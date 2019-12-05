@@ -1,0 +1,15 @@
+[submodule "src/IFAETopFramework"]
+	path = src/IFAETopFramework
+	url = ssh://git@gitlab.cern.ch:7999/htx/IFAETopFramework.git
+[submodule "src/BtaggingTRFandRW"]
+	path = src/BtaggingTRFandRW
+	url = ssh://git@gitlab.cern.ch:7999/htx/BtaggingTRFandRW.git
+[submodule "src/IFAEReweightingTools"]
+	path = src/IFAEReweightingTools
+	url = ssh://git@gitlab.cern.ch:7999/htx/IFAEReweightingTools.git
+[submodule "src/FakeLeptonEstimation"]
+	path = src/FakeLeptonEstimation
+	url = ssh://git@gitlab.cern.ch:7999/htx/FakeLeptonEstimation.git
+[submodule "src/IFAEPlotter"]
+	path = src/IFAEPlotter
+	url = ssh://git@gitlab.cern.ch:7999/htx/IFAEPlotter.git
