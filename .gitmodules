@@ -13,3 +13,6 @@
 [submodule "src/IFAEPlotter"]
 	path = src/IFAEPlotter
 	url = ssh://git@gitlab.cern.ch:7999/htx/IFAEPlotter.git
+[submodule "src/VLQAnalysis"]
+	path = src/VLQAnalysis
+	url = ssh://git@gitlab.cern.ch:7999/htx/VLQAnalysis.git
