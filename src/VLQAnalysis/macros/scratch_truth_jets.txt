@@ -1,0 +1,195 @@
+/**
+        This is a block of code that was in VLQ_Analysis_Data2015.cxx
+        However, right now we don't have the truth jets in htx ntuple,
+        so for now we put it here.
+*/
+
+=======
+    
+//    //###########################################################
+//    //                                                          #
+//    // Plots building                                           #
+//    //                                                          #
+//    //###########################################################
+//    //
+//    // Truth information recovery
+//    //
+//    if( !m_opt->IsData() && m_truthMngr -> Initialize()){
+//        m_outData -> o_VLQtype = m_truthMngr -> GetVLQDecayType();
+//        m_outMngrHist -> HistMngr() -> FillTH1D( "vlqType", m_outData->o_VLQtype, m_outData -> o_eventWeight_Nom );
+//
+//        if( m_opt -> DoTruthAnalysis() ){
+//            m_truthMngr -> PrepareBoostedTopStudies();
+//            std::vector < int > truth_top_indices = m_truthMngr -> GetTruthTops();
+//            float boosted_hadr_tops=0;
+//            float hadr_tops_checks=0;
+//            for ( const int top_index : truth_top_indices ) {
+//                AnalysisObject* top = m_truthMngr -> GetTruthParticleVector() -> at(top_index);
+//                if(top -> Pt() > m_outData -> o_truth_top_pt){
+//                    m_outData -> o_truth_dR_Wb = top -> GetMoment("dR_max_decays");
+//                    m_outData -> o_truth_top_pt = top -> Pt() / 1000.;
+//                }
+//                if(top->GetMoment("IsHadDecay")==1){
+//                    hadr_tops_checks++;
+//                    if(top -> GetMoment("dR_max_decays")<1.0){
+//                        boosted_hadr_tops++;
+//                    }
+//                }
+//            }
+//
+//            m_truthMngr->FillParticlesPartonsVectors();
+//            m_truthMngr->MatchParticlesPartonsToFatJets(signalFatJet);
+//            m_truthMngr->MatchParticlesPartonsToFatJets(signalRCJet);
+//
+//            int hadr_tops = m_truthMngr -> MatchTopPartonsToFatJets(signalFatJet);
+//            int hadr_tops_RC = m_truthMngr -> MatchTopPartonsToFatJets(signalRCJet);
+//            float nfj_topWb=0;
+//            float nfj_toptagged_TTLWb=0;
+//            float nfj_toptagged_TTTWb=0;
+//            float temp_meff=m_varComputer -> GetMeff( *(m_outData->o_jets), signalEl, signalMu, m_outData -> o_AO_met );
+//
+//            std::vector < std::string > chs;
+//            chs.push_back("");
+//            chs.push_back("e_");
+//            chs.push_back("mu_");
+//            for ( const std::string ch : chs ){
+//                if(ch=="e_" && !isElectronChannel) continue;
+//                if(ch=="mu_" && !isMuonChannel) continue;
+//                for ( AnalysisObject* fjet : signalFatJet ){
+//                    int jetclass= m_varComputer->GetJetClass(fjet);
+//                    if(fjet->GetMoment("TopIn")==1){
+//                        nfj_topWb++;
+//
+//                        m_anaTools -> FillHistosForTopTaggingEfficiency( "_eff_"+ch, "TTMassCut",temp_meff,fjet->Pt(),fjet->GetMoment("TopPt"), false );
+//                        m_anaTools -> FillHistosForTopTaggingEfficiency( "_eff_"+ch, "TTLoose",temp_meff,fjet->Pt(),fjet->GetMoment("TopPt"), false );
+//
+//                        if(fjet -> GetMoment("isTTL")==1){
+//                            nfj_toptagged_TTLWb++;
+//                            m_anaTools -> FillHistosForTopTaggingEfficiency( "_eff_"+ch, "TTLoose",temp_meff,fjet->Pt(),fjet->GetMoment("TopPt"), true);
+//                        }//top tagged loose
+//                        if(fjet -> GetMoment("isRCTTMass")==1){
+//                            nfj_toptagged_TTTWb++;
+//                            m_anaTools -> FillHistosForTopTaggingEfficiency( "_eff_"+ch, "TTMassCut",temp_meff,fjet->Pt(),fjet->GetMoment("TopPt"), true);
+//                        }//top tagged looser
+//                    }
+//                    else if(fjet->GetMoment("TopIn")==0){
+//
+//                        m_anaTools -> FillHistosForTopTaggingEfficiency( "_mistag_"+ch, "TTMassCut",temp_meff,fjet->Pt(),fjet->GetMoment("TopPt"), false );
+//                        m_anaTools -> FillHistosForTopTaggingEfficiency( "_mistag_"+ch, "TTLoose",temp_meff,fjet->Pt(),fjet->GetMoment("TopPt"), false );
+//
+//                        if(signalFatJet.size()>1){
+//                            if(hadr_tops==0){
+//                                m_anaTools -> FillHistosForTopTaggingEfficiency( "_mistag_0top_"+ch, "TTMassCut",temp_meff,fjet->Pt(),fjet->GetMoment("TopPt"), false );
+//                                m_anaTools -> FillHistosForTopTaggingEfficiency( "_mistag_0top_"+ch, "TTLoose",temp_meff,fjet->Pt(),fjet->GetMoment("TopPt"), false );
+//                            } else if(hadr_tops==1){
+//                                m_anaTools -> FillHistosForTopTaggingEfficiency( "_mistag_1top_"+ch, "TTMassCut",temp_meff,fjet->Pt(),fjet->GetMoment("TopPt"), false );
+//                                m_anaTools -> FillHistosForTopTaggingEfficiency( "_mistag_1top_"+ch, "TTLoose",temp_meff,fjet->Pt(),fjet->GetMoment("TopPt"), false );
+//                            }
+//                        }
+//
+//                        if(fjet -> GetMoment("isTTL")==1){
+//                            m_anaTools -> FillHistosForTopTaggingEfficiency( "_mistag_"+ch, "TTLoose",temp_meff,fjet->Pt(),fjet->GetMoment("TopPt"), true);
+//                            m_anaTools -> FillHistosForMisTagStudy( "_mistag_"+ch, "TTLoose", jetclass);
+//                            if(signalFatJet.size()>1){
+//                                if(hadr_tops==0){
+//                                    m_anaTools -> FillHistosForTopTaggingEfficiency( "_mistag_0top_"+ch, "TTLoose",temp_meff,fjet->Pt(),fjet->GetMoment("TopPt"), true);
+//                                    m_anaTools -> FillHistosForMisTagStudy( "_mistag_0top_"+ch, "TTLoose", jetclass);
+//                                }
+//                                else if(hadr_tops==1){
+//                                    m_anaTools -> FillHistosForTopTaggingEfficiency(  "_mistag_1top_"+ch, "TTLoose",temp_meff,fjet->Pt(),fjet->GetMoment("TopPt"), true);
+//                                    m_anaTools -> FillHistosForMisTagStudy( "_mistag_1top_"+ch, "TTLoose", jetclass);
+//                                }
+//                            }
+//                        }//top tagged loose
+//                        if(fjet -> GetMoment("isRCTTMass")==1){
+//
+//                            m_anaTools -> FillHistosForTopTaggingEfficiency("_mistag_"+ch, "TTMassCut",temp_meff,fjet->Pt(),fjet->GetMoment("TopPt"), true);
+//                            m_anaTools -> FillHistosForMisTagStudy( "_mistag_"+ch, "TTMassCut", jetclass);
+//                            if(signalFatJet.size()>1){
+//                                if(hadr_tops==0){
+//                                    m_anaTools -> FillHistosForTopTaggingEfficiency(  "_mistag_0top_"+ch, "TTMassCut",temp_meff,fjet->Pt(),fjet->GetMoment("TopPt"), true);
+//                                    m_anaTools -> FillHistosForMisTagStudy( "_mistag_0top_"+ch, "TTMassCut", jetclass);
+//                                }
+//                                else if(hadr_tops==1){
+//                                    m_anaTools -> FillHistosForTopTaggingEfficiency( "_mistag_1top_"+ch, "TTMassCut",temp_meff,fjet->Pt(),fjet->GetMoment("TopPt"), true);
+//                                    m_anaTools -> FillHistosForMisTagStudy( "_mistag_1top_"+ch, "TTMassCut", jetclass);
+//                                }
+//                            }
+//                        }//top tagged looser
+//                    }
+//                }//loop over fatjet
+//
+//                for ( AnalysisObject* rcjet : signalRCJet ){
+//                    int RCjetclass= m_varComputer->GetJetClass(rcjet);
+//
+//                    if(rcjet->GetMoment("TopIn")==1){
+//                        m_anaTools -> FillHistosForTopTaggingEfficiency( "_eff_"+ch, "TTRCJ",temp_meff,rcjet->Pt(),rcjet->GetMoment("TopPt"), false );
+//                        if(rcjet -> GetMoment("isRCTTMass")==1){
+//                            m_anaTools -> FillHistosForTopTaggingEfficiency( "_eff_"+ch, "TTRCJ",temp_meff,rcjet->Pt(),rcjet->GetMoment("TopPt"), true);
+//                        }//top tagged looser
+//                    }
+//                    else if (rcjet->GetMoment("TopIn")==0){
+//                        m_anaTools -> FillHistosForTopTaggingEfficiency( "_mistag_"+ch, "TTRCJ",temp_meff,rcjet->Pt(),rcjet->GetMoment("TopPt"), false );
+//                        if(signalRCJet.size()>1){
+//                            if(hadr_tops_RC==0){
+//                                m_anaTools -> FillHistosForTopTaggingEfficiency( "_mistag_0top_"+ch, "TTRCJ",temp_meff,rcjet->Pt(),rcjet->GetMoment("TopPt"), false );
+//                            } else if (hadr_tops_RC==1){
+//                                m_anaTools -> FillHistosForTopTaggingEfficiency( "_mistag_1top_"+ch, "TTRCJ",temp_meff,rcjet->Pt(),rcjet->GetMoment("TopPt"), false );
+//                            }
+//                        }
+//
+//                        if(rcjet -> GetMoment("isRCTTMass")==1){
+//                            m_anaTools -> FillHistosForTopTaggingEfficiency( "_mistag_"+ch, "TTRCJ",temp_meff,rcjet->Pt(),rcjet->GetMoment("TopPt"), true);
+//                            //m_anaTools -> FillHistosForMisTagStudy( "_mistag_"+ch, "TTRCJ", RCjetclass);
+//                            if(signalRCJet.size()>1){
+//                                if(hadr_tops_RC==0){
+//                                    m_anaTools -> FillHistosForTopTaggingEfficiency( "_mistag_0top_"+ch, "TTRCJ",temp_meff,rcjet->Pt(),rcjet->GetMoment("TopPt"), true);
+//                                    m_anaTools -> FillHistosForMisTagStudy( "_mistag_0top_"+ch, "TTRCJ", RCjetclass);
+//                                }
+//                                else if(hadr_tops_RC==1){
+//                                    m_anaTools -> FillHistosForTopTaggingEfficiency( "_mistag_1top_"+ch, "TTRCJ",temp_meff,rcjet->Pt(),rcjet->GetMoment("TopPt"), true);
+//                                    m_anaTools -> FillHistosForMisTagStudy( "_mistag_1top_"+ch, "TTRCJ", RCjetclass);
+//                                }
+//                            }
+//                        }//top tagged looser
+//                    }
+//
+//
+//
+//                    bool partonsIn=(RCjetclass==1) || (RCjetclass==2) || (RCjetclass==3) || (RCjetclass==5)|| (RCjetclass==6) || (RCjetclass==7) || RCjetclass==9 || RCjetclass==10 || RCjetclass==11 || RCjetclass==12 || RCjetclass==13 || RCjetclass==14 || RCjetclass==15 || RCjetclass==16 || RCjetclass==17 || RCjetclass==18 || RCjetclass==19 || RCjetclass==20 || RCjetclass==21 || RCjetclass==22 || RCjetclass==23 || RCjetclass==24 || RCjetclass==25 || RCjetclass==27 || RCjetclass==30 || rcjet->GetMoment("TopIn")==1;
+//                    //std::cout<<"JET CLASS = "<<RCjetclass<<"   PartonsIN "<<partonsIn<<std::endl;
+//                    if(partonsIn){
+//                        m_anaTools -> FillHistosForTopTaggingEfficiency( "_eff_Danilo_"+ch, "TTRCJ",temp_meff,rcjet->Pt(),rcjet->GetMoment("TopPt"), false );
+//                        if(rcjet -> GetMoment("isRCTTMass")==1){
+//                            m_anaTools -> FillHistosForTopTaggingEfficiency( "_eff_Danilo_"+ch, "TTRCJ",temp_meff,rcjet->Pt(),rcjet->GetMoment("TopPt"), true);
+//                        }//top tagged looser
+//                    }
+//                    else if(!partonsIn&&rcjet->GetMoment("TopIn")==0){
+//                        m_anaTools -> FillHistosForTopTaggingEfficiency( "_mistag_Danilo_"+ch, "TTRCJ",temp_meff,rcjet->Pt(),rcjet->GetMoment("TopPt"), false );
+//                        if(rcjet -> GetMoment("isRCTTMass")==1){
+//                            m_anaTools -> FillHistosForTopTaggingEfficiency( "_mistag_Danilo_"+ch, "TTRCJ",temp_meff,rcjet->Pt(),rcjet->GetMoment("TopPt"), true);
+//                            m_anaTools -> FillHistosForMisTagStudy( "_mistag_"+ch, "TTRCJ", RCjetclass);
+//                        }
+//                    }
+//
+//
+//                }//loop over fatjet
+//            }//split in e/mu channels
+//
+//            m_outData -> o_nhadtops = hadr_tops_RC;
+//            m_outData -> o_nboosthadtops = hadr_tops;
+//            m_outData -> o_fjets_topmatched = nfj_topWb;
+//            m_outData -> o_fjets_topmatchboost_TTL = nfj_toptagged_TTLWb;
+//            m_outData -> o_fjets_topmatchboost_TTT = nfj_toptagged_TTTWb;
+//
+//            if(boosted_hadr_tops>0 && signalFatJet.size()>0){
+//                m_outData -> o_matchingeff=nfj_topWb/hadr_tops_checks;
+//            }
+//
+//            if(nfj_topWb>0){
+//                m_outData -> o_tageff_TTL=nfj_toptagged_TTLWb/nfj_topWb;
+//                m_outData -> o_tageff_TTT=nfj_toptagged_TTTWb/nfj_topWb;
+//            }
+//
+//        }//do Truth Ana
+//    }

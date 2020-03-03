@@ -1,0 +1,226 @@
+
+2016-03-09 - Loic Valery <lvalery@cern.ch>
+   * Adding lepton change with systematics if needed ;-)
+
+2016-02-23 - Loic Valery <lvalery@lxplus.cern.ch>
+   * Updating the  sample_info.dat
+   * Adding possibility of adding other variables with systematics (see VLQ_Options)
+   * Adding ttH semilepotnic sample ... 
+   * ADding ttH as a separate background
+   * Everything preapred to launch 2D limits ...
+   * Tagging as VLQAnalysis-00-01-06-05
+
+2016-02-20 Loic Valery <lvalery@cern.ch>
+   * Update of WeightManager to included systematics for b-tagging (that are pruned anyway ...)
+   * Fix bug for TRF in 1b regions ...
+   * Update config files
+   * Adding Significance plot
+   * Adding QCD rates
+   * Finalize QCD estimation with new rates (recomputed on the fly)
+   * Adding lepton charge plot in the outputs 
+
+2016-02-19 - Mirko Casolino <mcasolin@cern.ch>
+   * Update MET plot
+
+2016-02-18 - Loic Valery <lvalery@cern.ch>
+   * Adding code to estimate QCD on the fly
+
+2016-02-17 - Loic Valery <lvalery@cern.ch>
+   * Fix trigger mathcing issue for the fakes
+   * Adding the 0b and 1 b regions for QCD control region
+   * Update in the config file for TRexFitter
+   * Tagging as VLQAnalysis-00-01-06-02
+
+2016-02-17 - Mirko Casolino <mcasolin@cern.ch>
+   * Update HOT tagging studies
+
+2016-02-12 - Mirko Casolino <mcasolin@cern.ch>
+   * Update ttbar syst additional checks for DT vs TRF
+   * Update ToppT Rw class
+	
+2016-02-10 - Mirko Casolino <mcasolin@cern.ch>
+   * Update ttbar syst rescaling yields to DT
+
+2016-02-06 - Loic Valery <lvalery@cern.ch>
+   * Take the R_MBB out of the box to avoid divergences due to cold spots in Run I ttbb systematics
+   * Update top pT rewighting file (now preserves the integral)
+   * Add constant MPI reweighitng (factor 1.5) from Run 1
+   * Fix bug in ttbb weights for weight systematics
+   * Propagate changes into the TEMPLATE config file
+   * Add protection against unknown systematics
+   * Tagging as VLQAnalysis-00-01-06-02
+
+2016-02-05 - Mirko Casolino <mcasolin@cern.ch>
+   * Fix MPI systs for Sherpa
+
+2016-02-03 - Loic Valery <lvalery@cern.ch>
+   * Adding smooth reweighting for ttbar systematics
+   * Update of ttbb systematics (adding back R_Mbb and last PDF variable)
+   * Update of top pT reweighting with 13 TeV diffential cross-section measurement (yay!!!)
+   * Update of other things
+   * Fix top pT reweigthing to use GeV pT 
+   * Tagging as VLQAnalysis-00-01-06-01
+
+2016-02-02 - Loic VAlery <lvalery@cern.ch>
+   * Fix bug in ttbb reweighting
+
+2016-02-01 - Loic Valery <lvalery@cern.ch>
+   * Fix bug in weight recomputation for ttbar
+
+2016-01-31 - Loic Valery <lvalery@cern.ch>
+   * Propagating the changes of ttbb reweighting inside the macros to launch the jobs
+   * Update of the sample_info.dat
+
+2016-01-31 - Mirko Casolino <mcasolin@cern.ch>
+   * Adding ttbar Fraction Rw;
+   * ttbb reweighting tool in place and working with limited set of syst;
+
+2016-01-30 - Loic Valery <lvalery@cern.ch>
+   * Code adapted for QCD estimation
+
+2016-01-29 - Loic Valery <lvalery@cern.ch>
+   * TRF implemetned for nominal (straighforwardto extend to systematics)
+   * Blinding cut applied properly
+
+2016-01-28 - Loic Valery <lvalery@cern.ch>
+   * Making more specific the lepton channels
+   * Adding the passOR flag for the jets
+   * Changing the OutputData object in VLQ_AnalysisTools class to be a daa member of the class. Propagating the change to all functions.
+
+2016-01-17 - Loic Valery <lvalery@cern.ch>
+   * Adding some QCD-sensitive variables in the plots and in OutputData
+
+2016-01-10 - Loic Valery <lvalery@cern.ch>
+   * Adding VLQ/UED-RPP corss-section in sample_info.dat file
+   * Adding MC15a ttbar 410000 in the sample_info.dat
+
+2016-01-09 - Loic Valery <lvalery@cern.ch>
+   * Adding script to dump config files for IFAEPlotter
+   * Code cleaning
+   * Adding variable to check the proper HT filtering
+   * Tagging as VLQAnalysis-00-01-05-01
+
+2016-01-02 - Loic Valery <lvalery@cern.ch>
+   * Adapt scripts for HT filter and CI 4tops
+   * Update the samples_info.dat
+   * Things on batch for the coupling reweighting :-)
+   * Macro for launching TRexFitter on batch added
+
+2015-12-31 - Loic Valery <lvaery@cern.ch>
+   * Adapt the reader and NtupleData to new inputs
+   * Includes the HT slices
+   * Before adapting all macros
+   * Add macros for stat interpretation
+
+2015-12-30 - Loic Valery <lvalery@cern.ch>
+   * Restore the NtupleData and NtupleReader in this package to adapt to the new ntuples
+   * No need anymore to SUSYAnalysis package
+
+2015-12-07 - Mirko Casolino <mcasolin@cern.ch>
+   * Adding blinding options
+
+2015-11-27 - Trisha Farooque <farooque@cern.ch>
+	* Changed VLQ_Object to IFAETopFramework::AnalysisObject
+2015-11-27 - Mirko Casolino <mcasolin@cern.ch>
+   * Updating Weight Manager for ttbb systematics
+
+2015-11-26 - Loic Valery <lvalery@cern.ch>
+   * Removing the install.sh file
+   * Updting options
+
+2015-11-25 - - Mirko Casolino <mcasolin@cern.ch>
+   * Changes in TruthManager,AnalysisTools,VariableComputer,Analysis_Data to add everything needed for mistag characterization
+
+2015-11-20 - Loic Valery <lvalery@cern.ch>
+   * Updating cut flow
+   * Updating the VLQ decay classification
+
+2015-11-13 - - Mirko Casolino <mcasolin@cern.ch>
+   * Changes in TruthManager to avoid crashes on UED_RPP samples
+
+2015-11-12 - - Mirko Casolino <mcasolin@cern.ch>
+   * Added Histograms for checks on top-tagging (see Aurelio's mail 11/11/2015)
+
+2015-11-04 - Loic Valery <lvalery@cern.ch>
+   * Adding the RCTT regions
+   * Reducing the list of data runs
+
+2015-10-31 - Loic Valery <lvalery@cern.ch>
+   * Adding some variables in the histograms
+
+2015-10-30 - Loic Valery <lvalery@cern.ch>
+   * Adding macro to dump TRexFitter config files
+
+2015-10-28 - Mirko Casolino <mcasolin@cern.ch>
+   * Added Reclustered jets variables and histograms
+
+2015-10-27 - Mirko Casolino <mcasolin@cern.ch>
+   * Changes in TRF_Manager according to new TRF tool
+   * Changes top-tagging truth studies ported some methods to AnalysisTools
+   * Added histograms to calculate mistag rate
+
+2015-10-19 - Loic Valery <lvalery@cern.ch>
+   * Finalize organisation of scripts for jobs submission start propagation to other scripts
+
+2015-10-19 - Loic Valery <lvalery@cern.ch>
+   * Update for job submission scripts
+   * Update sample_info.dat list with dibosons and dijets
+
+2015-10-18 - Loic Valery <lvalery@cern.ch>
+   * Cleaning top-tagging truth studies (remove copy-pasted parts)
+   * Start implementation of weight systematic uncertainties
+   * Adding the VLQ_WeightManager.cxx (with handling of b-tagging systematics)
+   * Full weight systematics implemented
+   * Remains to be done:
+       -> Check systematics are OK
+       -> Adapt batch scripts to handle object systematics in trees
+       -> Adapt macro to dump TRexFitter confi files with systematics
+
+2015-10-16 - Loic Valery <lvalery@cern.ch>
+   * Removing content from NtupleReader and NtupleData derived classes to inherit completely from SUYS corresponding classes (avoids duplication of work)
+
+2015-10-16 - Loic Valery <lvalery@cern.ch>
+   * Changing the whole selections (signal region candidates)
+   * Changing the call to TRF (always, but compute the permutations only when really wanting to use TRF weights)
+   * Changing the packages.txt file to be compatible with "rc checkout"
+
+2015-10-12 - Mirko Casolino <mcasolin@cern.ch>
+   * Added TRF_Manager, package dependence with TRF tool
+   * Changes in AnalysisTools,OutputData,Options to accomodate TRF
+
+2015-10-02 - Mirko Casolino <mcasolin@cern.ch>
+   * Changes in TruthManager for top tagging
+   * Changes in VLQ_Analysis_Data2015.cxx to add efficiency plots
+   * Changes in Analysis_Tools an OutputData
+
+2015-09-18 - Loic Valery <lvalery@cern.ch>
+   * Adding met, mtw cuts in VLQ_Options
+
+2015-09-12 - Loic Valery <lvalery@cern.ch>
+   * Adding signal regions in the VLQ_Analysis_Data2015.cxx code
+   * Adding variabls for the VLQCouplingReweighting
+
+2015-09-12 - Loic Valery <lvalery@cern.ch>
+   * Adding some baseline selections (a la Run I)
+   * Tagging as VLQAnalysis-00-01-03-01
+
+2015-09-12 - Loic Valery <lvalery@cern.ch>
+   * Tagging as VLQAnalysis-00-01-03-00
+
+2015-09-12 - Loic Valery <lvalery@cern.ch>
+   * Adding the config file for sample normalisation
+   * Adding script to prepare the normalisation config file
+
+2015-09-12 - Loic Valery <lvalery@cern.ch>
+   * Adding the VLQ BR reweighting (still not optimal but good enough for now)
+   * Adding the cross-section reweighting in the code (as for SUSY) using SampleInfo
+
+2015-09-07 - Mirko Casolino <mcasolin@cern.ch>
+   * Changes in TruthManager added else if for W daughter and DR initialized to -1
+
+2015-09-07 - Loic Valery <lvalery@cern.ch>
+   * Update the ranges for meff, hthad, ..
+   * Adding computation of mbb
+   * Adapt the reader to the new ntuple structure (VLQ type read directly from the tree instead of being recomputed)
+   * Adding the 77% OP for b-tagging
+   * Update trigger keys

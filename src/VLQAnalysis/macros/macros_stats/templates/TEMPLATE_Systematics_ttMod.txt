@@ -1,0 +1,71 @@
+% --------------------------- %
+% ---  TTBAR SYSTEMATICS  --- %
+% --------------------------- %
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_GEN" ; "HTX_BKGNP_TTBARBB_GEN" ; "HTX_BKGNP_TTBARCC_GEN"
+  Title: "t#bar{t}+light-jets generator" ; "t#bar{t}+#geq1b generator" ; "t#bar{t}+#geq1c generator"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  SampleUp: ttbarlight_aMCPy ; ttbarbb_aMCPy ; ttbarcc_aMCPy
+  Samples: ttbarlight;ttbarbb;ttbarcc
+  ReferenceSample: ttbarlight_AFII;ttbarbb_AFII;ttbarcc_AFII
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_PS" ; "HTX_BKGNP_TTBARBB_PS" ; "HTX_BKGNP_TTBARCC_PS"
+  Title: "t#bar{t}+light-jets parton shower" ; "t#bar{t}+#geq1b parton shower" ; "t#bar{t}+#geq1c parton shower"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  SampleUp: ttbarlight_PowhegHerwig7 ; ttbarbb_PowhegHerwig7 ; ttbarcc_PowhegHerwig7
+  Samples: ttbarlight;ttbarbb;ttbarcc
+  ReferenceSample: ttbarlight_AFII;ttbarbb_AFII;ttbarcc_AFII
+
+Sample: "ttbarlight_aMCPy"
+Title: "t#bar{t}+light-jets"
+Type: GHOST
+FillColor: 0
+LineColor: 1
+HistoFiles: ttbarlight_aMCPy.mc16a,ttbarlight_aMCPy.mc16d,ttbarlight_aMCPy.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "ttbarcc_aMCPy"
+Title: "t#bar{t}+#geq1c"
+Type: GHOST
+FillColor: 590
+LineColor: 1
+HistoFiles: ttbarcc_aMCPy.mc16a,ttbarcc_aMCPy.mc16d,ttbarcc_aMCPy.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "ttbarbb_aMCPy"
+Title: "t#bar{t}+#geq1b"
+Type: GHOST
+FillColor: 594
+LineColor: 1
+HistoFiles: ttbarbb_aMCPy.mc16a,ttbarbb_aMCPy.mc16d,ttbarbb_aMCPy.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "ttbarlight_PowhegHerwig7"
+Title: "t#bar{t}+light-jets"
+Type: GHOST
+FillColor: 0
+LineColor: 1
+HistoFiles: ttbarlight_PowhegHerwig7.mc16a,ttbarlight_PowhegHerwig7.mc16d,ttbarlight_PowhegHerwig7.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "ttbarcc_PowhegHerwig7"
+Title: "t#bar{t}+#geq1c"
+Type: GHOST
+FillColor: 590
+LineColor: 1
+HistoFiles: ttbarcc_PowhegHerwig7.mc16a,ttbarcc_PowhegHerwig7.mc16d,ttbarcc_PowhegHerwig7.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "ttbarbb_PowhegHerwig7"
+Title: "t#bar{t}+#geq1b"
+Type: GHOST
+FillColor: 594
+LineColor: 1
+HistoFiles: ttbarbb_PowhegHerwig7.mc16a,ttbarbb_PowhegHerwig7.mc16d,ttbarbb_PowhegHerwig7.mc16e
+LumiScales: 36207.66,44307.4,58450.1
