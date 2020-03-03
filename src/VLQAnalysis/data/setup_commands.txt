@@ -1,0 +1,12 @@
+mkcd take1
+setupATLAS 
+rcSetup Base,2.3.15
+ls
+svn co svn+ssh://$USER@svn.cern.ch/reps/IfaeAnaRepo/IFAEanalysis/RunIITopTools/IFAETopFramework/tags/IFAETopFramework-00-01-06/ IFAETopFramework
+rc checkout IFAETopFramework/share/packages.txt 
+rc checkout VLQAnalysis/share/packages.txt 
+git clone ssh://git@gitlab.cern.ch:7999/gerbaudo/VLQAnalysis.git
+rc find_packages
+rc clean 
+rc compile
+source run.sh

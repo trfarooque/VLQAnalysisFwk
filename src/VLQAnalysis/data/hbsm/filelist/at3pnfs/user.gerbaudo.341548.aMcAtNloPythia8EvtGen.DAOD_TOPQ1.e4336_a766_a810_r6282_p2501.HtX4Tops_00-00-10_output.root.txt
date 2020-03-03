@@ -1,0 +1,4 @@
+root://xrootd.pic.es//pnfs/pic.es/IFAEAtlasTier2/t2atlasscratchdisk/rucio/user/gerbaudo/3d/86/user.gerbaudo.8888740._000001.output.root
+root://xrootd.pic.es//pnfs/pic.es/IFAEAtlasTier2/t2atlasscratchdisk/rucio/user/gerbaudo/79/71/user.gerbaudo.8888740._000002.output.root
+root://xrootd.pic.es//pnfs/pic.es/IFAEAtlasTier2/t2atlasscratchdisk/rucio/user/gerbaudo/bd/14/user.gerbaudo.8888740._000003.output.root
+root://xrootd.pic.es//pnfs/pic.es/IFAEAtlasTier2/t2atlasscratchdisk/rucio/user/gerbaudo/57/35/user.gerbaudo.8888740._000004.output.root

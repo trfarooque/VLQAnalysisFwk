@@ -1,0 +1,162 @@
+% -------------------------- %
+% -------    JOB     ------- %
+% -------------------------- %
+
+Job: "__FITTYPE_____SIGNAL_____ADDITION__"
+Label: "Ht+X analysis"
+CmeLabel: "13 TeV"
+LumiLabel: "139.02 fb^{-1}"
+Lumi: 1.
+POI: "mu_signal"
+ReadFrom: HIST
+HistoPath: "__HISTOPATH__"
+DebugLevel: 0
+SystControlPlots: FALSE
+SystPruningShape: 0.01
+SystPruningNorm: 0.01
+CorrelationThreshold: 0.20
+HistoChecks: NOCRASH
+SplitHistoFiles: TRUE
+MCstatThreshold: 0.05
+StatOnly: __STATONLY__
+SystLarge: 10.
+%GetChi2: FALSE
+PlotOptions: YIELDS
+%PlotOptions: CHI2
+
+% -------------------------- %
+% -------    FIT     ------- %
+% -------------------------- %
+
+Fit: "__FITTYPE__"
+FitType: __FITTYPE__
+FitRegion: __FITREGION__
+FitBlind: __FITBLIND__
+POIAsimov: __FITPOIASIMOV__
+
+% --------------------------- %
+% ---------- LIMIT ---------- %
+% --------------------------- %
+
+Limit: "limit"
+LimitType: ASYMPTOTIC
+LimitBlind: __LIMITBLIND__
+POIAsimov: __LIMITPOIASIMOV__
+
+% -------------------------- %
+% --------- REGIONS -------- %
+% -------------------------- %
+
+_REGIONLIST_
+
+% --------------------------- %
+% --------  SAMPLES  -------- %
+% --------------------------- %
+
+Sample: "ttbarlight"
+Title: "t#bar{t}+light-jets"
+Type: background
+FillColor: 0
+LineColor: 1
+HistoFiles: ttbarlight_RW.mc16a,ttbarlight_RW.mc16d,ttbarlight_RW.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "ttbarcc"
+Title: "t#bar{t}+#geq1c"
+Type: background
+FillColor: 590
+LineColor: 1
+HistoFiles: ttbarcc_RW.mc16a,ttbarcc_RW.mc16d,ttbarcc_RW.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+%HistoFile: ttbarcc
+
+Sample: "ttbarbb"
+Title: "t#bar{t}+#geq1b"
+Type: background
+FillColor: 594
+LineColor: 1
+HistoFiles: ttbarbb_RW.mc16a,ttbarbb_RW.mc16d,ttbarbb_RW.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+%HistoFile: ttbarbb
+
+Sample: "Wjets"
+Title: "W+jets"
+Type: background
+FillColor: 824
+LineColor: 1
+HistoFiles: Wjets_RW.mc16a,Wjets_RW.mc16d,Wjets_RW.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+%HistoFile: Wjets
+
+Sample: "Zjets"
+Title: "Z+jets"
+Type: background
+FillColor: 419
+LineColor: 1
+HistoFiles: Zjets_RW.mc16a,Zjets_RW.mc16d,Zjets_RW.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+%HistoFile: Zjets
+
+Sample: "topEW"
+Title: "topEW"
+Type: background
+FillColor: 806
+LineColor: 1
+HistoFiles: topEW.mc16a,topEW.mc16d,topEW.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+%HistoFile: topEW
+Group: Others
+
+Sample: "Dibosons"
+Title: "Dibosons"
+Type: background
+FillColor: 806
+LineColor: 1
+HistoFiles: Dibosons.mc16a,Dibosons.mc16d,Dibosons.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+%HistoFile: Dibosons
+Group: Others
+
+Sample: "SingletopWtprod"
+Title: "Single-top"
+Type: background
+FillColor: 630
+LineColor: 1
+HistoFiles: SingletopWtprod_RW.mc16a,SingletopWtprod_RW.mc16d,SingletopWtprod_RW.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+%HistoFile: SingletopWtprod
+
+Sample: "Singletopschan"
+Title: "Single-top"
+Type: background
+FillColor: 630
+LineColor: 1
+HistoFiles: Singletopschan.mc16a,Singletopschan.mc16d,Singletopschan.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+%HistoFile: Singletopschan
+
+Sample: "Singletoptchan"
+Title: "Single-top"
+Type: background
+FillColor: 630
+LineColor: 1
+HistoFiles: Singletoptchan.mc16a,Singletoptchan.mc16d,Singletoptchan.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+%HistoFile: Singletoptchan
+
+Sample: "ttH"
+Title: "ttH"
+Type: background
+FillColor: 806
+LineColor: 1
+HistoFiles: ttH.mc16a,ttH.mc16d
+LumiScales: 36207.66,44307.4
+%HistoFile: ttH
+Group: Others
+
+#NormFactor: HTX_BKGNORM_TTBARBB
+#Title: t#bar{t}+#geq1b normalisation
+#Nominal: 1
+#Min: -10
+#Max: 10
+#Samples: ttbarbb

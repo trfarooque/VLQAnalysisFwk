@@ -1,0 +1,41 @@
+% ------------------------------------------ %
+% ---  SINGLE-TOP MODELLING SYSTEMATICS  --- %
+% ------------------------------------------ %
+
+% NOTE: only contains Gen and PS systematics, since DR/DS only applies to single-top Wt mode
+
+Systematic: "HTX_BKGNP_SINGLETOP_GEN"
+  Title: "Single-top generator"
+  Type: HISTO
+  Category: "Single-top uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  SampleUp: singletop_aMCPy
+  Samples: singletop
+  ReferenceSample: singletop_AFII
+
+Systematic: "HTX_BKGNP_SINGLETOP_PS"
+  Title: "Single-top parton shower"
+  Type: HISTO
+  Category: "Single-top uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  SampleUp: singletop_PowhegHerwig7 
+  Samples: singletop
+  ReferenceSample: singletop_AFII
+
+Sample: "singletop_aMCPy"
+Title: "Single-top"
+Type: GHOST
+FillColor: 0
+LineColor: 1
+HistoFiles: singletop_aMCPy.mc16a,singletop_aMCPy.mc16d,singletop_aMCPy.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "singletop_PowhegHerwig7"
+Title: "Single-top"
+Type: GHOST
+FillColor: 0
+LineColor: 1
+HistoFiles: singletop_PowhegHerwig7.mc16a,singletop_PowhegHerwig7.mc16d,singletop_PowhegHerwig7.mc16e
+LumiScales: 36207.66,44307.4,58450.1

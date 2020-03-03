@@ -1,0 +1,568 @@
+Index: Root/TRFinterface.cxx
+===================================================================
+--- Root/TRFinterface.cxx	(revision 325094)
++++ Root/TRFinterface.cxx	(working copy)
+@@ -13,7 +13,8 @@
+ #include <TFile.h>
+ 
+ TRFinterface::TRFinterface(std::string OperatingPoint, std::string JetAuthor, std::string ScaleFactorFileName, bool ignoreSF, unsigned int debug, bool rwSystForPerm, bool rwSystForTagBins, unsigned int nCalib, bool add_prop):
+-  m_jets(0)
++  m_jets(0),
++  m_jets_aux(0)
+ {
+   m_OperatingPoint = OperatingPoint;
+   m_JetAuthor = JetAuthor;
+@@ -87,7 +88,7 @@
+   std::map<std::string,int> tmpMap;
+   tmpMap["B"] = 5;
+   tmpMap["C"] = 4;
+-  tmpMap["Light"] = 0; 
++  tmpMap["Light"] = 0;
+   tmpMap["T"] = 15;
+   tmpMap["Extrap"] = 9;
+   tmpMap["ExtrapFromCharm"] = 8;
+@@ -107,10 +108,10 @@
+       std::cout << m_calibName << " set as reference if RW is needed " << std::endl;
+     }
+   }
+-    
++
+   std::map<std::string, BtagCalib>::iterator calit = m_calibMap.begin();
+   for( ; calit != m_calibMap.end(); calit++) {
+-    std::string calname = calit->first;    
++    std::string calname = calit->first;
+     std::string toolname_main = "BTagEffToolTRF_main_"+m_OperatingPoint;
+     m_effTool[calname] = new BTaggingEfficiencyTool(toolname_main);
+     if(m_rwSystForTagBins){
+@@ -120,10 +121,10 @@
+ 	//	setEffProperty(calname, "OperatingPoint", m_availableOP.at(iop));
+ 	StatusCode status = m_effTool_allOP[calname][m_availableOP.at(iop)]->setProperty("OperatingPoint", m_availableOP.at(iop));
+ 	if(status != StatusCode::SUCCESS)
+-	  std::cout << "Problem settig the Eff. property: " << "OperatingPoint" << " to: " << m_availableOP.at(iop) << std::endl;	
++	  std::cout << "Problem settig the Eff. property: " << "OperatingPoint" << " to: " << m_availableOP.at(iop) << std::endl;
+       }
+     }
+-    setEffProperty(calname, "TaggerName", "MV2c20");
++    setEffProperty(calname, "TaggerName", "MV2c10");
+     setEffProperty(calname, "ConeFlavourLabel", true);
+     setEffProperty(calname, "OperatingPoint", m_OperatingPoint);
+     setEffProperty(calname, "JetAuthor", m_JetAuthor);
+@@ -131,11 +132,11 @@
+ 
+     m_selTool[calname] = new BTaggingSelectionTool("BTaggingSelectionToolTRF");
+     setSelProperty(calname,  "FlvTagCutDefinitionsFileName", m_ScaleFactorFileName);
+-    setSelProperty(calname, "TaggerName",          "MV2c20");
++    setSelProperty(calname, "TaggerName",          "MV2c10");
+     setSelProperty(calname, "OperatingPoint",  m_OperatingPoint);
+     setSelProperty(calname, "JetAuthor",  m_JetAuthor);
+   }
+-    
++
+ }
+ 
+ void TRFinterface::classifySyst(){
+@@ -156,6 +157,7 @@
+     calit->second.syst["ExtrapFromCharm"].resize(2);
+ 
+     CP::SystematicSet systs = m_effTool[calname]->affectingSystematics();
++    
+     for (auto syst : systs) {
+       CP::SystematicSet myset;
+       myset.insert(syst);
+@@ -164,8 +166,8 @@
+       if(((TString)syst.name()).Contains("_B_")) calit->second.syst["B"].at(isUp).push_back(myset);
+       else if(((TString)syst.name()).Contains("_C_")) calit->second.syst["C"].at(isUp).push_back(myset);
+       else if(((TString)syst.name()).Contains("_Light_")) calit->second.syst["Light"].at(isUp).push_back(myset);
++      else if(((TString)syst.name()).Contains("_extrapolation_from_charm")) calit->second.syst["ExtrapFromCharm"].at(isUp).push_back(myset);
+       else if(((TString)syst.name()).Contains("_extrapolation_")) calit->second.syst["Extrap"].at(isUp).push_back(myset);
+-      else if(((TString)syst.name()).Contains("_extrapolation from charm")) calit->second.syst["ExtrapFromCharm"].at(isUp).push_back(myset);
+       else std::cout << "Unable to cathegorize systematic " << syst.name() << std::endl;
+     }
+   }
+@@ -261,7 +263,7 @@
+   CP::SystematicCode NomResult = m_effTool[calib]->applySystematicVariation(defaultSet);
+   if (NomResult != CP::SystematicCode::Ok)
+     std::cout << "problem disabling systematics setting!" << std::endl;
+-  return sf;  
++  return sf;
+ }
+ 
+ double TRFinterface::getEff(std::string calib, const xAOD::Jet* jet, std::string iop){
+@@ -308,7 +310,7 @@
+   CP::SystematicCode NomResult = m_effTool[calib]->applySystematicVariation(defaultSet);
+   if (NomResult != CP::SystematicCode::Ok)
+     std::cout << "problem disabling systematics setting!" << std::endl;
+-  return ineff;  
++  return ineff;
+ }
+ 
+ int TRFinterface::getSystId(unsigned int pdgid_EV, int eigenv, bool isUp){
+@@ -342,19 +344,26 @@
+   }
+ }
+ 
+-void TRFinterface::setJets(std::vector<double> pt, std::vector<double> eta, std::vector<int> pdg, std::vector<double> mv2c20,  std::vector<double> var1, std::vector<double> var2){
++void TRFinterface::setJets(std::vector<double> pt, std::vector<double> eta, std::vector<int> pdg, std::vector<double> mv2c10,  std::vector<double> var1, std::vector<double> var2){
+   m_usexAOD=false;
+   m_trfRes.clear();
+   m_njets=pt.size();
+-  if(eta.size()!=m_njets || pdg.size()!=m_njets || mv2c20.size()!=m_njets){
++  if(eta.size()!=m_njets || pdg.size()!=m_njets || mv2c10.size()!=m_njets){
+     std::cout << "Caution: all vectors must have the same size" << std::endl;
+     return;
+-  } 
++  }
+ 
++
+   if (m_jets != 0){
+     delete m_jets;
+     m_jets=0;
+   }
++
++  if (m_jets_aux != 0){
++    delete m_jets_aux;
++    m_jets_aux=0;
++  }
++
+   xAOD::JetContainer* myJets = new xAOD::JetContainer();
+   xAOD::AuxContainerBase* myJetsAux = new xAOD::AuxContainerBase();
+   myJets->setStore( myJetsAux );
+@@ -366,7 +375,7 @@
+     jet->setJetP4(p4);
+     jet->setAttribute("ConeTruthLabelID", pdg.at(i));
+     jet->setAttribute("HadronConeExclTruthLabelID", pdg.at(i));
+-    jet->setAttribute("MV2c20", mv2c20.at(i));
++    jet->setAttribute("MV2c10", mv2c10.at(i));
+     if(m_effCorr){
+       jet->setAttribute("effCorrVar1", var1.at(i));
+       jet->setAttribute("effCorrVar2", var2.at(i));
+@@ -374,6 +383,7 @@
+     myJets->push_back( jet );
+   }
+   m_jets = myJets;
++  m_jets_aux = myJetsAux;
+ }
+ 
+ void TRFinterface::setSeed(unsigned int seed){
+@@ -385,12 +395,12 @@
+   std::vector<int> appo;
+   for(const auto &jet : *m_jets) {
+     double btag_weight;
+-    if(m_usexAOD) (jet->btagging())->MVx_discriminant("MV2c20", btag_weight);
+-    else jet->getAttribute("MV2c20", btag_weight);
++    if(m_usexAOD) (jet->btagging())->MVx_discriminant("MV2c10", btag_weight);
++    else jet->getAttribute("MV2c10", btag_weight);
+     bool is_btagged = m_selTool[calib]->accept(jet->pt(), jet->eta(), btag_weight);
+     //    std::cout << "  weight " << btag_weight << "   is tagged " << is_btagged << std::endl;
+     //    std::cout << "  pt " << jet->pt() << "   eta " <<jet->eta()  << std::endl;
+-    if(is_btagged) appo.push_back(1);      
++    if(is_btagged) appo.push_back(1);
+     else appo.push_back(0);
+   }
+   is_tagged=appo;
+@@ -405,7 +415,7 @@
+     m_trfRes[calib].trfw_in = m_trfRes[calib].trfwsys_in[0];
+     trf_weight_ex = m_trfRes[calib].trfw_ex;
+     trf_weight_in = m_trfRes[calib].trfw_in;
+-  } 
++  }
+   else {
+     if(m_rwSystForPerm) {
+       if(m_debug > 5) std::cout << "For syst, eigenv = " << eigenv << "  TRF: ex = " << m_trfRes[calib].trfwsys_ex[syst].at(3) << "  in = " << m_trfRes[calib].trfwsys_in[syst].at(3) << std::endl;
+@@ -432,7 +442,7 @@
+ 
+   if(syst!=0){
+     std::string flav_unc = m_pdgFlav[pdgid_EV];
+-    unsigned int isUp = isUpVar ? 1 : 0;
++    unsigned int isUp = isUpVar ? 1 : 0;  
+     CP::SystematicCode SystResult = m_effTool[calib]->applySystematicVariation(m_calibMap[calib].syst[flav_unc].at(isUp).at(eigenv));
+     if (SystResult != CP::SystematicCode::Ok)
+       std::cout << "problem applying systematic!" << std::endl;
+@@ -445,6 +455,7 @@
+     }
+   }
+ 
++
+   getAllEff(calib);
+   getAllSF(calib);
+ 
+@@ -460,15 +471,15 @@
+ 	if (NomResult != CP::SystematicCode::Ok)
+ 	  std::cout << "problem disabling systematics setting!" << std::endl;
+       }
+-    }   
++    }
+   }
+ 
+   unsigned int njets = m_njets;
+-  unsigned int limit = (njets > 7) ? 8 : njets+1; 
++  unsigned int limit = (njets > 7) ? 8 : njets+1;
+ 
+   if (m_perms.find(njets)==m_perms.end()){
+     m_perms[njets] = std::vector<std::vector<std::vector<bool> > >(limit);
+-    for(unsigned int i=0;i<limit;i++)	
++    for(unsigned int i=0;i<limit;i++)
+       m_perms[njets].at(i) = generatePermutations(njets,i);
+   }
+   m_permsWeight.clear(), m_permsWeight.resize(limit);
+@@ -478,7 +489,7 @@
+ 
+   // compute TRF weight
+   unsigned int max = nbtag+1;
+-  
++
+   m_trfRes[calib].trfwsys_ex[syst].clear(), m_trfRes[calib].trfwsys_in[syst].clear();
+   m_trfRes[calib].trfwsys_ex[syst].resize(max), m_trfRes[calib].trfwsys_in[syst].resize(max);
+ 
+@@ -494,7 +505,7 @@
+   }
+ 
+   if(isInclusive) {
+-    for(unsigned int i=0; i<limit; i++) { 
++    for(unsigned int i=0; i<limit; i++) {
+       std::vector<double> weights;
+       double sum = 0., w = 0.;
+       for(unsigned int p=0; p<m_perms[njets].at(i).size(); p++) {
+@@ -504,7 +515,7 @@
+   	m_permsSumWeight.at(i).push_back(sum);
+     	if(m_debug > 8) std::cout << "nbtag = " << i << "  w = " << w << "  sum = " << sum << std::endl;
+       }
+-     
++
+       if(i<limit && i<max) {
+   	m_trfRes[calib].trfwsys_ex[syst].at(i) = sum;
+   	if(i == 0) m_trfRes[calib].trfwsys_in[syst].at(0) = 1.;
+@@ -514,8 +525,8 @@
+     }
+     if(m_debug > 7) std::cout << "avant le return, nbtag = " << nbtag << "  size de m_trfRes[calib].trfwsys_in[syst] = " << m_trfRes[calib].trfwsys_in[syst].size() << std::endl;
+     return m_trfRes[calib].trfwsys_in[syst].at(nbtag);
+-      
+-  } 
++
++  }
+   else { // exclusive case, only one calculation needed
+     std::vector<double> weights;
+     double sum = 0., w = 0.;
+@@ -531,15 +542,16 @@
+   return 1.;
+ }
+ 
+-void TRFinterface::getTRFweightsForSyst(std::string calib, unsigned int nbtag, std::vector<std::vector<double> > &trf_weight_ex, 
++void TRFinterface::getTRFweightsForSyst(std::string calib, unsigned int nbtag, std::vector<std::vector<double> > &trf_weight_ex,
+ 					std::vector<std::vector<double> > &trf_weight_in, std::string flav_syst, bool isUpVar)
+-{  
++{
+   trf_weight_ex.clear(), trf_weight_in.clear();
+   trf_weight_ex.resize(getNumEV(flav_syst,calib));
+   trf_weight_in.resize(getNumEV(flav_syst,calib));
+   for(unsigned int iev=0; iev < getNumEV(flav_syst,calib); iev++) {
+      getTRFweights(calib, nbtag, trf_weight_ex.at(iev), trf_weight_in.at(iev), m_flavPdg[flav_syst], iev, isUpVar);
+   }
++  
+ }
+ 
+ double TRFinterface::getTRFweightWithPermRW(std::string calib, unsigned int nbtag, bool isIncl, unsigned int pdgid_EV, int eigenv, bool isUp){
+@@ -550,7 +562,7 @@
+     if(isIncl) {
+       weight *= getPermutationRW(calib, true, nbtag, calib, pdgid_EV, eigenv, isUp);
+       if(m_rwSystForTagBins) weight *= getTagBinsRW(calib, true, nbtag, calib, pdgid_EV, eigenv, isUp);
+-    } 
++    }
+     else {
+       weight *= getPermutationRW(calib, false, nbtag, calib, pdgid_EV, eigenv, isUp);
+       if(m_rwSystForTagBins) weight *= getTagBinsRW(calib, false, nbtag, calib, pdgid_EV, eigenv, isUp);
+@@ -567,7 +579,7 @@
+ 	 << "This is important as you need to calculated the correct probabilities for each permutation and tag bins configuration.[0m" << std::endl;
+     exit(-1);
+   }
+-  
++
+   m_trfRes[calib].trfwsys_ex[0].clear(), m_trfRes[calib].trfwsys_in[0].clear();
+   m_trfRes[calib].trfwsys_ex[0] = trfw_ex;
+   m_trfRes[calib].trfwsys_in[0] = trfw_in;
+@@ -586,7 +598,7 @@
+     if(fabs(tweight-weight) > 1e-5)
+       std::cout << "[31mIt seems that the calibration you try to set " << calib << " does not correspond to the one in the configuration file, please check it\n"
+ 	   << "This is important as you need to calculated the correct probabilities for each permutation and tag bins configuration.[0m" << std::endl;
+-  } 
++  }
+   else {
+     m_trfRes[calib].trfwsys_ex[0].at(nbtag) = weight;
+     if(fabs(tweight-weight) > 1e-5)
+@@ -634,8 +646,8 @@
+   }
+   for(const auto &jet : *m_jets) {
+     double btag_weight;
+-    if(m_usexAOD) (jet->btagging())->MVx_discriminant("MV2c20", btag_weight);
+-    else jet->getAttribute("MV2c20", btag_weight);
++    if(m_usexAOD) (jet->btagging())->MVx_discriminant("MV2c10", btag_weight);
++    else jet->getAttribute("MV2c10", btag_weight);
+     bool is_btagged = m_selTool[calib]->accept(jet->pt(), jet->eta(), btag_weight);
+     //    std::cout << "  weight " << btag_weight << "   is tagged " << is_btagged << std::endl;
+     if(is_btagged){    // tagged --> look at sf
+@@ -660,11 +672,11 @@
+   if(tags==0){
+     std::vector<bool> tags(njets,false);
+     perm.push_back(tags);
+-  } 
++  }
+   else if(tags == njets) {
+     std::vector<bool> tags(njets,true);
+-    perm.push_back(tags);    
+-  } 
++    perm.push_back(tags);
++  }
+   else {
+     for(int i=start; i<njets;i++){
+       temp_perm = generatePermutations(njets,tags-1,i+1);
+@@ -686,9 +698,9 @@
+       std::cout << "[31mCaution trf > 1. maps not carefully checked ?[0m" << std::endl;
+       std::cout << m_trfRes[calib].SF[j] << "  " << m_trfRes[calib].eff[j] << std::endl;
+       trf = 1.;
+-    }    
++    }
+     if(tags.at(j)) weight *= trf;
+-    else weight *= (1.-trf);    
++    else weight *= (1.-trf);
+   } // end loop over jets
+   return weight;
+ }
+@@ -709,7 +721,7 @@
+   }
+ }
+ 
+-std::vector<bool> TRFinterface::chooseTagPermutation(std::string calib, unsigned int nbtag, bool isIncl) 
++std::vector<bool> TRFinterface::chooseTagPermutation(std::string calib, unsigned int nbtag, bool isIncl)
+ {
+   if(m_debug > 7)
+     std::cout << "size permprob EX = " << m_trfRes[calib].permprob_ex.size() << "  IN = " << m_trfRes[calib].permprob_in.size() << "  calib = " << calib << std::endl;
+@@ -725,7 +737,7 @@
+   	trackPerm.push_back(std::make_pair(itag,ip));
+       }
+     }
+-  } 
++  }
+   else { // in exclusive case
+     sum = m_permsSumWeight.at(nbtag).back();
+     incl = m_permsSumWeight.at(nbtag);
+@@ -744,15 +756,15 @@
+   double theX = m_rand.Uniform(sum);
+   for(unsigned int ip=0; ip < incl.size(); ip++) {
+     if(incl.at(ip) >= theX) {
+-      if(m_debug > 7) std::cout << "[34mpermutation " << ip 
+-			   << "  picked, proba = " << m_permsWeight.at(trackPerm.at(ip).first).at(trackPerm.at(ip).second)/sum 
++      if(m_debug > 7) std::cout << "[34mpermutation " << ip
++			   << "  picked, proba = " << m_permsWeight.at(trackPerm.at(ip).first).at(trackPerm.at(ip).second)/sum
+ 			   << "  permw = " << m_permsWeight.at(trackPerm.at(ip).first).at(trackPerm.at(ip).second)
+ 			   << "  for sum = " << sum
+ 			   << "  (seed = " << m_rand.GetSeed() << ")[0m" << std::endl;
+       if(isIncl) {
+ 	m_trfRes[calib].perm_in.at(nbtag) = m_perms[njets].at(trackPerm.at(ip).first).at(trackPerm.at(ip).second);
+ 	m_trfRes[calib].permprob_in.at(nbtag) = m_permsWeight.at(trackPerm.at(ip).first).at(trackPerm.at(ip).second) / m_trfRes[calib].trfwsys_in[0].at(nbtag);
+-      } 
++      }
+       else {
+ 	m_trfRes[calib].perm_ex.at(nbtag) = m_perms[njets].at(trackPerm.at(ip).first).at(trackPerm.at(ip).second);
+ 	m_trfRes[calib].permprob_ex.at(nbtag) = m_permsWeight.at(trackPerm.at(ip).first).at(trackPerm.at(ip).second) / m_trfRes[calib].trfwsys_ex[0].at(nbtag);
+@@ -783,7 +795,7 @@
+     m_trfRes[calib].rwpcals_in.at(nbtag) = getPermutationRW(m_calibName,true,nbtag,calib);
+     if(m_debug > 5)
+       std::cout << "AF in perm RW = " << m_trfRes[calib].rwpcals_in.at(nbtag) << "  et permprob = " << m_trfRes[calib].permprob_in.at(nbtag) << "  trf = " << m_trfRes[calib].trfwsys_in[0].at(nbtag) << std::endl;
+-  } 
++  }
+   else {
+     if(m_trfRes[calib].perm_ex.size() < nbtag) m_trfRes[calib].perm_ex.resize(nbtag+1);
+     m_trfRes[calib].perm_ex.at(nbtag) = tagconf;
+@@ -817,11 +829,11 @@
+   }
+ 
+   if(nbtag > m_njets) return 1.;
+-  
++
+   if(isIncl) {
+     w = trfWeight(m_trfRes[calib].perm_in.at(nbtag),ncalib);
+     if(m_debug > 7)
+-      std::cout << "nom proba = " << m_trfRes[calib].permprob_in.at(nbtag) << "  nbtag = " << nbtag << "  from " << trfWeight(m_trfRes[calib].perm_in.at(nbtag),calib) 
++      std::cout << "nom proba = " << m_trfRes[calib].permprob_in.at(nbtag) << "  nbtag = " << nbtag << "  from " << trfWeight(m_trfRes[calib].perm_in.at(nbtag),calib)
+ 	   << "  and " << m_trfRes[calib].trfwsys_in[syst].at(nbtag) << std::endl
+ 	   << "syst proba = " << w/m_trfRes[ncalib].trfwsys_in[syst].at(nbtag) << "  from " << w << " (or " << trfWeight(m_trfRes[ncalib].perm_in.at(nbtag),ncalib) << ")"
+ 	   << "  and " << m_trfRes[ncalib].trfwsys_in[syst].at(nbtag) << std::endl
+@@ -829,7 +841,7 @@
+ 	   << "Perm IN " << nbtag << " btag, calib rw = " <<  m_trfRes[calib].rwpcals_in.at(nbtag) << "  and new cal = " << m_trfRes[ncalib].rwpcals_in.at(nbtag) << std::endl;
+ 
+     return w/m_trfRes[ncalib].trfwsys_in[syst].at(nbtag)/m_trfRes[calib].permprob_in.at(nbtag) * m_trfRes[calib].rwpcals_in.at(nbtag);
+-  } 
++  }
+   else {
+     w = trfWeight(m_trfRes[calib].perm_ex.at(nbtag),ncalib);
+     if(m_debug > 7)
+@@ -858,7 +870,7 @@
+ 	std::cout << std::endl;
+       }
+     }
+-  } 
++  }
+ }
+ 
+ 
+@@ -896,7 +908,7 @@
+   }
+   else if(m_trfRes[calib].binsprob_in.size() < nbtag && isIncl) {
+     m_trfRes[calib].tbins_in.clear();
+-    m_trfRes[calib].tbins_in.resize(m_trfRes[calib].trfwsys_ex[0].size()); 
++    m_trfRes[calib].tbins_in.resize(m_trfRes[calib].trfwsys_ex[0].size());
+     m_trfRes[calib].binsprob_in.clear();
+     m_trfRes[calib].binsprob_in.resize( m_trfRes[calib].trfwsys_in[0].size());
+   }
+@@ -910,7 +922,7 @@
+ std::vector<int> TRFinterface::chooseTagBins_cum(std::string calib, std::vector<bool> &tagconf, bool isIncl, unsigned int nbtag)
+ {
+   std::vector<int> btagops;
+-  //  unsigned int binBtagCut = BtagOP::getLCbin(m_OP,m_calibMap[calib].jetCalAlg); // OP-bin of the OP used to cut on  
++  //  unsigned int binBtagCut = BtagOP::getLCbin(m_OP,m_calibMap[calib].jetCalAlg); // OP-bin of the OP used to cut on
+   unsigned int binBtagCut=0;
+   for(unsigned int i =0; i<m_availableOP.size(); i++){
+     if(m_availableOP.at(i)==m_OperatingPoint){
+@@ -978,7 +990,7 @@
+     m_trfRes[calib].tbins_in.at(nbtag) = btagops;
+     m_trfRes[calib].binsprob_in.at(nbtag) = prob;
+     //    std::cout << "incl, nbtag " << nbtag << "   prob " << prob << std::endl;
+-  } 
++  }
+   else {
+     m_trfRes[calib].tbins_ex.at(nbtag) = btagops;
+     m_trfRes[calib].binsprob_ex.at(nbtag) = prob;
+@@ -1019,7 +1031,7 @@
+   else {
+     tbw = getTagBinsConfProb(ncalib, m_trfRes[calib].tbins_ex.at(nbtag), cumToCont)/m_trfRes[calib].binsprob_ex.at(nbtag);
+     //    std::cout << "tbw " << tbw << std::endl;
+-    tbw *= m_trfRes[calib].rwtbcals_ex.at(nbtag); // compared to "old" calib, ex for syst, same as for perm rw 
++    tbw *= m_trfRes[calib].rwtbcals_ex.at(nbtag); // compared to "old" calib, ex for syst, same as for perm rw
+     return tbw;
+   }
+ }
+@@ -1037,7 +1049,7 @@
+       binBtagCut=i;
+       break;
+     }
+-  }  
++  }
+   for(unsigned int j=0; j<tagws.size(); j++) {
+     if((unsigned int)tagws.at(j) > binBtagCut) { // tagged
+       double prevBinW = 0.;
+@@ -1171,5 +1183,3 @@
+   return allok;
+ 
+ }
+-
+-
+Index: BtaggingTRFandRW/TRFinterface.h
+===================================================================
+--- BtaggingTRFandRW/TRFinterface.h	(revision 325094)
++++ BtaggingTRFandRW/TRFinterface.h	(working copy)
+@@ -27,7 +27,7 @@
+   template< typename T >
+     void setEffProperty(std::string calib, const std::string Property, const T& Value){
+     std::cout << "Setting " << Property << " to " << Value << std::endl;
+-    StatusCode status = m_effTool[calib]->setProperty(Property, Value);  
++    StatusCode status = m_effTool[calib]->setProperty(Property, Value);
+     if(status != StatusCode::SUCCESS)
+       std::cout << "Problem settig the Eff. property: " << Property << " to: " << Value << std::endl;
+     if(m_rwSystForTagBins && Property!="OperatingPoint"){
+@@ -45,7 +45,7 @@
+ 
+   template< typename T >
+     void setSelProperty(std::string calib, const std::string Property, const T& Value){
+-    StatusCode status =  m_selTool[calib]->setProperty(Property, Value);  
++    StatusCode status =  m_selTool[calib]->setProperty(Property, Value);
+     if(status != StatusCode::SUCCESS)
+       std::cout << "Problem settig the Sel. property: "<< Property << " to: " << Value<< std::endl;
+   }
+@@ -75,8 +75,8 @@
+   };
+ 
+   // set the jets to be used
+-  void setJets(std::vector<double> pt, std::vector<double> eta, std::vector<int> pdg, std::vector<double> mv2c20, std::vector<double> var1 = std::vector<double>(), std::vector<double> var2 = std::vector<double>());
+-  void setJets(const xAOD::JetContainer*& jets); 
++  void setJets(std::vector<double> pt, std::vector<double> eta, std::vector<int> pdg, std::vector<double> mv2c10, std::vector<double> var1 = std::vector<double>(), std::vector<double> var2 = std::vector<double>());
++  void setJets(const xAOD::JetContainer*& jets);
+   void setSeed(unsigned int seed);
+ 
+   // get TRF weight
+@@ -95,9 +95,9 @@
+   void setRwSystForTagBinsChoice(bool dorw) {m_rwSystForTagBins = dorw;};
+ 
+   // get vectors of all EV for a given variation ("B", "C", "Light", "Extrap") -> up variations: isUpVar = true, down variations: isUpVar = false; needs to initialize up and down vectors in main
+-  void getTRFweightsForSyst(std::string calib, unsigned int nbtag, std::vector<std::vector<double> > &trf_weight_ex, std::vector<std::vector<double> > &trf_weight_in, 
++  void getTRFweightsForSyst(std::string calib, unsigned int nbtag, std::vector<std::vector<double> > &trf_weight_ex, std::vector<std::vector<double> > &trf_weight_in,
+ 			    std::string flav_syst, bool isUpVar);
+-  void getTRFweightsForSyst(unsigned int limit, std::vector<std::vector<double> > &trf_weight_ex, std::vector<std::vector<double> > &trf_weight_in, 
++  void getTRFweightsForSyst(unsigned int limit, std::vector<std::vector<double> > &trf_weight_ex, std::vector<std::vector<double> > &trf_weight_in,
+ 			    std::string flav_syst, bool isUpVar) {
+     getTRFweightsForSyst(m_calibName, limit, trf_weight_ex, trf_weight_in, flav_syst, isUpVar);
+     return;
+@@ -147,7 +147,7 @@
+     return getNumEV(flav_syst, m_calibName);
+   };
+ 
+-  // setting histograms to correct  
++  // setting histograms to correct
+   void setEffCorr(std::string fileName, std::string histoName="");
+   void setEffCorrHisto(std::string flav, std::string histoName);
+   void setEffCorrVar(std::vector<double> var1, std::vector<double> var2);
+@@ -196,7 +196,7 @@
+   // only for nominal, already coded for systematics, supposing all permutations set already (else warning)
+   void getAllTagBinsRW(std::string calib, std::vector<double> &tbrw_ex, std::vector<double> &tbrw_in);
+ 
+-  // convert tag bins in "bin" unit in tagger unit (typically doubles between 0 and 1) and contrary  
++  // convert tag bins in "bin" unit in tagger unit (typically doubles between 0 and 1) and contrary
+   //  std::vector<double> getTagWfromTagBins(std::string calib,std::vector<int> &tagbins);
+   //  std::vector<int> getTagBinsfromTagW(std::string calib,std::vector<double> &tagws);
+ 
+@@ -209,7 +209,7 @@
+   bool m_effCorr;
+   bool m_usexAOD;
+   unsigned int m_debug;
+-  std::string m_JetAuthor; 
++  std::string m_JetAuthor;
+   unsigned int m_nCalib;
+   std::string m_OperatingPoint;
+   std::string m_ScaleFactorFileName;
+@@ -217,7 +217,7 @@
+   bool m_rwSystForPerm;
+   bool m_rwSystForTagBins;
+ 
+-  bool m_ignoreSF; // set SF to 1, only test efficiencies 
++  bool m_ignoreSF; // set SF to 1, only test efficiencies
+ 
+   struct BtagCalib {
+     std::string name;
+@@ -229,9 +229,9 @@
+ 
+   std::string m_calibName; // if more than one calibs, store the reference one if set
+   std::map<std::string, BtagCalib> m_calibMap;
+-  std::map<std::string, BTaggingEfficiencyTool*> m_effTool; 
++  std::map<std::string, BTaggingEfficiencyTool*> m_effTool;
+   std::map<std::string, std::map<std::string,BTaggingEfficiencyTool*>> m_effTool_allOP; // tagbin
+-  std::map<std::string, BTaggingSelectionTool*> m_selTool; 
++  std::map<std::string, BTaggingSelectionTool*> m_selTool;
+ 
+   std::map<std::string, std::map<std::string, TH2F*>> m_corrEffHist;
+   std::map<std::string, std::string> m_corrEffFile;
+@@ -247,6 +247,7 @@
+ 
+   //  xAOD::JetContainer* m_jets;
+   const xAOD::JetContainer* m_jets;
++  const xAOD::AuxContainerBase* m_jets_aux; 
+   unsigned int m_njets;
+ 
+   // objects characteristics of a calibration / systematic -> only save nominal syst not needed in mem here
+@@ -273,7 +274,7 @@
+     std::map<int,std::vector<double> > trfwsys_ex;
+     std::map<int,std::vector<double> > trfwsys_in;
+   };
+-  
++
+   std::map<std::string, TRFres> m_trfRes;
+ 
+   // Systematics...

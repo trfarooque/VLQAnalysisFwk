@@ -1,0 +1,43 @@
+% -------------------------------------------------- %
+% ------   SINGLETOP PMG WEIGHTS SYSTEMATICS  ------ %
+% -------------------------------------------------- %
+
+Systematic: "HTX_BKGNP_SINGLETOP_WT_ISR_VAR3C" ; "HTX_BKGNP_SINGLETOP_SCHAN_ISR_VAR3C" ; "HTX_BKGNP_SINGLETOP_TCHAN_ISR_VAR3C"
+  Title: "Single-top Wt isr Var3c" ; "Single-top s-channel isr Var3c" ; "Single-top t-channel isr Var3c"
+  Type: HISTO
+  Category: "Single-top uncertainties"
+  HistoNameSufUp: _weight_pmg_Var3cUp
+  HistoNameSufDown: _weight_pmg_Var3cDown
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Samples: singletopWtprod;singletopschan;singletoptchan
+
+Systematic: "HTX_BKGNP_SINGLETOP_WT_ISR_MUR" ; "HTX_BKGNP_SINGLETOP_SCHAN_ISR_MUR" ; "HTX_BKGNP_SINGLETOP_TCHAN_ISR_MUR"
+  Title: "Single-top Wt isr #mu_{R}" ; "Single-top s-channel isr #mu_{R}" ; "Single-top t-channel isr #mu_{R}"
+  Type: HISTO
+  Category: "Single-top uncertainties"
+  HistoNameSufUp: _weight_pmg_muR20__muF10
+  HistoNameSufDown: _weight_pmg_muR05__muF10
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Samples: singletopWtprod;singletopschan;singletoptchan
+
+Systematic: "HTX_BKGNP_SINGLETOP_WT_ISR_MUF" ; "HTX_BKGNP_SINGLETOP_SCHAN_ISR_MUF" ; "HTX_BKGNP_SINGLETOP_TCHAN_ISR_MUF"
+  Title: "Single-top Wt isr #mu_{F}" ; "Single-top s-channel isr #mu_{F}" ; "Single-top t-channel isr #mu_{F}"
+  Type: HISTO
+  Category: "Single-top uncertainties"
+  HistoNameSufUp: _weight_pmg_muR10__muF20
+  HistoNameSufDown: _weight_pmg_muR10__muF05
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Samples: singletopWtprod;singletopschan;singletoptchan
+
+Systematic: "HTX_BKGNP_SINGLETOP_WT_ISR_MURF" ; "HTX_BKGNP_SINGLETOP_SCHAN_ISR_MURF" ; "HTX_BKGNP_SINGLETOP_TCHAN_ISR_MURF"
+  Title: "Single-top Wt isr #mu_{R/F}" ; "Single-top s-channel isr #mu_{R/F}" ; "Single-top t-channel isr #mu_{R/F}"
+  Type: HISTO
+  Category: "Single-top uncertainties"
+  HistoNameSufUp: _weight_pmg_isr_muRfac10__fsr_muRfac20
+  HistoNameSufDown: _weight_pmg_isr_muRfac10__fsr_muRfac05
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Samples: singletopWtprod;singletopschan;singletoptchan

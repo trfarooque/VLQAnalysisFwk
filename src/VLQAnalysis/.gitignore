@@ -1,0 +1,13 @@
+*~
+doc/html/
+doc/latex/
+._*
+*.pyc
+python/Lists_*
+python/Rootfiles_*
+python/configFile_*
+python/*.list
+python/*.root
+data/hbsm/filelist/eos/*.txt
+.nfs*
+IGNORE*

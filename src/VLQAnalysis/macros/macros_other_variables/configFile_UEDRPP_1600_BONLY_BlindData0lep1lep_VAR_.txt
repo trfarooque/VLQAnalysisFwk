@@ -1,0 +1,1499 @@
+% -------------------------- %
+% -------    JOB     ------- %
+% -------------------------- %
+
+Job: "BONLY__VLQ_TT_800_TDoublet__"
+Label: "Ht+X analysis"
+CmeLabel: "13 TeV"
+LumiLabel: "36.1 fb^{-1}"
+Lumi: 36074.6
+POI: "mu_signal"
+ReadFrom: HIST
+HistoPath: "_INPUTDIR_"
+DebugLevel: 0
+SystControlPlots: FALSE
+SystPruningShape: 0.01
+SystPruningNorm: 0.01
+CorrelationThreshold: 0.20
+HistoChecks: NOCRASH
+SplitHistoFiles: TRUE
+MCstatThreshold: 0.05
+StatOnly: FALSE
+SystLarge: 10.
+GetChi2: TRUE
+PlotOptions: "CHI2"
+
+% -------------------------- %
+% -------    FIT     ------- %
+% -------------------------- %
+
+Fit: "BONLY"
+FitType: BONLY
+FitRegion: CRSR
+FitBlind: FALSE
+POIAsimov: 0
+
+% --------------------------- %
+% ---------- LIMIT ---------- %
+% --------------------------- %
+
+Limit: "limit"
+LimitType: ASYMPTOTIC
+LimitBlind: FALSE
+POIAsimov: 0
+
+% -------------------------- %
+% --------- REGIONS -------- %
+% -------------------------- %
+
+_REGIONS_
+
+
+% --------------------------- %
+% --------  SAMPLES  -------- %
+% --------------------------- %
+
+Sample: "ttbarlightSUSY10"
+Type: GHOST
+HistoFile: "ttbarlight_SUSY10"
+
+Sample: "ttbarbbSUSY10"
+Type: GHOST
+HistoFile: "ttbarbb_SUSY10"
+
+Sample: "ttbarccSUSY10"
+Type: GHOST
+HistoFile: "ttbarcc_SUSY10"
+
+Sample: "ttbarlightPowHer"
+Type: GHOST
+HistoFile: "ttbarlightPowHer"
+
+Sample: "ttbarbbPowHer"
+Type: GHOST
+HistoFile: "ttbarbbPowHer"
+
+Sample: "ttbarccPowHer"
+Type: GHOST
+HistoFile: "ttbarccPowHer"
+
+Sample: "ttbarlight"
+Title: "t#bar{t}+light"
+Type: background
+FillColor: 0
+LineColor: 1
+HistoFile: "ttbarlight"
+
+Sample: "ttbarcc"
+Title: "t#bar{t}+cc"
+Type: background
+FillColor: 590
+LineColor: 1
+HistoFile: "ttbarcc"
+
+Sample: "ttbarbb"
+Title: "t#bar{t}+bb"
+Type: background
+FillColor: 594
+LineColor: 1
+HistoFile: "ttbarbb"
+
+Sample: "topEW"
+Title: "topEW"
+Type: background
+FillColor: 410
+LineColor: 1
+HistoFile: "topEW"
+Group: "Non-t#bar{t}"
+
+Sample: "ttH"
+Title: "ttH"
+Type: background
+FillColor: 410
+LineColor: 1
+HistoFile: "ttH"
+Group: "Non-t#bar{t}"
+
+Sample: "Wjetslight"
+Title: "W+jetslight"
+Type: background
+FillColor: 410
+LineColor: 1
+HistoFile: "Wjets22light"
+Group: "Non-t#bar{t}"
+
+Sample: "Wjetscharm"
+Title: "W+jetscharm"
+Type: background
+FillColor: 410
+LineColor: 1
+HistoFile: "Wjets22charm"
+Group: "Non-t#bar{t}"
+
+Sample: "Wjetsbeauty"
+Title: "W+jetsbeauty"
+Type: background
+FillColor: 410
+LineColor: 1
+HistoFile: "Wjets22beauty"
+Group: "Non-t#bar{t}"
+
+Sample: "Zjetslight"
+Title: "Z+jetslight"
+Type: background
+FillColor: 410
+LineColor: 1
+HistoFile: "Zjets22light"
+Group: "Non-t#bar{t}"
+
+Sample: "Zjetscharm"
+Title: "Z+jetscharm"
+Type: background
+FillColor: 410
+LineColor: 1
+HistoFile: "Zjets22charm"
+Group: "Non-t#bar{t}"
+
+Sample: "Zjetsbeauty"
+Title: "Z+jetsbeauty"
+Type: background
+FillColor: 410
+LineColor: 1
+HistoFile: "Zjets22beauty"
+Group: "Non-t#bar{t}"
+
+Sample: "Singletop"
+Title: "Single-top"
+Type: background
+FillColor: 410
+LineColor: 1
+HistoFile: "Singletop"
+Group: "Non-t#bar{t}"
+
+Sample: "Dibosons"
+Title: "Dibosons"
+Type: background
+FillColor: 410
+LineColor: 1
+HistoFile: "Dibosons"
+Group: "Non-t#bar{t}"
+
+Sample: "QCD"
+Title: "QCD"
+Type: background
+FillColor: 410
+LineColor: 1
+HistoFile: "QCD"
+Group: "Non-t#bar{t}"
+NormalizedByTheory: FALSE
+Regions: c1lep*,sum1lep*
+Smooth: TRUE
+
+Sample: "QCD0L"
+Title: "QCD0L"
+Type: background
+FillColor: 410
+LineColor: 1
+HistoFile: "QCD0L"
+Group: "Non-t#bar{t}"
+NormalizedByTheory: FALSE
+Regions: c0lep*,sum0lep*
+
+NormFactor: "HTX_BKGNORM_TTBARBB"
+Title: "t#bar{t}+#geq1b normalisation"
+Nominal: 1
+Min: -10
+Max: 10
+Samples: ttbarbb
+
+Sample: "Data"
+Title: "Data"
+Type: "data"
+HistoFile: "Data"
+
+
+% ------------------------ %
+% --------  LUMI  -------- %
+% ------------------------ %
+
+Systematic: "Luminosity"
+  Title: "Luminosity"
+  Type: OVERALL
+  Category: Others
+  OverallUp: 0.022
+  OverallDown: -0.022
+  Exclude: QCD,QCD0L
+
+% ------------------------- %
+% -----  MET trigger  ----- %
+% ------------------------- %
+
+Systematic: HTX_MET_TRIGGER_0L
+  Title: "MET trigger uncertainty"
+  Type: OVERALL
+  Category: Others
+  OverallUp: 0.02
+  OverallDown: -0.02
+  Exclude: QCD0L,QCD
+  Regions: c0lep*,sum0lep*
+
+% ------------------------- %
+% --------  TTBAR  -------- %
+% ------------------------- %
+
+Systematic: "HTX_BKGNP_TTBAR_XS"
+  Title: "t#bar{t} inclusive cross section"
+  Type: OVERALL
+  Category: "t#bar{t} uncertainties"
+  OverallUp: 0.055
+  OverallDown: -0.061
+  Samples: ttbarlight,ttbarbb,ttbarcc
+
+Systematic: "HTX_BKGNP_TTBARCC_XS"
+  Title: "t#bar{t}+c#bar{c} norm."
+  Type: OVERALL
+  Category: "t#bar{t} uncertainties"
+  OverallUp: 0.5
+  OverallDown: -0.5
+  Samples: ttbarcc
+
+% ---------------------------------- %
+% --------  V+jets (1-lep)  -------- %
+% ---------------------------------- %
+
+Systematic: "HTX_BKGNP_VJETS_XS_1l_0T0H"
+  Title: "V+jets norm. (Presel.)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.30
+  OverallDown: -0.30
+  Samples: Wjetslight,Zjetslight,Wjetscharm,Zjetscharm,Wjetsbeauty,Zjetsbeauty
+  Regions: c1lep*,sum1lep*
+
+% ---------------------------------- %
+% ----  V+jets charm (1-lep)  ----- %
+% ---------------------------------- %
+
+Systematic: "HTX_BKGNP_VJETSCC_XS_1l_0T0H"
+  Title: "V+charm-jets norm. (Presel)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.30
+  OverallDown: -0.30
+  Samples: Wjetscharm,Zjetscharm
+  Regions: c1lep*,sum1lep*
+
+% ---------------------------------- %
+% ----  V+jets beauty (1-lep)  ----- %
+% ---------------------------------- %
+
+Systematic: "HTX_BKGNP_VJETSBB_XS_1l_0T0H"
+  Title: "V+beauty-jets norm. (Presel)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.30
+  OverallDown: -0.30
+  Samples: Wjetsbeauty,Zjetsbeauty
+  Regions: c1lep*,sum1lep*
+
+% ---------------------------------------- %
+% --------  V+jets (0-lep)  -------- %
+% ---------------------------------------- %
+
+Systematic: "HTX_BKGNP_VJETS_XS_0l_0T0H"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.30
+  OverallDown: -0.30
+  Samples: Wjetslight,Zjetslight,Wjetscharm,Zjetscharm,Wjetsbeauty,Zjetsbeauty
+  Regions: c0lep*,sum0lep*
+
+% ---------------------------------------- %
+% --------  V+jets charm (0-lep)  -------- %
+% ---------------------------------------- %
+
+Systematic: "HTX_BKGNP_VJETSCC_XS_0l_0T0H"
+  Title: "V+charm-jets norm. (Presel)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.30
+  OverallDown: -0.30
+  Samples: Wjetscharm,Zjetscharm
+  Regions: c0lep*,sum0lep*
+
+% ---------------------------------------- %
+% --------  V+jets charm (0-lep)  -------- %
+% ---------------------------------------- %
+
+Systematic: "HTX_BKGNP_VJETSBB_XS_0l_0T0H"
+  Title: "V+b-jets norm. (Presel)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.30
+  OverallDown: -0.30
+  Samples: Wjetsbeauty,Zjetsbeauty
+  Regions: c0lep*,sum0lep*
+
+% -------------------------------------- %
+% --------  Dibosons (1-lep)  ---------- %
+% -------------------------------------- %
+
+Systematic: "HTX_BKGNP_OTHERS_Dibosons_XS_1l_0T0H"
+  Title: "Dibosons norm. (Presel)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.48
+  OverallDown: -0.48
+  Samples: Dibosons
+  Regions: c1lep*,sum1lep*
+
+% -------------------------------------- %
+% --------  Dibosons (0-lep)  ---------- %
+% -------------------------------------- %
+
+Systematic: "HTX_BKGNP_OTHERS_Dibosons_XS_0l_0T0H"
+  Title: "Dibosons norm. (0l,0T,0H)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.48
+  OverallDown: -0.48
+  Samples: Dibosons
+  Regions: c0lep*,sum0lep*
+
+
+% ---------------------------- %
+% --------  Top EW  ---------- %
+% ---------------------------- %
+
+Systematic: "HTX_BKGNP_OTHERS_TopEW_XS_0l"
+  Title: "topEW norm. (0l)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.15
+  OverallDown: -0.15
+  Samples: topEW
+  Regions: c0lep*,sum0lep*
+
+Systematic: "HTX_BKGNP_OTHERS_TopEW_XS_1l"
+  Title: "topEW norm. (1l)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.15
+  OverallDown: -0.15
+  Samples: topEW
+  Regions: c1lep*,sum1lep*
+
+% ---------------------------- %
+% --------    ttH   ---------- %
+% ---------------------------- %
+
+Systematic: "HTX_BKGNP_OTHERS_ttH_XS_0l"
+  Title: "ttH norm. (0l)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.09
+  OverallDown: -0.12
+  Samples: ttH
+  Regions: c0lep*,sum0lep*
+
+Systematic: "HTX_BKGNP_OTHERS_ttH_XS_1l"
+  Title: "ttH norm. (1l)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.09
+  OverallDown: -0.12
+  Samples: ttH
+  Regions: c1lep*,sum1lep*
+
+% ----------------------------- %
+% --------  SM4tops  ---------- %
+% ----------------------------- %
+
+Systematic: "HTX_BKGNP_OTHERS_SM4tops_XS_0l"
+  Title: "SM 4tops norm. (0l)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.3
+  OverallDown: -0.3
+  Samples: BackSM4tops
+  Regions: c0lep*,sum0lep*
+
+Systematic: "HTX_BKGNP_OTHERS_SM4tops_XS_1l"
+  Title: "SM 4tops norm. (1l)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.3
+  OverallDown: -0.3
+  Samples: BackSM4tops
+  Regions: c1lep*,sum1lep*
+
+% ----------------------------- %
+% -------  Single-top  -------- %
+% ----------------------------- %
+
+Systematic: HTX_BKGNP_OTHERS_Singletop_XS_1lep_0Tex0Hex
+  Title: "Single-top norm. 1lep (Presel)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.6
+  OverallDown: -0.6
+  Samples: "Singletop"
+  Regions: c1lep*,sum1lep*
+
+Systematic: HTX_BKGNP_OTHERS_Singletop_DRDS_1lep_0Tex0Hex
+  Title: "Single-top DR/DS (1l, Presel)"
+  Type: HISTO
+  Category: "Background uncertainties"
+  HistoNameSufUp: "_SingleTopDR"
+  Smoothing: 40
+  Samples: "Singletop"
+  Regions: c1lep*,sum1lep*
+
+Systematic: HTX_BKGNP_OTHERS_Singletop_XS_0lepLowMtbmin_0Tex0Hex
+  Title: "Single-top norm. 0lep (Presel)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.6
+  OverallDown: -0.6
+  Samples: "Singletop"
+  Regions: c0lep*,sum0lep*
+
+Systematic: HTX_BKGNP_OTHERS_Singletop_DRDS_0lep_0Tex0Hex
+  Title: "Single-top DR/DS (0l, Presel)"
+  Type: HISTO
+  Category: "Background uncertainties"
+  HistoNameSufUp: "_SingleTopDR"
+  Smoothing: 40
+  Samples: "Singletop"
+  Regions: c0lep*,sum0lep*
+
+% ------------------------------ %
+% --------   ELECTRONS  -------- %
+% ------------------------------ %
+
+Systematic: "EG_RESOLUTION_ALL"
+  Title: "Electron E_{T} res."
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoFileSufUp: _EG_RESOLUTION_ALL__1up
+  HistoFileSufDown: _EG_RESOLUTION_ALL__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "EG_SCALE_ALL"
+  Title: "Electron E_{T} scale"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoFileSufUp: _EG_SCALE_ALL__1up
+  HistoFileSufDown: _EG_SCALE_ALL__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+% ------------------------------ %
+% ----------   MUONS  ---------- %
+% ------------------------------ %
+
+Systematic: "MUON_ID"
+  Title: "Muon ID p_{T} res."
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoFileSufUp: _MUON_ID__1up
+  HistoFileSufDown: _MUON_ID__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "MUON_MS"
+  Title: "Muon MS p_{T} res."
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoFileSufUp: _MUON_MS__1up
+  HistoFileSufDown: _MUON_MS__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "MUON_SCALE"
+  Title: "Muon p_{T} scale"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoFileSufUp: _MUON_SCALE__1up
+  HistoFileSufDown: _MUON_SCALE__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "MUON_SAGITTA_RESBIAS"
+  Title: "Muon p_{T} scale"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoFileSufUp: _MUON_SAGITTA_RESBIAS__1up
+  HistoFileSufDown: _MUON_SAGITTA_RESBIAS__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "MUON_SAGITTA_RHO"
+  Title: "Muon p_{T} scale"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoFileSufUp: _MUON_SAGITTA_RHO__1up
+  HistoFileSufDown: _MUON_SAGITTA_RHO__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+% ------------------------------ %
+% -----------   JETS  ---------- %
+% ------------------------------ %
+
+Systematic: "JET_BJES_Response"
+  Title: "b JES response"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_BJES_Response__1up
+  HistoFileSufDown: _JET_BJES_Response__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_EffectiveNP_1"
+  Title: "Effective NP 1"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_EffectiveNP_1__1up
+  HistoFileSufDown: _JET_EffectiveNP_1__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_EffectiveNP_2"
+  Title: "Effective NP 2"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_EffectiveNP_2__1up
+  HistoFileSufDown: _JET_EffectiveNP_2__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_EffectiveNP_3"
+  Title: "Effective NP 3"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_EffectiveNP_3__1up
+  HistoFileSufDown: _JET_EffectiveNP_3__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_EffectiveNP_4"
+  Title: "Effective NP 4"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_EffectiveNP_4__1up
+  HistoFileSufDown: _JET_EffectiveNP_4__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_EffectiveNP_5"
+  Title: "Effective NP 5"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_EffectiveNP_5__1up
+  HistoFileSufDown: _JET_EffectiveNP_5__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_EffectiveNP_6"
+  Title: "Effective NP 6"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_EffectiveNP_6__1up
+  HistoFileSufDown: _JET_EffectiveNP_6__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_EffectiveNP_7"
+  Title: "Effective NP 7"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_EffectiveNP_7__1up
+  HistoFileSufDown: _JET_EffectiveNP_7__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_EffectiveNP_8restTerm"
+  Title: "Effective NP 8"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_EffectiveNP_8restTerm__1up
+  HistoFileSufDown: _JET_EffectiveNP_8restTerm__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_EtaIntercalibration_Modelling"
+  Title: "#eta intercalib. (model)"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_EtaIntercalibration_Modelling__1up
+  HistoFileSufDown: _JET_EtaIntercalibration_Modelling__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_EtaIntercalibration_TotalStat"
+  Title: "#eta intercalib. (stat.)"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_EtaIntercalibration_TotalStat__1up
+  HistoFileSufDown: _JET_EtaIntercalibration_TotalStat__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_EtaIntercalibration_NonClosure"
+  Title: "#eta intercalib. (stat.)"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_EtaIntercalibration_NonClosure__1up
+  HistoFileSufDown: _JET_EtaIntercalibration_NonClosure__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_Flavor_Composition"
+  Title: "Flavour composition"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Flavor_Composition__1up
+  HistoFileSufDown: _JET_Flavor_Composition__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_Flavor_Response"
+  Title: "Flavor response"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Flavor_Response__1up
+  HistoFileSufDown: _JET_Flavor_Response__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_Pileup_OffsetMu"
+  Title: "Pile-up offset mu term"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Pileup_OffsetMu__1up
+  HistoFileSufDown: _JET_Pileup_OffsetMu__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_Pileup_OffsetNPV"
+  Title: "Pile-up offset NPV term"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Pileup_OffsetNPV__1up
+  HistoFileSufDown: _JET_Pileup_OffsetNPV__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_Pileup_PtTerm"
+  Title: "Pile-up offset p_{T} term"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Pileup_PtTerm__1up
+  HistoFileSufDown: _JET_Pileup_PtTerm__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_Pileup_RhoTopology"
+  Title: "#rho topology"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Pileup_RhoTopology__1up
+  HistoFileSufDown: _JET_Pileup_RhoTopology__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_PunchThrough_MC15"
+  Title: "Punch-through correction"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_PunchThrough_MC15__1up
+  HistoFileSufDown: _JET_PunchThrough_MC15__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_SingleParticle_HighPt"
+  Title: "High-p_{T} term"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_SingleParticle_HighPt__1up
+  HistoFileSufDown: _JET_SingleParticle_HighPt__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_Rtrk_Baseline_mass"
+  Title: "JMS baseline"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Rtrk_Baseline_mass__1up
+  HistoFileSufDown: _JET_Rtrk_Baseline_mass__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_Rtrk_Modelling_mass"
+  Title: "JMS modelling"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Rtrk_Modelling_mass__1up
+  HistoFileSufDown: _JET_Rtrk_Modelling_mass__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_Rtrk_TotalStat_mass"
+  Title: "JMS stat."
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Rtrk_TotalStat_mass__1up
+  HistoFileSufDown: _JET_Rtrk_TotalStat_mass__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_Rrk_Tracking_mass"
+  Title: "JMS tracking"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Rrk_Tracking_mass__1up
+  HistoFileSufDown: _JET_Rrk_Tracking_mass__1down
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "JET_JER_SINGLE_NP"
+  Title: "JER"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_JER_SINGLE_NP__1up
+  Symmetrisation: "OneSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "HTX_JET_JMR__1up"
+  Title: "JMR"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_JMR__1up
+  Symmetrisation: "OneSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+% ------------------------------ %
+% -----------   MET  ----------- %
+% ------------------------------ %
+
+Systematic: "MET_SoftTrk_ResoPara"
+  Title: "MET TST reso. para."
+  Type: HISTO
+  Category: "E_{T}^{miss} uncertainties"
+  HistoFileSufUp: _MET_SoftTrk_ResoPara
+  Symmetrisation: "OneSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "MET_SoftTrk_ResoPerp"
+  Title: "MET TST reso. perp."
+  Type: HISTO
+  Category: "E_{T}^{miss} uncertainties"
+  HistoFileSufUp: _MET_SoftTrk_ResoPerp
+  Symmetrisation: "OneSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+Systematic: "MET_SoftTrk_Scale"
+  Title: "MET TST scale"
+  Type: HISTO
+  Category: "E_{T}^{miss} uncertainties"
+  HistoFileSufUp: _MET_SoftTrk_ScaleUp
+  HistoFileSufDown: _MET_SoftTrk_ScaleDown
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+% ------------------------------ %
+% --------   ELECTRONS  -------- %
+% ------------------------------ %
+
+Systematic: "EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR"
+  Title: "Electron ID"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoNameSufUp: _weight_elec_ID_UP
+  HistoNameSufDown: _weight_elec_ID_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR"
+  Title: "Electron isol."
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoNameSufUp: _weight_elec_Iso_UP
+  HistoNameSufDown: _weight_elec_Iso_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR"
+  Title: "Electron reco."
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoNameSufUp: _weight_elec_Reco_UP
+  HistoNameSufDown: _weight_elec_Reco_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR"
+  Title: "Electron trig. eff"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoNameSufUp: _weight_elec_Trigger_UP
+  HistoNameSufDown: _weight_elec_Trigger_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "EL_EFF_TriggerEff_TOTAL_1NPCOR_PLUS_UNCOR"
+  Title: "Electron trig. eff"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoNameSufUp: _weight_elec_TriggerEff_UP
+  HistoNameSufDown: _weight_elec_TriggerEff_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+% -------------------------- %
+% --------   MUONS  -------- %
+% -------------------------- %
+
+Systematic: "MUON_BADMUON_STAT"
+  Title: "Muon BADMUON (stat.)"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoNameSufUp: _weight_muon_BADMUON_STAT_UP
+  HistoNameSufDown: _weight_muon_BADMUON_STAT_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "MUON_BADMUON_SYS"
+  Title: "Muon BADMUON (syst.)"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoNameSufUp: _weight_muon_BADMUON_SYS_UP
+  HistoNameSufDown: _weight_muon_BADMUON_SYS_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "MUON_EFF_STAT_LOWPT"
+  Title: "Muon ID low-p_{T} (stat.)"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoNameSufUp: _weight_muon_EFF_STAT_LOWPT_UP
+  HistoNameSufDown: _weight_muon_EFF_STAT_LOWPT_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "MUON_EFF_STAT"
+  Title: "Muon ID (stat.)"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoNameSufUp: _weight_muon_EFF_STAT_UP
+  HistoNameSufDown: _weight_muon_EFF_STAT_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "MUON_EFF_SYS_LOWPT"
+  Title: "Muon ID (syst.)"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoNameSufUp: _weight_muon_EFF_SYS_LOWPT_UP
+  HistoNameSufDown: _weight_muon_EFF_SYS_LOWPT_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "MUON_EFF_SYS"
+  Title: "Muon ID (syst.)"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoNameSufUp: _weight_muon_EFF_SYS_UP
+  HistoNameSufDown: _weight_muon_EFF_SYS_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "MUON_ISO_STAT"
+  Title: "Muon Isol. (stat.)"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoNameSufUp: _weight_muon_ISO_STAT_UP
+  HistoNameSufDown: _weight_muon_ISO_STAT_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "MUON_ISO_SYS"
+  Title: "Muon Isol. (syst.)"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoNameSufUp: _weight_muon_ISO_SYS_UP
+  HistoNameSufDown: _weight_muon_ISO_SYS_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "MUON_TTVA_STAT"
+  Title: "Muon TTVA (stat.)"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoNameSufUp: _weight_muon_TTVA_STAT_UP
+  HistoNameSufDown: _weight_muon_TTVA_STAT_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "MUON_TTVA_SYS"
+  Title: "Muon TTVA (syst.)"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoNameSufUp: _weight_muon_TTVA_SYS_UP
+  HistoNameSufDown: _weight_muon_TTVA_SYS_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "MUON_EFF_TrigStatUncertainty"
+  Title: "Muon Trig. (stat.)"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoNameSufUp: _weight_muon_TrigStatUncertainty_UP
+  HistoNameSufDown: _weight_muon_TrigStatUncertainty_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+Systematic: "MUON_EFF_TrigSystUncertainty"
+  Title: "Muon Trig. (syst.)"
+  Type: HISTO
+  Category: "Lepton uncertainties"
+  HistoNameSufUp: _weight_muon_TrigSystUncertainty_UP
+  HistoNameSufDown: _weight_muon_TrigSystUncertainty_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+  Regions: c1lep*,sum1lep*
+
+% ---------------------------- %
+% --------   PILE-UP  -------- %
+% ---------------------------- %
+
+Systematic: "PRW_DATASF"
+  Title: "Pile-up uncertainty"
+  Type: HISTO
+  Category: "Others"
+  HistoNameSufUp: _weight_pu_UP
+  HistoNameSufDown: _weight_pu_DOWN
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Exclude: QCD,QCD0L
+
+% ------------------------------ %
+% --------   B-TAGGING  -------- %
+% ------------------------------ %
+
+Systematic: "FT_EFF_Eigen_B_0"
+  Title: "b-tag (B) EV0"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_B_EV_Up_0
+  HistoNameSufDown: _weight_btag_B_EV_Down_0
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_B_1"
+  Title: "b-tag (B) EV1"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_B_EV_Up_1
+  HistoNameSufDown: _weight_btag_B_EV_Down_1
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_B_2"
+  Title: "b-tag (B) EV2"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_B_EV_Up_2
+  HistoNameSufDown: _weight_btag_B_EV_Down_2
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_B_3"
+  Title: "b-tag (B) EV3"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_B_EV_Up_3
+  HistoNameSufDown: _weight_btag_B_EV_Down_3
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_B_4"
+  Title: "b-tag (B) EV4"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_B_EV_Up_4
+  HistoNameSufDown: _weight_btag_B_EV_Down_4
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_B_5"
+  Title: "b-tag (B) EV5"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_B_EV_Up_5
+  HistoNameSufDown: _weight_btag_B_EV_Down_5
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+% ---------------------------------- %
+% --------   C MIS-TAGGING  -------- %
+% ---------------------------------- %
+
+Systematic: "FT_EFF_Eigen_C_0"
+  Title: "b-tag (C) EV0"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_C_EV_Up_0
+  HistoNameSufDown: _weight_btag_C_EV_Down_0
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_C_1"
+  Title: "b-tag (C) EV1"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_C_EV_Up_1
+  HistoNameSufDown: _weight_btag_C_EV_Down_1
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_C_2"
+  Title: "b-tag (C) EV2"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_C_EV_Up_2
+  HistoNameSufDown: _weight_btag_C_EV_Down_2
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_C_3"
+  Title: "b-tag (C) EV3"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_C_EV_Up_3
+  HistoNameSufDown: _weight_btag_C_EV_Down_3
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+% ---------------------------------- %
+% --------   L MIS-TAGGING  -------- %
+% ---------------------------------- %
+
+Systematic: "FT_EFF_Eigen_Light_0"
+  Title: "b-tag (L) EV0"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_Light_EV_Up_0
+  HistoNameSufDown: _weight_btag_Light_EV_Down_0
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_Light_1"
+  Title: "b-tag (L) EV1"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_Light_EV_Up_1
+  HistoNameSufDown: _weight_btag_Light_EV_Down_1
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_Light_2"
+  Title: "b-tag (L) EV2"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_Light_EV_Up_2
+  HistoNameSufDown: _weight_btag_Light_EV_Down_2
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_Light_3"
+  Title: "b-tag (L) EV3"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_Light_EV_Up_3
+  HistoNameSufDown: _weight_btag_Light_EV_Down_3
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_Light_4"
+  Title: "b-tag (L) EV4"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_Light_EV_Up_4
+  HistoNameSufDown: _weight_btag_Light_EV_Down_4
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_Light_5"
+  Title: "b-tag (L) EV5"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_Light_EV_Up_5
+  HistoNameSufDown: _weight_btag_Light_EV_Down_5
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_Light_6"
+  Title: "b-tag (L) EV6"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_Light_EV_Up_6
+  HistoNameSufDown: _weight_btag_Light_EV_Down_6
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_Light_7"
+  Title: "b-tag (L) EV7"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_Light_EV_Up_7
+  HistoNameSufDown: _weight_btag_Light_EV_Down_7
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_Light_8"
+  Title: "b-tag (L) EV8"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_Light_EV_Up_8
+  HistoNameSufDown: _weight_btag_Light_EV_Down_8
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_Light_9"
+  Title: "b-tag (L) EV9"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_Light_EV_Up_9
+  HistoNameSufDown: _weight_btag_Light_EV_Down_9
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_Light_10"
+  Title: "b-tag (L) EV10"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_Light_EV_Up_10
+  HistoNameSufDown: _weight_btag_Light_EV_Down_10
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_Light_11"
+  Title: "b-tag (L) EV11"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_Light_EV_Up_11
+  HistoNameSufDown: _weight_btag_Light_EV_Down_11
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_Light_12"
+  Title: "b-tag (L) EV12"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_Light_EV_Up_12
+  HistoNameSufDown: _weight_btag_Light_EV_Down_12
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_Light_13"
+  Title: "b-tag (L) EV13"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_Light_EV_Up_13
+  HistoNameSufDown: _weight_btag_Light_EV_Down_13
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_Light_14"
+  Title: "b-tag (L) EV14"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_Light_EV_Up_14
+  HistoNameSufDown: _weight_btag_Light_EV_Down_14
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_Light_15"
+  Title: "b-tag (L) EV15"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_Light_EV_Up_15
+  HistoNameSufDown: _weight_btag_Light_EV_Down_15
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_Eigen_Light_16"
+  Title: "b-tag (L) EV16"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_Light_EV_Up_16
+  HistoNameSufDown: _weight_btag_Light_EV_Down_16
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_extrapolation"
+  Title: "b-tag extrap."
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_extrapolation_Up
+  HistoNameSufDown: _weight_btag_extrapolation_Down
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+Systematic: "FT_EFF_extrapolation_from_charm"
+  Title: "b-tag extrap. from charm"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_btag_extrapolation_from_charm_Up
+  HistoNameSufDown: _weight_btag_extrapolation_from_charm_Down
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+% ------------------------ %
+% --------   JVT  -------- %
+% ------------------------ %
+
+Systematic: "JET_JvtEfficiency"
+  Title: "JVT uncertainty"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoNameSufUp: _weight_jvt_UP
+  HistoNameSufDown: _weight_jvt_DOWN
+  Symmetrisation: "TwoSided"
+  Exclude: QCD,QCD0L
+
+% ------------------------------ %
+% --------   TTBB unc.  -------- %
+% ------------------------------ %
+
+Systematic: "HTX_BKGNP_TTBARBB_SCALE"
+  Title: "t#bar{t}+b#bar{b} scale"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: _weight_ttbb_defaultX2
+  HistoNameSufDown: _weight_ttbb_defaultX05
+  Symmetrisation: "TwoSided"
+  Samples: ttbarbb
+
+Systematic: "HTX_BKGNP_TTBARBB_CSS_KIN"
+  Title: "t#bar{t}+b#bar{b} CSS KIN"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: _weight_ttbb_CSS_KIN
+  Symmetrisation: "OneSided"
+  Samples: ttbarbb
+
+Systematic: "HTX_BKGNP_TTBARBB_MSTW"
+  Title: "t#bar{t}+b#bar{b} MSTW"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: _weight_ttbb_MSTW
+  Symmetrisation: "OneSided"
+  Samples: ttbarbb
+
+Systematic: "HTX_BKGNP_TTBARBB_NNPDF"
+  Title: "t#bar{t}+b#bar{b} NNPDF"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: _weight_ttbb_NNPDF
+  Symmetrisation: "OneSided"
+  Samples: ttbarbb
+
+Systematic: "HTX_BKGNP_TTBARBB_Q_CMMPS"
+  Title: "t#bar{t}+b#bar{b} Q CMMPS"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: _weight_ttbb_Q_CMMPS
+  Symmetrisation: "OneSided"
+  Samples: ttbarbb
+
+Systematic: "HTX_BKGNP_TTBARBB_GLOSOFT"
+  Title: "t#bar{t}+b#bar{b} glo soft"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: _weight_ttbb_glosoft
+  Symmetrisation: "OneSided"
+  Samples: ttbarbb
+
+Systematic: "HTX_BKGNP_TTBARBB_UE"
+  Title: "t#bar{t}+b#bar{b} UE modeling"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: _weight_ttbb_MPIup
+  HistoNameSufDown: _weight_ttbb_MPIdown
+  Symmetrisation: "TwoSided"
+  Samples: ttbarbb
+
+Systematic: "HTX_BKGNP_TTBARBB_MPI"
+  Title: "t#bar{t}+b#bar{b} MPI"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: _weight_ttbb_MPIfactor
+  Symmetrisation: "OneSided"
+  Samples: ttbarbb
+
+Systematic: "HTX_BKGNP_TTBARBB_AMCPY8"
+  Title: "t#bar{t}+b#bar{b} 4F PY8"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: _weight_ttbb_aMcAtNloPy8
+  Symmetrisation: "OneSided"
+  Samples: ttbarbb
+
+Systematic: "HTX_BKGNP_TTBARBB_AMCHpp"
+  Title: "t#bar{t}+b#bar{b} 4F PS"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: _weight_ttbb_aMcAtNloHpp
+  Symmetrisation: "OneSided"
+  Samples: ttbarbb
+
+% --------------------------- %
+% ---  TTBAR SYSTEMATICS  --- %
+% --------------------------- %
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_RAD" ; "HTX_BKGNP_TTBARBB_RAD" ; "HTX_BKGNP_TTBARCC_RAD"
+  Title: "t#bar{t}+light rad." ; "t#bar{t}+bb rad." ; "t#bar{t}+cc rad."
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoFileSufUp: radHi
+  HistoFileSufDown: radLow
+  ReferenceSample: "ttbarlightSUSY10" ; "ttbarbbSUSY10" ; "ttbarccSUSY10"
+  Symmetrisation: "TwoSided"
+  Smoothing: 40
+  Samples: ttbarlight;ttbarbb;ttbarcc
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_GEN" ; "HTX_BKGNP_TTBARBB_GEN" ; "HTX_BKGNP_TTBARCC_GEN"
+  Title: "t#bar{t}+light generator" ; "t#bar{t}+bb generator" ; "t#bar{t}+cc generator"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoFileSufUp: "aMCHer"
+  ReferenceSample: "ttbarlightPowHer" ; "ttbarbbPowHer" ; "ttbarccPowHer"
+  Symmetrisation: "OneSided"
+  Smoothing: 40
+  Samples: ttbarlight;ttbarbb;ttbarcc
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_PS" ; "HTX_BKGNP_TTBARBB_PS" ; "HTX_TTBARCC_PS"
+  Title: "t#bar{t}+light parton shower" ; "t#bar{t}+bb parton shower" ; "t#bar{t}+cc parton shower"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoFileSufUp: "PowHer"
+  ReferenceSample: "ttbarlightSUSY10" ; "ttbarbbSUSY10" ; "ttbarccSUSY10"
+  Symmetrisation: "OneSided"
+  Smoothing: 40
+  Samples: ttbarlight;ttbarbb;ttbarcc
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_NNLO_REWEIGHTING_OFF" ; "HTX_BKGNP_TTBARCC_NNLO_REWEIGHTING_OFF"
+  Title: "t#bar{t}+light NNLO top-p_{T} correction" ; "t#bar{t}+cc NNLO top-p_{T} correction"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: "_weight_ttbar_NNLO_OFF"
+  Symmetrisation: "OneSided"
+  Samples: ttbarlight;ttbarcc
+
+% ------------------------- %
+% ---  QCD SYSTEMATICS  --- %
+% ------------------------- %
+
+%Systematic: HTX_BKGNP_OTHERS_QCD_Presel
+%  Title: "QCD"
+%  Type: OVERALL
+%  Category: "Background uncertainties"
+%  OverallUp: 0.5
+%  OverallDown: -0.5
+%  Symmetrisation: "OneSided"
+%  Samples: QCD
+
+Systematic: "HTX_BKGNP_OTHERS_QCD_1l_e_0T0H"
+  Title: "QCD (e,0T,0H)"
+  Type: HISTO
+  Category: "Background uncertainties"
+  HistoNameSufUp: "_weight_qcd_el_up"
+  Symmetrisation: "OneSided"
+  Smoothing: 40
+  Samples: QCD
+  Regions: c1lep*,sum1lep*
+
+Systematic: "HTX_BKGNP_OTHERS_QCD_1l_mu_0T0H"
+  Title: "QCD (#mu,0T,0H)"
+  Type: HISTO
+  Category: "Background uncertainties"
+  HistoNameSufUp: "_weight_qcd_mu_up"
+  Symmetrisation: "OneSided"
+  Smoothing: 40
+  Samples: QCD
+  Regions: c1lep*,sum1lep*
+
+% --------------------------- %
+% --------- SIGNALS --------- %
+% --------------------------- %
+
+Sample: "UEDRPP_1600"
+  Title: "UEDRPP 1600"
+  Type: "signal"
+  NormFactor: "mu_signal",1,0,100
+  FillColor: 2
+  LineColor: 2
+  HistoFile: UEDRPP_1600

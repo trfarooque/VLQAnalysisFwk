@@ -1,0 +1,620 @@
+BEGIN
+
+################
+################ QCD WEIGHTS #################################
+################
+
+--if ISQCD
+
+    NEW
+    NAME : weight_qcd
+    ISINPUT : FALSE
+
+    BREAK
+
+--endif ISQCD
+
+--ifnot ISQCD
+
+################
+################ NOMINAL WEIGHTS #################################
+################
+
+NEW
+NAME : weight_mc
+VARTYPE : F
+
+#
+# JVT
+#
+NEW
+NAME : weight_jvt
+VARTYPE : F
+
+#
+# Normalization weight
+#
+NEW
+NAME : weight_norm
+ISINPUT : FALSE
+
+#
+# Pile up weight
+#
+--if USEPUWEIGHT
+
+    NEW
+    NAME : weight_pileup
+    VARTYPE : F
+
+--endif USEPUWEIGHT
+
+#
+# Lepton scale-factors
+#
+--if USELEPTONSF
+
+    --ifnot RUNLEPTONSYSTEMATICS
+      NEW
+      NAME : weight_leptonSF
+      VARTYPE : F
+    --endif RUNLEPTONSYSTEMATICS
+
+    --if RUNLEPTONSYSTEMATICS
+
+      --if USELEPTONTRIGGERSF
+    	  NEW
+      	NAME : weight_indiv_SF_MU_Trigger
+      	VARTYPE : F
+    	--endif USELEPTONTRIGGERSF
+
+    	NEW
+    	NAME : weight_indiv_SF_EL_Reco
+    	VARTYPE : F
+
+    	NEW
+    	NAME : weight_indiv_SF_EL_ID
+    	VARTYPE : F
+
+    	NEW
+    	NAME : weight_indiv_SF_EL_Isol
+    	VARTYPE : F
+
+    	NEW
+    	NAME : weight_indiv_SF_MU_ID
+    	VARTYPE : F
+
+    	NEW
+    	NAME : weight_indiv_SF_MU_Isol
+    	VARTYPE : F
+
+    	NEW
+    	NAME : weight_indiv_SF_MU_TTVA
+    	VARTYPE : F
+
+    --endif RUNLEPTONSYSTEMATICS
+
+--endif USELEPTONSF
+
+#
+# B-tagging weights
+#
+--ifnot RECOMPUTEBTAGGINGWEIGHTS
+    #
+    # Weights from the trees
+    #
+    NEW
+    NAME : weight_bTagSF_77
+    VARTYPE : F
+
+--endif RECOMPUTEBTAGGINGWEIGHTS
+
+--if RECOMPUTEBTAGGINGWEIGHTS
+    #
+    # Weights recomputed in the code
+    #
+    NEW
+    NAME : weight_btag_recomputed
+    ISINPUT : FALSE
+--endif RECOMPUTEBTAGGINGWEIGHTS
+
+#
+# ttbb weights
+#
+--if USETTBBCORRECTION
+
+    NEW
+    NAME : weight_ttbb
+    ISINPUT : FALSE
+
+--endif USETTBBCORRECTION
+
+#
+# ttbar fraction reweighting
+#
+--if USETTBARFRACTIONSREWEIGHTING
+
+    NEW
+    NAME : weight_ttbar_fractions_rw
+    ISINPUT : FALSE
+
+--endif USETTBARFRACTIONSREWEIGHTING
+
+#
+# ttbar NNLO reweighting
+#
+--if USETTBARNNLOREWEIGHTING
+
+    NEW
+    NAME : weight_ttbar_nnlo
+    VARTYPE : F
+
+--endif USETTBARNNLOREWEIGHTING
+
+################
+################ SYSTEMATIC WEIGHTS #################################
+################
+
+NEW
+NAME : weight_jvt_UP
+ISNOMINAL : FALSE
+REPLACE : weight_jvt
+VARTYPE : F
+
+NEW
+NAME : weight_jvt_DOWN
+ISNOMINAL : FALSE
+REPLACE : weight_jvt
+VARTYPE : F
+
+
+--if USEPUWEIGHT
+
+    NEW
+    NAME : weight_pileup_UP
+    ISNOMINAL : FALSE
+    REPLACE : weight_pileup
+    VARTYPE : F
+
+    NEW
+    NAME : weight_pileup_DOWN
+    ISNOMINAL : FALSE
+    REPLACE : weight_pileup
+    VARTYPE : F
+
+--endif USEPUWEIGHT
+
+
+--if USELEPTONSF
+
+  --if USELEPTONTRIGGERSF
+
+    NEW
+    NAME : weight_indiv_SF_EL_Trigger_UP
+    ISNOMINAL : FALSE
+    REPLACE : weight_indiv_SF_MU_Trigger
+    VARTYPE : F
+
+    NEW
+    NAME : weight_indiv_SF_EL_Trigger_DOWN
+    ISNOMINAL : FALSE
+    REPLACE : weight_indiv_SF_MU_Trigger
+    VARTYPE : F
+
+    NEW
+    NAME : weight_indiv_SF_MU_Trigger_STAT_UP
+    ISNOMINAL : FALSE
+    REPLACE : weight_indiv_SF_MU_Trigger
+    VARTYPE : F
+
+    NEW
+    NAME : weight_indiv_SF_MU_Trigger_STAT_DOWN
+    ISNOMINAL : FALSE
+    REPLACE : weight_indiv_SF_MU_Trigger
+    VARTYPE : F
+
+    NEW
+    NAME : weight_indiv_SF_MU_Trigger_SYST_UP
+    ISNOMINAL : FALSE
+    REPLACE : weight_indiv_SF_MU_Trigger
+    VARTYPE : F
+
+    NEW
+    NAME : weight_indiv_SF_MU_Trigger_SYST_DOWN
+    ISNOMINAL : FALSE
+    REPLACE : weight_indiv_SF_MU_Trigger
+    VARTYPE : F
+
+  --endif USELEPTONTRIGGERSF
+
+  NEW
+  NAME : weight_indiv_SF_EL_Reco_UP
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_EL_Reco
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_EL_Reco_DOWN
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_EL_Reco
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_EL_ID_UP
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_EL_ID
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_EL_ID_DOWN
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_EL_ID
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_EL_Isol_UP
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_EL_Isol
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_EL_Isol_DOWN
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_EL_Isol
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_MU_ID_STAT_UP
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_MU_ID
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_MU_ID_STAT_DOWN
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_MU_ID
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_MU_ID_SYST_UP
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_MU_ID
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_MU_ID_SYST_DOWN
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_MU_ID
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_MU_ID_STAT_LOWPT_UP
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_MU_ID
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_MU_ID_STAT_LOWPT_DOWN
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_MU_ID
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_MU_ID_SYST_LOWPT_UP
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_MU_ID
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_MU_Isol_STAT_UP
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_MU_Isol
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_MU_Isol_STAT_DOWN
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_MU_Isol
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_MU_Isol_SYST_UP
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_MU_Isol
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_MU_Isol_SYST_DOWN
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_MU_Isol
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_MU_TTVA_STAT_UP
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_MU_TTVA
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_MU_TTVA_STAT_DOWN
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_MU_TTVA
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_MU_TTVA_SYST_UP
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_MU_TTVA
+  VARTYPE : F
+
+  NEW
+  NAME : weight_indiv_SF_MU_TTVA_SYST_DOWN
+  ISNOMINAL : FALSE
+  REPLACE : weight_indiv_SF_MU_TTVA
+  VARTYPE : F
+
+--endif USELEPTONSF
+
+--ifnot RECOMPUTEBTAGGINGWEIGHTS
+
+    ##
+    ## B UNCERTAINTIES
+    ##
+
+    NEW
+    NAME : weight_bTagSF_77_B_EV_Up
+    BRANCHNAME : weight_bTagSF_77_eigenvars_B_up
+    ISNOMINAL : FALSE
+    REPLACE : weight_bTagSF_77
+    VECIND : 0-4
+    VARTYPE : PVF
+
+    NEW
+    NAME : weight_bTagSF_77_B_EV_Down
+    BRANCHNAME : weight_bTagSF_77_eigenvars_B_down
+    ISNOMINAL : FALSE
+    REPLACE : weight_bTagSF_77
+    VECIND : 0-4
+    VARTYPE : PVF
+
+
+    ##
+    ## C UNCERTAINTIES
+    ##
+
+    NEW
+    NAME : weight_bTagSF_77_C_EV_Up
+    BRANCHNAME : weight_bTagSF_77_eigenvars_C_up
+    ISNOMINAL : FALSE
+    REPLACE : weight_bTagSF_77
+    VECIND : 0-3
+    VARTYPE : PVF
+
+
+    NEW
+    NAME : weight_bTagSF_77_C_EV_Down
+    BRANCHNAME : weight_bTagSF_77_eigenvars_C_down
+    ISNOMINAL : FALSE
+    REPLACE : weight_bTagSF_77
+    VECIND : 0-3
+    VARTYPE : PVF
+
+    ##
+    ## LIGHT UNCERTAINTIES
+    ##
+
+    NEW
+    NAME : weight_bTagSF_77_Light_EV_Up
+    BRANCHNAME : weight_bTagSF_77_eigenvars_Light_up
+    ISNOMINAL : FALSE
+    REPLACE : weight_bTagSF_77
+    VECIND : 0-5,7-13
+    VARTYPE : PVF
+
+    NEW
+    NAME : weight_bTagSF_77_Light_EV_Down
+    BRANCHNAME : weight_bTagSF_77_eigenvars_Light_down
+    ISNOMINAL : FALSE
+    REPLACE : weight_bTagSF_77
+    VECIND : 0-5,7-13
+    VARTYPE : PVF
+
+    NEW
+    NAME : weight_bTagSF_77_extrapolation_up
+    ISNOMINAL : FALSE
+    REPLACE : weight_bTagSF_77
+    VARTYPE : PVF
+
+    NEW
+    NAME : weight_bTagSF_77_extrapolation_down
+    ISNOMINAL : FALSE
+    REPLACE : weight_bTagSF_77
+    VARTYPE : PVF
+
+    NEW
+    NAME : weight_bTagSF_77_extrapolation_from_charm_up
+    ISNOMINAL : FALSE
+    REPLACE : weight_bTagSF_77
+    VARTYPE : PVF
+
+    NEW
+    NAME : weight_bTagSF_77_extrapolation_from_charm_down
+    ISNOMINAL : FALSE
+    REPLACE : weight_bTagSF_77
+    VARTYPE : PVF
+
+--endif RECOMPUTEBTAGGINGWEIGHTS
+
+--if RECOMPUTEBTAGGINGWEIGHTS
+
+
+    ##
+    ## B UNCERTAINTIES
+    ##
+
+    NEW
+    NAME : weight_btag_recomputed_B_EV_Up
+    ISNOMINAL : FALSE
+    REPLACE : weight_btag_recomputed
+    ISINPUT : FALSE
+    VECIND : 0-4    
+
+    NEW
+    NAME : weight_btag_recomputed_B_EV_Down
+    ISNOMINAL : FALSE
+    REPLACE : weight_btag_recomputed
+    ISINPUT : FALSE
+    VECIND : 0-4    
+
+
+    ##
+    ## C UNCERTAINTIES
+    ##
+
+    NEW
+    NAME : weight_btag_recomputed_C_EV_Up
+    ISNOMINAL : FALSE
+    REPLACE : weight_btag_recomputed
+    ISINPUT : FALSE
+    VECIND : 0-3    
+
+    NEW
+    NAME : weight_btag_recomputed_C_EV_Down
+    ISNOMINAL : FALSE
+    REPLACE : weight_btag_recomputed
+    ISINPUT : FALSE
+    VECIND : 0-3    
+
+    ##
+    ## LIGHT UNCERTAINTIES
+    ##
+
+    NEW
+    NAME : weight_btag_recomputed_L_EV_Up
+    ISNOMINAL : FALSE
+    REPLACE : weight_btag_recomputed
+    ISINPUT : FALSE
+    VECIND : 0-5,7-13    
+
+    NEW
+    NAME : weight_btag_recomputed_L_EV_Down
+    ISNOMINAL : FALSE
+    REPLACE : weight_btag_recomputed
+    ISINPUT : FALSE
+    VECIND : 0-5,7-13    
+
+    ##
+    ## EXTRAPOLATION
+    ##
+
+    NEW
+    NAME : weight_btag_recomputed_Extrap_Up
+    ISNOMINAL : FALSE
+    REPLACE : weight_btag_recomputed
+    ISINPUT : FALSE
+
+    NEW
+    NAME : weight_btag_recomputed_Extrap_Down
+    ISNOMINAL : FALSE
+    REPLACE : weight_btag_recomputed
+    ISINPUT : FALSE
+
+--endif RECOMPUTEBTAGGINGWEIGHTS
+
+--if ISTTBAR
+
+    NEW
+    NAME : weight_ttbar_PS
+    ISNOMINAL : FALSE
+    ISINPUT : FALSE
+
+    NEW
+    NAME : weight_ttbar_GEN
+    ISNOMINAL : FALSE
+    ISINPUT : FALSE
+
+    NEW
+    NAME : weight_ttbar_GENPS
+    ISNOMINAL : FALSE
+    ISINPUT : FALSE
+
+    NEW
+    NAME : weight_ttbar_RADHI
+    ISNOMINAL : FALSE
+    ISINPUT : FALSE
+
+    NEW
+    NAME : weight_ttbar_RADLOW
+    ISNOMINAL : FALSE
+    ISINPUT : FALSE
+
+--endif ISTTBAR
+
+--if USETTBBCORRECTION
+
+    NEW
+    NAME : weight_ttbb_CSS_KIN
+    ISNOMINAL : FALSE
+    ISINPUT : FALSE
+    REPLACE : weight_ttbb
+
+    NEW
+    NAME : weight_ttbb_MSTW
+    ISNOMINAL : FALSE
+    ISINPUT : FALSE
+    REPLACE : weight_ttbb
+
+    NEW
+    NAME : weight_ttbb_NNPDF
+    ISNOMINAL : FALSE
+    ISINPUT : FALSE
+    REPLACE : weight_ttbb
+
+    NEW
+    NAME : weight_ttbb_Q_CMMPS
+    ISNOMINAL : FALSE
+    ISINPUT : FALSE
+    REPLACE : weight_ttbb
+
+    NEW
+    NAME : weight_ttbb_glosoft
+    ISNOMINAL : FALSE
+    ISINPUT : FALSE
+    REPLACE : weight_ttbb
+
+    NEW
+    NAME : weight_ttbb_defaultX05
+    ISNOMINAL : FALSE
+    ISINPUT : FALSE
+    REPLACE : weight_ttbb
+
+    NEW
+    NAME : weight_ttbb_defaultX2
+    ISNOMINAL : FALSE
+    ISINPUT : FALSE
+    REPLACE : weight_ttbb
+
+    NEW
+    NAME : weight_ttbb_MPIup
+    ISNOMINAL : FALSE
+    ISINPUT : FALSE
+    REPLACE : weight_ttbb
+
+    NEW
+    NAME : weight_ttbb_MPIdown
+    ISNOMINAL : FALSE
+    ISINPUT : FALSE
+    REPLACE : weight_ttbb
+
+    NEW
+    NAME : weight_ttbb_MPIfactor
+    ISNOMINAL : FALSE
+    ISINPUT : FALSE
+    REPLACE : weight_ttbb
+
+--endif USETTBBCORRECTION
+
+--endif ISQCD
+
+
+END
