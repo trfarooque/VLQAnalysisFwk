@@ -52,7 +52,6 @@ public:
     bool SetLeptonSFWeights( const bool apply_trigger_weights );
     bool SetCrossSectionWeight();
     bool SetQCDWeight();
-    bool SetTtbarPMGWeights();
     bool SetTtccWeights();
     bool SetTtbarGeneratorSystematics( const std::string &region );
     bool SetNNLOSystematic();
