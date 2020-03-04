@@ -52,6 +52,8 @@ public:
     double o_ptwl;
     double o_mll;
     double o_hthad;
+    double o_htall;
+    double o_htred;
     double o_hthadRC;
     double o_hthadRCtag;
     double o_hthadRCM;
