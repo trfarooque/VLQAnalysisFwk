@@ -223,7 +223,7 @@ bool VLQ_Selector::Init(){
   std::vector<std::string> ch_mll; ch_mll.clear();
   if(m_opt->DoTwoLeptonAna()){
     if(m_opt->VerboseOutput()) ch_mll = {"", "-HighMLL", "-ZwinMLL"};
-    else ch_mll = {"-ZwinMLL"}; 
+    else ch_mll = {"","-ZwinMLL"}; 
   }
   else ch_mll = {""};
 
@@ -233,7 +233,7 @@ bool VLQ_Selector::Init(){
 
     AddVLQSelection("c-all",do_runop, false, PRESEL);
 
-    std::vector<std::string> v_bjet_presel = {"1bin","2bin","3bin"};
+    std::vector<std::string> v_bjet_presel = {"1bin","2bin","2bex","3bin"};
     if(m_opt->DoLowBRegions()){
       v_bjet_presel.push_back("0bin");
       v_bjet_presel.push_back("0bex");
@@ -372,7 +372,7 @@ bool VLQ_Selector::Init(){
 	    AddVLQSelection(lep_prefix+"3_5jwin-2bex-0fjex-0Tex-1Lin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    AddVLQSelection(lep_prefix+"3_5jwin-2bex-1fjin-1LTin-0Hex-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    AddVLQSelection(lep_prefix+"3_5jwin-2bex-1fjin-1Tin-0Lex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      
+
 	    AddVLQSelection(lep_prefix+"3_5jwin-3bin-0fjex-0Tex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    AddVLQSelection(lep_prefix+"3_5jwin-3bin-1fjin-1VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 
