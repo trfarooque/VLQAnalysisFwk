@@ -30,8 +30,6 @@ public:
                     AnalysisObject *met) const;
     
     double GetHtHad( std::vector< AnalysisObject* > &v_jets, const std::string& mom="" ) const;
-    double GetHtAll( std::vector< AnalysisObject* > &v_jets, std::vector< AnalysisObject* > &v_lep, const std::string& mom="" ) const;
-    double GetHtRed( std::vector< AnalysisObject* > &v_jets, std::vector< AnalysisObject* > &v_lep, const std::string& mom="" ) const;
     double GetMJSum( std::vector< AnalysisObject* > &v_jets, const std::string& mom="" ) const;
     double GetMetSignificance( const double met, const double hthad) const;    
     double GetMTw( const AnalysisObject* lep,

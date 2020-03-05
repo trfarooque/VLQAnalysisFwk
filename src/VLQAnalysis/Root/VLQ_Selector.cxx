@@ -223,7 +223,7 @@ bool VLQ_Selector::Init(){
   std::vector<std::string> ch_mll; ch_mll.clear();
   if(m_opt->DoTwoLeptonAna()){
     if(m_opt->VerboseOutput()) ch_mll = {"", "-HighMLL", "-ZwinMLL"};
-    else ch_mll = {"","-ZwinMLL"}; 
+    else ch_mll = {"-ZwinMLL"}; 
   }
   else ch_mll = {""};
 
@@ -233,7 +233,7 @@ bool VLQ_Selector::Init(){
 
     AddVLQSelection("c-all",do_runop, false, PRESEL);
 
-    std::vector<std::string> v_bjet_presel = {"1bin","2bin","2bex","3bin"};
+    std::vector<std::string> v_bjet_presel = {"1bin","2bin","3bin"};
     if(m_opt->DoLowBRegions()){
       v_bjet_presel.push_back("0bin");
       v_bjet_presel.push_back("0bex");
@@ -388,6 +388,7 @@ bool VLQ_Selector::Init(){
 
 	    AddVLQSelection(lep_prefix+"6jin-3bin-0fjex-1VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    AddVLQSelection(lep_prefix+"6jin-3bin-1fjin-1VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
 	  }
     
 	  // Loose regions for syst extrapolation

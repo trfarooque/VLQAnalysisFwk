@@ -15,7 +15,7 @@ OutputData(),
 m_opt(opt),
 //Event variables
 o_channel_type(0),o_period(0),o_run_number(0),o_pileup_mu(0),o_npv(0), o_meff(0), o_met(0), o_mtwl(0), o_ptwl(0), o_mll(0), 
-o_hthad(0), o_htall(0), o_htred(0), o_hthadRC(0), o_hthadRCtag(0), o_hthadRCM(0), o_mJsum(0), o_metsig_ev(0), o_metsig_obj(0),
+o_hthad(0), o_hthadRC(0), o_hthadRCtag(0), o_hthadRCM(0), o_mJsum(0), o_metsig_ev(0), o_metsig_obj(0),
 //Jet type numbers
 o_jets_n(0),o_bjets_n(0),o_ljets_n(0),
 o_jets_truth_b_n(0),o_jets_truth_c_n(0),o_jets_truth_tau_n(0),o_jets_truth_lqg_n(0),
@@ -444,8 +444,6 @@ void VLQ_OutputData::ClearOutputData()
   o_ptwl = 0;
   o_mll = 0;
   o_hthad = 0;
-  o_htall = 0;
-  o_htred = 0;
   o_metsig_ev = 0;
   o_metsig_obj = 0;
 
