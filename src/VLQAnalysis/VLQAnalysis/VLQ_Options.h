@@ -17,13 +17,6 @@ public:
     CALO = 0,
     TRACK = 1
   };
-
-  enum ttbarGen{
-    POWPY8 = 0,
-    AMCPY8 = 1,
-    POWHER7 = 2,
-    AFII = 3
-  };
   //
   // Standard C++ functions
   //
@@ -52,7 +45,6 @@ public:
   inline bool DoTRF() const { return m_doTRF; }
   inline bool RecomputeTRF() const { return m_recomputeTRF; }
   inline bool ApplyMetMtwCuts() const { return m_applyMetMtwCuts; }
-  inline bool ApplyMetSigObjCut() const { return m_applyMetSigObjCut; }
   inline bool InvertMetMtwCuts() const { return m_invertMetMtwCuts; }
   inline bool ApplyDeltaPhiCut() const { return m_applyDeltaPhiCut; }
   inline bool InvertDeltaPhiCut() const { return m_invertDeltaPhiCut; }
@@ -70,11 +62,8 @@ public:
   inline bool DoOneLeptonAna() const { return m_doOneLeptonAna; }
   inline bool DoTwoLeptonAna() const { return m_doTwoLeptonAna; }
   inline bool DoZeroLeptonAna() const { return m_doZeroLeptonAna; }
-  inline bool DoPreselection() const {return m_doPreselection; }
-  inline bool DoExclusiveJetRegions() const {return m_doExclusiveJetRegions; }
-  // inline bool DoPreselRegions() const { return m_doPreselRegions; }
-  inline bool DoSingleVLQPreselection() const { return m_doSingleVLQPreselection; }
-  inline bool DoPairVLQPreselection() const { return m_doPairVLQPreselection; }
+  inline bool DoPreselection() const { return m_doPreselection; }
+  inline bool DoExclusiveJetRegions() const { return m_doExclusiveJetRegions; }
   inline bool DoExtendedPreselection() const { return m_doExtendedPreselection; }
   inline bool DoSingleVLQRegions() const { return m_doSingleVLQRegions; }
   inline bool DoPairVLQRegions() const { return m_doPairVLQRegions; }
@@ -83,11 +72,7 @@ public:
   inline bool DoLowBRegions() const { return m_doLowBRegions; }
   inline bool DoLowJRegions() const { return m_doLowJRegions; }
   inline bool DoSplitEMu() const { return m_doSplitEMu; }
-  inline bool DoSplitFWDJet() const {return m_doSplitFWDJet; }
   inline bool DoOldBoost() const { return m_doOldBoost; }
-  inline bool DoNewSuperMergeBoost() const { return m_doNewSuperMergeBoost; }
-  inline bool DoNewMergeBoost() const { return m_doNewMergeBoost; }
-  inline bool DoNewFullBoost() const { return m_doNewFullBoost; }
   inline bool DoSplitMtb() const { return m_doSplitMtb; }
   inline bool DoSplitMbb() const { return m_doSplitMbb; }
   inline bool DoSumRegions() const { return m_doSumRegions; }
@@ -97,9 +82,11 @@ public:
   inline bool ApplyVjetsSherpa22RW() const { return m_applyVjetsSherpa22RW; }
   inline bool ComputeTtccNLO() const {return m_computeTtccNLO;}
   inline bool ReweightKinematics() const { return m_reweightKinematics; }
-  inline bool ReweightNominalKinematics() const { return m_reweightNominalKinematics; }
   inline bool OnlyReweightTtbarKin() const { return m_onlyReweightTtbarKin; }
   inline bool MakeQCD0LSystematics() const { return m_makeQCD0LSystematics; }
+  inline bool DoPreselSys() const { return m_doPreselSys; }
+  inline bool DoExpSys() const { return m_doExpSys; }
+  inline bool DoTheorySys() const { return m_doTheorySys; }
 
   // strings
   inline std::string DoRecoVLQ() const { return m_doRecoVLQ; }
@@ -110,8 +97,6 @@ public:
   inline std::string LepWOpt() const { return m_lepWOpt; }
   inline std::string LeptopOpt() const { return m_leptopOpt; }
   inline std::string RCCollection() const { return m_RCCollection; }
-  inline std::string KinRWList() const { return m_kinRWList; }
-
   // doubles
   inline double RCJetsPtCut() const { return m_RCJetsPtCut; }
   inline double JetsPtCut() const { return m_jetsPtCut; }
@@ -137,7 +122,6 @@ public:
   // enums
   inline FilteringType FilterType() const { return m_filterType; }
   inline BtagColl BtagCollection() const { return m_btagCollection; }
-  inline ttbarGen ttbarGenerator() const { return m_ttbarGen; }
 
   /// check whether the options are consistent
   /**
@@ -154,7 +138,6 @@ private:
   bool m_doTruthAnalysis;
   bool m_doTRF, m_recomputeTRF;
   bool m_applyMetMtwCuts;
-  bool m_applyMetSigObjCut;
   bool m_invertMetMtwCuts;
   bool m_applyDeltaPhiCut;
   bool m_invertDeltaPhiCut;
@@ -173,12 +156,9 @@ private:
   bool m_doTwoLeptonAna;
   bool m_doZeroLeptonAna;
 
-  bool m_doPreselection, m_doExclusiveJetRegions, m_doSingleVLQPreselection, m_doPairVLQPreselection, 
-  m_doExtendedPreselection, m_doSingleVLQRegions, m_doPairVLQRegions,
-  m_doValidnRegions, m_doFitRegions, m_doLowBRegions, m_doLowJRegions,
-  m_doSplitEMu, m_doSplitFWDJet,
-  m_doOldBoost, m_doNewFullBoost, m_doNewMergeBoost, m_doNewSuperMergeBoost,
-  m_doSplitMtb, m_doSplitMbb;
+  bool m_doPreselection, m_doExclusiveJetRegions, m_doExtendedPreselection, m_doSingleVLQRegions, m_doPairVLQRegions,
+    m_doValidnRegions, m_doFitRegions, m_doLowBRegions, m_doLowJRegions,
+    m_doSplitEMu, m_doOldBoost, m_doSplitMtb, m_doSplitMbb;
   bool m_doSumRegions;
 
   bool m_scaleTtbarHtSlices;
@@ -188,10 +168,12 @@ private:
   bool m_computeTtccNLO;
 
   bool m_reweightKinematics;
-  bool m_reweightNominalKinematics;
   bool m_onlyReweightTtbarKin;
 
   bool m_makeQCD0LSystematics;
+  bool m_doPreselSys;
+  bool m_doExpSys;
+  bool m_doTheorySys;
 
   int m_maxb;
   int m_RCNsubjetsCut;
@@ -221,11 +203,9 @@ private:
   std::string m_lepWOpt;
   std::string m_leptopOpt;
   std::string m_RCCollection;
-  std::string m_kinRWList;
 
   FilteringType m_filterType;
   BtagColl m_btagCollection;
-  ttbarGen m_ttbarGen;
 };
 
 #endif //VLQ_OPTIONS_H

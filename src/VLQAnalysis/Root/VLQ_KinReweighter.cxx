@@ -9,7 +9,6 @@
 
 #include "TFile.h"
 #include "TH1F.h"
-#include "TH2F.h"
 
 #include <vector>
 #include <map>
@@ -23,8 +22,7 @@ VLQ_KinReweighter::VLQ_KinReweighter( VLQ_Options *opt, VLQ_OutputData *outData 
 m_outData(outData),
 m_opt(opt),
 m_reweightings(0),
-m_histograms(0),
-m_histograms_2D(0)
+m_histograms(0)
 {
 }
 
@@ -36,7 +34,6 @@ VLQ_KinReweighter::VLQ_KinReweighter( const VLQ_KinReweighter &q ){
   m_opt           = q.m_opt;
   m_reweightings  = q.m_reweightings;
   m_histograms    = q.m_histograms;
-  m_histograms_2D = q.m_histograms_2D;
 }
 
 //______________________________________________________________________________
@@ -50,11 +47,6 @@ VLQ_KinReweighter::~VLQ_KinReweighter()
     delete pair.second;
   }
   delete m_histograms;
-
-  for( std::pair < std::string, TH2F* > pair : *m_histograms_2D){
-    delete pair.second;
-  }
-  delete m_histograms_2D;
 }
 
 //______________________________________________________________________________
@@ -74,161 +66,127 @@ bool VLQ_KinReweighter::Init( /*std::map < int, Selection* >* selection_tree,*/ 
   */
 
   m_histograms = new std::map < std::string, TH1F* >();
-  m_histograms_2D = new std::map < std::string, TH2F* >();
 
   //
   // Reweightings
   //
-  m_reweightings = new std::map<std::string, int>();
-
-  //Split by comma
-  std::string RWlist = m_opt -> KinRWList();
-  std::string RWel = "";
-  std::string::size_type pos = 0;
-
-  do{ 
-    pos = AnalysisUtils::ParseString(RWlist, RWel, ",");
-    AnalysisUtils::TrimString(RWel);
-    if(RWel == "MEFF"){
-      m_reweightings->insert(std::pair<std::string,int>(RWel, MEFF));
-    }
-    else if(RWel == "JETSN"){
-      m_reweightings->insert(std::pair<std::string,int>(RWel, JETSN));
-    }
-    else{
-      std::cerr << " Unknown reweighting : " << RWel;
-
-    }
-
-  }while(pos != std::string::npos);
-
-
+  m_reweightings = new std::map<std::string, int>{
+    {"MET", MET},
+    {"JETPT", JETPT},
+    {"LEPPT", LEPPT}
+  };
+  
   //
   // Regions 
   //
   std::vector<std::string> vec_regions{}; 
-  if(m_opt->DoOneLeptonAna() || m_opt->DoTwoLeptonAna() ){
-
-
-    if((m_opt -> SampleName() == SampleName::TTBARBB) || (m_opt -> SampleName() == SampleName::TTBARCC) || (m_opt -> SampleName() == SampleName::TTBARLIGHT)
-       || (m_opt -> SampleName() == SampleName::SINGLETOP)){
-
-      vec_regions.push_back("c1lep3jin2bex");
-
+  if(m_opt->DoOneLeptonAna()){
+    vec_regions.push_back("c1lep5jin2bin");
+    if(m_opt->DoSplitEMu()){
+      vec_regions.push_back("c1lep5jin2bin_el");
+      vec_regions.push_back("c1lep5jin2bin_mu");
     }
-    if((m_opt -> SampleName() == SampleName::WJETS) || (m_opt -> SampleName() == SampleName::ZJETS)){
-      vec_regions.push_back("c2lep3jin0bexZwinMLL_sf");
-    
-    }
-     
   }
- 
+  if(m_opt->DoZeroLeptonAna()){
+    vec_regions.push_back("c0lep6jin2bin");
+  }
+  
+  
   //
   // Filling the map with needed ratio plots
   //
   TFile *f = TFile::Open(fileName.c_str());
 
   for ( std::pair<std::string, int> kinpair : *m_reweightings ){
+    std::string suffix = "";
+    if(kinpair.second == MET) suffix = "met";
+    else if(kinpair.second == JETPT) suffix = "jet0_pt";
+    else if(kinpair.second == LEPPT) suffix = "lep0_pt";
 
-    std::string kin = "";
-    
-    if(kinpair.second == MEFF) kin = "meff";
-    else if(kinpair.second == JETSN) kin = "jets_n";
-    
+
     for ( const std::string region : vec_regions ){
-	
-      std::string histName = region + "_" + kin;
-      
-      if(kinpair.second == MEFF){
-
-	TH2F* temp_hist = (TH2F*) f -> Get(histName.c_str());
-
-	if(!temp_hist){
-	  std::cout << "<!> Error in VLQ_KinReweighter::Init(): Looks like the histo " << histName;
-	  std::cout << " is not in file " << fileName << ". Please check." << std::endl;
-	  continue;
-	}
-
-	temp_hist -> SetDirectory(0);
-
-	m_histograms_2D -> insert( std::pair < std::string, TH2F* >(histName,temp_hist) );
-
-	}
-      else{
-
-	TH1F* temp_hist = (TH1F*) f -> Get(histName.c_str());
-
-	if(!temp_hist){
-	    std::cout << "<!> Error in VLQ_KinReweighter::Init(): Looks like the histo " << histName;
-	    std::cout << " is not in file " << fileName << ". Please check." << std::endl;
-	    continue;
-	}
-	
-	temp_hist -> SetDirectory(0);
-
-	m_histograms -> insert( std::pair < std::string, TH1F* >(histName,temp_hist) );
-	
-      }
-      //kin.clear();
-    }
     
+      std::string histName = region + "_" + suffix; 
+      TH1F* temp_hist = (TH1F*) f -> Get(histName.c_str());
+      if(!temp_hist){
+	std::cout << "<!> Error in VLQ_KinReweighter::Init(): Looks like the histo " << histName;
+	std::cout << " is not in file " << fileName << ". Please check." << std::endl;
+	continue;
+      }
+      temp_hist -> SetDirectory(0);
+      m_histograms -> insert( std::pair < std::string, TH1F* >(histName,temp_hist) );
+    }
+    suffix.clear();
   }
-
   f -> Close();
-
   delete f;
-  
   return true;
-  
 }
 
 //______________________________________________________________________________
 //
-double VLQ_KinReweighter::GetKinReweight( const int kinematic) const {
+double VLQ_KinReweighter::GetKinReweight( const int kinematic ) const {
+  /*
+  std::cout<<" In GetKinReweight kinematic : " << kinematic 
+	   << " jets_n : "<<m_outData -> o_jets_n 
+	   << " el_n : "<<m_outData -> o_el_n 
+	   << " mu_n : "<<m_outData -> o_mu_n 
+	   << " met : "<<m_outData -> o_met
+	   << " dPhi_jetmet : "<<m_outData -> o_dPhi_jetmet 
  
+	   << " ISMUON : " << (m_outData -> o_channel_type == VLQ_Enums::MUON) 
+	   << " ISELECTRON : " << (m_outData -> o_channel_type == VLQ_Enums::ELECTRON)
+	   << " FULLHAD : " << (m_outData -> o_channel_type == VLQ_Enums::FULLHAD)
+	   << std::endl;  
+  */
   std::string source_reg = "";
- 
-  //std::cout << "channel type: " << m_outData->o_channel_type << std::endl;
-
-  if( m_outData -> o_channel_type == VLQ_Enums::MUON || m_outData -> o_channel_type == VLQ_Enums::ELECTRON || 
-      m_outData -> o_channel_type == VLQ_Enums::MUMU || m_outData -> o_channel_type == VLQ_Enums::ELEL){
-
-    if((m_opt -> SampleName() == SampleName::ZJETS) || (m_opt -> SampleName() == SampleName::WJETS)){
-
-      source_reg = "c2lep3jin0bexZwinMLL_sf";
-
+  
+  if( m_outData -> o_channel_type == VLQ_Enums::MUON || m_outData -> o_channel_type == VLQ_Enums::ELECTRON ){
+    if( m_outData -> o_jets_n <= 4 ){
+      //the systematic uncertainties for <= 4 jets have not been derived yet
+      return 1.;
     }
-    else if((m_opt -> SampleName() == SampleName::TTBARBB) || (m_opt -> SampleName() == SampleName::TTBARCC)
-	    || (m_opt -> SampleName() == SampleName::TTBARLIGHT) || (m_opt -> SampleName() == SampleName::SINGLETOP)){
-
-      source_reg = "c1lep3jin2bex";
-
+    if( m_opt->DoSplitEMu() ){
+      if( m_outData -> o_channel_type == VLQ_Enums::ELECTRON ){ source_reg = "c1lep5jin2bin_el"; }
+      else if( m_outData -> o_channel_type == VLQ_Enums::MUON ){ source_reg = "c1lep5jin2bin_mu"; }
     }
-
+    else{
+      source_reg = "c1lep5jin2bin";
+    }
+    
   }
+  else if( m_outData -> o_channel_type == VLQ_Enums::FULLHAD ){
+    if( m_outData -> o_jets_n <= 5 ){
+      //systematic uncertainties for <= 5 jets have not been derived yet for the 0-lepton channel
+      return 1.;
+    }
+    if( kinematic == LEPPT ){
+      //Cannot reweight to lepton pT if there is no lepton in the event
+      return 1.;
+    }
+    source_reg = "c0lep6jin2bin";
+  } 
   else {
-
     return 1.;
-
   }
   
-
-
   //
   // Reweighting
   //
   std::string kin = "";
   double param = 0.;
-  double param2 = 0.;
-
-  if( kinematic == MEFF ){
-    kin = "meff";
-    param = m_outData-> o_meff;
-    param2 = m_outData-> o_jets_n;
+  
+  if( kinematic == MET ){
+    kin = "met";
+    param = m_outData -> o_met;
   }
-  else if( kinematic == JETSN){
-    kin = "jets_n";
-    param = m_outData->o_jets_n;
+  else if( kinematic == JETPT ){
+    kin = "jet0_pt";
+    param = m_outData -> o_jets->at(0)->Pt();
+  }
+  else if( kinematic == LEPPT ){
+    kin = "lep0_pt";
+    param = m_outData -> o_lep->at(0)->Pt(); 
   }
 
   //
@@ -236,57 +194,17 @@ double VLQ_KinReweighter::GetKinReweight( const int kinematic) const {
   //
   //std::string histName = AnalysisUtils::ReplaceString( region_name, "-", "");
   std::string histName = source_reg + "_" + kin; // + "_" + sample; // + "_" + kin;
-
-  if(kinematic == MEFF){
-
-    std::map < std::string, TH2F* >::iterator it = m_histograms_2D -> find(histName);
-
-    if( it == m_histograms_2D -> end() ){
-      //the region is not found ... returning 1 => no systematic 
-      return 1;
-    }
-
-    int binx = 0;
-    int biny = 0;
-    int binz = 0;
-    
-    int globalbin = it -> second -> FindBin(param, param2);
-
-    it -> second -> GetBinXYZ(globalbin, binx, biny, binz);
-
-    const int max_xbin = it -> second -> GetNbinsX();
-
-    const int max_ybin = it -> second -> GetNbinsY();
-    
-    if( binx > max_xbin) binx = max_xbin;
-	
-    if( biny > max_ybin) biny = max_ybin;
-
-    /*std::cout << "histName : " << histName << std::endl;
-    std::cout<<" kin : " << kin << " param1 : " << param << " param2 : " << param2 << " RW : "  << it -> second -> GetBinContent(binx, biny)
-             << " source_reg : " << source_reg << " binx = " << binx << " max_xbin = " << max_xbin 
-    	     << " biny = " << biny <<" max_ybin = " << max_ybin <<std::endl;*/
-
-    return it -> second -> GetBinContent(binx,biny);
-
-  }
-
   std::map< std::string, TH1F* >::iterator it = m_histograms -> find(histName);
-
   if( it == m_histograms -> end() ){
     //the region is not found ... returning 1 => no systematic
     return 1;
   }
-
   int bin = it -> second -> FindBin( param );
-
   const int max_bin = it -> second -> GetNbinsX();
-
   if( bin > max_bin ) bin = max_bin;
 
-  /*std::cout << "histName : " << histName << std::endl;
-  std::cout<<" kin : " << kin << " param : " << param << " RW : "  << it -> second -> GetBinContent(bin) 
-  << " source_reg : " << source_reg << " bin = " << bin << " max_bin = " << max_bin << std::endl;*/
+  //std::cout<<" kin : " << kin << " param : " << param << " RW : "  << it -> second -> GetBinContent(bin) 
+  //	   << " source_reg : " << source_reg << " bin = " << bin << "max_bin = " << max_bin << std::endl;
 
   return it -> second -> GetBinContent(bin);
 

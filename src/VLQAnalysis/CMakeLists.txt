@@ -46,11 +46,3 @@ atlas_add_executable( MakeQCDFile
                                      FakeLeptonEstimation
                                      ${ROOT_LIBRARIES}
                                      VLQAnalysis)
-atlas_add_executable( MakeKinRwHists
-		      macros/macros_carlos/MakeKinRwHists.cxx
-		      LINK_LIBRARIES IFAETopFramework
-		      		     IFAEReweightingTools
-				     BtaggingTRFandRW
-				     FakeLeptonEstimation 
-				     ${ROOT_LIBRARIES}			  
-				     VLQAnalysis)

@@ -6,12 +6,13 @@ namespace VLQ_Enums {
         LEPTON_REJECTED = 3,
         TRIGGERMATCH_REJECTED = 4,
         JETS_REJECTED = 5,
-        METMTW_REJECTED = 6,
-        DPHI_REJECTED = 7,
-        MEFF_REJECTED = 8,
-        METONELEP_REJECTED = 9,
-        METZEROLEP_REJECTED = 10,
-        METSIG_REJECTED = 11
+        BJETS_REJECTED = 6,
+        METMTW_REJECTED = 7,
+        DPHI_REJECTED = 8,
+        MEFF_REJECTED = 9,
+        METONELEP_REJECTED = 10,
+        METZEROLEP_REJECTED = 11,
+        METSIG_REJECTED = 12
     };
 
     enum VLQType {

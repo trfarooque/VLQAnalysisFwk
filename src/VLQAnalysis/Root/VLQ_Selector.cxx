@@ -98,7 +98,7 @@ bool VLQ_Selector::Init(){
     std::cout<<" Inside VLQ_Selector::Init()"<<std::endl;
   }
   
-  m_blinding_config.open( Form("%s/x86_64-centos7-gcc8-opt/python/VLQAnalysis/regions_dictionary.py", std::getenv("BUILDDIR")) );
+  m_blinding_config.open( Form("%s/x86_64-centos7-gcc62-opt/python/VLQAnalysis/regions_dictionary.py", std::getenv("BUILDDIR")) );
   //m_blinding_config.open( Form("%s/python/VLQAnalysis/regions_dictionary.py", std::getenv("VLQAnalysisFramework_DIR")) );
   //============================  Initialise top selections and add rules for primary ancestors ==================================
   m_sel_indices = new std::map<std::string, int>();
@@ -218,7 +218,7 @@ bool VLQ_Selector::Init(){
   std::vector<std::string> ch_mll; ch_mll.clear();
   if(m_opt->DoTwoLeptonAna()){
     if(m_opt->VerboseOutput()) ch_mll = {"", "-HighMLL", "-ZwinMLL"};
-    else ch_mll = {"","-ZwinMLL"}; 
+    else ch_mll = {"-ZwinMLL"}; 
   }
   else ch_mll = {""};
 
@@ -226,11 +226,11 @@ bool VLQ_Selector::Init(){
   //======== PRESELECTION=========
   if(m_opt->DoPreselection()){
 
-    bool do_syst = true;
+    bool do_syst = m_opt->DoPreselSys();
 
     AddVLQSelection("c-all",do_runop, false, PRESEL);
 
-    std::vector<std::string> v_bjet_presel = {"1bin","2bin","2bex","3bin"};
+    std::vector<std::string> v_bjet_presel = {"1bin","2bin","3bin"};
     if(m_opt->DoLowBRegions()){
       v_bjet_presel.push_back("0bin");
       v_bjet_presel.push_back("0bex");
@@ -285,12 +285,7 @@ bool VLQ_Selector::Init(){
 	for(const std::string& bjet : v_bjet_presel){
 	  for(const std::string& lepsuf : lep_ch_pair.second){
 	    for(const std::string& mllsuf : ch_mll){
-	      
-	      if((lep_prefix == "c-1lep-" && mllsuf == "") || (lep_prefix == "c-2lep-" && mllsuf == "-ZwinMLL")){
-
-		AddVLQSelection(lep_prefix+jet+"-"+bjet+mllsuf+lepsuf, do_runop, do_syst, PRESEL);
-
-	      }
+	      AddVLQSelection(lep_prefix+jet+"-"+bjet+mllsuf+lepsuf, do_runop, do_syst, PRESEL);
 	    }//mll channels
 	  }//lepflav channels
 	}//bjet
@@ -371,12 +366,12 @@ bool VLQ_Selector::Init(){
 	    
 	    AddVLQSelection(lep_prefix+"3_5jwin-3bex-0fjex-0Tex-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    AddVLQSelection(lep_prefix+"3_5jwin-3bex-0fjex-0Tex-1Lin-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-	    //AddVLQSelection(lep_prefix+"3_5jwin-3bex-1fjin-1Tin-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ); // TOO HIGH SIGNAL
+	    // AddVLQSelection(lep_prefix+"3_5jwin-3bex-1fjin-1Tin-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ); // TOO HIGH SIGNAL
 	    AddVLQSelection(lep_prefix+"3_5jwin-3bex-1fjin-1VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    
 	    AddVLQSelection(lep_prefix+"3_5jwin-4bin-0fjex-0Tex-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    AddVLQSelection(lep_prefix+"3_5jwin-4bin-0fjex-0Tex-1Lin-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-	    //AddVLQSelection(lep_prefix+"3_5jwin-4bin-1fjin-1Tin-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ); // TOO HIGH SIGNAL
+	    // AddVLQSelection(lep_prefix+"3_5jwin-4bin-1fjin-1Tin-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ); // TOO HIGH SIGNAL
 	    AddVLQSelection(lep_prefix+"3_5jwin-4bin-1fjin-1VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    
 	    AddVLQSelection(lep_prefix+"6jin-1bex-0fjex-1LTex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
@@ -395,7 +390,7 @@ bool VLQ_Selector::Init(){
 	    AddVLQSelection(lep_prefix+"6jin-3bex-1fjin-2VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    
 	    AddVLQSelection(lep_prefix+"6jin-4bin-0fjex-1VLTex-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-	    AddVLQSelection(lep_prefix+"6jin-4bin-0fjex-2VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ); // TOO HIGH SIGNAL
+	    // AddVLQSelection(lep_prefix+"6jin-4bin-0fjex-2VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ); // TOO HIGH SIGNAL
 	    AddVLQSelection(lep_prefix+"6jin-4bin-1fjin-1VLTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    AddVLQSelection(lep_prefix+"6jin-4bin-1fjin-2VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	  }

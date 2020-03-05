@@ -1,4 +1,3 @@
-
 #include "VLQAnalysis/VLQ_AnalysisTools.h"
 
 #include "IFAETopFramework/OutputHistManager.h"
@@ -519,7 +518,7 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
 	isTop = isTop && ( obj -> Pt() < 800 ? m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 2 : m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 1);
       }
       else{
-  isTop = isTop && ( obj -> Pt() < 700 ? m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 2 : m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 1);
+	isTop = isTop && ( obj -> Pt() < 700 ? m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 2 : m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 1);
       }
       obj -> SetMoment("isRCMTop", isTop);
       // Exclusive Higgs tagging
@@ -772,7 +771,7 @@ void VLQ_AnalysisTools::FillAllTH1DHistogramsHistManager( const std::string &key
 //____________________________________________________________________________________
 //
 bool VLQ_AnalysisTools::UpdateRegionDependentWeight( const std::string &region_name ){
-  m_weightMngr -> SetTtbarGeneratorSystematics(region_name);
+  //m_weightMngr -> SetTtbarGeneratorSystematics(region_name);
   m_weightMngr -> ComputeAllWeights();
   if( m_opt->ReweightKinematics() && !m_opt->ComputeWeightSys() ){
     m_weightMngr -> ComputeSystematicWeights();
@@ -848,10 +847,6 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
 
   m_outData -> o_hthad        = m_varComputer -> GetHtHad( *(m_outData->o_jets) );
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_hthad (" << m_outData -> o_hthad << ")"  << std::endl;
-  m_outData -> o_htall        = m_varComputer -> GetHtAll( *(m_outData->o_jets), *(m_outData->o_lep) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_htall (" << m_outData -> o_htall << ")"  << std::endl;
-  m_outData -> o_htred        = m_varComputer -> GetHtRed( *(m_outData->o_jets), *(m_outData->o_lep) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_htall (" << m_outData -> o_htall << ")"  << std::endl;
   m_outData -> o_hthadRC      = m_varComputer -> GetHtHad( *(m_outData->o_rcjets) );
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_hthadRC (" << m_outData -> o_hthad << ")"  << std::endl;
   m_outData -> o_hthadRCtag   = m_varComputer -> GetHtHad( *(m_outData->o_rcjets), "isRCMTopHiggs" );
@@ -865,62 +860,62 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_metsig_ev (" << m_outData -> o_metsig_ev << ")"  << std::endl;
   m_outData -> o_metsig_obj      = m_ntupData -> d_met_sig;
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_metsig_obj (" << m_outData -> o_metsig_obj << ")"  << std::endl;
+  if(m_opt->VerboseOutput()){
+    m_outData -> o_dRmin_lepjet  = m_varComputer -> GetMindR( m_outData->o_selLep, *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_lepjet (" << m_outData -> o_dRmin_lepjet << ")"  << std::endl;
+    m_outData -> o_dRmin_ejets  = m_varComputer -> GetMindR( *(m_outData->o_jets), *(m_outData->o_el) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_ejets (" << m_outData -> o_dRmin_ejets << ")"  << std::endl;
+    m_outData -> o_dRmin_mujets = m_varComputer -> GetMindR( *(m_outData->o_jets), *(m_outData->o_mu) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_mujets (" << m_outData -> o_dRmin_mujets << ")"  << std::endl;
+    m_outData -> o_dRmin_jetjet = m_varComputer -> GetMindR( *(m_outData->o_jets), *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_jetjet (" << m_outData -> o_dRmin_jetjet << ")"  << std::endl;
+    m_outData -> o_dPhi_lepmet  = m_outData -> o_selLep ? TMath::Abs( m_outData -> o_selLep -> DeltaPhi( *(m_outData->o_AO_met) ) ) : -1;
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhi_lepmet (" << m_outData -> o_dPhi_lepmet << ")"  << std::endl;
+    m_outData -> o_dPhi_jetmet  = TMath::Abs(m_varComputer -> GetMindPhi( m_outData->o_AO_met, *(m_outData->o_jets), 4 ));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhi_jetmet (" << m_outData -> o_dPhi_jetmet << ")"  << std::endl;
+    m_outData -> o_dPhi_jetmet5  = TMath::Abs(m_varComputer -> GetMindPhi( m_outData->o_AO_met, *(m_outData->o_jets), 5 ));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhi_jetmet (" << m_outData -> o_dPhi_jetmet5 << ")"  << std::endl;
+    m_outData -> o_dPhi_jetmet6  = TMath::Abs(m_varComputer -> GetMindPhi( m_outData->o_AO_met, *(m_outData->o_jets), 6 ));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhi_jetmet (" << m_outData -> o_dPhi_jetmet6 << ")"  << std::endl;
+    m_outData -> o_dPhi_jetmet7  = TMath::Abs(m_varComputer -> GetMindPhi( m_outData->o_AO_met, *(m_outData->o_jets), 7 ));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhi_jetmet (" << m_outData -> o_dPhi_jetmet7 << ")"  << std::endl;
+    m_outData -> o_dPhi_lepjet  = TMath::Abs(m_varComputer -> GetMindPhi( m_outData->o_selLep, *(m_outData->o_jets) ) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhi_lepjet (" << m_outData -> o_dPhi_lepjet << ")"  << std::endl;
+    m_outData -> o_jets40_n  = m_varComputer -> GetNjets( *(m_outData->o_jets), 40. );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_jets40_n (" << m_outData -> o_jets40_n << ")"  << std::endl;
 
-  m_outData -> o_dRmin_lepjet  = m_varComputer -> GetMindR( m_outData->o_selLep, *(m_outData->o_jets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_lepjet (" << m_outData -> o_dRmin_lepjet << ")"  << std::endl;
-  m_outData -> o_dRmin_ejets  = m_varComputer -> GetMindR( *(m_outData->o_jets), *(m_outData->o_el) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_ejets (" << m_outData -> o_dRmin_ejets << ")"  << std::endl;
-  m_outData -> o_dRmin_mujets = m_varComputer -> GetMindR( *(m_outData->o_jets), *(m_outData->o_mu) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_mujets (" << m_outData -> o_dRmin_mujets << ")"  << std::endl;
-  m_outData -> o_dRmin_jetjet = m_varComputer -> GetMindR( *(m_outData->o_jets), *(m_outData->o_jets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_jetjet (" << m_outData -> o_dRmin_jetjet << ")"  << std::endl;
-  m_outData -> o_dPhi_lepmet  = m_outData -> o_selLep ? TMath::Abs( m_outData -> o_selLep -> DeltaPhi( *(m_outData->o_AO_met) ) ) : -1;
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhi_lepmet (" << m_outData -> o_dPhi_lepmet << ")"  << std::endl;
-  m_outData -> o_dPhi_jetmet  = TMath::Abs(m_varComputer -> GetMindPhi( m_outData->o_AO_met, *(m_outData->o_jets), 4 ));
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhi_jetmet (" << m_outData -> o_dPhi_jetmet << ")"  << std::endl;
-  m_outData -> o_dPhi_jetmet5  = TMath::Abs(m_varComputer -> GetMindPhi( m_outData->o_AO_met, *(m_outData->o_jets), 5 ));
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhi_jetmet (" << m_outData -> o_dPhi_jetmet5 << ")"  << std::endl;
-  m_outData -> o_dPhi_jetmet6  = TMath::Abs(m_varComputer -> GetMindPhi( m_outData->o_AO_met, *(m_outData->o_jets), 6 ));
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhi_jetmet (" << m_outData -> o_dPhi_jetmet6 << ")"  << std::endl;
-  m_outData -> o_dPhi_jetmet7  = TMath::Abs(m_varComputer -> GetMindPhi( m_outData->o_AO_met, *(m_outData->o_jets), 7 ));
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhi_jetmet (" << m_outData -> o_dPhi_jetmet7 << ")"  << std::endl;
-  m_outData -> o_dPhi_lepjet  = TMath::Abs(m_varComputer -> GetMindPhi( m_outData->o_selLep, *(m_outData->o_jets) ) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhi_lepjet (" << m_outData -> o_dPhi_lepjet << ")"  << std::endl;
-  m_outData -> o_jets40_n  = m_varComputer -> GetNjets( *(m_outData->o_jets), 40. );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_jets40_n (" << m_outData -> o_jets40_n << ")"  << std::endl;
+    m_outData -> o_fwdjets30_n  = m_varComputer -> GetNjets( *(m_outData->o_fwdjets), 30. );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_fwdjets30_n (" << m_outData -> o_fwdjets30_n << ")"  << std::endl;
+    m_outData -> o_fwdjets40_n  = m_varComputer -> GetNjets( *(m_outData->o_fwdjets), 40. );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_fwdjets40_n (" << m_outData -> o_fwdjets40_n << ")"  << std::endl;
 
-  m_outData -> o_fwdjets30_n  = m_varComputer -> GetNjets( *(m_outData->o_fwdjets), 30. );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_fwdjets30_n (" << m_outData -> o_fwdjets30_n << ")"  << std::endl;
-  m_outData -> o_fwdjets40_n  = m_varComputer -> GetNjets( *(m_outData->o_fwdjets), 40. );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_fwdjets40_n (" << m_outData -> o_fwdjets40_n << ")"  << std::endl;
-
-  m_outData -> o_centrality = m_varComputer -> GetCentrality( *(m_outData->o_jets), *(m_outData->o_el), *(m_outData->o_mu) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_centrality (" << m_outData -> o_centrality << ")"  << std::endl;
-  m_outData -> o_J_lepton_invariant_mass = m_varComputer -> GetJLeptonInvariantMass( *(m_outData->o_taggedjets.at("RCTTMass")), *(m_outData->o_el), *(m_outData->o_mu) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_J_lepton_invariant_mass (" << m_outData -> o_J_lepton_invariant_mass << ")"  << std::endl;
-  m_outData -> o_J_J_invariant_mass = m_varComputer -> GetJJInvariantMass(*(m_outData->o_taggedjets.at("RCTTMass")));
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_J_J_invariant_mass  (" << m_outData -> o_J_J_invariant_mass << ")"  << std::endl;
-  m_outData ->  o_dRaverage_jetjet = m_varComputer -> GetAveragedR( *(m_outData->o_jets), *(m_outData->o_jets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dRaverage_jetjet  (" << m_outData ->  o_dRaverage_jetjet << ")"  << std::endl;
-  m_outData -> o_mjj_leading_jets = m_varComputer -> GetMjjLeadingJets( *(m_outData->o_jets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_mjj_leading_jets (" << m_outData -> o_mjj_leading_jets << ")" << std::endl; 
-  m_outData -> o_mjj_maxdR = m_varComputer -> GetMjjMaxDr( *(m_outData->o_jets) ) ;
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_mjj_maxdR (" << m_outData -> o_mjj_maxdR << ")" << std::endl;
-  m_outData -> o_mjj_mindR = m_varComputer -> GetMjjMinDr( *(m_outData->o_jets) ) ;
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_mjj_mindR (" << m_outData -> o_mjj_mindR << ")" << std::endl;
-  m_outData -> o_dPhijj_leading_jets = m_varComputer -> GetDphijjLeadingJets( *(m_outData->o_jets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dPhijj_leading_jets (" << m_outData -> o_dPhijj_leading_jets << ")" << std::endl;
-  m_outData -> o_dPhijj_mindR = m_varComputer -> GetDphijjMinDr( *(m_outData->o_jets) ) ;
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dPhijj_mindR (" << m_outData -> o_dPhijj_mindR << ")" << std::endl;
-  m_outData -> o_dPhijj_maxdR = m_varComputer -> GetDphijjMaxDr( *(m_outData->o_jets) ) ;
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dPhijj_maxdR (" << m_outData -> o_dPhijj_maxdR << ")" << std::endl;
-  m_outData -> o_dEtajj_leading_jets = m_varComputer -> GetDetajjLeadingJets( *(m_outData->o_jets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtajj_leading_jets (" << m_outData -> o_dEtajj_leading_jets << ")" << std::endl;
-  m_outData -> o_dEtajj_mindR = m_varComputer -> GetDetajjMinDr( *(m_outData->o_jets) ) ;
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtajj_mindR (" << m_outData -> o_dEtajj_mindR << ")" << std::endl;
-  m_outData -> o_dEtajj_maxdR = m_varComputer -> GetDetajjMaxDr( *(m_outData->o_jets) ) ;
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtajj_maxdR (" << m_outData -> o_dEtajj_maxdR << ")" << std::endl;
-
+    m_outData -> o_centrality = m_varComputer -> GetCentrality( *(m_outData->o_jets), *(m_outData->o_el), *(m_outData->o_mu) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_centrality (" << m_outData -> o_centrality << ")"  << std::endl;
+    m_outData -> o_J_lepton_invariant_mass = m_varComputer -> GetJLeptonInvariantMass( *(m_outData->o_taggedjets.at("RCTTMass")), *(m_outData->o_el), *(m_outData->o_mu) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_J_lepton_invariant_mass (" << m_outData -> o_J_lepton_invariant_mass << ")"  << std::endl;
+    m_outData -> o_J_J_invariant_mass = m_varComputer -> GetJJInvariantMass(*(m_outData->o_taggedjets.at("RCTTMass")));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_J_J_invariant_mass  (" << m_outData -> o_J_J_invariant_mass << ")"  << std::endl;
+    m_outData ->  o_dRaverage_jetjet = m_varComputer -> GetAveragedR( *(m_outData->o_jets), *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dRaverage_jetjet  (" << m_outData ->  o_dRaverage_jetjet << ")"  << std::endl;
+    m_outData -> o_mjj_leading_jets = m_varComputer -> GetMjjLeadingJets( *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_mjj_leading_jets (" << m_outData -> o_mjj_leading_jets << ")" << std::endl; 
+    m_outData -> o_mjj_maxdR = m_varComputer -> GetMjjMaxDr( *(m_outData->o_jets) ) ;
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_mjj_maxdR (" << m_outData -> o_mjj_maxdR << ")" << std::endl;
+    m_outData -> o_mjj_mindR = m_varComputer -> GetMjjMinDr( *(m_outData->o_jets) ) ;
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_mjj_mindR (" << m_outData -> o_mjj_mindR << ")" << std::endl;
+    m_outData -> o_dPhijj_leading_jets = m_varComputer -> GetDphijjLeadingJets( *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dPhijj_leading_jets (" << m_outData -> o_dPhijj_leading_jets << ")" << std::endl;
+    m_outData -> o_dPhijj_mindR = m_varComputer -> GetDphijjMinDr( *(m_outData->o_jets) ) ;
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dPhijj_mindR (" << m_outData -> o_dPhijj_mindR << ")" << std::endl;
+    m_outData -> o_dPhijj_maxdR = m_varComputer -> GetDphijjMaxDr( *(m_outData->o_jets) ) ;
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dPhijj_maxdR (" << m_outData -> o_dPhijj_maxdR << ")" << std::endl;
+    m_outData -> o_dEtajj_leading_jets = m_varComputer -> GetDetajjLeadingJets( *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtajj_leading_jets (" << m_outData -> o_dEtajj_leading_jets << ")" << std::endl;
+    m_outData -> o_dEtajj_mindR = m_varComputer -> GetDetajjMinDr( *(m_outData->o_jets) ) ;
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtajj_mindR (" << m_outData -> o_dEtajj_mindR << ")" << std::endl;
+    m_outData -> o_dEtajj_maxdR = m_varComputer -> GetDetajjMaxDr( *(m_outData->o_jets) ) ;
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtajj_maxdR (" << m_outData -> o_dEtajj_maxdR << ")" << std::endl;
+  }
   this -> ComputeBTagVariables();
   
   this -> UpdateBTagMoments();
@@ -941,43 +936,46 @@ bool VLQ_AnalysisTools::ComputeBTagVariables() {
   //
   // Filling only the b-tag sensitive kinematic variables
   //
-  m_outData -> o_dRmin_lepbjet  = m_varComputer -> GetMindR( m_outData->o_selLep, *(source_bjets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_lepbjet (" << m_outData -> o_dRmin_lepbjet << ")"  << std::endl;
-  m_outData -> o_mbb_mindR        = m_varComputer -> GetMbb( *(source_bjets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_mbb_mindR (" << m_outData -> o_mbb_mindR << ")"  << std::endl;
-  m_outData -> o_dRmin_mubjets    = m_varComputer -> GetMindR( *(source_bjets), *(m_outData->o_mu) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_mubjets (" << m_outData -> o_dRmin_mubjets << ")"  << std::endl;
-  m_outData -> o_dRmin_ebjets     = m_varComputer -> GetMindR( *(source_bjets), *(m_outData->o_el) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_ebjets (" << m_outData -> o_dRmin_ebjets << ")"  << std::endl;
-  m_outData -> o_dRmin_bjetbjet   = m_varComputer -> GetMindR( *(source_bjets), *(source_bjets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_bjetbjet (" << m_outData -> o_dRmin_bjetbjet << ")"  << std::endl;
-  m_outData -> o_dPhi_lepbjet     = TMath::Abs(m_varComputer -> GetMindPhi( m_outData->o_selLep, *(source_bjets) ) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhi_lepbjet (" << m_outData -> o_dPhi_lepbjet << ")"  << std::endl;
+  if(m_opt->VerboseOutput()){
+    m_outData -> o_dRmin_lepbjet  = m_varComputer -> GetMindR( m_outData->o_selLep, *(source_bjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_lepbjet (" << m_outData -> o_dRmin_lepbjet << ")"  << std::endl;
+    m_outData -> o_mbb_mindR        = m_varComputer -> GetMbb( *(source_bjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_mbb_mindR (" << m_outData -> o_mbb_mindR << ")"  << std::endl;
+    m_outData -> o_dRmin_mubjets    = m_varComputer -> GetMindR( *(source_bjets), *(m_outData->o_mu) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_mubjets (" << m_outData -> o_dRmin_mubjets << ")"  << std::endl;
+    m_outData -> o_dRmin_ebjets     = m_varComputer -> GetMindR( *(source_bjets), *(m_outData->o_el) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_ebjets (" << m_outData -> o_dRmin_ebjets << ")"  << std::endl;
+    m_outData -> o_dRmin_bjetbjet   = m_varComputer -> GetMindR( *(source_bjets), *(source_bjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_bjetbjet (" << m_outData -> o_dRmin_bjetbjet << ")"  << std::endl;
+    m_outData -> o_dPhi_lepbjet     = TMath::Abs(m_varComputer -> GetMindPhi( m_outData->o_selLep, *(source_bjets) ) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhi_lepbjet (" << m_outData -> o_dPhi_lepbjet << ")"  << std::endl;
+  }
   m_outData -> o_mTbmin           = m_varComputer -> GetMTbmin( *(source_bjets), m_outData -> o_AO_met );
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_mTbmin (" << m_outData -> o_mTbmin << ")"  << std::endl;
-  m_outData -> o_mbb_leading_bjets= m_varComputer -> GetMbbLeadingBjets( *(source_bjets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_mbb_leading_bjets (" << m_outData -> o_mbb_leading_bjets << ")"  << std::endl;
-  m_outData -> o_mbb_softest_bjets= m_varComputer -> GetMbbSoftestBjets( *(source_bjets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_mbb_softest_bjets (" << m_outData -> o_mbb_softest_bjets << ")"  << std::endl;
-  m_outData -> o_J_leadingb_invariant_mass = m_varComputer -> GetJLeadingBInvariantMass( *(m_outData->o_taggedjets.at("RCTTMass")), *(source_bjets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_J_leadingb_invariant_mass (" << m_outData -> o_J_leadingb_invariant_mass << ")"  << std::endl;
-  m_outData ->  o_dRaverage_bjetbjet = m_varComputer -> GetAveragedR( *(source_bjets), *(source_bjets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dRaverage_bjetbjet  (" << m_outData ->  o_dRaverage_bjetbjet << ")"  << std::endl;
-  m_outData -> o_mbb_maxdR        =m_varComputer -> GetMbbMaxDr( *(source_bjets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_mbb_maxdR (" << m_outData -> o_mbb_maxdR << ")" << std::endl;
-  m_outData -> o_dPhibb_leading_bjets = m_varComputer -> GetDphibbLeadingBjets( *(source_bjets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dPhibb_leading_bjets (" << m_outData -> o_dPhibb_leading_bjets << ")" << std::endl;
-  m_outData -> o_dPhibb_mindR = m_varComputer -> GetDphibbMinDr( *(source_bjets) ); 
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dPhibb_mindR (" << m_outData -> o_dPhibb_mindR << ")" << std::endl;
-  m_outData -> o_dPhibb_maxdR = m_varComputer -> GetDphibbMaxDr( *(source_bjets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dPhibb_maxdR (" << m_outData ->o_dPhibb_maxdR << ")" << std::endl;
-  m_outData -> o_dEtabb_leading_bjets = m_varComputer -> GetDetabbLeadingBjets( *(source_bjets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtabb_leading_bjets (" << m_outData -> o_dEtabb_leading_bjets << ")" << std::endl;  
-  m_outData -> o_dEtabb_mindR = m_varComputer -> GetDetabbMinDr( *(source_bjets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtabb_mindR (" << m_outData -> o_dEtabb_mindR << ")" << std::endl;
-  m_outData -> o_dEtabb_maxdR = m_varComputer -> GetDetabbMaxDr( *(source_bjets) );
-  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtabb_maxdR (" << m_outData ->o_dEtabb_maxdR << ")" << std::endl;
-
+  if(m_opt->VerboseOutput()){
+    m_outData -> o_mbb_leading_bjets= m_varComputer -> GetMbbLeadingBjets( *(source_bjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_mbb_leading_bjets (" << m_outData -> o_mbb_leading_bjets << ")"  << std::endl;
+    m_outData -> o_mbb_softest_bjets= m_varComputer -> GetMbbSoftestBjets( *(source_bjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_mbb_softest_bjets (" << m_outData -> o_mbb_softest_bjets << ")"  << std::endl;
+    m_outData -> o_J_leadingb_invariant_mass = m_varComputer -> GetJLeadingBInvariantMass( *(m_outData->o_taggedjets.at("RCTTMass")), *(source_bjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_J_leadingb_invariant_mass (" << m_outData -> o_J_leadingb_invariant_mass << ")"  << std::endl;
+    m_outData ->  o_dRaverage_bjetbjet = m_varComputer -> GetAveragedR( *(source_bjets), *(source_bjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dRaverage_bjetbjet  (" << m_outData ->  o_dRaverage_bjetbjet << ")"  << std::endl;
+    m_outData -> o_mbb_maxdR        =m_varComputer -> GetMbbMaxDr( *(source_bjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_mbb_maxdR (" << m_outData -> o_mbb_maxdR << ")" << std::endl;
+    m_outData -> o_dPhibb_leading_bjets = m_varComputer -> GetDphibbLeadingBjets( *(source_bjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dPhibb_leading_bjets (" << m_outData -> o_dPhibb_leading_bjets << ")" << std::endl;
+    m_outData -> o_dPhibb_mindR = m_varComputer -> GetDphibbMinDr( *(source_bjets) ); 
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dPhibb_mindR (" << m_outData -> o_dPhibb_mindR << ")" << std::endl;
+    m_outData -> o_dPhibb_maxdR = m_varComputer -> GetDphibbMaxDr( *(source_bjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dPhibb_maxdR (" << m_outData ->o_dPhibb_maxdR << ")" << std::endl;
+    m_outData -> o_dEtabb_leading_bjets = m_varComputer -> GetDetabbLeadingBjets( *(source_bjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtabb_leading_bjets (" << m_outData -> o_dEtabb_leading_bjets << ")" << std::endl;  
+    m_outData -> o_dEtabb_mindR = m_varComputer -> GetDetabbMinDr( *(source_bjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtabb_mindR (" << m_outData -> o_dEtabb_mindR << ")" << std::endl;
+    m_outData -> o_dEtabb_maxdR = m_varComputer -> GetDetabbMaxDr( *(source_bjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtabb_maxdR (" << m_outData ->o_dEtabb_maxdR << ")" << std::endl;
+  }
 
   if(m_opt->DoLowBRegions()){
     //Fill fake low-b variables with the fake low-b vectors
@@ -1017,17 +1015,18 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
     m_resonance_maker -> MakeLeptop(m_leptopRecoOpt, m_opt->MaxLeptopDR());
   }
   m_resonance_maker -> MakeSemiBoostedHadtop();
-  if( m_opt->DoRecoVLQ() == "single" ){
-    m_resonance_maker->MakeSingleVLQ("Ht");
-    m_resonance_maker->MakeSingleVLQ("Zt");
-    m_resonance_maker->MakeSingleVLQ("Wb");
+  if(m_opt -> VerboseOutput()){
+    if( m_opt->DoRecoVLQ() == "single" ){
+      m_resonance_maker->MakeSingleVLQ("Ht");
+      m_resonance_maker->MakeSingleVLQ("Zt");
+      m_resonance_maker->MakeSingleVLQ("Wb");
+    }
+    else if( m_opt->DoRecoVLQ() == "pair" ){
+      m_resonance_maker->MakePairVLQ("Ht");
+      m_resonance_maker->MakePairVLQ("Zt");
+      m_resonance_maker->MakePairVLQ("Wb");
+    }
   }
-  else if( m_opt->DoRecoVLQ() == "pair" ){
-    m_resonance_maker->MakePairVLQ("Ht");
-    m_resonance_maker->MakePairVLQ("Zt");
-    m_resonance_maker->MakePairVLQ("Wb");
-  }
-
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Leptop-related variables in RC jets
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -53,27 +53,6 @@ double VLQ_VariableComputer::GetHtHad(  AOVector &v_jets, const std::string& mom
 
 //________________________________________________________________
 //
-double VLQ_VariableComputer::GetHtAll( AOVector &v_jets, AOVector &v_lep, const std::string& mom) const
-{
-  double htall = GetHtHad(v_jets, mom);  
-  for ( const AnalysisObject* lep : v_lep){
-    if(mom!="" && !(int)lep->GetMoment(mom)) continue;
-    htall += lep->Pt();
-  }
-  return htall;
-}
-
-//________________________________________________________________
-//
-double VLQ_VariableComputer::GetHtRed( AOVector &v_jets, AOVector &v_lep, const std::string& mom)const
-{
-  double htall = GetHtAll(v_jets, v_lep, mom);
-  double htred = htall - (( static_cast<int>(v_jets.size()) - 4)*90);
-  return htred;
-}
-
-//________________________________________________________________
-//   
 double VLQ_VariableComputer::GetMJSum(  AOVector &v_jets, const std::string& mom ) const
 {
     double ht = 0.;

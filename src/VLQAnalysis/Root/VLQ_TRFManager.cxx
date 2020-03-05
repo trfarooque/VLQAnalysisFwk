@@ -31,7 +31,8 @@ void VLQ_TRFManager::Init(){
   if(m_opt -> MsgLevel() == Debug::DEBUG){
     std::cout << "In VLQ_TRFManager constructor: Creating TRF Object" << std::endl;
   }
-  m_trfint = new TRFinterface(m_opt->BtagOP(),//b-tag OP
+  if(m_opt->BtagOP()==""){
+    m_trfint = new TRFinterface("FixedCutBEff_77",//b-tag OP
     "AntiKt4EMTopoJets",//jet collection
     m_opt->TRFCDIPath(),//CDI file
     false, //ignore SF
@@ -40,7 +41,20 @@ void VLQ_TRFManager::Init(){
     false,//tag bins
     1,//n calibrations
     true//add properties (because of the following line)
-  );
+    );
+  }
+  else {
+    m_trfint = new TRFinterface(m_opt->BtagOP(),//b-tag OP
+    "AntiKt4EMTopoJets",//jet collection
+    m_opt->TRFCDIPath(),//CDI file
+    false, //ignore SF
+    ((m_opt -> MsgLevel() == Debug::DEBUG)?5:0), //debug level
+    true,//rwSystForPerm (weight for permutation to be the same with systematics)
+    false,//tag bins
+    1,//n calibrations
+    true//add properties (because of the following line)
+    );
+  }
   m_trfint->setEffProperty("EfficiencyBCalibrations","default;410004;410006");
   //m_trfint->setEffProperty("ScaleFactorCCalibration","ttbar");
   m_trfint->Initialize();
