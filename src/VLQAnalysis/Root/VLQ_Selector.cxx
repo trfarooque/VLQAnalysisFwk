@@ -223,7 +223,7 @@ bool VLQ_Selector::Init(){
   std::vector<std::string> ch_mll; ch_mll.clear();
   if(m_opt->DoTwoLeptonAna()){
     if(m_opt->VerboseOutput()) ch_mll = {"", "-HighMLL", "-ZwinMLL"};
-    else ch_mll = {"","-ZwinMLL"}; 
+    else ch_mll = {"-ZwinMLL"}; 
   }
   else ch_mll = {""};
 
@@ -233,7 +233,7 @@ bool VLQ_Selector::Init(){
 
     AddVLQSelection("c-all",do_runop, false, PRESEL);
 
-    std::vector<std::string> v_bjet_presel = {"1bin","2bin","2bex","3bin"};
+    std::vector<std::string> v_bjet_presel = {"1bin","2bin","3bin"};
     if(m_opt->DoLowBRegions()){
       v_bjet_presel.push_back("0bin");
       v_bjet_presel.push_back("0bex");
@@ -376,12 +376,12 @@ bool VLQ_Selector::Init(){
 	    
 	    AddVLQSelection(lep_prefix+"3_5jwin-3bex-0fjex-0Tex-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    AddVLQSelection(lep_prefix+"3_5jwin-3bex-0fjex-0Tex-1Lin-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-	    //AddVLQSelection(lep_prefix+"3_5jwin-3bex-1fjin-1Tin-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ); // TOO HIGH SIGNAL
+	    // AddVLQSelection(lep_prefix+"3_5jwin-3bex-1fjin-1Tin-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ); // TOO HIGH SIGNAL
 	    AddVLQSelection(lep_prefix+"3_5jwin-3bex-1fjin-1VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    
 	    AddVLQSelection(lep_prefix+"3_5jwin-4bin-0fjex-0Tex-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    AddVLQSelection(lep_prefix+"3_5jwin-4bin-0fjex-0Tex-1Lin-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-	    //AddVLQSelection(lep_prefix+"3_5jwin-4bin-1fjin-1Tin-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ); // TOO HIGH SIGNAL
+	    // AddVLQSelection(lep_prefix+"3_5jwin-4bin-1fjin-1Tin-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ); // TOO HIGH SIGNAL
 	    AddVLQSelection(lep_prefix+"3_5jwin-4bin-1fjin-1VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    
 	    AddVLQSelection(lep_prefix+"6jin-1bex-0fjex-1LTex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
@@ -400,7 +400,7 @@ bool VLQ_Selector::Init(){
 	    AddVLQSelection(lep_prefix+"6jin-3bex-1fjin-2VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    
 	    AddVLQSelection(lep_prefix+"6jin-4bin-0fjex-1VLTex-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-	    AddVLQSelection(lep_prefix+"6jin-4bin-0fjex-2VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ); // TOO HIGH SIGNAL
+	    // AddVLQSelection(lep_prefix+"6jin-4bin-0fjex-2VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ); // TOO HIGH SIGNAL
 	    AddVLQSelection(lep_prefix+"6jin-4bin-1fjin-1VLTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    AddVLQSelection(lep_prefix+"6jin-4bin-1fjin-2VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	  }

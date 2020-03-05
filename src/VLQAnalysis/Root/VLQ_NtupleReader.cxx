@@ -120,8 +120,10 @@ int VLQ_NtupleReader::SetJetBranchAddresses(const string &/*sj*/){
   stat =  SetVariableToChain("jets_e", &(m_VLQ_ntupData->d_jet_E) ); if(stat != 0){ return stat; }
   stat =  SetVariableToChain("jets_btag_weight", &(m_VLQ_ntupData->d_jet_btag_weight) ); if(stat != 0){ return stat; }
   stat =  SetVariableToChain("jets_jvt", &(m_VLQ_ntupData->d_jet_jvt) ); if(stat != 0){ return stat; }
-  stat =  SetVariableToChain("jets_isb_"+m_opt->BtagOP(), &(m_VLQ_ntupData->d_jet_isb) ); if(stat != 0){ return stat; }
-
+  if(m_opt->BtagOP()==""){
+    stat =  SetVariableToChain("jets_isb", &(m_VLQ_ntupData->d_jet_isb) ); if(stat != 0){ return stat; }
+  }
+  else { stat =  SetVariableToChain("jets_isb_"+m_opt->BtagOP(), &(m_VLQ_ntupData->d_jet_isb) ); if(stat != 0){ return stat; } }
   if(!(m_opt->IsData() || m_opt -> StrSampleName().find("QCD") != std::string::npos)){
     stat =  SetVariableToChain("jets_truthLabel", &(m_VLQ_ntupData->d_jet_truthLabel) ); if(stat != 0){ return stat; }
   }
@@ -136,6 +138,7 @@ int VLQ_NtupleReader::SetJetBranchAddresses(const string &/*sj*/){
   // stat =  SetVariableToChain("fwjets_btag_weight", &(m_VLQ_ntupData->d_fwdjet_btag_weight) ); if(stat != 0){ return stat; }
   stat =  SetVariableToChain("fwjets_jvt", &(m_VLQ_ntupData->d_fwdjet_jvt) ); if(stat != 0){ return stat; }
   stat =  SetVariableToChain("fwjets_fJvt", &(m_VLQ_ntupData->d_fwdjet_fJvt) ); if(stat != 0){ return stat; }
+  //stat =  SetVariableToChain("fwjets_jvt", &(m_VLQ_ntupData->d_fwdjet_fJvt) ); if(stat != 0){ return stat; }
   // stat =  SetVariableToChain("jets_isSignal", &(m_VLQ_ntupData->d_fwdjet_isSignal) ); if(stat != 0){ return stat; }
   // stat =  SetVariableToChain("jets_passOR", &(m_VLQ_ntupData->d_fwdjet_passOR) ); if(stat != 0){ return stat; }
   if(!(m_opt->IsData() || m_opt -> StrSampleName().find("QCD") != std::string::npos)){
@@ -150,7 +153,10 @@ int VLQ_NtupleReader::SetJetBranchAddresses(const string &/*sj*/){
     stat =  SetVariableToChain("trkjets_phi", &(m_VLQ_ntupData->d_trkjet_phi) ); if(stat != 0){ return stat; }
     stat =  SetVariableToChain("trkjets_eta", &(m_VLQ_ntupData->d_trkjet_eta) ); if(stat != 0){ return stat; }
     stat =  SetVariableToChain("trkjets_btag_weight", &(m_VLQ_ntupData->d_trkjet_btag_weight) ); if(stat != 0){ return stat; }
-    stat =  SetVariableToChain("trkjets_isb_"+m_opt->BtagOP(), &(m_VLQ_ntupData->d_trkjet_isb) ); if(stat != 0){ return stat; }
+    if(m_opt->BtagOP()==""){
+      stat =  SetVariableToChain("trkjets_isb", &(m_VLQ_ntupData->d_trkjet_isb) ); if(stat != 0){ return stat; }
+    }
+    else { stat =  SetVariableToChain("trkjets_isb_"+m_opt->BtagOP(), &(m_VLQ_ntupData->d_trkjet_isb) ); if(stat != 0){ return stat; } }
     if(!(m_opt->IsData() || m_opt -> StrSampleName().find("QCD") != std::string::npos)){
       stat =  SetVariableToChain("trkjets_truthLabel", &(m_VLQ_ntupData->d_trkjet_truthLabel) ); if(stat != 0){ return stat; }
     }
