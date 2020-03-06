@@ -487,6 +487,9 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "mtbmin",      25, 0, 500,    ";m_{T}^{min}(b,MET)", false, &(m_outData->o_mTbmin) );
       m_outMngrHist -> AddStandardTH1( "metsig_ev",     0.5, 0, 50,    ";E_{T}^{miss}/#sqrt{H_{T}^{had}} [#sqrt{GeV}]", false, &(m_outData -> o_metsig_ev) );
       m_outMngrHist -> AddStandardTH1( "metsig_obj",    0.5, 0, 50,    "; #sigma(E_{T}^{miss}) [#sqrt{GeV}]", false, &(m_outData -> o_metsig_obj) );
+      
+      m_outMngrHist -> AddStandardTH2( "meff", "jets_n", 50, 0, 5000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} [GeV]", false, &(m_outData -> o_meff), &(m_outData -> o_jets_n));
+
       /*
       m_outMngrHist -> AddStandardTH2( "mu", "fwdjets_n", 10, 0, 80, 1, -0.5, 8.5,"<#mu>", "Number of fwd-jets", false, 
                &(m_outData -> o_pileup_mu),&(m_outData -> o_fwdjets_n) );
@@ -1477,7 +1480,7 @@ bool VLQ_Analysis_Data2015::Begin(){
   //
   // Rejection mask saving
   //
-  m_outMngrHist -> HistMngr() -> BookTH1D("rejectionMask","Mask",1,0,10,"","","#events");
+  m_outMngrHist -> HistMngr() -> BookTH1D("rejectionMask","Mask",1,0,14,"","","#events");
   m_outMngrHist -> HistMngr() -> GetTH1D("rejectionMask") -> GetXaxis() -> SetBinLabel( 1,                                    "Kept" );
   m_outMngrHist -> HistMngr() -> GetTH1D("rejectionMask") -> GetXaxis() -> SetBinLabel( VLQ_Enums::TRIGGER_REJECTED + 1,      "Trigger" );
   m_outMngrHist -> HistMngr() -> GetTH1D("rejectionMask") -> GetXaxis() -> SetBinLabel( VLQ_Enums::BADJET_REJECTED + 1,       "Bad jet" );
@@ -1486,6 +1489,7 @@ bool VLQ_Analysis_Data2015::Begin(){
   m_outMngrHist -> HistMngr() -> GetTH1D("rejectionMask") -> GetXaxis() -> SetBinLabel( VLQ_Enums::JETS_REJECTED + 1,         "Jets" );
   m_outMngrHist -> HistMngr() -> GetTH1D("rejectionMask") -> GetXaxis() -> SetBinLabel( VLQ_Enums::METMTW_REJECTED + 1,       "Met/Mtw" );
   m_outMngrHist -> HistMngr() -> GetTH1D("rejectionMask") -> GetXaxis() -> SetBinLabel( VLQ_Enums::DPHI_REJECTED + 1,         "#Delta#varphi" );
+  m_outMngrHist -> HistMngr() -> GetTH1D("rejectionMask") -> GetXaxis() -> SetBinLabel( VLQ_Enums::METSIGOBJ_REJECTED + 1,         "MetSig" );
 
   m_outMngrHist -> HistMngr() -> BookTH1D("cutFlow_unWeight","Cut",1,0,20,"","","#events");
   m_outMngrHist -> HistMngr() -> BookTH1D("cutFlow_weight_2","Cut",1,0,20,"","","#events");
@@ -1908,6 +1912,17 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     m_outData -> o_rejectEvent |= 1 << VLQ_Enums::METONELEP_REJECTED;
   }
 
+
+  if( m_opt -> ApplyMetSigObjCut()){
+
+    std::cout << m_ntupData -> d_met_sig << std::endl;
+    bool lowMetSigObj = m_ntupData -> d_met_sig < 5.0;
+    if(lowMetSigObj){
+      m_outData->o_rejectEvent |= 1 << VLQ_Enums::METSIGOBJ_REJECTED;
+    }
+
+  }
+
   //###########################################################
   //                                                          #
   // C9: Additional Met cut/veto in 0-lep channel                  #
@@ -2307,6 +2322,9 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
   }
   if( m_outData -> o_rejectEvent & 1<<VLQ_Enums::DPHI_REJECTED ){
     m_outMngrHist -> HistMngr() -> FillTH1D( "rejectionMask", VLQ_Enums::DPHI_REJECTED, 1. );
+  }
+  if( m_outData -> o_rejectEvent & 1<<VLQ_Enums::METSIGOBJ_REJECTED ){
+    m_outMngrHist -> HistMngr() -> FillTH1D( "rejectionMask", VLQ_Enums::METSIGOBJ_REJECTED, 1. );
   }
   if( !m_outData -> o_rejectEvent ){
     m_outMngrHist -> HistMngr() -> FillTH1D( "rejectionMask", 0, 1. );
