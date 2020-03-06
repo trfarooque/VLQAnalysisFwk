@@ -97,6 +97,14 @@ if(len(sys.argv))>1:
             param_runOtherBkgd = (value.upper()=="TRUE")
         elif(argument=="RUNSINGLETOP"):
             param_runSingleTop = (value.upper()=="TRUE")
+        elif(argument=="SIMPLESINGLETOP"):
+            param_simpleSingletop = (value.upper()=="TRUE")
+        elif(argument=="RUNTCHAN"):
+            param_runTchan = (value.upper()=="TRUE")
+        elif(argument=="RUNWTPROD"):
+            param_runWtprod = (value.upper()=="TRUE")
+        elif(argument=="RUNSCHAN"):
+            param_runSchan = (value.upper()=="TRUE")
         elif(argument=="RUNWJETS"):
             param_runWjets = (value.upper()=="TRUE")
         elif(argument=="RUNZJETS"):
@@ -243,7 +251,8 @@ if param_runTtbar:
 
 if param_runOtherBkgd:
     Samples += GetOtherBackgroundSamples ( useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, campaign=param_campaign
-                                           , includeSingleTop = param_runSingleTop
+                                           , includeSingleTop = param_runSingleTop, simple = param_simpleSingletop
+                                           , TChan = param_runTchan, Wtprod = param_runWtprod, Schan = param_runSchan
                                            , includeWjets = param_runWjets, includeZjets = param_runZjets
                                            , includeTopEW = param_runTopEW, includeDibosons = param_runDibosons
                                            , includeSingletopSystSamples = param_runSTSyst

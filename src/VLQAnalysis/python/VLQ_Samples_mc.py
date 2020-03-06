@@ -138,7 +138,8 @@ def GetTtbarSamples( useWeightSyst=False, useObjectSyst=False, hfSplitted=True, 
 ##______________________________________________________________________
 ##
 def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campaign = ""
-                                , includeSingleTop=True 
+                                , includeSingleTop=True , simple=True
+                                , Tchan=False, Wtprod=False, Schan=False
                                 , includeWjets=True, includeZjets=True
                                 , includeTopEW=True, includeDibosons=True
                                 , includeSingletopSystSamples=False 
@@ -321,7 +322,6 @@ def GetSingleTopSamples( useWeightSyst=False, useObjectSyst=False, campaign="", 
         ObjectSystematics = [getSystematics(name="nominal",nameUp="",oneSided=True)]
 
     Samples     =  []
-
     if splitChannel:
         Samples     += [getSampleUncertainties(name+"tchan", "410658."+campaign, ObjectSystematics , WeightSystematics)]
         Samples     += [getSampleUncertainties(name+"tchan", "410659."+campaign, ObjectSystematics , WeightSystematics)]

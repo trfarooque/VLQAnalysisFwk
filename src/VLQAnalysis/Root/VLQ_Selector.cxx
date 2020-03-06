@@ -101,6 +101,7 @@ bool VLQ_Selector::Init(){
   }
   
   m_blinding_config.open( Form("%s/python/VLQAnalysis/regions_dictionary.py", std::getenv("VLQAnalysisFramework_DIR")) );
+
   //============================  Initialise top selections and add rules for primary ancestors ==================================
   m_sel_indices = new std::map<std::string, int>();
   m_sel_names = new std::map<int, std::string>();
@@ -223,7 +224,7 @@ bool VLQ_Selector::Init(){
   std::vector<std::string> ch_mll; ch_mll.clear();
   if(m_opt->DoTwoLeptonAna()){
     if(m_opt->VerboseOutput()) ch_mll = {"", "-HighMLL", "-ZwinMLL"};
-    else ch_mll = {"-ZwinMLL"}; 
+    else ch_mll = {"","-ZwinMLL"}; 
   }
   else ch_mll = {""};
 
@@ -233,7 +234,7 @@ bool VLQ_Selector::Init(){
 
     AddVLQSelection("c-all",do_runop, false, PRESEL);
 
-    std::vector<std::string> v_bjet_presel = {"1bin","2bin","3bin"};
+    std::vector<std::string> v_bjet_presel = {"1bin","2bin","2bex","3bin"};
     if(m_opt->DoLowBRegions()){
       v_bjet_presel.push_back("0bin");
       v_bjet_presel.push_back("0bex");

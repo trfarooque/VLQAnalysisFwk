@@ -48,6 +48,33 @@ VLQ_WeightManager::VLQ_WeightManager( VLQ_Options *opt, const VLQ_NtupleData* nt
   m_kinRw(0),
   m_syst_regions(0)
 {
+
+  if( m_vlq_opt -> ReweightKinematics() ){
+    
+    m_kinRw = new VLQ_KinReweighter(m_vlq_opt, m_vlq_outData /*, m_vlq_ntupData*/);
+
+    if( m_vlq_opt -> OnlyReweightTtbarKin() ){
+      
+      if(m_vlq_opt -> ttbarGenerator() == VLQ_Options::POWPY8){
+        m_kinRw->Init(std::getenv("BUILDDIR")+std::string("/x86_64-centos7-gcc8-opt/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_PowPy8.root"));
+      }
+      else if(m_vlq_opt -> ttbarGenerator() == VLQ_Options::AFII){
+        m_kinRw->Init(std::getenv("BUILDDIR")+std::string("/x86_64-centos7-gcc8-opt/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_AFII.root"));
+      }
+      else if(m_vlq_opt -> ttbarGenerator() == VLQ_Options::POWHER7){
+        m_kinRw->Init(std::getenv("BUILDDIR")+std::string("/x86_64-centos7-gcc8-opt/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_PowH7.root"));
+      }
+      else if(m_vlq_opt -> ttbarGenerator() == VLQ_Options::AMCPY8){
+        m_kinRw->Init(std::getenv("BUILDDIR")+std::string("/x86_64-centos7-gcc8-opt/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_aMCPy.root"));
+      }
+
+    }
+    else{
+      m_kinRw->Init(std::getenv("BUILDDIR")+std::string("/x86_64-centos7-gcc8-opt/data/VLQAnalysis/kinReweightings_OnlyZjets_PowPy8.root"));
+    }
+
+  }
+
 }
 
 //______________________________________________________________________________
@@ -164,18 +191,6 @@ void VLQ_WeightManager::Init( std::map < int, Selection* >* selection_tree ){
 
 
   }//ttbar samples
-  if( m_vlq_opt -> ReweightKinematics() ){
-    m_kinRw = new VLQ_KinReweighter(m_vlq_opt, m_vlq_outData /*, m_vlq_ntupData*/);
-    if( m_vlq_opt -> OnlyReweightTtbarKin() ){
-      m_kinRw->Init(std::getenv("BUILDDIR")+std::string("/x86_64-centos7-gcc62-opt/data/VLQAnalysis/kinReweightings_OnlyTtbar.root"));
-      //m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyTtbar.root"));
-    }
-    else{
-      m_kinRw->Init(std::getenv("BUILDDIR")+std::string("/x86_64-centos7-gcc62-opt/data/VLQAnalysis/kinReweightings_AllBkgd.root"));
-      //m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_AllBkgd.root"));
-    }
-
-  }
 
 }
 
@@ -244,8 +259,10 @@ bool VLQ_WeightManager::AddVLQNominalWeights(){
 //
 bool VLQ_WeightManager::AddKinReweightings(  ){
 
-  for(const std::string& kin : {"MET","JETPT","LEPPT"} ){
-    AddAndInitWeight("weight_RW_"+kin, "", false, false);
+  for(const std::pair<std::string, int> kinpair : *(m_kinRw->GetReweightingList())){
+    
+    AddAndInitWeight("weight_RW_"+kinpair.first, "", m_vlq_opt->ReweightNominalKinematics() /*isNominal*/, false /*isInput*/);
+    
   }
   return true;
 }
@@ -714,13 +731,23 @@ bool VLQ_WeightManager::SetKinReweightings(  ){
     std::cerr << "<!> Error in VLQ_WeightManager::SetKinReweightings(): m_kinRw is null ... Please check !" << std::endl;
     abort();
   }
-
-  if( m_vlq_opt -> OnlyReweightTtbarKin() && !m_vlq_outData -> o_is_ttbar){ return false; }
-
-
+ 
   for(const std::pair<std::string, int> kinpair : *(m_kinRw->GetReweightingList())){
+   
     //std::cout<<" Setting systematic component for kinematic reweighting " << kinpair.first <<std::endl;
-    SetSystematicComponent( "weight_RW_"+kinpair.first, m_kinRw -> GetKinReweight( kinpair.second ) );
+    
+    if(m_vlq_opt->ReweightNominalKinematics()){
+
+      SetNominalComponent( "weight_RW_"+kinpair.first, m_kinRw -> GetKinReweight( kinpair.second ) );
+
+    }
+    else{
+
+      SetSystematicComponent( "weight_RW_"+kinpair.first, m_kinRw -> GetKinReweight(kinpair.second) );                                                                
+
+    }
+
+
   }
 
   return true;
