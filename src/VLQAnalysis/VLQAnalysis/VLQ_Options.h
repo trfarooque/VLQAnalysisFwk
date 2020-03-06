@@ -17,6 +17,13 @@ public:
     CALO = 0,
     TRACK = 1
   };
+  
+  enum ttbarGen{
+    POWPY8 = 0,
+    AMCPY8 = 1,
+    POWHER7 = 2,
+    AFII = 3
+  };
   //
   // Standard C++ functions
   //
@@ -48,6 +55,7 @@ public:
   inline bool InvertMetMtwCuts() const { return m_invertMetMtwCuts; }
   inline bool ApplyDeltaPhiCut() const { return m_applyDeltaPhiCut; }
   inline bool InvertDeltaPhiCut() const { return m_invertDeltaPhiCut; }
+  inline bool ApplyMetSigObjCut() const { return m_applyMetSigObjCut; }
   inline bool ApplyMetSignificanceCut() const { return m_applyMetSignificanceCut; }
   inline bool ApplyTtbbCorrection() const { return m_applyTtbbCorrection; }
   inline bool RecomputeTtBbRw() const { return m_RecTtBbRw; }
@@ -83,6 +91,7 @@ public:
   inline bool ComputeTtccNLO() const {return m_computeTtccNLO;}
   inline bool ReweightKinematics() const { return m_reweightKinematics; }
   inline bool OnlyReweightTtbarKin() const { return m_onlyReweightTtbarKin; }
+  inline bool ReweightNominalKinematics() const { return m_reweightNominalKinematics; }
   inline bool MakeQCD0LSystematics() const { return m_makeQCD0LSystematics; }
   inline bool DoPreselSys() const { return m_doPreselSys; }
   inline bool DoExpSys() const { return m_doExpSys; }
@@ -97,6 +106,8 @@ public:
   inline std::string LepWOpt() const { return m_lepWOpt; }
   inline std::string LeptopOpt() const { return m_leptopOpt; }
   inline std::string RCCollection() const { return m_RCCollection; }
+  inline std::string KinRWList() const { return m_kinRWList; }
+
   // doubles
   inline double RCJetsPtCut() const { return m_RCJetsPtCut; }
   inline double JetsPtCut() const { return m_jetsPtCut; }
@@ -122,6 +133,7 @@ public:
   // enums
   inline FilteringType FilterType() const { return m_filterType; }
   inline BtagColl BtagCollection() const { return m_btagCollection; }
+  inline ttbarGen ttbarGenerator() const { return m_ttbarGen; }
 
   /// check whether the options are consistent
   /**
@@ -141,6 +153,7 @@ private:
   bool m_invertMetMtwCuts;
   bool m_applyDeltaPhiCut;
   bool m_invertDeltaPhiCut;
+  bool m_applyMetSigObjCut;
   bool m_applyMetSignificanceCut;
   bool m_applyTtbbCorrection;
   bool m_multipleVariablesWithUncertainties;
@@ -168,6 +181,7 @@ private:
   bool m_computeTtccNLO;
 
   bool m_reweightKinematics;
+  bool m_reweightNominalKinematics;
   bool m_onlyReweightTtbarKin;
 
   bool m_makeQCD0LSystematics;
@@ -203,9 +217,11 @@ private:
   std::string m_lepWOpt;
   std::string m_leptopOpt;
   std::string m_RCCollection;
+  std::string m_kinRWList;
 
   FilteringType m_filterType;
   BtagColl m_btagCollection;
+  ttbarGen m_ttbarGen;
 };
 
 #endif //VLQ_OPTIONS_H

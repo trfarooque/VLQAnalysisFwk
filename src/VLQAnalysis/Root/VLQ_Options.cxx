@@ -29,6 +29,7 @@ m_applyMetMtwCuts(true),
 m_invertMetMtwCuts(false),
 m_applyDeltaPhiCut(true),
 m_invertDeltaPhiCut(false),
+m_applyMetSigObjCut(false),
 m_applyMetSignificanceCut(false),
 m_applyTtbbCorrection(false),
 m_multipleVariablesWithUncertainties(false),
@@ -62,6 +63,7 @@ m_recomputeTtbarNNLOCorrection(false),
 m_applyVjetsSherpa22RW(true),
 m_computeTtccNLO(false),
 m_reweightKinematics(false),
+m_reweightNominalKinematics(false),
 m_onlyReweightTtbarKin(false),
 m_makeQCD0LSystematics(false),
 m_doPreselSys(false),
@@ -95,8 +97,10 @@ m_sampleDat("samples_info_MBJ-2.4.24-1-0.dat"),
 m_lepWOpt("VANILLA"),
 m_leptopOpt("VETO_RCMATCH"),
 m_RCCollection("RCJ_r10pt05"),
+m_kinRWList("MEFF"),
 m_filterType(NOFILTER),
-m_btagCollection(CALO)
+m_btagCollection(CALO),
+m_ttbarGen(POWPY8)
 {}
 
 //_____________________________________________________________
@@ -119,6 +123,7 @@ OptionsBase(q)
     m_invertMetMtwCuts   = q.m_invertMetMtwCuts;
     m_applyDeltaPhiCut   = q.m_applyDeltaPhiCut;
     m_invertDeltaPhiCut  = q.m_invertDeltaPhiCut;
+    m_applyMetSigObjCut  = q.m_applyMetSigObjCut;
     m_applyMetSignificanceCut            = q.m_applyMetSignificanceCut;
     m_applyTtbbCorrection                = q.m_applyTtbbCorrection;
     m_multipleVariablesWithUncertainties = q.m_multipleVariablesWithUncertainties;
@@ -151,6 +156,7 @@ OptionsBase(q)
     m_applyVjetsSherpa22RW = q.m_applyVjetsSherpa22RW;
     m_computeTtccNLO     = q.m_computeTtccNLO;
     m_reweightKinematics = q.m_reweightKinematics;
+    m_reweightNominalKinematics = q.m_reweightNominalKinematics;
     m_onlyReweightTtbarKin = q.m_onlyReweightTtbarKin;
     m_makeQCD0LSystematics = q.m_makeQCD0LSystematics;
     m_doPreselSys       = q.m_doPreselSys;
@@ -185,8 +191,10 @@ OptionsBase(q)
     m_lepWOpt           = q.m_lepWOpt;
     m_leptopOpt         = q.m_leptopOpt;
     m_RCCollection      = q.m_RCCollection;
+    m_kinRWList         = q.m_kinRWList;
     m_filterType        = q.m_filterType;
     m_btagCollection    = q.m_btagCollection;
+    m_ttbarGen          = q.m_ttbarGen;
 }
 
 //_____________________________________________________________
@@ -236,6 +244,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_applyDeltaPhiCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--INVERTDELTAPHICUT") != std::string::npos ){
             m_invertDeltaPhiCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if( temp_arg.find("--APPLYMETSIGOBJCUT") != std::string::npos ){
+	    m_applyMetSigObjCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--APPLYMETSIGCUT") != std::string::npos ){
             m_applyMetSignificanceCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--APPLYTTBBCORRECTION") != std::string::npos ){
@@ -304,6 +314,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_computeTtccNLO = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--REWEIGHTKINEMATICS") != std::string::npos ){
             m_reweightKinematics = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if( temp_arg.find("--REWEIGHTNOMINALKINEMATICS") != std::string::npos ){
+	    m_reweightNominalKinematics = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--ONLYREWEIGHTTTBARKIN") != std::string::npos ){
             m_onlyReweightTtbarKin = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--MAKEQCD0LSYSTEMATICS") != std::string::npos ){
@@ -390,6 +402,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_leptopOpt = temp_val;
         } else if( temp_arg.find("--RCCOLLECTION") != std::string::npos ){
             m_RCCollection = temp_val;
+        } else if( temp_arg.find("--KINRWLIST") != std::string::npos ){
+	    m_kinRWList = temp_val;
         }
         //
         // Int arguments
@@ -418,6 +432,16 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             else {
                 std::cout<<"Unknown BTAGCOLLECTION option : " << temp_val << std::endl;
             }
+	}
+	else if( temp_arg.find("--TTBARGEN") != std::string::npos ){
+	  std::transform(temp_val.begin(), temp_val.end(), temp_val.begin(), toupper);
+	  if ( temp_val.find("POWPY8") != std::string::npos) m_ttbarGen = POWPY8;
+	  else if( temp_val.find("AMCPY8") != std::string::npos) m_ttbarGen = AMCPY8;
+	  else if( temp_val.find("POWHER7") != std::string::npos) m_ttbarGen = POWHER7;
+	  else if( temp_val.find("AFII") != std::string::npos) m_ttbarGen = AFII;
+	  else{
+	    std::cout<<"Unknown TTBARGEN option : " << temp_val << std::endl;
+	  }  
         } else {
             return false;
         }
@@ -450,6 +474,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_btagOP                  = " << m_btagOP            << std::endl;
     std::cout << " m_btagAlg                 = " << m_btagAlg           << std::endl;
     std::cout << " m_btagCollection          = " << m_btagCollection    << std::endl;
+    std::cout << " m_ttbarGen                = " << m_ttbarGen          << std::endl;
     std::cout << " m_useLeptonsSF            = " << m_useLeptonsSF      << std::endl;
     std::cout << " m_useBtagSF               = " << m_useBtagSF         << std::endl;
     std::cout << " m_recomputeBtagSF         = " << m_recomputeBtagSF   << std::endl;
@@ -466,6 +491,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_invertMetMtwCuts        = " << m_invertMetMtwCuts   << std::endl;
     std::cout << " m_applyDeltaPhiCut        = " << m_applyDeltaPhiCut  << std::endl;
     std::cout << " m_invertDeltaPhiCut       = " << m_invertDeltaPhiCut  << std::endl;
+    std::cout << " m_applyMetSigObjCut       = " << m_applyMetSigObjCut << std::endl;
     std::cout << " m_applyMetSignificanceCut = " << m_applyMetSignificanceCut  << std::endl;
     std::cout << " m_dumpHistos              = " << m_dumpHistos        << std::endl;
     std::cout << " m_dumpTree                = " << m_dumpTree          << std::endl;
@@ -499,6 +525,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_applyTtbarNNLOCorrection= " << m_applyTtbarNNLOCorrection   << std::endl;
     std::cout << " m_recomputeTtbarNNLOCorrection= " << m_recomputeTtbarNNLOCorrection   << std::endl;
     std::cout << " m_reweightKinematics      = " << m_reweightKinematics << std::endl;
+    std::cout << " m_reweightNominalKinematics      = " << m_reweightNominalKinematics << std::endl;
     std::cout << " m_onlyReweightTtbarKin    = " << m_onlyReweightTtbarKin << std::endl;
     std::cout << " m_makeQCD0LSystematics    = " << m_makeQCD0LSystematics << std::endl;
     std::cout << " m_doPreselSys             = " << m_doPreselSys       << std::endl;
@@ -512,6 +539,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_lepWOpt                 = " << m_lepWOpt           << std::endl;
     std::cout << " m_leptopOpt               = " << m_leptopOpt         << std::endl;
     std::cout << " m_RCCollection            = " << m_RCCollection      << std::endl;
+    std::cout << " m_kinRWList               = " << m_kinRWList         << std::endl;
     std::cout << "============================================="        << std::endl;
     std::cout << "" << std::endl;
 }
@@ -539,11 +567,11 @@ void VLQ_Options::checkConcistency() const
                       +" doOneLeptonAna "+bool2string(m_doOneLeptonAna)+","
                       +" doZeroLeptonAna "+bool2string(m_doZeroLeptonAna)
                       +" doTwoLeptonAna "+bool2string(m_doTwoLeptonAna));
-  if( (m_doOneLeptonAna==true or m_doZeroLeptonAna==true) and m_doTwoLeptonAna==true)
+  /*if( (m_doOneLeptonAna==true or m_doZeroLeptonAna==true) and m_doTwoLeptonAna==true)
     throw logic_error(string(__FILE__)+"\n"
                       +" Cannot run dilepton channel together with 0-lep or 1-lep channels:"
                       +" doOneLeptonAna "+bool2string(m_doOneLeptonAna)+","
                       +" doZeroLeptonAna "+bool2string(m_doZeroLeptonAna)
-                      +" doTwoLeptonAna "+bool2string(m_doTwoLeptonAna));
+                      +" doTwoLeptonAna "+bool2string(m_doTwoLeptonAna));*/
   // TODO implement other checks
 }

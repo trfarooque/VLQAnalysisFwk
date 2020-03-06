@@ -138,7 +138,8 @@ def GetTtbarSamples( useWeightSyst=False, useObjectSyst=False, hfSplitted=True, 
 ##______________________________________________________________________
 ##
 def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campaign = ""
-                                , includeSingleTop=True 
+                                , includeSingleTop=True , simple=True
+                                , Tchan=False, Wtprod=False, Schan=False
                                 , includeWjets=True, includeZjets=True
                                 , includeTopEW=True, includeDibosons=True
                                 , includeSingletopSystSamples=False ):
@@ -148,7 +149,9 @@ def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campai
     if includeZjets:
         Samples += GetZSamplesSherpa221( useWeightSyst, useObjectSyst, campaign )
     if includeSingleTop:
-        Samples += GetSingleTopSamples( useWeightSyst, useObjectSyst, campaign, SingletopSystSamples=includeSingletopSystSamples )
+        Samples += GetSingleTopSamples( useWeightSyst, useObjectSyst, campaign, simpleSingletop=simple,
+                                        runTchan=Tchan, runWtprod=Wtprod, runSchan=Schan,
+                                        SingletopSystSamples=includeSingletopSystSamples )
     if includeTopEW:
         Samples += GetTopEWSamples( useWeightSyst, useObjectSyst, campaign )
         Samples += GetTtHSamples( useWeightSyst, useObjectSyst, campaign )
@@ -297,7 +300,8 @@ def GetZSamplesSherpa221( useWeightSyst=False, useObjectSyst=False, campaign="",
 
 ##______________________________________________________________________
 ##
-def GetSingleTopSamples( useWeightSyst=False, useObjectSyst=False, campaign="", name = "Singletop",style="simple", SingletopSystSamples=False):
+def GetSingleTopSamples( useWeightSyst=False, useObjectSyst=False, campaign="", name = "Singletop",simpleSingletop=True, 
+                         runTchan=False, runWtprod=False, runSchan=False, SingletopSystSamples=False):
 
     ObjectSystematics = []
     WeightSystematics = []
@@ -307,7 +311,7 @@ def GetSingleTopSamples( useWeightSyst=False, useObjectSyst=False, campaign="", 
         ObjectSystematics = [getSystematics(name="nominal",nameUp="",oneSided=True)]
 
     Samples     =  []
-    if style == "simple":
+    if simpleSingletop:
         Samples     += [getSampleUncertainties(name,"410658."+campaign, ObjectSystematics , WeightSystematics)]
         Samples     += [getSampleUncertainties(name,"410659."+campaign, ObjectSystematics , WeightSystematics)]
         Samples     += [getSampleUncertainties(name,"410646."+campaign, ObjectSystematics , WeightSystematics)]
@@ -316,12 +320,15 @@ def GetSingleTopSamples( useWeightSyst=False, useObjectSyst=False, campaign="", 
         Samples     += [getSampleUncertainties(name,"410645."+campaign, ObjectSystematics , WeightSystematics)]
 
     else:
-        Samples     += [getSampleUncertainties(name+"tchan", "410658."+campaign, ObjectSystematics , WeightSystematics)]
-        Samples     += [getSampleUncertainties(name+"tchan", "410659."+campaign, ObjectSystematics , WeightSystematics)]
-        Samples     += [getSampleUncertainties(name+"Wtprod","410646."+campaign, ObjectSystematics , WeightSystematics)]
-        Samples     += [getSampleUncertainties(name+"Wtprod","410647."+campaign, ObjectSystematics , WeightSystematics)]
-        Samples     += [getSampleUncertainties(name+"schan", "410644."+campaign, ObjectSystematics , WeightSystematics)]
-        Samples     += [getSampleUncertainties(name+"schan", "410645."+campaign, ObjectSystematics , WeightSystematics)]
+        if runTchan:
+            Samples     += [getSampleUncertainties(name+"tchan", "410658."+campaign, ObjectSystematics , WeightSystematics)]
+            Samples     += [getSampleUncertainties(name+"tchan", "410659."+campaign, ObjectSystematics , WeightSystematics)]
+        if runWtprod:
+            Samples     += [getSampleUncertainties(name+"Wtprod","410646."+campaign, ObjectSystematics , WeightSystematics)]
+            Samples     += [getSampleUncertainties(name+"Wtprod","410647."+campaign, ObjectSystematics , WeightSystematics)]
+        if runSchan:
+            Samples     += [getSampleUncertainties(name+"schan", "410644."+campaign, ObjectSystematics , WeightSystematics)]
+            Samples     += [getSampleUncertainties(name+"schan", "410645."+campaign, ObjectSystematics , WeightSystematics)]
 
     if SingletopSystSamples:#to be updated
         #t-channel
