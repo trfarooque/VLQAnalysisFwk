@@ -37,10 +37,10 @@ param_runSignal = True
 param_runTtbar = True
 param_runOtherBkgd = True
 param_runSingleTop = True
-param_simpleSingletop = True
-param_runTchan = False
-param_runWtprod = False
-param_runSchan = False
+param_simpleSingleTop = True
+param_runTchanSingleTop = False
+param_runWtSingleTop = False
+param_runSchanSingleTop = False
 param_runWjets = True
 param_runZjets = True
 param_runTopEW = True
@@ -102,13 +102,13 @@ if(len(sys.argv))>1:
         elif(argument=="RUNSINGLETOP"):
             param_runSingleTop = (value.upper()=="TRUE")
         elif(argument=="SIMPLESINGLETOP"):
-            param_simpleSingletop = (value.upper()=="TRUE")
+            param_simpleSingleTop = (value.upper()=="TRUE")
         elif(argument=="RUNTCHAN"):
-            param_runTchan = (value.upper()=="TRUE")
+            param_runTchanSingleTop = (value.upper()=="TRUE")
         elif(argument=="RUNWTPROD"):
-            param_runWtprod = (value.upper()=="TRUE")
+            param_runWtSingleTop = (value.upper()=="TRUE")
         elif(argument=="RUNSCHAN"):
-            param_runSchan = (value.upper()=="TRUE")
+            param_runSchanSingleTop = (value.upper()=="TRUE")
         elif(argument=="RUNWJETS"):
             param_runWjets = (value.upper()=="TRUE")
         elif(argument=="RUNZJETS"):
@@ -255,8 +255,8 @@ if param_runTtbar:
 
 if param_runOtherBkgd:
     Samples += GetOtherBackgroundSamples ( useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, campaign=param_campaign
-                                           , includeSingleTop = param_runSingleTop, simple = param_simpleSingletop
-                                           , TChan = param_runTchan, Wtprod = param_runWtprod, Schan = param_runSchan
+                                           , includeSingleTop = param_runSingleTop, simple = param_simpleSingleTop
+                                           , TChan = param_runTchanSingleTop, Wtprod = param_runWtSingleTop, Schan = param_runSchanSingleTop
                                            , includeWjets = param_runWjets, includeZjets = param_runZjets
                                            , includeTopEW = param_runTopEW, includeDibosons = param_runDibosons
                                            , includeSingletopSystSamples = param_runSTSyst
