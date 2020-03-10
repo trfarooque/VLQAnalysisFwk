@@ -46,6 +46,7 @@ m_doTwoLeptonAna(false),
 m_doZeroLeptonAna(false),
 m_doPreselection(true),
 m_doExclusiveJetRegions(false),
+m_isAFII(false),
 m_doExtendedPreselection(false),
 m_doSingleVLQRegions(true),
 m_doPairVLQRegions(false),
@@ -64,7 +65,6 @@ m_recomputeTtbarNNLOCorrection(false),
 m_applyVjetsSherpa22RW(true),
 m_computeTtccNLO(false),
 m_reweightKinematics(false),
-m_reweightNominalKinematics(false),
 m_onlyReweightTtbarKin(false),
 m_makeQCD0LSystematics(false),
 m_doPreselSys(false),
@@ -138,6 +138,7 @@ OptionsBase(q)
     m_doZeroLeptonAna     = q.m_doZeroLeptonAna;
     m_doPreselection      = q.m_doPreselection;
     m_doExclusiveJetRegions    = q.m_doExclusiveJetRegions;
+    m_isAFII              =q.m_isAFII;
     m_doExtendedPreselection   = q.m_doExtendedPreselection;
     m_doSingleVLQRegions  = q.m_doSingleVLQRegions;
     m_doPairVLQRegions    = q.m_doPairVLQRegions;
@@ -157,7 +158,6 @@ OptionsBase(q)
     m_applyVjetsSherpa22RW = q.m_applyVjetsSherpa22RW;
     m_computeTtccNLO     = q.m_computeTtccNLO;
     m_reweightKinematics = q.m_reweightKinematics;
-    m_reweightNominalKinematics = q.m_reweightNominalKinematics;
     m_onlyReweightTtbarKin = q.m_onlyReweightTtbarKin;
     m_makeQCD0LSystematics = q.m_makeQCD0LSystematics;
     m_doPreselSys       = q.m_doPreselSys;
@@ -195,7 +195,6 @@ OptionsBase(q)
     m_kinRWList         = q.m_kinRWList;
     m_filterType        = q.m_filterType;
     m_btagCollection    = q.m_btagCollection;
-    m_ttbarGen          = q.m_ttbarGen;
 }
 
 //_____________________________________________________________
@@ -279,6 +278,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
              m_doPreselection = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOEXCLUSIVEJETREGIONS") != std::string::npos ){
             m_doExclusiveJetRegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if( temp_arg.find("--ISAFII") != std::string::npos ){
+	    m_isAFII = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOEXTENDEDPRESELECTION") != std::string::npos ){
             m_doExtendedPreselection = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOSINGLEVLQREGIONS") != std::string::npos ){
@@ -317,8 +318,6 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_computeTtccNLO = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--REWEIGHTKINEMATICS") != std::string::npos ){
             m_reweightKinematics = AnalysisUtils::BoolValue(temp_val, temp_arg);
-	} else if( temp_arg.find("--REWEIGHTNOMINALKINEMATICS") != std::string::npos ){
-	    m_reweightNominalKinematics = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--ONLYREWEIGHTTTBARKIN") != std::string::npos ){
             m_onlyReweightTtbarKin = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--MAKEQCD0LSYSTEMATICS") != std::string::npos ){
@@ -436,16 +435,6 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             else {
                 std::cout<<"Unknown BTAGCOLLECTION option : " << temp_val << std::endl;
             }
-	}
-	else if( temp_arg.find("--TTBARGEN") != std::string::npos ){
-	  std::transform(temp_val.begin(), temp_val.end(), temp_val.begin(), toupper);
-	  if ( temp_val.find("POWPY8") != std::string::npos) m_ttbarGen = POWPY8;
-	  else if( temp_val.find("AMCPY8") != std::string::npos) m_ttbarGen = AMCPY8;
-	  else if( temp_val.find("POWHER7") != std::string::npos) m_ttbarGen = POWHER7;
-	  else if( temp_val.find("AFII") != std::string::npos) m_ttbarGen = AFII;
-	  else{
-	    std::cout<<"Unknown TTBARGEN option : " << temp_val << std::endl;
-	  }  
         } else {
             return false;
         }
@@ -478,7 +467,6 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_btagOP                  = " << m_btagOP            << std::endl;
     std::cout << " m_btagAlg                 = " << m_btagAlg           << std::endl;
     std::cout << " m_btagCollection          = " << m_btagCollection    << std::endl;
-    std::cout << " m_ttbarGen                = " << m_ttbarGen          << std::endl;
     std::cout << " m_useLeptonsSF            = " << m_useLeptonsSF      << std::endl;
     std::cout << " m_useBtagSF               = " << m_useBtagSF         << std::endl;
     std::cout << " m_recomputeBtagSF         = " << m_recomputeBtagSF   << std::endl;
@@ -513,6 +501,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_doZeroLeptonAna         = " << m_doZeroLeptonAna   << std::endl;
     std::cout << " m_doPreselection          = " << m_doPreselection    << std::endl;
     std::cout << " m_doExclusiveJetRegions   = " << m_doExclusiveJetRegions << std::endl;
+    std::cout << " m_isAFII                  = " << m_isAFII << std::endl;
     std::cout << " m_doExtendedPreselection  = " << m_doExtendedPreselection << std::endl;
     std::cout << " m_doSingleVLQRegions      = " << m_doSingleVLQRegions<< std::endl;
     std::cout << " m_doPairVLQRegions        = " << m_doPairVLQRegions  << std::endl;
@@ -530,7 +519,6 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_applyTtbarNNLOCorrection= " << m_applyTtbarNNLOCorrection   << std::endl;
     std::cout << " m_recomputeTtbarNNLOCorrection= " << m_recomputeTtbarNNLOCorrection   << std::endl;
     std::cout << " m_reweightKinematics      = " << m_reweightKinematics << std::endl;
-    std::cout << " m_reweightNominalKinematics      = " << m_reweightNominalKinematics << std::endl;
     std::cout << " m_onlyReweightTtbarKin    = " << m_onlyReweightTtbarKin << std::endl;
     std::cout << " m_makeQCD0LSystematics    = " << m_makeQCD0LSystematics << std::endl;
     std::cout << " m_doPreselSys             = " << m_doPreselSys       << std::endl;

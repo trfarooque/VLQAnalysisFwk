@@ -221,12 +221,27 @@ bool VLQ_Selector::Init(){
   }
   std::string nolep_prefix = "c-0lep-";
 
-  std::vector<std::string> ch_mll; ch_mll.clear();
+  std::map<std::string, std::vector<std::string> > ch_mll;
+  ch_mll["c-1lep-"] = {""};
+
+  if(m_opt -> DoTwoLeptonAna()){
+
+    if(m_opt->VerboseOutput()) ch_mll["c-2lep-"] = {"", "-HighMLL", "-ZwinMLL"};
+
+    else ch_mll["c-2lep-"] = {"-ZwinMLL"};
+
+  }
+
+  /*std::vector<std::string> ch_mll; ch_mll.clear();
   if(m_opt->DoTwoLeptonAna()){
     if(m_opt->VerboseOutput()) ch_mll = {"", "-HighMLL", "-ZwinMLL"};
     else ch_mll = {"","-ZwinMLL"}; 
   }
-  else ch_mll = {""};
+  else ch_mll = {""};*/
+
+  std::vector<std::string> ch_metsig; ch_metsig.clear();
+  if(m_opt->ApplyMetSignificanceCut()) ch_metsig = {"", "-LowMetSig", "-HighMetSig"};
+  else ch_metsig = {""};
 
   
   //======== PRESELECTION=========
@@ -471,9 +486,9 @@ bool VLQ_Selector::Init(){
 	  if(m_opt->DoSplitMtb()) ch_mtb = {"", "-LowMtbmin", "-HighMtbmin"};
 	  else ch_mtb = {""};
 
-	  std::vector<std::string> ch_metsig; ch_metsig.clear();
-	  if(m_opt->ApplyMetSignificanceCut()) ch_metsig = {"", "-LowMetSig", "-HighMetSig"};
-	  else ch_metsig = {""};
+	  //std::vector<std::string> ch_metsig; ch_metsig.clear();
+	  //if(m_opt->ApplyMetSignificanceCut()) ch_metsig = {"", "-LowMetSig", "-HighMetSig"};
+	  //else ch_metsig = {""};
 
 	  for( const std::string& bjet : bjet_analist ){
 	    const std::set<std::string>* boostset_0L = NULL;
@@ -1032,10 +1047,10 @@ bool VLQ_Selector::PassSelection(const int index){
 
   //=== Metsig ====
   else if(index == c_LowMetSig){
-    pass = (m_outData->o_metsig_ev < 10.);
+    pass = m_opt->ApplyMetSigObjCut() ? (m_outData->o_metsig_obj < 5.) : (m_outData->o_metsig_ev < 10.);
   }
   else if(index == c_HighMetSig){
-    pass = (m_outData->o_metsig_ev > 10.);
+    pass = m_opt->ApplyMetSigObjCut() ? (m_outData->o_metsig_obj > 5.) : (m_outData->o_metsig_ev > 10.);
   }
 
   //==== MLL ======
