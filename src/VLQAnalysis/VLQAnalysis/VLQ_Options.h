@@ -18,12 +18,6 @@ public:
     TRACK = 1
   };
   
-  enum ttbarGen{
-    POWPY8 = 0,
-    AMCPY8 = 1,
-    POWHER7 = 2,
-    AFII = 3
-  };
   //
   // Standard C++ functions
   //
@@ -84,6 +78,7 @@ public:
   inline bool DoSplitMtb() const { return m_doSplitMtb; }
   inline bool DoSplitMbb() const { return m_doSplitMbb; }
   inline bool DoSumRegions() const { return m_doSumRegions; }
+  inline bool ISAFII() const { return m_isAFII; }
   inline bool ScaleTtbarHtSlices() const { return m_scaleTtbarHtSlices; }
   inline bool ApplyTtbarNNLOCorrection() const { return m_applyTtbarNNLOCorrection; }
   inline bool RecomputeTtbarNNLOCorrection() const { return m_recomputeTtbarNNLOCorrection; }
@@ -91,7 +86,6 @@ public:
   inline bool ComputeTtccNLO() const {return m_computeTtccNLO;}
   inline bool ReweightKinematics() const { return m_reweightKinematics; }
   inline bool OnlyReweightTtbarKin() const { return m_onlyReweightTtbarKin; }
-  inline bool ReweightNominalKinematics() const { return m_reweightNominalKinematics; }
   inline bool MakeQCD0LSystematics() const { return m_makeQCD0LSystematics; }
   inline bool DoPreselSys() const { return m_doPreselSys; }
   inline bool DoExpSys() const { return m_doExpSys; }
@@ -133,7 +127,6 @@ public:
   // enums
   inline FilteringType FilterType() const { return m_filterType; }
   inline BtagColl BtagCollection() const { return m_btagCollection; }
-  inline ttbarGen ttbarGenerator() const { return m_ttbarGen; }
 
   /// check whether the options are consistent
   /**
@@ -168,6 +161,7 @@ private:
   bool m_doOneLeptonAna;
   bool m_doTwoLeptonAna;
   bool m_doZeroLeptonAna;
+  bool m_isAFII;
 
   bool m_doPreselection, m_doExclusiveJetRegions, m_doExtendedPreselection, m_doSingleVLQRegions, m_doPairVLQRegions,
     m_doValidnRegions, m_doFitRegions, m_doLowBRegions, m_doLowJRegions,
@@ -181,7 +175,6 @@ private:
   bool m_computeTtccNLO;
 
   bool m_reweightKinematics;
-  bool m_reweightNominalKinematics;
   bool m_onlyReweightTtbarKin;
 
   bool m_makeQCD0LSystematics;
@@ -221,7 +214,6 @@ private:
 
   FilteringType m_filterType;
   BtagColl m_btagCollection;
-  ttbarGen m_ttbarGen;
 };
 
 #endif //VLQ_OPTIONS_H

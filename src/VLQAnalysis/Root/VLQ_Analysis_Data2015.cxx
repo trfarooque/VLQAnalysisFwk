@@ -1480,7 +1480,7 @@ bool VLQ_Analysis_Data2015::Begin(){
   //
   // Rejection mask saving
   //
-  m_outMngrHist -> HistMngr() -> BookTH1D("rejectionMask","Mask",1,0,14,"","","#events");
+  m_outMngrHist -> HistMngr() -> BookTH1D("rejectionMask","Mask",1,0,10,"","","#events");
   m_outMngrHist -> HistMngr() -> GetTH1D("rejectionMask") -> GetXaxis() -> SetBinLabel( 1,                                    "Kept" );
   m_outMngrHist -> HistMngr() -> GetTH1D("rejectionMask") -> GetXaxis() -> SetBinLabel( VLQ_Enums::TRIGGER_REJECTED + 1,      "Trigger" );
   m_outMngrHist -> HistMngr() -> GetTH1D("rejectionMask") -> GetXaxis() -> SetBinLabel( VLQ_Enums::BADJET_REJECTED + 1,       "Bad jet" );
@@ -1489,7 +1489,6 @@ bool VLQ_Analysis_Data2015::Begin(){
   m_outMngrHist -> HistMngr() -> GetTH1D("rejectionMask") -> GetXaxis() -> SetBinLabel( VLQ_Enums::JETS_REJECTED + 1,         "Jets" );
   m_outMngrHist -> HistMngr() -> GetTH1D("rejectionMask") -> GetXaxis() -> SetBinLabel( VLQ_Enums::METMTW_REJECTED + 1,       "Met/Mtw" );
   m_outMngrHist -> HistMngr() -> GetTH1D("rejectionMask") -> GetXaxis() -> SetBinLabel( VLQ_Enums::DPHI_REJECTED + 1,         "#Delta#varphi" );
-  m_outMngrHist -> HistMngr() -> GetTH1D("rejectionMask") -> GetXaxis() -> SetBinLabel( VLQ_Enums::METSIGOBJ_REJECTED + 1,         "MetSig" );
 
   m_outMngrHist -> HistMngr() -> BookTH1D("cutFlow_unWeight","Cut",1,0,20,"","","#events");
   m_outMngrHist -> HistMngr() -> BookTH1D("cutFlow_weight_2","Cut",1,0,20,"","","#events");
@@ -1913,16 +1912,6 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
   }
 
 
-  if( m_opt -> ApplyMetSigObjCut()){
-
-    std::cout << m_ntupData -> d_met_sig << std::endl;
-    bool lowMetSigObj = m_ntupData -> d_met_sig < 5.0;
-    if(lowMetSigObj){
-      m_outData->o_rejectEvent |= 1 << VLQ_Enums::METSIGOBJ_REJECTED;
-    }
-
-  }
-
   //###########################################################
   //                                                          #
   // C9: Additional Met cut/veto in 0-lep channel                  #
@@ -2321,9 +2310,6 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
   }
   if( m_outData -> o_rejectEvent & 1<<VLQ_Enums::DPHI_REJECTED ){
     m_outMngrHist -> HistMngr() -> FillTH1D( "rejectionMask", VLQ_Enums::DPHI_REJECTED, 1. );
-  }
-  if( m_outData -> o_rejectEvent & 1<<VLQ_Enums::METSIGOBJ_REJECTED ){
-    m_outMngrHist -> HistMngr() -> FillTH1D( "rejectionMask", VLQ_Enums::METSIGOBJ_REJECTED, 1. );
   }
   if( !m_outData -> o_rejectEvent ){
     m_outMngrHist -> HistMngr() -> FillTH1D( "rejectionMask", 0, 1. );
@@ -2726,8 +2712,7 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
   //================ If single-top Wt then make DR/DS uncertainty ================
   if(is_singletop){
     VLQ_PropagateSingleTopSystematics* DRDSPropagator = new VLQ_PropagateSingleTopSystematics(m_opt, m_outMngrHist);
-    DRDSPropagator->Init(m_selector -> GetSelectionTree(), std::getenv("BUILDDIR")+std::string("/x86_64-centos7-gcc8-opt/data/VLQAnalysis/single_top_syst.root"));
-    //DRDSPropagator->Init(m_selector -> GetSelectionTree(), std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/single_top_syst.root"));
+    DRDSPropagator->Init(m_selector -> GetSelectionTree(), std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/single_top_syst.root"));
     DRDSPropagator->WriteAllSystHistograms(false,false);
     delete DRDSPropagator;
   }

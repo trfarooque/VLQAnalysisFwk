@@ -98,8 +98,7 @@ bool VLQ_Selector::Init(){
     std::cout<<" Inside VLQ_Selector::Init()"<<std::endl;
   }
   
-  m_blinding_config.open( Form("%s/x86_64-centos7-gcc8-opt/python/VLQAnalysis/regions_dictionary.py", std::getenv("BUILDDIR")) );
-  //m_blinding_config.open( Form("%s/python/VLQAnalysis/regions_dictionary.py", std::getenv("VLQAnalysisFramework_DIR")) );
+  m_blinding_config.open( Form("%s/python/VLQAnalysis/regions_dictionary.py", std::getenv("VLQAnalysisFramework_DIR")) );
   //============================  Initialise top selections and add rules for primary ancestors ==================================
   m_sel_indices = new std::map<std::string, int>();
   m_sel_names = new std::map<int, std::string>();
@@ -215,12 +214,27 @@ bool VLQ_Selector::Init(){
   }
   std::string nolep_prefix = "c-0lep-";
 
-  std::vector<std::string> ch_mll; ch_mll.clear();
+  std::map<std::string, std::vector<std::string> > ch_mll;
+  ch_mll["c-1lep-"] = {""};
+
+  if(m_opt -> DoTwoLeptonAna()){
+
+    if(m_opt->VerboseOutput()) ch_mll["c-2lep-"] = {"", "-HighMLL", "-ZwinMLL"};
+
+    else ch_mll["c-2lep-"] = {"-ZwinMLL"};
+
+  }
+
+  /*std::vector<std::string> ch_mll; ch_mll.clear();
   if(m_opt->DoTwoLeptonAna()){
     if(m_opt->VerboseOutput()) ch_mll = {"", "-HighMLL", "-ZwinMLL"};
     else ch_mll = {"","-ZwinMLL"}; 
   }
-  else ch_mll = {""};
+  else ch_mll = {""};*/
+
+  std::vector<std::string> ch_metsig; ch_metsig.clear();
+  if(m_opt->ApplyMetSignificanceCut()) ch_metsig = {"", "-LowMetSig", "-HighMetSig"};
+  else ch_metsig = {""};
 
   
   //======== PRESELECTION=========
@@ -285,13 +299,14 @@ bool VLQ_Selector::Init(){
       for(const std::string& jet : set_jet_presel){
 	for(const std::string& bjet : v_bjet_presel){
 	  for(const std::string& lepsuf : lep_ch_pair.second){
-	    for(const std::string& mllsuf : ch_mll){
-	      
-	      if((lep_prefix == "c-1lep-" && mllsuf == "") || (lep_prefix == "c-2lep-" && mllsuf == "-ZwinMLL")){
-	      
-		AddVLQSelection(lep_prefix+jet+"-"+bjet+mllsuf+lepsuf, do_runop, do_syst, PRESEL);
-
-	      }
+	    for(const std::string& mllsuf : ch_mll[lep_prefix]){
+	      for(const std::string& metsuf : ch_metsig){
+		//if((lep_prefix == "c-1lep-" && mllsuf == "") || (lep_prefix == "c-2lep-" && mllsuf == "-ZwinMLL")){
+		  
+		AddVLQSelection(lep_prefix+jet+"-"+bjet+metsuf+mllsuf+lepsuf, do_runop, do_syst, PRESEL);
+		  
+		//}
+	      }//metsig channels
 	    }//mll channels
 	  }//lepflav channels
 	}//bjet
@@ -472,9 +487,9 @@ bool VLQ_Selector::Init(){
 	  if(m_opt->DoSplitMtb()) ch_mtb = {"", "-LowMtbmin", "-HighMtbmin"};
 	  else ch_mtb = {""};
 
-	  std::vector<std::string> ch_metsig; ch_metsig.clear();
-	  if(m_opt->ApplyMetSignificanceCut()) ch_metsig = {"", "-LowMetSig", "-HighMetSig"};
-	  else ch_metsig = {""};
+	  //std::vector<std::string> ch_metsig; ch_metsig.clear();
+	  //if(m_opt->ApplyMetSignificanceCut()) ch_metsig = {"", "-LowMetSig", "-HighMetSig"};
+	  //else ch_metsig = {""};
 
 	  for( const std::string& bjet : bjet_analist ){
 	    const std::set<std::string>* boostset_0L = NULL;
@@ -1017,10 +1032,10 @@ bool VLQ_Selector::PassSelection(const int index){
 
   //=== Metsig ====
   else if(index == c_LowMetSig){
-    pass = (m_outData->o_metsig_ev < 10.);
+    pass = m_opt->ApplyMetSigObjCut() ? (m_outData->o_metsig_obj < 5.) : (m_outData->o_metsig_ev < 10.);
   }
   else if(index == c_HighMetSig){
-    pass = (m_outData->o_metsig_ev > 10.);
+    pass = m_opt->ApplyMetSigObjCut() ? (m_outData->o_metsig_obj > 5.) : (m_outData->o_metsig_ev > 10.);
   }
 
   //==== MLL ======

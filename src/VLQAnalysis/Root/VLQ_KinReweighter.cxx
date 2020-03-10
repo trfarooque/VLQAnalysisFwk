@@ -110,8 +110,7 @@ bool VLQ_KinReweighter::Init( /*std::map < int, Selection* >* selection_tree,*/ 
   if(m_opt->DoOneLeptonAna() || m_opt->DoTwoLeptonAna() ){
 
 
-    if((m_opt -> SampleName() == SampleName::TTBARBB) || (m_opt -> SampleName() == SampleName::TTBARCC) || (m_opt -> SampleName() == SampleName::TTBARLIGHT)
-       || (m_opt -> SampleName() == SampleName::SINGLETOP)){
+    if((m_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP)){
 
       vec_regions.push_back("c1lep3jin2bex");
 
@@ -126,6 +125,7 @@ bool VLQ_KinReweighter::Init( /*std::map < int, Selection* >* selection_tree,*/ 
   //
   // Filling the map with needed ratio plots
   //
+  std::cout << "VLQ_KinReweighter::Init(): Reading reweighting histogram from " << fileName << std::endl;
   TFile *f = TFile::Open(fileName.c_str());
 
   for ( std::pair<std::string, int> kinpair : *m_reweightings ){
@@ -198,8 +198,7 @@ double VLQ_KinReweighter::GetKinReweight( const int kinematic) const {
       source_reg = "c2lep3jin0bexZwinMLL_sf";
 
     }
-    else if((m_opt -> SampleName() == SampleName::TTBARBB) || (m_opt -> SampleName() == SampleName::TTBARCC)
-	    || (m_opt -> SampleName() == SampleName::TTBARLIGHT) || (m_opt -> SampleName() == SampleName::SINGLETOP)){
+    else if((m_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP)){
 
       source_reg = "c1lep3jin2bex";
 
