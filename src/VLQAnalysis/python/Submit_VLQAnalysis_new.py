@@ -256,7 +256,7 @@ if param_runTtbar:
 if param_runOtherBkgd:
     Samples += GetOtherBackgroundSamples ( useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, campaign=param_campaign
                                            , includeSingleTop = param_runSingleTop, simple = param_simpleSingleTop
-                                           , TChan = param_runTchanSingleTop, Wtprod = param_runWtSingleTop, Schan = param_runSchanSingleTop
+                                           , Tchan = param_runTchanSingleTop, Wtprod = param_runWtSingleTop, Schan = param_runSchanSingleTop
                                            , includeWjets = param_runWjets, includeZjets = param_runZjets
                                            , includeTopEW = param_runTopEW, includeDibosons = param_runDibosons
                                            , includeSingletopSystSamples = param_runSTSyst
