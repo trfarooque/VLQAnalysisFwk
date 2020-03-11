@@ -87,7 +87,6 @@ public:
   inline bool ApplyVjetsSherpa22RW() const { return m_applyVjetsSherpa22RW; }
   inline bool ComputeTtccNLO() const {return m_computeTtccNLO;}
   inline bool ReweightKinematics() const { return m_reweightKinematics; }
-  inline bool OnlyReweightTtbarKin() const { return m_onlyReweightTtbarKin; }
   inline bool MakeQCD0LSystematics() const { return m_makeQCD0LSystematics; }
   inline bool DoPreselSys() const { return m_doPreselSys; }
   inline bool DoExpSys() const { return m_doExpSys; }
@@ -177,8 +176,7 @@ private:
   bool m_computeTtccNLO;
 
   bool m_reweightKinematics;
-  bool m_onlyReweightTtbarKin;
-
+  
   bool m_makeQCD0LSystematics;
   bool m_doPreselSys;
   bool m_doExpSys;
