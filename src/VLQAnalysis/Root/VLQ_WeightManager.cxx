@@ -53,26 +53,22 @@ m_syst_regions(0)
     
     m_kinRw = new VLQ_KinReweighter(m_vlq_opt, m_vlq_outData /*, m_vlq_ntupData*/);
 
-    if( m_vlq_opt -> OnlyReweightTtbarKin() ){
-
-      if(m_vlq_opt -> StrSampleName().find("POWHER") != std::string::npos){
-        m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_PowH7.root"));
-      }
-      else if(m_vlq_opt -> StrSampleName().find("AMCPY") != std::string::npos){
-        m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_aMCPy.root"));
-      }
-      else if(m_vlq_opt -> ISAFII()){
-	m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_AFII.root"));
-      }
-      else{
- 	m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_PowPy8.root"));
-      }
-
-    }
-    else{
+    if((m_vlq_opt -> SampleName() == SampleName::ZJETS) || (m_vlq_opt -> SampleName() == SampleName::WJETS)){	
       m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyZjets_PowPy8.root"));
     }
-
+    if(m_vlq_opt -> StrSampleName().find("POWHER") != std::string::npos){
+      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_PowH7.root"));
+    }
+    else if(m_vlq_opt -> StrSampleName().find("AMCPY") != std::string::npos){
+      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_aMCPy.root"));
+    }
+    else if(m_vlq_opt -> ISAFII()){
+      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_AFII.root"));
+    }
+    else{
+      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_PowPy8.root"));
+    }
+    
   }
 
 }
@@ -377,6 +373,7 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
       AddAndInitWeight("weight_pmg_Var3cDown","",false, true, "weight_pmg_Var3cDown", "weight_mc");
       AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac20","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac20", "weight_mc");
       AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac05","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac05", "weight_mc");
+
 
       //ttbar generator, PS and radiation uncertainties
       std::vector<std::string> ttbar_sys_comp = {"PS", "GEN", "GENPS", "RADHI", "RADLOW"};

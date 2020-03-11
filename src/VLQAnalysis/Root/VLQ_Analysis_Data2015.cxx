@@ -488,7 +488,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "metsig_ev",     0.5, 0, 50,    ";E_{T}^{miss}/#sqrt{H_{T}^{had}} [#sqrt{GeV}]", false, &(m_outData -> o_metsig_ev) );
       m_outMngrHist -> AddStandardTH1( "metsig_obj",    0.5, 0, 50,    "; #sigma(E_{T}^{miss}) [#sqrt{GeV}]", false, &(m_outData -> o_metsig_obj) );
       
-      m_outMngrHist -> AddStandardTH2( "meff", "jets_n", 50, 0, 5000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} [GeV]", false, &(m_outData -> o_meff), &(m_outData -> o_jets_n));
+      m_outMngrHist -> AddStandardTH2( "meff", "jets_n", 50, 0, 5000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} [GeV]", true, &(m_outData -> o_meff), &(m_outData -> o_jets_n));
 
       /*
       m_outMngrHist -> AddStandardTH2( "mu", "fwdjets_n", 10, 0, 80, 1, -0.5, 8.5,"<#mu>", "Number of fwd-jets", false, 
