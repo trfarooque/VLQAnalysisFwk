@@ -65,7 +65,6 @@ m_recomputeTtbarNNLOCorrection(false),
 m_applyVjetsSherpa22RW(true),
 m_computeTtccNLO(false),
 m_reweightKinematics(false),
-m_onlyReweightTtbarKin(false),
 m_makeQCD0LSystematics(false),
 m_doPreselSys(false),
 m_doExpSys(true),
@@ -158,7 +157,6 @@ OptionsBase(q)
     m_applyVjetsSherpa22RW = q.m_applyVjetsSherpa22RW;
     m_computeTtccNLO     = q.m_computeTtccNLO;
     m_reweightKinematics = q.m_reweightKinematics;
-    m_onlyReweightTtbarKin = q.m_onlyReweightTtbarKin;
     m_makeQCD0LSystematics = q.m_makeQCD0LSystematics;
     m_doPreselSys       = q.m_doPreselSys;
     m_doExpSys          = q.m_doExpSys;
@@ -318,8 +316,6 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_computeTtccNLO = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--REWEIGHTKINEMATICS") != std::string::npos ){
             m_reweightKinematics = AnalysisUtils::BoolValue(temp_val, temp_arg);
-        } else if( temp_arg.find("--ONLYREWEIGHTTTBARKIN") != std::string::npos ){
-            m_onlyReweightTtbarKin = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--MAKEQCD0LSYSTEMATICS") != std::string::npos ){
             m_makeQCD0LSystematics = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOPRESELSYS") != std::string::npos ){
@@ -519,7 +515,6 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_applyTtbarNNLOCorrection= " << m_applyTtbarNNLOCorrection   << std::endl;
     std::cout << " m_recomputeTtbarNNLOCorrection= " << m_recomputeTtbarNNLOCorrection   << std::endl;
     std::cout << " m_reweightKinematics      = " << m_reweightKinematics << std::endl;
-    std::cout << " m_onlyReweightTtbarKin    = " << m_onlyReweightTtbarKin << std::endl;
     std::cout << " m_makeQCD0LSystematics    = " << m_makeQCD0LSystematics << std::endl;
     std::cout << " m_doPreselSys             = " << m_doPreselSys       << std::endl;
     std::cout << " m_doExpSys                = " << m_doExpSys          << std::endl;
