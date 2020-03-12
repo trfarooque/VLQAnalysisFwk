@@ -56,7 +56,7 @@ m_syst_regions(0)
     if((m_vlq_opt -> SampleName() == SampleName::ZJETS) || (m_vlq_opt -> SampleName() == SampleName::WJETS)){	
       m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyZjets_PowPy8.root"));
     }
-    if(m_vlq_opt -> StrSampleName().find("POWHER") != std::string::npos){
+    else if(m_vlq_opt -> StrSampleName().find("POWHER") != std::string::npos){
       m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_PowH7.root"));
     }
     else if(m_vlq_opt -> StrSampleName().find("AMCPY") != std::string::npos){
@@ -392,7 +392,7 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
 
       //ttcc uncertainties
       if( m_vlq_opt->ComputeWeightSys() && m_vlq_opt -> ComputeTtccNLO()){
-	AddAndInitWeight("weight_ttcc_NLO", "", false, false);
+	AddAndInitWeight("weight_ttcc_NLO", "", false, false)->AddFlagAtBit(3,true);
       }
 
     }//ttbar samples
@@ -627,6 +627,7 @@ bool VLQ_WeightManager::SetTtbarGeneratorSystematics( const std::string &region 
       std::cerr << "<!> Error in VLQ_WeightManager::SetTtbarGeneratorSystematics(): m_ttbar_syst_weight is null ... Please check !" << std::endl;
       abort();
     }
+
     SetSystematicComponent( "weight_ttbar_PS",    m_ttbar_syst_weight -> GetTtbarSystWeight( region, VLQ_TtbarSystematicsManager::PS)      );
     SetSystematicComponent( "weight_ttbar_GEN",   m_ttbar_syst_weight -> GetTtbarSystWeight( region, VLQ_TtbarSystematicsManager::GEN)     );
     SetSystematicComponent( "weight_ttbar_GENPS", m_ttbar_syst_weight -> GetTtbarSystWeight( region, VLQ_TtbarSystematicsManager::GENPS)   );
