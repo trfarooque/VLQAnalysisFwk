@@ -400,7 +400,7 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
 
       //ttcc uncertainties
       if( m_vlq_opt->ComputeWeightSys() && m_vlq_opt -> ComputeTtccNLO()){
-	AddAndInitWeight("weight_ttcc_NLO", "", false, false)->AddFlagAtBit(3,true);
+	AddAndInitWeight("weight_ttcc_NLO", "", false, false);
       }
 
     }//ttbar samples
