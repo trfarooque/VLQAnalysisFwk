@@ -34,6 +34,9 @@ class FakeLeptonEstimation;
 class VLQ_WeightManager : public WeightManager {
 
 public:
+  
+  enum FlagTypes{REWEIGHT=3};
+
     //
     // Standard C++ functions
     //
@@ -47,7 +50,7 @@ public:
     void Init( std::map < int, Selection* >* selection_tree );
     bool AddVLQNominalWeights();
     bool AddVLQSystematicWeights( const bool dump_config = false );
-    bool AddKinReweightings(  );
+    bool AddKinReweightings();
 
     bool SetLeptonSFWeights( const bool apply_trigger_weights );
     bool SetCrossSectionWeight();
@@ -60,7 +63,8 @@ public:
     bool SetTtbarFractionWeight();
     bool SetNNLOWeight( const double topPt );
 
-    bool SetKinReweightings(  );
+    bool SetKinReweightings();
+    bool UpdateSysReweighting();
 
 private:
     VLQ_Options *m_vlq_opt;

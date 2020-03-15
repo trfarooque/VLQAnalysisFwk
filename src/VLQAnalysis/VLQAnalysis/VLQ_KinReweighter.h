@@ -46,7 +46,7 @@ public:
     //
     // Real function
     //
-    double GetKinReweight( /*const std::string &region_name,*/ const int kinematic ) const;
+    double GetKinReweight( /*const std::string &region_name,*/ const int kinematic, const std::string systematic ="") const;
 
 private:
     //const VLQ_NtupleData *m_ntupData;
