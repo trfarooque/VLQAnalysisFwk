@@ -1,5 +1,4 @@
 #include "VLQAnalysis/VLQ_WeightManager.h"
-
 #include "IFAETopFramework/SampleInfo.h"
 #include "IFAETopFramework/AnalysisObject.h"
 #include "IFAETopFramework/Selection.h"
@@ -367,7 +366,6 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
       AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac20","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac20", "weight_mc");
       AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac05","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac05", "weight_mc");
 
-
       //ttbar generator, PS and radiation uncertainties
       std::vector<std::string> ttbar_sys_comp = {"PS", "GEN", "GENPS", "RADHI", "RADLOW"};
       for(const std::string& ttbar_sys : ttbar_sys_comp){
@@ -435,6 +433,7 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
     }
 
   }
+
   return true;
 }
 
@@ -734,6 +733,34 @@ bool VLQ_WeightManager::SetKinReweightings(  ){
     //std::cout<<" Setting systematic component for kinematic reweighting " << kinpair.first <<std::endl;
    
     SetNominalComponent( "weight_RW_"+kinpair.first, m_kinRw -> GetKinReweight( kinpair.second ) ); 
+
+  }
+
+  return true;
+}
+
+//______________________________________________________________________________
+//
+bool VLQ_WeightManager::UpdateSysReweighting(){
+  
+  
+
+  for( auto& weight : *m_systMap){
+    
+    if(((weight.second)->PassFlagAtBit(REWEIGHT)) && (weight.first.find("weight_ttcc_NLO") != std::string::npos)){
+
+      double oldWeight = weight.second->GetComponentValue();
+
+      oldWeight /= ((*m_nomMap)["weight_RW_MEFF"]->GetComponentValue());
+      oldWeight /= ((*m_nomMap)["weight_RW_JETSN"]->GetComponentValue());
+
+      oldWeight *= m_kinRw->GetKinReweight(3, "_"+weight.first);
+      oldWeight *= m_kinRw->GetKinReweight(4,"_"+weight.first);
+
+      UpdateSystematicComponent(weight.first, oldWeight);
+    }
+
+    
 
   }
 
