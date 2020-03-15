@@ -10,6 +10,7 @@
 #include "TFile.h"
 #include "TH1F.h"
 #include "TH2F.h"
+#include "TKey.h"
 
 #include <vector>
 #include <map>
@@ -128,48 +129,68 @@ bool VLQ_KinReweighter::Init( /*std::map < int, Selection* >* selection_tree,*/ 
   std::cout << "VLQ_KinReweighter::Init(): Reading reweighting histogram from " << fileName << std::endl;
   TFile *f = TFile::Open(fileName.c_str());
 
-  for ( std::pair<std::string, int> kinpair : *m_reweightings ){
+  for(const std::string region : vec_regions){
 
-    std::string kin = "";
-    
-    if(kinpair.second == MEFF) kin = "meff";
-    else if(kinpair.second == JETSN) kin = "jets_n";
-    
-    for ( const std::string region : vec_regions ){
-	
-      std::string histName = region + "_" + kin;
-      
-      if(kinpair.second == MEFF){
+    for(std::pair<std::string, int> kinpair : *m_reweightings){
 
-	TH2F* temp_hist = (TH2F*) f -> Get(histName.c_str());
+      std::string histName = region;
 
-	if(!temp_hist){
-	  std::cout << "<!> Error in VLQ_KinReweighter::Init(): Looks like the histo " << histName;
-	  std::cout << " is not in file " << fileName << ". Please check." << std::endl;
-	  continue;
+      if(kinpair.second == MEFF) histName += "_meff";
+      else if(kinpair.second == JETSN) histName += "_jets_n";
+
+      TIter next(f->GetListOfKeys());
+
+      TKey *key;
+
+      while((key = (TKey*)next())){
+
+	std::string tmpHistName = key->GetName();
+	std::string tmpHistClass = key->GetClassName();
+
+	if(tmpHistName.find(histName) != std::string::npos){
+
+	  if(tmpHistClass == "TH1D"){
+
+	    TH1F* temp_hist = (TH1F*) f -> Get(tmpHistName.c_str());
+
+	    std::cout << "Adding histogram " << tmpHistName << " of type " << tmpHistClass << std::endl; 
+	    
+	    if(!temp_hist){
+	      std::cout << "<!> Error in VLQ_KinReweighter::Init(): Looks like the histo " << tmpHistName;
+	      std::cout << " is not in file " << fileName << ". Please check." << std::endl;
+	      continue;
+	    }
+
+	    temp_hist -> SetDirectory(0);
+
+	    m_histograms -> insert( std::pair < std::string, TH1F* >(tmpHistName,temp_hist) );
+					       
+
+	  }
+	  else if(tmpHistClass == "TH2D"){
+
+	    TH2F* temp_hist = (TH2F*) f -> Get(tmpHistName.c_str());
+
+	    std::cout << "Adding histogram " <<tmpHistName << " of type " << tmpHistClass << std::endl;
+
+	    if(!temp_hist){
+	      std::cout << "<!> Error in VLQ_KinReweighter::Init(): Looks like the histo " << tmpHistName;
+	      std::cout << " is not in file " << fileName << ". Please check." << std::endl;
+	      continue;
+	    }
+
+	    temp_hist -> SetDirectory(0);
+
+	    m_histograms_2D -> insert( std::pair < std::string, TH2F* >(tmpHistName,temp_hist) );
+
+	  }
+
+
 	}
 
-	temp_hist -> SetDirectory(0);
-
-	m_histograms_2D -> insert( std::pair < std::string, TH2F* >(histName,temp_hist) );
-
-	}
-      else{
-
-	TH1F* temp_hist = (TH1F*) f -> Get(histName.c_str());
-
-	if(!temp_hist){
-	    std::cout << "<!> Error in VLQ_KinReweighter::Init(): Looks like the histo " << histName;
-	    std::cout << " is not in file " << fileName << ". Please check." << std::endl;
-	    continue;
-	}
-	
-	temp_hist -> SetDirectory(0);
-
-	m_histograms -> insert( std::pair < std::string, TH1F* >(histName,temp_hist) );
-	
       }
-      //kin.clear();
+
+
     }
     
   }
@@ -184,7 +205,7 @@ bool VLQ_KinReweighter::Init( /*std::map < int, Selection* >* selection_tree,*/ 
 
 //______________________________________________________________________________
 //
-double VLQ_KinReweighter::GetKinReweight( const int kinematic) const {
+double VLQ_KinReweighter::GetKinReweight( const int kinematic, const std::string systematic) const {
  
   std::string source_reg = "";
  
@@ -234,7 +255,7 @@ double VLQ_KinReweighter::GetKinReweight( const int kinematic) const {
   // Now, actually grabs the histogram
   //
   //std::string histName = AnalysisUtils::ReplaceString( region_name, "-", "");
-  std::string histName = source_reg + "_" + kin; // + "_" + sample; // + "_" + kin;
+  std::string histName = source_reg + "_" + kin + systematic; // + "_" + sample; // + "_" + kin;
 
   if(kinematic == MEFF){
 
@@ -260,7 +281,7 @@ double VLQ_KinReweighter::GetKinReweight( const int kinematic) const {
     if( binx > max_xbin) binx = max_xbin;
 	
     if( biny > max_ybin) biny = max_ybin;
-
+    
     /*std::cout << "histName : " << histName << std::endl;
     std::cout<<" kin : " << kin << " param1 : " << param << " param2 : " << param2 << " RW : "  << it -> second -> GetBinContent(binx, biny)
              << " source_reg : " << source_reg << " binx = " << binx << " max_xbin = " << max_xbin 
