@@ -374,84 +374,84 @@ reg_1lep6jin4bin1fjin2VLTin0Hex = {
 #
 reg_1lep3_5jwin1bin = {
 	'name':"HTX_c1lep3_5jwin1bin",
-	'legend': "#scale[0.75]{LJ, 1b}",
+	'legend': "#scale[0.75]{3-5j, #geq1b}",
 	'binning':"600,800,1000,1400,1600,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"VALIDATION"
 }
 reg_1lep3_5jwin2bin = {
 	'name':"HTX_c1lep3_5jwin2bin",
-	'legend': "#scale[0.75]{LJ, 2b}",
+	'legend': "#scale[0.75]{3-5j, #geq2b}",
 	'binning':"600,800,1000,1400,1600,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"VALIDATION"
 }
 reg_1lep3_5jwin3bin = {
 	'name':"HTX_c1lep3_5jwin3bin",
-	'legend': "#scale[0.75]{LJ, 3b}",
+	'legend': "#scale[0.75]{3-5j, #geq3b}",
 	'binning':"600,800,1000,1400,1600,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"VALIDATION"
 }
 reg_1lep3jin1bin = {
 	'name':"HTX_c1lep3jin1bin",
-	'legend': "#scale[0.75]{, 1b}",
+	'legend': "#scale[0.75]{#geq3j, #geq1b}",
 	'binning':"600,800,1000,1400,1600,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"VALIDATION"
 }
 reg_1lep3jin2bin = {
 	'name':"HTX_c1lep3jin2bin",
-	'legend': "#scale[0.75]{, 2b}",
+	'legend': "#scale[0.75]{#geq3j, #geq2b}",
 	'binning':"600,800,1000,1400,1600,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"VALIDATION"
 }
 reg_1lep3jin3bin = {
 	'name':"HTX_c1lep3jin3bin",
-	'legend': "#scale[0.75]{, 3b}",
+	'legend': "#scale[0.75]{#geq3j, #geq3b}",
 	'binning':"600,800,1000,1400,1600,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"VALIDATION"
 }
 reg_1lep5jin1bin = {
 	'name':"HTX_c1lep5jin1bin",
-	'legend': "#scale[0.75]{, 1b}",
+	'legend': "#scale[0.75]{#geq5j, #geq1b}",
 	'binning':"600,800,1000,1400,1600,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"VALIDATION"
 }
 reg_1lep5jin2bin = {
 	'name':"HTX_c1lep5jin2bin",
-	'legend': "#scale[0.75]{, 2b}",
+	'legend': "#scale[0.75]{#geq5j, #geq2b}",
 	'binning':"600,800,1000,1400,1600,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"VALIDATION"
 }
 reg_1lep5jin3bin = {
 	'name':"HTX_c1lep5jin3bin",
-	'legend': "#scale[0.75]{, 3b}",
+	'legend': "#scale[0.75]{#geq5j, #geq3b}",
 	'binning':"600,800,1000,1400,1600,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"VALIDATION"
 }
 reg_1lep6jin1bin = {
 	'name':"HTX_c1lep6jin1bin",
-	'legend': "#scale[0.75]{HJ, 1b}",
+	'legend': "#scale[0.75]{#geq6j, #geq1b}",
 	'binning':"600,800,1000,1400,1600,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"VALIDATION"
 }
 reg_1lep6jin2bin = {
 	'name':"HTX_c1lep6jin2bin",
-	'legend': "#scale[0.75]{HJ, 2b}",
+	'legend': "#scale[0.75]{#geq6j, #geqb}",
 	'binning':"600,800,1000,1400,1600,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"VALIDATION"
 }
 reg_1lep6jin3bin = {
 	'name':"HTX_c1lep6jin3bin",
-	'legend': "#scale[0.75]{HJ, 3b}",
+	'legend': "#scale[0.75]{#geq6j, 3b}",
 	'binning':"600,800,1000,1400,1600,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"VALIDATION"
@@ -521,9 +521,9 @@ reg_1lep6jin4bin1fjin2VLTin0Hex
 ]
 
 preselection_regions_1l = [
-reg_1lep3_5jwin1bin,
-reg_1lep3_5jwin2bin,
-reg_1lep3_5jwin3bin,
+# reg_1lep3_5jwin1bin,
+# reg_1lep3_5jwin2bin,
+# reg_1lep3_5jwin3bin,
 reg_1lep3jin1bin,
 reg_1lep3jin2bin,
 reg_1lep3jin3bin,
@@ -532,8 +532,9 @@ reg_1lep5jin2bin,
 reg_1lep5jin3bin,
 reg_1lep6jin1bin,
 reg_1lep6jin2bin,
-reg_1lep6jin3bin,
-reg_all
+reg_1lep6jin3bin
+# reg_1lep6jin3bin,
+# reg_all
 ]
 
 all_regions_1l =  []

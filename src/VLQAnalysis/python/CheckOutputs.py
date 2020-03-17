@@ -1,3 +1,4 @@
+#!/bin/python
 import os
 import os.path
 import string
@@ -8,6 +9,9 @@ import socket
 import sys
 import datetime
 from ROOT import *
+from VLQ_Samples_mc import *
+
+sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "python/IFAETopFramework/" )
 from BatchTools import *
 
 ##______________________________________________________
