@@ -96,6 +96,9 @@ bool VLQ_KinReweighter::Init( /*std::map < int, Selection* >* selection_tree,*/ 
     else if(RWel == "JETSN"){
       m_reweightings->insert(std::pair<std::string,int>(RWel, JETSN));
     }
+    else if(RWel == "MEFFRED"){
+      m_reweightings->insert(std::pair<std::string,int>(RWel, MEFFRED));
+    }
     else{
       std::cerr << " Unknown reweighting : " << RWel;
 
@@ -136,6 +139,7 @@ bool VLQ_KinReweighter::Init( /*std::map < int, Selection* >* selection_tree,*/ 
       std::string histName = region;
 
       if(kinpair.second == MEFF) histName += "_meff";
+      else if(kinpair.second == MEFFRED) histName += "_meffred";
       else if(kinpair.second == JETSN) histName += "_jets_n";
 
       TIter next(f->GetListOfKeys());
@@ -246,7 +250,12 @@ double VLQ_KinReweighter::GetKinReweight( const int kinematic, const std::string
     param = m_outData-> o_meff;
     param2 = m_outData-> o_jets_n;
   }
-  else if( kinematic == JETSN){
+  else if( kinematic == MEFFRED ){
+    kin = "meffred";
+    param = m_outData-> o_meffred;
+    param2 = m_outData-> o_jets_n;
+  }
+  else if( kinematic == JETSN ){
     kin = "jets_n";
     param = m_outData->o_jets_n;
   }
@@ -257,7 +266,7 @@ double VLQ_KinReweighter::GetKinReweight( const int kinematic, const std::string
   //std::string histName = AnalysisUtils::ReplaceString( region_name, "-", "");
   std::string histName = source_reg + "_" + kin + systematic; // + "_" + sample; // + "_" + kin;
 
-  if(kinematic == MEFF){
+  if(kinematic == MEFF || kinematic == MEFFRED){
 
     std::map < std::string, TH2F* >::iterator it = m_histograms_2D -> find(histName);
 
