@@ -262,6 +262,7 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_outMngrOvlerlapTree->AddStandardBranch("fwdjets_n",     "fwdjets_n",    &(m_outData->o_fwdjets_n));
     m_outMngrOvlerlapTree->AddStandardBranch("lep_n",         "lep_n",        &(m_outData->o_lep_n));
     m_outMngrOvlerlapTree->AddStandardBranch("meff",          "meff",         &(m_outData->o_meff));
+    m_outMngrOvlerlapTree->AddStandardBranch("meffred",       "meffred",      &(m_outData->o_meffred));
     m_outMngrOvlerlapTree->AddStandardBranch("met",           "met",          &(m_outData->o_met));
     m_outMngrOvlerlapTree->AddStandardBranch("mtw",           "mtw",          &(m_outData->o_mtwl));
     m_outMngrOvlerlapTree->AddStandardBranch("weight",        "weight",       &(m_outData->o_eventWeight_Nom));
@@ -370,6 +371,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 
     //-------------------------------------------------------------------------------------------------------------------
     m_outMngrTree->AddStandardBranch("meff", "Effective mass", &(m_outData->o_meff));
+    m_outMngrTree->AddStandardBranch("meffred", "Effective mass reduced", &(m_outData->o_meffred));
     m_outMngrTree->AddStandardBranch("met", "Missing E_{T}",  &(m_outData->o_AO_met), -1, "Pt");
     //m_outMngrTree->AddStandardBranch("met_phi", "#phi_{MET}",  &(m_outData->o_AO_met), -1, "Phi");
     m_outMngrTree->AddStandardBranch("mtw", "Transverse W mass", &(m_outData->o_mtwl));
@@ -471,6 +473,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       //Event variables
       m_outMngrHist -> AddStandardTH1( "mu",          1, 0, 80,       ";<#mu>",         false, &(m_outData -> o_pileup_mu) );
       m_outMngrHist -> AddStandardTH1( "meff",        50, 0, 3500,    ";m_{eff} [GeV]", true, &(m_outData -> o_meff) );
+      m_outMngrHist -> AddStandardTH1( "meffred",     50, 0, 3500,    ";m_{eff} reduced [GeV]", true, &(m_outData -> o_meffred) );
       m_outMngrHist -> AddStandardTH1( "mJsum",       25, 0, 2000,    ";m_{J}^{#Sigma} [GeV]", otherVariables, &(m_outData -> o_mJsum) );
       m_outMngrHist -> AddStandardTH1( "met",         20, 0, 1000,    ";E_{T}^{miss} [GeV]",otherVariables, &(m_outData -> o_met) );
       m_outMngrHist -> AddStandardTH1( "met_phi",     0.2, -3.5, 3.5, ";#phi_{MET}", false, &(m_outData->o_AO_met), -1, "Phi");
@@ -489,6 +492,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "metsig_obj",    0.5, 0, 50,    "; #sigma(E_{T}^{miss}) [#sqrt{GeV}]", false, &(m_outData -> o_metsig_obj) );
       
       m_outMngrHist -> AddStandardTH2( "meff", "jets_n", 50, 0, 5000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} [GeV]", true, &(m_outData -> o_meff), &(m_outData -> o_jets_n));
+      m_outMngrHist -> AddStandardTH2( "meffred", "jets_n", 50, 0, 5000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} reduced [GeV]", true, &(m_outData -> o_meffred), &(m_outData -> o_jets_n));
 
       /*
       m_outMngrHist -> AddStandardTH2( "mu", "fwdjets_n", 10, 0, 80, 1, -0.5, 8.5,"<#mu>", "Number of fwd-jets", false, 
@@ -1910,7 +1914,6 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
   || (m_opt->MaxMetCutOneLep() > 0. && m_outData -> o_AO_met->Pt() > m_opt->MaxMetCutOneLep()) ) ){ 
     m_outData -> o_rejectEvent |= 1 << VLQ_Enums::METONELEP_REJECTED;
   }
-
 
   //###########################################################
   //                                                          #

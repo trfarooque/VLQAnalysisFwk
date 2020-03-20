@@ -24,7 +24,8 @@ public:
     LEPPT = 2,
     MEFF = 3,
     JETSN = 4,
-    HTALL = 5
+    HTALL = 5,
+    MEFFRED = 6
   };
     //
     // Standard C++ functions

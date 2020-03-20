@@ -357,14 +357,14 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
     if( m_vlq_outData -> o_is_ttbar ){
       
       //ttbar PMG weights
-      AddAndInitWeight("weight_pmg_muR10__muF20","",false, true, "weight_pmg_muR10__muF20", "weight_mc");
-      AddAndInitWeight("weight_pmg_muR10__muF05","",false, true, "weight_pmg_muR10__muF05", "weight_mc");
-      AddAndInitWeight("weight_pmg_muR20__muF10","",false, true, "weight_pmg_muR20__muF10", "weight_mc");
-      AddAndInitWeight("weight_pmg_muR05__muF10","",false, true, "weight_pmg_muR05__muF10", "weight_mc");
-      AddAndInitWeight("weight_pmg_Var3cUp","",false, true, "weight_pmg_Var3cUp", "weight_mc");
-      AddAndInitWeight("weight_pmg_Var3cDown","",false, true, "weight_pmg_Var3cDown", "weight_mc");
-      AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac20","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac20", "weight_mc");
-      AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac05","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac05", "weight_mc");
+      AddAndInitWeight("weight_pmg_muR10__muF20","",false, true, "weight_pmg_muR10__muF20", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+      AddAndInitWeight("weight_pmg_muR10__muF05","",false, true, "weight_pmg_muR10__muF05", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+      AddAndInitWeight("weight_pmg_muR20__muF10","",false, true, "weight_pmg_muR20__muF10", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+      AddAndInitWeight("weight_pmg_muR05__muF10","",false, true, "weight_pmg_muR05__muF10", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+      AddAndInitWeight("weight_pmg_Var3cUp","",false, true, "weight_pmg_Var3cUp", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+      AddAndInitWeight("weight_pmg_Var3cDown","",false, true, "weight_pmg_Var3cDown", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+      AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac20","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac20", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+      AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac05","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac05", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
 
       //ttbar generator, PS and radiation uncertainties
       std::vector<std::string> ttbar_sys_comp = {"PS", "GEN", "GENPS", "RADHI", "RADLOW"};
@@ -742,12 +742,10 @@ bool VLQ_WeightManager::SetKinReweightings(  ){
 //______________________________________________________________________________
 //
 bool VLQ_WeightManager::UpdateSysReweighting(){
-  
-  
 
   for( auto& weight : *m_systMap){
     
-    if(((weight.second)->PassFlagAtBit(REWEIGHT)) && (weight.first.find("weight_ttcc_NLO") != std::string::npos)){
+    if( (weight.second)->PassFlagAtBit(REWEIGHT) ){
 
       double oldWeight = weight.second->GetComponentValue();
 
@@ -755,12 +753,11 @@ bool VLQ_WeightManager::UpdateSysReweighting(){
       oldWeight /= ((*m_nomMap)["weight_RW_JETSN"]->GetComponentValue());
 
       oldWeight *= m_kinRw->GetKinReweight(3, "_"+weight.first);
-      oldWeight *= m_kinRw->GetKinReweight(4,"_"+weight.first);
+      oldWeight *= m_kinRw->GetKinReweight(4, "_"+weight.first);
 
       UpdateSystematicComponent(weight.first, oldWeight);
-    }
 
-    
+    }
 
   }
 
