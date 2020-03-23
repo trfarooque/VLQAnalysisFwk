@@ -4,15 +4,17 @@
 #include <string>
 #include <stdlib.h>
 #include "TFile.h"
+#include "TMath.h"
 #include "TH1.h"
 #include "TH2D.h"
-
+#include "TF1.h"
 
 std::string inDir;
 std::string outName;
 std::string signalSamples;
 std::string backgroundSamples;
 std::string systematicsList;
+bool doSmoothing = false;
 bool debug = false;
 
 // Utility function for splitting input string with a given delimiter. Each substring
@@ -175,6 +177,10 @@ void parseUserOptions(int arc, char** argv){
     else if(argument == "--SIGNAL") signalSamples = value;
     else if(argument == "--BACKGROUND") backgroundSamples = value;
     else if(argument == "--SYSTEMATICS") systematicsList = value;
+    else if(argument == "--DOSMOOTHING"){
+      std::transform(value.begin(), value.end(), value.begin(), toupper);
+      doSmoothing = (value == "TRUE") ? true : false;
+    }
     else if(argument == "--DEBUG"){
 
       std::transform(value.begin(), value.end(), value.begin(), toupper);
@@ -182,6 +188,16 @@ void parseUserOptions(int arc, char** argv){
     }
   }
   
+}
+
+//______________________________________________________________________________
+//
+Double_t meffFitFunction(Double_t *x, Double_t *par){
+  
+  Double_t fitVal = par[0] + par[1]/(TMath::Power(x[0],par[2]));
+
+  return fitVal;
+
 }
 
 // Main function that calculates the jets_n reweighting for the given samples to be 
@@ -198,6 +214,7 @@ int main(int argc, char** argv){
   std::cout << " signalSamples = " << signalSamples << std::endl;
   std::cout << " backgroundSamples = " << backgroundSamples << std::endl;
   std::cout << " systematicsList = " << systematicsList << std::endl;
+  std::cout << " doSmoothing = " << doSmoothing << std::endl;
   std::cout << " debug = "<< debug << std::endl;
 
   TFile* f_out = TFile::Open( outName.c_str(), "UPDATE" );
@@ -213,7 +230,7 @@ int main(int argc, char** argv){
   
   // Vector containing the kinematics to be reweighted
   std::vector<std::string> list_kin = {"jets_n","meff"};
- 
+
   std::vector<std::string> list_reg{};
 
   std::ifstream systFile(systematicsList);
@@ -245,7 +262,8 @@ int main(int argc, char** argv){
   if(std::find(list_signal.begin(), list_signal.end(), "ttbarbb") != list_signal.end() ||
      std::find(list_signal.begin(), list_signal.end(), "ttbarbbaMCPy") != list_signal.end() ||
      std::find(list_signal.begin(), list_signal.end(), "ttbarbbPowHer") != list_signal.end() ||
-     std::find(list_signal.begin(), list_signal.end(), "ttbarbbAFII") != list_signal.end()){
+     std::find(list_signal.begin(), list_signal.end(), "ttbarbbAFII") != list_signal.end() ||
+     std::find(list_signal.begin(), list_signal.end(), "ttbarbb_systWeights") != list_signal.end()){
 
     list_reg.push_back("c1lep3jin2bex");
 
@@ -317,7 +335,7 @@ int main(int argc, char** argv){
       
       // Calculate the jets_n reweighting
       numerator_jets_n -> Divide( denominator_jets_n );
-      
+
       f_out->cd();
 
       numerator_jets_n -> SetName( (region + "_jets_n" + systematicPrefix).c_str() );
@@ -325,7 +343,7 @@ int main(int argc, char** argv){
       numerator_jets_n -> Write();
       
       // Define histogram that will contain the meff reweighting after applying the jets_n reweighting
-      TH2D* meff_rw = new TH2D( (region + "_meff" + systematicPrefix).c_str(), "", nbins_meff, binedges_meff, nbins_jets_n, binedges_jets_n);
+      TH2D* meff_rw = new TH2D( (region + "_" + list_kin[1] + systematicPrefix).c_str(), "", nbins_meff, binedges_meff, nbins_jets_n, binedges_jets_n);
 
       for(int ybin =4; ybin <= meff_rw -> GetNbinsY(); ybin++){ // Start loop through jets_n bins
 	
@@ -334,6 +352,8 @@ int main(int argc, char** argv){
 	
 	TH1D* data_hist_meff = ((TH2D*)(data_hist -> Clone(data_hist->GetName() ) ) ) -> ProjectionX();
 	data_hist_meff -> Reset();
+
+	data_hist_meff->Sumw2(kFALSE);
 	
 	TH1D* signal_hist_meff = ((TH2D*)(signal_hist -> Clone(signal_hist->GetName() ) ) ) -> ProjectionX();
 	signal_hist_meff -> Reset();
@@ -400,6 +420,7 @@ int main(int argc, char** argv){
 	  
 	} // End if ybin is greater than jets_n = 8
 	
+	data_hist_meff->Sumw2(kTRUE);
 	
 	// Apply meff rebinning
 	
@@ -414,12 +435,45 @@ int main(int argc, char** argv){
 	
 	// Calculate meff reweighting by dividing numerator by samples to be reweighted
 	data_hist_meff -> Divide(signal_hist_meff);
-	
+
+	f_out->cd();
+
+	data_hist_meff->SetName( (region + "_" + list_kin[1] + "_jet_" + std::to_string(ybin-1) + "_" + systematicPrefix).c_str() );
+
+	// Uncomment this to store individual TH1 meff reweighting histograms into output file
+	//data_hist_meff->Write();
+
+	if(doSmoothing){
+
+	  std::cout << "#######################################################################" << std::endl;
+	  if(ybin < meff_rw -> GetNbinsY()) std::cout << "Fitting meff reweighting histogram for njets = " << ybin-1 << std::endl;
+	  else std::cout << "Fitting meff reweighting histogram for njets >= " << ybin-1 << std::endl;
+	  
+	  TF1* func = new TF1(("meffFitFunc_jet_"+ std::to_string(ybin-1)).c_str(), meffFitFunction, 500, 5000, 3);
+	  
+	  //func->SetParameters(1,1,1);
+	  
+	  data_hist_meff->Fit(func, "WW E M");
+	  
+	  //======================================
+	  //f_out->cd();
+	  //data_hist_meff->SetName( (region + "_meff_jet_" + std::to_string(ybin-1)).c_str() );
+	  //data_hist_meff->Write();
+	  f_out->cd();
+	  func->Write();
+	  //======================================
+	  
+	  //Double_t par[3];
+	  
+	  //func->GetParameters(&par[0]);
+	  
+	}
+
 	// Store meff reweighting values for the current jets_n bin
 	for(int xbin = 1; xbin <= meff_rw -> GetNbinsX(); xbin++){ // Start loop through meff bins
 	  
 	  meff_rw -> SetBinContent(xbin, ybin, data_hist_meff -> GetBinContent(xbin));
-	  
+
 	  // std::cout << data_hist_meff -> GetBinContent(xbin) << std::endl;
 	  
 	} // End loop through meff bins
@@ -430,7 +484,7 @@ int main(int argc, char** argv){
       
       f_out -> cd();
       
-      meff_rw -> SetName( (region + "_meff" + systematicPrefix).c_str() );
+      meff_rw -> SetName( (region + "_" + list_kin[1] + systematicPrefix).c_str() );
       
       meff_rw -> Write();
       
@@ -454,20 +508,12 @@ int main(int argc, char** argv){
 	    if(ybin == meff_rw -> GetNbinsY()) test_region = Form("c1lep%ijin2bex", ybin-1);
 	  }
 	  
-	  //std::string test_region = Form("c1lep%ijex2bex", ybin-1);
-	  //std::string test_region = Form("c2lep%ijex0bexZwinMLL_sf", ybin-1);
-	  //std::string test_region = Form("c2lep%ijex0bexZwinMLL_ee_or_mumu", ybin-1);
-	  
-	  //if(ybin == meff_rw -> GetNbinsY()) test_region = Form("c1lep%ijin2bex", ybin-1);
-	  //if(ybin == meff_rw -> GetNbinsY()) test_region = Form("c2lep%ijin0bexZwinMLL_sf", ybin-1);
-	  //if(ybin == meff_rw -> GetNbinsY()) test_region = Form("c2lep%ijin0bexZwinMLL_ee_or_mumu", ybin-1);
-	  
 	  TFile* f_data_test = TFile::Open( (inDir + "/mergedData/outVLQAnalysis_Data_nominal_HIST.root").c_str(), "READ" );
-	  TH1D* data_hist_test = (TH1D*)(f_data_test -> Get( ( (test_region + "_meff").c_str() ) ) );
+	  TH1D* data_hist_test = (TH1D*)(f_data_test -> Get( ( (test_region + "_" + list_kin[1]).c_str() ) ) );
 	  data_hist_test -> SetDirectory(0);
 	  f_data_test -> Close();
-	  TH1D* signal_hist_test = getTotalKinHisto1D(&list_signal, inDir, test_region, &list_campaign, "meff", data_hist_test, "signal", systematicPrefix);
-	  TH1D* background_hist_test = getTotalKinHisto1D(&list_background, inDir, test_region, &list_campaign, "meff", data_hist_test, "background", systematicPrefix);
+	  TH1D* signal_hist_test = getTotalKinHisto1D(&list_signal, inDir, test_region, &list_campaign, list_kin[1], data_hist_test, "signal", systematicPrefix);
+	  TH1D* background_hist_test = getTotalKinHisto1D(&list_background, inDir, test_region, &list_campaign, list_kin[1], data_hist_test, "background", systematicPrefix);
 	  
 	  data_hist_test = (TH1D*) data_hist_test -> Rebin( nbins_meff, data_hist_test -> GetName(), rebin_meff);
 	  signal_hist_test = (TH1D*) signal_hist_test -> Rebin( nbins_meff, signal_hist_test -> GetName(), rebin_meff);
@@ -488,7 +534,7 @@ int main(int argc, char** argv){
 	  
 	  for(int xbin =1; xbin < meff_rw -> GetNbinsX(); xbin++){
 	  
-	    std::cout << "Closure meff bin " << xbin << " value: " << data_hist_test -> GetBinContent(xbin) << std::endl;
+	    std::cout << "Closure " << list_kin[1] << " bin " << xbin << " value: " << data_hist_test -> GetBinContent(xbin) << std::endl;
 	    
 	  }
 	  
