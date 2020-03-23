@@ -749,11 +749,13 @@ bool VLQ_WeightManager::UpdateSysReweighting(){
 
       double oldWeight = weight.second->GetComponentValue();
 
-      oldWeight /= ((*m_nomMap)["weight_RW_MEFF"]->GetComponentValue());
-      oldWeight /= ((*m_nomMap)["weight_RW_JETSN"]->GetComponentValue());
+      for(const std::pair<std::string, int> kinpair : *(m_kinRw->GetReweightingList())){
 
-      oldWeight *= m_kinRw->GetKinReweight(3, "_"+weight.first);
-      oldWeight *= m_kinRw->GetKinReweight(4, "_"+weight.first);
+	oldWeight /= ((*m_nomMap)["weight_RW_"+kinpair.first]->GetComponentValue());
+	
+	oldWeight *= m_kinRw->GetKinReweight(kinpair.second, "_"+weight.first);
+	
+      }
 
       UpdateSystematicComponent(weight.first, oldWeight);
 
