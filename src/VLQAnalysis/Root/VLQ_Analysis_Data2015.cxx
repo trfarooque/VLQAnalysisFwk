@@ -2162,12 +2162,14 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
       }
       if( m_opt -> ComputeWeightSys() ){
         m_weightMngr -> SetTtccWeights();
-        m_weightMngr -> SetTtbarPMGWeights();
         if( m_opt -> ApplyTtbarNNLOCorrection() ){
           m_weightMngr -> SetNNLOSystematic();
         }
       }
       m_weightMngr -> SetTtbarFractionWeight();
+    }
+    if( m_outData -> o_is_ttbar || (m_opt -> StrSampleName().find("SINGLETOP") != std::string::npos) || (m_opt -> StrSampleName().find("W+JETS") != std::string::npos) || (m_opt -> StrSampleName().find("Z+JETS") != std::string::npos) ){
+      m_weightMngr -> SetPMGSystWeights();
     }
   } else if (m_opt -> StrSampleName().find("QCD") != std::string::npos){
     m_weightMngr -> SetQCDWeight();

@@ -557,20 +557,18 @@ bool VLQ_WeightManager::SetQCDWeight(){
 
 //______________________________________________________________________________
 //
-bool VLQ_WeightManager::SetTtbarPMGWeights(){
+bool VLQ_WeightManager::SetPMGSystWeights(){
   if(!m_vlq_opt->ComputeWeightSys()){
     return true;
   }
-  if( m_vlq_outData -> o_is_ttbar ){
 
-    for( auto& weightfactor : m_sampleInfo -> SystWeightFactorMap() ){
-      if( m_systMap->find(weightfactor.first) !=  m_systMap->end()){
-        UpdateSystematicComponent(weightfactor.first, (*m_systMap)[weightfactor.first]->GetComponentValue()*m_sampleInfo->SystWeightFactorMap()[weightfactor.first]);
-      }
+  for( auto& weightfactor : m_sampleInfo -> SystWeightFactorMap() ){
+    if( m_systMap->find(weightfactor.first) !=  m_systMap->end()){
+      UpdateSystematicComponent(weightfactor.first, (*m_systMap)[weightfactor.first]->GetComponentValue()*m_sampleInfo->SystWeightFactorMap()[weightfactor.first]);
     }
   }
 
-  if(m_vlq_opt -> MsgLevel() == Debug::DEBUG) std::cout << "==> After TtbarPMGWeights weights" << std::endl;
+  if(m_vlq_opt -> MsgLevel() == Debug::DEBUG) std::cout << "==> After SetPMGSystWeights weights" << std::endl;
 
   return true;
 }
