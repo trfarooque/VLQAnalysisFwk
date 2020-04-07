@@ -226,8 +226,6 @@ bool VLQ_Selector::Init(){
   //======== PRESELECTION=========
   if(m_opt->DoPreselection()){
 
-    bool do_syst = m_opt->DoPreselSys();
-
     AddVLQSelection("c-all",do_runop, false, PRESEL);
 
     std::vector<std::string> v_bjet_presel = {"1bin","2bin","3bin"};
@@ -285,7 +283,7 @@ bool VLQ_Selector::Init(){
 	for(const std::string& bjet : v_bjet_presel){
 	  for(const std::string& lepsuf : lep_ch_pair.second){
 	    for(const std::string& mllsuf : ch_mll){
-	      AddVLQSelection(lep_prefix+jet+"-"+bjet+mllsuf+lepsuf, do_runop, do_syst, PRESEL);
+	      AddVLQSelection(lep_prefix+jet+"-"+bjet+mllsuf+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
 	    }//mll channels
 	  }//lepflav channels
 	}//bjet
@@ -295,8 +293,8 @@ bool VLQ_Selector::Init(){
 	std::vector<std::string> v_supr_svlq = {"0fjex", "1fjin", "1fjin-0Hex-0Vex"};
 	for(const std::string& supr : v_supr_svlq){
 	  for(const std::string& lepsuf : lep_ch_pair.second){
-	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-"+supr+lepsuf, do_runop, do_syst, PRESEL);
-	    AddVLQSelection(lep_prefix+"6jin-2bin-"+supr+lepsuf, do_runop, do_syst, PRESEL);
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-"+supr+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
+	    AddVLQSelection(lep_prefix+"6jin-2bin-"+supr+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
 	  }//lepflav channels
 	}//signal suppressing
       }//Extended preselection

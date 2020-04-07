@@ -60,6 +60,17 @@ Class structure::
 To run a full analysis, the following steps must be taken::
   1. Produce a sample_info.dat file with the cross section and sum of weights of all DSIDs to be processed
      a. Make a json file containing the cross section information with MakeXSecFile.py
+     Only for this part, you would need a different setup than for the rest of the code:
+     ```  
+     cd build
+     setupATLAS && lsetup pyami 
+     voms-proxy-init -voms atlas
+     acmSetup AthAnalysis,21.2,latest
+     asetup --restore
+     source */setup.sh     
+     ```
+
+     Then, run	this from src/VLQAnalysis/python
      ```
      MakeXSecFile.py --listProc <list of processes> --xsecFile <name of output file> --procDir <directory containing process lists>
      ```  

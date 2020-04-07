@@ -116,13 +116,14 @@ def writeCondorSubmitScript(scriptName, tRexFitterOutDirectory):
     f.write("#Queue subjobs \n")
     f.write("queue $(nJobs) \n")
     f.close()
-
+    os.system("chmod +x "+scriptName+".sub")
 ##----------------------------------------------------------
 ## Launch jobs
 ##----------------------------------------------------------
 def LaunchJobs( scriptName, tRexFitterOutDirectory ):
 
     os.system("mkdir " + m_outputDir + "/" + tRexFitterOutDirectory) 
+    os.system("chmod +x " + m_outputDir + "/*")
     com=""
     if m_runPBS:
         com="qsub -q " + m_batch_queue + " " + scriptName 
@@ -149,6 +150,7 @@ def writeScriptsAndLaunchJobs( scriptTempName, configFile, instructions ):
         pathToCreate += level
         pathToCreate += "/"
     os.system("mkdir -p " + pathToCreate)
+    os.system("chmod +x " + pathToCreate + "/*")
 
     scriptName += configFile.split("/")[len(configFile.split("/"))-1].replace(" ","")
 

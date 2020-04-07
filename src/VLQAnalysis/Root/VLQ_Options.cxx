@@ -94,7 +94,7 @@ m_TRFCDIPath("xAODBTaggingEfficiency/13TeV/2016-20_7-13TeV-MC15-CDI-2017-01-31_v
 m_sampleDat("samples_info_MBJ-2.4.24-1-0.dat"),
 m_lepWOpt("VANILLA"),
 m_leptopOpt("VETO_RCMATCH"),
-m_RCCollection("RCJ_r10pt05"),
+m_RCCollection("VR_rho550"),
 m_filterType(NOFILTER),
 m_btagCollection(CALO)
 {}

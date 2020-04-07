@@ -46,3 +46,6 @@ atlas_add_executable( MakeQCDFile
                                      FakeLeptonEstimation
                                      ${ROOT_LIBRARIES}
                                      VLQAnalysis)
+atlas_add_executable( compareJetCollections
+                      macros/macros_trisha/compareJetCollections.cxx
+                      LINK_LIBRARIES ${ROOT_LIBRARIES} VLQAnalysis)

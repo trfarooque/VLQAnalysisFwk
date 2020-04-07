@@ -74,9 +74,9 @@ os.system("mkdir -p " + listFolder) #list files folder
 ##________________________________________________________
 ## Getting all samples and their associated weight/object systematics
 Samples = []
-Samples += GetTtbarSamples(hfSplitted=False,ttbarSystSamples=False,useHTSlices=False,campaign=mccampaign)
+Samples += GetTtbarSamples(hfSplitted=False,ttbarSystSamples=False,useHTSlices=True,campaign=mccampaign)
 Samples += GetOtherBackgroundSamples (campaign=mccampaign)
-#Samples += GetSingleVLQSamples( includeSingleVLQ=True, campaign=mccampaign )
+Samples += GetSingleVLQSamples( campaign=mccampaign )
 printGoodNews("--> All samples recovered")
 ##........................................................
 

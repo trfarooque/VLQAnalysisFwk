@@ -2,6 +2,7 @@
 import os
 import sys
 import importlib
+import json
 
 sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/VLQAnalysis/" )
 from VLQ_Samples_mc import *
@@ -25,6 +26,8 @@ if(len(sys.argv)<5):
     print "    signal=<ALL/ONE> ALL: all signals are put in the config file (default), ONE: only one signal in each config file (default is ALL)"
     print "    normfactor=<Init,Low,High> settings for the signal normalisation factor (default is: 1,0,100)"
     print "    signalType=<PAIR/SINGLE> (default is PAIR)"
+    print "    signalScaling=<DEFAULT/BENCHMARK> (default is DEFAULT)"
+    print "    signalBenchmark=Benchmark cross section for signal normalisation"
     print "    doZeroLep=TRUE/FALSE use the zero lepton regions"
     print "    doOneLep=TRUE/FALSE use the one lepton regions"
     print "    doOneLepEMu=TRUE/FALSE use the separate e/mu regions in one lepton"
@@ -50,7 +53,7 @@ here = os.getcwd()
 ##------------------------------------------------------
 _ARGUMENTS_ = []
 #Job arguments
-_ARGUMENTS_ += [{'arg':"__LUMIVALUE__",'value':"36097.6"}]
+_ARGUMENTS_ += [{'arg':"__LUMIVALUE__",'value':"139020.02"}]
 _ARGUMENTS_ += [{'arg':"__ADDITION__",'value':""}]
 _ARGUMENTS_ += [{'arg':"__STATONLY__",'value':"FALSE"}]
 #Fit
@@ -71,6 +74,8 @@ inputDir = ""
 addition = ""
 signalHandling = "ALL"
 signalType = "PAIR"
+signalScaling = "DEFAULT"
+signalBenchmark = 0.1
 SignalNormFactor = "1,0,100"
 systConfig = []
 #for syst_file in ["BackNorm", "Objects", "Weights"]:
@@ -154,6 +159,10 @@ for iArg in range(1,len(sys.argv)):
         regDict = splitted[1]
     elif(argument=="SIGNALTYPE"):
         signalType = splitted[1].upper()
+    elif(argument=="SIGNALSCALING"):
+        signalScaling = splitted[1].upper()
+    elif(argument=="SIGNALBENCHMARK"):
+      signalBenchmark = float(splitted[1])
     else:
         for arg in _ARGUMENTS_:
             if arg['arg'] != "__"+argument+"__": continue
@@ -249,6 +258,13 @@ if doZeroLep:
 ##------------------------------------------------------
 ## Creating all the config files
 ##------------------------------------------------------
+
+#open json xsec database if needed
+##________________________________________________________                                                                                                                                                
+## Looking into the XSe DB file                                                                                                                                                                           
+with open(os.getenv("VLQAnalysisFramework_DIR") + '/data/VLQAnalysis/xsec_list.json','r') as f:
+    xsecdata = json.load(f)
+
 for counter,sample in enumerate(Signals):
 
     #Sample characteristics
@@ -358,6 +374,29 @@ for counter,sample in enumerate(Signals):
         f_adapted.write("% --------------------------- %\n")
         f_adapted.write(" \n")
 
+
+    lumiscale = 1.
+    for arg in _ARGUMENTS_:
+        if arg['arg'] == "__LUMIVALUE__":
+            lumiscale = float(arg['value'])
+            break
+    #####
+    #Cross section scaling
+    if signalScaling=="BENCHMARK":
+        searchname = SName.replace(".","")
+        d_SampleInfo = xsecdata.get(searchname)
+        if not d_SampleInfo:
+            printError("<!> Sample not found in json file for benchmark xsec scaling")
+            sys.exit()
+
+
+        crossSection = d_SampleInfo.get('xsec')
+        kFactor = d_SampleInfo.get('kFactor')
+        filterEff = d_SampleInfo.get('genFiltEff')
+        crossSection = float(crossSection*filterEff*kFactor)
+
+        lumiscale = (signalBenchmark / crossSection)*lumiscale;
+        
     f_adapted.write("Sample: \""+SType+"\"\n")
     f_adapted.write("  Title: \""+TypeTemp+"\"\n")
     f_adapted.write("  Type: signal\n")
@@ -365,7 +404,7 @@ for counter,sample in enumerate(Signals):
     f_adapted.write("  FillColor: 2\n")
     f_adapted.write("  LineColor: 2\n")
     f_adapted.write("  HistoFile: "+cleaned_sampleType+"\n")
-    f_adapted.write("  LumiScale: 139020.02\n")
+    f_adapted.write("  LumiScale: "+str(lumiscale)+"\n")
     f_adapted.write(" \n")
 
     f_adapted.close()

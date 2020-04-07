@@ -169,7 +169,7 @@ def GetSignalSamples(useWeightSyst=False, useObjectSyst=False, campaign=""
         Samples += Get4topsCISamples( useWeightSyst, useObjectSyst )
         Samples += GetUEDRPPSamples( useWeightSyst, useObjectSyst )
     if includeSingleVLQ:
-        Samples += GetSingleVLQSamples( useWeightSyst, useObjectSyst )
+        Samples += GetSingleVLQSamples( useWeightSyst, useObjectSyst, campaign )
     if includePairVLQ:
         Samples += GetVLQTSamples( useWeightSyst, useObjectSyst )
 

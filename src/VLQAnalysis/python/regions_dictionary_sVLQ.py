@@ -8,42 +8,48 @@
 reg_1lep3_5jwin1bex1fjin0LTex0Hex1Vin = {
 	'name':"HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin",
 	'legend': "#scale[0.75]{LJ, 1b, 1fj, 0(t_{h}+t_{l}), 0h, 1V}",
-	'binning':"600,700,800,900,1100,1300,1500,1800,3000",
+	'binning':"700,800,900,1100,1300,1500,1800,3000",
+	#'binning':"600,700,800,900,1100,1300,1500,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"SIGNAL"
 }
 reg_1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin = {
 	'name':"HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin",
 	'legend': "#scale[0.75]{LJ, 1b, 1fj, 0t_{h}, 1t_{l}, 0h, 1V}",
-	'binning':"600,800,900,1100,1300,1500,1800,3000",
+	'binning':"700,800,900,1100,1300,1500,1800,3000",
+	#'binning':"600,800,900,1100,1300,1500,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"SIGNAL"
 }
 reg_1lep3_5jwin2bex1fjin0LTex0Hex1Vin = {
 	'name':"HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin",
 	'legend': "#scale[0.75]{LJ, 2b, 1fj, 0(t_{h}+t_{l}), 0h, 1V}",
-	'binning':"600,700,800,900,1100,1300,1500,1800,3000",
+	'binning':"700,800,900,1100,1300,1500,1800,3000",
+	#'binning':"600,700,800,900,1100,1300,1500,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"SIGNAL"
 }
 reg_1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin = {
 	'name':"HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin",
 	'legend': "#scale[0.75]{LJ, 2b, 1fj, 0t_{h}, 1t_{l}, 0h, 1V}",
-	'binning':"600,800,900,1100,1300,1500,1800,3000",
+	'binning':"700,800,900,1100,1300,1500,1800,3000",
+	#'binning':"600,800,900,1100,1300,1500,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"SIGNAL"
 }
 reg_1lep3_5jwin3bex1fjin0LTex1Hin0Vex = {
 	'name':"HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex",
 	'legend': "#scale[0.75]{LJ, 3b, 1fj, 0(t_{h}+t_{l}), 1h, 0V}",
-	'binning':"600,800,900,1100,1300,1500,1900,3000",
+	'binning':"700,800,900,1100,1300,1500,1900,3000",
+	#'binning':"600,800,900,1100,1300,1500,1900,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"SIGNAL"
 }
 reg_1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex = {
 	'name':"HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex",
 	'legend': "#scale[0.75]{LJ, 3b, 1fj, 0t_{h}, 1t_{l}, 1h, 0V}",
-	'binning':"600,800,900,1100,1300,1500,1900,3000",
+	'binning':"700,800,900,1100,1300,1500,1900,3000",
+	#'binning':"600,800,900,1100,1300,1500,1900,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"SIGNAL"
 }
@@ -57,14 +63,16 @@ reg_1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex = {
 reg_1lep3_5jwin4bin1fjin0LTex1Hin0Vex = {
 	'name':"HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex",
 	'legend': "#scale[0.75]{LJ, 4b, 1fj, 0(t_{h}+t_{l}), 1h, 0V}",
-	'binning':"600,900,1100,1400,1800,3000",
+	'binning':"700,900,1100,1400,1800,3000",
+	#'binning':"600,900,1100,1400,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"SIGNAL"
 }
 reg_1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex = {
 	'name':"HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex",
 	'legend': "#scale[0.75]{LJ, 4b, 1fj, 0t_{h}, 1t_{l}, 1h, 0V}",
-	'binning':"600,900,1100,1400,1800,3000",
+	'binning':"700,900,1100,1400,1800,3000",
+	#'binning':"600,900,1100,1400,1800,3000",
 	'binning_recoVLQ0_m':"600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,3000",
 	'type':"SIGNAL"
 }
