@@ -1,0 +1,82 @@
+% -------------------------- %
+% -------    JOB     ------- %
+% -------------------------- %
+
+Job: "__FITTYPE_____SIGNAL_____ADDITION__"
+Label: "Ht+X analysis"
+CmeLabel: "13 TeV"
+LumiLabel: "139.02 fb^{-1}"
+Lumi: 1.
+POI: "mu_signal"
+ReadFrom: HIST
+HistoPath: "__HISTOPATH__"
+DebugLevel: 0
+SystControlPlots: TRUE
+SystPruningShape: 0.01
+SystPruningNorm: 0.01
+CorrelationThreshold: 0.20
+HistoChecks: NOCRASH
+SplitHistoFiles: TRUE
+MCstatThreshold: 0.05
+StatOnly: __STATONLY__
+SystLarge: 10.
+%GetChi2: FALSE
+PlotOptions: YIELDS
+%PlotOptions: CHI2
+
+% -------------------------- %
+% -------    FIT     ------- %
+% -------------------------- %
+
+Fit: "__FITTYPE__"
+FitType: __FITTYPE__
+FitRegion: __FITREGION__
+FitBlind: __FITBLIND__
+POIAsimov: __FITPOIASIMOV__
+
+% --------------------------- %
+% ---------- LIMIT ---------- %
+% --------------------------- %
+
+Limit: "limit"
+LimitType: ASYMPTOTIC
+LimitBlind: __LIMITBLIND__
+POIAsimov: __LIMITPOIASIMOV__
+
+% -------------------------- %
+% --------- REGIONS -------- %
+% -------------------------- %
+
+_REGIONLIST_
+
+% --------------------------- %
+% --------  SAMPLES  -------- %
+% --------------------------- %
+
+Sample: "SingletopWtprod"
+Title: "Single-top"
+Type: background
+FillColor: 630
+LineColor: 1
+HistoFiles: SingletopWtprod.mc16a,SingletopWtprod.mc16d,SingletopWtprod.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+%HistoFile: SingletopWtprod
+
+Sample: "Singletopschan"
+Title: "Single-top"
+Type: background
+FillColor: 630
+LineColor: 1
+HistoFiles: Singletopschan.mc16a,Singletopschan.mc16d,Singletopschan.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+%HistoFile: Singletopschan
+
+Sample: "Singletoptchan"
+Title: "Single-top"
+Type: background
+FillColor: 630
+LineColor: 1
+HistoFiles: Singletoptchan.mc16a,Singletoptchan.mc16d,Singletoptchan.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+%HistoFile: Singletoptchan
+

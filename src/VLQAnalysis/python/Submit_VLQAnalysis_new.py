@@ -42,6 +42,7 @@ param_runTopEW = True
 param_runDibosons = True
 param_runTtSyst = False
 param_runSTSyst = False
+param_splitSTChannels = False
 
 param_runSingleVLQ = True
 param_runPairVLQ = False
@@ -105,7 +106,9 @@ if(len(sys.argv))>1:
             param_runTtSyst = (value.upper()=="TRUE")
         elif(argument=="RUNSTSYST"):
             param_runSTSyst = (value.upper()=="TRUE")
-            
+        elif(argument=="SPLITSTCHANNELS"):
+            param_splitSTChannels = (value.upper()=="TRUE")
+
         elif(argument=="RUNSINGLEVLQ"):
             param_runSingleVLQ = (value.upper()=="TRUE")
         elif(argument=="RUNPAIRVLQ"):
@@ -170,6 +173,7 @@ print "param_runTopEW = ", param_runTopEW
 print "param_runDibosons = ", param_runDibosons
 print "param_runTtSyst = ", param_runTtSyst
 print "param_runSTSyst = ", param_runSTSyst
+print "param_splitSTChannels = ", param_splitSTChannels
 
 print "param_runSingleVLQ = ", param_runSingleVLQ
 print "param_runPairVLQ = ", param_runPairVLQ
@@ -238,7 +242,8 @@ if param_runOtherBkgd:
                                            , includeSingleTop = param_runSingleTop
                                            , includeWjets = param_runWjets, includeZjets = param_runZjets
                                            , includeTopEW = param_runTopEW, includeDibosons = param_runDibosons
-                                           , includeSingletopSystSamples = param_runSTSyst)
+                                           , includeSingletopSystSamples = param_runSTSyst
+                                           , splitSTChannels = param_splitSTChannels)
 
 if param_runSignal:
     Samples += GetSignalSamples( useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, campaign = param_campaign
