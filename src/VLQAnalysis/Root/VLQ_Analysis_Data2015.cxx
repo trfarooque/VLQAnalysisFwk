@@ -1457,7 +1457,7 @@ bool VLQ_Analysis_Data2015::Begin(){
   // Declaration of the TruthManager
   //
   //############################################################################
-  if( m_opt -> SampleName() == SampleName::VLQ  || ( m_outData -> o_is_ttbar && m_opt->InputTree()=="nominal" ) ){
+  if( (m_opt -> SampleName() == SampleName::VLQ  ||  m_outData -> o_is_ttbar) && m_opt->InputTree()=="nominal" ) {
     m_truthMngr = new VLQ_TruthManager( m_opt, m_ntupData, m_outData, m_varComputer );
   } else {
     cout<<"VLQ_Analysis_Data2015::Begin: skipping truth part (VLQ-specific)"<<endl;
@@ -2168,7 +2168,8 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
       }
       m_weightMngr -> SetTtbarFractionWeight();
     }
-    if( m_outData -> o_is_ttbar || (m_opt -> StrSampleName().find("SINGLETOP") != std::string::npos) || (m_opt -> StrSampleName().find("W+JETS") != std::string::npos) || (m_opt -> StrSampleName().find("Z+JETS") != std::string::npos) ){
+    if( m_outData -> o_is_ttbar || (m_opt -> StrSampleName().find("SINGLETOP") != std::string::npos) 
+	|| (m_opt -> StrSampleName().find("WJETS") != std::string::npos) || (m_opt -> StrSampleName().find("ZJETS") != std::string::npos) ){
       m_weightMngr -> SetPMGSystWeights();
     }
   } else if (m_opt -> StrSampleName().find("QCD") != std::string::npos){

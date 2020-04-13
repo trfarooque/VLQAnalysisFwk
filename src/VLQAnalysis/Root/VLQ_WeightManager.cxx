@@ -205,17 +205,9 @@ bool VLQ_WeightManager::AddVLQNominalWeights(){
       }
     }
 
-    if((m_vlq_opt -> DoTRF() && m_vlq_opt -> RecomputeTRF()) || m_vlq_opt -> RecomputeBtagSF()){
-      AddAndInitWeight("weight_btag", "", true, false);
-    } 
-    else {
-      if(m_vlq_opt->BtagCollection() == VLQ_Options::TRACK){
-	AddAndInitWeight("weight_trkbtag");
-      }
-      else{
-	AddAndInitWeight("weight_btag");
-      }
-    }
+    std::string btag_name = (m_vlq_opt->BtagCollection() == VLQ_Options::TRACK) ? "weight_trkbtag" : "weight_btag";
+    bool btag_isinput = !((m_vlq_opt -> DoTRF() && m_vlq_opt -> RecomputeTRF()) || m_vlq_opt -> RecomputeBtagSF());
+    AddAndInitWeight(btag_name, "", true/*is nominal*/, btag_isinput);
 
     if( m_vlq_outData -> o_is_ttbar ){
       //ttbb correction weight
