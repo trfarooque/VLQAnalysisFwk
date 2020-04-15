@@ -21,6 +21,7 @@ nFilesSplit = 1000
 nMerge=1
 wgtSysSplit=False
 jsonOutput = True
+isolateBadFiles = True
 ##........................................................
 
 ##________________________________________________________
@@ -32,13 +33,14 @@ here = os.getcwd()
 
 ##________________________________________________________
 ## Defining the paths and the tarball
-inputDir="/nfs/atlas-data07/tvdaalen/VLQ_FullRun2/Ttbar_AltGenSyst_output_Oct2019/MV2/Nominal_AFII/" 
+inputDir="/nfs/at3/scratch2/tvdaalen/VLQ_FullRun2/Production_tag-21.2.87-htztx-3-syst/" 
 # "nfs/at3/scratch2/farooque/MBJOutputs/tag-21.2.67-htztx-0-fJvt-DL1.PFlow/"
 listFolder=here+"/Lists_Analysis_" + now
 histogramName="cut_flow"
 mccampaign=""
 configName = "configFile_MV2_"+mccampaign+".dat"
 doSysWeights = False
+badFileList = []
 
 if(len(sys.argv))>1:
     for x in sys.argv[1:]:
@@ -74,9 +76,9 @@ os.system("mkdir -p " + listFolder) #list files folder
 ##________________________________________________________
 ## Getting all samples and their associated weight/object systematics
 Samples = []
-Samples += GetTtbarSamples(hfSplitted=False,ttbarSystSamples=False,useHTSlices=True,campaign=mccampaign)
+Samples += GetTtbarSamples(hfSplitted=False,ttbarSystSamples=True,useHTSlices=True,campaign=mccampaign)
 Samples += GetOtherBackgroundSamples (campaign=mccampaign)
-Samples += GetSingleVLQSamples( campaign=mccampaign )
+#Samples += GetSingleVLQSamples( includeSingleVLQ=True, campaign=mccampaign )
 printGoodNews("--> All samples recovered")
 ##........................................................
 
@@ -129,11 +131,18 @@ for sample in Samples:
         root_f = TFile(f,"read")
 
         if(root_f.IsZombie()):
-            printError("<!> The file "+f+" is corrupted ... removes it from the list")
+            printError("<!> The file "+f+" is corrupted ... removed it from the list")
+            badFileList.append(f)
             continue
 
-        h_nEvents = root_f.Get(histogramName).Clone()
-        h_nEvents.SetDirectory(0)
+        try:
+            h_nEvents = root_f.Get(histogramName).Clone()
+            h_nEvents.SetDirectory(0)
+        except ReferenceError:
+            printError("<!> No "+histogramName+" histogram found in file "+f+" ... removed it from the list")
+            badFileList.append(f)
+            continue
+
         nEventsWeighted += h_nEvents.GetBinContent(2)
         d_SampleInfo = weights.get(SName.replace("."+mccampaign,""))
         if not d_SampleInfo:
@@ -188,6 +197,26 @@ if jsonOutput:
     configFile.write(json.dumps(configDict,sort_keys=True,indent=4))
 
 configFile.close()
+
+if isolateBadFiles and len(badFileList)>0:
+
+    if inputDir[-1] == '/':
+        isolationDir = inputDir[:-1] + '_isolatedFiles/'
+    else:
+        isolationDir = inputDir + '_isolatedFiles/'
+
+    try:
+        if os.system('mkdir -p %s'%isolationDir) != 0:
+            raise Exception('OSError')
+    except:
+        printError("<!> Unable to create isolation directory. Please manually make sure the follow bad files are not included in VLQAnalysis inputs:")
+        for badfile in badFileList:
+            print badfile
+
+    else:
+        printGoodNews("--> Moving %s bad file(s) to %s"%(len(badFileList),isolationDir))
+        for badfile in badFileList:
+            os.system('mv %s %s'%(badfile,isolationDir))
 
 ##________________________________________________________
 ## Removing list folder
