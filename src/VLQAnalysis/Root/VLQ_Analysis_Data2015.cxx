@@ -1879,7 +1879,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 
   //###########################################################
   //                                                          #
-  // C6: BJet requirement                                      #
+  // C6: BJet requirement                                     #
   //                                                          #
   //###########################################################
   int min_nbj = 0;
@@ -1896,7 +1896,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 
   //###########################################################
   //                                                          #
-  // C7: Meff requirement                                      #
+  // C7: Meff requirement                                     #
   //                                                          #
   //###########################################################
   double temp_meff = m_varComputer->GetMeff(*(m_outData->o_jets),*(m_outData->o_el),*(m_outData->o_mu),m_outData->o_AO_met);
@@ -1917,7 +1917,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 
   //###########################################################
   //                                                          #
-  // C9: Additional Met cut/veto in 0-lep channel                  #
+  // C9: Additional Met cut/veto in 0-lep channel             #
   //                                                          #
   //###########################################################
   if( (m_outData-> o_channel_type == VLQ_Enums::FULLHAD) &&
@@ -1926,6 +1926,14 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     m_outData -> o_rejectEvent |= 1 << VLQ_Enums::METZEROLEP_REJECTED;
   }
 
+
+  if( (m_outData-> o_channel_type == VLQ_Enums::ELEL || m_outData-> o_channel_type == VLQ_Enums::MUMU || 
+       m_outData-> o_channel_type == VLQ_Enums::ELMU) && 
+      (m_opt->MaxMetCutTwoLep() > 0. && m_outData -> o_AO_met->Pt() > m_opt->MaxMetCutTwoLep())){
+
+    m_outData -> o_rejectEvent |= 1 << VLQ_Enums::METTWOLEP_REJECTED;
+
+  }
 
   //###########################################################
   //                                                          #

@@ -45,7 +45,7 @@ double VLQ_VariableComputer::GetMeffRed( AOVector&v_jets, AOVector &v_el, AOVect
 {
   double meff = GetMeff(v_jets, v_el, v_mu, met);
 
-  double meff_reduced = meff + ( ( ( static_cast<int>( v_jets.size() ) ) - 3 ) * 50.0 );
+  double meff_reduced = meff - ( ( ( static_cast<int>( v_jets.size() ) ) - 3 ) * 50.0 );
 
   return meff_reduced;
 

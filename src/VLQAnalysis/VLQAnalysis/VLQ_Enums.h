@@ -11,7 +11,8 @@ namespace VLQ_Enums {
         DPHI_REJECTED = 8,
         MEFF_REJECTED = 9,
         METONELEP_REJECTED = 10,
-        METZEROLEP_REJECTED = 11
+        METZEROLEP_REJECTED = 11,
+	METTWOLEP_REJECTED = 12
     };
 
     enum VLQType {
