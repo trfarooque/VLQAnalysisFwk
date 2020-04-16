@@ -8,9 +8,9 @@ Systematic: "HTX_BKGNP_SINGLETOP_WT_GEN" ; "HTX_BKGNP_SINGLETOP_SCHAN_GEN" ; "HT
   Category: "Single-top uncertainties"
   Symmetrisation: ONESIDED
   Smoothing: 40
-  SampleUp: singletopWtprod_aMCPy ; singletopschan_aMCPy ; singletoptchan_aMCPy
-  Samples: singletopWtprod;singletopschan;singletoptchan
-  ReferenceSample: singletopWtprod_AFII;singletopschan_AFII;singletoptchan_AFII
+  SampleUp: SingletopWtprod_aMCPy ; Singletopschan_aMCPy ; Singletoptchan_aMCPy
+  Samples: SingletopWtprod;Singletopschan;Singletoptchan
+  ReferenceSample: SingletopWtprod_AFII;Singletopschan_AFII;Singletoptchan_AFII
 
 Systematic: "HTX_BKGNP_SINGLETOP_WT_PS" ; "HTX_BKGNP_SINGLETOP_SCHAN_PS" ; "HTX_BKGNP_SINGLETOP_TCHAN_PS"
   Title: "Single-top Wt parton shower" ; "Single-top s-channel parton shower" ; "Single-top t-channel parton shower"
@@ -18,9 +18,9 @@ Systematic: "HTX_BKGNP_SINGLETOP_WT_PS" ; "HTX_BKGNP_SINGLETOP_SCHAN_PS" ; "HTX_
   Category: "Single-top uncertainties"
   Symmetrisation: ONESIDED
   Smoothing: 40
-  SampleUp: singletopWtprod_PowhegHerwig7 ; singletopschan_PowhegHerwig7 ; singletoptchan_PowhegHerwig7
-  Samples: singletopWtprod;singletopschan;singletoptchan
-  ReferenceSample: singletopWtprod_AFII;singletopschan_AFII;singletoptchan_AFII
+  SampleUp: SingletopWtprod_PowHer ; Singletopschan_PowHer ; Singletoptchan_PowHer
+  Samples: SingletopWtprod;Singletopschan;Singletoptchan
+  ReferenceSample: SingletopWtprod_AFII;Singletopschan_AFII;Singletoptchan_AFII
 
 Systematic: "HTX_BKGNP_SINGLETOP_WT_DRDS"
   Title: "Single-top Wt DR/DS"
@@ -28,61 +28,85 @@ Systematic: "HTX_BKGNP_SINGLETOP_WT_DRDS"
   Category: "Single-top uncertainties"
   Symmetrisation: ONESIDED
   Smoothing: 40
-  SampleUp: singletopWtprod_DS
-  Samples: singletopWtprod
+  SampleUp: SingletopWtprod_DiagSub
+  Samples: SingletopWtprod
 
-Sample: "singletopWtprod_aMCPy"
+Sample: "SingletopWtprod_AFII"
 Title: "Single-top Wt"
 Type: GHOST
 FillColor: 0
 LineColor: 1
-HistoFiles: singletopWtprod_aMCPy.mc16a,singletopWtprod_aMCPy.mc16d,singletopWtprod_aMCPy.mc16e
+HistoFiles: SingletopWtprod_AFII.mc16a,SingletopWtprod_AFII.mc16d,SingletopWtprod_AFII.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 
-Sample: "singletoptchan_aMCPy"
+Sample: "Singletoptchan_AFII"
 Title: "Single-top t-channel"
 Type: GHOST
 FillColor: 590
 LineColor: 1
-HistoFiles: singletoptchan_aMCPy.mc16a,singletoptchan_aMCPy.mc16d,singletoptchan_aMCPy.mc16e
+HistoFiles: Singletoptchan_AFII.mc16a,Singletoptchan_AFII.mc16d,Singletoptchan_AFII.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 
-Sample: "singletopschan_aMCPy"
+Sample: "Singletopschan_AFII"
 Title: "Single-top s-channel"
 Type: GHOST
 FillColor: 594
 LineColor: 1
-HistoFiles: singletopschan_aMCPy.mc16a,singletopschan_aMCPy.mc16d,singletopschan_aMCPy.mc16e
+HistoFiles: Singletopschan_AFII.mc16a,Singletopschan_AFII.mc16d,Singletopschan_AFII.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 
-Sample: "singletopWtprod_PowhegHerwig7"
+Sample: "SingletopWtprod_aMCPy"
 Title: "Single-top Wt"
 Type: GHOST
 FillColor: 0
 LineColor: 1
-HistoFiles: singletopWtprod_PowhegHerwig7.mc16a,singletopWtprod_PowhegHerwig7.mc16d,singletopWtprod_PowhegHerwig7.mc16e
+HistoFiles: SingletopWtprod_aMCPy.mc16a,SingletopWtprod_aMCPy.mc16d,SingletopWtprod_aMCPy.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 
-Sample: "singletoptchan_PowhegHerwig7"
+Sample: "Singletoptchan_aMCPy"
 Title: "Single-top t-channel"
 Type: GHOST
 FillColor: 590
 LineColor: 1
-HistoFiles: singletoptchan_PowhegHerwig7.mc16a,singletoptchan_PowhegHerwig7.mc16d,singletoptchan_PowhegHerwig7.mc16e
+HistoFiles: Singletoptchan_aMCPy.mc16a,Singletoptchan_aMCPy.mc16d,Singletoptchan_aMCPy.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 
-Sample: "singletopschan_PowhegHerwig7"
+Sample: "Singletopschan_aMCPy"
 Title: "Single-top s-channel"
 Type: GHOST
 FillColor: 594
 LineColor: 1
-HistoFiles: singletopschan_PowhegHerwig7.mc16a,singletopschan_PowhegHerwig7.mc16d,singletopschan_PowhegHerwig7.mc16e
+HistoFiles: Singletopschan_aMCPy.mc16a,Singletopschan_aMCPy.mc16d,Singletopschan_aMCPy.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 
-Sample: "singletopWtprod_DS"
+Sample: "SingletopWtprod_PowHer"
 Title: "Single-top Wt"
 Type: GHOST
 FillColor: 0
 LineColor: 1
-HistoFiles: singletopWtprod_DS.mc16a,singletopWtprod_DS.mc16d,singletopWtprod_DS.mc16e
+HistoFiles: SingletopWtprod_PowHer.mc16a,SingletopWtprod_PowHer.mc16d,SingletopWtprod_PowHer.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "Singletoptchan_PowHer"
+Title: "Single-top t-channel"
+Type: GHOST
+FillColor: 590
+LineColor: 1
+HistoFiles: Singletoptchan_PowHer.mc16a,Singletoptchan_PowHer.mc16d,Singletoptchan_PowHer.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "Singletopschan_PowHer"
+Title: "Single-top s-channel"
+Type: GHOST
+FillColor: 594
+LineColor: 1
+HistoFiles: Singletopschan_PowHer.mc16a,Singletopschan_PowHer.mc16d,Singletopschan_PowHer.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "SingletopWtprod_DiagSub"
+Title: "Single-top Wt"
+Type: GHOST
+FillColor: 0
+LineColor: 1
+HistoFiles: SingletopWtprod_DiagSub.mc16a,SingletopWtprod_DiagSub.mc16d,SingletopWtprod_DiagSub.mc16e
 LumiScales: 36207.66,44307.4,58450.1

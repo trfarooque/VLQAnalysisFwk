@@ -360,8 +360,8 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
   }//INSTRUMENTAL UNCERTAINTIES
 
   if(m_vlq_opt->DoTheorySys()){
-    //ttbar systematics
-    if( m_vlq_outData -> o_is_ttbar ){
+    //ttbar and singletop systematics
+    if( (m_vlq_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP) ){
 
       //ttbar PMG weights
       AddAndInitWeight("weight_pmg_muR10__muF20","",false, true, "weight_pmg_muR10__muF20", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
@@ -373,36 +373,38 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
       AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac20","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac20", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
       AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac05","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac05", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
 
-      //ttbar generator, PS and radiation uncertainties
-      std::vector<std::string> ttbar_sys_comp = {"PS", "GEN", "GENPS", "RADHI", "RADLOW"};
-      for(const std::string& ttbar_sys : ttbar_sys_comp){
-	AddAndInitWeight("weight_ttbar_"+ttbar_sys,"",false, false, "", "");
-      }
-
-      //ttbar NNLO systematic
-      if(m_vlq_opt->SampleName()!=SampleName::TTBARBB){
-	if(m_vlq_opt->ApplyTtbarNNLOCorrection()){
-	  AddAndInitWeight("weight_ttbar_NNLO_OFF", "", false, false, "", "weight_ttbar_NNLO_1L");
-	} else {
-	  AddAndInitWeight("weight_ttbar_NNLO_ON", "", false, true, "weight_ttbar_NNLO_1L", "");
-	}
-      }
-
-      //ttbb uncertainties
-      if(m_vlq_opt->ApplyTtbbCorrection() && m_vlq_opt->SampleName()==SampleName::TTBARBB){
-	std::vector<std::string> ttbb_sys_comp = {"CSS_KIN", "MSTW", "NNPDF", "Q_CMMPS", "glosoft", "defaultX05", "defaultX2", "MPIup", "MPIdown", "MPIfactor", "aMcAtNloHpp", "aMcAtNloPy8"};
-	for(const std::string& ttbb_sys : ttbb_sys_comp){
-	  AddAndInitWeight("weight_ttbb_"+ttbb_sys, "", false, true, "weight_ttbb_ttbb_"+ttbb_sys+"_weight", "weight_ttbb");
-	}
-      }//ttbb correction
-
-      //ttcc uncertainties
-      if( m_vlq_opt->ComputeWeightSys() && m_vlq_opt -> ComputeTtccNLO()){
-	AddAndInitWeight("weight_ttcc_NLO", "", false, false);
+      if (m_vlq_outData -> o_is_ttbar){
+        //ttbar generator, PS and radiation uncertainties                                                                                                                                              
+ 	std::vector<std::string> ttbar_sys_comp = {"PS", "GEN", "GENPS", "RADHI", "RADLOW"};
+        for(const std::string& ttbar_sys : ttbar_sys_comp){
+	  AddAndInitWeight("weight_ttbar_"+ttbar_sys,"",false, false, "", "");
+        }
 	
-      }
+        //ttbar NNLO systematic                                                                                                                                                                          
+        if(m_vlq_opt->SampleName()!=SampleName::TTBARBB){
+	  if(m_vlq_opt->ApplyTtbarNNLOCorrection()){
+	    AddAndInitWeight("weight_ttbar_NNLO_OFF", "", false, false, "", "weight_ttbar_NNLO_1L");
+	  } else {
+	    AddAndInitWeight("weight_ttbar_NNLO_ON", "", false, true, "weight_ttbar_NNLO_1L", "");
+	  }
+        }
+	
+        //ttbb uncertainties                                                                                                                                                                             
+        if(m_vlq_opt->ApplyTtbbCorrection() && m_vlq_opt->SampleName()==SampleName::TTBARBB){
+	  std::vector<std::string> ttbb_sys_comp = {"CSS_KIN", "MSTW", "NNPDF", "Q_CMMPS", "glosoft", "defaultX05", "defaultX2", "MPIup", "MPIdown", "MPIfactor", "aMcAtNloHpp", "aMcAtNloPy8"};
+	  for(const std::string& ttbb_sys : ttbb_sys_comp){
+	    AddAndInitWeight("weight_ttbb_"+ttbb_sys, "", false, true, "weight_ttbb_ttbb_"+ttbb_sys+"_weight", "weight_ttbb");
+	  }
+        }//ttbb correction                                                                                                                                                                               
 
-    }//ttbar samples
+        //ttcc uncertainties                                                                                                                                                                             
+        if( m_vlq_opt->ComputeWeightSys() && m_vlq_opt -> ComputeTtccNLO()){
+	  AddAndInitWeight("weight_ttcc_NLO", "", false, false);
+        }
+
+      }//ttbar samples               
+
+    }//ttbar or singletop samples
 
     //V+jets systematics
     if( (m_opt -> SampleName() == SampleName::WJETS) || (m_opt -> SampleName() == SampleName::ZJETS) ){
@@ -477,19 +479,38 @@ bool VLQ_WeightManager::SetLeptonSFWeights( const bool apply_trigger_weights ){
 //
 bool VLQ_WeightManager::SetTtbarHtSliceScale(){
 
-  SetNominalComponent("weight_ttbar_htslice", 1.);
-
-  bool is1L = ( m_vlq_outData-> o_channel_type == VLQ_Enums::ELECTRON ) || ( m_vlq_outData-> o_channel_type == VLQ_Enums::MUON );
-  bool is0L = ( m_vlq_outData-> o_channel_type == VLQ_Enums::FULLHAD );
-  if(is1L){
-    if( m_vlq_ntupData -> d_runNumber == 407009 ){ SetNominalComponent("weight_ttbar_htslice", 1.02849); }
-    else if( m_vlq_ntupData -> d_runNumber == 407010 ){ SetNominalComponent("weight_ttbar_htslice", 1.02637); }
-    else if( m_vlq_ntupData -> d_runNumber == 407011 ){ SetNominalComponent("weight_ttbar_htslice", 0.872646); }
+  if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
+    UpdateNominalComponent("weight_norm", m_sampleInfo -> NormFactor()/0.99860961239196);
+    UpdateSystematicComponent("weight_pmg_Var3cDown", (*m_systMap)["weight_pmg_Var3cDown"]->GetComponentValue()/1.00989117643996);
+    UpdateSystematicComponent("weight_pmg_Var3cUp", (*m_systMap)["weight_pmg_Var3cUp"]->GetComponentValue()/0.98630942849818);
+    UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac05", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac05"]->GetComponentValue()/1.01244857328796);
+    UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac20", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac20"]->GetComponentValue()/0.98661128202278);
+    UpdateSystematicComponent("weight_pmg_muR05__muF10", (*m_systMap)["weight_pmg_muR05__muF10"]->GetComponentValue()/0.96762126478968);
+    UpdateSystematicComponent("weight_pmg_muR10__muF05", (*m_systMap)["weight_pmg_muR10__muF05"]->GetComponentValue()/0.97391612230213);
+    UpdateSystematicComponent("weight_pmg_muR10__muF20", (*m_systMap)["weight_pmg_muR10__muF20"]->GetComponentValue()/1.02221909345704);
+    UpdateSystematicComponent("weight_pmg_muR20__muF10", (*m_systMap)["weight_pmg_muR20__muF10"]->GetComponentValue()/1.02018541245750);
   }
-  else if(is0L){
-    if( m_vlq_ntupData -> d_runNumber == 407009 ){ SetNominalComponent("weight_ttbar_htslice", 1.04571); }
-    else if( m_vlq_ntupData -> d_runNumber == 407010 ){ SetNominalComponent("weight_ttbar_htslice", 0.983895); }
-    else if( m_vlq_ntupData -> d_runNumber == 407011 ){ SetNominalComponent("weight_ttbar_htslice", 0.916687); }
+  if ( m_opt -> StrSampleID().find("407343.") != std::string::npos ){
+    UpdateNominalComponent("weight_norm", m_sampleInfo -> NormFactor()/1.00220071443736);
+    UpdateSystematicComponent("weight_pmg_Var3cDown", (*m_systMap)["weight_pmg_Var3cDown"]->GetComponentValue()/1.02075306498765);
+    UpdateSystematicComponent("weight_pmg_Var3cUp", (*m_systMap)["weight_pmg_Var3cUp"]->GetComponentValue()/0.98196927321205);
+    UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac05", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac05"]->GetComponentValue()/1.03193538833724);
+    UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac20", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac20"]->GetComponentValue()/0.99087003186616);
+    UpdateSystematicComponent("weight_pmg_muR05__muF10", (*m_systMap)["weight_pmg_muR05__muF10"]->GetComponentValue()/0.91951515882506);
+    UpdateSystematicComponent("weight_pmg_muR10__muF05", (*m_systMap)["weight_pmg_muR10__muF05"]->GetComponentValue()/0.93819392248974);
+    UpdateSystematicComponent("weight_pmg_muR10__muF20", (*m_systMap)["weight_pmg_muR10__muF20"]->GetComponentValue()/1.06487669659290);
+    UpdateSystematicComponent("weight_pmg_muR20__muF10", (*m_systMap)["weight_pmg_muR20__muF10"]->GetComponentValue()/1.06891808020899);
+  }
+  if ( m_opt -> StrSampleID().find("407342.") != std::string::npos ){
+    UpdateNominalComponent("weight_norm", m_sampleInfo -> NormFactor()/1.01614066637173);
+    UpdateSystematicComponent("weight_pmg_Var3cDown", (*m_systMap)["weight_pmg_Var3cDown"]->GetComponentValue()/1.04057257636042);
+    UpdateSystematicComponent("weight_pmg_Var3cUp", (*m_systMap)["weight_pmg_Var3cUp"]->GetComponentValue()/0.99097386133341);
+    UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac05", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac05"]->GetComponentValue()/1.06280582379557);
+    UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac20", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac20"]->GetComponentValue()/1.00957616786319);
+    UpdateSystematicComponent("weight_pmg_muR05__muF10", (*m_systMap)["weight_pmg_muR05__muF10"]->GetComponentValue()/0.89300718054136);
+    UpdateSystematicComponent("weight_pmg_muR10__muF05", (*m_systMap)["weight_pmg_muR10__muF05"]->GetComponentValue()/0.90726044083483);
+    UpdateSystematicComponent("weight_pmg_muR10__muF20", (*m_systMap)["weight_pmg_muR10__muF20"]->GetComponentValue()/1.12725897511274);
+    UpdateSystematicComponent("weight_pmg_muR20__muF10", (*m_systMap)["weight_pmg_muR20__muF10"]->GetComponentValue()/1.12572488013792);
   }
   return true;
 }
@@ -566,20 +587,18 @@ bool VLQ_WeightManager::SetQCDWeight(){
 
 //______________________________________________________________________________
 //
-bool VLQ_WeightManager::SetTtbarPMGWeights(){
+bool VLQ_WeightManager::SetPMGSystWeights(){
   if(!m_vlq_opt->ComputeWeightSys()){
     return true;
   }
-  if( m_vlq_outData -> o_is_ttbar ){
 
-    for( auto& weightfactor : m_sampleInfo -> SystWeightFactorMap() ){
-      if( m_systMap->find(weightfactor.first) !=  m_systMap->end()){
-        UpdateSystematicComponent(weightfactor.first, (*m_systMap)[weightfactor.first]->GetComponentValue()*m_sampleInfo->SystWeightFactorMap()[weightfactor.first]);
-      }
+  for( auto& weightfactor : m_sampleInfo -> SystWeightFactorMap() ){
+    if( m_systMap->find(weightfactor.first) !=  m_systMap->end()){
+      UpdateSystematicComponent(weightfactor.first, (*m_systMap)[weightfactor.first]->GetComponentValue()*m_sampleInfo->SystWeightFactorMap()[weightfactor.first]);
     }
   }
 
-  if(m_vlq_opt -> MsgLevel() == Debug::DEBUG) std::cout << "==> After TtbarPMGWeights weights" << std::endl;
+  if(m_vlq_opt -> MsgLevel() == Debug::DEBUG) std::cout << "==> After SetPMGSystWeights weights" << std::endl;
 
   return true;
 }

@@ -313,8 +313,8 @@ bool VLQ_Selector::Init(){
 	std::vector<std::string> v_supr_svlq = {"0fjex", "1fjin", "1fjin-0Hex-0Vex"};
 	for(const std::string& supr : v_supr_svlq){
 	  for(const std::string& lepsuf : lep_ch_pair.second){
-	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-"+supr+lepsuf, do_runop, do_syst, PRESEL);
-	    AddVLQSelection(lep_prefix+"6jin-2bin-"+supr+lepsuf, do_runop, do_syst, PRESEL);
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-"+supr+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
+	    AddVLQSelection(lep_prefix+"6jin-2bin-"+supr+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
 	  }//lepflav channels
 	}//signal suppressing
       }//Extended preselection

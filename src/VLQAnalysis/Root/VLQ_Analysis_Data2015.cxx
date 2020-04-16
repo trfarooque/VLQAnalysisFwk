@@ -1602,7 +1602,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 	       || ( m_opt -> StrSampleID().find("407355.") != std::string::npos ) ){
 	if( ht_truth < 1000 || ht_truth > 1500 ) return false;
       } 
-      else if( ( m_opt -> StrSampleID().find("407343.") != std::string::npos )
+      else if( ( m_opt -> StrSampleID().find("407342.") != std::string::npos )
 	       || ( m_opt -> StrSampleID().find("407348.") != std::string::npos )
 	       || ( m_opt -> StrSampleID().find("407354.") != std::string::npos ) ){
 	if( ht_truth < 1500 ) return false;
@@ -2177,7 +2177,6 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
       }
       if( m_opt -> ComputeWeightSys() ){
         m_weightMngr -> SetTtccWeights();
-        m_weightMngr -> SetTtbarPMGWeights();
         if( m_opt -> ApplyTtbarNNLOCorrection() ){
           m_weightMngr -> SetNNLOSystematic();
         }
@@ -2186,6 +2185,9 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     }
     if((m_opt -> ReweightKinematics()) && (m_opt -> ComputeWeightSys())){
       m_weightMngr -> UpdateSysReweighting();
+    }
+    if( m_outData -> o_is_ttbar || (m_opt -> StrSampleName().find("SINGLETOP") != std::string::npos) || (m_opt -> StrSampleName().find("W+JETS") != std::string::npos) || (m_opt -> StrSampleName().find("Z+JETS") != std::string::npos) ){
+      m_weightMngr -> SetPMGSystWeights();
     }
   } else if (m_opt -> StrSampleName().find("QCD") != std::string::npos){
     m_weightMngr -> SetQCDWeight();
@@ -2715,7 +2717,7 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
   };
 
 
-  bool is_Vjets = ( (m_opt -> StrSampleName().find("W+JETS") != std::string::npos) || (m_opt -> StrSampleName().find("Z+JETS") != std::string::npos) );
+  bool is_Vjets = ( (m_opt -> StrSampleName().find("WJETS") != std::string::npos) || (m_opt -> StrSampleName().find("ZJETS") != std::string::npos) );
   bool is_VjetsHF = is_Vjets && ( (m_opt -> StrSampleName().find("CHARM") != std::string::npos) || (m_opt -> StrSampleName().find("BEAUTY") != std::string::npos) );
 
   bool is_Diboson = m_opt->StrSampleName().find("DIBOSONS") != std::string::npos;

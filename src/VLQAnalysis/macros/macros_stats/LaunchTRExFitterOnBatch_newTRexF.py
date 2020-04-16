@@ -116,13 +116,15 @@ def writeCondorSubmitScript(scriptName, tRexFitterOutDirectory):
     f.write("#Queue subjobs \n")
     f.write("queue $(nJobs) \n")
     f.close()
+    os.system("chmod +x "+scriptName+".sub")
 
 ##----------------------------------------------------------
 ## Launch jobs
 ##----------------------------------------------------------
 def LaunchJobs( scriptName, tRexFitterOutDirectory ):
 
-    os.system("mkdir " + m_outputDir + "/" + tRexFitterOutDirectory) 
+    os.system("mkdir " + m_outputDir + "/" + tRexFitterOutDirectory)
+    os.system("chmod +x " + m_outputDir + "/*")
     com=""
     if m_runPBS:
         com="qsub -q " + m_batch_queue + " " + scriptName 
@@ -134,6 +136,8 @@ def LaunchJobs( scriptName, tRexFitterOutDirectory ):
     if m_dryRun:
         print " Command to launch: " + com
     else:
+        if m_verbose:
+            print com
         os.system(com)
 
 
@@ -149,6 +153,7 @@ def writeScriptsAndLaunchJobs( scriptTempName, configFile, instructions ):
         pathToCreate += level
         pathToCreate += "/"
     os.system("mkdir -p " + pathToCreate)
+    os.system("chmod +x " + pathToCreate + "/*")
 
     scriptName += configFile.split("/")[len(configFile.split("/"))-1].replace(" ","")
 
@@ -183,6 +188,7 @@ if(len(sys.argv)<5):
     print "    queue=<name of the batch queue to launch the jobs. delfault in at3> "
     print "    dryrun : No jobs submitted "
     print "    runPBS : Launch jobs on PBS queue [default: condor] "
+    print "    verbose : print launch command for each job "
     print ""
     sys.exit()
 
@@ -198,6 +204,7 @@ m_mergeJobs = False
 m_dryRun = False
 m_runPBS = False
 m_batch_queue = "at3"
+m_verbose = False
 for iArg in range(1,len(sys.argv)):
     splitted=sys.argv[iArg].split("=")
     argument = splitted[0].upper()
@@ -210,6 +217,7 @@ for iArg in range(1,len(sys.argv)):
     elif(argument=="MERGEJOBS"): m_mergeJobs = True
     elif(argument=="RUNPBS"): m_runPBS = True
     elif(argument=="DRYRUN"): m_dryRun = True
+    elif(argument=="VERBOSE"): m_verbose = True
     else:
         printWarning("/!\ Unrecognized argument ("+splitted[0]+") ! Please check !")
 if(m_inputConfigFiles==""):
