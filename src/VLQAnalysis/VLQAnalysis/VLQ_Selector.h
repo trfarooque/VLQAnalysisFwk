@@ -34,8 +34,10 @@ public:
 		   c_0l_chan,
 		   /*jet multiplicities*/
 		   c_2jin, c_3jin, c_3jex, c_3_5jwin,
-		   c_4jex, c_5jex, c_6jex, c_7jex, c_8jex, c_6_8jwin,
+		   c_4jex, c_5jex, c_6jex, c_7jex, c_8jex, c_9jex, 
+		   c_10jex, c_11jex, c_6_8jwin,
 		   c_4jin, c_5jin, c_6jin, c_7jin, c_8jin, c_9jin,
+		   c_10jin, c_11jin, c_12jin,
 		   /*bjet multiplicities*/
 		   c_0bex, c_1bex, c_2bex, c_3bex,
 		   c_0bin, c_1bin, c_2bin, c_3bin, c_4bin, c_1_2bwin,

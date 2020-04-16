@@ -64,6 +64,7 @@ m_recomputeTtbarNNLOCorrection(false),
 m_applyVjetsSherpa22RW(true),
 m_computeTtccNLO(false),
 m_reweightKinematics(false),
+m_doKinRwSmoothing(false),
 m_makeQCD0LSystematics(false),
 m_doPreselSys(false),
 m_doExpSys(true),
@@ -86,6 +87,7 @@ m_minMetCutOneLep(0.),
 m_maxMetCutOneLep(-1.),
 m_minMetCutZeroLep(200.),
 m_maxMetCutZeroLep(-1.),
+m_maxMetCutTwoLep(-1.),
 m_maxLeptopDR(1.),
 m_doRecoVLQ("pair"),
 // m_btagOP("77"),
@@ -155,6 +157,7 @@ OptionsBase(q)
     m_applyVjetsSherpa22RW = q.m_applyVjetsSherpa22RW;
     m_computeTtccNLO     = q.m_computeTtccNLO;
     m_reweightKinematics = q.m_reweightKinematics;
+    m_doKinRwSmoothing = q.m_doKinRwSmoothing;
     m_makeQCD0LSystematics = q.m_makeQCD0LSystematics;
     m_doPreselSys       = q.m_doPreselSys;
     m_doExpSys          = q.m_doExpSys;
@@ -178,6 +181,7 @@ OptionsBase(q)
     m_maxMetCutOneLep   = q.m_maxMetCutOneLep;
     m_minMetCutZeroLep  = q.m_minMetCutZeroLep;
     m_maxMetCutZeroLep  = q.m_maxMetCutZeroLep;
+    m_maxMetCutTwoLep   = q.m_maxMetCutTwoLep;
     m_maxLeptopDR        = q.m_maxLeptopDR;
     m_doRecoVLQ         = q.m_doRecoVLQ;
     m_btagOP            = q.m_btagOP;
@@ -311,7 +315,9 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
         } else if( temp_arg.find("--COMPUTETTCCNLO") != std::string::npos ){
             m_computeTtccNLO = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--REWEIGHTKINEMATICS") != std::string::npos ){
-            m_reweightKinematics = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	    m_reweightKinematics = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if( temp_arg.find("--DOKINRWSMOOTHING") != std::string::npos ){
+	    m_doKinRwSmoothing = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--MAKEQCD0LSYSTEMATICS") != std::string::npos ){
             m_makeQCD0LSystematics = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOPRESELSYS") != std::string::npos ){
@@ -373,7 +379,10 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
         else if( temp_arg.find("--MAXMETCUTZEROLEP") != std::string::npos ){
 	  m_maxMetCutZeroLep = atof(temp_val.c_str());
         }
-        else if( temp_arg.find("--MAXLEPTOPDR") != std::string::npos ){
+	else if( temp_arg.find("--MAXMETCUTTWOLEP") != std::string::npos ){
+	  m_maxMetCutTwoLep = atof(temp_val.c_str());
+	}
+	else if( temp_arg.find("--MAXLEPTOPDR") != std::string::npos ){
 	  m_maxLeptopDR = atof(temp_val.c_str());
         }
         //
@@ -453,6 +462,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_maxMetCutOneLep         = " << m_maxMetCutOneLep   << std::endl;
     std::cout << " m_minMetCutZeroLep        = " << m_minMetCutZeroLep  << std::endl;
     std::cout << " m_maxMetCutZeroLep        = " << m_maxMetCutZeroLep  << std::endl;
+    std::cout << " m_maxMetCutTwoLep         = " << m_maxMetCutTwoLep   << std::endl;
     std::cout << " m_maxLeptopDR             = " << m_maxLeptopDR       << std::endl;
     std::cout << " m_doRecoVLQ               = " << m_doRecoVLQ         << std::endl;
     std::cout << " m_btagOP                  = " << m_btagOP            << std::endl;
@@ -509,6 +519,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_applyTtbarNNLOCorrection= " << m_applyTtbarNNLOCorrection   << std::endl;
     std::cout << " m_recomputeTtbarNNLOCorrection= " << m_recomputeTtbarNNLOCorrection   << std::endl;
     std::cout << " m_reweightKinematics      = " << m_reweightKinematics << std::endl;
+    std::cout << " m_doKinRwSmoothing        = " << m_doKinRwSmoothing << std::endl;
     std::cout << " m_makeQCD0LSystematics    = " << m_makeQCD0LSystematics << std::endl;
     std::cout << " m_doPreselSys             = " << m_doPreselSys       << std::endl;
     std::cout << " m_doExpSys                = " << m_doExpSys          << std::endl;

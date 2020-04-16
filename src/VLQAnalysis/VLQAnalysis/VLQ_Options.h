@@ -85,6 +85,7 @@ public:
   inline bool ApplyVjetsSherpa22RW() const { return m_applyVjetsSherpa22RW; }
   inline bool ComputeTtccNLO() const {return m_computeTtccNLO;}
   inline bool ReweightKinematics() const { return m_reweightKinematics; }
+  inline bool DoKinRwSmoothing() const {return m_doKinRwSmoothing; }
   inline bool MakeQCD0LSystematics() const { return m_makeQCD0LSystematics; }
   inline bool DoPreselSys() const { return m_doPreselSys; }
   inline bool DoExpSys() const { return m_doExpSys; }
@@ -118,6 +119,7 @@ public:
   inline double MaxMetCutOneLep() const { return m_maxMetCutOneLep; }
   inline double MinMetCutZeroLep() const { return m_minMetCutZeroLep; }
   inline double MaxMetCutZeroLep() const { return m_maxMetCutZeroLep; }
+  inline double MaxMetCutTwoLep() const {return m_maxMetCutTwoLep; }
   inline double MaxLeptopDR() const { return m_maxLeptopDR; }
   // ints
   inline int MaxTRFB() const { return m_maxb; }
@@ -174,7 +176,8 @@ private:
   bool m_computeTtccNLO;
 
   bool m_reweightKinematics;
-  
+  bool m_doKinRwSmoothing;
+
   bool m_makeQCD0LSystematics;
   bool m_doPreselSys;
   bool m_doExpSys;
@@ -198,6 +201,7 @@ private:
   double m_maxMetCutOneLep;
   double m_minMetCutZeroLep;
   double m_maxMetCutZeroLep;
+  double m_maxMetCutTwoLep;
   double m_maxLeptopDR;
 
   std::string m_doRecoVLQ;

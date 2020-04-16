@@ -9,6 +9,7 @@ class VLQ_OutputData;
 //class VLQ_NtupleData;
 class TH1F;
 class TH2F;
+class TF1;
 //class Selection;
 
 class VLQ_KinReweighter {
@@ -56,6 +57,7 @@ private:
     std::map<std::string, int> *m_reweightings; 
     std::map < std::string, TH1F* > *m_histograms;
     std::map < std::string, TH2F* > *m_histograms_2D;
+    std::map < std::string, TF1* > *m_smoothFunction; 
 };
 
 #endif //VLQ_TTBARSYSTEMATICSMANAGER_H
