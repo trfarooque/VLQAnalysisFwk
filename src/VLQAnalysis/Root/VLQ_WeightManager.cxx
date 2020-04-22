@@ -152,8 +152,7 @@ void VLQ_WeightManager::Init( std::map < int, Selection* >* selection_tree ){
 
     // Declaration of Ttbar Fraction Rw tool
     if( m_vlq_opt -> ReweightTtbarFractions () ){
-      m_tool_ttFractionRw = new TtbarFractionReweighter(m_vlq_opt -> StrSampleID(), std::getenv("BUILDDIR")+std::string("/x86_64-centos7-gcc62-opt/data/IFAEReweightingTools/TtbarHFFractions_Rw.root"));
-      //m_tool_ttFractionRw = new TtbarFractionReweighter(m_vlq_opt -> StrSampleID(), std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/IFAEReweightingTools/TtbarHFFractions_Rw.root"));
+      m_tool_ttFractionRw = new TtbarFractionReweighter(m_vlq_opt -> StrSampleID());
       m_tool_ttFractionRw -> Init();
     }
 
