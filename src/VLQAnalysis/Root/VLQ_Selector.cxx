@@ -349,6 +349,19 @@ bool VLQ_Selector::Init(){
 	    AddVLQSelection(lep_prefix+"6jin-4bin-1fjin-0Lex-1VTex-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-b
 	    AddVLQSelection(lep_prefix+"6jin-4bin-1fjin-2VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-c
 
+      // Ttbar+HF control regions
+      AddVLQSelection(lep_prefix+"3_5jwin-3bin-0fjex-0VLTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+      AddVLQSelection(lep_prefix+"3_5jwin-3bin-0fjex-1Lin-0VTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
+      AddVLQSelection(lep_prefix+"3_5jwin-4bin-0fjex-0VLTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+      AddVLQSelection(lep_prefix+"3_5jwin-4bin-0fjex-1Lin-0VTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
+      AddVLQSelection(lep_prefix+"6jin-3bin-0fjex-0VLTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+      AddVLQSelection(lep_prefix+"6jin-3bin-0fjex-1Lin-0VTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
+      AddVLQSelection(lep_prefix+"6jin-4bin-0fjex-0VLTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+      AddVLQSelection(lep_prefix+"6jin-4bin-0fjex-1Lin-0VTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
 	  }//FIT REGIONS
 
 	  if(m_opt->DoValidnRegions()){
