@@ -477,6 +477,7 @@ bool VLQ_WeightManager::SetLeptonSFWeights( const bool apply_trigger_weights ){
 bool VLQ_WeightManager::SetTtbarHtSliceScale(){
 
   // CURRENTLY NOT IN USE -- Ttbar Ht scaling happening in VLQ_Analysis_Data2015 in Terminate() function
+<<<<<<< HEAD
   /*
   if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
     UpdateNominalComponent("weight_mc", (*m_nomMap)["weight_mc"]->GetComponentValue()/0.99860961239196);
@@ -518,7 +519,6 @@ bool VLQ_WeightManager::SetTtbarHtSliceScale(){
     }
   }
   */
-
   return true;
 }
 
