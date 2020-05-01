@@ -16,8 +16,6 @@
 #include "IFAETopFramework/TriggerInfo.h"
 #include "IFAETopFramework/Selection.h"
 
-#include "IFAEReweightingTools/TtbarFractionReweighter.h"
-
 #include "VLQAnalysis/VLQ_Options.h"
 #include "VLQAnalysis/VLQ_NtupleData.h"
 #include "VLQAnalysis/VLQ_NtupleReader.h"
@@ -56,8 +54,7 @@ m_anaTools(0),
 m_varComputer(0),
 m_truthMngr(0),
 m_TRFMngr(0),
-m_weightMngr(0),
-m_tool_ttFractionRw(0)
+m_weightMngr(0)
 {
   m_channels.clear();
   m_topTaggers.clear();
@@ -1415,16 +1412,6 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_selector->PrintSelectionTree();
   }
   m_weightMngr -> Init( m_selector -> GetSelectionTree() );
-
-  // //############################################################################
-  // //
-  // // Declaration and initialisation of TtbarFractionReweighter
-  // //
-  // //############################################################################
-  // if(m_opt->ReweightTtbarFractions()){
-  //   m_tool_ttFractionRw = new TtbarFractionReweighter(m_opt -> StrSampleID());
-  //   m_tool_ttFractionRw -> Init();
-  // }
 
   //############################################################################
   //
