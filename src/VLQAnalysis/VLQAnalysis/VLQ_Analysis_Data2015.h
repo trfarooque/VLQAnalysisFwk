@@ -10,9 +10,6 @@ class OutputHistManager;
 class OutputTreeManager;
 //class WeightManager;
 
-//IFAEReweightingTools classes
-class TtbarFractionReweighter;
-
 //VLQ specific classes
 class VLQ_Options;
 class VLQ_OutputData;
@@ -55,7 +52,6 @@ private:
     VLQ_TRFManager *m_TRFMngr;
     VLQ_WeightManager *m_weightMngr;
     VLQ_Selector *m_selector;
-    TtbarFractionReweighter *m_tool_ttFractionRw;
     std::map < std::string, std::vector < std::string > > m_channels;
     std::vector < std::string > m_topTaggers;
     std::vector < std::string > m_truthRCTypes;
