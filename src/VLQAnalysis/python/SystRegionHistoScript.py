@@ -265,4 +265,3 @@ for campaign in ['a','d','e']:
                         continue
 
                 outf_alt.Close()
-
