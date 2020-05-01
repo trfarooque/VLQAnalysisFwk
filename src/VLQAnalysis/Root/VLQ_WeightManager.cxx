@@ -225,11 +225,11 @@ bool VLQ_WeightManager::AddVLQNominalWeights(){
     }//ttbar
     
     if( ((m_vlq_opt -> StrSampleName().find("W+JETS22") != std::string::npos)
-	 || (m_vlq_opt -> StrSampleName().find("Z+JETS22") != std::string::npos))
-	
-	&& ((m_vlq_opt -> StrSampleName().find("W+JETS221") == std::string::npos)
-	    || (m_vlq_opt -> StrSampleName().find("Z+JETS221") == std::string::npos))
-	){
+   || (m_vlq_opt -> StrSampleName().find("Z+JETS22") != std::string::npos))
+  
+  && ((m_vlq_opt -> StrSampleName().find("W+JETS221") == std::string::npos)
+      || (m_vlq_opt -> StrSampleName().find("Z+JETS221") == std::string::npos))
+  ){
       AddAndInitWeight("weight_WZ_2_2");
     }
 
@@ -274,34 +274,34 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
     if(m_vlq_opt->UseLeptonsSF()){
       std::vector<std::string> el_sys_comp = {"Reco", "ID", "Iso" };
       for(const std::string& el_sys : el_sys_comp){
-	AddAndInitWeight("weight_elec_"+el_sys+"_UP", "", false, true, "weight_elec_EL_EFF_"+el_sys+"_TOTAL_1NPCOR_PLUS_UNCOR__1up", "weight_elec");
-	AddAndInitWeight("weight_elec_"+el_sys+"_DOWN", "", false, true, "weight_elec_EL_EFF_"+el_sys+"_TOTAL_1NPCOR_PLUS_UNCOR__1down", "weight_elec");
+  AddAndInitWeight("weight_elec_"+el_sys+"_UP", "", false, true, "weight_elec_EL_EFF_"+el_sys+"_TOTAL_1NPCOR_PLUS_UNCOR__1up", "weight_elec");
+  AddAndInitWeight("weight_elec_"+el_sys+"_DOWN", "", false, true, "weight_elec_EL_EFF_"+el_sys+"_TOTAL_1NPCOR_PLUS_UNCOR__1down", "weight_elec");
       }
 
       std::map<std::string, std::vector<std::string> > mu_sys_comp = {
-	{"RECO", {"STAT", "SYS", "STAT_LOWPT", "SYS_LOWPT"}},
-	{"ISO",{"STAT", "SYS"}},
-	{"TTVA", {"STAT", "SYS"}},
-	{"BADMUON", {"STAT", "SYS"}}
+  {"RECO", {"STAT", "SYS", "STAT_LOWPT", "SYS_LOWPT"}},
+  {"ISO",{"STAT", "SYS"}},
+  {"TTVA", {"STAT", "SYS"}},
+  {"BADMUON", {"STAT", "SYS"}}
       };
       for(std::pair<std::string, std::vector<std::string> > mu_sys_pair : mu_sys_comp){
-	for(const std::string& mu_sys : mu_sys_pair.second){
-	  AddAndInitWeight("weight_muon_"+mu_sys_pair.first+"_"+mu_sys+"_UP","",false, true, "weight_muon_MUON_EFF_"+mu_sys_pair.first+"_"+mu_sys+"__1up", "weight_muon");
-	  AddAndInitWeight("weight_muon_"+mu_sys_pair.first+"_"+mu_sys+"_DOWN","",false, true, "weight_muon_MUON_EFF_"+mu_sys_pair.first+"_"+mu_sys+"__1down", "weight_muon");
-	}
+  for(const std::string& mu_sys : mu_sys_pair.second){
+    AddAndInitWeight("weight_muon_"+mu_sys_pair.first+"_"+mu_sys+"_UP","",false, true, "weight_muon_MUON_EFF_"+mu_sys_pair.first+"_"+mu_sys+"__1up", "weight_muon");
+    AddAndInitWeight("weight_muon_"+mu_sys_pair.first+"_"+mu_sys+"_DOWN","",false, true, "weight_muon_MUON_EFF_"+mu_sys_pair.first+"_"+mu_sys+"__1down", "weight_muon");
+  }
       }
 
       if(m_vlq_opt->UseLeptonTrigger()){
-	std::vector<std::string> el_trig_sys_comp = {"TriggerEff", "Trigger"};
-	for(const std::string& el_trig_sys : el_trig_sys_comp){
-	  AddAndInitWeight("weight_elec_"+el_trig_sys+"_UP", "", false, true, "weight_elec_trigger_EL_EFF_"+el_trig_sys+"_TOTAL_1NPCOR_PLUS_UNCOR__1up", "weight_elec_trigger");
-	  AddAndInitWeight("weight_elec_"+el_trig_sys+"_DOWN", "", false, true, "weight_elec_trigger_EL_EFF_"+el_trig_sys+"_TOTAL_1NPCOR_PLUS_UNCOR__1down", "weight_elec_trigger");
-	}
-	std::vector<std::string> mu_trig_sys_comp = {"TrigStatUncertainty", "TrigSystUncertainty"};
-	for(const std::string& mu_trig_sys : mu_trig_sys_comp){
-	  AddAndInitWeight("weight_muon_"+mu_trig_sys+"_UP", "", false, true, "weight_muon_trigger_MUON_EFF_"+mu_trig_sys+"__1up", "weight_muon_trigger");
-	  AddAndInitWeight("weight_muon_"+mu_trig_sys+"_DOWN", "", false, true, "weight_muon_trigger_MUON_EFF_"+mu_trig_sys+"__1down", "weight_muon_trigger");
-	}
+  std::vector<std::string> el_trig_sys_comp = {"TriggerEff", "Trigger"};
+  for(const std::string& el_trig_sys : el_trig_sys_comp){
+    AddAndInitWeight("weight_elec_"+el_trig_sys+"_UP", "", false, true, "weight_elec_trigger_EL_EFF_"+el_trig_sys+"_TOTAL_1NPCOR_PLUS_UNCOR__1up", "weight_elec_trigger");
+    AddAndInitWeight("weight_elec_"+el_trig_sys+"_DOWN", "", false, true, "weight_elec_trigger_EL_EFF_"+el_trig_sys+"_TOTAL_1NPCOR_PLUS_UNCOR__1down", "weight_elec_trigger");
+  }
+  std::vector<std::string> mu_trig_sys_comp = {"TrigStatUncertainty", "TrigSystUncertainty"};
+  for(const std::string& mu_trig_sys : mu_trig_sys_comp){
+    AddAndInitWeight("weight_muon_"+mu_trig_sys+"_UP", "", false, true, "weight_muon_trigger_MUON_EFF_"+mu_trig_sys+"__1up", "weight_muon_trigger");
+    AddAndInitWeight("weight_muon_"+mu_trig_sys+"_DOWN", "", false, true, "weight_muon_trigger_MUON_EFF_"+mu_trig_sys+"__1down", "weight_muon_trigger");
+  }
       }//trigger
     }//lepton SF
 
@@ -343,16 +343,16 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
 
       // PMG weights
       if(m_vlq_outData -> o_is_ttbar){
-	AddAndInitWeight("weight_pmg_muR10__muF20","",false, true, "weight_pmg_muR10__muF20", "weight_mc");
-	AddAndInitWeight("weight_pmg_muR10__muF05","",false, true, "weight_pmg_muR10__muF05", "weight_mc");
-	AddAndInitWeight("weight_pmg_muR20__muF10","",false, true, "weight_pmg_muR20__muF10", "weight_mc");
-	AddAndInitWeight("weight_pmg_muR05__muF10","",false, true, "weight_pmg_muR05__muF10", "weight_mc");
+  AddAndInitWeight("weight_pmg_muR10__muF20","",false, true, "weight_pmg_muR10__muF20", "weight_mc");
+  AddAndInitWeight("weight_pmg_muR10__muF05","",false, true, "weight_pmg_muR10__muF05", "weight_mc");
+  AddAndInitWeight("weight_pmg_muR20__muF10","",false, true, "weight_pmg_muR20__muF10", "weight_mc");
+  AddAndInitWeight("weight_pmg_muR05__muF10","",false, true, "weight_pmg_muR05__muF10", "weight_mc");
       }
       else{
-	AddAndInitWeight("weight_pmg_muR100__muF200","",false, true, "weight_pmg_muR100__muF200", "weight_mc");
-	AddAndInitWeight("weight_pmg_muR100__muF050","",false, true, "weight_pmg_muR100__muF050", "weight_mc");
-	AddAndInitWeight("weight_pmg_muR200__muF100","",false, true, "weight_pmg_muR200__muF100", "weight_mc");
-	AddAndInitWeight("weight_pmg_muR050__muF100","",false, true, "weight_pmg_muR050__muF100", "weight_mc");
+  AddAndInitWeight("weight_pmg_muR100__muF200","",false, true, "weight_pmg_muR100__muF200", "weight_mc");
+  AddAndInitWeight("weight_pmg_muR100__muF050","",false, true, "weight_pmg_muR100__muF050", "weight_mc");
+  AddAndInitWeight("weight_pmg_muR200__muF100","",false, true, "weight_pmg_muR200__muF100", "weight_mc");
+  AddAndInitWeight("weight_pmg_muR050__muF100","",false, true, "weight_pmg_muR050__muF100", "weight_mc");
       }
       AddAndInitWeight("weight_pmg_Var3cUp","",false, true, "weight_pmg_Var3cUp", "weight_mc");
       AddAndInitWeight("weight_pmg_Var3cDown","",false, true, "weight_pmg_Var3cDown", "weight_mc");
@@ -363,29 +363,29 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
         //ttbar generator, PS and radiation uncertainties
         std::vector<std::string> ttbar_sys_comp = {"PS", "GEN", "GENPS", "RADHI", "RADLOW"};
         for(const std::string& ttbar_sys : ttbar_sys_comp){
-	 AddAndInitWeight("weight_ttbar_"+ttbar_sys,"",false, false, "", "");
+   AddAndInitWeight("weight_ttbar_"+ttbar_sys,"",false, false, "", "");
         }
   
         //ttbar NNLO systematic
         if(m_vlq_opt->SampleName()!=SampleName::TTBARBB){
-  	if(m_vlq_opt->ApplyTtbarNNLOCorrection()){
-  	  AddAndInitWeight("weight_ttbar_NNLO_OFF", "", false, false, "", "weight_ttbar_NNLO_1L");
-  	} else {
-  	  AddAndInitWeight("weight_ttbar_NNLO_ON", "", false, true, "weight_ttbar_NNLO_1L", "");
-  	}
+    if(m_vlq_opt->ApplyTtbarNNLOCorrection()){
+      AddAndInitWeight("weight_ttbar_NNLO_OFF", "", false, false, "", "weight_ttbar_NNLO_1L");
+    } else {
+      AddAndInitWeight("weight_ttbar_NNLO_ON", "", false, true, "weight_ttbar_NNLO_1L", "");
+    }
         }
   
         //ttbb uncertainties
         if(m_vlq_opt->ApplyTtbbCorrection() && m_vlq_opt->SampleName()==SampleName::TTBARBB){
-  	std::vector<std::string> ttbb_sys_comp = {"CSS_KIN", "MSTW", "NNPDF", "Q_CMMPS", "glosoft", "defaultX05", "defaultX2", "MPIup", "MPIdown", "MPIfactor", "aMcAtNloHpp", "aMcAtNloPy8"};
-  	for(const std::string& ttbb_sys : ttbb_sys_comp){
-  	  AddAndInitWeight("weight_ttbb_"+ttbb_sys, "", false, true, "weight_ttbb_ttbb_"+ttbb_sys+"_weight", "weight_ttbb");
-  	}
+    std::vector<std::string> ttbb_sys_comp = {"CSS_KIN", "MSTW", "NNPDF", "Q_CMMPS", "glosoft", "defaultX05", "defaultX2", "MPIup", "MPIdown", "MPIfactor", "aMcAtNloHpp", "aMcAtNloPy8"};
+    for(const std::string& ttbb_sys : ttbb_sys_comp){
+      AddAndInitWeight("weight_ttbb_"+ttbb_sys, "", false, true, "weight_ttbb_ttbb_"+ttbb_sys+"_weight", "weight_ttbb");
+    }
         }//ttbb correction
   
         //ttcc uncertainties
         if( m_vlq_opt->ComputeWeightSys() && m_vlq_opt -> ComputeTtccNLO()){
-  	AddAndInitWeight("weight_ttcc_NLO", "", false, false);
+    AddAndInitWeight("weight_ttcc_NLO", "", false, false);
         }
   
       }//ttbar samples
@@ -477,7 +477,6 @@ bool VLQ_WeightManager::SetLeptonSFWeights( const bool apply_trigger_weights ){
 bool VLQ_WeightManager::SetTtbarHtSliceScale(){
 
   // CURRENTLY NOT IN USE -- Ttbar Ht scaling happening in VLQ_Analysis_Data2015 in Terminate() function
-<<<<<<< HEAD
   /*
   if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
     UpdateNominalComponent("weight_mc", (*m_nomMap)["weight_mc"]->GetComponentValue()/0.99860961239196);
@@ -519,6 +518,7 @@ bool VLQ_WeightManager::SetTtbarHtSliceScale(){
     }
   }
   */
+
   return true;
 }
 
