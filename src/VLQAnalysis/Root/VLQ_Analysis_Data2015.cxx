@@ -2711,8 +2711,7 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
   //================ If single-top Wt then make DR/DS uncertainty ================
   if(is_singletop){
     VLQ_PropagateSingleTopSystematics* DRDSPropagator = new VLQ_PropagateSingleTopSystematics(m_opt, m_outMngrHist);
-    DRDSPropagator->Init(m_selector -> GetSelectionTree(), std::getenv("BUILDDIR")+std::string("/x86_64-centos7-gcc62-opt/data/VLQAnalysis/single_top_syst.root"));
-    //DRDSPropagator->Init(m_selector -> GetSelectionTree(), std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/single_top_syst.root"));
+    DRDSPropagator->Init(m_selector -> GetSelectionTree(), std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/single_top_syst.root"));
     DRDSPropagator->WriteAllSystHistograms(false,false);
     delete DRDSPropagator;
   }

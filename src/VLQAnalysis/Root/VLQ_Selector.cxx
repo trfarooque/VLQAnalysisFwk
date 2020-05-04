@@ -98,8 +98,7 @@ bool VLQ_Selector::Init(){
     std::cout<<" Inside VLQ_Selector::Init()"<<std::endl;
   }
   
-  m_blinding_config.open( Form("%s/x86_64-centos7-gcc62-opt/python/VLQAnalysis/regions_dictionary.py", std::getenv("BUILDDIR")) );
-  //m_blinding_config.open( Form("%s/python/VLQAnalysis/regions_dictionary.py", std::getenv("VLQAnalysisFramework_DIR")) );
+  m_blinding_config.open( Form("%s/python/VLQAnalysis/regions_dictionary.py", std::getenv("VLQAnalysisFramework_DIR")) );
   //============================  Initialise top selections and add rules for primary ancestors ==================================
   m_sel_indices = new std::map<std::string, int>();
   m_sel_names = new std::map<int, std::string>();

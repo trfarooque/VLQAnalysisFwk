@@ -35,7 +35,17 @@ void VLQ_TRFManager::Init(){
   }
 
   m_btag_name = (m_opt->BtagCollection() == VLQ_Options::TRACK) ? "weight_trkbtag" : "weight_btag";
-  std::string btag_coll = (m_opt->BtagCollection() == VLQ_Options::TRACK) ? "AntiKtVR30Rmax4Rmin02TrackJets" : "AntiKt4EMPFlow"; 
+  std::string btag_coll = "";
+  if(m_opt->BtagCollection() == VLQ_Options::TRACK){
+    btag_coll = "AntiKtVR30Rmax4Rmin02TrackJets"; 
+  }
+  else if(m_opt->BtagCollection() == VLQ_Options::CALOPFLOW){
+    btag_coll = "AntiKt4EMPFlow"; 
+  }
+  else if(m_opt->BtagCollection() == VLQ_Options::CALOTOPO){
+    btag_coll = "AntiKt4EMTopo"; 
+  }
+
   if(m_opt->BtagOP()==""){
     m_trfint = new TRFinterface("FixedCutBEff_77",//b-tag OP
     btag_coll,//jet collection
@@ -45,7 +55,8 @@ void VLQ_TRFManager::Init(){
     true,//rwSystForPerm (weight for permutation to be the same with systematics)
     false,//tag bins
     1,//n calibrations
-    true//add properties (because of the following line)
+    true,//add properties (because of the following line)
+    m_opt->BtagAlg() //tagger name
     );
   }
   else {
@@ -57,7 +68,8 @@ void VLQ_TRFManager::Init(){
     true,//rwSystForPerm (weight for permutation to be the same with systematics)
     false,//tag bins
     1,//n calibrations
-    true//add properties (because of the following line)
+    true,//add properties (because of the following line)
+    m_opt->BtagAlg() //tagger name
     );
   }
   m_trfint->setEffProperty("EfficiencyBCalibrations","default;410004;410006");

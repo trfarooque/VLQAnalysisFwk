@@ -14,8 +14,9 @@ public:
   };
 
   enum BtagColl{
-    CALO = 0,
-    TRACK = 1
+    CALOPFLOW = 0,
+    CALOTOPO = 1,
+    TRACK = 2
   };
   //
   // Standard C++ functions

@@ -96,7 +96,7 @@ m_lepWOpt("VANILLA"),
 m_leptopOpt("VETO_RCMATCH"),
 m_RCCollection("VR_rho550"),
 m_filterType(NOFILTER),
-m_btagCollection(CALO)
+m_btagCollection(CALOPFLOW)
 {}
 
 //_____________________________________________________________
@@ -413,7 +413,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
         }
         else if( temp_arg.find("--BTAGCOLLECTION") != std::string::npos ){
             std::transform(temp_val.begin(), temp_val.end(), temp_val.begin(), toupper);
-            if ( temp_val.find("CALO") != std::string::npos) 	m_btagCollection = CALO;
+            if ( temp_val.find("CALOPFLOW") != std::string::npos) 	m_btagCollection = CALOPFLOW;
+            else if ( temp_val.find("CALOTOPO") != std::string::npos) 	m_btagCollection = CALOTOPO;
             else if ( temp_val.find("TRACK") != std::string::npos) 	m_btagCollection = TRACK;
             else {
                 std::cout<<"Unknown BTAGCOLLECTION option : " << temp_val << std::endl;

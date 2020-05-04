@@ -326,6 +326,9 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
 
     bool isSignalJet = m_ntupData -> d_jet_pt -> at(iJet)  >= m_opt->JetsPtCut();
     isSignalJet = isSignalJet && TMath::Abs( m_ntupData -> d_jet_eta -> at(iJet) ) < m_opt->JetsEtaCut();
+    isSignalJet = isSignalJet && ( ( (m_ntupData -> d_jet_jvt -> at(iJet) > 0.11) && (TMath::Abs( m_ntupData -> d_jet_eta -> at(iJet) ) > 2.4) ) 
+    				   || (m_ntupData -> d_jet_jvt -> at(iJet) > 0.59)
+    				   || (m_ntupData -> d_jet_pt -> at(iJet) > 120.) ); 
     if( isSignalJet ){
       AnalysisObject *obj = new AnalysisObject();
       obj -> SetPtEtaPhiE( m_ntupData -> d_jet_pt -> at(iJet), m_ntupData -> d_jet_eta -> at(iJet), m_ntupData -> d_jet_phi -> at(iJet), m_ntupData -> d_jet_E -> at(iJet) );
@@ -342,7 +345,7 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
  
       int isB = 0;
 
-      if(m_opt->BtagCollection()== VLQ_Options::CALO){
+      if(m_opt->BtagCollection()==VLQ_Options::CALOTOPO || m_opt->BtagCollection()==VLQ_Options::CALOPFLOW){
 	if(TMath::Abs(obj->Eta())<2.5){
           isB = obj -> GetMoment("isb");
 	}

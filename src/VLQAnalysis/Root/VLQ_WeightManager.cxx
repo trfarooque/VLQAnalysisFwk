@@ -90,7 +90,6 @@ void VLQ_WeightManager::Init( std::map < int, Selection* >* selection_tree ){
   if ( !(m_vlq_opt -> IsData() || (m_opt -> StrSampleName().find("QCD") != std::string::npos)) ) {
     std::string path = "";
     path += std::getenv("VLQAnalysisFramework_DIR") + std::string("/data/VLQAnalysis/") + m_vlq_opt -> SampleDat();
-    //path += std::getenv("VLQAnalysisFramework_DIR") + std::string("/data/VLQAnalysis/") + m_vlq_opt -> SampleDat();
     string sampleId = m_vlq_opt -> StrSampleID();
     m_sampleInfo = new SampleInfo( sampleId, path );
     if(!m_sampleInfo->Ready()){
@@ -143,17 +142,14 @@ void VLQ_WeightManager::Init( std::map < int, Selection* >* selection_tree ){
     //////////////////////////////////////
     // Declaration of ttbb_syst class
     if( m_vlq_opt -> RecomputeTtBbRw () ){
-      m_tool_HFsyst = new ttbbNLO_syst( m_vlq_opt -> StrSampleID(),std::getenv("BUILDDIR")+std::string("/x86_64-centos7-gcc62-opt/data/IFAEReweightingTools/ttbbNormRw.root"),
-					std::getenv("BUILDDIR")+std::string("/x86_64-centos7-gcc62-opt/data/IFAEReweightingTools/ttbbShapeRw.root"));
-      //m_tool_HFsyst = new ttbbNLO_syst( m_vlq_opt -> StrSampleID(),std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/IFAEReweightingTools/ttbbNormRw.root"),
-      //std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/IFAEReweightingTools/ttbbShapeRw.root"));
+      m_tool_HFsyst = new ttbbNLO_syst( m_vlq_opt -> StrSampleID(),std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/IFAEReweightingTools/ttbbNormRw.root"),
+      std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/IFAEReweightingTools/ttbbShapeRw.root"));
       m_tool_HFsyst -> Init();
     }
 
     // Declaration of Ttbar Fraction Rw tool
     if( m_vlq_opt -> ReweightTtbarFractions () ){
-      m_tool_ttFractionRw = new TtbarFractionReweighter(m_vlq_opt -> StrSampleID(), std::getenv("BUILDDIR")+std::string("/x86_64-centos7-gcc62-opt/data/IFAEReweightingTools/TtbarHFFractions_Rw.root"));
-      //m_tool_ttFractionRw = new TtbarFractionReweighter(m_vlq_opt -> StrSampleID(), std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/IFAEReweightingTools/TtbarHFFractions_Rw.root"));
+      m_tool_ttFractionRw = new TtbarFractionReweighter(m_vlq_opt -> StrSampleID(), std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/IFAEReweightingTools/TtbarHFFractions_Rw.root"));
       m_tool_ttFractionRw -> Init();
     }
 
@@ -164,16 +160,16 @@ void VLQ_WeightManager::Init( std::map < int, Selection* >* selection_tree ){
       //m_ttbar_syst_weight = new VLQ_TtbarSystematicsManager( m_vlq_opt, m_vlq_outData, m_vlq_ntupData );
       //m_ttbar_syst_weight -> Init(selection_tree, std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/ttbarSystematics.root"));
     }
+
+
   }//ttbar samples
   if( m_vlq_opt -> ReweightKinematics() ){
     m_kinRw = new VLQ_KinReweighter(m_vlq_opt, m_vlq_outData /*, m_vlq_ntupData*/);
     if( m_vlq_opt -> OnlyReweightTtbarKin() ){
-      m_kinRw->Init(std::getenv("BUILDDIR")+std::string("/x86_64-centos7-gcc62-opt/data/VLQAnalysis/kinReweightings_OnlyTtbar.root"));
-      //m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyTtbar.root"));
+      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyTtbar.root"));
     }
     else{
-      m_kinRw->Init(std::getenv("BUILDDIR")+std::string("/x86_64-centos7-gcc62-opt/data/VLQAnalysis/kinReweightings_AllBkgd.root"));
-      //m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_AllBkgd.root"));
+      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_AllBkgd.root"));
     }
 
   }
@@ -397,7 +393,19 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
       AddAndInitWeight("weight_pmg_muR10__muF20","",false, true, "weight_pmg_MUR1__MUF2__PDF261000", "weight_mc");
       AddAndInitWeight("weight_pmg_muR20__muF10","",false, true, "weight_pmg_MUR2__MUF1__PDF261000", "weight_mc");
       AddAndInitWeight("weight_pmg_muR20__muF20","",false, true, "weight_pmg_MUR2__MUF2__PDF261000", "weight_mc");
+      //parametrised weights
 
+      AddAndInitWeight("weight_pmg_ckkw15","",false, true, "ckkw15_Weight", "weight_mc","F");
+      AddAndInitWeight("weight_pmg_ckkw30","",false, true, "ckkw30_Weight", "weight_mc","F");
+      AddAndInitWeight("weight_pmg_qsf025","",false, true, "qsf025_Weight", "weight_mc","F");
+      AddAndInitWeight("weight_pmg_qsf4","",false, true, "qsf4_Weight", "weight_mc","F");
+
+      /*
+      AddAndInitWeight("weight_pmg_ckkw15","",false, true, "ckkw15_Weight", "","F");
+      AddAndInitWeight("weight_pmg_ckkw30","",false, true, "ckkw30_Weight", "","F");
+      AddAndInitWeight("weight_pmg_qsf025","",false, true, "qsf025_Weight", "","F");
+      AddAndInitWeight("weight_pmg_qsff4","",false, true, "qsf4_Weight", "","F");
+      */
     }
 
   }
@@ -460,38 +468,45 @@ bool VLQ_WeightManager::SetLeptonSFWeights( const bool apply_trigger_weights ){
 //
 bool VLQ_WeightManager::SetTtbarHtSliceScale(){
 
+
   if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
-    UpdateNominalComponent("weight_norm", m_sampleInfo -> NormFactor()/0.99860961239196);
-    UpdateSystematicComponent("weight_pmg_Var3cDown", (*m_systMap)["weight_pmg_Var3cDown"]->GetComponentValue()/1.00989117643996);
-    UpdateSystematicComponent("weight_pmg_Var3cUp", (*m_systMap)["weight_pmg_Var3cUp"]->GetComponentValue()/0.98630942849818);
-    UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac05", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac05"]->GetComponentValue()/1.01244857328796);
-    UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac20", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac20"]->GetComponentValue()/0.98661128202278);
-    UpdateSystematicComponent("weight_pmg_muR05__muF10", (*m_systMap)["weight_pmg_muR05__muF10"]->GetComponentValue()/0.96762126478968);
-    UpdateSystematicComponent("weight_pmg_muR10__muF05", (*m_systMap)["weight_pmg_muR10__muF05"]->GetComponentValue()/0.97391612230213);
-    UpdateSystematicComponent("weight_pmg_muR10__muF20", (*m_systMap)["weight_pmg_muR10__muF20"]->GetComponentValue()/1.02221909345704);
-    UpdateSystematicComponent("weight_pmg_muR20__muF10", (*m_systMap)["weight_pmg_muR20__muF10"]->GetComponentValue()/1.02018541245750);
+    UpdateNominalComponent("weight_mc", (*m_nomMap)["weight_mc"]->GetComponentValue()/0.99860961239196);
+    if(m_vlq_opt->ComputeWeightSys() && m_vlq_opt->DoTheorySys()){
+      UpdateSystematicComponent("weight_pmg_Var3cDown", (*m_systMap)["weight_pmg_Var3cDown"]->GetComponentValue()/1.00989117643996);
+      UpdateSystematicComponent("weight_pmg_Var3cUp", (*m_systMap)["weight_pmg_Var3cUp"]->GetComponentValue()/0.98630942849818);
+      UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac05", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac05"]->GetComponentValue()/1.01244857328796);
+      UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac20", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac20"]->GetComponentValue()/0.98661128202278);
+      UpdateSystematicComponent("weight_pmg_muR05__muF10", (*m_systMap)["weight_pmg_muR05__muF10"]->GetComponentValue()/0.96762126478968);
+      UpdateSystematicComponent("weight_pmg_muR10__muF05", (*m_systMap)["weight_pmg_muR10__muF05"]->GetComponentValue()/0.97391612230213);
+      UpdateSystematicComponent("weight_pmg_muR10__muF20", (*m_systMap)["weight_pmg_muR10__muF20"]->GetComponentValue()/1.02221909345704);
+      UpdateSystematicComponent("weight_pmg_muR20__muF10", (*m_systMap)["weight_pmg_muR20__muF10"]->GetComponentValue()/1.02018541245750);
+    }
   }
   if ( m_opt -> StrSampleID().find("407343.") != std::string::npos ){
-    UpdateNominalComponent("weight_norm", m_sampleInfo -> NormFactor()/1.00220071443736);
-    UpdateSystematicComponent("weight_pmg_Var3cDown", (*m_systMap)["weight_pmg_Var3cDown"]->GetComponentValue()/1.02075306498765);
-    UpdateSystematicComponent("weight_pmg_Var3cUp", (*m_systMap)["weight_pmg_Var3cUp"]->GetComponentValue()/0.98196927321205);
-    UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac05", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac05"]->GetComponentValue()/1.03193538833724);
-    UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac20", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac20"]->GetComponentValue()/0.99087003186616);
-    UpdateSystematicComponent("weight_pmg_muR05__muF10", (*m_systMap)["weight_pmg_muR05__muF10"]->GetComponentValue()/0.91951515882506);
-    UpdateSystematicComponent("weight_pmg_muR10__muF05", (*m_systMap)["weight_pmg_muR10__muF05"]->GetComponentValue()/0.93819392248974);
-    UpdateSystematicComponent("weight_pmg_muR10__muF20", (*m_systMap)["weight_pmg_muR10__muF20"]->GetComponentValue()/1.06487669659290);
-    UpdateSystematicComponent("weight_pmg_muR20__muF10", (*m_systMap)["weight_pmg_muR20__muF10"]->GetComponentValue()/1.06891808020899);
+    UpdateNominalComponent("weight_mc", (*m_nomMap)["weight_mc"]->GetComponentValue()/1.00220071443736);
+    if(m_vlq_opt->ComputeWeightSys() && m_vlq_opt->DoTheorySys()){
+      UpdateSystematicComponent("weight_pmg_Var3cDown", (*m_systMap)["weight_pmg_Var3cDown"]->GetComponentValue()/1.02075306498765);
+      UpdateSystematicComponent("weight_pmg_Var3cUp", (*m_systMap)["weight_pmg_Var3cUp"]->GetComponentValue()/0.98196927321205);
+      UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac05", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac05"]->GetComponentValue()/1.03193538833724);
+      UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac20", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac20"]->GetComponentValue()/0.99087003186616);
+      UpdateSystematicComponent("weight_pmg_muR05__muF10", (*m_systMap)["weight_pmg_muR05__muF10"]->GetComponentValue()/0.91951515882506);
+      UpdateSystematicComponent("weight_pmg_muR10__muF05", (*m_systMap)["weight_pmg_muR10__muF05"]->GetComponentValue()/0.93819392248974);
+      UpdateSystematicComponent("weight_pmg_muR10__muF20", (*m_systMap)["weight_pmg_muR10__muF20"]->GetComponentValue()/1.06487669659290);
+      UpdateSystematicComponent("weight_pmg_muR20__muF10", (*m_systMap)["weight_pmg_muR20__muF10"]->GetComponentValue()/1.06891808020899);
+    }
   }
   if ( m_opt -> StrSampleID().find("407342.") != std::string::npos ){
-    UpdateNominalComponent("weight_norm", m_sampleInfo -> NormFactor()/1.01614066637173);
-    UpdateSystematicComponent("weight_pmg_Var3cDown", (*m_systMap)["weight_pmg_Var3cDown"]->GetComponentValue()/1.04057257636042);
-    UpdateSystematicComponent("weight_pmg_Var3cUp", (*m_systMap)["weight_pmg_Var3cUp"]->GetComponentValue()/0.99097386133341);
-    UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac05", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac05"]->GetComponentValue()/1.06280582379557);
-    UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac20", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac20"]->GetComponentValue()/1.00957616786319);
-    UpdateSystematicComponent("weight_pmg_muR05__muF10", (*m_systMap)["weight_pmg_muR05__muF10"]->GetComponentValue()/0.89300718054136);
-    UpdateSystematicComponent("weight_pmg_muR10__muF05", (*m_systMap)["weight_pmg_muR10__muF05"]->GetComponentValue()/0.90726044083483);
-    UpdateSystematicComponent("weight_pmg_muR10__muF20", (*m_systMap)["weight_pmg_muR10__muF20"]->GetComponentValue()/1.12725897511274);
-    UpdateSystematicComponent("weight_pmg_muR20__muF10", (*m_systMap)["weight_pmg_muR20__muF10"]->GetComponentValue()/1.12572488013792);
+    UpdateNominalComponent("weight_mc", (*m_nomMap)["weight_mc"]->GetComponentValue()/1.01614066637173);
+    if(m_vlq_opt->ComputeWeightSys() && m_vlq_opt->DoTheorySys()){
+      UpdateSystematicComponent("weight_pmg_Var3cDown", (*m_systMap)["weight_pmg_Var3cDown"]->GetComponentValue()/1.04057257636042);
+      UpdateSystematicComponent("weight_pmg_Var3cUp", (*m_systMap)["weight_pmg_Var3cUp"]->GetComponentValue()/0.99097386133341);
+      UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac05", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac05"]->GetComponentValue()/1.06280582379557);
+      UpdateSystematicComponent("weight_pmg_isr_muRfac10__fsr_muRfac20", (*m_systMap)["weight_pmg_isr_muRfac10__fsr_muRfac20"]->GetComponentValue()/1.00957616786319);
+      UpdateSystematicComponent("weight_pmg_muR05__muF10", (*m_systMap)["weight_pmg_muR05__muF10"]->GetComponentValue()/0.89300718054136);
+      UpdateSystematicComponent("weight_pmg_muR10__muF05", (*m_systMap)["weight_pmg_muR10__muF05"]->GetComponentValue()/0.90726044083483);
+      UpdateSystematicComponent("weight_pmg_muR10__muF20", (*m_systMap)["weight_pmg_muR10__muF20"]->GetComponentValue()/1.12725897511274);
+      UpdateSystematicComponent("weight_pmg_muR20__muF10", (*m_systMap)["weight_pmg_muR20__muF10"]->GetComponentValue()/1.12572488013792);
+    }
   }
   return true;
 }
