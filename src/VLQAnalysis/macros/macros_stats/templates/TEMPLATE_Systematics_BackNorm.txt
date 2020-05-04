@@ -8,7 +8,7 @@ Systematic: "Luminosity"
   Category: Others
   OverallUp: 0.022
   OverallDown: -0.022
-  Exclude: QCD,QCD0L
+%  Exclude: QCD,QCD0L
 
 % ------------------------- %
 % --------  TTBAR  -------- %
@@ -30,147 +30,60 @@ Systematic: "HTX_BKGNP_TTBARCC_XS"
   OverallDown: -0.5
   Samples: ttbarcc
 
+Systematic: "HTX_BKGNP_TTBARBB_XS"
+  Title: "t#bar{t}+b#bar{b} norm."
+  Type: OVERALL
+  Category: "t#bar{t} uncertainties"
+  OverallUp: 0.5
+  OverallDown: -0.5
+  Samples: ttbarcc
+
 % ---------------------------------- %
 % --------  V+jets (1-lep)  -------- %
 % ---------------------------------- %
 
-Systematic: "HTX_BKGNP_VJETS_XS_1l_0T0H" ; "HTX_BKGNP_VJETS_XS_1l_1T0H" ; "HTX_BKGNP_VJETS_XS_1l_0T1H" ; "HTX_BKGNP_VJETS_XS_1l_1T1H" ; "HTX_BKGNP_VJETS_XS_1l_2T0_1H" ; "HTX_BKGNP_VJETS_XS_1l_0T2H" ; "HTX_BKGNP_VJETS_XS_1l_2TH"
-  Title: "V+jets norm. (1l,0T,0H)" ; "V+jets norm. (1l,1T,0H)" ; "V+jets norm. (1l,0T,1H)" ; "V+jets norm. (1l,1T,1H)" ; "V+jets norm. (1l,#geq2T,0-1H)" ; "V+jets norm. (1l,#geq0T,#geq2H)" ; "V+jets norm. (1l,#geq2TH)"
+Systematic: "HTX_BKGNP_VJETS_XS_1B" ; "HTX_BKGNP_VJETS_XS_2B" ; "HTX_BKGNP_VJETS_XS_3B" ; "HTX_BKGNP_VJETS_XS_4B"
+  Title: "V+jets norm. (1b)"; "V+jets norm. (2b)"; "V+jets norm. (3b)" ; "V+jets norm. (#geq 4b)"
   Type: OVERALL
   Category: "Background uncertainties"
   OverallUp: 0.30
   OverallDown: -0.30
-  Samples: Wjetslight,Zjetslight,Wjetscharm,Zjetscharm,Wjetsbeauty,Zjetsbeauty
-  Regions: HTX_c1lep0Tex0Hex*;HTX_c1lep1Tex0Hex*;HTX_c1lep0Tex1Hex*;HTX_c1lep1Tex1Hex*;HTX_c1lep2Tin0_1Hwin*;HTX_c1lep0Tin2Hin*;HTX_c1lep2TH*
+  Samples: Wjets,Zjets
+  Regions: HTX_c1lep3_5jwin1bex*,HTX_c1lep6jin1bex*;HTX_c1lep3_5jwin2bex*,HTX_c1lep6jin2bex*;HTX_c1lep3_5jwin3bex*,HTX_c1lep6jin3bex*;HTX_c1lep3_5jwin4bin*,HTX_c1lep6jin4bin*  
 
-% ---------------------------------- %
-% ----  V+jets charm (1-lep)  ----- %
-% ---------------------------------- %
-
-Systematic: "HTX_BKGNP_VJETSCC_XS_1l_0T0H" ; "HTX_BKGNP_VJETSCC_XS_1l_1T0H" ; "HTX_BKGNP_VJETSCC_XS_1l_0T1H" ; "HTX_BKGNP_VJETSCC_XS_1l_1T1H" ; "HTX_BKGNP_VJETSCC_XS_1l_2T0_1H" ; "HTX_BKGNP_VJETSCC_XS_1l_0T2H" ; "HTX_BKGNP_VJETSCC_XS_1l_2TH"
-  Title: "V+charm-jets norm. (1l,0T,0H)" ; "V+charm-jets norm. (1l,1T,0H)" ; "V+charm-jets norm. (1l,0T,1H)" ; "V+charm-jets norm. (1l,1T,1H)" ; "V+charm-jets norm. (1l,#geq2T,0-1H)" ; "V+charm-jets norm. (1l,#geq0T,#geq2H)" ; "V+charm-jets norm. (1l,#geq2TH)"
-  Type: OVERALL
-  Category: "Background uncertainties"
-  OverallUp: 0.30
-  OverallDown: -0.30
-  Samples: Wjetscharm,Zjetscharm
-  Regions: HTX_c1lep0Tex0Hex*;HTX_c1lep1Tex0Hex*;HTX_c1lep0Tex1Hex*;HTX_c1lep1Tex1Hex*;HTX_c1lep2Tin0_1Hwin*;HTX_c1lep0Tin2Hin*;HTX_c1lep2TH*
-
-% ---------------------------------- %
-% ----  V+jets beauty (1-lep)  ----- %
-% ---------------------------------- %
-
-Systematic: "HTX_BKGNP_VJETSBB_XS_1l_0T0H" ; "HTX_BKGNP_VJETSBB_XS_1l_1T0H" ; "HTX_BKGNP_VJETSBB_XS_1l_0T1H" ; "HTX_BKGNP_VJETSBB_XS_1l_1T1H" ; "HTX_BKGNP_VJETSBB_XS_1l_2T0_1H" ; "HTX_BKGNP_VJETSBB_XS_1l_0T2H" ; "HTX_BKGNP_VJETSBB_XS_1l_2TH"
-  Title: "V+beauty-jets norm. (1l,0T,0H)" ; "V+beauty-jets norm. (1l,1T,0H)" ; "V+beauty-jets norm. (1l,0T,1H)" ; "V+beauty-jets norm. (1l,1T,1H)" ; "V+beauty-jets norm. (1l,#geq2T,0-1H)" ; "V+beauty-jets norm. (1l,#geq0T,#geq2H)" ; "V+beauty-jets norm. (1l,#geq2TH)"
-  Type: OVERALL
-  Category: "Background uncertainties"
-  OverallUp: 0.30
-  OverallDown: -0.30
-  Samples: Wjetsbeauty,Zjetsbeauty
-  Regions: HTX_c1lep0Tex0Hex*;HTX_c1lep1Tex0Hex*;HTX_c1lep0Tex1Hex*;HTX_c1lep1Tex1Hex*;HTX_c1lep2Tin0_1Hwin*;HTX_c1lep0Tin2Hin*;HTX_c1lep2TH*
-
-% ---------------------------------------- %
-% --------  V+jets (0-lep)  -------- %
-% ---------------------------------------- %
-
-Systematic: "HTX_BKGNP_VJETS_XS_0l_0T0H" ; "HTX_BKGNP_VJETS_XS_0l_1T0H" ; "HTX_BKGNP_VJETS_XS_0l_0T1H" ; "HTX_BKGNP_VJETS_XS_0l_1T1H" ; "HTX_BKGNP_VJETS_XS_0l_2T0_1H" ; "HTX_BKGNP_VJETS_XS_0l_0T2H" ; "HTX_BKGNP_VJETS_XS_0l_2TH"
-  Title: "V-jets norm. (0l,0T,0H)" ; "V-jets norm. (0l,1T,0H)" ; "V-jets norm. (0l,0T,1H)" ; "V-jets norm. (0l,1T,1H)" ; "V-jets norm. (0l,#geq2T,0-1H)" ; "V-jets norm. (0l,#geq0T,#geq2H)" ; "V-jets norm. (0l,#geq2TH)"
-  Type: OVERALL
-  Category: "Background uncertainties"
-  OverallUp: 0.30
-  OverallDown: -0.30
-  Samples: Wjetslight,Zjetslight,Wjetscharm,Zjetscharm,Wjetsbeauty,Zjetsbeauty
-  Regions: HTX_c0lep0Tex0Hex*;HTX_c0lep1Tex0Hex*;HTX_c0lep0Tex1Hex*;HTX_c0lep1Tex1Hex*;HTX_c0lep2Tin0_1Hwin*;HTX_c0lep0Tin2Hin*;HTX_c0lep2TH*
-
-% ---------------------------------------- %
-% --------  V+jets charm (0-lep)  -------- %
-% ---------------------------------------- %
-
-Systematic: "HTX_BKGNP_VJETSCC_XS_0l_0T0H" ; "HTX_BKGNP_VJETSCC_XS_0l_1T0H" ; "HTX_BKGNP_VJETSCC_XS_0l_0T1H" ; "HTX_BKGNP_VJETSCC_XS_0l_1T1H" ; "HTX_BKGNP_VJETSCC_XS_0l_2T0_1H" ; "HTX_BKGNP_VJETSCC_XS_0l_0T2H" ; "HTX_BKGNP_VJETSCC_XS_0l_2TH"
-  Title: "V+charm-jets norm. (0l,0T,0H)" ; "V+charm-jets norm. (0l,1T,0H)" ; "V+charm-jets norm. (0l,0T,1H)" ; "V+charm-jets norm. (0l,1T,1H)" ; "V+charm-jets norm. (0l,#geq2T,0-1H)" ; "V+charm-jets norm. (0l,#geq0T,#geq2H)" ; "V+charm-jets norm. (0l,#geq2TH)"
-  Type: OVERALL
-  Category: "Background uncertainties"
-  OverallUp: 0.30
-  OverallDown: -0.30
-  Samples: Wjetscharm,Zjetscharm
-  Regions: HTX_c0lep0Tex0Hex*;HTX_c0lep1Tex0Hex*;HTX_c0lep0Tex1Hex*;HTX_c0lep1Tex1Hex*;HTX_c0lep2Tin0_1Hwin*;HTX_c0lep0Tin2Hin*;HTX_c0lep2TH*
-
-% ---------------------------------------- %
-% --------  V+jets beauty (0-lep)  -------- %
-% ---------------------------------------- %
-
-Systematic: "HTX_BKGNP_VJETSBB_XS_0l_0T0H" ; "HTX_BKGNP_VJETSBB_XS_0l_1T0H" ; "HTX_BKGNP_VJETSBB_XS_0l_0T1H" ; "HTX_BKGNP_VJETSBB_XS_0l_1T1H" ; "HTX_BKGNP_VJETSBB_XS_0l_2T0_1H" ; "HTX_BKGNP_VJETSBB_XS_0l_0T2H" ; "HTX_BKGNP_VJETSBB_XS_0l_2TH"
-  Title: "V+b-jets norm. (0l,0T,0H)" ; "V+b-jets norm. (0l,1T,0H)" ; "V+b-jets norm. (0l,0T,1H)" ; "V+b-jets norm. (0l,1T,1H)" ; "V+b-jets norm. (0l,#geq2T,0-1H)" ; "V+b-jets norm. (0l,#geq0T,#geq2H)" ; "V+b-jets norm. (0l,#geq2TH)"
-  Type: OVERALL
-  Category: "Background uncertainties"
-  OverallUp: 0.30
-  OverallDown: -0.30
-  Samples: Wjetsbeauty,Zjetsbeauty
-  Regions: HTX_c0lep0Tex0Hex*;HTX_c0lep1Tex0Hex*;HTX_c0lep0Tex1Hex*;HTX_c0lep1Tex1Hex*;HTX_c0lep2Tin0_1Hwin*;HTX_c0lep0Tin2Hin*;HTX_c0lep2TH*
 
 % -------------------------------------- %
 % --------  Dibosons (1-lep)  ---------- %
 % -------------------------------------- %
 
-Systematic: "HTX_BKGNP_OTHERS_Dibosons_XS_1l_0T0H" ; "HTX_BKGNP_OTHERS_Dibosons_XS_1l_1T0H" ; "HTX_BKGNP_OTHERS_Dibosons_XS_1l_0T1H" ; "HTX_BKGNP_OTHERS_Dibosons_XS_1l_1T1H" ; "HTX_BKGNP_OTHERS_Dibosons_XS_1l_2T0_1H" ; "HTX_BKGNP_OTHERS_Dibosons_XS_1l_0T2H" ; "HTX_BKGNP_OTHERS_Dibosons_XS_1l_2TH"
-  Title: "Dibosons norm. (1l,0T,0H)" ; "Dibosons norm. (1l,1T,0H)" ; "Dibosons norm. (1l,0T,1H)" ; "Dibosons norm. (1l,1T,1H)" ; "Dibosons norm. (1l,#geq2T,0-1H)" ; "Dibosons norm. (1l,#geq0T,#geq2H)" ; "Dibosons norm. (1l,#geq2TH)"
+Systematic: "HTX_BKGNP_OTHERS_Dibosons_XS_LJ1b" ; "HTX_BKGNP_OTHERS_Dibosons_XS_LJ2b" ; "HTX_BKGNP_OTHERS_Dibosons_XS_LJ3b" ; "HTX_BKGNP_OTHERS_Dibosons_XS_LJ4b" ; "HTX_BKGNP_OTHERS_Dibosons_XS_HJ1b" ; "HTX_BKGNP_OTHERS_Dibosons_XS_HJ2b" ; "HTX_BKGNP_OTHERS_Dibosons_XS_HJ3b" ; "HTX_BKGNP_OTHERS_Dibosons_XS_HJ4b"
+  Title: "Dibosons norm. (3-5j,1b)" ; "Dibosons norm. (3-5j,2b)" ; "Dibosons norm. (3-5j,3b)" ; "Dibosons norm. (3-5j,4b)" ; "Dibosons norm. (6j,1b)" ; "Dibosons norm. (6j,2b)" ; "Dibosons norm. (6j,3b)" ; "Dibosons norm. (6j,4b)" 
   Type: OVERALL
   Category: "Background uncertainties"
   OverallUp: 0.48
   OverallDown: -0.48
   Samples: Dibosons
-  Regions: HTX_c1lep0Tex0Hex*;HTX_c1lep1Tex0Hex*;HTX_c1lep0Tex1Hex*;HTX_c1lep1Tex1Hex*;HTX_c1lep2Tin0_1Hwin*;HTX_c1lep0Tin2Hin*;HTX_c1lep2TH*
-
-% -------------------------------------- %
-% --------  Dibosons (0-lep)  ---------- %
-% -------------------------------------- %
-
-Systematic: "HTX_BKGNP_OTHERS_Dibosons_XS_0l_0T0H" ; "HTX_BKGNP_OTHERS_Dibosons_XS_0l_1T0H" ; "HTX_BKGNP_OTHERS_Dibosons_XS_0l_0T1H" ; "HTX_BKGNP_OTHERS_Dibosons_XS_0l_1T1H" ; "HTX_BKGNP_OTHERS_Dibosons_XS_0l_2T0_1H" ; "HTX_BKGNP_OTHERS_Dibosons_XS_0l_0T2H" ; "HTX_BKGNP_OTHERS_Dibosons_XS_0l_2TH"
-  Title: "Dibosons norm. (0l,0T,0H)" ; "Dibosons norm. (0l,1T,0H)" ; "Dibosons norm. (0l,0T,1H)" ; "Dibosons norm. (0l,1T,1H)" ; "Dibosons norm. (0l,#geq2T,0-1H)" ; "Dibosons norm. (0l,#geq0T,#geq2H)" ; "Dibosons norm. (0l,#geq2TH)"
-  Type: OVERALL
-  Category: "Background uncertainties"
-  OverallUp: 0.48
-  OverallDown: -0.48
-  Samples: Dibosons
-  Regions: HTX_c0lep0Tex0Hex*;HTX_c0lep1Tex0Hex*;HTX_c0lep0Tex1Hex*;HTX_c0lep1Tex1Hex*;HTX_c0lep2Tin0_1Hwin*;HTX_c0lep0Tin2Hin*;HTX_c0lep2TH*
+  Regions: HTX_c1lep3_5jwin1bex*;HTX_c1lep3_5jwin2bex*;HTX_c1lep3_5jwin3bex*;HTX_c1lep3_5jwin4bin*;HTX_c1lep6jin1bex*;HTX_c1lep6jin2bex*;HTX_c1lep6jin3bex*;HTX_c1lep6jin4bin*
 
 % ---------------------------- %
 % --------  Top EW  ---------- %
 % ---------------------------- %
 
-Systematic: "HTX_BKGNP_OTHERS_TopEW_XS_0l"
-  Title: "topEW norm. (0l)"
+Systematic: "HTX_BKGNP_OTHERS_TopEW_XS_LJ" ; "HTX_BKGNP_OTHERS_TopEW_XS_HJ"
+  Title: "topEW norm. (3-5j)" ; "topEW norm. (6j)"
   Type: OVERALL
   Category: "Background uncertainties"
   OverallUp: 0.15
   OverallDown: -0.15
   Samples: topEW
-  Regions: HTX_c0lep*
-
-Systematic: "HTX_BKGNP_OTHERS_TopEW_XS_1l"
-  Title: "topEW norm. (1l)"
-  Type: OVERALL
-  Category: "Background uncertainties"
-  OverallUp: 0.15
-  OverallDown: -0.15
-  Samples: topEW
-  Regions: HTX_c1lep*
+  Regions: HTX_c1lep3_5jwin*;HTX_c1lep6jin*
 
 % ---------------------------- %
 % --------    ttH   ---------- %
 % ---------------------------- %
 
-Systematic: "HTX_BKGNP_OTHERS_ttH_XS_0l"
+Systematic: "HTX_BKGNP_OTHERS_ttH_XS"
   Title: "ttH norm. (0l)"
-  Type: OVERALL
-  Category: "Background uncertainties"
-  OverallUp: 0.09
-  OverallDown: -0.12
-  Samples: ttH
-  Regions: HTX_c0lep*
-
-Systematic: "HTX_BKGNP_OTHERS_ttH_XS_1l"
-  Title: "ttH norm. (1l)"
   Type: OVERALL
   Category: "Background uncertainties"
   OverallUp: 0.09
@@ -182,16 +95,7 @@ Systematic: "HTX_BKGNP_OTHERS_ttH_XS_1l"
 % --------  SM4tops  ---------- %
 % ----------------------------- %
 
-Systematic: "HTX_BKGNP_OTHERS_SM4tops_XS_0l"
-  Title: "SM 4tops norm. (0l)"
-  Type: OVERALL
-  Category: "Background uncertainties"
-  OverallUp: 0.3
-  OverallDown: -0.3
-  Samples: BackSM4tops
-  Regions: HTX_c0lep*
-
-Systematic: "HTX_BKGNP_OTHERS_SM4tops_XS_1l"
+Systematic: "HTX_BKGNP_OTHERS_SM4tops_XS"
   Title: "SM 4tops norm. (1l)"
   Type: OVERALL
   Category: "Background uncertainties"
@@ -204,68 +108,24 @@ Systematic: "HTX_BKGNP_OTHERS_SM4tops_XS_1l"
 % -------  Single-top  -------- %
 % ----------------------------- %
 
-Systematic: HTX_BKGNP_OTHERS_Singletop_XS_1lep_0Tex0Hex; HTX_BKGNP_OTHERS_Singletop_XS_1lep_1Tex0Hex; HTX_BKGNP_OTHERS_Singletop_XS_1lep_0Tex1Hex; HTX_BKGNP_OTHERS_Singletop_XS_1lep_1Tex1Hex; HTX_BKGNP_OTHERS_Singletop_XS_1lep_2Tin0_1Hwin; HTX_BKGNP_OTHERS_Singletop_XS_1lep_0Tin2Hin; HTX_BKGNP_OTHERS_Singletop_XS_1lep_2THin
-  Title: "Single-top norm. (1l, 0T, 0H)"; "Single-top norm. (1l, 1T, 0H)"; "Single-top norm. (1l, 0T, 1H)"; "Single-top norm. (1l, 1T, 1H)"; "Single-top norm. (1l, #geq2T,0-1H)"; "Single-top norm. (1l, #geq0T#geq2H)"; "Single-top norm. (1l, #geq2TH)"
+Systematic: HTX_BKGNP_OTHERS_Singletop_XS
+  Title: "Single-top norm."
   Type: OVERALL
   Category: "Background uncertainties"
   OverallUp: 0.2
   OverallDown: -0.2
   Samples: "Singletop"
-  Regions: HTX_c1lep0Tex0Hex6jin3bex,HTX_c1lep0Tex0Hex6jin4bin,HTX_c1lep0Tex0Hex5jex3bex,HTX_c1lep0Tex0Hex5jex4bin; HTX_c1lep1Tex0Hex6jin3bex,HTX_c1lep1Tex0Hex6jin4bin,HTX_c1lep1Tex0Hex5jex3bex,HTX_c1lep1Tex0Hex5jex4bin; HTX_c1lep0Tex1Hex6jin3bex,HTX_c1lep0Tex1Hex6jin4bin,HTX_c1lep0Tex1Hex5jex3bex,HTX_c1lep0Tex1Hex5jex4bin; HTX_c1lep1Tex1Hex6jin3bex,HTX_c1lep1Tex1Hex6jin4bin,HTX_c1lep1Tex1Hex5jex3bex; HTX_c1lep2Tin0_1Hwin6jin3bex,HTX_c1lep2Tin0_1Hwin6jin4bin,HTX_c1lep2Tin0_1Hwin5jex3bex; HTX_c1lep0Tin2Hin6jin3bex,HTX_c1lep0Tin2Hin6jin4bin,HTX_c1lep0Tin2Hin5jex3bex; HTX_c1lep2THin5jex4bin
-
-
-Systematic: HTX_BKGNP_OTHERS_Singletop_XS_0lepHighMtbmin_0Tex0Hex; HTX_BKGNP_OTHERS_Singletop_XS_0lepHighMtbmin_1Tex0Hex; HTX_BKGNP_OTHERS_Singletop_XS_0lepHighMtbmin_0Tex1Hex; HTX_BKGNP_OTHERS_Singletop_XS_0lepHighMtbmin_1Tex1Hex; HTX_BKGNP_OTHERS_Singletop_XS_0lepHighMtbmin_2Tin0_1Hwin; HTX_BKGNP_OTHERS_Singletop_XS_0lepHighMtbmin_2THin
-  Title: "Single-top norm. (0l, 0T, 0H, HM)"; "Single-top norm. (0l, 1T, 0H, HM)"; "Single-top norm. (0l, 0T, 1H, HM)"; "Single-top norm. (0l, 1T, 1H, HM)"; "Single-top norm. (0l, #geq2T,0-1H, HM)"; "Single-top norm. (0l, #geq2TH, HM)"
-  Type: OVERALL
-  Category: "Background uncertainties"
-  OverallUp: 0.25
-  OverallDown: -0.25
-  Samples: "Singletop"
-  Regions: HTX_c0lep0Tex0Hex7jin2bexHighMtbmin,HTX_c0lep0Tex0Hex7jin3bexHighMtbmin,HTX_c0lep0Tex0Hex7jin4binHighMtbmin,HTX_c0lep0Tex0Hex6jex2bexHighMtbmin,HTX_c0lep0Tex0Hex6jex3bexHighMtbmin,HTX_c0lep0Tex0Hex6jex4binHighMtbmin; HTX_c0lep1Tex0Hex7jin2bexHighMtbmin,HTX_c0lep1Tex0Hex7jin3bexHighMtbmin,HTX_c0lep1Tex0Hex7jin4binHighMtbmin,HTX_c0lep1Tex0Hex6jex2bexHighMtbmin,HTX_c0lep1Tex0Hex6jex3bexHighMtbmin; HTX_c0lep0Tex1Hex7jin2bexHighMtbmin,HTX_c0lep0Tex1Hex7jin3bexHighMtbmin,HTX_c0lep0Tex1Hex7jin4binHighMtbmin,HTX_c0lep0Tex1Hex6jex2bexHighMtbmin,HTX_c0lep0Tex1Hex6jex3bexHighMtbmin; HTX_c0lep1Tex1Hex7jin3bexHighMtbmin; HTX_c0lep2Tin0_1Hwin7jin3bexHighMtbmin; HTX_c0lep2THin7jin2bexHighMtbmin,HTX_c0lep2THin6jex2bexHighMtbmin
-
-
-Systematic: HTX_BKGNP_OTHERS_Singletop_XS_0lepLowMtbmin_0Tex0Hex; HTX_BKGNP_OTHERS_Singletop_XS_0lepLowMtbmin_1Tex0Hex; HTX_BKGNP_OTHERS_Singletop_XS_0lepLowMtbmin_0Tex1Hex; HTX_BKGNP_OTHERS_Singletop_XS_0lepLowMtbmin_1Tex1Hex; HTX_BKGNP_OTHERS_Singletop_XS_0lepLowMtbmin_2Tin0_1Hwin
-  Title: "Single-top norm. (0l, 0T, 0H, LM)"; "Single-top norm. (0l, 1T, 0H, LM)"; "Single-top norm. (0l, 0T, 1H, LM)"; "Single-top norm. (0l, 1T, 1H, LM)"; "Single-top norm. (0l, #geq2T, 0-1H, LM)"
-  Type: OVERALL
-  Category: "Background uncertainties"
-  OverallUp: 0.2
-  OverallDown: -0.2
-  Samples: "Singletop"
-  Regions: HTX_c0lep0Tex0Hex7jin3bexLowMtbmin,HTX_c0lep0Tex0Hex7jin4binLowMtbmin,HTX_c0lep0Tex0Hex6jex3bexLowMtbmin,HTX_c0lep0Tex0Hex6jex4binLowMtbmin; HTX_c0lep1Tex0Hex7jin3bexLowMtbmin,HTX_c0lep1Tex0Hex7jin4binLowMtbmin,HTX_c0lep1Tex0Hex6jex3bexLowMtbmin; HTX_c0lep0Tex1Hex7jin3bexLowMtbmin,HTX_c0lep0Tex1Hex7jin4binLowMtbmin,HTX_c0lep0Tex1Hex6jex3bexLowMtbmin; HTX_c0lep1Tex1Hex7jin3bexLowMtbmin; HTX_c0lep2Tin0_1Hwin7jin3bexLowMtbmin
-
-
-Systematic: HTX_BKGNP_OTHERS_Singletop_XS_0lepOther_1Tex0Hex; HTX_BKGNP_OTHERS_Singletop_XS_0lepOther_0Tex1Hex; HTX_BKGNP_OTHERS_Singletop_XS_0lepOther_0Tin2Hin; HTX_BKGNP_OTHERS_Singletop_XS_0lepOther_2THin
-  Title: "Single-top norm. (0l, 1T, 0H)"; "Single-top norm. (0l, 0T, 1H)"; "Single-top norm. (0l, #geq0T#geq2H)"; "Single-top norm. (0l, #geq2TH)"
-  Type: OVERALL
-  Category: "Background uncertainties"
-  OverallUp: 0.2
-  OverallDown: -0.2
-  Samples: "Singletop"
-  Regions: HTX_c0lep1Tex0Hex6jex4bin; HTX_c0lep0Tex1Hex6jex4bin; HTX_c0lep0Tin2Hin7jin3bex; HTX_c0lep2THin7jin4bin,HTX_c0lep2THin6jex3bex,HTX_c0lep2THin6jex4bin
-
-% ------------------------- %
-% --------  QCD0L  -------- %
-% ------------------------- %
-
-Systematic: HTX_BKGNP_OTHERS_QCD0L_XS_0lepHighMtbmin_0Tex0Hex; HTX_BKGNP_OTHERS_QCD0L_XS_0lepHighMtbmin_1Tex0Hex; HTX_BKGNP_OTHERS_QCD0L_XS_0lepHighMtbmin_0Tex1Hex; HTX_BKGNP_OTHERS_QCD0L_XS_0lepHighMtbmin_1Tex1Hex; HTX_BKGNP_OTHERS_QCD0L_XS_0lepHighMtbmin_2Tin0_1Hwin; HTX_BKGNP_OTHERS_QCD0L_XS_0lepHighMtbmin_2THin; HTX_BKGNP_OTHERS_QCD0L_XS_0lepLowMtbmin_0Tex0Hex; HTX_BKGNP_OTHERS_QCD0L_XS_0lepLowMtbmin_1Tex0Hex; HTX_BKGNP_OTHERS_QCD0L_XS_0lepLowMtbmin_0Tex1Hex; HTX_BKGNP_OTHERS_QCD0L_XS_0lepLowMtbmin_1Tex1Hex; HTX_BKGNP_OTHERS_QCD0L_XS_0lepLowMtbmin_2Tin0_1Hwin; HTX_BKGNP_OTHERS_QCD0L_XS_0lepOther_1Tex0Hex; HTX_BKGNP_OTHERS_QCD0L_XS_0lepOther_0Tex1Hex; HTX_BKGNP_OTHERS_QCD0L_XS_0lepOther_0Tin2Hin; HTX_BKGNP_OTHERS_QCD0L_XS_0lepOther_2THin
-  Title: "QCD norm. (0l, 0T, 0H, HM)"; "QCD norm. (0l, 1T, 0H, HM)"; "QCD norm. (0l, 0T, 1H, HM)"; "QCD norm. (0l, 1T, 1H, HM)"; "QCD norm. (0l, #geq2T,0-1H, HM)"; "QCD norm. (0l, #geq2TH, HM)"; "QCD norm. (0l, 0T, 0H, LM)"; "QCD norm. (0l, 1T, 0H, LM)"; "QCD norm. (0l, 0T, 1H, LM)"; "QCD norm. (0l, 1T, 1H, LM)"; "QCD norm. (0l, #geq2T, 0-1H, LM)"; "QCD norm. (0l, 1T, 0H)"; "QCD norm. (0l, 0T, 1H)"; "QCD norm. (0l, #geq0T#geq2H)"; "QCD norm. (0l, #geq2TH)"
-  Type: OVERALL
-  Category: "Background uncertainties"
-  OverallUp: 1.0
-  OverallDown: -1.0
-  Samples: "QCD0L"
-  Regions: HTX_c0lep0Tex0Hex7jin2bexHighMtbmin,HTX_c0lep0Tex0Hex7jin3bexHighMtbmin,HTX_c0lep0Tex0Hex7jin4binHighMtbmin,HTX_c0lep0Tex0Hex6jex2bexHighMtbmin,HTX_c0lep0Tex0Hex6jex3bexHighMtbmin,HTX_c0lep0Tex0Hex6jex4binHighMtbmin; HTX_c0lep1Tex0Hex7jin2bexHighMtbmin,HTX_c0lep1Tex0Hex7jin3bexHighMtbmin,HTX_c0lep1Tex0Hex7jin4binHighMtbmin,HTX_c0lep1Tex0Hex6jex2bexHighMtbmin,HTX_c0lep1Tex0Hex6jex3bexHighMtbmin; HTX_c0lep0Tex1Hex7jin2bexHighMtbmin,HTX_c0lep0Tex1Hex7jin3bexHighMtbmin,HTX_c0lep0Tex1Hex7jin4binHighMtbmin,HTX_c0lep0Tex1Hex6jex2bexHighMtbmin,HTX_c0lep0Tex1Hex6jex3bexHighMtbmin; HTX_c0lep1Tex1Hex7jin3bexHighMtbmin; HTX_c0lep2Tin0_1Hwin7jin3bexHighMtbmin; HTX_c0lep2THin7jin2bexHighMtbmin,HTX_c0lep2THin6jex2bexHighMtbmin; HTX_c0lep0Tex0Hex7jin3bexLowMtbmin,HTX_c0lep0Tex0Hex7jin4binLowMtbmin,HTX_c0lep0Tex0Hex6jex3bexLowMtbmin,HTX_c0lep0Tex0Hex6jex4binLowMtbmin; HTX_c0lep1Tex0Hex7jin3bexLowMtbmin,HTX_c0lep1Tex0Hex7jin4binLowMtbmin,HTX_c0lep1Tex0Hex6jex3bexLowMtbmin; HTX_c0lep0Tex1Hex7jin3bexLowMtbmin,HTX_c0lep0Tex1Hex7jin4binLowMtbmin,HTX_c0lep0Tex1Hex6jex3bexLowMtbmin; HTX_c0lep1Tex1Hex7jin3bexLowMtbmin; HTX_c0lep2Tin0_1Hwin7jin3bexLowMtbmin; HTX_c0lep1Tex0Hex6jex4bin; HTX_c0lep0Tex1Hex6jex4bin; HTX_c0lep0Tin2Hin7jin3bex; HTX_c0lep2THin7jin4bin,HTX_c0lep2THin6jex3bex,HTX_c0lep2THin6jex4bin
-
+  Regions: HTX_c1lep*
 
 % ------------------------- %
 % -----  MET trigger  ----- %
 % ------------------------- %
 
-Systematic: HTX_MET_TRIGGER_0L
+Systematic: HTX_MET_TRIGGER_1L
   Title: "MET trigger uncertainty"
   Type: OVERALL
   Category: Others
   OverallUp: 0.02
   OverallDown: -0.02
-  Exclude: QCD0L,QCD
-  Regions: HTX_c0lep*
+%  Exclude: QCD0L,QCD
+  Regions: HTX_c1lep*

@@ -124,7 +124,8 @@ else:
 
 #ttbar systematics
 if(ttbarSyst):
-    Samples += GetTtbarSamples( useObjectSyst=False, hfSplitted = True, ttbarSystSamples = True )
+    for mc_campaign in campaigns:
+        Samples += GetTtbarSamples( useObjectSyst=False, hfSplitted = True, ttbarSystSamples = True, campaign=mc_campaign )
 else:
     #-- Data
     if(useData):

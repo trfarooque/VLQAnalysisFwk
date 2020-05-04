@@ -365,7 +365,10 @@ for counter,sample in enumerate(Signals):
         for systfile in systConfig:
             f_templateSysts = open(systfile,'r')
             for systLine in f_templateSysts:
-                f_adapted.write(systLine)
+                corrected_systLine = systLine
+                for arg in _ARGUMENTS_:
+                    corrected_systLine = corrected_systLine.replace(arg['arg'],arg['value'])
+                f_adapted.write(corrected_systLine)
             f_adapted.write("\n")
 
         f_adapted.write(" \n")

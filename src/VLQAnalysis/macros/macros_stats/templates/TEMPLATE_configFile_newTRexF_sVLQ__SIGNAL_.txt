@@ -53,6 +53,78 @@ _REGIONLIST_
 % --------  SAMPLES  -------- %
 % --------------------------- %
 
+Sample: "ttbarlight_AFII"
+Title: "t#bar{t}+light-jets"
+Type: GHOST
+FillColor: 0
+LineColor: 1
+HistoFiles: TtbarAlt/ttbarlight.mc16a,TtbarAlt/ttbarlight.mc16d,TtbarAlt/ttbarlight.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "ttbarcc_AFII"
+Title: "t#bar{t}+#geq1c"
+Type: GHOST
+FillColor: 590
+LineColor: 1
+HistoFiles: TtbarAlt/ttbarcc.mc16a,TtbarAlt/ttbarcc.mc16d,TtbarAlt/ttbarcc.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "ttbarbb_AFII"
+Title: "t#bar{t}+#geq1b"
+Type: GHOST
+FillColor: 594
+LineColor: 1
+HistoFiles: TtbarAlt/ttbarbb.mc16a,TtbarAlt/ttbarbb.mc16d,TtbarAlt/ttbarbb.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "ttbarlight_aMCPy"
+Title: "t#bar{t}+light-jets"
+Type: GHOST
+FillColor: 0
+LineColor: 1
+HistoFiles: TtbarAlt/ttbarlightaMCPy.mc16a,TtbarAlt/ttbarlightaMCPy.mc16d,TtbarAlt/ttbarlightaMCPy.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "ttbarcc_aMCPy"
+Title: "t#bar{t}+#geq1c"
+Type: GHOST
+FillColor: 590
+LineColor: 1
+HistoFiles: TtbarAlt/ttbarccaMCPy.mc16a,TtbarAlt/ttbarccaMCPy.mc16d,TtbarAlt/ttbarccaMCPy.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "ttbarbb_aMCPy"
+Title: "t#bar{t}+#geq1b"
+Type: GHOST
+FillColor: 594
+LineColor: 1
+HistoFiles: TtbarAlt/ttbarbbaMCPy.mc16a,TtbarAlt/ttbarbbaMCPy.mc16d,TtbarAlt/ttbarbbaMCPy.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "ttbarlight_PowHer"
+Title: "t#bar{t}+light-jets"
+Type: GHOST
+FillColor: 0
+LineColor: 1
+HistoFiles: TtbarAlt/ttbarlightPowHer.mc16a,TtbarAlt/ttbarlightPowHer.mc16d,TtbarAlt/ttbarlightPowHer.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "ttbarcc_PowHer"
+Title: "t#bar{t}+#geq1c"
+Type: GHOST
+FillColor: 590
+LineColor: 1
+HistoFiles: TtbarAlt/ttbarccPowHer.mc16a,TtbarAlt/ttbarccPowHer.mc16d,TtbarAlt/ttbarccPowHer.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "ttbarbb_PowHer"
+Title: "t#bar{t}+#geq1b"
+Type: GHOST
+FillColor: 594
+LineColor: 1
+HistoFiles: TtbarAlt/ttbarbbPowHer.mc16a,TtbarAlt/ttbarbbPowHer.mc16d,TtbarAlt/ttbarbbPowHer.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+
 Sample: "ttbarlight"
 Title: "t#bar{t}+light-jets"
 Type: background
@@ -209,10 +281,3 @@ Group: Non-t#bar{t}
 #Group: Non-t#bar{t}
 #NormalizedByTheory: FALSE
 #Regions: HTX_c0lep*
-
-#NormFactor: HTX_BKGNORM_TTBARBB
-#Title: t#bar{t}+#geq1b normalisation
-#Nominal: 1
-#Min: -10
-#Max: 10
-#Samples: ttbarbb
