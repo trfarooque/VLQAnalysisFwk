@@ -41,3 +41,48 @@ Systematic: "HTX_BKGNP_SINGLETOP_FSR_MURF"
   Symmetrisation: TwoSided
   Smoothing: 40
   Samples: Singletop
+
+
+% -------------------------------------------------- %
+% ------   SINGLETOP PMG WEIGHTS SYSTEMATICS  ------ %
+% -------------------------------------------------- %
+
+%Systematic: "HTX_BKGNP_SINGLETOP_WT_ISR_VAR3C" ; "HTX_BKGNP_SINGLETOP_SCHAN_ISR_VAR3C" ; "HTX_BKGNP_SINGLETOP_TCHAN_ISR_VAR3C"
+%  Title: "Single-top Wt isr Var3c" ; "Single-top s-channel isr Var3c" ; "Single-top t-channel isr Var3c"
+%  Type: HISTO
+%  Category: "Single-top uncertainties"
+%  HistoNameSufUp: _weight_pmg_Var3cUp
+%  HistoNameSufDown: _weight_pmg_Var3cDown
+%  Symmetrisation: TwoSided
+%  Smoothing: 40
+%  Samples: singletopWtprod;singletopschan;singletoptchan
+%
+%Systematic: "HTX_BKGNP_SINGLETOP_WT_ISR_MUR" ; "HTX_BKGNP_SINGLETOP_SCHAN_ISR_MUR" ; "HTX_BKGNP_SINGLETOP_TCHAN_ISR_MUR"
+%  Title: "Single-top Wt isr #mu_{R}" ; "Single-top s-channel isr #mu_{R}" ; "Single-top t-channel isr #mu_{R}"
+%  Type: HISTO
+%  Category: "Single-top uncertainties"
+%  HistoNameSufUp: _weight_pmg_muR200__muF100
+%  HistoNameSufDown: _weight_pmg_muR050__muF100
+%  Symmetrisation: TwoSided
+%  Smoothing: 40
+%  Samples: singletopWtprod;singletopschan;singletoptchan
+%
+%Systematic: "HTX_BKGNP_SINGLETOP_WT_ISR_MUF" ; "HTX_BKGNP_SINGLETOP_SCHAN_ISR_MUF" ; "HTX_BKGNP_SINGLETOP_TCHAN_ISR_MUF"
+%  Title: "Single-top Wt isr #mu_{F}" ; "Single-top s-channel isr #mu_{F}" ; "Single-top t-channel isr #mu_{F}"
+%  Type: HISTO
+%  Category: "Single-top uncertainties"
+%  HistoNameSufUp: _weight_pmg_muR100__muF200
+%  HistoNameSufDown: _weight_pmg_muR100__muF050
+%  Symmetrisation: TwoSided
+%  Smoothing: 40
+%  Samples: singletopWtprod;singletopschan;singletoptchan
+%
+%Systematic: "HTX_BKGNP_SINGLETOP_WT_FSR_MURF" ; "HTX_BKGNP_SINGLETOP_SCHAN_FSR_MURF" ; "HTX_BKGNP_SINGLETOP_TCHAN_FSR_MURF"
+%  Title: "Single-top Wt fsr #mu_{R/F}" ; "Single-top s-channel fsr #mu_{R/F}" ; "Single-top t-channel fsr #mu_{R/F}"
+%  Type: HISTO
+%  Category: "Single-top uncertainties"
+%  HistoNameSufUp: _weight_pmg_isr_muRfac10__fsr_muRfac20
+%  HistoNameSufDown: _weight_pmg_isr_muRfac10__fsr_muRfac05
+%  Symmetrisation: TwoSided
+%  Smoothing: 40
+%  Samples: singletopWtprod;singletopschan;singletoptchan
