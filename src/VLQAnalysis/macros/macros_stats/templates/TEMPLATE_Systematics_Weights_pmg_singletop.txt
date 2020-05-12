@@ -16,8 +16,8 @@ Systematic: "HTX_BKGNP_SINGLETOP_WT_ISR_MUR" ; "HTX_BKGNP_SINGLETOP_SCHAN_ISR_MU
   Title: "Single-top Wt isr #mu_{R}" ; "Single-top s-channel isr #mu_{R}" ; "Single-top t-channel isr #mu_{R}"
   Type: HISTO
   Category: "Single-top uncertainties"
-  HistoNameSufUp: _weight_pmg_muR20__muF10
-  HistoNameSufDown: _weight_pmg_muR05__muF10
+  HistoNameSufUp: _weight_pmg_muR200__muF100
+  HistoNameSufDown: _weight_pmg_muR050__muF100
   Symmetrisation: TwoSided
   Smoothing: 40
   Samples: singletopWtprod;singletopschan;singletoptchan
@@ -26,8 +26,8 @@ Systematic: "HTX_BKGNP_SINGLETOP_WT_ISR_MUF" ; "HTX_BKGNP_SINGLETOP_SCHAN_ISR_MU
   Title: "Single-top Wt isr #mu_{F}" ; "Single-top s-channel isr #mu_{F}" ; "Single-top t-channel isr #mu_{F}"
   Type: HISTO
   Category: "Single-top uncertainties"
-  HistoNameSufUp: _weight_pmg_muR10__muF20
-  HistoNameSufDown: _weight_pmg_muR10__muF05
+  HistoNameSufUp: _weight_pmg_muR100__muF200
+  HistoNameSufDown: _weight_pmg_muR100__muF050
   Symmetrisation: TwoSided
   Smoothing: 40
   Samples: singletopWtprod;singletopschan;singletoptchan
