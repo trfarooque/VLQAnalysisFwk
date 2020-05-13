@@ -4,16 +4,16 @@ import sys
 import importlib
 
 # default params
-indir  = '/nfs/pic.es/user/t/tvdaalen/scratch2/SingleVLQWorkArea/RootFiles/RootFiles_Singletop_UncTest_FitInputs/'
+indir  = '/nfs/pic.es/user/t/tvdaalen/scratch2/SingleVLQWorkArea/RootFiles/RootFiles_Singletop_UncTest_FitInputs/EXTRAPOLATED/'
 indir_alt = indir+'SingletopAlt/'
 var = 'meff'
 regDict = "regions_dictionary_sVLQ"
 
 backupOldFiles = True
-startFromBackup = True
+startFromBackup = False
 
-doPMGweights = False
-doModSysts = True
+doPMGweights = True
+doModSysts = False
 
 samples = ['Singletop'] #SingletopWtprod','Singletopschan','Singletoptchan']
 
@@ -98,11 +98,12 @@ for campaign in ['a','d','e']:
 
         if doPMGweights:
 
-            outf = TFile(fname, 'update')
-            outf.cd()
-
             # loop through histograms and replace
             for fr in fitRegions:
+
+                outf = TFile(fname, 'update')
+                outf.cd()
+
                 # doing pmg weight histogram replacing
                 # we are replacing h_sys_SR by h_nom_SR * h_sys_loose / h_nom_loose
 
@@ -122,6 +123,7 @@ for campaign in ['a','d','e']:
                     try:
                         h_nom_SR = outf.Get(fr+'_'+var)
 
+                        # write the nominal histogram instead if it's empty
                         if emptyhist:
                             h_nom_SR.Write(fr+'_'+var+suf)
                             continue
@@ -131,11 +133,16 @@ for campaign in ['a','d','e']:
                             h_sys_loose = outf.Get(regMap[fr]+'_'+var+suf)
                             h_sys_loose.Divide(h_nom_loose)
                             h_nom_SR.Multiply(h_sys_loose)
+
+                            print '\n',sample, 'mc16'+campaign, suf, fr
+                            print 'h_pmg_new:\t', h_nom_SR.Integral()
                             h_nom_SR.Write(fr+'_'+var+suf)
 
                     except ReferenceError:
                         print "Could not find histogram(s) for %s. Skipping..."%(fr)
                         continue
+
+                outf.Close()
 
         if doModSysts:
 
@@ -155,7 +162,7 @@ for campaign in ['a','d','e']:
                     fname_short_AFII = sample+'.mc16'+campaign+'.root'
                     fname_AFII = indir+fname_short_AFII
 
-                fname_alt_short = sample+'_'+mod+'.mc16'+campaign+'.root'
+                fname_alt_short = sample+mod+'.mc16'+campaign+'.root'
                 fname_alt = indir_alt+fname_alt_short
 
                 # check if file exists
