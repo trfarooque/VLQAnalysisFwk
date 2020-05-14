@@ -8,7 +8,7 @@ import importlib
 indir  = '/nfs/pic.es/user/t/tvdaalen/scratch2/SingleVLQWorkArea/RootFiles/RootFiles_Singletop_UncTest_FitInputs/EXTRAPOLATED_2_STonly/'
 indir_alt = indir+'SingletopAlt/'
 var = 'meff'
-regDict = "regions_dictionary_sVLQ"
+regDict = "regions_dictionary_sVLQ_STextrap"
 
 backupOldFiles = True
 startFromBackup = False
@@ -41,12 +41,16 @@ if backupOldFiles:
     backupDir = indir+'Backups'
     os.system('mkdir -p %s'%(backupDir))
 
+looseRegs = ['c1lep3_5jwin1_2bwin1VLTHin','c1lep3_5jwin3bin1VLTHin','c1lep6jin1_2bwin1VLTHin','c1lep6jin3bin1VLTHin']
+
 # retrieve fit regions
 regModule = importlib.import_module(regDict)
 fitRegions = []
 binningDict = {}
 for fr in regModule.fit_regions_1l:
     frname = fr['name'].replace('HTX_','')
+    if frname in looseRegs:
+        continue
     fitRegions.append(frname)
     binningDict[frname] = np.array([int(b) for b in fr['binning'].split(',')],'double')
 
@@ -63,6 +67,7 @@ for fr in fitRegions:
             regMap[fr] = 'c1lep6jin1_2bwin1VLTHin'
         elif '3bex' in fr or '4bin' in fr:
             regMap[fr] = 'c1lep6jin3bin1VLTHin'
+
 
 # pmg weight names
 histoSuffixes = ['_weight_pmg_Var3cUp',
@@ -118,7 +123,6 @@ for campaign in ['a','d','e']:
                 # set uncertainties to 0 if histogram has no events
                 emptyhist = False
                 try:
-                    # h_nom_SR = outf.Get(fr+'_'+var)
                     h_nom_SR = LoadBinnedHist(outf,fr+'_'+var,fr)
                     if h_nom_SR.Integral() == 0.:
                         print "\nRegion %s is empty in sample %s. Setting uncertainties to 0.0!"%(fr,fname_short)
@@ -130,7 +134,6 @@ for campaign in ['a','d','e']:
                                 
                 for suf in histoSuffixes:
                     try:
-                        # h_nom_SR = outf.Get(fr+'_'+var)
                         h_nom_SR = LoadBinnedHist(outf,fr+'_'+var,fr)
 
                         # write the nominal histogram instead if it's empty
@@ -139,10 +142,8 @@ for campaign in ['a','d','e']:
                             continue
 
                         else:
-                            # h_nom_loose = outf.Get(regMap[fr]+'_'+var)
                             # load loose hist with same binning as region to extrapolate to
                             h_nom_loose = LoadBinnedHist(outf,regMap[fr]+'_'+var,fr)
-                            # h_sys_loose = outf.Get(regMap[fr]+'_'+var+suf)
                             h_sys_loose = LoadBinnedHist(outf,regMap[fr]+'_'+var+suf,fr)
 
                             h_sys_loose.Divide(h_nom_loose)
@@ -205,7 +206,6 @@ for campaign in ['a','d','e']:
                     # set uncertainties to 0 if histogram has no events
                     emptyhist = False
                     try:
-                        # h_nom_SR = outf.Get(nameSR)
                         h_nom_SR = LoadBinnedHist(outf,nameSR,fr)
                         if h_nom_SR.Integral() == 0.:
                             print "\nRegion %s is empty in sample %s. Setting uncertainties to 0.0!"%(fr,fname_short_AFII)
@@ -218,10 +218,8 @@ for campaign in ['a','d','e']:
                     try:
                         outf.cd()
 
-                        # h_nom_SR = outf.Get(nameSR).Clone()
                         h_nom_SR = LoadBinnedHist(outf,nameSR,fr)
                         h_nom_SR_OriginalIntegral = h_nom_SR.Integral()
-                        # h_nom_loose = outf.Get(nameLoose)
                         h_nom_loose = LoadBinnedHist(outf,nameLoose,fr)
 
                         outf_alt = TFile(fname_alt, 'update')
@@ -231,9 +229,7 @@ for campaign in ['a','d','e']:
                             h_nom_SR.Write(nameSR)
                             continue
 
-                        h_alt_loose = outf_alt.Get(nameLoose)
                         h_alt_loose = LoadBinnedHist(outf_alt,nameLoose,fr)
-                        # h_alt_SR = outf_alt.Get(nameSR)
                         h_alt_SR = LoadBinnedHist(outf_alt,nameSR,fr)
 
                         h_alt_loose.Divide(h_nom_loose)
@@ -242,7 +238,6 @@ for campaign in ['a','d','e']:
                         if h_nom_SR.Integral() == 0. or h_nom_SR.Integral() < 0.:
                             print '\nNew histogram integral <= 0 - Using nominal histogram as alt. instead...'
                             outf.cd()
-                            # h_nom_SR = outf.Get(nameSR).Clone()
                             h_nom_SR = LoadBinnedHist(outf,nameSR,fr)
 
                             outf_alt.cd()
