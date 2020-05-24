@@ -9,7 +9,7 @@ from ROOT import *
 sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/VLQAnalysis/" )
 from VLQ_Samples_mc import *
 
-regDict = "regions_dictionary_sVLQ"
+regDict = "regions_dictionary_sVLQ_VRmerge"
 regDict_blinded = regDict+"_blinded"
 doOneLep = True
 
@@ -37,10 +37,12 @@ if doOneLep:
         Regions += regModule.preselection_regions_1l
 
 # Setting up input files
-inputDir = '/nfs/pic.es/user/t/tvdaalen/scratch2/SingleVLQWorkArea/br_R21_master_Mar2020/VLQAnalysisFramework/fitinputs_blinding/'
+# inputDir = '/nfs/pic.es/user/t/tvdaalen/scratch2/SingleVLQWorkArea/br_R21_master_Mar2020/VLQAnalysisFramework/fitinputs_blinding_CRs/'
+inputDir = '/nfs/pic.es/user/t/tvdaalen/scratch2/SingleVLQWorkArea/RootFiles/RootFiles_VR_mergeStudies/'
 f_bkg = {'a':TFile(inputDir+'bkg.mc16a.root','read'),'d':TFile(inputDir+'bkg.mc16a.root','read'),'e':TFile(inputDir+'bkg.mc16a.root','read')}
 
-signals = ['sVLQ_WTHt16K05','sVLQ_WTHt20K05','sVLQ_WTZt16K05','sVLQ_WTZt20K05','sVLQ_ZTHt11K05','sVLQ_ZTHt16K05','sVLQ_ZTHt20K05','sVLQ_ZTZt11K05','sVLQ_ZTZt16K05','sVLQ_WTHt11K03','sVLQ_WTHt16K03','sVLQ_WTZt11K03','sVLQ_ZTHt16K03']
+# signals = ['sVLQ_WTHt16K05','sVLQ_WTHt20K05','sVLQ_WTZt16K05','sVLQ_WTZt20K05','sVLQ_ZTHt11K05','sVLQ_ZTHt16K05','sVLQ_ZTHt20K05','sVLQ_ZTZt11K05','sVLQ_ZTZt16K05','sVLQ_WTHt11K03','sVLQ_WTHt16K03','sVLQ_WTZt11K03','sVLQ_ZTHt16K03']
+signals = ['sVLQ_WTHt16K05','sVLQ_WTHt20K05','sVLQ_WTZt16K05','sVLQ_WTZt20K05','sVLQ_ZTHt11K05','sVLQ_ZTHt16K05','sVLQ_ZTHt20K05','sVLQ_ZTZt11K05','sVLQ_WTHt11K03','sVLQ_WTHt16K03','sVLQ_WTZt11K03','sVLQ_ZTHt16K03']
 
 # clean signals for 2 TeV samples
 signals  = [s for s in signals if not "20" in s]
@@ -97,6 +99,9 @@ for reg in Regions:
         SB = 0.0
 
         for campaign in ['a','d','e']:
+
+            # print hname
+
             this_h = f_bkg[campaign].Get(hname).Rebin(len(newbins_list)-1,hname+"_rebin",newbins).Clone()
             this_h.SetDirectory(0)
             binyield = scalings['bkg.mc16%s'%campaign] * this_h.GetBinContent(ibin+1)
