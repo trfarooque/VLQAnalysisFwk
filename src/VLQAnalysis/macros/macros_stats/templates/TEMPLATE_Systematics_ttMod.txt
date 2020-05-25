@@ -8,8 +8,8 @@ Systematic: "HTX_BKGNP_TTBARLIGHT_GEN" ; "HTX_BKGNP_TTBARBB_GEN" ; "HTX_BKGNP_TT
   Category: "t#bar{t} uncertainties"
   Symmetrisation: ONESIDED
   Smoothing: 40
-  SampleUp: ttbarlight_aMCPy ; ttbarbb_aMCPy ; ttbarcc_aMCPy
   Samples: ttbarlight;ttbarbb;ttbarcc
+  HistoFilesUp: TtbarAlt/ttbarlightaMCPy.mc16a,TtbarAlt/ttbarlightaMCPy.mc16d,TtbarAlt/ttbarlightaMCPy.mc16e ; TtbarAlt/ttbarccaMCPy.mc16a,TtbarAlt/ttbarccaMCPy.mc16d,TtbarAlt/ttbarccaMCPy.mc16e ; TtbarAlt/ttbarbbaMCPy.mc16a,TtbarAlt/ttbarbbaMCPy.mc16d,TtbarAlt/ttbarbbaMCPy.mc16e
   ReferenceSample: ttbarlight_AFII;ttbarbb_AFII;ttbarcc_AFII
 
 Systematic: "HTX_BKGNP_TTBARLIGHT_PS" ; "HTX_BKGNP_TTBARBB_PS" ; "HTX_BKGNP_TTBARCC_PS"
@@ -18,78 +18,6 @@ Systematic: "HTX_BKGNP_TTBARLIGHT_PS" ; "HTX_BKGNP_TTBARBB_PS" ; "HTX_BKGNP_TTBA
   Category: "t#bar{t} uncertainties"
   Symmetrisation: ONESIDED
   Smoothing: 40
-  SampleUp: ttbarlight_PowHer ; ttbarbb_PowHer ; ttbarcc_PowHer
+  HistoFilesUp: TtbarAlt/ttbarlightPowHer.mc16a,TtbarAlt/ttbarlightPowHer.mc16d,TtbarAlt/ttbarlightPowHer.mc16e ; TtbarAlt/ttbarccPowHer.mc16a,TtbarAlt/ttbarccPowHer.mc16d,TtbarAlt/ttbarccPowHer.mc16e ; TtbarAlt/ttbarbbPowHer.mc16a,TtbarAlt/ttbarbbPowHer.mc16d,TtbarAlt/ttbarbbPowHer.mc16e
   Samples: ttbarlight;ttbarbb;ttbarcc
   ReferenceSample: ttbarlight_AFII;ttbarbb_AFII;ttbarcc_AFII
-
-Sample: "ttbarlight_AFII"
-Title: "t#bar{t}+light-jets"
-Type: GHOST
-FillColor: 0
-LineColor: 1
-HistoFiles: ttbarlight_AFII.mc16a,ttbarlight_AFII.mc16d,ttbarlight_AFII.mc16e
-LumiScales: 36207.66,44307.4,58450.1
-
-Sample: "ttbarcc_AFII"
-Title: "t#bar{t}+#geq1c"
-Type: GHOST
-FillColor: 590
-LineColor: 1
-HistoFiles: ttbarcc_AFII.mc16a,ttbarcc_AFII.mc16d,ttbarcc_AFII.mc16e
-LumiScales: 36207.66,44307.4,58450.1
-
-Sample: "ttbarbb_AFII"
-Title: "t#bar{t}+#geq1b"
-Type: GHOST
-FillColor: 594
-LineColor: 1
-HistoFiles: ttbarbb_AFII.mc16a,ttbarbb_AFII.mc16d,ttbarbb_AFII.mc16e
-LumiScales: 36207.66,44307.4,58450.1
-
-Sample: "ttbarlight_aMCPy"
-Title: "t#bar{t}+light-jets"
-Type: GHOST
-FillColor: 0
-LineColor: 1
-HistoFiles: ttbarlight_aMCPy.mc16a,ttbarlight_aMCPy.mc16d,ttbarlight_aMCPy.mc16e
-LumiScales: 36207.66,44307.4,58450.1
-
-Sample: "ttbarcc_aMCPy"
-Title: "t#bar{t}+#geq1c"
-Type: GHOST
-FillColor: 590
-LineColor: 1
-HistoFiles: ttbarcc_aMCPy.mc16a,ttbarcc_aMCPy.mc16d,ttbarcc_aMCPy.mc16e
-LumiScales: 36207.66,44307.4,58450.1
-
-Sample: "ttbarbb_aMCPy"
-Title: "t#bar{t}+#geq1b"
-Type: GHOST
-FillColor: 594
-LineColor: 1
-HistoFiles: ttbarbb_aMCPy.mc16a,ttbarbb_aMCPy.mc16d,ttbarbb_aMCPy.mc16e
-LumiScales: 36207.66,44307.4,58450.1
-
-Sample: "ttbarlight_PowHer"
-Title: "t#bar{t}+light-jets"
-Type: GHOST
-FillColor: 0
-LineColor: 1
-HistoFiles: ttbarlight_PowHer.mc16a,ttbarlight_PowHer.mc16d,ttbarlight_PowHer.mc16e
-LumiScales: 36207.66,44307.4,58450.1
-
-Sample: "ttbarcc_PowHer"
-Title: "t#bar{t}+#geq1c"
-Type: GHOST
-FillColor: 590
-LineColor: 1
-HistoFiles: ttbarcc_PowHer.mc16a,ttbarcc_PowHer.mc16d,ttbarcc_PowHer.mc16e
-LumiScales: 36207.66,44307.4,58450.1
-
-Sample: "ttbarbb_PowHer"
-Title: "t#bar{t}+#geq1b"
-Type: GHOST
-FillColor: 594
-LineColor: 1
-HistoFiles: ttbarbb_PowHer.mc16a,ttbarbb_PowHer.mc16d,ttbarbb_PowHer.mc16e
-LumiScales: 36207.66,44307.4,58450.1

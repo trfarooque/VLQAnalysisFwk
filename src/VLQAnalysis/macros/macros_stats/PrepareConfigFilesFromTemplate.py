@@ -312,7 +312,10 @@ for counter,sample in enumerate(Signals):
                             continue
                         for channel in LepChannels:    
                             corrected_line += "\n"
-                            corrected_line += "Region: " + reg['name'] + channel + "\n"
+                            if reg['type']=="VALIDATION":
+                                corrected_line += "Region: " + reg['name'] + "_VR" + channel + "\n"
+                            else:
+                                corrected_line += "Region: " + reg['name'] + channel + "\n"
                             corrected_line += "Type: " + reg['type'] + "\n"
 
                             reg_discriminant = discriminant
@@ -343,8 +346,8 @@ for counter,sample in enumerate(Signals):
             f_adapted.write("\n")
             f_adapted.write("Sample: \"Data\"\n")
             f_adapted.write("Title: \"Data\"\n")
-            f_adapted.write("Type: \"data\"\n")
-            f_adapted.write("HistoFile: \"Data\"\n")
+            f_adapted.write("Type: data \n")
+            f_adapted.write("HistoFiles: Data.grp15,Data.grp16,Data.grp17,Data.grp18 \n")
 
         #Adding the SM 4tops as a background in case this is not the investigated signal ... Check if the option is set before
         #if(useFourTopsAsBack and SName.find("SM4tops")==-1):
@@ -365,7 +368,10 @@ for counter,sample in enumerate(Signals):
         for systfile in systConfig:
             f_templateSysts = open(systfile,'r')
             for systLine in f_templateSysts:
-                f_adapted.write(systLine)
+                corrected_systLine = systLine
+                for arg in _ARGUMENTS_:
+                    corrected_systLine = corrected_systLine.replace(arg['arg'],arg['value'])
+                f_adapted.write(corrected_systLine)
             f_adapted.write("\n")
 
         f_adapted.write(" \n")

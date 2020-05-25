@@ -428,8 +428,18 @@ Systematic: "JET_SingleParticle_HighPt"
 #  Smoothing: 40
 #%  Exclude: QCD,QCD0L
 
+Systematic: "JET_JER_DataVsMC_MC16"
+  Title: "JER Data/MC"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp:  _JET_JER_DataVsMC_MC16__1up
+  HistoFileSufDown:  _JET_JER_DataVsMC_MC16__1down
+  Symmetrisation: TwoSided
+  Smoothing: 40
+%  Exclude: QCD,QCD0L
+
 Systematic: "JET_JER_EffectiveNP_1"
-  Title: "JER"
+  Title: "JER NP1"
   Type: HISTO
   Category: "Jet uncertainties"
   HistoFileSufUp: _JET_JER_EffectiveNP_1__1up
@@ -438,7 +448,7 @@ Systematic: "JET_JER_EffectiveNP_1"
 %  Exclude: QCD,QCD0L
 
 Systematic: "JET_JER_EffectiveNP_2"
-  Title: "JER"
+  Title: "JER NP2"
   Type: HISTO
   Category: "Jet uncertainties"
   HistoFileSufUp: _JET_JER_EffectiveNP_2__1up
@@ -447,7 +457,7 @@ Systematic: "JET_JER_EffectiveNP_2"
 %  Exclude: QCD,QCD0L
 
 Systematic: "JET_JER_EffectiveNP_3"
-  Title: "JER"
+  Title: "JER NP3"
   Type: HISTO
   Category: "Jet uncertainties"
   HistoFileSufUp: _JET_JER_EffectiveNP_3__1up
@@ -456,7 +466,7 @@ Systematic: "JET_JER_EffectiveNP_3"
 %  Exclude: QCD,QCD0L
 
 Systematic: "JET_JER_EffectiveNP_4"
-  Title: "JER"
+  Title: "JER NP4"
   Type: HISTO
   Category: "Jet uncertainties"
   HistoFileSufUp: _JET_JER_EffectiveNP_4__1up
@@ -465,7 +475,7 @@ Systematic: "JET_JER_EffectiveNP_4"
 %  Exclude: QCD,QCD0L
 
 Systematic: "JET_JER_EffectiveNP_5"
-  Title: "JER"
+  Title: "JER NP5"
   Type: HISTO
   Category: "Jet uncertainties"
   HistoFileSufUp: _JET_JER_EffectiveNP_5__1up
@@ -474,7 +484,7 @@ Systematic: "JET_JER_EffectiveNP_5"
 %  Exclude: QCD,QCD0L
 
 Systematic: "JET_JER_EffectiveNP_6"
-  Title: "JER"
+  Title: "JER NP6"
   Type: HISTO
   Category: "Jet uncertainties"
   HistoFileSufUp: _JET_JER_EffectiveNP_6__1up
@@ -483,7 +493,7 @@ Systematic: "JET_JER_EffectiveNP_6"
 %  Exclude: QCD,QCD0L
 
 Systematic: "JET_JER_EffectiveNP_7restTerm"
-  Title: "JER"
+  Title: "JER NP7"
   Type: HISTO
   Category: "Jet uncertainties"
   HistoFileSufUp: _JET_JER_EffectiveNP_7restTerm__1up

@@ -1457,7 +1457,7 @@ bool VLQ_Analysis_Data2015::Begin(){
   // Declaration of the TruthManager
   //
   //############################################################################
-  if( m_opt -> SampleName() == SampleName::VLQ  || ( m_outData -> o_is_ttbar && m_opt->InputTree()=="nominal" ) ){
+  if( (m_opt -> SampleName() == SampleName::VLQ  ||  m_outData -> o_is_ttbar) && m_opt->InputTree()=="nominal" ) {
     m_truthMngr = new VLQ_TruthManager( m_opt, m_ntupData, m_outData, m_varComputer );
   } else {
     cout<<"VLQ_Analysis_Data2015::Begin: skipping truth part (VLQ-specific)"<<endl;
@@ -2154,9 +2154,6 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
       m_weightMngr -> SetKinReweightings();
     }
     if( m_outData -> o_is_ttbar ){
-      if(m_opt->ScaleTtbarHtSlices()){
-        m_weightMngr -> SetTtbarHtSliceScale();
-      }
       if(m_opt->RecomputeTtbarNNLOCorrection() && m_truthMngr){
         m_weightMngr -> SetNNLOWeight(m_truthMngr -> GetTopPt());
       }
@@ -2168,7 +2165,8 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
       }
       m_weightMngr -> SetTtbarFractionWeight();
     }
-    if( m_outData -> o_is_ttbar || (m_opt -> StrSampleName().find("SINGLETOP") != std::string::npos) || (m_opt -> StrSampleName().find("W+JETS") != std::string::npos) || (m_opt -> StrSampleName().find("Z+JETS") != std::string::npos) ){
+    if( m_outData -> o_is_ttbar || (m_opt -> StrSampleName().find("SINGLETOP") != std::string::npos) 
+	|| (m_opt -> StrSampleName().find("WJETS") != std::string::npos) || (m_opt -> StrSampleName().find("ZJETS") != std::string::npos) ){
       m_weightMngr -> SetPMGSystWeights();
     }
   } else if (m_opt -> StrSampleName().find("QCD") != std::string::npos){
@@ -2326,8 +2324,65 @@ bool VLQ_Analysis_Data2015::Terminate()
   cout<<"Yield summary: "<<endl
   <<summaryYields()
   <<endl;
+
   //
-  // Writting outputs
+  // Reweighting histograms with flat scales
+  //
+  if( m_outData -> o_is_ttbar ){
+
+    for(auto histname : m_outMngrHist->HistMngr()->GetTH1KeyList()){
+      TH1D* histo = m_outMngrHist->HistMngr()->GetTH1D(histname);
+    
+      // Scaling ttbar HT slices (nominal and PMG weights)
+      if( m_opt->ScaleTtbarHtSlices() ){
+          double Scale = 1.0;
+
+        if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
+          Scale = 1./0.99860961239196;
+          if ( m_opt -> ComputeWeightSys() ){
+            if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.00989117643996;
+            else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98630942849818;
+            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.01244857328796;
+            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.98661128202278;
+            else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.96762126478968;
+            else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.97391612230213;
+            else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.02221909345704;
+            else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.02018541245750;
+          }
+        }
+        if ( m_opt -> StrSampleID().find("407343.") != std::string::npos ){
+          Scale = 1./1.00220071443736;
+          if ( m_opt -> ComputeWeightSys() ){
+            if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.02075306498765;
+            else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98196927321205;
+            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.03193538833724;
+            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.99087003186616;
+            else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.91951515882506;
+            else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.93819392248974;
+            else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.06487669659290;
+            else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.06891808020899;
+          }
+        }
+        if ( m_opt -> StrSampleID().find("407342.") != std::string::npos ){
+          Scale = 1./1.01614066637173;
+          if ( m_opt -> ComputeWeightSys() ){
+            if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.04057257636042;
+            else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.99097386133341;
+            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.06280582379557;
+            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./1.00957616786319;
+            else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.89300718054136;
+            else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.90726044083483;
+            else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.12725897511274;
+            else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.12572488013792;
+          }
+        }
+        histo->Scale(Scale);
+      }
+    }
+  }
+
+  //
+  // Writing outputs
   //
   std::string nameHist = m_opt->OutputFile();
   if(m_outMngrHist){
@@ -2710,8 +2765,7 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
   //================ If single-top Wt then make DR/DS uncertainty ================
   if(is_singletop){
     VLQ_PropagateSingleTopSystematics* DRDSPropagator = new VLQ_PropagateSingleTopSystematics(m_opt, m_outMngrHist);
-    DRDSPropagator->Init(m_selector -> GetSelectionTree(), std::getenv("BUILDDIR")+std::string("/x86_64-centos7-gcc62-opt/data/VLQAnalysis/single_top_syst.root"));
-    //DRDSPropagator->Init(m_selector -> GetSelectionTree(), std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/single_top_syst.root"));
+    DRDSPropagator->Init(m_selector -> GetSelectionTree(), std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/single_top_syst.root"));
     DRDSPropagator->WriteAllSystHistograms(false,false);
     delete DRDSPropagator;
   }

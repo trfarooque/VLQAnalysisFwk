@@ -23,7 +23,11 @@ if(len(sys.argv)<3):
     print "Arguments"
     print "========="
     print "    inputDir=<path to input files>"
-    print "    ttbarSyst=<TRUE/FALSE> SUSY10 files for ttbar systematics *only*"
+    print "    ttbarSyst=<TRUE/FALSE> files for ttbar systematics *only*"
+    print "    singletopSyst=<TRUE/FALSE> files for singletop systematics *only*"
+    print "    splitSingletop=<TRUE/FALSE> split singletop channels"
+    print "    mergeSingletop=<TRUE/FALSE> merge split singletop channels at the end"
+    print "    singletopNominalDir=<path to singletop nominal input files (required for DiagSub merging)>"
     print "    useData=<TRUE/FALSE> use the real data"
     print "    useBkgd=<TRUE/FALSE> use background samples"
     print "    useSystematics=<TRUE/FALSE> run over systematics"
@@ -45,6 +49,10 @@ here = os.getcwd()
 ##------------------------------------------------------
 inputDir=""
 ttbarSyst=False
+singletopSyst=False
+splitSingletop=False
+mergeSingletop=False
+singletopNominalDir=""
 useData = True
 useBkgd = True
 folderRootFiles = "RootFilesForTtHFitter_"+now
@@ -72,7 +80,30 @@ for iArg in range(1,len(sys.argv)):
         elif splitted[1].upper()=="FALSE":
             ttbarSyst = False
         else:
-            printWarning("/!\ The argument for useData is not recognised ... Please check !")
+            printWarning("/!\ The argument for ttbarSyst is not recognised ... Please check !")
+    elif(argument=="SINGLETOPSYST"):
+        if splitted[1].upper()=="TRUE":
+            singletopSyst = True
+        elif splitted[1].upper()=="FALSE":
+            singletopSyst = False
+        else:
+            printWarning("/!\ The argument for singletopSyst is not recognised ... Please check !")
+    elif(argument=="SPLITSINGLETOP"):
+        if splitted[1].upper()=="TRUE":
+            splitSingletop = True
+        elif splitted[1].upper()=="FALSE":
+            splitSingletop = False
+        else:
+            printWarning("/!\ The argument for splitSingletop is not recognised ... Please check !")
+    elif(argument=="MERGESINGLETOP"):
+        if splitted[1].upper()=="TRUE":
+            mergeSingletop = True
+        elif splitted[1].upper()=="FALSE":
+            mergeSingletop = False
+        else:
+            printWarning("/!\ The argument for mergeSingletop is not recognised ... Please check !")
+    elif(argument=="SINGLETOPNOMINALDIR"): 
+        singletopNominalDir = splitted[1]
     elif(argument=="OUTPUTDIR"):
         folderRootFiles = splitted[1]
     elif(argument=="USESYSTEMATICS"):
@@ -124,7 +155,12 @@ else:
 
 #ttbar systematics
 if(ttbarSyst):
-    Samples += GetTtbarSamples( useObjectSyst=False, hfSplitted = True, ttbarSystSamples = True )
+    for mc_campaign in campaigns:
+        Samples += GetTtbarSamples( useObjectSyst=False, hfSplitted = True, ttbarSystSamples = True, campaign=mc_campaign )
+elif(singletopSyst):
+    for mc_campaign in campaigns:
+        Samples += GetSingleTopSamples( useObjectSyst=False, campaign=mc_campaign, splitChannel=splitSingletop, SingletopSystSamples=True)
+
 else:
     #-- Data
     if(useData):
@@ -139,7 +175,7 @@ else:
         for mc_campaign in campaigns:
             Samples += GetTtbarSamples( useObjectSyst=useSystematics, hfSplitted = True, ttbarSystSamples = False, campaign=mc_campaign )
             Samples += GetOtherBackgroundSamples( useObjectSyst=useSystematics, campaign=mc_campaign
-                                                  , includeSingleTop=True
+                                                  , includeSingleTop=True, splitSTChannels=splitSingletop
                                                   , includeWjets=True, includeZjets=True
                                                   , includeTopEW=True, includeDibosons=True
                                                   , includeSingletopSystSamples=False )
@@ -272,3 +308,34 @@ for Comm in Commands:
     else:
         printError( "Invalid command line: " + Comm )
 
+##------------------------------------------------------
+## Merge single top files if needed
+##------------------------------------------------------
+if mergeSingletop:
+    printGoodNews("--> Now merging single-top channels")
+    systVar = []
+    if singletopSyst:
+        systVar = ["","PowHer","aMCPy"]
+    else:
+        systVar = [""]
+    for mc_campaign in campaigns:
+        if mc_campaign:
+            mc_campaign = "."+mc_campaign
+        for syst in systVar:
+            com = "hadd "+folderRootFiles+"/Singletop"+syst+mc_campaign+".root "  
+            com += folderRootFiles+"/Singletopschan"+syst+mc_campaign+".root "
+            com += folderRootFiles+"/Singletoptchan"+syst+mc_campaign+".root "
+            if syst:
+                com += folderRootFiles+"/SingletopWt"+syst+mc_campaign+".root "
+            else:
+                com += folderRootFiles+"/SingletopWtprod"+syst+mc_campaign+".root "
+
+            printGoodNews("  --> "+mc_campaign+" ; "+syst)
+            os.system(com)
+        if singletopNominalDir:
+            printGoodNews("  --> DiagSub "+mc_campaign)
+            com = "hadd "+folderRootFiles+"/SingletopDiagSub"+mc_campaign+".root "  
+            com += singletopNominalDir+"/Singletopschan"+mc_campaign+".root "
+            com += singletopNominalDir+"/Singletoptchan"+mc_campaign+".root "
+            com += folderRootFiles+"/SingletopWtDiagSub"+mc_campaign+".root "
+            os.system(com)

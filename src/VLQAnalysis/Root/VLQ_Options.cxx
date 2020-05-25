@@ -50,6 +50,7 @@ m_doSingleVLQRegions(true),
 m_doPairVLQRegions(false),
 m_doValidnRegions(false),
 m_doFitRegions(true),
+m_doLooseSystRegions(true),
 m_doLowBRegions(false),
 m_doLowJRegions(false),
 m_doSplitEMu(false),
@@ -96,7 +97,7 @@ m_lepWOpt("VANILLA"),
 m_leptopOpt("VETO_RCMATCH"),
 m_RCCollection("VR_rho550"),
 m_filterType(NOFILTER),
-m_btagCollection(CALO)
+m_btagCollection(CALOPFLOW)
 {}
 
 //_____________________________________________________________
@@ -138,6 +139,7 @@ OptionsBase(q)
     m_doPairVLQRegions    = q.m_doPairVLQRegions;
     m_doValidnRegions     = q.m_doValidnRegions;
     m_doFitRegions        = q.m_doFitRegions;
+    m_doLooseSystRegions  = q.m_doLooseSystRegions;
     m_doLowBRegions       = q.m_doLowBRegions;
     m_doLowJRegions       = q.m_doLowJRegions;
     m_doSplitEMu          = q.m_doSplitEMu;
@@ -278,6 +280,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_doValidnRegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOFITREGIONS") != std::string::npos ){
             m_doFitRegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
+        } else if( temp_arg.find("--DOLOOSESYSTREGIONS") != std::string::npos ){
+            m_doLooseSystRegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOLOWBREGIONS") != std::string::npos ){
             m_doLowBRegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOLOWJREGIONS") != std::string::npos ){
@@ -413,7 +417,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
         }
         else if( temp_arg.find("--BTAGCOLLECTION") != std::string::npos ){
             std::transform(temp_val.begin(), temp_val.end(), temp_val.begin(), toupper);
-            if ( temp_val.find("CALO") != std::string::npos) 	m_btagCollection = CALO;
+            if ( temp_val.find("CALOPFLOW") != std::string::npos) 	m_btagCollection = CALOPFLOW;
+            else if ( temp_val.find("CALOTOPO") != std::string::npos) 	m_btagCollection = CALOTOPO;
             else if ( temp_val.find("TRACK") != std::string::npos) 	m_btagCollection = TRACK;
             else {
                 std::cout<<"Unknown BTAGCOLLECTION option : " << temp_val << std::endl;
@@ -488,6 +493,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_doPairVLQRegions        = " << m_doPairVLQRegions  << std::endl;
     std::cout << " m_doValidnRegions         = " << m_doValidnRegions   << std::endl;
     std::cout << " m_doFitRegions            = " << m_doFitRegions      << std::endl;
+    std::cout << " m_doLooseSystRegions      = " << m_doLooseSystRegions<< std::endl;
     std::cout << " m_doLowBRegions           = " << m_doLowBRegions     << std::endl;
     std::cout << " m_doLowJRegions           = " << m_doLowJRegions     << std::endl;
     std::cout << " m_doSplitEMu              = " << m_doSplitEMu        << std::endl;

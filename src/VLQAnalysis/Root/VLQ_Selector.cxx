@@ -44,6 +44,7 @@ VLQ_Selector::VLQ_Selector( VLQ_Options *opt, const VLQ_NtupleData *ntupData,
   m_sel_LT_prop(NULL),
   m_sel_VT_prop(NULL),
   m_sel_VLT_prop(NULL),
+  m_sel_VLTH_prop(NULL),
   m_sel_Mbb_prop(NULL),
   m_sel_Mtb_prop(NULL),
   m_sel_MetSig_prop(NULL),
@@ -79,6 +80,7 @@ VLQ_Selector::VLQ_Selector( const VLQ_Selector &q ):
   m_sel_LT_prop         = new std::vector<SelProp>(*(q.m_sel_LT_prop));
   m_sel_VT_prop         = new std::vector<SelProp>(*(q.m_sel_VT_prop));
   m_sel_VLT_prop        = new std::vector<SelProp>(*(q.m_sel_VLT_prop));
+  m_sel_VLTH_prop        = new std::vector<SelProp>(*(q.m_sel_VLTH_prop));
   m_sel_Mbb_prop        = new std::vector<SelProp>(*(q.m_sel_Mbb_prop));
   m_sel_Mtb_prop        = new std::vector<SelProp>(*(q.m_sel_Mtb_prop));
   m_sel_MetSig_prop     = new std::vector<SelProp>(*(q.m_sel_MetSig_prop));
@@ -98,8 +100,7 @@ bool VLQ_Selector::Init(){
     std::cout<<" Inside VLQ_Selector::Init()"<<std::endl;
   }
   
-  m_blinding_config.open( Form("%s/x86_64-centos7-gcc62-opt/python/VLQAnalysis/regions_dictionary.py", std::getenv("BUILDDIR")) );
-  //m_blinding_config.open( Form("%s/python/VLQAnalysis/regions_dictionary.py", std::getenv("VLQAnalysisFramework_DIR")) );
+  m_blinding_config.open( Form("%s/python/VLQAnalysis/regions_dictionary.py", std::getenv("VLQAnalysisFramework_DIR")) );
   //============================  Initialise top selections and add rules for primary ancestors ==================================
   m_sel_indices = new std::map<std::string, int>();
   m_sel_names = new std::map<int, std::string>();
@@ -167,6 +168,9 @@ bool VLQ_Selector::Init(){
   m_sel_VLT_prop = new std::vector<SelProp>({
       MakeSelProp("0VLTex",c_0VLTex), MakeSelProp("1VLTex", c_1VLTex), MakeSelProp("1VLTin", c_1VLTin), MakeSelProp("2VLTin", c_2VLTin) });
 
+  m_sel_VLTH_prop = new std::vector<SelProp>({
+      MakeSelProp("0VLTHex",c_0VLTHex), MakeSelProp("1VLTHin", c_1VLTHin) });
+
   m_sel_Mbb_prop = new std::vector<SelProp>({
       MakeSelProp("LowMbb",c_LowMbb), MakeSelProp("HighMbb", c_HighMbb) });
 
@@ -194,6 +198,7 @@ bool VLQ_Selector::Init(){
   for(auto selprop : *m_sel_LT_prop){ AddSelectionIndex(selprop.name, selprop.index); }
   for(auto selprop : *m_sel_VT_prop){ AddSelectionIndex(selprop.name, selprop.index); }
   for(auto selprop : *m_sel_VLT_prop){ AddSelectionIndex(selprop.name, selprop.index); }
+  for(auto selprop : *m_sel_VLTH_prop){ AddSelectionIndex(selprop.name, selprop.index); }
   for(auto selprop : *m_sel_Mbb_prop){ AddSelectionIndex(selprop.name, selprop.index); }
   for(auto selprop : *m_sel_Mtb_prop){ AddSelectionIndex(selprop.name, selprop.index); }
   for(auto selprop : *m_sel_MetSig_prop){ AddSelectionIndex(selprop.name, selprop.index); }
@@ -303,8 +308,8 @@ bool VLQ_Selector::Init(){
 
   }//Do Preselection
 
-  //================================ FIT AND VALIDATION REGIONS ===================================
-  if(m_opt->DoFitRegions() || m_opt->DoValidnRegions()){
+  //================================ FIT, VALIDATION, AND LOOSE SYST REGIONS ===================================
+  if(m_opt->DoFitRegions() || m_opt->DoValidnRegions() || m_opt->DoLooseSystRegions()){
     bool do_syst = true;
 
     //======== SINGLE VLQ REGIONS =========
@@ -349,6 +354,13 @@ bool VLQ_Selector::Init(){
 	    AddVLQSelection(lep_prefix+"6jin-4bin-1fjin-0Lex-1VTex-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-b
 	    AddVLQSelection(lep_prefix+"6jin-4bin-1fjin-2VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-c
 
+	    // Ttbar+HF control regions
+	    AddVLQSelection(lep_prefix+"3_5jwin-4bin-0fjex-0VLTHex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-4bin-0fjex-1Lin-0VTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    
+	    AddVLQSelection(lep_prefix+"6jin-4bin-0fjex-0VLTHex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-4bin-0fjex-1Lin-0VTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
 	  }//FIT REGIONS
 
 	  if(m_opt->DoValidnRegions()){
@@ -391,6 +403,14 @@ bool VLQ_Selector::Init(){
 	    // AddVLQSelection(lep_prefix+"6jin-4bin-0fjex-2VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ); // TOO HIGH SIGNAL
 	    AddVLQSelection(lep_prefix+"6jin-4bin-1fjin-1VLTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    AddVLQSelection(lep_prefix+"6jin-4bin-1fjin-2VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	  }
+	  
+	  // Loose regions for syst extrapolation
+	  if(m_opt->DoLooseSystRegions()){
+	    AddVLQSelection(lep_prefix+"3_5jwin-1_2bwin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-3bin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-1_2bwin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-3bin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	  }
 	  
 	}//lepflav channels 
@@ -604,6 +624,7 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
   SelProp* sprop_LT = NULL;
   SelProp* sprop_VT = NULL;
   SelProp* sprop_VLT = NULL;
+  SelProp* sprop_VLTH = NULL;
   SelProp* sprop_Mbb = NULL;
   SelProp* sprop_Mtb = NULL;
   SelProp* sprop_MetSig = NULL;
@@ -739,6 +760,15 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     }
     if(found) continue;
 
+    //=============== VLTH-tag part ========================
+    for(SelProp& VLTHprop : *m_sel_VLTH_prop){
+      if(VLTHprop.name == _parts_){
+	sprop_VLTH = &VLTHprop;
+	found = true; n_nodes++; break;
+      }
+    }
+    if(found) continue;
+
     //=============== Mbb-split part ========================
     for(SelProp& Mbbprop : *m_sel_Mbb_prop){
       if(Mbbprop.name == _parts_){
@@ -834,7 +864,7 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
 
   else{
     if( !(sprop_fwdjet || sprop_bjet || sprop_J || sprop_M || sprop_T || sprop_L || sprop_H || sprop_V 
-	  || sprop_TH || sprop_LT || sprop_VT || sprop_VLT
+	  || sprop_TH || sprop_LT || sprop_VT || sprop_VLT || sprop_VLTH
 	  ||sprop_Mbb || sprop_Mtb || sprop_MetSig || sprop_MLL)  ){
 
       if(sprop_jet->primanc_name.empty()){
@@ -847,7 +877,7 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
 
     }//Lep + jet
     else if( !(sprop_fwdjet || sprop_J || sprop_M || sprop_T || sprop_L || sprop_H || sprop_V 
-	       || sprop_TH || sprop_LT || sprop_VT || sprop_VLT
+	       || sprop_TH || sprop_LT || sprop_VT || sprop_VLT || sprop_VLTH
 	       || sprop_Mbb || sprop_Mtb || sprop_MetSig || sprop_MLL) ){
       
       if(sprop_bjet->primanc_name.empty()){
@@ -874,6 +904,7 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
         if(sprop_LT )     { SelectorBase::AddAncestor(*sel, sprop_LT->index); }
         if(sprop_VT )     { SelectorBase::AddAncestor(*sel, sprop_VT->index); }
         if(sprop_VLT )     { SelectorBase::AddAncestor(*sel, sprop_VLT->index); }
+        if(sprop_VLTH )    { SelectorBase::AddAncestor(*sel, sprop_VLTH->index); }
       }
     }//Lep-jet-bjet + boost
     else{
@@ -917,7 +948,12 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
 	  if(!s_boost.empty()){ s_boost += "-"; }
 	  s_boost += sprop_VLT->name;
 	}
-  
+	
+	if(sprop_VLTH){
+	  if(!s_boost.empty()){ s_boost += "-"; }
+	  s_boost += sprop_VLTH->name;
+	}
+	
       }
       if(!(sprop_MetSig || sprop_MLL) ){
 	AddAncestor(*sel, "c-" + sprop_lep->name + "-" + s_boost + "-" + sprop_jet->name + "-" + sprop_bjet->name, true);
@@ -1110,6 +1146,9 @@ bool VLQ_Selector::PassSelection(const int index){
   else if(index == c_1VLTex){ pass = (m_outData->o_taggedjets_n.at("RCMV")+m_outData->o_taggedjets_n.at("RCMTop")+m_outData->o_leptop_n == 1); }
   else if(index == c_1VLTin){ pass = (m_outData->o_taggedjets_n.at("RCMV")+m_outData->o_taggedjets_n.at("RCMTop")+m_outData->o_leptop_n >= 1); }
   else if(index == c_2VLTin){ pass = (m_outData->o_taggedjets_n.at("RCMV")+m_outData->o_taggedjets_n.at("RCMTop")+m_outData->o_leptop_n >= 2); }
+
+  else if(index == c_0VLTHex){ pass = (m_outData->o_taggedjets_n.at("RCMV")+m_outData->o_taggedjets_n.at("RCMTop")+m_outData->o_leptop_n+m_outData->o_taggedjets_n.at("RCMHiggs") == 0); }
+  else if(index == c_1VLTHin){ pass = (m_outData->o_taggedjets_n.at("RCMV")+m_outData->o_taggedjets_n.at("RCMTop")+m_outData->o_leptop_n+m_outData->o_taggedjets_n.at("RCMHiggs") >= 1); }
 
   //=========== B-tag multiplicities ====================
   else if(index == c_0bex){ pass = m_anaTools->PassBTagRequirement(0, false); }

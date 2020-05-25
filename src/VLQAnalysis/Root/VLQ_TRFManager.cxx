@@ -21,7 +21,9 @@ m_weightMngr(weightMngr),
 m_ntupData(ntupData),
 m_outData(outData),
 m_trfint(0),
-m_btag_calib_scheme("default"){
+m_btag_calib_scheme("default"),
+m_btag_name("")
+{
 }
 
 //______________________________________________________________________________
@@ -31,28 +33,43 @@ void VLQ_TRFManager::Init(){
   if(m_opt -> MsgLevel() == Debug::DEBUG){
     std::cout << "In VLQ_TRFManager constructor: Creating TRF Object" << std::endl;
   }
+
+  m_btag_name = (m_opt->BtagCollection() == VLQ_Options::TRACK) ? "weight_trkbtag" : "weight_btag";
+  std::string btag_coll = "";
+  if(m_opt->BtagCollection() == VLQ_Options::TRACK){
+    btag_coll = "AntiKtVR30Rmax4Rmin02TrackJets"; 
+  }
+  else if(m_opt->BtagCollection() == VLQ_Options::CALOPFLOW){
+    btag_coll = "AntiKt4EMPFlow"; 
+  }
+  else if(m_opt->BtagCollection() == VLQ_Options::CALOTOPO){
+    btag_coll = "AntiKt4EMTopo"; 
+  }
+
   if(m_opt->BtagOP()==""){
     m_trfint = new TRFinterface("FixedCutBEff_77",//b-tag OP
-    "AntiKt4EMTopoJets",//jet collection
+    btag_coll,//jet collection
     m_opt->TRFCDIPath(),//CDI file
     false, //ignore SF
     ((m_opt -> MsgLevel() == Debug::DEBUG)?5:0), //debug level
     true,//rwSystForPerm (weight for permutation to be the same with systematics)
     false,//tag bins
     1,//n calibrations
-    true//add properties (because of the following line)
+    true,//add properties (because of the following line)
+    m_opt->BtagAlg() //tagger name
     );
   }
   else {
     m_trfint = new TRFinterface(m_opt->BtagOP(),//b-tag OP
-    "AntiKt4EMTopoJets",//jet collection
+    btag_coll,//jet collection
     m_opt->TRFCDIPath(),//CDI file
     false, //ignore SF
     ((m_opt -> MsgLevel() == Debug::DEBUG)?5:0), //debug level
     true,//rwSystForPerm (weight for permutation to be the same with systematics)
     false,//tag bins
     1,//n calibrations
-    true//add properties (because of the following line)
+    true,//add properties (because of the following line)
+    m_opt->BtagAlg() //tagger name
     );
   }
   m_trfint->setEffProperty("EfficiencyBCalibrations","default;410004;410006");
@@ -197,7 +214,8 @@ bool VLQ_TRFManager::ComputeTRFWeights(){
     if(m_opt -> MsgLevel() == Debug::DEBUG){
       std::cout << "==> SF EVT =  "<< recomputedBTagSF << std::endl;
     }
-    m_weightMngr->SetNominalComponent("weight_btag", recomputedBTagSF);
+
+    m_weightMngr->SetNominalComponent(m_btag_name, recomputedBTagSF);
 
     // Systematics
     if(m_opt -> ComputeWeightSys()){
@@ -211,26 +229,26 @@ bool VLQ_TRFManager::ComputeTRFWeights(){
       for(unsigned int ibev=0; ibev<nbBev; ibev++) {
         const double evUp   = m_trfint->getEvtSF(m_btag_calib_scheme,"B",ibev,true);
         const double evDown = m_trfint->getEvtSF(m_btag_calib_scheme,"B",ibev,false);
-        m_weightMngr->SetSystematicComponent(Form("weight_btag_B_EV_Up_%i",ibev), evUp);
-        m_weightMngr->SetSystematicComponent(Form("weight_btag_B_EV_Down_%i",ibev), evDown);
+        m_weightMngr->SetSystematicComponent(m_btag_name+Form("_B_EV_Up_%i",ibev), evUp);
+        m_weightMngr->SetSystematicComponent(m_btag_name+Form("_B_EV_Down_%i",ibev), evDown);
       }
       for(unsigned int icev=0; icev<nbCev; icev++) {
         const double evUp   = m_trfint->getEvtSF(m_btag_calib_scheme,"C",icev,true);
         const double evDown = m_trfint->getEvtSF(m_btag_calib_scheme,"C",icev,false);
-        m_weightMngr->SetSystematicComponent(Form("weight_btag_C_EV_Up_%i",icev), evUp);
-        m_weightMngr->SetSystematicComponent(Form("weight_btag_C_EV_Down_%i",icev), evDown);
+        m_weightMngr->SetSystematicComponent(m_btag_name+Form("_C_EV_Up_%i",icev), evUp);
+        m_weightMngr->SetSystematicComponent(m_btag_name+Form("_C_EV_Down_%i",icev), evDown);
       }
       for(unsigned int ilev=0; ilev<nbLev; ilev++) {
         const double evUp   = m_trfint->getEvtSF(m_btag_calib_scheme,"Light",ilev,true);
         const double evDown = m_trfint->getEvtSF(m_btag_calib_scheme,"Light",ilev,false);
-        m_weightMngr->SetSystematicComponent(Form("weight_btag_Light_EV_Up_%i",ilev), evUp);
-        m_weightMngr->SetSystematicComponent(Form("weight_btag_Light_EV_Down_%i",ilev), evDown);
+        m_weightMngr->SetSystematicComponent(m_btag_name+Form("_Light_EV_Up_%i",ilev), evUp);
+        m_weightMngr->SetSystematicComponent(m_btag_name+Form("_Light_EV_Down_%i",ilev), evDown);
       }
-      m_weightMngr->SetSystematicComponent( "weight_btag_extrapolation_Up", m_trfint->getEvtSF(m_btag_calib_scheme,"Extrap",0,true) );
-      m_weightMngr->SetSystematicComponent( "weight_btag_extrapolation_Down", m_trfint->getEvtSF(m_btag_calib_scheme,"Extrap",0,false) );
+      m_weightMngr->SetSystematicComponent( m_btag_name+"_extrapolation_Up", m_trfint->getEvtSF(m_btag_calib_scheme,"Extrap",0,true) );
+      m_weightMngr->SetSystematicComponent( m_btag_name+"_extrapolation_Down", m_trfint->getEvtSF(m_btag_calib_scheme,"Extrap",0,false) );
 
-      m_weightMngr->SetSystematicComponent( "weight_btag_extrapolation_from_charm_Up", m_trfint->getEvtSF(m_btag_calib_scheme,"ExtrapFromCharm",0,true) );
-      m_weightMngr->SetSystematicComponent( "weight_btag_extrapolation_from_charm_Down", m_trfint->getEvtSF(m_btag_calib_scheme,"ExtrapFromCharm",0,false) );
+      m_weightMngr->SetSystematicComponent( m_btag_name+"_extrapolation_from_charm_Up", m_trfint->getEvtSF(m_btag_calib_scheme,"ExtrapFromCharm",0,true) );
+      m_weightMngr->SetSystematicComponent( m_btag_name+"_extrapolation_from_charm_Down", m_trfint->getEvtSF(m_btag_calib_scheme,"ExtrapFromCharm",0,false) );
     }
   }
   return true;
@@ -260,7 +278,8 @@ bool VLQ_TRFManager::UpdateBTagging( const bool isIncl, const int req_nbjets ){
     //
     //---~~~~>> Nominal
     //
-    m_weightMngr->SetNominalComponent("weight_btag", (isIncl ? m_outData -> o_TRFweight_in -> at(req_nbjets) : m_outData -> o_TRFweight_ex -> at(req_nbjets)) );
+
+    m_weightMngr->SetNominalComponent(m_btag_name, (isIncl ? m_outData -> o_TRFweight_in -> at(req_nbjets) : m_outData -> o_TRFweight_ex -> at(req_nbjets)) );
 
     //
     //---~~~~>> Systematics
@@ -270,33 +289,33 @@ bool VLQ_TRFManager::UpdateBTagging( const bool isIncl, const int req_nbjets ){
       std::vector < std::vector < double > > *BTag_BreakUp_TRF = isIncl ? m_outData -> o_BTag_BreakUp_TRF_in : m_outData -> o_BTag_BreakUp_TRF_ex;
       std::vector < std::vector < double > > *BTag_BreakDown_TRF = isIncl ? m_outData -> o_BTag_BreakDown_TRF_in : m_outData -> o_BTag_BreakDown_TRF_ex;
       for ( unsigned int ibev = 0; ibev < BTag_BreakUp_TRF -> size(); ++ibev ) {
-        m_weightMngr->SetSystematicComponent(Form("weight_btag_B_EV_Up_%i",ibev), BTag_BreakUp_TRF -> at(ibev)[req_nbjets] );
-        m_weightMngr->SetSystematicComponent(Form("weight_btag_B_EV_Down_%i",ibev), BTag_BreakDown_TRF -> at(ibev)[req_nbjets]);
+        m_weightMngr->SetSystematicComponent(m_btag_name+Form("_B_EV_Up_%i",ibev), BTag_BreakUp_TRF -> at(ibev)[req_nbjets] );
+        m_weightMngr->SetSystematicComponent(m_btag_name+Form("_B_EV_Down_%i",ibev), BTag_BreakDown_TRF -> at(ibev)[req_nbjets]);
       }
       //-- c
       std::vector < std::vector < double > > *CTag_BreakUp_TRF = isIncl ? m_outData -> o_CTag_BreakUp_TRF_in : m_outData -> o_CTag_BreakUp_TRF_ex;
       std::vector < std::vector < double > > *CTag_BreakDown_TRF = isIncl ? m_outData -> o_CTag_BreakDown_TRF_in : m_outData -> o_CTag_BreakDown_TRF_ex;
       for ( unsigned int icev = 0; icev < CTag_BreakUp_TRF -> size(); ++icev ) {
-        m_weightMngr->SetSystematicComponent(Form("weight_btag_C_EV_Up_%i",icev), CTag_BreakUp_TRF -> at(icev)[req_nbjets]);
-        m_weightMngr->SetSystematicComponent(Form("weight_btag_C_EV_Down_%i",icev), CTag_BreakDown_TRF -> at(icev)[req_nbjets]);
+        m_weightMngr->SetSystematicComponent(m_btag_name+Form("_C_EV_Up_%i",icev), CTag_BreakUp_TRF -> at(icev)[req_nbjets]);
+        m_weightMngr->SetSystematicComponent(m_btag_name+Form("_C_EV_Down_%i",icev), CTag_BreakDown_TRF -> at(icev)[req_nbjets]);
       }
       //-- l
       std::vector < std::vector < double > > *LTag_BreakUp_TRF = isIncl ? m_outData -> o_LTag_BreakUp_TRF_in : m_outData -> o_LTag_BreakUp_TRF_ex;
       std::vector < std::vector < double > > *LTag_BreakDown_TRF = isIncl ? m_outData -> o_LTag_BreakDown_TRF_in : m_outData -> o_LTag_BreakDown_TRF_ex;
       for ( unsigned int ilev = 0; ilev < LTag_BreakUp_TRF -> size(); ++ilev ) {
-        m_weightMngr->SetSystematicComponent(Form("weight_btag_Light_EV_Up_%i",ilev), LTag_BreakUp_TRF -> at(ilev)[req_nbjets]);
-        m_weightMngr->SetSystematicComponent(Form("weight_btag_Light_EV_Down_%i",ilev), LTag_BreakDown_TRF -> at(ilev)[req_nbjets]);
+        m_weightMngr->SetSystematicComponent(m_btag_name+Form("_Light_EV_Up_%i",ilev), LTag_BreakUp_TRF -> at(ilev)[req_nbjets]);
+        m_weightMngr->SetSystematicComponent(m_btag_name+Form("_Light_EV_Down_%i",ilev), LTag_BreakDown_TRF -> at(ilev)[req_nbjets]);
       }
       //-- extrapolation
       std::vector < double > *temp_extrap_up     = isIncl ? &(m_outData -> o_BTagExtrapUp_TRF_in -> at(0)) : &(m_outData -> o_BTagExtrapUp_TRF_ex -> at(0));
       std::vector < double > *temp_extrap_down   = isIncl ? &(m_outData -> o_BTagExtrapDown_TRF_in -> at(0)) : &(m_outData -> o_BTagExtrapDown_TRF_ex -> at(0));
-      m_weightMngr->SetSystematicComponent( "weight_btag_extrapolation_Up", temp_extrap_up->at(req_nbjets) );
-      m_weightMngr->SetSystematicComponent( "weight_btag_extrapolation_Down", temp_extrap_down->at(req_nbjets) );
+      m_weightMngr->SetSystematicComponent( m_btag_name+"_extrapolation_Up", temp_extrap_up->at(req_nbjets) );
+      m_weightMngr->SetSystematicComponent( m_btag_name+"_extrapolation_Down", temp_extrap_down->at(req_nbjets) );
       //-- extrapolation from charm
       std::vector < double > *temp_extrap_from_charm_up = isIncl ? &(m_outData->o_BTagExtrapFromCharmUp_TRF_in->at(0)) : &(m_outData->o_BTagExtrapFromCharmUp_TRF_ex->at(0));
       std::vector < double > *temp_extrap_from_charm_down = isIncl ? &(m_outData->o_BTagExtrapFromCharmDown_TRF_in->at(0)) : &(m_outData->o_BTagExtrapFromCharmDown_TRF_ex->at(0));
-      m_weightMngr->SetSystematicComponent( "weight_btag_extrapolation_from_charm_Up", temp_extrap_from_charm_up -> at(req_nbjets) );
-      m_weightMngr->SetSystematicComponent( "weight_btag_extrapolation_from_charm_Down", temp_extrap_from_charm_down -> at(req_nbjets) );
+      m_weightMngr->SetSystematicComponent( m_btag_name+"_extrapolation_from_charm_Up", temp_extrap_from_charm_up -> at(req_nbjets) );
+      m_weightMngr->SetSystematicComponent( m_btag_name+"_extrapolation_from_charm_Down", temp_extrap_from_charm_down -> at(req_nbjets) );
     }//if compute weight systematics
     m_weightMngr -> ComputeAllWeights();//propagates the change to all weights handled by WeightManager
     if( m_opt->ReweightKinematics() && !m_opt->ComputeWeightSys() ){
@@ -329,24 +348,24 @@ bool VLQ_TRFManager::UpdateBTagging( const bool isIncl, const int req_nbjets ){
     // Only a few combinations are in the tree ... so, let's return 0 is case this is an unknown combination
     //
     if( ( isIncl && (req_nbjets==2 || req_nbjets==3) ) || ( !isIncl && (req_nbjets==0 || req_nbjets==1) ) ){
-      m_weightMngr->SetNominalComponent("weight_btag", 0. );
+      m_weightMngr->SetNominalComponent(m_btag_name, 0. );
       if(m_opt -> ComputeWeightSys()){
         for ( unsigned int ibev = 0; ibev <= 5; ++ibev ) {
-          m_weightMngr->SetSystematicComponent(Form("weight_btag_B_EV_Up_%i",ibev), 0. );
-          m_weightMngr->SetSystematicComponent(Form("weight_btag_B_EV_Down_%i",ibev), 0. );
+          m_weightMngr->SetSystematicComponent(m_btag_name+Form("_B_EV_Up_%i",ibev), 0. );
+          m_weightMngr->SetSystematicComponent(m_btag_name+Form("_B_EV_Down_%i",ibev), 0. );
         }
         for ( unsigned int icev = 0; icev <= 3; ++icev ) {
-          m_weightMngr->SetSystematicComponent(Form("weight_btag_C_EV_Up_%i",icev), 0. );
-          m_weightMngr->SetSystematicComponent(Form("weight_btag_C_EV_Down_%i",icev), 0. );
+          m_weightMngr->SetSystematicComponent(m_btag_name+Form("_C_EV_Up_%i",icev), 0. );
+          m_weightMngr->SetSystematicComponent(m_btag_name+Form("_C_EV_Down_%i",icev), 0. );
         }
         for ( unsigned int ilev = 0; ilev <= 16; ++ilev ) {
-          m_weightMngr->SetSystematicComponent(Form("weight_btag_Light_EV_Up_%i",ilev), 0. );
-          m_weightMngr->SetSystematicComponent(Form("weight_btag_Light_EV_Down_%i",ilev), 0. );
+          m_weightMngr->SetSystematicComponent(m_btag_name+Form("_Light_EV_Up_%i",ilev), 0. );
+          m_weightMngr->SetSystematicComponent(m_btag_name+Form("_Light_EV_Down_%i",ilev), 0. );
         }
-        m_weightMngr->SetSystematicComponent( "weight_btag_extrapolation_Up", 0. );
-        m_weightMngr->SetSystematicComponent( "weight_btag_extrapolation_Down", 0. );
-        m_weightMngr->SetSystematicComponent( "weight_btag_extrapolation_from_charm_Up", 0. );
-        m_weightMngr->SetSystematicComponent( "weight_btag_extrapolation_from_charm_Down", 0. );
+        m_weightMngr->SetSystematicComponent( m_btag_name+"_extrapolation_Up", 0. );
+        m_weightMngr->SetSystematicComponent( m_btag_name+"_extrapolation_Down", 0. );
+        m_weightMngr->SetSystematicComponent( m_btag_name+"_extrapolation_from_charm_Up", 0. );
+        m_weightMngr->SetSystematicComponent( m_btag_name+"_extrapolation_from_charm_Down", 0. );
       }
       m_outData -> o_TRF_bjets_n  = req_nbjets;
       m_outData -> o_TRF_isIncl   = isIncl;
@@ -363,7 +382,7 @@ bool VLQ_TRFManager::UpdateBTagging( const bool isIncl, const int req_nbjets ){
     if( !isIncl && req_nbjets==2 ) trf_weight = m_ntupData -> d_trf_weight_77_2ex;
     else if( !isIncl && req_nbjets==3 ) trf_weight = m_ntupData -> d_trf_weight_77_3ex;
     else if( isIncl && req_nbjets==4 ) trf_weight = m_ntupData -> d_trf_weight_77_4in;
-    m_weightMngr->SetNominalComponent( "weight_btag", trf_weight );
+    m_weightMngr->SetNominalComponent( m_btag_name, trf_weight );
 
     //
     //---~~~~>> Systematics
@@ -383,8 +402,8 @@ bool VLQ_TRFManager::UpdateBTagging( const bool isIncl, const int req_nbjets ){
         BTag_BreakDown_TRF = m_ntupData -> d_trf_weight_77_4in_eigenvars_B_down;
       }
       for ( unsigned int ibev = 0; ibev < BTag_BreakUp_TRF -> size(); ++ibev ) {
-        m_weightMngr->SetSystematicComponent( Form("weight_btag_B_EV_Up_%i",ibev), BTag_BreakUp_TRF -> at(ibev) );
-        m_weightMngr->SetSystematicComponent( Form("weight_btag_B_EV_Down_%i",ibev), BTag_BreakDown_TRF -> at(ibev) );
+        m_weightMngr->SetSystematicComponent( m_btag_name+Form("_B_EV_Up_%i",ibev), BTag_BreakUp_TRF -> at(ibev) );
+        m_weightMngr->SetSystematicComponent( m_btag_name+Form("_B_EV_Down_%i",ibev), BTag_BreakDown_TRF -> at(ibev) );
       }
       //-- c
       std::vector < double > *CTag_BreakUp_TRF = nullptr;
@@ -400,8 +419,8 @@ bool VLQ_TRFManager::UpdateBTagging( const bool isIncl, const int req_nbjets ){
         CTag_BreakDown_TRF = m_ntupData -> d_trf_weight_77_4in_eigenvars_C_down;
       }
       for ( unsigned int icev = 0; icev < CTag_BreakUp_TRF -> size(); ++icev ) {
-        m_weightMngr->SetSystematicComponent( Form("weight_btag_C_EV_Up_%i",icev), CTag_BreakUp_TRF -> at(icev) );
-        m_weightMngr->SetSystematicComponent( Form("weight_btag_C_EV_Down_%i",icev), CTag_BreakDown_TRF -> at(icev) );
+        m_weightMngr->SetSystematicComponent( m_btag_name+Form("_C_EV_Up_%i",icev), CTag_BreakUp_TRF -> at(icev) );
+        m_weightMngr->SetSystematicComponent( m_btag_name+Form("_C_EV_Down_%i",icev), CTag_BreakDown_TRF -> at(icev) );
       }
       //-- l
       std::vector < double > *LTag_BreakUp_TRF = nullptr;
@@ -417,8 +436,8 @@ bool VLQ_TRFManager::UpdateBTagging( const bool isIncl, const int req_nbjets ){
         LTag_BreakDown_TRF = m_ntupData -> d_trf_weight_77_4in_eigenvars_Light_down;
       }
       for ( unsigned int ilev = 0; ilev < LTag_BreakUp_TRF -> size(); ++ilev ) {
-        m_weightMngr->SetSystematicComponent(Form("weight_btag_Light_EV_Up_%i",ilev), LTag_BreakUp_TRF -> at(ilev) );
-        m_weightMngr->SetSystematicComponent(Form("weight_btag_Light_EV_Down_%i",ilev), LTag_BreakDown_TRF -> at(ilev) );
+        m_weightMngr->SetSystematicComponent(m_btag_name+Form("_Light_EV_Up_%i",ilev), LTag_BreakUp_TRF -> at(ilev) );
+        m_weightMngr->SetSystematicComponent(m_btag_name+Form("_Light_EV_Down_%i",ilev), LTag_BreakDown_TRF -> at(ilev) );
       }
       //-- extrapolation
       double extrapolation_up = 0.;
@@ -442,10 +461,10 @@ bool VLQ_TRFManager::UpdateBTagging( const bool isIncl, const int req_nbjets ){
         extrapolation_from_charm_up   = m_ntupData -> d_trf_weight_77_4in_extrapolation_from_charm_up;
         extrapolation_from_charm_down = m_ntupData -> d_trf_weight_77_4in_extrapolation_from_charm_down;
       }
-      m_weightMngr->SetSystematicComponent( "weight_btag_extrapolation_Up", extrapolation_up );
-      m_weightMngr->SetSystematicComponent( "weight_btag_extrapolation_Down", extrapolation_down );
-      m_weightMngr->SetSystematicComponent( "weight_btag_extrapolation_from_charm_Up", extrapolation_from_charm_up );
-      m_weightMngr->SetSystematicComponent( "weight_btag_extrapolation_from_charm_Down", extrapolation_from_charm_down );
+      m_weightMngr->SetSystematicComponent( m_btag_name+"_extrapolation_Up", extrapolation_up );
+      m_weightMngr->SetSystematicComponent( m_btag_name+"_extrapolation_Down", extrapolation_down );
+      m_weightMngr->SetSystematicComponent( m_btag_name+"_extrapolation_from_charm_Up", extrapolation_from_charm_up );
+      m_weightMngr->SetSystematicComponent( m_btag_name+"_extrapolation_from_charm_Down", extrapolation_from_charm_down );
     }
     m_weightMngr -> ComputeAllWeights();//propagates the change to all weights handled by WeightManager
     if( m_opt->ReweightKinematics() && !m_opt->ComputeWeightSys() ){

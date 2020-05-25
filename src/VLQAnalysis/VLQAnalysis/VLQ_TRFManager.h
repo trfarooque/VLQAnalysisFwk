@@ -44,7 +44,7 @@ private:
     VLQ_OutputData* m_outData;
     TRFinterface *m_trfint;
     std::string m_btag_calib_scheme;
-
+    std::string m_btag_name;
 };
 
 #endif //VLQ_TRFMANAGER_H
