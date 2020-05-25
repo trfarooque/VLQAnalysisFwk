@@ -56,13 +56,13 @@ CommonObjectSystematics += [getSystematics(name="JET_SingleParticle_HighPt",name
 #CommonObjectSystematics += [getSystematics(name="JET_Rtrk_Baseline_mass",nameUp="JET_Rtrk_Baseline_mass__1up",nameDown="JET_Rtrk_Baseline_mass__1down",oneSided=False)]
 #CommonObjectSystematics += [getSystematics(name="JET_Rtrk_Modelling_mass",nameUp="JET_Rtrk_Modelling_mass__1up",nameDown="JET_Rtrk_Modelling_mass__1down",oneSided=False)]
 #CommonObjectSystematics += [getSystematics(name="JET_Rtrk_TotalStat_mass_mass",nameUp="JET_Rtrk_TotalStat_mass__1up",nameDown="JET_Rtrk_TotalStat_mass__1down",oneSided=False)]
-CommonObjectSystematics += [getSystematics(name="JET_JER_EffectiveNP_1",nameUp="JET_JER_EffectiveNP_1__1up",nameDown="",oneSided=True)]
-CommonObjectSystematics += [getSystematics(name="JET_JER_EffectiveNP_2",nameUp="JET_JER_EffectiveNP_2__1up",nameDown="",oneSided=True)]
-CommonObjectSystematics += [getSystematics(name="JET_JER_EffectiveNP_3",nameUp="JET_JER_EffectiveNP_3__1up",nameDown="",oneSided=True)]
-CommonObjectSystematics += [getSystematics(name="JET_JER_EffectiveNP_4",nameUp="JET_JER_EffectiveNP_4__1up",nameDown="",oneSided=True)]
-CommonObjectSystematics += [getSystematics(name="JET_JER_EffectiveNP_5",nameUp="JET_JER_EffectiveNP_5__1up",nameDown="",oneSided=True)]
-CommonObjectSystematics += [getSystematics(name="JET_JER_EffectiveNP_6",nameUp="JET_JER_EffectiveNP_6__1up",nameDown="",oneSided=True)]
-CommonObjectSystematics += [getSystematics(name="JET_JER_EffectiveNP_7restTerm",nameUp="JET_JER_EffectiveNP_7restTerm__1up",nameDown="JET_JER_EffectiveNP_7restTerm__1down",oneSided=False)]
+CommonObjectSystematics += [getSystematics(name="JET_JER_EffectiveNP_1__1up",nameUp="JET_JER_EffectiveNP_1__1up",nameDown="",oneSided=True)]
+CommonObjectSystematics += [getSystematics(name="JET_JER_EffectiveNP_2__1up",nameUp="JET_JER_EffectiveNP_2__1up",nameDown="",oneSided=True)]
+CommonObjectSystematics += [getSystematics(name="JET_JER_EffectiveNP_3__1up",nameUp="JET_JER_EffectiveNP_3__1up",nameDown="",oneSided=True)]
+CommonObjectSystematics += [getSystematics(name="JET_JER_EffectiveNP_4__1up",nameUp="JET_JER_EffectiveNP_4__1up",nameDown="",oneSided=True)]
+CommonObjectSystematics += [getSystematics(name="JET_JER_EffectiveNP_5__1up",nameUp="JET_JER_EffectiveNP_5__1up",nameDown="",oneSided=True)]
+CommonObjectSystematics += [getSystematics(name="JET_JER_EffectiveNP_6__1up",nameUp="JET_JER_EffectiveNP_6__1up",nameDown="",oneSided=True)]
+CommonObjectSystematics += [getSystematics(name="JET_JER_EffectiveNP_7restTerm__1up",nameUp="JET_JER_EffectiveNP_7restTerm__1up",nameDown="",oneSided=True)]
 CommonObjectSystematics += [getSystematics(name="JET_JER_DataVsMC_MC16",nameUp="JET_JER_DataVsMC_MC16__1up",nameDown="JET_JER_DataVsMC_MC16__1down",oneSided=False)]
 #CommonObjectSystematics += [getSystematics(name="JET_JMR__1up",nameUp="JET_JMR__1up",nameDown="",oneSided=True)]
 #MET
@@ -142,12 +142,12 @@ def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campai
                                 , includeWjets=True, includeZjets=True
                                 , includeTopEW=True, includeDibosons=True
                                 , includeSingletopSystSamples=False 
-                                , splitSTChannels=False):
+                                , splitSTChannels=False, removeNull=False):
     Samples =  []
     if includeWjets:
-        Samples += GetWSamplesSherpa221( useWeightSyst, useObjectSyst, campaign )
+        Samples += GetWSamplesSherpa221( useWeightSyst, useObjectSyst, campaign, "Wjets", removeNull )
     if includeZjets:
-        Samples += GetZSamplesSherpa221( useWeightSyst, useObjectSyst, campaign )
+        Samples += GetZSamplesSherpa221( useWeightSyst, useObjectSyst, campaign, "Zjets", removeNull )
     if includeSingleTop:
         Samples += GetSingleTopSamples( useWeightSyst, useObjectSyst, campaign, SingletopSystSamples=includeSingletopSystSamples, splitChannel=splitSTChannels )
     if includeTopEW:
@@ -180,7 +180,7 @@ def GetSignalSamples(useWeightSyst=False, useObjectSyst=False, campaign=""
 
 ##_____________________________________________________________________
 ##
-def GetWSamplesSherpa221 ( useWeightSyst=False, useObjectSyst=False, campaign="", name = "Wjets"):
+def GetWSamplesSherpa221 ( useWeightSyst=False, useObjectSyst=False, campaign="", name = "Wjets", removeNull=False):
 
     ObjectSystematics = []
     WeightSystematics = []
@@ -190,10 +190,13 @@ def GetWSamplesSherpa221 ( useWeightSyst=False, useObjectSyst=False, campaign=""
         ObjectSystematics = [getSystematics(name="nominal",nameUp="",oneSided=True)]
 
     Samples     =  []
-    Samples     += [getSampleUncertainties(name,"364170."+campaign, ObjectSystematics , WeightSystematics)]
-    Samples     += [getSampleUncertainties(name,"364171."+campaign, ObjectSystematics , WeightSystematics)]
+    if not(removeNull):
+        Samples     += [getSampleUncertainties(name,"364170."+campaign, ObjectSystematics , WeightSystematics)]
+    if not(removeNull and campaign=="mc16d"):
+        Samples     += [getSampleUncertainties(name,"364171."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364172."+campaign, ObjectSystematics , WeightSystematics)]
-    Samples     += [getSampleUncertainties(name,"364173."+campaign, ObjectSystematics , WeightSystematics)]
+    if not(removeNull and campaign=="mc16a"):
+        Samples     += [getSampleUncertainties(name,"364173."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364174."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364175."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364176."+campaign, ObjectSystematics , WeightSystematics)]
@@ -204,7 +207,8 @@ def GetWSamplesSherpa221 ( useWeightSyst=False, useObjectSyst=False, campaign=""
     Samples     += [getSampleUncertainties(name,"364181."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364182."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364183."+campaign, ObjectSystematics , WeightSystematics)]
-    Samples     += [getSampleUncertainties(name,"364156."+campaign, ObjectSystematics , WeightSystematics)]
+    if not(removeNull and (campaign=="mc16a" or campaign=="mc16d")):
+        Samples     += [getSampleUncertainties(name,"364156."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364157."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364158."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364159."+campaign, ObjectSystematics , WeightSystematics)]
@@ -218,10 +222,14 @@ def GetWSamplesSherpa221 ( useWeightSyst=False, useObjectSyst=False, campaign=""
     Samples     += [getSampleUncertainties(name,"364167."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364168."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364169."+campaign, ObjectSystematics , WeightSystematics)]
-    Samples     += [getSampleUncertainties(name,"364184."+campaign, ObjectSystematics , WeightSystematics)]
-    Samples     += [getSampleUncertainties(name,"364185."+campaign, ObjectSystematics , WeightSystematics)]
-    Samples     += [getSampleUncertainties(name,"364186."+campaign, ObjectSystematics , WeightSystematics)]
-    Samples     += [getSampleUncertainties(name,"364187."+campaign, ObjectSystematics , WeightSystematics)]
+    if not(removeNull):
+        Samples     += [getSampleUncertainties(name,"364184."+campaign, ObjectSystematics , WeightSystematics)]
+        Samples     += [getSampleUncertainties(name,"364185."+campaign, ObjectSystematics , WeightSystematics)]
+
+    if not(removeNull and (campaign=="mc16a" or campaign=="mc16e")):
+        Samples     += [getSampleUncertainties(name,"364186."+campaign, ObjectSystematics , WeightSystematics)]
+    if not(removeNull):
+        Samples     += [getSampleUncertainties(name,"364187."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364188."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364189."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364190."+campaign, ObjectSystematics , WeightSystematics)]
@@ -236,7 +244,7 @@ def GetWSamplesSherpa221 ( useWeightSyst=False, useObjectSyst=False, campaign=""
 
 ##_____________________________________________________________________
 ##
-def GetZSamplesSherpa221( useWeightSyst=False, useObjectSyst=False, campaign="", name = "Zjets"):
+def GetZSamplesSherpa221( useWeightSyst=False, useObjectSyst=False, campaign="", name = "Zjets", removeNull=False):
 
     ObjectSystematics = []
     WeightSystematics = []
@@ -248,10 +256,12 @@ def GetZSamplesSherpa221( useWeightSyst=False, useObjectSyst=False, campaign="",
     Samples     =  []
     ######## Z+jets ########### 
     #ee
-    Samples     += [getSampleUncertainties(name,"364114."+campaign, ObjectSystematics , WeightSystematics)]
+    if not(removeNull and campaign=="mc16a"):
+        Samples     += [getSampleUncertainties(name,"364114."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364115."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364116."+campaign, ObjectSystematics , WeightSystematics)]
-    Samples     += [getSampleUncertainties(name,"364117."+campaign, ObjectSystematics , WeightSystematics)]
+    if not(removeNull and campaign=="mc16a"):
+        Samples     += [getSampleUncertainties(name,"364117."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364118."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364119."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364120."+campaign, ObjectSystematics , WeightSystematics)]
@@ -263,7 +273,8 @@ def GetZSamplesSherpa221( useWeightSyst=False, useObjectSyst=False, campaign="",
     Samples     += [getSampleUncertainties(name,"364126."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364127."+campaign, ObjectSystematics , WeightSystematics)]
     #mumu
-    Samples     += [getSampleUncertainties(name,"364100."+campaign, ObjectSystematics , WeightSystematics)]
+    if not(removeNull and (campaign=="mc16a" or campaign=="mc16d")):
+        Samples     += [getSampleUncertainties(name,"364100."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364101."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364102."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364103."+campaign, ObjectSystematics , WeightSystematics)]
@@ -278,8 +289,10 @@ def GetZSamplesSherpa221( useWeightSyst=False, useObjectSyst=False, campaign="",
     Samples     += [getSampleUncertainties(name,"364112."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364113."+campaign, ObjectSystematics , WeightSystematics)]
     #tautau
-    Samples     += [getSampleUncertainties(name,"364128."+campaign, ObjectSystematics , WeightSystematics)]
-    Samples     += [getSampleUncertainties(name,"364129."+campaign, ObjectSystematics , WeightSystematics)]
+    if not(removeNull):
+        Samples     += [getSampleUncertainties(name,"364128."+campaign, ObjectSystematics , WeightSystematics)]
+    if not(removeNull and (campaign=="mc16a" or campaign=="mc16e")):
+        Samples     += [getSampleUncertainties(name,"364129."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364130."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364131."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364132."+campaign, ObjectSystematics , WeightSystematics)]

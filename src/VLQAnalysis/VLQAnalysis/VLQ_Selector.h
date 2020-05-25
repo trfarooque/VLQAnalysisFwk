@@ -61,6 +61,8 @@ public:
            c_0VTex, c_1VTex, c_1VTin, c_2VTin, 
            /*V+L+T multiplicities*/
            c_0VLTex, c_1VLTex, c_1VLTin, c_2VLTin,
+            /*V+L+T+H multiplicities*/
+           c_0VLTHex, c_1VLTHin,
 		   /*Kinematic cuts*/
 		   c_LowMtbmin, c_HighMtbmin, c_LowMbb, c_HighMbb, c_HighMetSig, c_LowMetSig, c_HighMLL, c_ZwinMLL, TOPSEL_MAX
   };
@@ -120,6 +122,7 @@ public:
     std::vector<SelProp>* m_sel_LT_prop;
     std::vector<SelProp>* m_sel_VT_prop;
     std::vector<SelProp>* m_sel_VLT_prop;
+    std::vector<SelProp>* m_sel_VLTH_prop;
 
     std::vector<SelProp>* m_sel_Mbb_prop;
     std::vector<SelProp>* m_sel_Mtb_prop;

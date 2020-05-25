@@ -1,7 +1,7 @@
 import re
 from datetime import datetime
 
-outfile = 'regions_dictionary_sVLQ.py'
+outfile = 'regions_dictionary_sVLQ_ttbarCR.py'
 
 doSplitLine = False
 
@@ -45,6 +45,16 @@ SR=['c1lep3_5jwin1bex1fjin0LTex0Hex1Vin',
 'c1lep6jin4bin1fjin0Lex1VTex1Hin',
 'c1lep6jin4bin1fjin2VLTin1Hin']
 
+# Loose Syst regions
+SR.append('c1lep3_5jwin1_2bwin1VLTHin')
+SR.append('c1lep3_5jwin3bin1VLTHin')
+SR.append('c1lep6jin1_2bwin1VLTHin')
+SR.append('c1lep6jin3bin1VLTHin')
+
+# ttbar+HF CRs
+SR.append('c1lep3_5jwin4bin0fjex1Lin0VTex0Hex')
+SR.append('c1lep6jin4bin0fjex1Lin0VTex0Hex')
+
 VR=['c1lep3_5jwin1bex0fjex0Tex0Lex0Hex1Vin',
 'c1lep3_5jwin1bex0fjex0Tex1Lin0Hex1Vin',
 'c1lep3_5jwin1bex1fjin1LTin0Hex0Vex',
@@ -86,7 +96,7 @@ binningdict['c1lep3_5jwin3bex1fjin0LTex1Hin0Vex']     = '600,800,900,1100,1300,1
 binningdict['c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex']  = '600,800,900,1100,1300,1500,1900,3000'
 binningdict['c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex']  = '900,1100,1300,1500,2000,3000'
 binningdict['c1lep3_5jwin4bin1fjin0LTex1Hin0Vex']     = '600,900,1100,1400,1800,3000'
-binningdict['c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex']  = '600,900,1100,1400,1800,3000'
+binningdict['c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex']  = '600,900,1100,1350,1650,3000'
 binningdict['c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex']  = '1000,1300,1500,2000,3000'
 
 binningdict['c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin']     = '800,950,1100,1300,1800,3000'
@@ -101,6 +111,16 @@ binningdict['c1lep6jin3bex1fjin2VLTin1Hin']           = '1400,1600,1900,2300,350
 binningdict['c1lep6jin4bin1fjin1Lex0VTex1Hin']        = '900,1100,1300,1600,2000,3000'
 binningdict['c1lep6jin4bin1fjin0Lex1VTex1Hin']        = '1000,1200,1400,1650,2000,3000'
 binningdict['c1lep6jin4bin1fjin2VLTin1Hin']           = '1500,1900,3500'
+
+# ttbar+HF Control Regions
+binningdict['c1lep3_5jwin4bin0fjex1Lin0VTex0Hex']     = '600,900,1100,1400,1800,3000'
+binningdict['c1lep6jin4bin0fjex1Lin0VTex0Hex']       = '900,1100,1300,1600,2000,3000'
+
+# Loose Syst Regions
+binningdict['c1lep3_5jwin1_2bwin1VLTHin']             = '600,800,950,1100,1300,1500,1800,3000'
+binningdict['c1lep3_5jwin3bin1VLTHin']                = '600,800,950,1100,1300,1650,3000'
+binningdict['c1lep6jin1_2bwin1VLTHin']                = '600,800,950,1100,1300,1650,3000'
+binningdict['c1lep6jin3bin1VLTHin']                   = '600,900,1100,1300,1600,2000,3000'
 
 # VR
 binningdict['c1lep3_5jwin1bex0fjex0Tex0Lex0Hex1Vin']  = '600,700,800,900,1100,1300,1500,1800,3000'
@@ -148,14 +168,17 @@ def printregions(l,typ):
       legend+='HJ'
       items+=1
 
-    if 'b' in region:
+    if 'bwin' in region:
+      legend+=', '+region[region.index('bwin')-3]+'-'+region[region.index('bwin')-1]+'b'
+
+    elif 'b' in region:
       legend+=', '+region[region.index('b')-1]+'b'
       items+=1
     if 'fj' in region:
       legend+=', '+region[region.index('fj')-1]+'fj'
       items+=1
 
-    if 'TH' in region:
+    if 'TH' in region and region[region.index('TH')-1].isdigit():
       legend+=', '+region[region.index('TH')-1]+'h+t_{h}'
       items+=1
     elif 'T' in region and region[region.index('T')-1].isdigit():
@@ -169,11 +192,14 @@ def printregions(l,typ):
       legend+=', '+region[region.index('L')-1]+'t_{l}'
       items+=1  
 
-    if 'H' in region:
+    if 'H' in region and region[region.index('H')-1].isdigit():
       legend+=', '+region[region.index('H')-1]+'h'
       items+=1
   
-    if 'VLT' in region:
+    if 'VLTH' in region:
+      legend+=', '+region[region.index('VLTH')-1]+'(v+h+t_{l}+t_{h})'
+      items+=2
+    elif 'VLT' in region:
       legend+=', '+region[region.index('VLT')-1]+'(v+t_{l}+t_{h})'
       items+=2
     if 'VT' in region:

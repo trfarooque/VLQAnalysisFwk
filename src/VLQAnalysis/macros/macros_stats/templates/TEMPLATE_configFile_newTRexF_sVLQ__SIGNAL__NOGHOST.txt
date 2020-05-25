@@ -210,6 +210,33 @@ Group: Non-t#bar{t}
 #NormalizedByTheory: FALSE
 #Regions: HTX_c0lep*
 
+Systematic: HTX_BKGNORM_TTBAR
+  Title: "t#bar{t} xsec"
+  Type: OVERALL
+  OverallUp: 0.05
+  OverallDown: -0.05
+  Samples: ttbarbb
+  Regions: HTX_c1lep*
+
+Systematic: HTX_BKGNORM_TTBARBB
+  Title: "t#bar{t}+#geq1b normalisation"
+  Type: OVERALL
+  Category: "ttHF normalisation"
+  OverallUp: 0.5
+  OverallDown: -0.5
+  Samples: ttbarbb
+  Regions: HTX_c1lep*
+
+Systematic: HTX_BKGNORM_TTBARCC
+  Title: "t#bar{t}+#geq1c normalisation"
+  Type: OVERALL
+  Category: "ttHF normalisation"
+  OverallUp: 0.5
+  OverallDown: -0.5
+  Samples: ttbarcc
+  Regions: HTX_c1lep*
+
+
 #NormFactor: HTX_BKGNORM_TTBARBB
 #Title: t#bar{t}+#geq1b normalisation
 #Nominal: 1

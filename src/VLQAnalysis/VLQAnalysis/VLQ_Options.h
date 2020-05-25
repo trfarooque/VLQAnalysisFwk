@@ -14,8 +14,9 @@ public:
   };
 
   enum BtagColl{
-    CALO = 0,
-    TRACK = 1
+    CALOPFLOW = 0,
+    CALOTOPO = 1,
+    TRACK = 2
   };
   //
   // Standard C++ functions
@@ -69,6 +70,7 @@ public:
   inline bool DoPairVLQRegions() const { return m_doPairVLQRegions; }
   inline bool DoValidnRegions() const { return m_doValidnRegions; }
   inline bool DoFitRegions() const { return m_doFitRegions; }
+  inline bool DoLooseSystRegions() const { return m_doLooseSystRegions; }
   inline bool DoLowBRegions() const { return m_doLowBRegions; }
   inline bool DoLowJRegions() const { return m_doLowJRegions; }
   inline bool DoSplitEMu() const { return m_doSplitEMu; }
@@ -157,7 +159,7 @@ private:
   bool m_doZeroLeptonAna;
 
   bool m_doPreselection, m_doExclusiveJetRegions, m_doExtendedPreselection, m_doSingleVLQRegions, m_doPairVLQRegions,
-    m_doValidnRegions, m_doFitRegions, m_doLowBRegions, m_doLowJRegions,
+    m_doValidnRegions, m_doFitRegions, m_doLooseSystRegions, m_doLowBRegions, m_doLowJRegions,
     m_doSplitEMu, m_doOldBoost, m_doSplitMtb, m_doSplitMbb;
   bool m_doSumRegions;
 

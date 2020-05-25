@@ -25,6 +25,7 @@ nMerge = 10 #number of merged running of the code in a single job
 channels = ["./.",]
 sleep = 1
 param_campaign = ""
+param_removeNull = False
 
 #Options to control individual submission of different types of samples
 param_runQCD = True
@@ -78,6 +79,8 @@ if(len(sys.argv))>1:
             nMerge = int(value)
         elif(argument=="SLEEP"):
             sleep = int(value)
+        elif(argument=="REMOVENULL"):
+            param_removeNull = (value.upper()=="TRUE")
         elif(argument=="RUNDATA"):
             param_runData = (value.upper()=="TRUE")
         elif(argument=="RUNQCD"):
@@ -158,6 +161,7 @@ param_outputDir += param_outputDirSuffix
 print "param_campaign = ", param_campaign
 print "nFilesSplit = ", nFilesSplit
 print "nMerge = ", nMerge
+print "param_removeNull = ", param_removeNull
 
 print "param_runData = ", param_runData
 print "param_runTOPQ1Data = ", param_runTOPQ1Data
@@ -243,7 +247,7 @@ if param_runOtherBkgd:
                                            , includeWjets = param_runWjets, includeZjets = param_runZjets
                                            , includeTopEW = param_runTopEW, includeDibosons = param_runDibosons
                                            , includeSingletopSystSamples = param_runSTSyst
-                                           , splitSTChannels = param_splitSTChannels)
+                                           , splitSTChannels = param_splitSTChannels, removeNull = param_removeNull)
 
 if param_runSignal:
     Samples += GetSignalSamples( useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, campaign = param_campaign
