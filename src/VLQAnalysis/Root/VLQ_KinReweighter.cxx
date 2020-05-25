@@ -155,7 +155,7 @@ bool VLQ_KinReweighter::Init( /*std::map < int, Selection* >* selection_tree,*/ 
 	histName += "_meffred";
 
 	if(m_opt->DoKinRwSmoothing()){
-	  histName += "_fit";
+	  histName +="_fit";
 	}
 
       }
@@ -223,11 +223,9 @@ bool VLQ_KinReweighter::Init( /*std::map < int, Selection* >* selection_tree,*/ 
 
 	  }
 
-
 	}
 
       }
-
 
     }
     
@@ -277,7 +275,7 @@ double VLQ_KinReweighter::GetKinReweight( const int kinematic, const std::string
   //
   std::string kin = "";
   double param = 0.;
-  double param2 = 0.;
+  int param2 = 0;
 
   if( kinematic == MEFF ){
     kin = "meff";
@@ -349,35 +347,63 @@ double VLQ_KinReweighter::GetKinReweight( const int kinematic, const std::string
     }
     else if(source_reg == "c1lep3jin2bex"){
 
-      std::map < std::string, TH2F* >::iterator it = m_histograms_2D -> find(histName);
+      if(m_opt->DoKinRwSmoothing()){
 
-      if( it == m_histograms_2D -> end() ){
-	//the region is not found ... returning 1 => no systematic                                                                                                                                      
-	return 1;
+	std::string jet_prefix = (param2 < 7) ? std::to_string(param2) : "7";
+
+
+	std::string histName = source_reg + "_" + kin + "_fit_jet_" + jet_prefix + systematic;
+
+	std::cout << histName << std::endl;
+
+	std::map < std::string, TF1* >::iterator it = m_smoothFunction -> find(histName);
+
+        if( it == m_smoothFunction -> end() ){
+          return 1;
+        }
+
+        /*std::cout << "histName : " << histName << std::endl;                                                                                                                                           
+          std::cout<<" kin : " << kin << " param : " << param << " RW : "  << it -> second -> Eval(param)                                                                                                
+          << " source_reg : " << source_reg << " p0 = " << it -> second -> GetParameter(0)                                                                                                               
+          << " p1 = " << it -> second -> GetParameter(1)                                                                                                                                                 
+          << " p2 = " << it -> second -> GetParameter(2) <<std::endl;*/
+
+        return it -> second -> Eval(param);
+
       }
+      else{
 
-      int binx = 0;
-      int biny = 0;
-      int binz = 0;
+	std::map < std::string, TH2F* >::iterator it = m_histograms_2D -> find(histName);
+	
+	if( it == m_histograms_2D -> end() ){
+	  //the region is not found ... returning 1 => no systematic                                                                                                                                     
+	  return 1;
+	}
 
-      int globalbin = it -> second -> FindBin(param, param2);
+	int binx = 0;
+	int biny = 0;
+	int binz = 0;
+	
+	int globalbin = it -> second -> FindBin(param, param2);
+	
+	it -> second -> GetBinXYZ(globalbin, binx, biny, binz);
+	
+	const int max_xbin = it -> second -> GetNbinsX();
+	
+	const int max_ybin = it -> second -> GetNbinsY();
+	
+	if( binx > max_xbin) binx = max_xbin;
+	
+	if( biny > max_ybin) biny = max_ybin;
+	
+	/*std::cout << "histName : " << histName << std::endl;                                                                                                                                           
+	  std::cout <<" kin : " << kin << " param1 : " << param << " param2 : " << param2 << " RW : "  << it -> second -> GetBinContent(binx, biny)                                                      
+  	  << " source_reg : " << source_reg << " binx = " << binx << " max_xbin = " << max_xbin                                                                                                    
+	  << " biny = " << biny <<" max_ybin = " << max_ybin <<std::endl;*/
+	
+	return it -> second -> GetBinContent(binx,biny);
 
-      it -> second -> GetBinXYZ(globalbin, binx, biny, binz);
-
-      const int max_xbin = it -> second -> GetNbinsX();
-
-      const int max_ybin = it -> second -> GetNbinsY();
-
-      if( binx > max_xbin) binx = max_xbin;
-
-      if( biny > max_ybin) biny = max_ybin;
-
-      /*std::cout << "histName : " << histName << std::endl;                                                                                                                                             
-      std::cout <<" kin : " << kin << " param1 : " << param << " param2 : " << param2 << " RW : "  << it -> second -> GetBinContent(binx, biny)                                                         
-	        << " source_reg : " << source_reg << " binx = " << binx << " max_xbin = " << max_xbin                                                                                                    
-	        << " biny = " << biny <<" max_ybin = " << max_ybin <<std::endl;*/
-      
-      return it -> second -> GetBinContent(binx,biny);
+      }
 
     }
 
@@ -431,7 +457,7 @@ double VLQ_KinReweighter::GetKinReweight( const int kinematic, const std::string
 
     /*std::cout << "histName : " << histName << std::endl;
     std::cout <<" kin : " << kin << " param : " << param << " RW : "  << it -> second -> GetBinContent(bin) 
-	      << " source_reg : " << source_reg << " bin = " << bin << " max_bin = " << max_bin << std::endl;*/
+    << " source_reg : " << source_reg << " bin = " << bin << " max_bin = " << max_bin << std::endl;*/
     
     return it -> second -> GetBinContent(bin);
   }
