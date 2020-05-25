@@ -272,10 +272,11 @@ int main(int argc, char** argv){
 
   // If we are reweighting any ttbar sample or singletopWt use the following regions
   if(std::find(list_signal.begin(), list_signal.end(), "ttbarbb") != list_signal.end() ||
-     std::find(list_signal.begin(), list_signal.end(), "ttbarbbaMCPy") != list_signal.end() ||
-     std::find(list_signal.begin(), list_signal.end(), "ttbarbbPowHer") != list_signal.end() ||
-     std::find(list_signal.begin(), list_signal.end(), "ttbarbbAFII") != list_signal.end() ||
-     std::find(list_signal.begin(), list_signal.end(), "ttbarbb_systWeights") != list_signal.end()){
+     std::find(list_signal.begin(), list_signal.end(), "ttbarbb_aMCPy") != list_signal.end() ||
+     std::find(list_signal.begin(), list_signal.end(), "ttbarbb_PowHer") != list_signal.end() ||
+     std::find(list_signal.begin(), list_signal.end(), "ttbarbb_AFII") != list_signal.end() ||
+     std::find(list_signal.begin(), list_signal.end(), "ttbarbb_systWeights") != list_signal.end() || 
+     std::find(list_signal.begin(), list_signal.end(), "ttbarbb_pmg") != list_signal.end()){
 
     list_reg.push_back("c1lep3jin2bex");
 
@@ -284,19 +285,27 @@ int main(int argc, char** argv){
   // If we are reweighting Zjets use the following regions
   if(std::find(list_signal.begin(), list_signal.end(), "Zjets") != list_signal.end()){    
 
-    list_reg.push_back("c2lep3jin1bexZwinMLL_ee");
+    list_reg.push_back("c2lep3jin1bexZwinMLL_sf");
 
   }
 
 
   // Define rebinning for meff
-  double binedges_meff[19] = {0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000};
-  double* rebin_meff = &binedges_meff[0];
-  int nbins_meff = 18;
+  //double binedges_meff[19] = {0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000};
+  //double* rebin_meff = &binedges_meff[0];
+  //int nbins_meff = 18;
 
-  double binedges_meffred[18] = {0,100,200,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000};
+  double binedges_meff[14] = {0,100,400,500,600,700,800,900,1000,1200,1400,1600,2000,5000};
+  double* rebin_meff = &binedges_meff[0];
+  int nbins_meff = 13;
+
+  //double binedges_meffred[18] = {0,100,200,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000};
+  //double* rebin_meffred = &binedges_meffred[0];
+  //int nbins_meffred = 17;
+
+  double binedges_meffred[15] = {0,100,200,500,600,700,800,900,1000,1200,1400,1600,2000,2500,5000};
   double* rebin_meffred = &binedges_meffred[0];
-  int nbins_meffred = 17;
+  int nbins_meffred = 14;
 
   //double binedges_meff[16] = {0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,5000};
   //double* rebin_meff = &binedges_meff[0];
@@ -369,7 +378,7 @@ int main(int argc, char** argv){
 
       jets_n_rw -> Write();
 
-      if(list_kin[1] == "meffred" && region == "c2lep3jin1bexZwinMLL_ee"){
+      if(list_kin[1] == "meffred" && region == "c2lep3jin1bexZwinMLL_sf"){
 
 	TH1D* meffred_rw = new TH1D( (region + "_" + list_kin[1] + systematicPrefix).c_str(), "", nbins_meffred, binedges_meffred);
 
@@ -505,7 +514,7 @@ int main(int argc, char** argv){
 
           data_hist_meffred->SetName( (region + "_" + list_kin[1] + "_jet_" + std::to_string(ybin-1) + "_" + systematicPrefix).c_str() );
 
-          data_hist_meffred->Write();
+          //data_hist_meffred->Write();
 
 	  if(doSmoothing){
 
@@ -513,9 +522,9 @@ int main(int argc, char** argv){
             if(ybin < meffred_rw -> GetNbinsY()) std::cout << "Fitting meff reweighting histogram for njets = " << ybin-1 << std::endl;
             else std::cout << "Fitting meffred reweighting histogram for njets >= " << ybin-1 << std::endl;
 
-            TF1* func = new TF1(("meffredFitFunc_jet_"+ std::to_string(ybin-1)).c_str(), meffFitFunction, 200, 5000, 3);
+            TF1* func = new TF1((region + "_" + list_kin[1] + "_fit_jet_"+ std::to_string(ybin-1) + systematicPrefix).c_str(), meffFitFunction, 200, 5000, 3);
 
-            TF1* funcSigmoid = new TF1(("meffredFitFuncSigmoid_jet_"+ std::to_string(ybin-1)).c_str(), sigmoidFitFunction, 200, 5000, 6);
+	    TF1* funcSigmoid = new TF1((region + "_" + list_kin[1] + "_Sigmoidfit_jet_"+ std::to_string(ybin-1) + systematicPrefix).c_str(), sigmoidFitFunction, 200, 5000, 6);
 
             data_hist_meffred->Fit(func, "M WW");
 
