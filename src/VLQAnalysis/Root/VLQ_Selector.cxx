@@ -100,47 +100,46 @@ bool VLQ_Selector::Init(){
     std::cout<<" Inside VLQ_Selector::Init()"<<std::endl;
   }
   
-  m_blinding_config.open( Form("%s/x86_64-centos7-gcc62-opt/python/VLQAnalysis/regions_dictionary.py", std::getenv("BUILDDIR")) );
-  //m_blinding_config.open( Form("%s/python/VLQAnalysis/regions_dictionary.py", std::getenv("VLQAnalysisFramework_DIR")) );
+  m_blinding_config.open( Form("%s/python/VLQAnalysis/regions_dictionary.py", std::getenv("VLQAnalysisFramework_DIR")) );
   //============================  Initialise top selections and add rules for primary ancestors ==================================
   m_sel_indices = new std::map<std::string, int>();
   m_sel_names = new std::map<int, std::string>();
   
   m_sel_lep_prop = new std::vector<SelProp>({
       MakeSelProp("all", c_all), 
-  MakeSelProp("1lep", c_1l_chan) , MakeSelProp("0lep", c_0l_chan), MakeSelProp("2lep", c_2l_chan) });
+	MakeSelProp("1lep", c_1l_chan) , MakeSelProp("0lep", c_0l_chan), MakeSelProp("2lep", c_2l_chan) });
   
   m_sel_lepflav_prop = new std::vector<SelProp>({
       MakeSelProp("1el", c_1el_chan) , MakeSelProp("1mu", c_1mu_chan)
-  , MakeSelProp("ee", c_ee_chan), MakeSelProp("mumu", c_mumu_chan), MakeSelProp("emu", c_emu_chan), MakeSelProp("sf", c_sf_chan) });
+	, MakeSelProp("ee", c_ee_chan), MakeSelProp("mumu", c_mumu_chan), MakeSelProp("emu", c_emu_chan), MakeSelProp("sf", c_sf_chan) });
   
   m_sel_jet_prop = new std::vector<SelProp>({
       MakeSelProp("2jin", c_2jin, ""),MakeSelProp("3jin", c_3jin, "2jin")
-  ,MakeSelProp("3jex", c_3jex, "3jin"),MakeSelProp("4jin", c_4jin, "3jin")
-  ,MakeSelProp("4jex", c_4jex, "4jin"), MakeSelProp("5jin", c_5jin, "4jin")
-  ,MakeSelProp("5jex", c_5jex, "5jin"), MakeSelProp("6jin", c_6jin, "5jin")
-  ,MakeSelProp("6_8jwin", c_6_8jwin, "6jin"), MakeSelProp("7jin", c_7jin, "6jin")
-  ,MakeSelProp("6jex", c_6jex, "6jin")
-  ,MakeSelProp("3_5jwin", c_3_5jwin, "3jin")
-  ,MakeSelProp("7jex", c_7jex, "7jin"), MakeSelProp("8jin", c_8jin, "7jin")
-  ,MakeSelProp("8jex", c_8jex, "8jin"), MakeSelProp("9jin", c_9jin, "8jin") });
+	,MakeSelProp("3jex", c_3jex, "3jin"),MakeSelProp("4jin", c_4jin, "3jin")
+	,MakeSelProp("4jex", c_4jex, "4jin"), MakeSelProp("5jin", c_5jin, "4jin")
+	,MakeSelProp("5jex", c_5jex, "5jin"), MakeSelProp("6jin", c_6jin, "5jin")
+	,MakeSelProp("6_8jwin", c_6_8jwin, "6jin"), MakeSelProp("7jin", c_7jin, "6jin")
+	,MakeSelProp("6jex", c_6jex, "6jin")
+	,MakeSelProp("3_5jwin", c_3_5jwin, "3jin")
+	,MakeSelProp("7jex", c_7jex, "7jin"), MakeSelProp("8jin", c_8jin, "7jin")
+	,MakeSelProp("8jex", c_8jex, "8jin"), MakeSelProp("9jin", c_9jin, "8jin") });
   
   m_sel_fwdjet_prop = new std::vector<SelProp>({
       MakeSelProp("0fjex",c_0fjex), MakeSelProp("0fjin",c_0fjin), MakeSelProp("1fjex", c_1fjex), 
-  MakeSelProp("1fjin", c_1fjin), MakeSelProp("2fjin", c_2fjin) });
+	MakeSelProp("1fjin", c_1fjin), MakeSelProp("2fjin", c_2fjin) });
   
   m_sel_bjet_prop = new std::vector<SelProp>({
       MakeSelProp("0bex", c_0bex, ""), MakeSelProp("0bin", c_0bin, ""), MakeSelProp("1bin", c_1bin, "")
-  ,MakeSelProp("1bex", c_1bex, "1bin"), MakeSelProp("2bin", c_2bin, "1bin")
-  ,MakeSelProp("2bex", c_2bex, "2bin"), MakeSelProp("3bin", c_3bin, "2bin")
-  ,MakeSelProp("3bex", c_3bex, "3bin"), MakeSelProp("4bin", c_4bin, "3bin")
-  ,MakeSelProp("1_2bwin", c_1_2bwin, "1bin") });
+	,MakeSelProp("1bex", c_1bex, "1bin"), MakeSelProp("2bin", c_2bin, "1bin")
+	,MakeSelProp("2bex", c_2bex, "2bin"), MakeSelProp("3bin", c_3bin, "2bin")
+	,MakeSelProp("3bex", c_3bex, "3bin"), MakeSelProp("4bin", c_4bin, "3bin")
+	,MakeSelProp("1_2bwin", c_1_2bwin, "1bin") });
   
   //**** NOTE : Ancestors are not currently implemented for boosted categories ******
 
   m_sel_J_prop = new std::vector<SelProp>({
       MakeSelProp("0Jex",c_0Jex), MakeSelProp("1Jex", c_1Jex), MakeSelProp("1Jin", c_1Jin), 
-  MakeSelProp("2Jex", c_2Jex), MakeSelProp("2Jin", c_2Jin), MakeSelProp("3Jin", c_3Jin) });
+	MakeSelProp("2Jex", c_2Jex), MakeSelProp("2Jin", c_2Jin), MakeSelProp("3Jin", c_3Jin) });
 
   m_sel_M_prop = new std::vector<SelProp>({
       MakeSelProp("0Mex",c_0Mex), MakeSelProp("1Mex", c_1Mex), MakeSelProp("1Min", c_1Min), MakeSelProp("2Min", c_2Min) });
@@ -247,36 +246,36 @@ bool VLQ_Selector::Init(){
       v_jet_presel = {"3jin","4jin","5jin","6jin"};
 
       if(m_opt->DoExclusiveJetRegions()){ 
-  std::vector<std::string> v_jet_presel_ex = {"3jex","4jex","5jex","6jex","7jex","8jin"};
-  v_jet_presel.insert(v_jet_presel.end(),v_jet_presel_ex.begin(),v_jet_presel_ex.end());
+	std::vector<std::string> v_jet_presel_ex = {"3jex","4jex","5jex","6jex","7jex","8jin"};
+	v_jet_presel.insert(v_jet_presel.end(),v_jet_presel_ex.begin(),v_jet_presel_ex.end());
       }
       
     }//sVLQ
     if(m_opt->DoPairVLQRegions()){
       if(m_opt->DoZeroLeptonAna()){ 
-  v_jet_presel.push_back("6jin"); 
-  if(m_opt->DoLowJRegions()){ 
-    v_jet_presel.push_back("5jex"); 
-    v_jet_presel.push_back("5jin"); 
-  }
+	v_jet_presel.push_back("6jin"); 
+	if(m_opt->DoLowJRegions()){ 
+	  v_jet_presel.push_back("5jex"); 
+	  v_jet_presel.push_back("5jin"); 
+	}
   
-  if(m_opt->DoExclusiveJetRegions()){ 
-    std::vector<std::string> v_jet_presel_ex = {"6jex","7jex","8jex","9jin"};
-    v_jet_presel.insert(v_jet_presel.end(),v_jet_presel_ex.begin(),v_jet_presel_ex.end());
-  }
+	if(m_opt->DoExclusiveJetRegions()){ 
+	  std::vector<std::string> v_jet_presel_ex = {"6jex","7jex","8jex","9jin"};
+	  v_jet_presel.insert(v_jet_presel.end(),v_jet_presel_ex.begin(),v_jet_presel_ex.end());
+	}
   
       }
       if(m_opt->DoOneLeptonAna() || m_opt->DoTwoLeptonAna()){ 
-  v_jet_presel.push_back("5jin"); 
-  if(m_opt->DoLowJRegions()){ 
-    v_jet_presel.push_back("4jex");
-    v_jet_presel.push_back("4jin");
-  }
+	v_jet_presel.push_back("5jin"); 
+	if(m_opt->DoLowJRegions()){ 
+	  v_jet_presel.push_back("4jex");
+	  v_jet_presel.push_back("4jin");
+	}
   
-  if(m_opt->DoExclusiveJetRegions()){ 
-    std::vector<std::string> v_jet_presel_ex = {"5jex","6jex","7jex","8jex","9jin"};
-    v_jet_presel.insert(v_jet_presel.end(),v_jet_presel_ex.begin(),v_jet_presel_ex.end());
-  }
+	if(m_opt->DoExclusiveJetRegions()){ 
+	  std::vector<std::string> v_jet_presel_ex = {"5jex","6jex","7jex","8jex","9jin"};
+	  v_jet_presel.insert(v_jet_presel.end(),v_jet_presel_ex.begin(),v_jet_presel_ex.end());
+	}
 
       }
     }//pVLQ
@@ -286,23 +285,23 @@ bool VLQ_Selector::Init(){
 
       const std::string& lep_prefix = lep_ch_pair.first;
       for(const std::string& jet : set_jet_presel){
-  for(const std::string& bjet : v_bjet_presel){
-    for(const std::string& lepsuf : lep_ch_pair.second){
-      for(const std::string& mllsuf : ch_mll){
-        AddVLQSelection(lep_prefix+jet+"-"+bjet+mllsuf+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
-      }//mll channels
-    }//lepflav channels
-  }//bjet
+	for(const std::string& bjet : v_bjet_presel){
+	  for(const std::string& lepsuf : lep_ch_pair.second){
+	    for(const std::string& mllsuf : ch_mll){
+	      AddVLQSelection(lep_prefix+jet+"-"+bjet+mllsuf+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
+	    }//mll channels
+	  }//lepflav channels
+	}//bjet
       }//jet
 
       if(m_opt->DoSingleVLQRegions() && m_opt->DoExtendedPreselection()){
-  std::vector<std::string> v_supr_svlq = {"0fjex", "1fjin", "1fjin-0Hex-0Vex"};
-  for(const std::string& supr : v_supr_svlq){
-    for(const std::string& lepsuf : lep_ch_pair.second){
-      AddVLQSelection(lep_prefix+"3_5jwin-1bin-"+supr+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection(lep_prefix+"6jin-2bin-"+supr+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
-    }//lepflav channels
-  }//signal suppressing
+	std::vector<std::string> v_supr_svlq = {"0fjex", "1fjin", "1fjin-0Hex-0Vex"};
+	for(const std::string& supr : v_supr_svlq){
+	  for(const std::string& lepsuf : lep_ch_pair.second){
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-"+supr+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
+	    AddVLQSelection(lep_prefix+"6jin-2bin-"+supr+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
+	  }//lepflav channels
+	}//signal suppressing
       }//Extended preselection
     }//Lepton channels
 
@@ -318,91 +317,91 @@ bool VLQ_Selector::Init(){
 
       for( std::pair<std::string, std::vector<std::string> > lep_ch_pair : ch_lep ){
 
-  const std::string& lep_prefix = lep_ch_pair.first;
+	const std::string& lep_prefix = lep_ch_pair.first;
 
-  for(const std::string& lepsuf : lep_ch_pair.second){
+	for(const std::string& lepsuf : lep_ch_pair.second){
 
-    if(m_opt->DoFitRegions()){
+	  if(m_opt->DoFitRegions()){
 
-      // Signal regions
-      AddVLQSelection(lep_prefix+"3_5jwin-1bex-1fjin-0LTex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR1-a
-      AddVLQSelection(lep_prefix+"3_5jwin-1bex-1fjin-0Tex-1Lin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ); //SR1-b ORIG
+	    // Signal regions
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bex-1fjin-0LTex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR1-a
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bex-1fjin-0Tex-1Lin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ); //SR1-b ORIG
 
-      AddVLQSelection(lep_prefix+"3_5jwin-2bex-1fjin-0LTex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR1-a
-      AddVLQSelection(lep_prefix+"3_5jwin-2bex-1fjin-0Tex-1Lin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ); //SR1-b ORIG
+	    AddVLQSelection(lep_prefix+"3_5jwin-2bex-1fjin-0LTex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR1-a
+	    AddVLQSelection(lep_prefix+"3_5jwin-2bex-1fjin-0Tex-1Lin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ); //SR1-b ORIG
 
-      AddVLQSelection(lep_prefix+"3_5jwin-3bex-1fjin-0LTex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);    //SR2-a
-      AddVLQSelection(lep_prefix+"3_5jwin-3bex-1fjin-0Tex-1Lin-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);    //SR2-b ORIG
-      AddVLQSelection(lep_prefix+"3_5jwin-3bex-1fjin-1Tin-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-3bex-1fjin-0LTex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);    //SR2-a
+	    AddVLQSelection(lep_prefix+"3_5jwin-3bex-1fjin-0Tex-1Lin-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);    //SR2-b ORIG
+	    AddVLQSelection(lep_prefix+"3_5jwin-3bex-1fjin-1Tin-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 
-      AddVLQSelection(lep_prefix+"3_5jwin-4bin-1fjin-0LTex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);    //SR2-a
-      AddVLQSelection(lep_prefix+"3_5jwin-4bin-1fjin-0Tex-1Lin-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);    //SR2-b ORIG
-      AddVLQSelection(lep_prefix+"3_5jwin-4bin-1fjin-1Tin-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-4bin-1fjin-0LTex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);    //SR2-a
+	    AddVLQSelection(lep_prefix+"3_5jwin-4bin-1fjin-0Tex-1Lin-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);    //SR2-b ORIG
+	    AddVLQSelection(lep_prefix+"3_5jwin-4bin-1fjin-1Tin-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 
-      AddVLQSelection(lep_prefix+"6jin-1bex-1fjin-1Lex-0Tex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-a 
-      AddVLQSelection(lep_prefix+"6jin-1bex-1fjin-0Lex-1Tex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-b 
-      AddVLQSelection(lep_prefix+"6jin-1bex-1fjin-2LTin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-c
+	    AddVLQSelection(lep_prefix+"6jin-1bex-1fjin-1Lex-0Tex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-a 
+	    AddVLQSelection(lep_prefix+"6jin-1bex-1fjin-0Lex-1Tex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-b 
+	    AddVLQSelection(lep_prefix+"6jin-1bex-1fjin-2LTin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-c
 
-      AddVLQSelection(lep_prefix+"6jin-2bex-1fjin-1Lex-0Tex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-a 
-      AddVLQSelection(lep_prefix+"6jin-2bex-1fjin-0Lex-1Tex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-b 
-      AddVLQSelection(lep_prefix+"6jin-2bex-1fjin-2LTin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-c
+	    AddVLQSelection(lep_prefix+"6jin-2bex-1fjin-1Lex-0Tex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-a 
+	    AddVLQSelection(lep_prefix+"6jin-2bex-1fjin-0Lex-1Tex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-b 
+	    AddVLQSelection(lep_prefix+"6jin-2bex-1fjin-2LTin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-c
 
-      AddVLQSelection(lep_prefix+"6jin-3bex-1fjin-1Lex-0VTex-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-a
-      AddVLQSelection(lep_prefix+"6jin-3bex-1fjin-0Lex-1VTex-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-b
-      AddVLQSelection(lep_prefix+"6jin-3bex-1fjin-2VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-c
+	    AddVLQSelection(lep_prefix+"6jin-3bex-1fjin-1Lex-0VTex-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-a
+	    AddVLQSelection(lep_prefix+"6jin-3bex-1fjin-0Lex-1VTex-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-b
+	    AddVLQSelection(lep_prefix+"6jin-3bex-1fjin-2VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-c
 
-      AddVLQSelection(lep_prefix+"6jin-4bin-1fjin-1Lex-0VTex-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-a
-      AddVLQSelection(lep_prefix+"6jin-4bin-1fjin-0Lex-1VTex-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-b
-      AddVLQSelection(lep_prefix+"6jin-4bin-1fjin-2VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-c
+	    AddVLQSelection(lep_prefix+"6jin-4bin-1fjin-1Lex-0VTex-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-a
+	    AddVLQSelection(lep_prefix+"6jin-4bin-1fjin-0Lex-1VTex-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-b
+	    AddVLQSelection(lep_prefix+"6jin-4bin-1fjin-2VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-c
 
-      // Ttbar+HF control regions
-      AddVLQSelection(lep_prefix+"3_5jwin-4bin-0fjex-0VLTHex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"3_5jwin-4bin-0fjex-1Lin-0VTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    // Ttbar+HF control regions
+	    AddVLQSelection(lep_prefix+"3_5jwin-4bin-0fjex-0VLTHex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-4bin-0fjex-1Lin-0VTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 
-      AddVLQSelection(lep_prefix+"6jin-4bin-0fjex-0VLTHex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"6jin-4bin-0fjex-1Lin-0VTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-4bin-0fjex-0VLTHex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-4bin-0fjex-1Lin-0VTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 
-    }//FIT REGIONS
+	  }//FIT REGIONS
 
-    if(m_opt->DoValidnRegions()){
+	  if(m_opt->DoValidnRegions()){
 
-      // CONVENTIONAL VALIDATION REGIONS
-      AddVLQSelection(lep_prefix+"3_5jwin-1bex-0fjex-0Tex-0Lex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"3_5jwin-1bex-0fjex-0Tex-1Lin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"3_5jwin-1bex-1fjin-1LTin-0Hex-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"3_5jwin-1bex-1fjin-1Tin-0Lex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    // CONVENTIONAL VALIDATION REGIONS
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bex-0fjex-0Tex-0Lex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bex-0fjex-0Tex-1Lin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bex-1fjin-1LTin-0Hex-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bex-1fjin-1Tin-0Lex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
       
-      AddVLQSelection(lep_prefix+"3_5jwin-2bex-0fjex-0Tex-0Lex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"3_5jwin-2bex-0fjex-0Tex-1Lin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"3_5jwin-2bex-1fjin-1LTin-0Hex-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"3_5jwin-2bex-1fjin-1Tin-0Lex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-2bex-0fjex-0Tex-0Lex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-2bex-0fjex-0Tex-1Lin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-2bex-1fjin-1LTin-0Hex-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-2bex-1fjin-1Tin-0Lex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
       
-      AddVLQSelection(lep_prefix+"3_5jwin-3bin-0fjex-0Tex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"3_5jwin-3bin-1fjin-1VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-3bin-0fjex-0Tex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-3bin-1fjin-1VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 
-      AddVLQSelection(lep_prefix+"6jin-1bex-0fjex-1LTex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"6jin-1bex-0fjex-2LTin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"6jin-1bex-1fjin-0Tex-0Lex-1Hin-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"6jin-1bex-1fjin-2LTin-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-1bex-0fjex-1LTex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-1bex-0fjex-2LTin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-1bex-1fjin-0Tex-0Lex-1Hin-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-1bex-1fjin-2LTin-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
       
-      AddVLQSelection(lep_prefix+"6jin-2bex-0fjex-1LTex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"6jin-2bex-0fjex-2LTin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"6jin-2bex-1fjin-0Tex-0Lex-1Hin-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"6jin-2bex-1fjin-2LTin-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-2bex-0fjex-1LTex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-2bex-0fjex-2LTin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-2bex-1fjin-0Tex-0Lex-1Hin-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-2bex-1fjin-2LTin-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 
-      AddVLQSelection(lep_prefix+"6jin-3bin-0fjex-1VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"6jin-3bin-1fjin-1VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-    }
+	    AddVLQSelection(lep_prefix+"6jin-3bin-0fjex-1VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-3bin-1fjin-1VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	  }
     
-    // Loose regions for syst extrapolation
-    if(m_opt->DoLooseSystRegions()){
-      AddVLQSelection(lep_prefix+"3_5jwin-1_2bwin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"3_5jwin-3bin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"6jin-1_2bwin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      AddVLQSelection(lep_prefix+"6jin-3bin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-    }
+	  // Loose regions for syst extrapolation
+	  if(m_opt->DoLooseSystRegions()){
+	    AddVLQSelection(lep_prefix+"3_5jwin-1_2bwin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-3bin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-1_2bwin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-3bin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	  }
 
-  }//lepflav channels 
+	}//lepflav channels 
       }//Lepton channels
       
     }//Single VLQ regions
@@ -423,27 +422,27 @@ bool VLQ_Selector::Init(){
 
 
       std::vector<std::string> boostlist_highstat = {
-  "2Tin-0_1Hwin",
-  "1Tex-1Hex", "1Tex-0Hex",
-  "0Tex-1Hex", "0Tex-0Hex",
-  "0Tin-2Hin"
+	"2Tin-0_1Hwin",
+	"1Tex-1Hex", "1Tex-0Hex",
+	"0Tex-1Hex", "0Tex-0Hex",
+	"0Tin-2Hin"
       };
       
       std::vector<std::string> boostlist_lowstat = {
-  "2THin", "1Tex-0Hex",
-  "0Tex-1Hex", "0Tex-0Hex"
+	"2THin", "1Tex-0Hex",
+	"0Tex-1Hex", "0Tex-0Hex"
       };
       
       if(m_opt->DoZeroLeptonAna()){
-  boostlist_0L_lowb.insert(boostlist_0L_lowb.end(), boostlist_highstat.begin(), boostlist_highstat.end());
-  boostlist_0L_valid_lowb.insert(boostlist_0L_valid_lowb.end(), boostlist_highstat.begin(), boostlist_highstat.end());
-  boostlist_0L_valid_lowb.push_back("2THin");
-  boostlist_0L_highb.insert(boostlist_0L_highb.end(), boostlist_lowstat.begin(), boostlist_lowstat.end());
+	boostlist_0L_lowb.insert(boostlist_0L_lowb.end(), boostlist_highstat.begin(), boostlist_highstat.end());
+	boostlist_0L_valid_lowb.insert(boostlist_0L_valid_lowb.end(), boostlist_highstat.begin(), boostlist_highstat.end());
+	boostlist_0L_valid_lowb.push_back("2THin");
+	boostlist_0L_highb.insert(boostlist_0L_highb.end(), boostlist_lowstat.begin(), boostlist_lowstat.end());
       }
       
       if(m_opt->DoOneLeptonAna() || m_opt->DoTwoLeptonAna()){
-  boostlist_1L_default.insert(boostlist_1L_default.end(), boostlist_highstat.begin(), boostlist_highstat.end());
-  boostlist_1L_valid_4b.insert(boostlist_1L_valid_4b.end(), boostlist_lowstat.begin(), boostlist_lowstat.end());
+	boostlist_1L_default.insert(boostlist_1L_default.end(), boostlist_highstat.begin(), boostlist_highstat.end());
+	boostlist_1L_valid_4b.insert(boostlist_1L_valid_4b.end(), boostlist_lowstat.begin(), boostlist_lowstat.end());
       }
       
       //Remove overlaps between different boost options so that any region is only added once
@@ -456,83 +455,83 @@ bool VLQ_Selector::Init(){
       
       //0-lepton analysis regions
       if(m_opt->DoZeroLeptonAna()){
-  std::vector<std::string> jet_analist_0L{};
-  if(m_opt->DoFitRegions()){ jet_analist_0L.push_back("7jin"); }
-  if(m_opt->DoLowJRegions())  {
-    jet_analist_0L.push_back("5jex");
-  }
-  if(m_opt->DoValidnRegions()){
-    jet_analist_0L.push_back("6jex");
-  }
+	std::vector<std::string> jet_analist_0L{};
+	if(m_opt->DoFitRegions()){ jet_analist_0L.push_back("7jin"); }
+	if(m_opt->DoLowJRegions())  {
+	  jet_analist_0L.push_back("5jex");
+	}
+	if(m_opt->DoValidnRegions()){
+	  jet_analist_0L.push_back("6jex");
+	}
 
-  for( const std::string& jet : jet_analist_0L ){
+	for( const std::string& jet : jet_analist_0L ){
 
-    const int reg_type = (jet=="6jex") ? VALIDATION : FIT;
+	  const int reg_type = (jet=="6jex") ? VALIDATION : FIT;
 
-    std::vector<std::string> ch_mtb; ch_mtb.clear();
-    if(m_opt->DoSplitMtb()) ch_mtb = {"", "-LowMtbmin", "-HighMtbmin"};
-    else ch_mtb = {""};
+	  std::vector<std::string> ch_mtb; ch_mtb.clear();
+	  if(m_opt->DoSplitMtb()) ch_mtb = {"", "-LowMtbmin", "-HighMtbmin"};
+	  else ch_mtb = {""};
 
-    std::vector<std::string> ch_metsig; ch_metsig.clear();
-    if(m_opt->ApplyMetSignificanceCut()) ch_metsig = {"", "-LowMetSig", "-HighMetSig"};
-    else ch_metsig = {""};
+	  std::vector<std::string> ch_metsig; ch_metsig.clear();
+	  if(m_opt->ApplyMetSignificanceCut()) ch_metsig = {"", "-LowMetSig", "-HighMetSig"};
+	  else ch_metsig = {""};
 
-    for( const std::string& bjet : bjet_analist ){
-      const std::set<std::string>* boostset_0L = NULL;
+	  for( const std::string& bjet : bjet_analist ){
+	    const std::set<std::string>* boostset_0L = NULL;
 
-      if(bjet=="2bex"){ boostset_0L = &boostset_0L_valid_lowb; }
-      else if( (bjet=="3bex") && (reg_type == FIT) ){ boostset_0L = &boostset_0L_lowb; }
-      else if( (bjet=="4bin") || ((reg_type == VALIDATION) && (bjet == "3bex")) ){ boostset_0L = &boostset_0L_highb; }
+	    if(bjet=="2bex"){ boostset_0L = &boostset_0L_valid_lowb; }
+	    else if( (bjet=="3bex") && (reg_type == FIT) ){ boostset_0L = &boostset_0L_lowb; }
+	    else if( (bjet=="4bin") || ((reg_type == VALIDATION) && (bjet == "3bex")) ){ boostset_0L = &boostset_0L_highb; }
 
-      for( const std::string& boost : *boostset_0L ){
-        for(const std::string& mtb : ch_mtb ){
-    AddVLQSelection(nolep_prefix+boost+"-"+jet+"-"+bjet+mtb, do_runop, do_syst, reg_type);
-    if(m_opt->ApplyMetSignificanceCut() && (bjet=="2bex") ){
-      AddVLQSelection(nolep_prefix+boost+"-"+jet+"-"+bjet+mtb+"-HighMetSig", do_runop, do_syst, reg_type);
-    }//metsig
+	    for( const std::string& boost : *boostset_0L ){
+	      for(const std::string& mtb : ch_mtb ){
+		AddVLQSelection(nolep_prefix+boost+"-"+jet+"-"+bjet+mtb, do_runop, do_syst, reg_type);
+		if(m_opt->ApplyMetSignificanceCut() && (bjet=="2bex") ){
+		  AddVLQSelection(nolep_prefix+boost+"-"+jet+"-"+bjet+mtb+"-HighMetSig", do_runop, do_syst, reg_type);
+		}//metsig
 
-        }//mtb split
-      }//boost list
-    }//ana bjet channels
-  }//jet
+	      }//mtb split
+	    }//boost list
+	  }//ana bjet channels
+	}//jet
       }//0-lepton
       
       //One/Two-lepton analysis regions
       if(m_opt->DoOneLeptonAna() || m_opt->DoTwoLeptonAna()){
 
-  for( std::pair<std::string, std::vector<std::string> > lep_ch_pair : ch_lep ){
-    const std::string& lep_prefix = lep_ch_pair.first;
+	for( std::pair<std::string, std::vector<std::string> > lep_ch_pair : ch_lep ){
+	  const std::string& lep_prefix = lep_ch_pair.first;
   
-    for(const std::string& lepsuf : lep_ch_pair.second){
+	  for(const std::string& lepsuf : lep_ch_pair.second){
     
-      for( const std::string& bjet : bjet_analist ){
+	    for( const std::string& bjet : bjet_analist ){
       
-        for( const std::string& boost : boostset_1L_default){
-    if(m_opt->DoFitRegions()){
-      //Fit regions
-      AddVLQSelection(lep_prefix+boost+"-6jin-"+bjet+lepsuf, true, true, FIT);
-    }
-    if(m_opt->DoValidnRegions()){
-      if(bjet != "4bin"){
-        //Validation regions
-        AddVLQSelection(lep_prefix+boost+"-5jex-"+bjet+lepsuf, true, true, VALIDATION);
-      }
-    }
-        }//Default boost merging
+	      for( const std::string& boost : boostset_1L_default){
+		if(m_opt->DoFitRegions()){
+		  //Fit regions
+		  AddVLQSelection(lep_prefix+boost+"-6jin-"+bjet+lepsuf, true, true, FIT);
+		}
+		if(m_opt->DoValidnRegions()){
+		  if(bjet != "4bin"){
+		    //Validation regions
+		    AddVLQSelection(lep_prefix+boost+"-5jex-"+bjet+lepsuf, true, true, VALIDATION);
+		  }
+		}
+	      }//Default boost merging
 
-        if(m_opt->DoValidnRegions()){
-    if(bjet == "4bin"){
-      //Validation regions
-      for( const std::string& boost : boostset_1L_valid_4b){
-        AddVLQSelection(lep_prefix+boost+"-5jex-"+bjet+lepsuf, true, true, VALIDATION);
-      }
-    }//Special merging for 4b validation regions
-        }
+	      if(m_opt->DoValidnRegions()){
+		if(bjet == "4bin"){
+		  //Validation regions
+		  for( const std::string& boost : boostset_1L_valid_4b){
+		    AddVLQSelection(lep_prefix+boost+"-5jex-"+bjet+lepsuf, true, true, VALIDATION);
+		  }
+		}//Special merging for 4b validation regions
+	      }
       
-      }//ana bjet channels
-    }//e/mu splitting
+	    }//ana bjet channels
+	  }//e/mu splitting
 
-  }//lepton channels
+	}//lepton channels
   
       }//1/2-lepton
       
@@ -625,8 +624,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== Lepton part =====================
     for(SelProp& lepprop : *m_sel_lep_prop){
       if(lepprop.name == _parts_){
-  sprop_lep = &lepprop;
-  found = true; n_nodes++; break;
+	sprop_lep = &lepprop;
+	found = true; n_nodes++; break;
       }
     }
     if(found) continue;
@@ -634,8 +633,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== Jet part ========================
     for(SelProp& jetprop : *m_sel_jet_prop){
       if(jetprop.name == _parts_){
-  sprop_jet = &jetprop;
-  found = true; n_nodes++; break;
+	sprop_jet = &jetprop;
+	found = true; n_nodes++; break;
       }
     }
     if(found) continue;
@@ -643,8 +642,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== Fwd-jet part ========================
     for(SelProp& fwdjetprop : *m_sel_fwdjet_prop){
       if(fwdjetprop.name == _parts_){
-  sprop_fwdjet = &fwdjetprop;
-  found = true; n_nodes++; break;
+	sprop_fwdjet = &fwdjetprop;
+	found = true; n_nodes++; break;
       }
     }
     if(found) continue;
@@ -652,8 +651,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== B-jet part ========================
     for(SelProp& bjetprop : *m_sel_bjet_prop){
       if(bjetprop.name == _parts_){
-  sprop_bjet = &bjetprop;
-  found = true; n_nodes++; break;
+	sprop_bjet = &bjetprop;
+	found = true; n_nodes++; break;
       }
     }
     if(found) continue;
@@ -661,8 +660,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== J-tag part ========================
     for(SelProp& Jprop : *m_sel_J_prop){
       if(Jprop.name == _parts_){
-  sprop_J = &Jprop;
-  found = true; n_nodes++; break;
+	sprop_J = &Jprop;
+	found = true; n_nodes++; break;
       }
     }
     if(found) continue;
@@ -670,8 +669,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== M-tag part ========================
     for(SelProp& Mprop : *m_sel_M_prop){
       if(Mprop.name == _parts_){
-  sprop_M = &Mprop;
-  found = true; n_nodes++; break;
+	sprop_M = &Mprop;
+	found = true; n_nodes++; break;
       }
     }
     if(found) continue;
@@ -679,8 +678,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== T-tag part ========================
     for(SelProp& Tprop : *m_sel_T_prop){
       if(Tprop.name == _parts_){
-  sprop_T = &Tprop;
-  found = true; n_nodes++; break;
+	sprop_T = &Tprop;
+	found = true; n_nodes++; break;
       }
     }
     if(found) continue;
@@ -688,8 +687,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== Leptonic T-tag part ===============
     for(SelProp& Lprop : *m_sel_L_prop){
       if(Lprop.name == _parts_){
-  sprop_L = &Lprop;
-  found = true; n_nodes++; break;
+	sprop_L = &Lprop;
+	found = true; n_nodes++; break;
       }
     }
     if(found) continue;
@@ -697,8 +696,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== H-tag part ========================
     for(SelProp& Hprop : *m_sel_H_prop){
       if(Hprop.name == _parts_){
-  sprop_H = &Hprop;
-  found = true; n_nodes++; break;
+	sprop_H = &Hprop;
+	found = true; n_nodes++; break;
       }
     }
     if(found) continue;
@@ -706,8 +705,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== V-tag part ========================
     for(SelProp& Vprop : *m_sel_V_prop){
       if(Vprop.name == _parts_){
-  sprop_V = &Vprop;
-  found = true; n_nodes++; break;
+	sprop_V = &Vprop;
+	found = true; n_nodes++; break;
       }
     }
     if(found) continue;
@@ -715,8 +714,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== TH-tag part ========================
     for(SelProp& THprop : *m_sel_TH_prop){
       if(THprop.name == _parts_){
-  sprop_TH = &THprop;
-  found = true; n_nodes++; break;
+	sprop_TH = &THprop;
+	found = true; n_nodes++; break;
       }
     }
     if(found) continue;
@@ -725,8 +724,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== LT-tag part ========================
     for(SelProp& LTprop : *m_sel_LT_prop){
       if(LTprop.name == _parts_){
-  sprop_LT = &LTprop;
-  found = true; n_nodes++; break;
+	sprop_LT = &LTprop;
+	found = true; n_nodes++; break;
       }
     }
     if(found) continue;
@@ -734,8 +733,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== VT-tag part ========================
     for(SelProp& VTprop : *m_sel_VT_prop){
       if(VTprop.name == _parts_){
-  sprop_VT = &VTprop;
-  found = true; n_nodes++; break;
+	sprop_VT = &VTprop;
+	found = true; n_nodes++; break;
       }
     }
     if(found) continue;
@@ -743,8 +742,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== VLT-tag part ========================
     for(SelProp& VLTprop : *m_sel_VLT_prop){
       if(VLTprop.name == _parts_){
-  sprop_VLT = &VLTprop;
-  found = true; n_nodes++; break;
+	sprop_VLT = &VLTprop;
+	found = true; n_nodes++; break;
       }
     }
     if(found) continue;
@@ -752,8 +751,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== VLTH-tag part ========================
     for(SelProp& VLTHprop : *m_sel_VLTH_prop){
       if(VLTHprop.name == _parts_){
-  sprop_VLTH = &VLTHprop;
-  found = true; n_nodes++; break;
+	sprop_VLTH = &VLTHprop;
+	found = true; n_nodes++; break;
       }
     }
     if(found) continue;
@@ -761,8 +760,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== Mbb-split part ========================
     for(SelProp& Mbbprop : *m_sel_Mbb_prop){
       if(Mbbprop.name == _parts_){
-  sprop_Mbb = &Mbbprop;
-  found = true; n_nodes++; break;
+	sprop_Mbb = &Mbbprop;
+	found = true; n_nodes++; break;
       }
     }
     if(found) continue;
@@ -770,22 +769,22 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== Mtb-split part ========================
     for(SelProp& Mtbprop : *m_sel_Mtb_prop){
       if(Mtbprop.name == _parts_){
-  sprop_Mtb = &Mtbprop;
-  found = true; n_nodes++; break;
+	sprop_Mtb = &Mtbprop;
+	found = true; n_nodes++; break;
       }
     }
     //=============== Metsig-split part ========================
     for(SelProp& MetSigprop : *m_sel_MetSig_prop){
       if(MetSigprop.name == _parts_){
-  sprop_MetSig = &MetSigprop;
-  found = true; n_nodes++; break;
+	sprop_MetSig = &MetSigprop;
+	found = true; n_nodes++; break;
       }
     }
     //=============== MLL selection part ========================
     for(SelProp& MLLprop : *m_sel_MLL_prop){
       if(MLLprop.name == _parts_){
-  sprop_MLL = &MLLprop;
-  found = true; n_nodes++; break;
+	sprop_MLL = &MLLprop;
+	found = true; n_nodes++; break;
       }
     }
     if(found) continue;
@@ -831,7 +830,7 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     }
   }
   else if( (sel_name.find("_ee") == sel_name.size()-3) || (sel_name.find("_mumu") == sel_name.size()-5)
-     || (sel_name.find("_emu") == sel_name.size()-4) || (sel_name.find("_sf") == sel_name.size()-3) ){
+	   || (sel_name.find("_emu") == sel_name.size()-4) || (sel_name.find("_sf") == sel_name.size()-3) ){
     if(sel_name.find("_ee") != std::string::npos){
       AddAncestor(*sel, sel_name.substr(0, sel_name.find("_ee")), true);
       SelectorBase::AddAncestor(*sel, c_ee_chan);
@@ -853,8 +852,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
 
   else{
     if( !(sprop_fwdjet || sprop_bjet || sprop_J || sprop_M || sprop_T || sprop_L || sprop_H || sprop_V 
-    || sprop_TH || sprop_LT || sprop_VT || sprop_VLT || sprop_VLTH
-    ||sprop_Mbb || sprop_Mtb || sprop_MetSig || sprop_MLL)  ){
+	  || sprop_TH || sprop_LT || sprop_VT || sprop_VLT || sprop_VLTH
+	  ||sprop_Mbb || sprop_Mtb || sprop_MetSig || sprop_MLL)  ){
 
       if(sprop_jet->primanc_name.empty()){
         SelectorBase::AddAncestors(*sel, {sprop_lep->index, sprop_jet->index}, sprop_lep->index);
@@ -866,12 +865,12 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
 
     }//Lep + jet
     else if( !(sprop_fwdjet || sprop_J || sprop_M || sprop_T || sprop_L || sprop_H || sprop_V 
-         || sprop_TH || sprop_LT || sprop_VT || sprop_VLT || sprop_VLTH
-         || sprop_Mbb || sprop_Mtb || sprop_MetSig || sprop_MLL) ){
+	       || sprop_TH || sprop_LT || sprop_VT || sprop_VLT || sprop_VLTH
+	       || sprop_Mbb || sprop_Mtb || sprop_MetSig || sprop_MLL) ){
       
       if(sprop_bjet->primanc_name.empty()){
         AddAncestor(*sel, "c-"+sprop_lep->name+"-"+sprop_jet->name, true);
-  SelectorBase::AddAncestor(*sel, sprop_bjet->index);
+	SelectorBase::AddAncestor(*sel, sprop_bjet->index);
       }
       else{
         AddPrimary(*sel, "c-"+sprop_lep->name+"-"+sprop_jet->name+"-"+sprop_bjet->primanc_name);
@@ -903,67 +902,67 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
       if(sprop_TH){s_boost = sprop_TH->name; }
       else{
 
-  if(sprop_T){
-    if(!s_boost.empty()){ s_boost += "-"; }
-    s_boost += sprop_T->name;
-  }
+	if(sprop_T){
+	  if(!s_boost.empty()){ s_boost += "-"; }
+	  s_boost += sprop_T->name;
+	}
   
-  if(sprop_L){
-    if(!s_boost.empty()){ s_boost += "-"; }
-    s_boost += sprop_T->name;
-  }
+	if(sprop_L){
+	  if(!s_boost.empty()){ s_boost += "-"; }
+	  s_boost += sprop_T->name;
+	}
   
-  if(sprop_H){
-    if(!s_boost.empty()){ s_boost += "-"; }
-    s_boost += sprop_H->name;
-  }
+	if(sprop_H){
+	  if(!s_boost.empty()){ s_boost += "-"; }
+	  s_boost += sprop_H->name;
+	}
   
-  if(sprop_V){
-    if(!s_boost.empty()){ s_boost += "-"; }
-    s_boost += sprop_V->name;
-  }
+	if(sprop_V){
+	  if(!s_boost.empty()){ s_boost += "-"; }
+	  s_boost += sprop_V->name;
+	}
   
-  if(sprop_LT){
-    if(!s_boost.empty()){ s_boost += "-"; }
-    s_boost += sprop_LT->name;
-  }
+	if(sprop_LT){
+	  if(!s_boost.empty()){ s_boost += "-"; }
+	  s_boost += sprop_LT->name;
+	}
   
-  if(sprop_VT){
-    if(!s_boost.empty()){ s_boost += "-"; }
-    s_boost += sprop_VT->name;
-  }
+	if(sprop_VT){
+	  if(!s_boost.empty()){ s_boost += "-"; }
+	  s_boost += sprop_VT->name;
+	}
   
-  if(sprop_VLT){
-    if(!s_boost.empty()){ s_boost += "-"; }
-    s_boost += sprop_VLT->name;
-  }
+	if(sprop_VLT){
+	  if(!s_boost.empty()){ s_boost += "-"; }
+	  s_boost += sprop_VLT->name;
+	}
 
-  if(sprop_VLTH){
-    if(!s_boost.empty()){ s_boost += "-"; }
-    s_boost += sprop_VLTH->name;
-  }
+	if(sprop_VLTH){
+	  if(!s_boost.empty()){ s_boost += "-"; }
+	  s_boost += sprop_VLTH->name;
+	}
   
       }
       if(!(sprop_MetSig || sprop_MLL) ){
-  AddAncestor(*sel, "c-" + sprop_lep->name + "-" + s_boost + "-" + sprop_jet->name + "-" + sprop_bjet->name, true);
-  if(sprop_Mbb){
-    SelectorBase::AddAncestor(*sel, sprop_Mbb->index);
-  }
-  else if(sprop_Mtb){
-    SelectorBase::AddAncestor(*sel, sprop_Mtb->index);
-  }
+	AddAncestor(*sel, "c-" + sprop_lep->name + "-" + s_boost + "-" + sprop_jet->name + "-" + sprop_bjet->name, true);
+	if(sprop_Mbb){
+	  SelectorBase::AddAncestor(*sel, sprop_Mbb->index);
+	}
+	else if(sprop_Mtb){
+	  SelectorBase::AddAncestor(*sel, sprop_Mtb->index);
+	}
       }//Lep-jet-bjet-boost-mt[b]b
       else{
-  std::string msplit = "";
-  if(sprop_Mbb){ msplit = "-"+sprop_Mbb->name; }
-  else if(sprop_Mtb){ msplit = "-"+sprop_Mtb->name; }
-  AddAncestor(*sel, "c-" + sprop_lep->name + "-" + s_boost + "-" + sprop_jet->name + "-" + sprop_bjet->name + msplit, true);
-  if(sprop_MetSig){
-    SelectorBase::AddAncestor(*sel, sprop_MetSig->index);
-  }
-  if(sprop_MLL){
-    SelectorBase::AddAncestor(*sel, sprop_MLL->index);
-  }
+	std::string msplit = "";
+	if(sprop_Mbb){ msplit = "-"+sprop_Mbb->name; }
+	else if(sprop_Mtb){ msplit = "-"+sprop_Mtb->name; }
+	AddAncestor(*sel, "c-" + sprop_lep->name + "-" + s_boost + "-" + sprop_jet->name + "-" + sprop_bjet->name + msplit, true);
+	if(sprop_MetSig){
+	  SelectorBase::AddAncestor(*sel, sprop_MetSig->index);
+	}
+	if(sprop_MLL){
+	  SelectorBase::AddAncestor(*sel, sprop_MLL->index);
+	}
       }//Lep-jet-bjet-boost-mt[b]b-metsig-mll
 
     }//post-boost
