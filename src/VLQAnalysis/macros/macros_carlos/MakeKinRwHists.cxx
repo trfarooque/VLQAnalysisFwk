@@ -71,6 +71,11 @@ TH2D* getTotalKinHisto2D( std::vector<std::string>* samples, std::string inputDi
 
       TFile* f = TFile::Open( (inputDir + "/" + campaign + "/outVLQAnalysis_" + sample + "_nominal_HIST.root").c_str(), "READ" );
 
+      if(sample == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR10__muF20") systematicPrefix = "_weight_pmg_muR100__muF200";
+      if(sample == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR10__muF05") systematicPrefix = "_weight_pmg_muR100__muF050";
+      if(sample == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR20__muF10") systematicPrefix = "_weight_pmg_muR200__muF100";
+      if(sample == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR05__muF10") systematicPrefix = "_weight_pmg_muR050__muF100";
+
       TH2D* h_i = ((TH2D*)(f -> Get( ( std::string(region) + "_" + (kinematics -> at(0)) + "_vs_" + (kinematics -> at(1)) + systematicPrefix ).c_str() ) ) );
 
       if(!h_i){
@@ -291,25 +296,21 @@ int main(int argc, char** argv){
 
 
   // Define rebinning for meff
-  //double binedges_meff[19] = {0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000};
-  //double* rebin_meff = &binedges_meff[0];
-  //int nbins_meff = 18;
-
-  double binedges_meff[14] = {0,100,400,500,600,700,800,900,1000,1200,1400,1600,2000,5000};
+  double binedges_meff[19] = {0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000};
   double* rebin_meff = &binedges_meff[0];
-  int nbins_meff = 13;
+  int nbins_meff = 18;
 
-  //double binedges_meffred[18] = {0,100,200,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000};
-  //double* rebin_meffred = &binedges_meffred[0];
-  //int nbins_meffred = 17;
-
-  double binedges_meffred[15] = {0,100,200,500,600,700,800,900,1000,1200,1400,1600,2000,2500,5000};
-  double* rebin_meffred = &binedges_meffred[0];
-  int nbins_meffred = 14;
-
-  //double binedges_meff[16] = {0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,5000};
+  //double binedges_meff[14] = {0,100,400,500,600,700,800,900,1000,1200,1400,1600,2000,5000};
   //double* rebin_meff = &binedges_meff[0];
-  //int nbins_meff = 15;
+  //int nbins_meff = 13;
+
+  double binedges_meffred[18] = {0,100,200,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000};
+  double* rebin_meffred = &binedges_meffred[0];
+  int nbins_meffred = 17;
+
+  //double binedges_meffred[15] = {0,100,200,500,600,700,800,900,1000,1200,1400,1600,2000,2500,5000};
+  //double* rebin_meffred = &binedges_meffred[0];
+  //int nbins_meffred = 14;
 
   // Define rebining for jets_n. Merging bins starting from jets_n = 8 to decrease run time
   //double binedges_jets_n[10] = {-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 15.5};

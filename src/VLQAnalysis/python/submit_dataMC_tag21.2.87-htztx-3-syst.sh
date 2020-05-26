@@ -18,18 +18,18 @@ do
 		    --queue=at3 --NFILESPLIT=200 --NMERGE=1 \
 		    --dumpHistos=true --dumpOverlapTree=false --dumpTree=false --doTruthAnalysis=false --splitVLQDecays=false \
 		    --otherVariables=true --doBlind=false \
-		    --useObjectSyst=false --useWeightSyst=false --onlyDumpSystHistograms=true \
-		    --doOneLeptonAna=true --doZeroLeptonAna=false --doTwoLeptonAna=true --doSplitEMu=true \
+		    --useObjectSyst=false --useWeightSyst=true --onlyDumpSystHistograms=false \
+		    --doOneLeptonAna=true --doZeroLeptonAna=false --doTwoLeptonAna=true --doSplitEMu=false \
 		    --doLowBRegions=true --doLowJRegions=false \
 		    --doFitRegions=true --doValidnRegions=true --DOSINGLEVLQREGIONS=true --doSingleVLQPreselection=true --doExtendedPreselection=false \
 		    --doExclusiveJetRegions=true \
-		    --computeWeightSys=false --DOEXPSYS=false --DOTHEORYSYS=false \
+		    --DOEXPSYS=false --DOTHEORYSYS=true \
 		    --ISAFII=false \
-		    --MAXMETCUTTWOLEP=100. \
 		    --runSignals=false --runOtherBkgd=true --runTtbar=false --runQCD=false --runData=false \
-		    --runTopEW=false --runDibosons=false --runSingletop=false --runZjets=true --runWjets=true \
-		    --SPLITSTCHANNELS=false --runTchan=false --runSchan=false --runWtProd=true \
+		    --runTopEW=false --runDibosons=false --runSingletop=true --runZjets=false --runWjets=false \
+		    --SPLITSTCHANNELS=true --runTchan=false --runSchan=false --runWtProd=true \
 		    --runTOPQ1Data=true --runTOPQ4Data=true \
+		    --RUNTTSYST=false --RUNSTSYST=false \
 		    --useLeptonsSF=true --useLeptonTrigger=true --useMETTrigger=true --USEMETTRIGGERONELEP=true \
 		    --applyMetMtwCuts=true --invertMetMtwCuts=false --APPLYMETSIGOBJCUT=false \
 		    --applydeltaphicut=true --minDeltaPhiCut=0.4 --maxDeltaPhiCut=-1. \
@@ -40,7 +40,7 @@ do
 		    --filterType=APPLYFILTER --useSlices=true --scaleTtbarHtSlices=false \
 		    --jetPtCut=25 --fwdJetPtCut=20 --RCJetPtCut=200 --RCNsubjetsCut=0 --RCCollection=VR_rho550 \
 		    --minMeffCut=600 \
-		    --REWEIGHTKINEMATICS=true --KINRWLIST=JETSN,MEFFRED --DOKINRWSMOOTHING=false
+		    --REWEIGHTKINEMATICS=false --KINRWLIST=JETSN,MEFFRED --DOKINRWSMOOTHING=false
 		
 	    done
 	done

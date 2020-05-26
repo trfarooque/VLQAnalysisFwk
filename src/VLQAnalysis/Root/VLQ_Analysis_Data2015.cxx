@@ -478,16 +478,16 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "met",         20, 0, 1000,    ";E_{T}^{miss} [GeV]",otherVariables, &(m_outData -> o_met) );
       m_outMngrHist -> AddStandardTH1( "met_phi",     0.2, -3.5, 3.5, ";#phi_{MET}", false, &(m_outData->o_AO_met), -1, "Phi");
       m_outMngrHist -> AddStandardTH1( "mtw",         25, 0, 1000,    ";m_{T}(W) [GeV]", otherVariables, &(m_outData -> o_mtwl) );
-      m_outMngrHist -> AddStandardTH1( "ptw",         25, 0, 1000,    ";p_{T}(W) [GeV]", false, &(m_outData -> o_ptwl) );
-      m_outMngrHist -> AddStandardTH1( "mll",         5, 0, 500,    ";m_{ll} [GeV]", false, &(m_outData -> o_mll) );
-      m_outMngrHist -> AddStandardTH1( "hthad",       25, 0, 3000,    ";H_{T}^{had} [GeV]", false, &(m_outData -> o_hthad) );
+      m_outMngrHist -> AddStandardTH1( "ptw",         25, 0, 1000,    ";p_{T}(W) [GeV]", otherVariables, &(m_outData -> o_ptwl) );
+      m_outMngrHist -> AddStandardTH1( "mll",         5, 0, 500,    ";m_{ll} [GeV]", otherVariables, &(m_outData -> o_mll) );
+      m_outMngrHist -> AddStandardTH1( "hthad",       25, 0, 3000,    ";H_{T}^{had} [GeV]", otherVariables, &(m_outData -> o_hthad) );
       m_outMngrHist -> AddStandardTH1( "hthadRC",     50, 0, 5000,    ";H_{T}^{had} (RC jets) [GeV]", false, &(m_outData -> o_hthadRC) );
       m_outMngrHist -> AddStandardTH1( "hthadRCtag",     50, 0, 5000,  ";H_{T}^{had} (tagged RC jets) [GeV]", false, &(m_outData -> o_hthadRCtag) );
       m_outMngrHist -> AddStandardTH1( "hthadRCM",     50, 0, 5000,  ";H_{T}^{had} (RC jets w/ M>100 GeV) [GeV]", false, &(m_outData -> o_hthadRCM) );
 
       m_outMngrHist -> AddStandardTH1( "truth_ht_filter",    25, 0, 3000,    ";Truth H_{T} [GeV]", false, &(m_outData -> o_truth_ht_filter ) );
       m_outMngrHist -> AddStandardTH1( "truth_met_filter",   25, 0, 1000,    ";Truth MET [GeV]", false, &(m_outData -> o_truth_met_filter ) );
-      m_outMngrHist -> AddStandardTH1( "mtbmin",      25, 0, 500,    ";m_{T}^{min}(b,MET)", false, &(m_outData->o_mTbmin) );
+      m_outMngrHist -> AddStandardTH1( "mtbmin",      25, 0, 500,    ";m_{T}^{min}(b,MET)", otherVariables, &(m_outData->o_mTbmin) );
       m_outMngrHist -> AddStandardTH1( "metsig_ev",     0.5, 0, 50,    ";E_{T}^{miss}/#sqrt{H_{T}^{had}} [#sqrt{GeV}]", false, &(m_outData -> o_metsig_ev) );
       m_outMngrHist -> AddStandardTH1( "metsig_obj",    0.5, 0, 50,    "; #sigma(E_{T}^{miss}) [#sqrt{GeV}]", false, &(m_outData -> o_metsig_obj) );
       
@@ -822,9 +822,9 @@ bool VLQ_Analysis_Data2015::Begin(){
       //const bool DrawSyst = (iRCJet == 0) && otherVariables;
 
       if(DrawReco){
-	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_pt",         50, 0, 1000, ";RC jet"+str_id+"  p_{T} [GeV]"      ,  false, &(m_outData -> o_rcjets), iRCJet, "Pt");
+	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_pt",         50, 0, 1000, ";RC jet"+str_id+"  p_{T} [GeV]"      ,  otherVariables, &(m_outData -> o_rcjets), iRCJet, "Pt");
 	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_eta",        0.2, -3, 3,  ";RC jet"+str_id+"  #eta"             ,  false, &(m_outData -> o_rcjets), iRCJet, "Eta");
-	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_m",          10, 0, 500,  ";RC jet"+str_id+"  mass [GeV]"       ,  false, &(m_outData -> o_rcjets), iRCJet, "M");
+	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_m",          10, 0, 500,  ";RC jet"+str_id+"  mass [GeV]"       ,  otherVariables, &(m_outData -> o_rcjets), iRCJet, "M");
 	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_nconsts",    1, -0.5,5.5, ";Number of RC jet"+str_id+"  consts" ,  false,    &(m_outData -> o_rcjets), iRCJet, "nconsts");
 	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_nbconsts",    1, -0.5,5.5, ";Number of RC jet"+str_id+" b-tagged consts" ,  false,    &(m_outData -> o_rcjets), iRCJet, "nbconsts");
 	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_isRCTTMass", 1, -.5, 1.5, ";Mass Tag"          ,  false,    &(m_outData -> o_rcjets), iRCJet, "isRCTTMass");
@@ -908,9 +908,9 @@ bool VLQ_Analysis_Data2015::Begin(){
 					   +" b-tagged consts", "Number of truth "+tagstring+" RC jet"+str_id+" b-tagged consts"
 					   , false, &(m_outData -> o_rcjets_truthmatched.at(type)), &(m_outData -> o_rcjets_truthmatched.at(type)), iRCJet, iRCJet, false, "Pt", "nbconsts" );
 	
-	  m_outMngrHist -> AddStandardTH1( type+"_RCjet"+str_id+"_pt", 50, 0, 1200, ";truth "+tagstring+" RC jet"+str_id+" p_{T} [GeV]", false, &(m_outData -> o_rcjets_truthmatched.at(type))
+	  m_outMngrHist -> AddStandardTH1( type+"_RCjet"+str_id+"_pt", 50, 0, 1200, ";truth "+tagstring+" RC jet"+str_id+" p_{T} [GeV]", otherVariables, &(m_outData -> o_rcjets_truthmatched.at(type))
 					   , iRCJet, "Pt");
-	  m_outMngrHist -> AddStandardTH1( type+"_RCjet"+str_id+"_m", 10, 0, 500, ";truth "+tagstring+" RC jet"+str_id+" mass [GeV]", false, &(m_outData -> o_rcjets_truthmatched.at(type)), iRCJet, "M");
+	  m_outMngrHist -> AddStandardTH1( type+"_RCjet"+str_id+"_m", 10, 0, 500, ";truth "+tagstring+" RC jet"+str_id+" mass [GeV]", otherVariables, &(m_outData -> o_rcjets_truthmatched.at(type)), iRCJet, "M");
 	  m_outMngrHist -> AddStandardTH1( type+"_RCjet"+str_id+"_nconsts", 1, -0.5, 5.5, ";Number of truth "+tagstring+" RC jet"+str_id+" consts", false
 					   , &(m_outData -> o_rcjets_truthmatched.at(type)), iRCJet, "nconsts");
 	  m_outMngrHist -> AddStandardTH1( type+"_RCjet"+str_id+"_nbconsts", 1, -0.5, 5.5, ";Number of truth "+tagstring+" RC jet"+str_id+" b-tagged consts"
