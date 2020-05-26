@@ -2175,7 +2175,6 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
       }
       if( m_opt -> ComputeWeightSys() ){
         m_weightMngr -> SetTtccWeights();
-        m_weightMngr -> SetTtbarPMGWeights();
         if( m_opt -> ApplyTtbarNNLOCorrection() ){
           m_weightMngr -> SetNNLOSystematic();
         }
@@ -2185,13 +2184,14 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     if( m_outData -> o_is_ttbar || (m_opt -> StrSampleName().find("SINGLETOP") != std::string::npos) 
 	|| (m_opt -> StrSampleName().find("WJETS") != std::string::npos) || (m_opt -> StrSampleName().find("ZJETS") != std::string::npos) ){
       m_weightMngr -> SetPMGSystWeights();
-    if((m_opt -> ReweightKinematics()) && (m_opt -> ComputeWeightSys())){
-      m_weightMngr -> UpdateSysReweighting();
+      if((m_opt -> ReweightKinematics()) && (m_opt -> ComputeWeightSys())){
+	m_weightMngr -> UpdateSysReweighting();
+      }
     }
   } else if (m_opt -> StrSampleName().find("QCD") != std::string::npos){
     m_weightMngr -> SetQCDWeight();
   }
-
+  
   //###########################################################
   //                                                          #
   // TRF                                                      #
