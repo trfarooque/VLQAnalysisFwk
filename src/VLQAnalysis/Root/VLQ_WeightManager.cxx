@@ -408,12 +408,6 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
       AddAndInitWeight("weight_pmg_qsf025","",false, true, "qsf025_Weight", "weight_mc","F");
       AddAndInitWeight("weight_pmg_qsf4","",false, true, "qsf4_Weight", "weight_mc","F");
 
-      /*
-	AddAndInitWeight("weight_pmg_ckkw15","",false, true, "ckkw15_Weight", "","F");
-	AddAndInitWeight("weight_pmg_ckkw30","",false, true, "ckkw30_Weight", "","F");
-	AddAndInitWeight("weight_pmg_qsf025","",false, true, "qsf025_Weight", "","F");
-	AddAndInitWeight("weight_pmg_qsff4","",false, true, "qsf4_Weight", "","F");
-      */
     }
 
   }
