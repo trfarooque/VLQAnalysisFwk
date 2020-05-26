@@ -64,6 +64,7 @@ m_applyTtbarNNLOCorrection(false),
 m_recomputeTtbarNNLOCorrection(false),
 m_applyVjetsSherpa22RW(true),
 m_computeTtccNLO(false),
+m_deriveReweighting(false),
 m_reweightKinematics(false),
 m_doKinRwSmoothing(false),
 m_makeQCD0LSystematics(false),
@@ -158,6 +159,7 @@ OptionsBase(q)
     m_recomputeTtbarNNLOCorrection  = q.m_recomputeTtbarNNLOCorrection;
     m_applyVjetsSherpa22RW = q.m_applyVjetsSherpa22RW;
     m_computeTtccNLO     = q.m_computeTtccNLO;
+    m_deriveReweighting  = q.m_deriveReweighting;
     m_reweightKinematics = q.m_reweightKinematics;
     m_doKinRwSmoothing = q.m_doKinRwSmoothing;
     m_makeQCD0LSystematics = q.m_makeQCD0LSystematics;
@@ -318,6 +320,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_applyVjetsSherpa22RW = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--COMPUTETTCCNLO") != std::string::npos ){
             m_computeTtccNLO = AnalysisUtils::BoolValue(temp_val, temp_arg);
+        } else if( temp_arg.find("--DERIVEREWEIGHTING") != std::string::npos ){
+	    m_deriveReeweighting = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--REWEIGHTKINEMATICS") != std::string::npos ){
 	    m_reweightKinematics = AnalysisUtils::BoolValue(temp_val, temp_arg);
 	} else if( temp_arg.find("--DOKINRWSMOOTHING") != std::string::npos ){
@@ -524,6 +528,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_scaleTtbarHtSlices      = " << m_scaleTtbarHtSlices << std::endl;
     std::cout << " m_applyTtbarNNLOCorrection= " << m_applyTtbarNNLOCorrection   << std::endl;
     std::cout << " m_recomputeTtbarNNLOCorrection= " << m_recomputeTtbarNNLOCorrection   << std::endl;
+    std::cout << " m_deriveReweighting       = " << m_deriveReweighting << std::endl;
     std::cout << " m_reweightKinematics      = " << m_reweightKinematics << std::endl;
     std::cout << " m_doKinRwSmoothing        = " << m_doKinRwSmoothing << std::endl;
     std::cout << " m_makeQCD0LSystematics    = " << m_makeQCD0LSystematics << std::endl;

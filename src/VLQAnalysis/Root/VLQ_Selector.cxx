@@ -258,7 +258,7 @@ bool VLQ_Selector::Init(){
     if(m_opt->DoSingleVLQRegions()){
       v_jet_presel = {"3jin","4jin","5jin","6jin","7jin","8jin","12jin"};
 
-      if(m_opt->DoExclusiveJetRegions()){ 
+      if(m_opt->DeriveReweighting() ||  m_opt->DoExclusiveJetRegions()){ 
 	std::vector<std::string> v_jet_presel_ex = {"3jex","4jex","5jex","6jex","7jex","8jex","9jex","10jex","11jex"};
 	v_jet_presel.insert(v_jet_presel.end(),v_jet_presel_ex.begin(),v_jet_presel_ex.end());
       }
