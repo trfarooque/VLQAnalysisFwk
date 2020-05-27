@@ -4,6 +4,14 @@ from datetime import datetime
 outfile = 'regions_dictionary_sVLQ.py'
 
 doSplitLine = False
+consistentLastBin = True
+lastbinedge = 3500
+
+doPresel = True
+doSR = True
+doVR = True
+doTtbarCR = True
+doLooseSyst = False
 
 with open(outfile,'write') as f:
   f.write("# Created with MakeRegionsDictionary at %s\n\n"%datetime.now())
@@ -46,13 +54,15 @@ SR=['c1lep3_5jwin1bex1fjin0LTex0Hex1Vin',
     'c1lep6jin4bin1fjin2VLTin1Hin']
 
 # Loose Syst regions
-SR.extend(['c1lep3_5jwin1_2bwin1VLTHin',
+if doLooseSyst:
+  SR.extend(['c1lep3_5jwin1_2bwin1VLTHin',
            'c1lep3_5jwin3bin1VLTHin',
            'c1lep6jin1_2bwin1VLTHin',
            'c1lep6jin3bin1VLTHin'])
 
 # ttbar+HF CRs
-SR.extend(['c1lep3_5jwin4bin0fjex1Lin0VTex0Hex',
+if doTtbarCR:
+  SR.extend(['c1lep3_5jwin4bin0fjex1Lin0VTex0Hex',
           'c1lep6jin4bin0fjex1Lin0VTex0Hex'])
 
 VR=['c1lep3_5jwin1bex0fjex0Tex0Lex0Hex1Vin',
@@ -152,6 +162,10 @@ binningdict['c1lep6jin2bin'] =                              '700,800,1000,1400,1
 binningdict['c1lep6jin3bin'] =                              '700,800,1000,1400,1600,1800,3000'
 binningdict['call'] =                                       '700,800,1000,1400,1600,1800,3000'
 
+if consistentLastBin:
+  for reg in binningdict.keys():
+    binningdict[reg] = binningdict[reg][:binningdict[reg].rfind(',')+1]+str(lastbinedge)
+
 def printregions(l,typ):
   for region in l:
     legend = ""
@@ -230,57 +244,71 @@ def printregions(l,typ):
       f.write("\t'type':"+'"%s"\n'%typ)
       f.write('}\n')
 
-with open(outfile,'a') as f:
-  f.write("#\n")
-  f.write("#\n")
-  f.write("# Fit regions\n")
-  f.write("#\n")
-  f.write("#\n")
-printregions(SR,"SIGNAL")
+# Write region definitions
+if doSR:
+  with open(outfile,'a') as f:
+    f.write("#\n")
+    f.write("#\n")
+    f.write("# Fit regions\n")
+    f.write("#\n")
+    f.write("#\n")
+  printregions(SR,"SIGNAL")
 
-with open(outfile,'a') as f:
-  f.write("#\n")
-  f.write("#\n")
-  f.write("# Validation regions\n")
-  f.write("#\n")
-  f.write("#\n")
-printregions(VR,"VALIDATION")
+if doVR:
+  with open(outfile,'a') as f:
+    f.write("#\n")
+    f.write("#\n")
+    f.write("# Validation regions\n")
+    f.write("#\n")
+    f.write("#\n")
+  printregions(VR,"VALIDATION")
 
-with open(outfile,'a') as f:
-  f.write("#\n")
-  f.write("#\n")
-  f.write("# Preselection regions\n")
-  f.write("#\n")
-  f.write("#\n")
-printregions(Presel,"VALIDATION")
+if doPresel:
+  with open(outfile,'a') as f:
+    f.write("#\n")
+    f.write("#\n")
+    f.write("# Preselection regions\n")
+    f.write("#\n")
+    f.write("#\n")
+  printregions(Presel,"VALIDATION")
 
-with open(outfile,'a') as f:
-  f.write("fit_regions_1l = [\n")
-  for region in SR:
-    if region==SR[-1]:
-      f.write("reg_"+region[1:]+"\n")
-    else:
-      f.write("reg_"+region[1:]+",\n")
-  f.write("]\n\n")
+# Add regions to dictionary to be read later
+if doSR:
+  with open(outfile,'a') as f:
+    f.write("\nfit_regions_1l = [\n")
+    for region in SR:
+      if region==SR[-1]:
+        f.write("reg_"+region[1:]+"\n")
+      else:
+        f.write("reg_"+region[1:]+",\n")
+    f.write("]\n")
 
-with open(outfile,'a') as f:
-  f.write("validation_regions_1l = [\n")
-  for region in VR:
-    if region==VR[-1]:
-      f.write("reg_"+region[1:]+"\n")
-    else:
-      f.write("reg_"+region[1:]+",\n")
-  f.write("]\n\n")
+if doVR:
+  with open(outfile,'a') as f:
+    f.write("\nvalidation_regions_1l = [\n")
+    for region in VR:
+      if region==VR[-1]:
+        f.write("reg_"+region[1:]+"\n")
+      else:
+        f.write("reg_"+region[1:]+",\n")
+    f.write("]\n")
 
+if doPresel:
+  with open(outfile,'a') as f:
+    f.write("\npreselection_regions_1l = [\n")
+    for region in Presel:
+      if region==Presel[-1]:
+        f.write("reg_"+region[1:]+"\n")
+      else:
+        f.write("reg_"+region[1:]+",\n")
+    f.write("]\n")
+
+# Final tally
 with open(outfile,'a') as f:
-  f.write("preselection_regions_1l = [\n")
-  for region in Presel:
-    if region==Presel[-1]:
-      f.write("reg_"+region[1:]+"\n")
-    else:
-      f.write("reg_"+region[1:]+",\n")
-  f.write("]\n\n")
   f.write("all_regions_1l =  []\n")
-  f.write("all_regions_1l += fit_regions_1l\n")
-  f.write("all_regions_1l += validation_regions_1l\n")
-  f.write("all_regions_1l += preselection_regions_1l\n")
+  if doSR:
+    f.write("all_regions_1l += fit_regions_1l\n")
+  if doVR:
+    f.write("all_regions_1l += validation_regions_1l\n")
+  if doPresel:
+    f.write("all_regions_1l += preselection_regions_1l\n")

@@ -10,17 +10,22 @@ sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/VLQAnalysis/" 
 from VLQ_Samples_mc import *
 
 regDict = "regions_dictionary_sVLQ"
-regDict_blinded = regDict+"_blinded"
 regDictDir = '.'
 doOneLep = True
 
 # Running options
 writeToNewDictionary = True
+overWriteDictionary = True
 correctEmptyBins = True
 doSR = True
-doVR = True
+doVR = False
 doPresel = False
 debugPrint = False
+
+if overWriteDictionary:
+    regDict_blinded = regDict
+else:
+    regDict_blinded = regDict+"_blinded"
 
 # Blinding options
 SBcut = 0.1
@@ -38,12 +43,12 @@ if doOneLep:
         Regions += regModule.preselection_regions_1l
 
 # Setting up input files
-# inputDir = '/nfs/pic.es/user/t/tvdaalen/scratch2/SingleVLQWorkArea/br_R21_master_Mar2020/VLQAnalysisFramework/fitinputs_blinding_CRs/'
+# inputDir = '/nfs/at3/scratch2/tvdaalen/SingleVLQWorkArea/br_R21_master_Mar2020/VLQAnalysisFramework/fitinputs_blinding/'
 inputDir = '/nfs/at3/scratch2/tvdaalen/SingleVLQWorkArea/RootFiles/RootFiles_VR_mergeStudies/'
 f_bkg = {'a':TFile(inputDir+'bkg.mc16a.root','read'),'d':TFile(inputDir+'bkg.mc16a.root','read'),'e':TFile(inputDir+'bkg.mc16a.root','read')}
 
-# signals = ['sVLQ_WTHt16K05','sVLQ_WTHt20K05','sVLQ_WTZt16K05','sVLQ_WTZt20K05','sVLQ_ZTHt11K05','sVLQ_ZTHt16K05','sVLQ_ZTHt20K05','sVLQ_ZTZt11K05','sVLQ_ZTZt16K05','sVLQ_WTHt11K03','sVLQ_WTHt16K03','sVLQ_WTZt11K03','sVLQ_ZTHt16K03']
-signals = ['sVLQ_WTHt16K05','sVLQ_WTHt20K05','sVLQ_WTZt16K05','sVLQ_WTZt20K05','sVLQ_ZTHt11K05','sVLQ_ZTHt16K05','sVLQ_ZTHt20K05','sVLQ_ZTZt11K05','sVLQ_WTHt11K03','sVLQ_WTHt16K03','sVLQ_WTZt11K03','sVLQ_ZTHt16K03']
+signals = ['sVLQ_WTHt16K05','sVLQ_WTHt20K05','sVLQ_WTZt16K05','sVLQ_WTZt20K05','sVLQ_ZTHt11K05','sVLQ_ZTHt16K05','sVLQ_ZTHt20K05','sVLQ_ZTZt11K05','sVLQ_ZTZt16K05','sVLQ_WTHt11K03','sVLQ_WTHt16K03','sVLQ_WTZt11K03','sVLQ_ZTHt16K03']
+# signals = ['sVLQ_WTHt16K05','sVLQ_WTHt20K05','sVLQ_WTZt16K05','sVLQ_WTZt20K05','sVLQ_ZTHt11K05','sVLQ_ZTHt16K05','sVLQ_ZTHt20K05','sVLQ_ZTZt11K05','sVLQ_WTHt11K03','sVLQ_WTHt16K03','sVLQ_WTZt11K03','sVLQ_ZTHt16K03']
 
 # clean signals for 2 TeV samples
 signals  = [s for s in signals if not "20" in s]
