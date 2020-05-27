@@ -18,7 +18,7 @@ writeToNewDictionary = True
 overWriteDictionary = True
 correctEmptyBins = True
 doSR = True
-doVR = False
+doVR = True
 doPresel = False
 debugPrint = False
 

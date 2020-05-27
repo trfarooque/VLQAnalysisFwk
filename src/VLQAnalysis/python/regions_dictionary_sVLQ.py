@@ -182,120 +182,140 @@ reg_1lep3_5jwin1bex0fjex0Tex0Lex0Hex1Vin = {
 	'name':"HTX_c1lep3_5jwin1bex0fjex0Tex0Lex0Hex1Vin",
 	'legend': "#scale[0.75]{LJ, 1b, 0fj, 0t_{h}, 0t_{l}, 0h, 1V}",
 	'binning':"700,800,900,1100,1300,1500,1800,3500",
+	'binning_blind':"700,800,900,1100,1300,1500,1800,3500",
 	'type':"VALIDATION"
 }
 reg_1lep3_5jwin1bex0fjex0Tex1Lin0Hex1Vin = {
 	'name':"HTX_c1lep3_5jwin1bex0fjex0Tex1Lin0Hex1Vin",
 	'legend': "#scale[0.75]{LJ, 1b, 0fj, 0t_{h}, 1t_{l}, 0h, 1V}",
 	'binning':"700,800,900,1100,1300,1500,1800,3500",
+	'binning_blind':"700,800,900,1100,1300,1500,1800,3500",
 	'type':"VALIDATION"
 }
 reg_1lep3_5jwin1bex1fjin1LTin0Hex0Vex = {
 	'name':"HTX_c1lep3_5jwin1bex1fjin1LTin0Hex0Vex",
 	'legend': "#scale[0.75]{LJ, 1b, 1fj, 1(t_{h}+t_{l}), 0h, 0V}",
 	'binning':"700,800,950,1100,1300,1500,1800,3500",
+	'binning_blind':"700,800,950,1100,1300,1500,1800,3500",
 	'type':"VALIDATION"
 }
 reg_1lep3_5jwin1bex1fjin1Tin0Lex0Hex1Vin = {
 	'name':"HTX_c1lep3_5jwin1bex1fjin1Tin0Lex0Hex1Vin",
 	'legend': "#scale[0.75]{LJ, 1b, 1fj, 1t_{h}, 0t_{l}, 0h, 1V}",
 	'binning':"800,1100,1300,1600,2000,3500",
+	'binning_blind':"800,1100,1300,1600",
 	'type':"VALIDATION"
 }
 reg_1lep3_5jwin2bex0fjex0Tex0Lex0Hex1Vin = {
 	'name':"HTX_c1lep3_5jwin2bex0fjex0Tex0Lex0Hex1Vin",
 	'legend': "#scale[0.75]{LJ, 2b, 0fj, 0t_{h}, 0t_{l}, 0h, 1V}",
 	'binning':"700,800,900,1100,1300,1500,1800,3500",
+	'binning_blind':"700,800,900,1100,1300,1500,1800,3500",
 	'type':"VALIDATION"
 }
 reg_1lep3_5jwin2bex0fjex0Tex1Lin0Hex1Vin = {
 	'name':"HTX_c1lep3_5jwin2bex0fjex0Tex1Lin0Hex1Vin",
 	'legend': "#scale[0.75]{LJ, 2b, 0fj, 0t_{h}, 1t_{l}, 0h, 1V}",
 	'binning':"700,800,900,1100,1300,1500,1800,3500",
+	'binning_blind':"700,800,900,1100,1300,1500,1800,3500",
 	'type':"VALIDATION"
 }
 reg_1lep3_5jwin2bex1fjin1LTin0Hex0Vex = {
 	'name':"HTX_c1lep3_5jwin2bex1fjin1LTin0Hex0Vex",
 	'legend': "#scale[0.75]{LJ, 2b, 1fj, 1(t_{h}+t_{l}), 0h, 0V}",
 	'binning':"700,800,950,1100,1300,1500,1800,3500",
+	'binning_blind':"700,800,950,1100,1300,1500,1800,3500",
 	'type':"VALIDATION"
 }
 reg_1lep3_5jwin2bex1fjin1Tin0Lex0Hex1Vin = {
 	'name':"HTX_c1lep3_5jwin2bex1fjin1Tin0Lex0Hex1Vin",
 	'legend': "#scale[0.75]{LJ, 2b, 1fj, 1t_{h}, 0t_{l}, 0h, 1V}",
 	'binning':"900,1100,1300,1600,2000,3500",
+	'binning_blind':"900,1100,1300,1600",
 	'type':"VALIDATION"
 }
 reg_1lep3_5jwin3bin0fjex0Tex1Hin0Vex = {
 	'name':"HTX_c1lep3_5jwin3bin0fjex0Tex1Hin0Vex",
 	'legend': "#scale[0.75]{LJ, 3b, 0fj, 0t_{h}, 1h, 0V}",
 	'binning':"700,800,900,1100,1300,1500,1800,3500",
+	'binning_blind':"700,800,900,1100,1300",
 	'type':"VALIDATION"
 }
 reg_1lep3_5jwin3bin1fjin1VLTin0Hex = {
 	'name':"HTX_c1lep3_5jwin3bin1fjin1VLTin0Hex",
 	'legend': "#scale[0.75]{LJ, 3b, 1fj, 0h, 1(v+t_{l}+t_{h})}",
 	'binning':"700,800,950,1100,1300,1500,1800,3500",
+	'binning_blind':"700,800,950,1100,1300,1500",
 	'type':"VALIDATION"
 }
 reg_1lep6jin1bex0fjex1LTex0Hex1Vin = {
 	'name':"HTX_c1lep6jin1bex0fjex1LTex0Hex1Vin",
 	'legend': "#scale[0.75]{HJ, 1b, 0fj, 1(t_{h}+t_{l}), 0h, 1V}",
 	'binning':"800,1000,1100,1300,1800,3500",
+	'binning_blind':"800,1000,1100,1300,1800,3500",
 	'type':"VALIDATION"
 }
 reg_1lep6jin1bex0fjex2LTin0Hex1Vin = {
 	'name':"HTX_c1lep6jin1bex0fjex2LTin0Hex1Vin",
 	'legend': "#scale[0.75]{HJ, 1b, 0fj, 2(t_{h}+t_{l}), 0h, 1V}",
 	'binning':"1200,1400,1600,1800,2100,2500,3500",
+	'binning_blind':"1200,1400,1600,1800,2100,2500,3500",
 	'type':"VALIDATION"
 }
 reg_1lep6jin1bex1fjin0Tex0Lex1Hin1Vin = {
 	'name':"HTX_c1lep6jin1bex1fjin0Tex0Lex1Hin1Vin",
 	'legend': "#scale[0.75]{HJ, 1b, 1fj, 0t_{h}, 0t_{l}, 1h, 1V}",
 	'binning':"900,1100,1300,1800,3500",
+	'binning_blind':"900,1100,1300,1800",
 	'type':"VALIDATION"
 }
 reg_1lep6jin1bex1fjin2LTin1Hin0Vex = {
 	'name':"HTX_c1lep6jin1bex1fjin2LTin1Hin0Vex",
 	'legend': "#scale[0.75]{HJ, 1b, 1fj, 2(t_{h}+t_{l}), 1h, 0V}",
 	'binning':"1200,1400,1600,1800,2100,2500,3500",
+	'binning_blind':"1200,1400,1600",
 	'type':"VALIDATION"
 }
 reg_1lep6jin2bex0fjex1LTex0Hex1Vin = {
 	'name':"HTX_c1lep6jin2bex0fjex1LTex0Hex1Vin",
 	'legend': "#scale[0.75]{HJ, 2b, 0fj, 1(t_{h}+t_{l}), 0h, 1V}",
 	'binning':"800,1000,1200,1500,1900,3500",
+	'binning_blind':"800,1000,1200,1500,1900,3500",
 	'type':"VALIDATION"
 }
 reg_1lep6jin2bex0fjex2LTin0Hex1Vin = {
 	'name':"HTX_c1lep6jin2bex0fjex2LTin0Hex1Vin",
 	'legend': "#scale[0.75]{HJ, 2b, 0fj, 2(t_{h}+t_{l}), 0h, 1V}",
 	'binning':"1200,1400,1600,1800,2100,2500,3500",
+	'binning_blind':"1200,1400,1600,1800,2100,2500,3500",
 	'type':"VALIDATION"
 }
 reg_1lep6jin2bex1fjin0Tex0Lex1Hin1Vin = {
 	'name':"HTX_c1lep6jin2bex1fjin0Tex0Lex1Hin1Vin",
 	'legend': "#scale[0.75]{HJ, 2b, 1fj, 0t_{h}, 0t_{l}, 1h, 1V}",
 	'binning':"900,1200,1500,1900,3500",
+	'binning_blind':"900,1200,1500",
 	'type':"VALIDATION"
 }
 reg_1lep6jin2bex1fjin2LTin1Hin0Vex = {
 	'name':"HTX_c1lep6jin2bex1fjin2LTin1Hin0Vex",
 	'legend': "#scale[0.75]{HJ, 2b, 1fj, 2(t_{h}+t_{l}), 1h, 0V}",
 	'binning':"1200,1400,1600,1800,2100,2500,3500",
+	'binning_blind':"1200,1400,1600",
 	'type':"VALIDATION"
 }
 reg_1lep6jin3bin1fjin1VLTin0Hex = {
 	'name':"HTX_c1lep6jin3bin1fjin1VLTin0Hex",
 	'legend': "#scale[0.75]{HJ, 3b, 1fj, 0h, 1(v+t_{l}+t_{h})}",
 	'binning':"900,1100,1300,1600,2000,3500",
+	'binning_blind':"900,1100,1300,1600",
 	'type':"VALIDATION"
 }
 reg_1lep6jin3bin0fjex1VLTin1Hin = {
 	'name':"HTX_c1lep6jin3bin0fjex1VLTin1Hin",
 	'legend': "#scale[0.75]{HJ, 3b, 0fj, 1h, 1(v+t_{l}+t_{h})}",
 	'binning':"900,1100,1300,1600,2000,3500",
+	'binning_blind':"900,1100,1300,1600",
 	'type':"VALIDATION"
 }
 #
