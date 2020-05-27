@@ -5,7 +5,7 @@ import sys
 import importlib
 
 # default params
-indir  = '/nfs/pic.es/user/t/tvdaalen/scratch2/SingleVLQWorkArea/RootFiles/RootFiles_Singletop_UncTest_FitInputs/EXTRAPOLATED_2_STonly/'
+indir  = '/nfs/at3/scratch2/tvdaalen/SingleVLQWorkArea/RootFiles/RootFiles_Singletop_UncTest_FitInputs/EXTRAPOLATED_2_STonly/'
 indir_alt = indir+'SingletopAlt/'
 
 var = 'meff'
