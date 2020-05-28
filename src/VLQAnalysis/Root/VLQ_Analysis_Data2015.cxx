@@ -470,7 +470,7 @@ bool VLQ_Analysis_Data2015::Begin(){
     if( DrawReco ){
       //Event variables
       m_outMngrHist -> AddStandardTH1( "mu",          1, 0, 80,       ";<#mu>",         false, &(m_outData -> o_pileup_mu) );
-      m_outMngrHist -> AddStandardTH1( "meff",        50, 0, 5000,    ";m_{eff} [GeV]", true, &(m_outData -> o_meff) );
+      m_outMngrHist -> AddStandardTH1( "meff",        50, 0, 3500,    ";m_{eff} [GeV]", true, &(m_outData -> o_meff) );
       m_outMngrHist -> AddStandardTH1( "mJsum",       25, 0, 2000,    ";m_{J}^{#Sigma} [GeV]", otherVariables, &(m_outData -> o_mJsum) );
       m_outMngrHist -> AddStandardTH1( "met",         20, 0, 1000,    ";E_{T}^{miss} [GeV]",otherVariables, &(m_outData -> o_met) );
       m_outMngrHist -> AddStandardTH1( "met_phi",     0.2, -3.5, 3.5, ";#phi_{MET}", false, &(m_outData->o_AO_met), -1, "Phi");
