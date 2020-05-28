@@ -158,7 +158,7 @@ bool VLQ_TRFManager::ComputeTRFWeights(){
     //
     // Computing the systematic uncertainties
     //
-    if(m_opt -> ComputeWeightSys()){
+    if(m_opt -> ComputeWeightSys() && m_opt->DoExpSys()){
       if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "==> TRF: Starting systematics part  " << std::endl;
 
       //
@@ -218,7 +218,7 @@ bool VLQ_TRFManager::ComputeTRFWeights(){
     m_weightMngr->SetNominalComponent(m_btag_name, recomputedBTagSF);
 
     // Systematics
-    if(m_opt -> ComputeWeightSys()){
+    if(m_opt -> ComputeWeightSys() && m_opt->DoExpSys()){
       if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "==> TRF: Starting systematics part  " << std::endl;
 
       const unsigned int nbBev = m_trfint->getNumEV("B",m_btag_calib_scheme);
@@ -284,7 +284,7 @@ bool VLQ_TRFManager::UpdateBTagging( const bool isIncl, const int req_nbjets ){
     //
     //---~~~~>> Systematics
     //
-    if(m_opt -> ComputeWeightSys()){
+    if(m_opt -> ComputeWeightSys() && m_opt->DoExpSys()){
       //-- b
       std::vector < std::vector < double > > *BTag_BreakUp_TRF = isIncl ? m_outData -> o_BTag_BreakUp_TRF_in : m_outData -> o_BTag_BreakUp_TRF_ex;
       std::vector < std::vector < double > > *BTag_BreakDown_TRF = isIncl ? m_outData -> o_BTag_BreakDown_TRF_in : m_outData -> o_BTag_BreakDown_TRF_ex;
@@ -349,7 +349,7 @@ bool VLQ_TRFManager::UpdateBTagging( const bool isIncl, const int req_nbjets ){
     //
     if( ( isIncl && (req_nbjets==2 || req_nbjets==3) ) || ( !isIncl && (req_nbjets==0 || req_nbjets==1) ) ){
       m_weightMngr->SetNominalComponent(m_btag_name, 0. );
-      if(m_opt -> ComputeWeightSys()){
+      if(m_opt -> ComputeWeightSys() && m_opt->DoExpSys()){
         for ( unsigned int ibev = 0; ibev <= 5; ++ibev ) {
           m_weightMngr->SetSystematicComponent(m_btag_name+Form("_B_EV_Up_%i",ibev), 0. );
           m_weightMngr->SetSystematicComponent(m_btag_name+Form("_B_EV_Down_%i",ibev), 0. );
@@ -387,7 +387,7 @@ bool VLQ_TRFManager::UpdateBTagging( const bool isIncl, const int req_nbjets ){
     //
     //---~~~~>> Systematics
     //
-    if(m_opt -> ComputeWeightSys()){
+    if(m_opt -> ComputeWeightSys() && m_opt->DoExpSys()){
       //-- b
       std::vector < double > *BTag_BreakUp_TRF = nullptr;
       std::vector < double > *BTag_BreakDown_TRF = nullptr;

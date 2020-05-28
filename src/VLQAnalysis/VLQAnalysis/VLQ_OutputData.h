@@ -47,6 +47,7 @@ public:
     double o_pileup_mu;
     int o_npv;
     double o_meff;
+    double o_meffred;
     double o_met;
     double o_mtwl;
     double o_ptwl;

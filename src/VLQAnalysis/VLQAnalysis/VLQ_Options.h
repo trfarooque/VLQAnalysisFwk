@@ -18,6 +18,7 @@ public:
     CALOTOPO = 1,
     TRACK = 2
   };
+  
   //
   // Standard C++ functions
   //
@@ -49,6 +50,7 @@ public:
   inline bool InvertMetMtwCuts() const { return m_invertMetMtwCuts; }
   inline bool ApplyDeltaPhiCut() const { return m_applyDeltaPhiCut; }
   inline bool InvertDeltaPhiCut() const { return m_invertDeltaPhiCut; }
+  inline bool ApplyMetSigObjCut() const { return m_applyMetSigObjCut; }
   inline bool ApplyMetSignificanceCut() const { return m_applyMetSignificanceCut; }
   inline bool ApplyTtbbCorrection() const { return m_applyTtbbCorrection; }
   inline bool RecomputeTtBbRw() const { return m_RecTtBbRw; }
@@ -78,13 +80,15 @@ public:
   inline bool DoSplitMtb() const { return m_doSplitMtb; }
   inline bool DoSplitMbb() const { return m_doSplitMbb; }
   inline bool DoSumRegions() const { return m_doSumRegions; }
+  inline bool ISAFII() const { return m_isAFII; }
   inline bool ScaleTtbarHtSlices() const { return m_scaleTtbarHtSlices; }
   inline bool ApplyTtbarNNLOCorrection() const { return m_applyTtbarNNLOCorrection; }
   inline bool RecomputeTtbarNNLOCorrection() const { return m_recomputeTtbarNNLOCorrection; }
   inline bool ApplyVjetsSherpa22RW() const { return m_applyVjetsSherpa22RW; }
   inline bool ComputeTtccNLO() const {return m_computeTtccNLO;}
+  inline bool DeriveReweighting() const { return m_deriveReweighting; }
   inline bool ReweightKinematics() const { return m_reweightKinematics; }
-  inline bool OnlyReweightTtbarKin() const { return m_onlyReweightTtbarKin; }
+  inline bool DoKinRwSmoothing() const {return m_doKinRwSmoothing; }
   inline bool MakeQCD0LSystematics() const { return m_makeQCD0LSystematics; }
   inline bool DoPreselSys() const { return m_doPreselSys; }
   inline bool DoExpSys() const { return m_doExpSys; }
@@ -99,6 +103,8 @@ public:
   inline std::string LepWOpt() const { return m_lepWOpt; }
   inline std::string LeptopOpt() const { return m_leptopOpt; }
   inline std::string RCCollection() const { return m_RCCollection; }
+  inline std::string KinRWList() const { return m_kinRWList; }
+
   // doubles
   inline double RCJetsPtCut() const { return m_RCJetsPtCut; }
   inline double JetsPtCut() const { return m_jetsPtCut; }
@@ -116,6 +122,7 @@ public:
   inline double MaxMetCutOneLep() const { return m_maxMetCutOneLep; }
   inline double MinMetCutZeroLep() const { return m_minMetCutZeroLep; }
   inline double MaxMetCutZeroLep() const { return m_maxMetCutZeroLep; }
+  inline double MaxMetCutTwoLep() const {return m_maxMetCutTwoLep; }
   inline double MaxLeptopDR() const { return m_maxLeptopDR; }
   // ints
   inline int MaxTRFB() const { return m_maxb; }
@@ -143,6 +150,7 @@ private:
   bool m_invertMetMtwCuts;
   bool m_applyDeltaPhiCut;
   bool m_invertDeltaPhiCut;
+  bool m_applyMetSigObjCut;
   bool m_applyMetSignificanceCut;
   bool m_applyTtbbCorrection;
   bool m_multipleVariablesWithUncertainties;
@@ -157,6 +165,7 @@ private:
   bool m_doOneLeptonAna;
   bool m_doTwoLeptonAna;
   bool m_doZeroLeptonAna;
+  bool m_isAFII;
 
   bool m_doPreselection, m_doExclusiveJetRegions, m_doExtendedPreselection, m_doSingleVLQRegions, m_doPairVLQRegions,
     m_doValidnRegions, m_doFitRegions, m_doLooseSystRegions, m_doLowBRegions, m_doLowJRegions,
@@ -169,8 +178,9 @@ private:
   bool m_applyVjetsSherpa22RW;
   bool m_computeTtccNLO;
 
+  bool m_deriveReweighting;
   bool m_reweightKinematics;
-  bool m_onlyReweightTtbarKin;
+  bool m_doKinRwSmoothing;
 
   bool m_makeQCD0LSystematics;
   bool m_doPreselSys;
@@ -195,6 +205,7 @@ private:
   double m_maxMetCutOneLep;
   double m_minMetCutZeroLep;
   double m_maxMetCutZeroLep;
+  double m_maxMetCutTwoLep;
   double m_maxLeptopDR;
 
   std::string m_doRecoVLQ;
@@ -205,6 +216,7 @@ private:
   std::string m_lepWOpt;
   std::string m_leptopOpt;
   std::string m_RCCollection;
+  std::string m_kinRWList;
 
   FilteringType m_filterType;
   BtagColl m_btagCollection;
