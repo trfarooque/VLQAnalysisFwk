@@ -100,8 +100,6 @@ if(len(sys.argv))>1:
             param_runOtherBkgd = (value.upper()=="TRUE")
         elif(argument=="RUNSINGLETOP"):
             param_runSingleTop = (value.upper()=="TRUE")
-        elif(argument=="SIMPLESINGLETOP"):
-            param_simpleSingleTop = (value.upper()=="TRUE")
         elif(argument=="RUNTCHAN"):
             param_runTchanSingleTop = (value.upper()=="TRUE")
         elif(argument=="RUNWTPROD"):
