@@ -378,12 +378,6 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
       //ttbar systematics
       if( m_vlq_outData -> o_is_ttbar ){
 
-	//ttbar generator, PS and radiation uncertainties
-	std::vector<std::string> ttbar_sys_comp = {"PS", "GEN", "GENPS", "RADHI", "RADLOW"};
-	for(const std::string& ttbar_sys : ttbar_sys_comp){
-	  AddAndInitWeight("weight_ttbar_"+ttbar_sys,"",false, false, "", "");
-	}
-
 	//ttbar NNLO systematic
 	if(m_vlq_opt->SampleName()!=SampleName::TTBARBB){
 	  if(m_vlq_opt->ApplyTtbarNNLOCorrection()){
@@ -392,7 +386,7 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
 	    AddAndInitWeight("weight_ttbar_NNLO_ON", "", false, true, "weight_ttbar_NNLO_1L", "");
 	  }
 	}
-	
+	/*	
 	//ttbb uncertainties
 	if(m_vlq_opt->ApplyTtbbCorrection() && m_vlq_opt->SampleName()==SampleName::TTBARBB){
 	  std::vector<std::string> ttbb_sys_comp = {"CSS_KIN", "MSTW", "NNPDF", "Q_CMMPS", "glosoft", "defaultX05", "defaultX2", "MPIup", "MPIdown", "MPIfactor", "aMcAtNloHpp", "aMcAtNloPy8"};
@@ -404,9 +398,9 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
 	//ttcc uncertainties
 	if( m_vlq_opt->ComputeWeightSys() && m_vlq_opt -> ComputeTtccNLO()){
 	  AddAndInitWeight("weight_ttcc_NLO", "", false, false);
-	  
 	}
-	
+	*/ //IF ANYONE EVER WANTS TO REVIVE
+
       }//ttbar samples
 
     }//ttbar or singletop samples

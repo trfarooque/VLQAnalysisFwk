@@ -44,9 +44,9 @@ m_doCutFlow(true),
 m_doOneLeptonAna(false),
 m_doTwoLeptonAna(false),
 m_doZeroLeptonAna(false),
+m_isAFII(false),
 m_doPreselection(true),
 m_doExclusiveJetRegions(false),
-m_isAFII(false),
 m_doExtendedPreselection(false),
 m_doSingleVLQRegions(true),
 m_doPairVLQRegions(false),
@@ -101,8 +101,7 @@ m_lepWOpt("VANILLA"),
 m_leptopOpt("VETO_RCMATCH"),
 m_RCCollection("VR_rho550"),
 m_filterType(NOFILTER),
-m_btagCollection(CALOPFLOW),
-m_ttbarGen(POWPY8)
+m_btagCollection(CALOPFLOW)
 {}
 
 //_____________________________________________________________
@@ -321,7 +320,7 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
         } else if( temp_arg.find("--COMPUTETTCCNLO") != std::string::npos ){
             m_computeTtccNLO = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DERIVEREWEIGHTING") != std::string::npos ){
-	    m_deriveReeweighting = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	    m_deriveReweighting = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--REWEIGHTKINEMATICS") != std::string::npos ){
 	    m_reweightKinematics = AnalysisUtils::BoolValue(temp_val, temp_arg);
 	} else if( temp_arg.find("--DOKINRWSMOOTHING") != std::string::npos ){

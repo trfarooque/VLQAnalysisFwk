@@ -138,7 +138,7 @@ def GetTtbarSamples( useWeightSyst=False, useObjectSyst=False, hfSplitted=True, 
 ##______________________________________________________________________
 ##
 def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campaign = ""
-                                , includeSingleTop=True, 
+                                , includeSingleTop=True 
                                 , includeWjets=True, includeZjets=True
                                 , includeTopEW=True, includeDibosons=True
                                 , includeSingletopSystSamples=False 

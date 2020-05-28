@@ -305,7 +305,7 @@ bool VLQ_Selector::Init(){
 	    for(const std::string& mllsuf : ch_mll[lep_prefix]){
 	      for(const std::string& metsuf : ch_metsig){
 		for(const std::string& fjet : ch_fjet){
-		  AddVLQSelection(lep_prefix+jet+"-"+bjet+fjet+metsuf+mllsuf+lepsuf, do_runop, do_syst, PRESEL);
+		  AddVLQSelection(lep_prefix+jet+"-"+bjet+fjet+metsuf+mllsuf+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
 		}
 	      }//metsig channels
 	    }//mll channels
