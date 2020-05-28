@@ -835,6 +835,8 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_pileup_mu (" << m_outData -> o_pileup_mu << ")"  << std::endl;
   m_outData -> o_meff         = m_varComputer -> GetMeff( *(m_outData->o_jets), *(m_outData->o_el), *(m_outData->o_mu), m_outData->o_AO_met );
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_meff (" << m_outData -> o_meff << ")"  << std::endl;
+  m_outData -> o_meffred      = m_varComputer -> GetMeffRed( *(m_outData->o_jets), *(m_outData->o_el), *(m_outData->o_mu), m_outData->o_AO_met );
+  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_meffred (" << m_outData -> o_meffred << ")"  << std::endl;
   m_outData -> o_met          = m_outData     -> o_AO_met -> Pt();
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_met (" << m_outData -> o_met << ")"  << std::endl;
   m_outData -> o_mtwl         = m_varComputer -> GetMTw( *(m_outData->o_el), *(m_outData->o_mu), m_outData->o_AO_met );

@@ -101,6 +101,7 @@ bool VLQ_Selector::Init(){
   }
   
   m_blinding_config.open( Form("%s/python/VLQAnalysis/regions_dictionary.py", std::getenv("VLQAnalysisFramework_DIR")) );
+
   //============================  Initialise top selections and add rules for primary ancestors ==================================
   m_sel_indices = new std::map<std::string, int>();
   m_sel_names = new std::map<int, std::string>();
@@ -122,7 +123,10 @@ bool VLQ_Selector::Init(){
 	,MakeSelProp("6jex", c_6jex, "6jin")
 	,MakeSelProp("3_5jwin", c_3_5jwin, "3jin")
 	,MakeSelProp("7jex", c_7jex, "7jin"), MakeSelProp("8jin", c_8jin, "7jin")
-	,MakeSelProp("8jex", c_8jex, "8jin"), MakeSelProp("9jin", c_9jin, "8jin") });
+	,MakeSelProp("8jex", c_8jex, "8jin"), MakeSelProp("9jin", c_9jin, "8jin")
+	,MakeSelProp("9jex", c_9jex, "9jin"), MakeSelProp("10jin", c_10jin, "9jin")
+	,MakeSelProp("10jex", c_10jex, "10jin"), MakeSelProp("11jin", c_11jin, "10jin") 
+	,MakeSelProp("11jex", c_11jex, "11jin"), MakeSelProp("12jin", c_12jin, "11jin") });
   
   m_sel_fwdjet_prop = new std::vector<SelProp>({
       MakeSelProp("0fjex",c_0fjex), MakeSelProp("0fjin",c_0fjin), MakeSelProp("1fjex", c_1fjex), 
@@ -220,12 +224,21 @@ bool VLQ_Selector::Init(){
   }
   std::string nolep_prefix = "c-0lep-";
 
-  std::vector<std::string> ch_mll; ch_mll.clear();
-  if(m_opt->DoTwoLeptonAna()){
-    if(m_opt->VerboseOutput()) ch_mll = {"", "-HighMLL", "-ZwinMLL"};
-    else ch_mll = {"-ZwinMLL"}; 
+  std::map<std::string, std::vector<std::string> > ch_mll;
+  
+  if(m_opt -> DoOneLeptonAna()) ch_mll["c-1lep-"] = {""};
+ 
+  if(m_opt -> DoTwoLeptonAna()){
+
+    if(m_opt->VerboseOutput()) ch_mll["c-2lep-"] = {"", "-HighMLL", "-ZwinMLL"};
+
+    else ch_mll["c-2lep-"] = {"-ZwinMLL"};
+
   }
-  else ch_mll = {""};
+
+  std::vector<std::string> ch_metsig; ch_metsig.clear();
+  if(m_opt->ApplyMetSignificanceCut()) ch_metsig = {"", "-LowMetSig", "-HighMetSig"};
+  else ch_metsig = {""};
 
   
   //======== PRESELECTION=========
@@ -233,7 +246,7 @@ bool VLQ_Selector::Init(){
 
     AddVLQSelection("c-all",do_runop, false, PRESEL);
 
-    std::vector<std::string> v_bjet_presel = {"1bin","2bin","3bin"};
+    std::vector<std::string> v_bjet_presel = {"1bin","2bin","2bex","3bin"};
     if(m_opt->DoLowBRegions()){
       v_bjet_presel.push_back("0bin");
       v_bjet_presel.push_back("0bex");
@@ -245,8 +258,8 @@ bool VLQ_Selector::Init(){
     if(m_opt->DoSingleVLQRegions()){
       v_jet_presel = {"3jin","4jin","5jin","6jin"};
 
-      if(m_opt->DoExclusiveJetRegions()){ 
-	std::vector<std::string> v_jet_presel_ex = {"3jex","4jex","5jex","6jex","7jex","8jin"};
+      if(m_opt->DeriveReweighting() ||  m_opt->DoExclusiveJetRegions()){ 
+	std::vector<std::string> v_jet_presel_ex = {"3jex","4jex","5jex","6jex","7jex","8jex","9jex","10jex","11jex"};
 	v_jet_presel.insert(v_jet_presel.end(),v_jet_presel_ex.begin(),v_jet_presel_ex.end());
       }
       
@@ -280,6 +293,8 @@ bool VLQ_Selector::Init(){
       }
     }//pVLQ
 
+    std::vector<std::string> ch_fjet = {"","-0fjex","-1fjin"};
+
     std::set<std::string> set_jet_presel(v_jet_presel.begin(), v_jet_presel.end()); 
     for( std::pair<std::string, std::vector<std::string> > lep_ch_pair : ch_lep ){
 
@@ -287,8 +302,12 @@ bool VLQ_Selector::Init(){
       for(const std::string& jet : set_jet_presel){
 	for(const std::string& bjet : v_bjet_presel){
 	  for(const std::string& lepsuf : lep_ch_pair.second){
-	    for(const std::string& mllsuf : ch_mll){
-	      AddVLQSelection(lep_prefix+jet+"-"+bjet+mllsuf+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
+	    for(const std::string& mllsuf : ch_mll[lep_prefix]){
+	      for(const std::string& metsuf : ch_metsig){
+		for(const std::string& fjet : ch_fjet){
+		  AddVLQSelection(lep_prefix+jet+"-"+bjet+fjet+metsuf+mllsuf+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
+		}
+	      }//metsig channels
 	    }//mll channels
 	  }//lepflav channels
 	}//bjet
@@ -372,7 +391,7 @@ bool VLQ_Selector::Init(){
 	    AddVLQSelection(lep_prefix+"3_5jwin-2bex-0fjex-0Tex-1Lin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    AddVLQSelection(lep_prefix+"3_5jwin-2bex-1fjin-1LTin-0Hex-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    AddVLQSelection(lep_prefix+"3_5jwin-2bex-1fjin-1Tin-0Lex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-      
+
 	    AddVLQSelection(lep_prefix+"3_5jwin-3bin-0fjex-0Tex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    AddVLQSelection(lep_prefix+"3_5jwin-3bin-1fjin-1VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 
@@ -388,6 +407,7 @@ bool VLQ_Selector::Init(){
 
 	    AddVLQSelection(lep_prefix+"6jin-3bin-0fjex-1VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    AddVLQSelection(lep_prefix+"6jin-3bin-1fjin-1VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
 	  }
     
 	  // Loose regions for syst extrapolation
@@ -468,10 +488,6 @@ bool VLQ_Selector::Init(){
 	  std::vector<std::string> ch_mtb; ch_mtb.clear();
 	  if(m_opt->DoSplitMtb()) ch_mtb = {"", "-LowMtbmin", "-HighMtbmin"};
 	  else ch_mtb = {""};
-
-	  std::vector<std::string> ch_metsig; ch_metsig.clear();
-	  if(m_opt->ApplyMetSignificanceCut()) ch_metsig = {"", "-LowMetSig", "-HighMetSig"};
-	  else ch_metsig = {""};
 
 	  for( const std::string& bjet : bjet_analist ){
 	    const std::set<std::string>* boostset_0L = NULL;
@@ -1030,10 +1046,10 @@ bool VLQ_Selector::PassSelection(const int index){
 
   //=== Metsig ====
   else if(index == c_LowMetSig){
-    pass = (m_outData->o_metsig_ev < 10.);
+    pass = m_opt->ApplyMetSigObjCut() ? (m_outData->o_metsig_obj < 5.) : (m_outData->o_metsig_ev < 10.);
   }
   else if(index == c_HighMetSig){
-    pass = (m_outData->o_metsig_ev > 10.);
+    pass = m_opt->ApplyMetSigObjCut() ? (m_outData->o_metsig_obj > 5.) : (m_outData->o_metsig_ev > 10.);
   }
 
   //==== MLL ======
@@ -1051,6 +1067,9 @@ bool VLQ_Selector::PassSelection(const int index){
   else if(index == c_6jex){ pass = (m_outData->o_jets_n == 6); }
   else if(index == c_7jex){ pass = (m_outData->o_jets_n == 7); }
   else if(index == c_8jex){ pass = (m_outData->o_jets_n == 8); }
+  else if(index == c_9jex){ pass = (m_outData->o_jets_n == 9); }
+  else if(index == c_10jex){ pass = (m_outData->o_jets_n == 10); }
+  else if(index == c_11jex){ pass = (m_outData->o_jets_n == 11); }
 
   else if(index == c_3_5jwin){ pass = (m_outData->o_jets_n >= 3) && (m_outData->o_jets_n <= 5); }
   else if(index == c_6_8jwin){ pass = (m_outData->o_jets_n >= 6) && (m_outData->o_jets_n <= 8); }
@@ -1063,6 +1082,9 @@ bool VLQ_Selector::PassSelection(const int index){
   else if(index == c_7jin){ pass = (m_outData->o_jets_n >= 7); }
   else if(index == c_8jin){ pass = (m_outData->o_jets_n >= 8); }
   else if(index == c_9jin){ pass = (m_outData->o_jets_n >= 9); }
+  else if(index == c_10jin){ pass = (m_outData->o_jets_n >= 10); }
+  else if(index == c_11jin){ pass = (m_outData->o_jets_n >= 11); }
+  else if(index == c_12jin){ pass = (m_outData->o_jets_n >= 12); }
 
   else if(index == c_0fjin){ pass = (m_outData->o_fwdjets_n >= 0); }
   else if(index == c_0fjex){ pass = (m_outData->o_fwdjets_n == 0); }

@@ -1,5 +1,4 @@
 #include "VLQAnalysis/VLQ_WeightManager.h"
-
 #include "IFAETopFramework/SampleInfo.h"
 #include "IFAETopFramework/AnalysisObject.h"
 #include "IFAETopFramework/Selection.h"
@@ -48,6 +47,29 @@ VLQ_WeightManager::VLQ_WeightManager( VLQ_Options *opt, const VLQ_NtupleData* nt
   m_kinRw(0),
   m_syst_regions(0)
 {
+
+  if( m_vlq_opt -> ReweightKinematics() ){
+    
+    m_kinRw = new VLQ_KinReweighter(m_vlq_opt, m_vlq_outData /*, m_vlq_ntupData*/);
+
+    if((m_vlq_opt -> SampleName() == SampleName::ZJETS) || (m_vlq_opt -> SampleName() == SampleName::WJETS)){	
+      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyZjets_PowPy8.root"));
+    }
+    else if(m_vlq_opt -> StrSampleName().find("POWHER") != std::string::npos){
+      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_PowH7.root"));
+    }
+    else if(m_vlq_opt -> StrSampleName().find("AMCPY") != std::string::npos){
+      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_aMCPy.root"));
+    }
+    else if(m_vlq_opt -> ISAFII()){
+      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_AFII.root"));
+    }
+    else{
+      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_PowPy8.root"));
+    }
+    
+  }
+
 }
 
 //______________________________________________________________________________
@@ -113,29 +135,30 @@ void VLQ_WeightManager::Init( std::map < int, Selection* >* selection_tree ){
   //
   if( m_vlq_outData -> o_is_ttbar ){
     /*
-//////////////////////////////////////
-// ttbar NNLO reweighting
-//////////////////////////////////////
-if( m_vlq_opt -> ApplyTtbarNNLOCorrection() && m_vlq_opt -> RecomputeTtbarNNLOCorrection() ){
-int dsid = 410000;
-//radHi
-if( m_vlq_opt -> InputFile() . find(".407029.") != std::string::npos ) dsid = 410001;
-if( m_vlq_opt -> InputFile() . find(".407030.") != std::string::npos ) dsid = 410001;
-if( m_vlq_opt -> InputFile() . find(".407031.") != std::string::npos ) dsid = 410001;
-if( m_vlq_opt -> InputFile() . find(".407032.") != std::string::npos ) dsid = 410001;
-//radLo
-if( m_vlq_opt -> InputFile() . find(".407033.") != std::string::npos ) dsid = 410002;
-if( m_vlq_opt -> InputFile() . find(".407034.") != std::string::npos ) dsid = 410002;
-if( m_vlq_opt -> InputFile() . find(".407035.") != std::string::npos ) dsid = 410002;
-if( m_vlq_opt -> InputFile() . find(".407036.") != std::string::npos ) dsid = 410002;
-//PowHpp
-if( m_vlq_opt -> InputFile() . find(".407037.") != std::string::npos ) dsid = 410004;
-if( m_vlq_opt -> InputFile() . find(".407038.") != std::string::npos ) dsid = 410004;
-if( m_vlq_opt -> InputFile() . find(".407039.") != std::string::npos ) dsid = 410004;
-if( m_vlq_opt -> InputFile() . find(".407040.") != std::string::npos ) dsid = 410004;
-m_nnlo_rw = new NNLOReweighter( dsid, (std::string(getenv("VLQAnalysisFramework_DIR"))+"/data/NNLOReweighter/") );
-m_nnlo_rw -> Init();
-}
+    //////////////////////////////////////
+    // ttbar NNLO reweighting
+    //////////////////////////////////////
+    if( m_vlq_opt -> ApplyTtbarNNLOCorrection() && m_vlq_opt -> RecomputeTtbarNNLOCorrection() ){
+      int dsid = 410000;
+      //radHi
+      if( m_vlq_opt -> InputFile() . find(".407029.") != std::string::npos ) dsid = 410001;
+      if( m_vlq_opt -> InputFile() . find(".407030.") != std::string::npos ) dsid = 410001;
+      if( m_vlq_opt -> InputFile() . find(".407031.") != std::string::npos ) dsid = 410001;
+      if( m_vlq_opt -> InputFile() . find(".407032.") != std::string::npos ) dsid = 410001;
+      //radLo
+      if( m_vlq_opt -> InputFile() . find(".407033.") != std::string::npos ) dsid = 410002;
+      if( m_vlq_opt -> InputFile() . find(".407034.") != std::string::npos ) dsid = 410002;
+      if( m_vlq_opt -> InputFile() . find(".407035.") != std::string::npos ) dsid = 410002;
+      if( m_vlq_opt -> InputFile() . find(".407036.") != std::string::npos ) dsid = 410002;
+      //PowHpp
+      if( m_vlq_opt -> InputFile() . find(".407037.") != std::string::npos ) dsid = 410004;
+      if( m_vlq_opt -> InputFile() . find(".407038.") != std::string::npos ) dsid = 410004;
+      if( m_vlq_opt -> InputFile() . find(".407039.") != std::string::npos ) dsid = 410004;
+      if( m_vlq_opt -> InputFile() . find(".407040.") != std::string::npos ) dsid = 410004;
+      m_nnlo_rw = new NNLOReweighter( dsid, (std::string(getenv("VLQAnalysisFramework_DIR"))+"/data/NNLOReweighter/") );
+      m_nnlo_rw -> Init();
+    }
+>>>>>>> Initial commit br_VLQ_Reweighting.
     */
     //////////////////////////////////////
     // tt+bb reweighting tool
@@ -163,16 +186,6 @@ m_nnlo_rw -> Init();
 
 
   }//ttbar samples
-  if( m_vlq_opt -> ReweightKinematics() ){
-    m_kinRw = new VLQ_KinReweighter(m_vlq_opt, m_vlq_outData /*, m_vlq_ntupData*/);
-    if( m_vlq_opt -> OnlyReweightTtbarKin() ){
-      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyTtbar.root"));
-    }
-    else{
-      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_AllBkgd.root"));
-    }
-
-  }
 
 }
 
@@ -241,8 +254,10 @@ bool VLQ_WeightManager::AddVLQNominalWeights(){
 //
 bool VLQ_WeightManager::AddKinReweightings(  ){
 
-  for(const std::string& kin : {"MET","JETPT","LEPPT"} ){
-    AddAndInitWeight("weight_RW_"+kin, "", false, false);
+  for(const std::pair<std::string, int> kinpair : *(m_kinRw->GetReweightingList())){
+    
+    AddAndInitWeight("weight_RW_"+kinpair.first, "", true /*isNominal*/, false /*isInput*/);
+    
   }
   return true;
 }
@@ -290,7 +305,7 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
 	  AddAndInitWeight("weight_muon_"+mu_sys_pair.first+"_"+mu_sys+"_DOWN","",false, true, "weight_muon_MUON_EFF_"+mu_sys_pair.first+"_"+mu_sys+"__1down", "weight_muon");
 	}
       }
-      
+
       if(m_vlq_opt->UseLeptonTrigger()){
 	std::vector<std::string> el_trig_sys_comp = {"TriggerEff", "Trigger"};
 	for(const std::string& el_trig_sys : el_trig_sys_comp){
@@ -304,7 +319,7 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
 	}
       }//trigger
     }//lepton SF
-    
+
     //Btag systematics
     std::string btag_name = (m_vlq_opt->BtagCollection() == VLQ_Options::TRACK) ? "weight_trkbtag" : "weight_btag";
     std::string btag_vartype = "";
@@ -338,59 +353,67 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
   }//INSTRUMENTAL UNCERTAINTIES
 
   if(m_vlq_opt->DoTheorySys()){
+
     //ttbar and singletop systematics
     if( (m_vlq_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP) ){
-
       // PMG weights
       if(m_vlq_outData -> o_is_ttbar){
-	AddAndInitWeight("weight_pmg_muR10__muF20","",false, true, "weight_pmg_muR10__muF20", "weight_mc");
-	AddAndInitWeight("weight_pmg_muR10__muF05","",false, true, "weight_pmg_muR10__muF05", "weight_mc");
-	AddAndInitWeight("weight_pmg_muR20__muF10","",false, true, "weight_pmg_muR20__muF10", "weight_mc");
-	AddAndInitWeight("weight_pmg_muR05__muF10","",false, true, "weight_pmg_muR05__muF10", "weight_mc");
+        AddAndInitWeight("weight_pmg_muR10__muF20","",false, true, "weight_pmg_muR10__muF20", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+        AddAndInitWeight("weight_pmg_muR10__muF05","",false, true, "weight_pmg_muR10__muF05", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+        AddAndInitWeight("weight_pmg_muR20__muF10","",false, true, "weight_pmg_muR20__muF10", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+        AddAndInitWeight("weight_pmg_muR05__muF10","",false, true, "weight_pmg_muR05__muF10", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+
+	AddAndInitWeight("weight_pmg_Var3cUp","",false, true, "weight_pmg_Var3cUp", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_Var3cDown","",false, true, "weight_pmg_Var3cDown", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac20","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac20", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac05","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac05", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	
       }
       else{
-	AddAndInitWeight("weight_pmg_muR100__muF200","",false, true, "weight_pmg_muR100__muF200", "weight_mc");
-	AddAndInitWeight("weight_pmg_muR100__muF050","",false, true, "weight_pmg_muR100__muF050", "weight_mc");
-	AddAndInitWeight("weight_pmg_muR200__muF100","",false, true, "weight_pmg_muR200__muF100", "weight_mc");
-	AddAndInitWeight("weight_pmg_muR050__muF100","",false, true, "weight_pmg_muR050__muF100", "weight_mc");
-      }
-      AddAndInitWeight("weight_pmg_Var3cUp","",false, true, "weight_pmg_Var3cUp", "weight_mc");
-      AddAndInitWeight("weight_pmg_Var3cDown","",false, true, "weight_pmg_Var3cDown", "weight_mc");
-      AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac20","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac20", "weight_mc");
-      AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac05","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac05", "weight_mc");
-      
-      if (m_vlq_outData -> o_is_ttbar){
-        //ttbar generator, PS and radiation uncertainties
-        std::vector<std::string> ttbar_sys_comp = {"PS", "GEN", "GENPS", "RADHI", "RADLOW"};
-        for(const std::string& ttbar_sys : ttbar_sys_comp){
-	  AddAndInitWeight("weight_ttbar_"+ttbar_sys,"",false, false, "", "");
-        }
+	//Reweightings not yet available
+        AddAndInitWeight("weight_pmg_muR100__muF200","",false, true, "weight_pmg_muR100__muF200", "weight_mc");//->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_muR100__muF050","",false, true, "weight_pmg_muR100__muF050", "weight_mc");//->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_muR200__muF100","",false, true, "weight_pmg_muR200__muF100", "weight_mc");//->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_muR050__muF100","",false, true, "weight_pmg_muR050__muF100", "weight_mc");//->AddFlagAtBit(REWEIGHT, true);
+
+	AddAndInitWeight("weight_pmg_Var3cUp","",false, true, "weight_pmg_Var3cUp", "weight_mc");//->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_Var3cDown","",false, true, "weight_pmg_Var3cDown", "weight_mc");//->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac20","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac20", "weight_mc");//->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac05","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac05", "weight_mc");//->AddFlagAtBit(REWEIGHT, true);
 	
-        //ttbar NNLO systematic
-        if(m_vlq_opt->SampleName()!=SampleName::TTBARBB){
+      }
+
+	/*	
+      //ttbar systematics
+      if( m_vlq_outData -> o_is_ttbar ){
+
+	//ttbar NNLO systematic
+	if(m_vlq_opt->SampleName()!=SampleName::TTBARBB){
 	  if(m_vlq_opt->ApplyTtbarNNLOCorrection()){
 	    AddAndInitWeight("weight_ttbar_NNLO_OFF", "", false, false, "", "weight_ttbar_NNLO_1L");
 	  } else {
 	    AddAndInitWeight("weight_ttbar_NNLO_ON", "", false, true, "weight_ttbar_NNLO_1L", "");
 	  }
-        }
-	
-        //ttbb uncertainties
-        if(m_vlq_opt->ApplyTtbbCorrection() && m_vlq_opt->SampleName()==SampleName::TTBARBB){
+	}
+
+	//ttbb uncertainties
+	if(m_vlq_opt->ApplyTtbbCorrection() && m_vlq_opt->SampleName()==SampleName::TTBARBB){
 	  std::vector<std::string> ttbb_sys_comp = {"CSS_KIN", "MSTW", "NNPDF", "Q_CMMPS", "glosoft", "defaultX05", "defaultX2", "MPIup", "MPIdown", "MPIfactor", "aMcAtNloHpp", "aMcAtNloPy8"};
 	  for(const std::string& ttbb_sys : ttbb_sys_comp){
 	    AddAndInitWeight("weight_ttbb_"+ttbb_sys, "", false, true, "weight_ttbb_ttbb_"+ttbb_sys+"_weight", "weight_ttbb");
 	  }
-        }//ttbb correction
+	}//ttbb correction
 	
-        //ttcc uncertainties
-        if( m_vlq_opt->ComputeWeightSys() && m_vlq_opt -> ComputeTtccNLO()){
+	//ttcc uncertainties
+	if( m_vlq_opt->ComputeWeightSys() && m_vlq_opt -> ComputeTtccNLO()){
 	  AddAndInitWeight("weight_ttcc_NLO", "", false, false);
-        }
-	
+	}
+
       }//ttbar samples
+	*/ //IF ANYONE EVER WANTS TO REVIVE
+
     }//ttbar or singletop samples
-    
+
     //V+jets systematics
     if( (m_opt -> SampleName() == SampleName::WJETS) || (m_opt -> SampleName() == SampleName::ZJETS) ){
       //V+jets PMG weights
@@ -401,8 +424,8 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
       AddAndInitWeight("weight_pmg_muR10__muF20","",false, true, "weight_pmg_MUR1__MUF2__PDF261000", "weight_mc");
       AddAndInitWeight("weight_pmg_muR20__muF10","",false, true, "weight_pmg_MUR2__MUF1__PDF261000", "weight_mc");
       AddAndInitWeight("weight_pmg_muR20__muF20","",false, true, "weight_pmg_MUR2__MUF2__PDF261000", "weight_mc");
-      //parametrised weights
 
+      //parametrised weights
       AddAndInitWeight("weight_pmg_ckkw15","",false, true, "ckkw15_Weight", "weight_mc","F");
       AddAndInitWeight("weight_pmg_ckkw30","",false, true, "ckkw30_Weight", "weight_mc","F");
       AddAndInitWeight("weight_pmg_qsf025","",false, true, "qsf025_Weight", "weight_mc","F");
@@ -410,7 +433,9 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
 
     }
 
-  }
+  }//theory sys
+
+
   return true;
 }
 
@@ -641,6 +666,7 @@ bool VLQ_WeightManager::SetTtbarGeneratorSystematics( const std::string &region 
       std::cerr << "<!> Error in VLQ_WeightManager::SetTtbarGeneratorSystematics(): m_ttbar_syst_weight is null ... Please check !" << std::endl;
       abort();
     }
+
     SetSystematicComponent( "weight_ttbar_PS",    m_ttbar_syst_weight -> GetTtbarSystWeight( region, VLQ_TtbarSystematicsManager::PS)      );
     SetSystematicComponent( "weight_ttbar_GEN",   m_ttbar_syst_weight -> GetTtbarSystWeight( region, VLQ_TtbarSystematicsManager::GEN)     );
     SetSystematicComponent( "weight_ttbar_GENPS", m_ttbar_syst_weight -> GetTtbarSystWeight( region, VLQ_TtbarSystematicsManager::GENPS)   );
@@ -703,13 +729,40 @@ bool VLQ_WeightManager::SetKinReweightings(  ){
     std::cerr << "<!> Error in VLQ_WeightManager::SetKinReweightings(): m_kinRw is null ... Please check !" << std::endl;
     abort();
   }
-
-  if( m_vlq_opt -> OnlyReweightTtbarKin() && !m_vlq_outData -> o_is_ttbar){ return false; }
-
-
+ 
   for(const std::pair<std::string, int> kinpair : *(m_kinRw->GetReweightingList())){
+   
     //std::cout<<" Setting systematic component for kinematic reweighting " << kinpair.first <<std::endl;
-    SetSystematicComponent( "weight_RW_"+kinpair.first, m_kinRw -> GetKinReweight( kinpair.second ) );
+   
+    SetNominalComponent( "weight_RW_"+kinpair.first, m_kinRw -> GetKinReweight( kinpair.second ) ); 
+
+  }
+
+  return true;
+}
+
+//______________________________________________________________________________
+//
+bool VLQ_WeightManager::UpdateSysReweighting(){
+
+  for( auto& weight : *m_systMap){
+    
+    if( (weight.second)->PassFlagAtBit(REWEIGHT) ){
+
+      double oldWeight = weight.second->GetComponentValue();
+
+      for(const std::pair<std::string, int> kinpair : *(m_kinRw->GetReweightingList())){
+
+	oldWeight /= ((*m_nomMap)["weight_RW_"+kinpair.first]->GetComponentValue());
+	
+	oldWeight *= m_kinRw->GetKinReweight(kinpair.second, "_"+weight.first);
+	
+      }
+
+      UpdateSystematicComponent(weight.first, oldWeight);
+
+    }
+
   }
 
   return true;

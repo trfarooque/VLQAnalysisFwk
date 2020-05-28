@@ -29,6 +29,11 @@ public:
                     std::vector< AnalysisObject* > &v_mu,
                     AnalysisObject *met) const;
     
+    double GetMeffRed( std::vector < AnalysisObject* > &v_jets, 
+		       std::vector< AnalysisObject* > &v_el, 
+		       std::vector< AnalysisObject* > &v_mu, 
+		       AnalysisObject *met ) const;
+
     double GetHtHad( std::vector< AnalysisObject* > &v_jets, const std::string& mom="" ) const;
     double GetMJSum( std::vector< AnalysisObject* > &v_jets, const std::string& mom="" ) const;
     double GetMetSignificance( const double met, const double hthad) const;    

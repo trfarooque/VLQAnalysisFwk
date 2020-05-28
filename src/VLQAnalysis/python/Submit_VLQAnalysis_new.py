@@ -44,6 +44,9 @@ param_runDibosons = True
 param_runTtSyst = False
 param_runSTSyst = False
 param_splitSTChannels = False
+param_runTchanSingleTop = True
+param_runWtSingleTop = True
+param_runSchanSingleTop = True
 
 param_runSingleVLQ = True
 param_runPairVLQ = False
@@ -97,6 +100,12 @@ if(len(sys.argv))>1:
             param_runOtherBkgd = (value.upper()=="TRUE")
         elif(argument=="RUNSINGLETOP"):
             param_runSingleTop = (value.upper()=="TRUE")
+        elif(argument=="RUNTCHAN"):
+            param_runTchanSingleTop = (value.upper()=="TRUE")
+        elif(argument=="RUNWTPROD"):
+            param_runWtSingleTop = (value.upper()=="TRUE")
+        elif(argument=="RUNSCHAN"):
+            param_runSchanSingleTop = (value.upper()=="TRUE")
         elif(argument=="RUNWJETS"):
             param_runWjets = (value.upper()=="TRUE")
         elif(argument=="RUNZJETS"):
@@ -242,12 +251,14 @@ if param_runTtbar:
                                  useHTSlices = param_useSlices, campaign = param_campaign )
 
 if param_runOtherBkgd:
-    Samples += GetOtherBackgroundSamples ( useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, campaign=param_campaign
-                                           , includeSingleTop = param_runSingleTop
-                                           , includeWjets = param_runWjets, includeZjets = param_runZjets
-                                           , includeTopEW = param_runTopEW, includeDibosons = param_runDibosons
-                                           , includeSingletopSystSamples = param_runSTSyst
-                                           , splitSTChannels = param_splitSTChannels, removeNull = param_removeNull)
+    Samples += GetOtherBackgroundSamples (  useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, campaign=param_campaign
+                                            , includeSingleTop = param_runSingleTop
+                                            , includeWjets = param_runWjets, includeZjets = param_runZjets
+                                            , includeTopEW = param_runTopEW, includeDibosons = param_runDibosons
+                                            , includeSingletopSystSamples = param_runSTSyst
+                                            , splitSTChannels = param_splitSTChannels
+                                            , includeTchan=param_runTchanSingleTop, includeWtprod=param_runWtSingleTop, includeSchan=param_runSchanSingleTop
+                                            , removeNull = param_removeNull )
 
 if param_runSignal:
     Samples += GetSignalSamples( useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, campaign = param_campaign

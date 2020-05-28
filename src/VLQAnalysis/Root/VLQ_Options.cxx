@@ -29,6 +29,7 @@ m_applyMetMtwCuts(true),
 m_invertMetMtwCuts(false),
 m_applyDeltaPhiCut(true),
 m_invertDeltaPhiCut(false),
+m_applyMetSigObjCut(false),
 m_applyMetSignificanceCut(false),
 m_applyTtbbCorrection(false),
 m_multipleVariablesWithUncertainties(false),
@@ -43,6 +44,7 @@ m_doCutFlow(true),
 m_doOneLeptonAna(false),
 m_doTwoLeptonAna(false),
 m_doZeroLeptonAna(false),
+m_isAFII(false),
 m_doPreselection(true),
 m_doExclusiveJetRegions(false),
 m_doExtendedPreselection(false),
@@ -62,8 +64,9 @@ m_applyTtbarNNLOCorrection(false),
 m_recomputeTtbarNNLOCorrection(false),
 m_applyVjetsSherpa22RW(true),
 m_computeTtccNLO(false),
+m_deriveReweighting(false),
 m_reweightKinematics(false),
-m_onlyReweightTtbarKin(false),
+m_doKinRwSmoothing(false),
 m_makeQCD0LSystematics(false),
 m_doPreselSys(false),
 m_doExpSys(true),
@@ -86,6 +89,7 @@ m_minMetCutOneLep(0.),
 m_maxMetCutOneLep(-1.),
 m_minMetCutZeroLep(200.),
 m_maxMetCutZeroLep(-1.),
+m_maxMetCutTwoLep(-1.),
 m_maxLeptopDR(1.),
 m_doRecoVLQ("pair"),
 // m_btagOP("77"),
@@ -120,6 +124,7 @@ OptionsBase(q)
     m_invertMetMtwCuts   = q.m_invertMetMtwCuts;
     m_applyDeltaPhiCut   = q.m_applyDeltaPhiCut;
     m_invertDeltaPhiCut  = q.m_invertDeltaPhiCut;
+    m_applyMetSigObjCut  = q.m_applyMetSigObjCut;
     m_applyMetSignificanceCut            = q.m_applyMetSignificanceCut;
     m_applyTtbbCorrection                = q.m_applyTtbbCorrection;
     m_multipleVariablesWithUncertainties = q.m_multipleVariablesWithUncertainties;
@@ -134,6 +139,7 @@ OptionsBase(q)
     m_doZeroLeptonAna     = q.m_doZeroLeptonAna;
     m_doPreselection      = q.m_doPreselection;
     m_doExclusiveJetRegions    = q.m_doExclusiveJetRegions;
+    m_isAFII              =q.m_isAFII;
     m_doExtendedPreselection   = q.m_doExtendedPreselection;
     m_doSingleVLQRegions  = q.m_doSingleVLQRegions;
     m_doPairVLQRegions    = q.m_doPairVLQRegions;
@@ -152,8 +158,9 @@ OptionsBase(q)
     m_recomputeTtbarNNLOCorrection  = q.m_recomputeTtbarNNLOCorrection;
     m_applyVjetsSherpa22RW = q.m_applyVjetsSherpa22RW;
     m_computeTtccNLO     = q.m_computeTtccNLO;
+    m_deriveReweighting  = q.m_deriveReweighting;
     m_reweightKinematics = q.m_reweightKinematics;
-    m_onlyReweightTtbarKin = q.m_onlyReweightTtbarKin;
+    m_doKinRwSmoothing = q.m_doKinRwSmoothing;
     m_makeQCD0LSystematics = q.m_makeQCD0LSystematics;
     m_doPreselSys       = q.m_doPreselSys;
     m_doExpSys          = q.m_doExpSys;
@@ -177,6 +184,7 @@ OptionsBase(q)
     m_maxMetCutOneLep   = q.m_maxMetCutOneLep;
     m_minMetCutZeroLep  = q.m_minMetCutZeroLep;
     m_maxMetCutZeroLep  = q.m_maxMetCutZeroLep;
+    m_maxMetCutTwoLep   = q.m_maxMetCutTwoLep;
     m_maxLeptopDR        = q.m_maxLeptopDR;
     m_doRecoVLQ         = q.m_doRecoVLQ;
     m_btagOP            = q.m_btagOP;
@@ -187,6 +195,7 @@ OptionsBase(q)
     m_lepWOpt           = q.m_lepWOpt;
     m_leptopOpt         = q.m_leptopOpt;
     m_RCCollection      = q.m_RCCollection;
+    m_kinRWList         = q.m_kinRWList;
     m_filterType        = q.m_filterType;
     m_btagCollection    = q.m_btagCollection;
 }
@@ -238,6 +247,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_applyDeltaPhiCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--INVERTDELTAPHICUT") != std::string::npos ){
             m_invertDeltaPhiCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if( temp_arg.find("--APPLYMETSIGOBJCUT") != std::string::npos ){
+	    m_applyMetSigObjCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--APPLYMETSIGCUT") != std::string::npos ){
             m_applyMetSignificanceCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--APPLYTTBBCORRECTION") != std::string::npos ){
@@ -270,6 +281,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
              m_doPreselection = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOEXCLUSIVEJETREGIONS") != std::string::npos ){
             m_doExclusiveJetRegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if( temp_arg.find("--ISAFII") != std::string::npos ){
+	    m_isAFII = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOEXTENDEDPRESELECTION") != std::string::npos ){
             m_doExtendedPreselection = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOSINGLEVLQREGIONS") != std::string::npos ){
@@ -306,10 +319,12 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_applyVjetsSherpa22RW = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--COMPUTETTCCNLO") != std::string::npos ){
             m_computeTtccNLO = AnalysisUtils::BoolValue(temp_val, temp_arg);
+        } else if( temp_arg.find("--DERIVEREWEIGHTING") != std::string::npos ){
+	    m_deriveReweighting = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--REWEIGHTKINEMATICS") != std::string::npos ){
-            m_reweightKinematics = AnalysisUtils::BoolValue(temp_val, temp_arg);
-        } else if( temp_arg.find("--ONLYREWEIGHTTTBARKIN") != std::string::npos ){
-            m_onlyReweightTtbarKin = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	    m_reweightKinematics = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if( temp_arg.find("--DOKINRWSMOOTHING") != std::string::npos ){
+	    m_doKinRwSmoothing = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--MAKEQCD0LSYSTEMATICS") != std::string::npos ){
             m_makeQCD0LSystematics = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOPRESELSYS") != std::string::npos ){
@@ -371,7 +386,10 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
         else if( temp_arg.find("--MAXMETCUTZEROLEP") != std::string::npos ){
 	  m_maxMetCutZeroLep = atof(temp_val.c_str());
         }
-        else if( temp_arg.find("--MAXLEPTOPDR") != std::string::npos ){
+	else if( temp_arg.find("--MAXMETCUTTWOLEP") != std::string::npos ){
+	  m_maxMetCutTwoLep = atof(temp_val.c_str());
+	}
+	else if( temp_arg.find("--MAXLEPTOPDR") != std::string::npos ){
 	  m_maxLeptopDR = atof(temp_val.c_str());
         }
         //
@@ -394,6 +412,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_leptopOpt = temp_val;
         } else if( temp_arg.find("--RCCOLLECTION") != std::string::npos ){
             m_RCCollection = temp_val;
+        } else if( temp_arg.find("--KINRWLIST") != std::string::npos ){
+	    m_kinRWList = temp_val;
         }
         //
         // Int arguments
@@ -450,6 +470,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_maxMetCutOneLep         = " << m_maxMetCutOneLep   << std::endl;
     std::cout << " m_minMetCutZeroLep        = " << m_minMetCutZeroLep  << std::endl;
     std::cout << " m_maxMetCutZeroLep        = " << m_maxMetCutZeroLep  << std::endl;
+    std::cout << " m_maxMetCutTwoLep         = " << m_maxMetCutTwoLep   << std::endl;
     std::cout << " m_maxLeptopDR             = " << m_maxLeptopDR       << std::endl;
     std::cout << " m_doRecoVLQ               = " << m_doRecoVLQ         << std::endl;
     std::cout << " m_btagOP                  = " << m_btagOP            << std::endl;
@@ -471,6 +492,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_invertMetMtwCuts        = " << m_invertMetMtwCuts   << std::endl;
     std::cout << " m_applyDeltaPhiCut        = " << m_applyDeltaPhiCut  << std::endl;
     std::cout << " m_invertDeltaPhiCut       = " << m_invertDeltaPhiCut  << std::endl;
+    std::cout << " m_applyMetSigObjCut       = " << m_applyMetSigObjCut << std::endl;
     std::cout << " m_applyMetSignificanceCut = " << m_applyMetSignificanceCut  << std::endl;
     std::cout << " m_dumpHistos              = " << m_dumpHistos        << std::endl;
     std::cout << " m_dumpTree                = " << m_dumpTree          << std::endl;
@@ -488,6 +510,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_doZeroLeptonAna         = " << m_doZeroLeptonAna   << std::endl;
     std::cout << " m_doPreselection          = " << m_doPreselection    << std::endl;
     std::cout << " m_doExclusiveJetRegions   = " << m_doExclusiveJetRegions << std::endl;
+    std::cout << " m_isAFII                  = " << m_isAFII << std::endl;
     std::cout << " m_doExtendedPreselection  = " << m_doExtendedPreselection << std::endl;
     std::cout << " m_doSingleVLQRegions      = " << m_doSingleVLQRegions<< std::endl;
     std::cout << " m_doPairVLQRegions        = " << m_doPairVLQRegions  << std::endl;
@@ -504,8 +527,9 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_scaleTtbarHtSlices      = " << m_scaleTtbarHtSlices << std::endl;
     std::cout << " m_applyTtbarNNLOCorrection= " << m_applyTtbarNNLOCorrection   << std::endl;
     std::cout << " m_recomputeTtbarNNLOCorrection= " << m_recomputeTtbarNNLOCorrection   << std::endl;
+    std::cout << " m_deriveReweighting       = " << m_deriveReweighting << std::endl;
     std::cout << " m_reweightKinematics      = " << m_reweightKinematics << std::endl;
-    std::cout << " m_onlyReweightTtbarKin    = " << m_onlyReweightTtbarKin << std::endl;
+    std::cout << " m_doKinRwSmoothing        = " << m_doKinRwSmoothing << std::endl;
     std::cout << " m_makeQCD0LSystematics    = " << m_makeQCD0LSystematics << std::endl;
     std::cout << " m_doPreselSys             = " << m_doPreselSys       << std::endl;
     std::cout << " m_doExpSys                = " << m_doExpSys          << std::endl;
@@ -518,6 +542,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_lepWOpt                 = " << m_lepWOpt           << std::endl;
     std::cout << " m_leptopOpt               = " << m_leptopOpt         << std::endl;
     std::cout << " m_RCCollection            = " << m_RCCollection      << std::endl;
+    std::cout << " m_kinRWList               = " << m_kinRWList         << std::endl;
     std::cout << "============================================="        << std::endl;
     std::cout << "" << std::endl;
 }
@@ -545,11 +570,11 @@ void VLQ_Options::checkConcistency() const
                       +" doOneLeptonAna "+bool2string(m_doOneLeptonAna)+","
                       +" doZeroLeptonAna "+bool2string(m_doZeroLeptonAna)
                       +" doTwoLeptonAna "+bool2string(m_doTwoLeptonAna));
-  if( (m_doOneLeptonAna==true or m_doZeroLeptonAna==true) and m_doTwoLeptonAna==true)
+  /*if( (m_doOneLeptonAna==true or m_doZeroLeptonAna==true) and m_doTwoLeptonAna==true)
     throw logic_error(string(__FILE__)+"\n"
                       +" Cannot run dilepton channel together with 0-lep or 1-lep channels:"
                       +" doOneLeptonAna "+bool2string(m_doOneLeptonAna)+","
                       +" doZeroLeptonAna "+bool2string(m_doZeroLeptonAna)
-                      +" doTwoLeptonAna "+bool2string(m_doTwoLeptonAna));
+                      +" doTwoLeptonAna "+bool2string(m_doTwoLeptonAna));*/
   // TODO implement other checks
 }

@@ -8,6 +8,8 @@ class VLQ_Options;
 class VLQ_OutputData;
 //class VLQ_NtupleData;
 class TH1F;
+class TH2F;
+class TF1;
 //class Selection;
 
 class VLQ_KinReweighter {
@@ -20,7 +22,11 @@ public:
   enum Kins{
     MET = 0,
     JETPT = 1,
-    LEPPT = 2
+    LEPPT = 2,
+    MEFF = 3,
+    JETSN = 4,
+    HTALL = 5,
+    MEFFRED = 6
   };
     //
     // Standard C++ functions
@@ -42,7 +48,7 @@ public:
     //
     // Real function
     //
-    double GetKinReweight( /*const std::string &region_name,*/ const int kinematic ) const;
+    double GetKinReweight( /*const std::string &region_name,*/ const int kinematic, const std::string systematic ="") const;
 
 private:
     //const VLQ_NtupleData *m_ntupData;
@@ -50,6 +56,8 @@ private:
     VLQ_Options *m_opt;
     std::map<std::string, int> *m_reweightings; 
     std::map < std::string, TH1F* > *m_histograms;
+    std::map < std::string, TH2F* > *m_histograms_2D;
+    std::map < std::string, TF1* > *m_smoothFunction; 
 };
 
 #endif //VLQ_TTBARSYSTEMATICSMANAGER_H
