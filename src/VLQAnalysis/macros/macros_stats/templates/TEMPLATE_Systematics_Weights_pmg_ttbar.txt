@@ -8,8 +8,6 @@ Systematic: "HTX_BKGNP_TTBARLIGHT_ISR_VAR3C" ; "HTX_BKGNP_TTBARBB_ISR_VAR3C" ; H
   Category: "t#bar{t} uncertainties"
   HistoNameSufUp: _weight_pmg_Var3cUp
   HistoNameSufDown: _weight_pmg_Var3cDown
-  HistoPathUp: "__HISTOPATH__/TheorySys/"
-  HistoPathDown: "__HISTOPATH__/TheorySys/"
   Symmetrisation: TwoSided
   Samples: ttbarlight;ttbarbb;ttbarcc
 
@@ -19,8 +17,6 @@ Systematic: "HTX_BKGNP_TTBARLIGHT_ISR_MUR" ; "HTX_BKGNP_TTBARBB_ISR_MUR" ; HTX_B
   Category: "t#bar{t} uncertainties"
   HistoNameSufUp: _weight_pmg_muR20__muF10
   HistoNameSufDown: _weight_pmg_muR05__muF10
-  HistoPathUp: "__HISTOPATH__/TheorySys/"
-  HistoPathDown: "__HISTOPATH__/TheorySys/"
   Symmetrisation: TwoSided
   Samples: ttbarlight;ttbarbb;ttbarcc
 
@@ -30,8 +26,6 @@ Systematic: "HTX_BKGNP_TTBARLIGHT_ISR_MUF" ; "HTX_BKGNP_TTBARBB_ISR_MUF" ; HTX_B
   Category: "t#bar{t} uncertainties"
   HistoNameSufUp: _weight_pmg_muR10__muF20
   HistoNameSufDown: _weight_pmg_muR10__muF05
-  HistoPathUp: "__HISTOPATH__/TheorySys/"
-  HistoPathDown: "__HISTOPATH__/TheorySys/"
   Symmetrisation: TwoSided
   Samples: ttbarlight;ttbarbb;ttbarcc
 
@@ -41,7 +35,5 @@ Systematic: "HTX_BKGNP_TTBARLIGHT_FSR_MURF" ; "HTX_BKGNP_TTBARBB_FSR_MURF" ; HTX
   Category: "t#bar{t} uncertainties"
   HistoNameSufUp: _weight_pmg_isr_muRfac10__fsr_muRfac20
   HistoNameSufDown: _weight_pmg_isr_muRfac10__fsr_muRfac05
-  HistoPathUp: "__HISTOPATH__/TheorySys/"
-  HistoPathDown: "__HISTOPATH__/TheorySys/"
   Symmetrisation: TwoSided
   Samples: ttbarlight;ttbarbb;ttbarcc

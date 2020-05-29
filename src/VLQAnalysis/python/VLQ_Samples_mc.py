@@ -153,7 +153,7 @@ def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campai
     if includeSingleTop:
         Samples += GetSingleTopSamples( useWeightSyst, useObjectSyst, campaign, 
                                         splitChannel=splitSTChannels,
-                                        runTChan=includeTChan, runWtprod=includeWtprod, runSchan=includeSChan,
+                                        runTchan=includeTchan, runWtprod=includeWtprod, runSchan=includeSchan,
                                         runSingletopSystSamples=includeSingletopSystSamples)
     if includeTopEW:
         Samples += GetTopEWSamples( useWeightSyst, useObjectSyst, campaign )
@@ -338,17 +338,17 @@ def GetSingleTopSamples( useWeightSyst=False, useObjectSyst=False, campaign="", 
         nameSChan=name+"schan"
         nameWtprod=name+"Wtprod"
         
-    if runTChan:
+    if runTchan:
         Samples     += [getSampleUncertainties(nameTChan, "410658."+campaign, ObjectSystematics , WeightSystematics)]
         Samples     += [getSampleUncertainties(nameTChan, "410659."+campaign, ObjectSystematics , WeightSystematics)]
     if runWtprod:
         Samples     += [getSampleUncertainties(nameWtprod,"410646."+campaign, ObjectSystematics , WeightSystematics)]
         Samples     += [getSampleUncertainties(nameWtprod,"410647."+campaign, ObjectSystematics , WeightSystematics)]
-    if runSChan:
+    if runSchan:
         Samples     += [getSampleUncertainties(nameSChan, "410644."+campaign, ObjectSystematics , WeightSystematics)]
         Samples     += [getSampleUncertainties(nameSChan, "410645."+campaign, ObjectSystematics , WeightSystematics)]
 
-    if SingletopSystSamples:
+    if runSingletopSystSamples:
         if runWtprod:
             Samples     += [getSampleUncertainties(nameWtprod+"PowHer","411036."+campaign, ObjectSystematics , WeightSystematics)]
             Samples     += [getSampleUncertainties(nameWtprod+"PowHer","411037."+campaign, ObjectSystematics , WeightSystematics)]
@@ -356,11 +356,11 @@ def GetSingleTopSamples( useWeightSyst=False, useObjectSyst=False, campaign="", 
             # DiagSub only applicable to Wt channel
             Samples     += [getSampleUncertainties(nameWtprod+"DiagSub","410654."+campaign, ObjectSystematics , WeightSystematics)]
             Samples     += [getSampleUncertainties(nameWtprod+"DiagSub","410655."+campaign, ObjectSystematics , WeightSystematics)]
-        if runTChan:
+        if runTchan:
             Samples     += [getSampleUncertainties(nameTChan+"PowHer","411032."+campaign, ObjectSystematics , WeightSystematics)]
             Samples     += [getSampleUncertainties(nameTChan+"PowHer","411033."+campaign, ObjectSystematics , WeightSystematics)]
             Samples     += [getSampleUncertainties(nameTChan+"aMCPy","412004."+campaign, ObjectSystematics , WeightSystematics)]
-        if runSChan:
+        if runSchan:
             Samples     += [getSampleUncertainties(nameSChan+"PowHer","411034."+campaign, ObjectSystematics , WeightSystematics)]
             Samples     += [getSampleUncertainties(nameSChan+"PowHer","411035."+campaign, ObjectSystematics , WeightSystematics)]
             Samples     += [getSampleUncertainties(nameSChan+"aMCPy","412005."+campaign, ObjectSystematics , WeightSystematics)]
