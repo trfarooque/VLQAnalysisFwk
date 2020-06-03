@@ -407,6 +407,7 @@ for counter,sample in enumerate(Signals):
     f_adapted.write("  Title: \""+TypeTemp+"\"\n")
     f_adapted.write("  Type: signal\n")
     f_adapted.write("  NormFactor: \"mu_signal\","+SignalNormFactor+"\n")
+    f_adapted.write("  SeparateGammas: TRUE\n")
     f_adapted.write("  FillColor: 2\n")
     f_adapted.write("  LineColor: 2\n")
     f_adapted.write("  HistoFile: "+cleaned_sampleType+"\n")

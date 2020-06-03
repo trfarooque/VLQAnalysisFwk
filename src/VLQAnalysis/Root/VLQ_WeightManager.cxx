@@ -48,7 +48,11 @@ VLQ_WeightManager::VLQ_WeightManager( VLQ_Options *opt, const VLQ_NtupleData* nt
   m_syst_regions(0)
 {
 
-  if( m_vlq_opt -> ReweightKinematics() ){
+  if( m_vlq_opt -> ReweightKinematics() 
+      && ( (m_vlq_opt->SampleName() == SampleName::WJETS) || (m_vlq_opt->SampleName() == SampleName::ZJETS) 
+	   || (m_vlq_opt->StrSampleName().find("TTBAR") != std::string::npos)
+	   || (m_vlq_opt->StrSampleName().find("SINGLETOPWTPROD") != std::string::npos) )
+      ){
     
     m_kinRw = new VLQ_KinReweighter(m_vlq_opt, m_vlq_outData /*, m_vlq_ntupData*/);
 
@@ -253,6 +257,8 @@ bool VLQ_WeightManager::AddVLQNominalWeights(){
 //______________________________________________________________________________
 //
 bool VLQ_WeightManager::AddKinReweightings(  ){
+
+  if(!m_kinRw) return true;
 
   for(const std::pair<std::string, int> kinpair : *(m_kinRw->GetReweightingList())){
     
@@ -721,14 +727,14 @@ bool VLQ_WeightManager::SetKinReweightings(  ){
 
   //if(!m_vlq_opt->ComputeWeightSys()){
 
-  if( !m_vlq_opt -> ReweightKinematics() ){
+  if( !m_vlq_opt -> ReweightKinematics() || !m_kinRw ){
     return true;
   }
 
-  if(!m_kinRw){
-    std::cerr << "<!> Error in VLQ_WeightManager::SetKinReweightings(): m_kinRw is null ... Please check !" << std::endl;
-    abort();
-  }
+  //if(!m_kinRw){
+  //std::cerr << "<!> Error in VLQ_WeightManager::SetKinReweightings(): m_kinRw is null ... Please check !" << std::endl;
+  //abort();
+  //}
  
   for(const std::pair<std::string, int> kinpair : *(m_kinRw->GetReweightingList())){
    
@@ -744,6 +750,8 @@ bool VLQ_WeightManager::SetKinReweightings(  ){
 //______________________________________________________________________________
 //
 bool VLQ_WeightManager::UpdateSysReweighting(){
+
+  if(!m_kinRw) return true;
 
   for( auto& weight : *m_systMap){
     

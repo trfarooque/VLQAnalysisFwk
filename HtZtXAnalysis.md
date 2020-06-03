@@ -60,6 +60,8 @@ in the VLQAnalysis/python directory:
   * submit_FitInputs_TTSTALT: Run over alternative ttbar and single-top samples from the alt_samples_v2 directory. These will be 
     compared to the nominal samples to derive theory uncertainties. 
     Therefore, these samples are run with --useWeightSys=FALSE --useObjectSys=FALSE --doExpSys=FALSE --doTheorySys=FALSE
+    Also, since the nominal ttbar and Wt samples in this directory are AFII, --isAFII=TRUE in this run (this does not affect the 
+    reweighting of alternative generators)   
 
 After launching the jobs, check the batch intermittently to track completion. Once the queue is clear *it is very important that 
 you explicitly check whether all files were produced*, using `IFAETopFramework/python/CheckOutputs.py`. This is run as:
@@ -80,7 +82,7 @@ can quickly trace back the log files and code used to produce them in case debug
 Once all files are correctly soft linked, they can be merged using the script provided in `VLQAnalysis/macros/macros_stat/`
 
 Nominal samples:
-`python ../macros/macros_stats/PrepareInputFilesTRexFitter.py inputDir=FitInputs/ useData=false singletopSyst=false useBkgd=true useSystematics=true splitCampaigns=true signal=NONE splitSingletop=true outputDir=FitInputs/FilesTRexF/`
+`python ../macros/macros_stats/PrepareInputFilesTRexFitter.py inputDir=FitInputs/ useData=false singletopSyst=false useBkgd=true useSystematics=true splitCampaigns=true signal=SINGLE splitSingletop=true outputDir=FitInputs/FilesTRexF/`
 
 PMG weights samples:
 `python ../macros/macros_stats/PrepareInputFilesTRexFitter.py inputDir=FitInputs/TheorySys/ useData=false singletopSyst=false useBkgd=true useSystematics=true splitCampaigns=true signal=NONE splitSingletop=true outputDir=$VLQSCRATCH/FitInputs/FilesTRexF/TheorySys/`
