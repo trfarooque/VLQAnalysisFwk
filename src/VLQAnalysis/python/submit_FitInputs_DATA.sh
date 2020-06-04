@@ -4,10 +4,10 @@ python Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 \
     producetarball=true \
     --inputDir=/nfs/at3/scratch2/farooque/MBJOutputs/tag-21.2.87-htztx-3-syst/nominal/ \
     --sampleDat=samples_info.tag-21.2.87-htztx-3-syst.${campaign}.dat \
-    --outputDirSuffix=FitInputs_RW_DATA_NOW \
-    --reweightKinematics=true \
+    --outputDirSuffix=FitInputs_RWNORW_DATA_NOW \
+    --reweightKinematics=false \
     --queue=at3 --NFILESPLIT=200 --NMERGE=1 --removeNull=TRUE \
-    --runData=false --runQCD=false --runSignals=false --runTtbar=true --runOtherBkgd=false \
+    --runData=true --runQCD=false --runSignals=false --runTtbar=false --runOtherBkgd=false \
     --runSingleTop=false --runWjets=false --runZjets=false --runTopEW=false --runDibosons=false \
     --runTtSyst=false --runStSyst=false --splitSTChannels=true \
     --dumpHistos=true --dumpOverlapTree=false --dumpTree=false --doTruthAnalysis=false --splitVLQDecays=false \
