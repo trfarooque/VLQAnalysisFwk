@@ -58,7 +58,7 @@ Title: "t#bar{t}+light-jets"
 Type: GHOST
 FillColor: 0
 LineColor: 1
-HistoFiles: TtbarAlt/ttbarlight.mc16a,TtbarAlt/ttbarlight.mc16d,TtbarAlt/ttbarlight.mc16e
+HistoFiles: TtStAlt/ttbarlight.mc16a,TtStAlt/ttbarlight.mc16d,TtStAlt/ttbarlight.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 
 Sample: "ttbarcc_AFII"
@@ -66,7 +66,7 @@ Title: "t#bar{t}+#geq1c"
 Type: GHOST
 FillColor: 590
 LineColor: 1
-HistoFiles: TtbarAlt/ttbarcc.mc16a,TtbarAlt/ttbarcc.mc16d,TtbarAlt/ttbarcc.mc16e
+HistoFiles: TtStAlt/ttbarcc.mc16a,TtStAlt/ttbarcc.mc16d,TtStAlt/ttbarcc.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 
 Sample: "ttbarbb_AFII"
@@ -74,7 +74,7 @@ Title: "t#bar{t}+#geq1b"
 Type: GHOST
 FillColor: 594
 LineColor: 1
-HistoFiles: TtbarAlt/ttbarbb.mc16a,TtbarAlt/ttbarbb.mc16d,TtbarAlt/ttbarbb.mc16e
+HistoFiles: TtStAlt/ttbarbb.mc16a,TtStAlt/ttbarbb.mc16d,TtStAlt/ttbarbb.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 
 Sample: "Singletop_AFII"
@@ -82,7 +82,7 @@ Title: "Single-top"
 Type: GHOST
 FillColor: 0
 LineColor: 1
-HistoFiles: SingletopAlt/Singletop.mc16a,SingletopAlt/Singletop.mc16d,SingletopAlt/Singletop.mc16e
+HistoFiles: TtStAlt/Singletop.mc16a,TtStAlt/Singletop.mc16d,TtStAlt/Singletop.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 
 Sample: "Singletop_Ref"

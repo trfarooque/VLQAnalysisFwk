@@ -159,7 +159,7 @@ if(ttbarSyst):
         Samples += GetTtbarSamples( useObjectSyst=False, hfSplitted = True, ttbarSystSamples = True, campaign=mc_campaign )
 elif(singletopSyst):
     for mc_campaign in campaigns:
-        Samples += GetSingleTopSamples( useObjectSyst=False, campaign=mc_campaign, splitChannel=splitSingletop, SingletopSystSamples=True)
+        Samples += GetSingleTopSamples( useObjectSyst=False, campaign=mc_campaign, splitChannel=splitSingletop, runSingletopSystSamples=True)
 
 else:
     #-- Data
@@ -270,6 +270,7 @@ for sample in Samples:
             Combination += [name_temp_rootfile]
             com = "hadd " + name_temp_rootfile
             usedFiles = []
+            SType = sample['sampleType']
             for f in listfiles:
                 if f.find("outVLQAna_"+SType+"_")>-1 and f.find(syst)>-1 and f.find(MC_campaign)>-1:
                     com += " " + f
@@ -317,18 +318,25 @@ if mergeSingletop:
     if singletopSyst:
         systVar = ["","PowHer","aMCPy"]
     else:
-        systVar = [""]
+        STfiles = glob.glob(folderRootFiles+"/Singletop*mc16*root")
+        for f in STfiles:
+            systclean = f.replace(folderRootFiles,"").replace("mc16a_","").replace("mc16d_","").replace("mc16e_","").replace(".root","")
+            systclean = systclean.replace("mc16a","").replace("mc16d","").replace("mc16e","")
+            systclean = systclean.replace("Singletop.","").replace("Singletopschan.","").replace("Singletoptchan.","").replace("SingletopWtprod.","")
+            systVar.append(systclean)
+        systVar = list(set(systVar))
     for mc_campaign in campaigns:
         if mc_campaign:
             mc_campaign = "."+mc_campaign
         for syst in systVar:
-            com = "hadd "+folderRootFiles+"/Singletop"+syst+mc_campaign+".root "  
-            com += folderRootFiles+"/Singletopschan"+syst+mc_campaign+".root "
-            com += folderRootFiles+"/Singletoptchan"+syst+mc_campaign+".root "
-            if syst:
-                com += folderRootFiles+"/SingletopWt"+syst+mc_campaign+".root "
+            if singletopSyst or syst=="":
+                filesuffix = syst+mc_campaign+".root "
             else:
-                com += folderRootFiles+"/SingletopWtprod"+syst+mc_campaign+".root "
+                filesuffix = mc_campaign+"_"+syst+".root "
+            com = "hadd "+folderRootFiles+"/Singletop"+filesuffix
+            com += folderRootFiles+"/Singletopschan"+filesuffix
+            com += folderRootFiles+"/Singletoptchan"+filesuffix
+            com += folderRootFiles+"/SingletopWtprod"+filesuffix
 
             printGoodNews("  --> "+mc_campaign+" ; "+syst)
             os.system(com)
@@ -337,5 +345,5 @@ if mergeSingletop:
             com = "hadd "+folderRootFiles+"/SingletopDiagSub"+mc_campaign+".root "  
             com += singletopNominalDir+"/Singletopschan"+mc_campaign+".root "
             com += singletopNominalDir+"/Singletoptchan"+mc_campaign+".root "
-            com += folderRootFiles+"/SingletopWtDiagSub"+mc_campaign+".root "
+            com += folderRootFiles+"/SingletopWtprodDiagSub"+mc_campaign+".root "
             os.system(com)
