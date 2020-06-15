@@ -66,7 +66,9 @@ in the VLQAnalysis/python directory:
 After launching the jobs, check the batch intermittently to track completion. Once the queue is clear *it is very important that 
 you explicitly check whether all files were produced*, using `IFAETopFramework/python/CheckOutputs.py`. This is run as:
 `python IFAETopFramework/python/CheckOutputs.py input=[output_directory]/Scripts_[output_directory]/JobCheck.chk`
-where output_directory is the output directory created by Submit_VLQAnalysis_new.py during the job submission.
+where output_directory is the output directory created by Submit_VLQAnalysis_new.py during the job submission. After seeing if any 
+jobs failed and understanding the cause, one can add the option `relaunch=True`, which will automatically relaunch the jobs that 
+failed (default is False).
 
 
 ### Merging outputs
@@ -82,10 +84,10 @@ can quickly trace back the log files and code used to produce them in case debug
 Once all files are correctly soft linked, they can be merged using the script provided in `VLQAnalysis/macros/macros_stat/`
 
 Nominal samples:
-`python ../macros/macros_stats/PrepareInputFilesTRexFitter.py inputDir=FitInputs/ useData=false singletopSyst=false useBkgd=true useSystematics=true splitCampaigns=true signal=SINGLE splitSingletop=true outputDir=FitInputs/FilesTRexF/`
+`python ../macros/macros_stats/PrepareInputFilesTRexFitter.py inputDir=FitInputs/ useData=false singletopSyst=false useBkgd=true useSystematics=true splitCampaigns=true signal=NONE splitSingletop=true mergeSingletop=true outputDir=FitInputs/FilesTRexF/`
 
 PMG weights samples:
-`python ../macros/macros_stats/PrepareInputFilesTRexFitter.py inputDir=FitInputs/TheorySys/ useData=false singletopSyst=false useBkgd=true useSystematics=false splitCampaigns=true signal=NONE splitSingletop=true outputDir=$VLQSCRATCH/FitInputs/FilesTRexF/TheorySys/`
+`python ../macros/macros_stats/PrepareInputFilesTRexFitter.py inputDir=FitInputs/TheorySys/ useData=false singletopSyst=false useBkgd=true useSystematics=false splitCampaigns=true signal=NONE splitSingletop=true mergeSingletop=true outputDir=$VLQSCRATCH/FitInputs/FilesTRexF/TheorySys/`
 
 Alternative generator samples:
 `python ../macros/macros_stats/PrepareInputFilesTRexFitter.py inputDir=FitInputs/TtStAlt/ useData=false ttbarSyst=true singletopSyst=true useBkgd=false useSystematics=false splitCampaigns=true signal=NONE splitSingletop=true mergeSingletop=true outputDir=FitInputs/FilesTRexF/TtStAlt/ singletopNominalDir=FitInputs/FilesTRexF/`
@@ -156,7 +158,7 @@ python ${MACRODIR}/PrepareConfigFilesFromTemplate.py \
 inputTemplate=${TEMPLATEDIR}/TEMPLATE_configFile_sVLQ__SIGNAL_.txt \
 outputFolder=$SCRATCHDIR/VLQFITINPUTS/VLQ2018/sVLQ/tag21.2.87-3-syst/FitSysBlind_incSTSys/ \
 systConfig=${TEMPLATEDIR}/TEMPLATE_Systematics_Weights_Exp.txt,${TEMPLATEDIR}/TEMPLATE_Systematics_Objects.txt,${TEMPLATEDIR}/TEMPLATE_Systematics_ttMod.txt,${TEMPLATEDIR}/TEMPLATE_Systematics_Weights_pmg_ttbar.txt,${TEMPLATEDIR}/TEMPLATE_Systematics_singletopMod.txt,${TEMPLATEDIR}/TEMPLATE_Systematics_Weights_pmg_singletop.txt,${TEMPLATEDIR}/TEMPLATE_Systematics_Weights_pmg_Vjets.txt,${TEMPLATEDIR}/TEMPLATE_Systematics_BackNorm.txt \
-signal=ONE signalType=SINGLE doOneLep=True doZeroLep=false doSR=true doVR=true doPresel=false useData=false \
+signal=ONE signalType=SINGLE doOneLep=True doZeroLep=false doSR=true doVR=true doPresel=false useData=true \
 regions=regions_dictionary_sVLQ \
 inputDir=FitInputsCR/FilesTRexF/ \
 signalScaling="BENCHMARK" \
