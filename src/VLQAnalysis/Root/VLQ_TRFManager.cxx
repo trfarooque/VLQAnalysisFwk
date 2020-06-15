@@ -40,10 +40,10 @@ void VLQ_TRFManager::Init(){
     btag_coll = "AntiKtVR30Rmax4Rmin02TrackJets"; 
   }
   else if(m_opt->BtagCollection() == VLQ_Options::CALOPFLOW){
-    btag_coll = "AntiKt4EMPFlow"; 
+    btag_coll = "AntiKt4EMPFlowJets"; 
   }
   else if(m_opt->BtagCollection() == VLQ_Options::CALOTOPO){
-    btag_coll = "AntiKt4EMTopo"; 
+    btag_coll = "AntiKt4EMTopoJets"; 
   }
 
   if(m_opt->BtagOP()==""){

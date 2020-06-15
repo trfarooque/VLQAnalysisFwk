@@ -159,7 +159,7 @@ if(ttbarSyst):
         Samples += GetTtbarSamples( useObjectSyst=False, hfSplitted = True, ttbarSystSamples = True, campaign=mc_campaign )
 elif(singletopSyst):
     for mc_campaign in campaigns:
-        Samples += GetSingleTopSamples( useObjectSyst=False, campaign=mc_campaign, splitChannel=splitSingletop, SingletopSystSamples=True)
+        Samples += GetSingleTopSamples( useObjectSyst=False, campaign=mc_campaign, splitChannel=splitSingletop, runSingletopSystSamples=True)
 
 else:
     #-- Data

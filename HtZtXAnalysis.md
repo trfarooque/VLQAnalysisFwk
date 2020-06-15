@@ -85,7 +85,7 @@ Nominal samples:
 `python ../macros/macros_stats/PrepareInputFilesTRexFitter.py inputDir=FitInputs/ useData=false singletopSyst=false useBkgd=true useSystematics=true splitCampaigns=true signal=SINGLE splitSingletop=true outputDir=FitInputs/FilesTRexF/`
 
 PMG weights samples:
-`python ../macros/macros_stats/PrepareInputFilesTRexFitter.py inputDir=FitInputs/TheorySys/ useData=false singletopSyst=false useBkgd=true useSystematics=true splitCampaigns=true signal=NONE splitSingletop=true outputDir=$VLQSCRATCH/FitInputs/FilesTRexF/TheorySys/`
+`python ../macros/macros_stats/PrepareInputFilesTRexFitter.py inputDir=FitInputs/TheorySys/ useData=false singletopSyst=false useBkgd=true useSystematics=false splitCampaigns=true signal=NONE splitSingletop=true outputDir=$VLQSCRATCH/FitInputs/FilesTRexF/TheorySys/`
 
 Alternative generator samples:
 `python ../macros/macros_stats/PrepareInputFilesTRexFitter.py inputDir=FitInputs/TtStAlt/ useData=false ttbarSyst=true singletopSyst=true useBkgd=false useSystematics=false splitCampaigns=true signal=NONE splitSingletop=true mergeSingletop=true outputDir=FitInputs/FilesTRexF/TtStAlt/ singletopNominalDir=FitInputs/FilesTRexF/`

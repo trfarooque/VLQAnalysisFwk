@@ -9,7 +9,7 @@ do
 	--outputDirSuffix=FitInputs_RW_TTSTALT_${campaign}_NOW \
 	--reweightKinematics=true --kinRWList=JETSN,MEFFRED --isAFII=true \
 	--queue=at3 --NFILESPLIT=200 --NMERGE=1 --removeNull=TRUE \
-	--runData=false --runQCD=false --runSignals=false --runTtbar=true --runOtherBkgd=false \
+	--runData=false --runQCD=false --runSignals=false --runTtbar=true --runOtherBkgd=true \
 	--runSingleTop=true --runWjets=false --runZjets=false --runTopEW=false --runDibosons=false \
 	--runTtSyst=true --runStSyst=true --splitSTChannels=true \
 	--dumpHistos=true --dumpOverlapTree=false --dumpTree=false --doTruthAnalysis=false --splitVLQDecays=false \
@@ -27,6 +27,7 @@ do
 	--doTRF=false --recomputeTRF=false --recomputeBTagSF=false --btagOP=FixedCutBEff_77 \
 	--TRFCDI=xAODBTaggingEfficiency/13TeV/2017-21-13TeV-MC16-CDI-2019-07-30_v1.root \
 	--btagCollection=TRACK --trkJetPtCut=20. \
+	--RWTTFRACTIONS=true \
 	--applyTtbarNNLOCorrection=false --applyVJetsSherpa22RW=false --applyTtbbCorrection=false \
 	--filterType=APPLYFILTER --useSlices=true --scaleTtbarHtSlices=true \
 	--jetPtCut=25 --fwdJetPtCut=20 --RCJetPtCut=200 --RCNsubjetsCut=0 \

@@ -143,7 +143,7 @@ def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campai
                                 , includeTopEW=True, includeDibosons=True
                                 , includeSingletopSystSamples=False 
                                 , splitSTChannels=False
-                                , includeTchan=False, includeWtprod=False, includeSchan=False
+                                , includeTchan=True, includeWtprod=True, includeSchan=True
                                 , removeNull=False):
     Samples =  []
     if includeWjets:
