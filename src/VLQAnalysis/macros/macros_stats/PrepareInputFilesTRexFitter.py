@@ -153,13 +153,14 @@ if splitCampaigns:
 else:
     campaigns = [""]
 
-#ttbar systematics
-if(ttbarSyst):
-    for mc_campaign in campaigns:
-        Samples += GetTtbarSamples( useObjectSyst=False, hfSplitted = True, ttbarSystSamples = True, campaign=mc_campaign )
-elif(singletopSyst):
-    for mc_campaign in campaigns:
-        Samples += GetSingleTopSamples( useObjectSyst=False, campaign=mc_campaign, splitChannel=splitSingletop, runSingletopSystSamples=True)
+#ttbar+singletop systematics
+if(ttbarSyst or singletopSyst):
+    if(ttbarSyst):  
+        for mc_campaign in campaigns:
+            Samples += GetTtbarSamples( useObjectSyst=False, hfSplitted = True, ttbarSystSamples = True, campaign=mc_campaign )
+    if(singletopSyst):
+        for mc_campaign in campaigns:
+            Samples += GetSingleTopSamples( useObjectSyst=False, campaign=mc_campaign, splitChannel=splitSingletop, runSingletopSystSamples=True)
 
 else:
     #-- Data
