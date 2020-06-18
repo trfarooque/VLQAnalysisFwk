@@ -8,7 +8,7 @@ removeSignal=True
 ##_______________________________________________________________
 ##
 def writePreamble( inFile, fout ):
-    isSyst = False
+    isSyst = True
     if inFile.name.find("syst")>-1: isSyst = True
     if not isSyst:
         fout.write("\\begin{table}\n")
@@ -122,6 +122,7 @@ def dumpVector(inFile):
         temp_line = temp_line.replace("Z+jets", "$Z$+jets")
         temp_line = temp_line.replace("Data/MC", "DataMC")
         temp_line = temp_line.replace("R/F", "RF")
+        temp_line = temp_line.replace("DR/DS", "DRDS")
         
         #Replace characters
         temp_line=temp_line.replace("|","&")
@@ -194,7 +195,7 @@ def dumpVector(inFile):
 
 #allTextFiles=glob.glob("BackgroundOnly_10FB_1LeptonOnly/Tables/*.txt")
 #/nfs/at3/scratch2/farooque/VLQFITINPUTS/2017_05_09/ExotCirc/Unblinded/ProjectedPostFitsPlots/Outputs/PaperTablesPostFit/PaperTables_Bkgd_1L/Tables/Yields*.txt
-allTextFiles=glob.glob("/nfs/at3/scratch2/farooque/VLQFITINPUTS/VLQ2018/sVLQ/tag21.2.87-3-syst/FitSysBlindData//Results/BONLY__sVLQ_WTHt11K03__/Tables/*.txt")
+allTextFiles=glob.glob("/nfs/at3/scratch2/farooque/VLQFITINPUTS/VLQ2018/sVLQ/tag21.2.87-3-syst/FitSysBlindData_incSTSys//Results/BONLY__sVLQ_WTHt11K03__/Tables/*/*.txt")
 for textFile in allTextFiles:
     print"-> ",textFile
     inFile = open(textFile,"read")
