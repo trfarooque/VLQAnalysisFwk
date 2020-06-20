@@ -59,15 +59,6 @@ VLQ_WeightManager::VLQ_WeightManager( VLQ_Options *opt, const VLQ_NtupleData* nt
     if((m_vlq_opt -> SampleName() == SampleName::ZJETS) || (m_vlq_opt -> SampleName() == SampleName::WJETS)){	
       m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyZjets_PowPy8.root"));
     }
-    else if(m_vlq_opt -> StrSampleName().find("POWHER") != std::string::npos){
-      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_PowH7.root"));
-    }
-    else if(m_vlq_opt -> StrSampleName().find("AMCPY") != std::string::npos){
-      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_aMCPy.root"));
-    }
-    else if(m_vlq_opt -> ISAFII()){
-      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_AFII.root"));
-    }
     else{
       m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar_PowPy8.root"));
     }
@@ -368,6 +359,11 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
         AddAndInitWeight("weight_pmg_muR10__muF05","",false, true, "weight_pmg_muR10__muF05", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
         AddAndInitWeight("weight_pmg_muR20__muF10","",false, true, "weight_pmg_muR20__muF10", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
         AddAndInitWeight("weight_pmg_muR05__muF10","",false, true, "weight_pmg_muR05__muF10", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+
+	AddAndInitWeight("weight_pmg_Var3cUp","",false, true, "weight_pmg_Var3cUp", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_Var3cDown","",false, true, "weight_pmg_Var3cDown", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac20","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac20", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac05","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac05", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
 	
       }
       else{
@@ -376,13 +372,14 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
 	AddAndInitWeight("weight_pmg_muR100__muF050","",false, true, "weight_pmg_muR100__muF050", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
 	AddAndInitWeight("weight_pmg_muR200__muF100","",false, true, "weight_pmg_muR200__muF100", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
 	AddAndInitWeight("weight_pmg_muR050__muF100","",false, true, "weight_pmg_muR050__muF100", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+
+	AddAndInitWeight("weight_pmg_Var3cUp","",false, true, "weight_pmg_Var3cUp", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_Var3cDown","",false, true, "weight_pmg_Var3cDown", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac20","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac20", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac05","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac05", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	
       }
 
-      AddAndInitWeight("weight_pmg_Var3cUp","",false, true, "weight_pmg_Var3cUp", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
-      AddAndInitWeight("weight_pmg_Var3cDown","",false, true, "weight_pmg_Var3cDown", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
-      AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac20","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac20", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
-      AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac05","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac05", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
-      
 	/*	
       //ttbar systematics
       if( m_vlq_outData -> o_is_ttbar ){
@@ -417,19 +414,19 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
     //V+jets systematics
     if( (m_opt -> SampleName() == SampleName::WJETS) || (m_opt -> SampleName() == SampleName::ZJETS) ){
       //V+jets PMG weights
-      AddAndInitWeight("weight_pmg_muR05__muF05","",false, true, "weight_pmg_MUR05__MUF05__PDF261000", "weight_mc");
-      AddAndInitWeight("weight_pmg_muR05__muF10","",false, true, "weight_pmg_MUR05__MUF1__PDF261000", "weight_mc");
-      AddAndInitWeight("weight_pmg_muR10__muF05","",false, true, "weight_pmg_MUR1__MUF05__PDF261000", "weight_mc");
-      AddAndInitWeight("weight_pmg_muR10__muF10","",false, true, "weight_pmg_MUR1__MUF1__PDF261000", "weight_mc");
-      AddAndInitWeight("weight_pmg_muR10__muF20","",false, true, "weight_pmg_MUR1__MUF2__PDF261000", "weight_mc");
-      AddAndInitWeight("weight_pmg_muR20__muF10","",false, true, "weight_pmg_MUR2__MUF1__PDF261000", "weight_mc");
-      AddAndInitWeight("weight_pmg_muR20__muF20","",false, true, "weight_pmg_MUR2__MUF2__PDF261000", "weight_mc");
+      AddAndInitWeight("weight_pmg_muR05__muF05","",false, true, "weight_pmg_MUR05__MUF05__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+      AddAndInitWeight("weight_pmg_muR05__muF10","",false, true, "weight_pmg_MUR05__MUF1__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+      AddAndInitWeight("weight_pmg_muR10__muF05","",false, true, "weight_pmg_MUR1__MUF05__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+      AddAndInitWeight("weight_pmg_muR10__muF10","",false, true, "weight_pmg_MUR1__MUF1__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+      AddAndInitWeight("weight_pmg_muR10__muF20","",false, true, "weight_pmg_MUR1__MUF2__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+      AddAndInitWeight("weight_pmg_muR20__muF10","",false, true, "weight_pmg_MUR2__MUF1__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+      AddAndInitWeight("weight_pmg_muR20__muF20","",false, true, "weight_pmg_MUR2__MUF2__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
 
       //parametrised weights
-      AddAndInitWeight("weight_pmg_ckkw15","",false, true, "ckkw15_Weight", "weight_mc","F");
-      AddAndInitWeight("weight_pmg_ckkw30","",false, true, "ckkw30_Weight", "weight_mc","F");
-      AddAndInitWeight("weight_pmg_qsf025","",false, true, "qsf025_Weight", "weight_mc","F");
-      AddAndInitWeight("weight_pmg_qsf4","",false, true, "qsf4_Weight", "weight_mc","F");
+      AddAndInitWeight("weight_pmg_ckkw15","",false, true, "ckkw15_Weight", "weight_mc","F")->AddFlagAtBit(REWEIGHT, true);
+      AddAndInitWeight("weight_pmg_ckkw30","",false, true, "ckkw30_Weight", "weight_mc","F")->AddFlagAtBit(REWEIGHT, true);
+      AddAndInitWeight("weight_pmg_qsf025","",false, true, "qsf025_Weight", "weight_mc","F")->AddFlagAtBit(REWEIGHT, true);
+      AddAndInitWeight("weight_pmg_qsf4","",false, true, "qsf4_Weight", "weight_mc","F")->AddFlagAtBit(REWEIGHT, true);
 
     }
 
@@ -734,7 +731,26 @@ bool VLQ_WeightManager::SetKinReweightings(  ){
    
     //std::cout<<" Setting systematic component for kinematic reweighting " << kinpair.first <<std::endl;
    
-    SetNominalComponent( "weight_RW_"+kinpair.first, m_kinRw -> GetKinReweight( kinpair.second ) ); 
+
+    double weight = m_kinRw -> GetKinReweight( kinpair.second );
+
+    if((m_vlq_opt -> StrSampleName().find("POWHER") != std::string::npos) && (kinpair.first == "MEFFRED")){
+
+      weight *= m_kinRw->GetKinReweight(VLQ_KinReweighter::MEFFRED, "_PowHer");
+
+    }
+    else if((m_vlq_opt -> StrSampleName().find("AMCPY") != std::string::npos) && (kinpair.first == "MEFFRED")){
+
+      weight *= m_kinRw->GetKinReweight(VLQ_KinReweighter::MEFFRED, "_aMCPy");
+
+    }
+    else if(m_vlq_opt -> ISAFII() && (kinpair.first == "MEFFRED")){
+
+      weight *= m_kinRw->GetKinReweight(VLQ_KinReweighter::MEFFRED, "_AFII");
+      
+    }
+
+    SetNominalComponent( "weight_RW_"+kinpair.first, weight ); 
 
   }
 
@@ -748,24 +764,33 @@ bool VLQ_WeightManager::UpdateSysReweighting(){
   if(!m_kinRw) return true;
 
   for( auto& weight : *m_systMap){
-    
+
     if( (weight.second)->PassFlagAtBit(REWEIGHT) ){
 
       double oldWeight = weight.second->GetComponentValue();
 
+      std::string weightName = weight.first;
+
+      if(weight.first == "weight_pmg_muR100__muF200") weightName = "weight_pmg_muR10__muF20";
+      if(weight.first == "weight_pmg_muR100__muF050") weightName = "weight_pmg_muR10__muF05";
+      if(weight.first == "weight_pmg_muR200__muF100") weightName = "weight_pmg_muR20__muF10";
+      if(weight.first == "weight_pmg_muR050__muF100") weightName = "weight_pmg_muR05__muF10";
+
       for(const std::pair<std::string, int> kinpair : *(m_kinRw->GetReweightingList())){
 
-	oldWeight /= ((*m_nomMap)["weight_RW_"+kinpair.first]->GetComponentValue());
-	
-	oldWeight *= m_kinRw->GetKinReweight(kinpair.second, "_"+weight.first);
-	
+	oldWeight *= m_kinRw->GetKinReweight(kinpair.second, "_"+weightName);
+
       }
 
       UpdateSystematicComponent(weight.first, oldWeight);
 
     }
 
+
   }
 
   return true;
+
 }
+
+

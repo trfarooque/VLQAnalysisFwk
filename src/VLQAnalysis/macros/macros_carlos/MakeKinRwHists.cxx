@@ -63,13 +63,44 @@ TH2D* getTotalKinHisto2D( std::vector<std::string>* samples, std::string inputDi
 
   for(const std::string& sample : *samples){
     
+    std::string sampleName = sample;
+
+    if(sample == "ttbarbb" || sample == "ttbarcc" || sample == "ttbarlight" || sample == "SingletopWtprod"){
+
+      if(systematicPrefix == "_aMCPy" || systematicPrefix == "_PowHer" || systematicPrefix == "_AFII"){
+	
+	sampleName += systematicPrefix;
+
+      }
+      else if(systematicPrefix != ""){
+
+	sampleName += "_pmg";
+
+      }
+      
+    }
+    else if(sample == "Zjets"){
+      
+      if(systematicPrefix != ""){
+
+	sampleName += "_pmg";
+
+      }
+
+    }
+
     for(const std::string& campaign : *campaigns){
 
       if(sample == "ttH" && campaign == "merged_mc16e") continue;
 
-      if(debug) std::cout << "Opening file " << inputDir + "/" + campaign + "/outVLQAnalysis_" + sample + "_nominal_HIST.root" << std::endl;
+      if(sample == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR10__muF20") systematicPrefix = "_weight_pmg_muR100__muF200";
+      if(sample == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR10__muF05") systematicPrefix = "_weight_pmg_muR100__muF050";
+      if(sample == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR20__muF10") systematicPrefix = "_weight_pmg_muR200__muF100";
+      if(sample == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR05__muF10") systematicPrefix = "_weight_pmg_muR050__muF100";
 
-      TFile* f = TFile::Open( (inputDir + "/" + campaign + "/outVLQAnalysis_" + sample + "_nominal_HIST.root").c_str(), "READ" );
+      if(debug) std::cout << "Opening file " << inputDir + "/" + campaign + "/outVLQAnalysis_" + sampleName + "_nominal_HIST.root" << std::endl;
+
+      TFile* f = TFile::Open( (inputDir + "/" + campaign + "/outVLQAnalysis_" + sampleName + "_nominal_HIST.root").c_str(), "READ" );
 
       TH2D* h_i = ((TH2D*)(f -> Get( ( std::string(region) + "_" + (kinematics -> at(0)) + "_vs_" + (kinematics -> at(1)) + systematicPrefix ).c_str() ) ) );
 
@@ -116,11 +147,42 @@ TH1D* getTotalKinHisto1D( std::vector<std::string>* samples, std::string inputDi
 
   for(const std::string& sample : *samples){
 
+    std::string sampleName = sample;
+
+    if(sample == "ttbarbb" || sample == "ttbarcc" || sample == "ttbarlight" || sample == "SingletopWtprod"){
+
+      if(systematicPrefix == "_aMCPy" || systematicPrefix == "_PowHer" || systematicPrefix == "_AFII"){
+	
+	sampleName += systematicPrefix;
+
+      } 
+      else if(systematicPrefix != ""){
+
+	sampleName += "_pmg";
+
+      }
+
+    }
+    else if(sample == "Zjets"){
+      
+      if(systematicPrefix != ""){
+
+	sampleName += "_pmg";
+
+      }
+
+    }
+
     for(const std::string& campaign : *campaigns){
 
       if(sample == "ttH" && campaign == "merged_mc16e") continue;
 
-      TFile* f = TFile::Open( (inputDir + "/" + campaign + "/outVLQAnalysis_" + sample + "_nominal_HIST.root").c_str(), "READ" );
+      if(sample == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR10__muF20") systematicPrefix = "_weight_pmg_muR100__muF200";
+      if(sample == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR10__muF05") systematicPrefix = "_weight_pmg_muR100__muF050";
+      if(sample == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR20__muF10") systematicPrefix = "_weight_pmg_muR200__muF100";
+      if(sample == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR05__muF10") systematicPrefix = "_weight_pmg_muR050__muF100";
+
+      TFile* f = TFile::Open( (inputDir + "/" + campaign + "/outVLQAnalysis_" + sampleName + "_nominal_HIST.root").c_str(), "READ" );
 
       TH1D* h_i = ((TH1D*)(f -> Get( ( std::string(region) + "_" + kinematics + systematicPrefix ).c_str() ) ) );
 
@@ -271,11 +333,7 @@ int main(int argc, char** argv){
  
 
   // If we are reweighting any ttbar sample or singletopWt use the following regions
-  if(std::find(list_signal.begin(), list_signal.end(), "ttbarbb") != list_signal.end() ||
-     std::find(list_signal.begin(), list_signal.end(), "ttbarbb_aMCPy") != list_signal.end() ||
-     std::find(list_signal.begin(), list_signal.end(), "ttbarbb_PowHer") != list_signal.end() ||
-     std::find(list_signal.begin(), list_signal.end(), "ttbarbb_AFII") != list_signal.end() ||
-     std::find(list_signal.begin(), list_signal.end(), "ttbarbb_systWeights") != list_signal.end() || 
+  if(std::find(list_signal.begin(), list_signal.end(), "ttbarbb") != list_signal.end() || 
      std::find(list_signal.begin(), list_signal.end(), "ttbarbb_pmg") != list_signal.end()){
 
     list_reg.push_back("c1lep3jin2bex");
@@ -291,13 +349,13 @@ int main(int argc, char** argv){
 
 
   // Define rebinning for meff
-  //double binedges_meff[19] = {0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000};
-  //double* rebin_meff = &binedges_meff[0];
-  //int nbins_meff = 18;
-
-  double binedges_meff[14] = {0,100,400,500,600,700,800,900,1000,1200,1400,1600,2000,5000};
+  double binedges_meff[19] = {0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000};
   double* rebin_meff = &binedges_meff[0];
-  int nbins_meff = 13;
+  int nbins_meff = 18;
+
+  //double binedges_meff[14] = {0,100,400,500,600,700,800,900,1000,1200,1400,1600,2000,5000};
+  //double* rebin_meff = &binedges_meff[0];
+  //int nbins_meff = 13;
 
   //double binedges_meffred[18] = {0,100,200,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000};
   //double* rebin_meffred = &binedges_meffred[0];
@@ -319,60 +377,77 @@ int main(int argc, char** argv){
   double binedges_jets_n[15] = {-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 12.5, 15.5};
   double* rebin_jets_n = &binedges_jets_n[0];
   int nbins_jets_n = 14;
- 
-  for(const std::string& systematic : systematics){ // Start loop through systematics
 
-    std::cout << "########################################################################" << std::endl;
-    std::cout << "Running systematic: " << systematic << std::endl;
-    std::cout << "########################################################################" << std::endl;
+  for(const std::string& region : list_reg){ // Start loop through regions 
 
-    std::string systematicPrefix = (systematic == "nominal") ? "" : "_" + systematic;
+    for(const std::string& systematic : systematics){ // Start loop through systematics
 
-    for(const std::string& region : list_reg){ // Start loop through regions
+      std::cout << "########################################################################" << std::endl;
+      std::cout << "Running systematic: " << systematic << std::endl;
+      std::cout << "########################################################################" << std::endl;
       
-      // Open file containing data
+      std::string systematicPrefix = (systematic == "nominal") ? "" : "_" + systematic;
+
+
       TFile* f_data = TFile::Open( (inDir + "/mergedData/outVLQAnalysis_Data_nominal_HIST.root").c_str(), "READ" );
-      
-      // Retrieve jets_n and meff 2D histogram 
+
+      // Retrieve jets_n and meff 2D histogram                                                                                                                                                          
       TH2D* data_hist = (TH2D*)(f_data -> Get( ( (region + "_" + list_kin[0] + "_vs_" + list_kin[1]).c_str() ) ) );
-      
+
       data_hist -> SetDirectory(0);
-      
+
       f_data -> Close();
-      
-      // Obtain 2D histogram for samples to be reweighted
-      TH2D* signal_hist = getTotalKinHisto2D(&list_signal, inDir, region, &list_campaign, &list_kin, data_hist, "signal", systematicPrefix);
 
-      // Obtain 2D histogram for background samples
-      TH2D* background_hist = getTotalKinHisto2D(&list_background, inDir, region, &list_campaign, &list_kin, data_hist, "background", systematicPrefix);
+      TH2D* signal_hist = new TH2D();
 
-      TH2D* numeratorHist = (TH2D*)(data_hist -> Clone ( "numerator" ) );
+      TH2D* background_hist = new TH2D();
 
-      numeratorHist -> Reset();
-      
-      // Define reweighting numerator as data histogram subtracted by background samples
-      numeratorHist -> Add(data_hist, background_hist, 1.0, -1.0);
-      
-      // Define histogram containing the Y-projection (jets_n) for the numerator
-      TH1D* numerator_jets_n = numeratorHist -> ProjectionY();
-      
-      // Define histogram containing the Y-projection (jets_n) of the samples to be reweighted 
-      TH1D* denominator_jets_n = signal_hist -> ProjectionY();
-      
-      // Apply jets_n rebinning
-      numerator_jets_n   = (TH1D*) numerator_jets_n   -> Rebin(nbins_jets_n, numerator_jets_n   -> GetName(), rebin_jets_n);
-      denominator_jets_n = (TH1D*) denominator_jets_n -> Rebin(nbins_jets_n, denominator_jets_n -> GetName(), rebin_jets_n);
+      TH1D* jets_n_rw = ( (TH2D*)(data_hist -> Clone(data_hist -> GetName() ) ) ) -> ProjectionY();
 
+      jets_n_rw -> SetName( (region + "_jets_n"+systematicPrefix).c_str() );
 
-      TH1D* jets_n_rw = (TH1D*)(numerator_jets_n -> Clone(numerator_jets_n->GetName() ) );
+      jets_n_rw = (TH1D*) jets_n_rw->Rebin(nbins_jets_n, jets_n_rw   -> GetName(), rebin_jets_n);
 
-      jets_n_rw -> Reset();
+      if(systematic != "nominal"){
 
-      jets_n_rw -> SetName( (region + "_jets_n" + systematicPrefix).c_str() );
-      
-      // Calculate the jets_n reweighting
-      
-      jets_n_rw -> Divide(numerator_jets_n, denominator_jets_n);
+	*signal_hist = *getTotalKinHisto2D(&list_signal, inDir, region, &list_campaign, &list_kin, data_hist, "signal", systematicPrefix);
+
+	*background_hist = *getTotalKinHisto2D(&list_signal, inDir, region, &list_campaign, &list_kin, data_hist, "background", "");
+	
+	TH1D* numerator_jets_n = background_hist -> ProjectionY();
+
+	TH1D* denominator_jets_n = signal_hist -> ProjectionY();
+
+	numerator_jets_n   = (TH1D*) numerator_jets_n   -> Rebin(nbins_jets_n, numerator_jets_n   -> GetName(), rebin_jets_n);
+
+	denominator_jets_n = (TH1D*) denominator_jets_n -> Rebin(nbins_jets_n, denominator_jets_n -> GetName(), rebin_jets_n);
+	
+	jets_n_rw -> Divide(numerator_jets_n, denominator_jets_n);
+
+      }
+      else{
+
+	*signal_hist = *getTotalKinHisto2D(&list_signal, inDir, region, &list_campaign, &list_kin, data_hist, "signal", "");
+
+	*background_hist = *getTotalKinHisto2D(&list_background, inDir, region, &list_campaign, &list_kin, data_hist, "background", "");
+
+	TH2D* numeratorHist = (TH2D*)(data_hist -> Clone ( "numerator" ) );
+
+	numeratorHist->Reset();
+
+	numeratorHist -> Add(data_hist, background_hist, 1.0, -1.0);
+   
+	TH1D* numerator_jets_n = numeratorHist -> ProjectionY();
+
+	TH1D* denominator_jets_n = signal_hist -> ProjectionY();
+
+	numerator_jets_n   = (TH1D*) numerator_jets_n   -> Rebin(nbins_jets_n, numerator_jets_n   -> GetName(), rebin_jets_n);
+
+	denominator_jets_n = (TH1D*) denominator_jets_n -> Rebin(nbins_jets_n, denominator_jets_n -> GetName(), rebin_jets_n);
+
+	jets_n_rw -> Divide(numerator_jets_n, denominator_jets_n);
+
+      }
 
       f_out->cd();
 
@@ -381,172 +456,281 @@ int main(int argc, char** argv){
       if(list_kin[1] == "meffred" && region == "c2lep3jin1bexZwinMLL_sf"){
 
 	TH1D* meffred_rw = new TH1D( (region + "_" + list_kin[1] + systematicPrefix).c_str(), "", nbins_meffred, binedges_meffred);
+	
+	if(systematic != "nominal"){
 
-	for(int ybin = 4; ybin <= signal_hist -> GetNbinsY(); ybin++){
+	  signal_hist->Reset();
 
-	  for(int xbin = 1; xbin <= signal_hist -> GetNbinsX(); xbin++){
+	  *signal_hist = *getTotalKinHisto2D(&list_signal, inDir, region, &list_campaign, &list_kin, data_hist, "signal", systematicPrefix);
 
-	    signal_hist->SetBinContent(xbin, ybin, (jets_n_rw -> GetBinContent(ybin)) * (signal_hist->GetBinContent(xbin, ybin)) );
+	  for(int ybin = 4; ybin <= signal_hist -> GetNbinsY(); ybin++){
+
+            for(int xbin = 1; xbin <= signal_hist -> GetNbinsX(); xbin++){
+
+              signal_hist->SetBinContent(xbin, ybin, (jets_n_rw -> GetBinContent(ybin)) * (signal_hist->GetBinContent(xbin, ybin)) );
+
+            }
 
 	  }
+
+	  background_hist->Reset();
+
+	  *background_hist = *getTotalKinHisto2D(&list_signal, inDir, region, &list_campaign, &list_kin, data_hist, "background", "");
+
+	  TH1D* background_hist_meffred = ( (TH2D*)(background_hist -> Clone(background_hist -> GetName() ) ) ) -> ProjectionX();
+
+	  TH1D* signal_hist_meffred = ( (TH2D*)(signal_hist -> Clone(signal_hist -> GetName() ) ) ) -> ProjectionX();
+
+	  background_hist_meffred = (TH1D*) background_hist_meffred -> Rebin( nbins_meffred, background_hist_meffred -> GetName(), rebin_meffred);
+
+          signal_hist_meffred = (TH1D*) signal_hist_meffred -> Rebin( nbins_meffred, signal_hist_meffred -> GetName(), rebin_meffred);
+
+	  background_hist_meffred->Sumw2(kFALSE);
+
+	  meffred_rw->Add(background_hist_meffred, 1.0);
 	  
+	  meffred_rw->Divide(signal_hist_meffred);
+
 	}
+	else{
 
-	TH1D* data_hist_meffred = ( (TH2D*)(data_hist -> Clone(data_hist -> GetName() ) ) ) -> ProjectionX();
+	  for(int ybin = 4; ybin <= signal_hist -> GetNbinsY(); ybin++){
 
-	TH1D* background_hist_meffred = ( (TH2D*)(background_hist -> Clone(background_hist -> GetName() ) ) ) -> ProjectionX();
+	    for(int xbin = 1; xbin <= signal_hist -> GetNbinsX(); xbin++){
 
-	TH1D* signal_hist_meffred = ( (TH2D*)(signal_hist -> Clone(signal_hist -> GetName() ) ) ) -> ProjectionX();
+	      signal_hist->SetBinContent(xbin, ybin, (jets_n_rw -> GetBinContent(ybin)) * (signal_hist->GetBinContent(xbin, ybin)) );
 
-	data_hist_meffred = (TH1D*) data_hist_meffred -> Rebin( nbins_meffred, data_hist_meffred -> GetName(), rebin_meffred);
+	    }
 
-	data_hist_meffred->Sumw2(kFALSE);
+	  }
 
-	background_hist_meffred = (TH1D*) background_hist_meffred -> Rebin( nbins_meffred, background_hist_meffred -> GetName(), rebin_meffred);
+	  TH1D* data_hist_meffred = ( (TH2D*)(data_hist -> Clone(data_hist -> GetName() ) ) ) -> ProjectionX();
 
-	signal_hist_meffred = (TH1D*) signal_hist_meffred -> Rebin( nbins_meffred, signal_hist_meffred -> GetName(), rebin_meffred);
-	
-	meffred_rw -> Add(data_hist_meffred, background_hist_meffred, 1.0, -1.0);
+	  TH1D* background_hist_meffred = ( (TH2D*)(background_hist -> Clone(background_hist -> GetName() ) ) ) -> ProjectionX();
 
-	meffred_rw -> Divide(signal_hist_meffred);
+	  TH1D* signal_hist_meffred = ( (TH2D*)(signal_hist -> Clone(signal_hist -> GetName() ) ) ) -> ProjectionX();
+
+	  data_hist_meffred = (TH1D*) data_hist_meffred -> Rebin( nbins_meffred, data_hist_meffred -> GetName(), rebin_meffred);
+
+	  data_hist_meffred->Sumw2(kFALSE);
+
+	  background_hist_meffred = (TH1D*) background_hist_meffred -> Rebin( nbins_meffred, background_hist_meffred -> GetName(), rebin_meffred);
+
+	  signal_hist_meffred = (TH1D*) signal_hist_meffred -> Rebin( nbins_meffred, signal_hist_meffred -> GetName(), rebin_meffred);
+
+	  meffred_rw -> Add(data_hist_meffred, background_hist_meffred, 1.0, -1.0);
+
+	  meffred_rw -> Divide(signal_hist_meffred);
+
+	  if(doSmoothing){
+
+	    std::cout << "#######################################################################" << std::endl;
+	    std::cout << "Fitting meffred reweighting histogram" << std::endl;
+
+	    TF1* func = new TF1((region + "_" + list_kin[1] + "_fit" + systematicPrefix).c_str(), meffFitFunction, 200, 5000, 3);
+	    TF1* funcSigmoid = new TF1((region + "_" + list_kin[1] + "_Sigmoidfit" + systematicPrefix).c_str(), sigmoidFitFunction, 200, 5000, 6);
+
+	    meffred_rw->Fit(func, "M WW");
+	    meffred_rw->Fit(funcSigmoid, "M WW");
+
+	    f_out->cd();
+	    func->Write();
+
+	    f_out->cd();
+	    funcSigmoid->Write();
+
+	  }
+
+	}
 
         meffred_rw -> SetName( (region + "_" + list_kin[1] + systematicPrefix).c_str() );
 
         f_out -> cd();
 
         meffred_rw -> Write();
-
-	if(doSmoothing){
-
-	  std::cout << "#######################################################################" << std::endl;
-	  std::cout << "Fitting meffred reweighting histogram" << std::endl;
-
-          TF1* func = new TF1((region + "_" + list_kin[1] + "_fit" + systematicPrefix).c_str(), meffFitFunction, 200, 5000, 3);
-	  TF1* funcSigmoid = new TF1((region + "_" + list_kin[1] + "_Sigmoidfit" + systematicPrefix).c_str(), sigmoidFitFunction, 200, 5000, 6);
-
-          meffred_rw->Fit(func, "M WW");
-	  meffred_rw->Fit(funcSigmoid, "M WW");
-
-          f_out->cd();
-          func->Write();
-
-	  f_out->cd();
-	  funcSigmoid->Write();
-
-
-        }
 
       }
       else if(list_kin[1] == "meffred" && region == "c1lep3jin2bex"){
 	
 	int nbins_jets_n_new = 8;
 	double binedges_jets_n_new[9] = {-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 15.5};
-
+	
 	TH2D* meffred_rw = new TH2D( (region + "_" + list_kin[1] + systematicPrefix).c_str(), "", nbins_meff, binedges_meff, nbins_jets_n_new, binedges_jets_n_new);
 
-	for(int ybin = 4; ybin <= signal_hist -> GetNbinsY(); ybin++){
+	if(systematic != "nominal"){
 
-          for(int xbin = 1; xbin <= signal_hist -> GetNbinsX(); xbin++){
+          signal_hist->Reset();
 
-            signal_hist->SetBinContent(xbin, ybin, (jets_n_rw -> GetBinContent(ybin)) * (signal_hist->GetBinContent(xbin, ybin)) );
+          *signal_hist = *getTotalKinHisto2D(&list_signal, inDir, region, &list_campaign, &list_kin, data_hist, "signal", systematicPrefix);
+
+          background_hist->Reset();
+
+          *background_hist = *getTotalKinHisto2D(&list_signal, inDir, region, &list_campaign, &list_kin, data_hist, "background", "");
+
+	  for(int ybin = 4; ybin <= signal_hist -> GetNbinsY(); ybin++){
+
+            for(int xbin = 1; xbin <= signal_hist -> GetNbinsX(); xbin++){
+
+              signal_hist->SetBinContent(xbin, ybin, (jets_n_rw -> GetBinContent(ybin)) * (signal_hist->GetBinContent(xbin, ybin)) );
+
+            }
 
           }
 
-        }
+	  for(int ybin = 4; ybin <= meffred_rw -> GetNbinsY(); ybin++){
 
-	for(int ybin = 4; ybin <= meffred_rw -> GetNbinsY(); ybin++){
+	    TH1D* signal_hist_meffred = ((TH2D*)(signal_hist -> Clone(signal_hist->GetName() ) ) ) -> ProjectionX();
+	    signal_hist_meffred -> Reset();
 
-	  TH1D* data_hist_meffred = ((TH2D*)(data_hist -> Clone(data_hist->GetName() ) ) ) -> ProjectionX();
-          data_hist_meffred -> Reset();
+	    TH1D* background_hist_meffred = ((TH2D*)(background_hist -> Clone(background_hist->GetName() ) ) ) -> ProjectionX();
+	    background_hist_meffred -> Reset();
 
-          data_hist_meffred->Sumw2(kFALSE);
+	    background_hist_meffred -> Sumw2(kFALSE);
 
-          TH1D* signal_hist_meffred = ((TH2D*)(signal_hist -> Clone(signal_hist->GetName() ) ) ) -> ProjectionX();
-          signal_hist_meffred -> Reset();
+	    if(ybin < meffred_rw -> GetNbinsY()){
 
-          TH1D* background_hist_meffred = ((TH2D*)(background_hist -> Clone(background_hist->GetName() ) ) ) -> ProjectionX();
-          background_hist_meffred -> Reset();	  
+	      for(int xbin = 1; xbin <= data_hist -> GetNbinsX(); xbin++){
 
-	  if(ybin < meffred_rw -> GetNbinsY()){
+		signal_hist_meffred -> SetBinContent(xbin, signal_hist -> GetBinContent(xbin,ybin));
 
-            for(int xbin = 1; xbin <= data_hist -> GetNbinsX(); xbin++){ 
+		signal_hist -> SetBinContent(xbin,ybin,0);
 
-              data_hist_meffred -> SetBinContent(xbin, data_hist -> GetBinContent(xbin,ybin));
+		background_hist_meffred -> SetBinContent(xbin, background_hist -> GetBinContent(xbin,ybin));
+
+		background_hist ->SetBinContent(xbin,ybin,0);
+
+	      }
+
+	    }
+	    else{
+
+	      signal_hist_meffred = ((TH2D*)(signal_hist -> Clone(signal_hist->GetName() ) ) ) -> ProjectionX();
 	      
-	      data_hist -> SetBinContent(xbin,ybin,0);
+	      background_hist_meffred = ((TH2D*)(background_hist -> Clone(background_hist->GetName() ) ) ) -> ProjectionX();
 
-              signal_hist_meffred -> SetBinContent(xbin, signal_hist -> GetBinContent(xbin,ybin));
+	    }
 
-	      signal_hist -> SetBinContent(xbin,ybin,0);
 
-              background_hist_meffred -> SetBinContent(xbin, background_hist -> GetBinContent(xbin,ybin));
+	    signal_hist_meffred = (TH1D*) signal_hist_meffred -> Rebin( nbins_meff, signal_hist_meffred -> GetName(), rebin_meff);
 
-	      background_hist ->SetBinContent(xbin,ybin,0);
+	    background_hist_meffred = (TH1D*) background_hist_meffred -> Rebin( nbins_meff, background_hist_meffred -> GetName(), rebin_meff);
 
-            } 
+	    background_hist_meffred -> Divide(signal_hist_meffred);
 
-          }
-	  else{
+	    for(int xbin = 1; xbin <= meffred_rw -> GetNbinsX(); xbin++){
 
-	    data_hist_meffred = ((TH2D*)(data_hist -> Clone(data_hist->GetName() ) )) -> ProjectionX();
-	    
-	    data_hist_meffred->Sumw2(kFALSE);
+	      meffred_rw -> SetBinContent(xbin, ybin, background_hist_meffred -> GetBinContent(xbin));
 
-	    signal_hist_meffred = ((TH2D*)(signal_hist -> Clone(signal_hist->GetName() ) ) ) -> ProjectionX();
+	    }
 
-	    background_hist_meffred = ((TH2D*)(background_hist -> Clone(background_hist->GetName() ) ) ) -> ProjectionX();
-	    
 	  }
 
-	  data_hist_meffred->Sumw2(kTRUE);
-
-          data_hist_meffred = (TH1D*) data_hist_meffred -> Rebin( nbins_meff, data_hist_meffred -> GetName(), rebin_meff);
-
-          signal_hist_meffred = (TH1D*) signal_hist_meffred -> Rebin( nbins_meff, signal_hist_meffred -> GetName(), rebin_meff);
-
-          background_hist_meffred = (TH1D*) background_hist_meffred -> Rebin( nbins_meff, background_hist_meffred -> GetName(), rebin_meff);
-
-          data_hist_meffred -> Add(background_hist_meffred, -1.0);
-
-          data_hist_meffred -> Divide(signal_hist_meffred);
-
-          f_out->cd();
-
-          data_hist_meffred->SetName( (region + "_" + list_kin[1] + "_jet_" + std::to_string(ybin-1) + "_" + systematicPrefix).c_str() );
-
-          //data_hist_meffred->Write();
-
-	  if(doSmoothing){
-
-	    std::cout << "#######################################################################" << std::endl;
-            if(ybin < meffred_rw -> GetNbinsY()) std::cout << "Fitting meff reweighting histogram for njets = " << ybin-1 << std::endl;
-            else std::cout << "Fitting meffred reweighting histogram for njets >= " << ybin-1 << std::endl;
-
-            TF1* func = new TF1((region + "_" + list_kin[1] + "_fit_jet_"+ std::to_string(ybin-1) + systematicPrefix).c_str(), meffFitFunction, 200, 5000, 3);
-
-	    TF1* funcSigmoid = new TF1((region + "_" + list_kin[1] + "_Sigmoidfit_jet_"+ std::to_string(ybin-1) + systematicPrefix).c_str(), sigmoidFitFunction, 200, 5000, 6);
-
-            data_hist_meffred->Fit(func, "M WW");
-
-            data_hist_meffred->Fit(funcSigmoid, "M WW");
-
-            f_out->cd();
-            func->Write();
-
-            f_out->cd();
-            funcSigmoid->Write();
-
-          }
-
-
-
-	  for(int xbin = 1; xbin <= meffred_rw -> GetNbinsX(); xbin++){
-
-           meffred_rw -> SetBinContent(xbin, ybin, data_hist_meffred -> GetBinContent(xbin));
-
-          } 
-
         }
+	else{
+
+	  for(int ybin = 4; ybin <= signal_hist -> GetNbinsY(); ybin++){
+	    
+	    for(int xbin = 1; xbin <= signal_hist -> GetNbinsX(); xbin++){
+	      
+	      signal_hist->SetBinContent(xbin, ybin, (jets_n_rw -> GetBinContent(ybin)) * (signal_hist->GetBinContent(xbin, ybin)) );
+	      
+	    }
+	    
+	  }
+	  
+	  for(int ybin = 4; ybin <= meffred_rw -> GetNbinsY(); ybin++){
+	  
+	    TH1D* data_hist_meffred = ((TH2D*)(data_hist -> Clone(data_hist->GetName() ) ) ) -> ProjectionX();
+	    data_hist_meffred -> Reset();
+	    
+	    data_hist_meffred->Sumw2(kFALSE);
+	    
+	    TH1D* signal_hist_meffred = ((TH2D*)(signal_hist -> Clone(signal_hist->GetName() ) ) ) -> ProjectionX();
+	    signal_hist_meffred -> Reset();
+	    
+	    TH1D* background_hist_meffred = ((TH2D*)(background_hist -> Clone(background_hist->GetName() ) ) ) -> ProjectionX();
+	    background_hist_meffred -> Reset();	  
+	    
+	    if(ybin < meffred_rw -> GetNbinsY()){
+	      
+	      for(int xbin = 1; xbin <= data_hist -> GetNbinsX(); xbin++){ 
+		
+		data_hist_meffred -> SetBinContent(xbin, data_hist -> GetBinContent(xbin,ybin));
+		
+		data_hist -> SetBinContent(xbin,ybin,0);
+		
+		signal_hist_meffred -> SetBinContent(xbin, signal_hist -> GetBinContent(xbin,ybin));
+		
+		signal_hist -> SetBinContent(xbin,ybin,0);
+	      
+		background_hist_meffred -> SetBinContent(xbin, background_hist -> GetBinContent(xbin,ybin));
+		
+		background_hist ->SetBinContent(xbin,ybin,0);
+	      
+	      } 
+
+	    }
+	    else{
+	      
+	      data_hist_meffred = ((TH2D*)(data_hist -> Clone(data_hist->GetName() ) )) -> ProjectionX();
+	      
+	      data_hist_meffred->Sumw2(kFALSE);
+	      
+	      signal_hist_meffred = ((TH2D*)(signal_hist -> Clone(signal_hist->GetName() ) ) ) -> ProjectionX();
+	      
+	      background_hist_meffred = ((TH2D*)(background_hist -> Clone(background_hist->GetName() ) ) ) -> ProjectionX();
+	      
+	    }
+
+	    data_hist_meffred->Sumw2(kTRUE);
+	    
+	    data_hist_meffred = (TH1D*) data_hist_meffred -> Rebin( nbins_meff, data_hist_meffred -> GetName(), rebin_meff);
+	    
+	    signal_hist_meffred = (TH1D*) signal_hist_meffred -> Rebin( nbins_meff, signal_hist_meffred -> GetName(), rebin_meff);
+	    
+	    background_hist_meffred = (TH1D*) background_hist_meffred -> Rebin( nbins_meff, background_hist_meffred -> GetName(), rebin_meff);
+	    
+	    data_hist_meffred -> Add(background_hist_meffred, -1.0);
+	    
+	    data_hist_meffred -> Divide(signal_hist_meffred);
+	    
+	    f_out->cd();
+
+	    data_hist_meffred->SetName( (region + "_" + list_kin[1] + "_jet_" + std::to_string(ybin-1) + "_" + systematicPrefix).c_str() );
+	    
+	    //data_hist_meffred->Write();
+	    
+	    if(doSmoothing){
+	      
+	      std::cout << "#######################################################################" << std::endl;
+	      if(ybin < meffred_rw -> GetNbinsY()) std::cout << "Fitting meff reweighting histogram for njets = " << ybin-1 << std::endl;
+	      else std::cout << "Fitting meffred reweighting histogram for njets >= " << ybin-1 << std::endl;
+	      
+	      TF1* func = new TF1((region + "_" + list_kin[1] + "_fit_jet_"+ std::to_string(ybin-1) + systematicPrefix).c_str(), meffFitFunction, 200, 5000, 3);
+	      
+	      TF1* funcSigmoid = new TF1((region + "_" + list_kin[1] + "_Sigmoidfit_jet_"+ std::to_string(ybin-1) + systematicPrefix).c_str(), sigmoidFitFunction, 200, 5000, 6);
+	    
+	      data_hist_meffred->Fit(func, "M WW");
+	      
+	      data_hist_meffred->Fit(funcSigmoid, "M WW");
+	      
+	      f_out->cd();
+	      func->Write();
+	      
+	      f_out->cd();
+	      funcSigmoid->Write();
+	      
+	    }
+	    
+	    for(int xbin = 1; xbin <= meffred_rw -> GetNbinsX(); xbin++){
+
+	      meffred_rw -> SetBinContent(xbin, ybin, data_hist_meffred -> GetBinContent(xbin));
+	      
+	    } 
+
+	  }
+
+	}
 
         f_out -> cd();
 
@@ -554,21 +738,37 @@ int main(int argc, char** argv){
 
         meffred_rw -> Write();
 	
-
 	if(debug){
 
           for(int ybin = 4; ybin <= meffred_rw -> GetNbinsY(); ybin++){
 
 	    std::string test_region = Form("c1lep%ijex2bex", ybin-1);
 	    if(ybin == meffred_rw -> GetNbinsY()) test_region = Form("c1lep%ijin2bex", ybin-1);
-            
-
+       
             TFile* f_data_test = TFile::Open( (inDir + "/mergedData/outVLQAnalysis_Data_nominal_HIST.root").c_str(), "READ" );
             TH1D* data_hist_test = (TH1D*)(f_data_test -> Get( ( (test_region + "_" + list_kin[1]).c_str() ) ) );
             data_hist_test -> SetDirectory(0);
             f_data_test -> Close();
-            TH1D* signal_hist_test = getTotalKinHisto1D(&list_signal, inDir, test_region, &list_campaign, list_kin[1], data_hist_test, "signal", systematicPrefix);
-            TH1D* background_hist_test = getTotalKinHisto1D(&list_background, inDir, test_region, &list_campaign, list_kin[1], data_hist_test, "background", systematicPrefix);
+
+	    TH1D* signal_hist_test = new TH1D();
+
+	    TH1D* background_hist_test = new TH1D();
+
+	    if(systematic != "nominal"){
+
+	      *signal_hist_test = *getTotalKinHisto1D(&list_signal, inDir, test_region, &list_campaign, list_kin[1], data_hist_test, "signal", systematicPrefix);
+
+	      *background_hist_test = *getTotalKinHisto1D(&list_signal, inDir, test_region, &list_campaign, list_kin[1], data_hist_test, "background", "");
+
+	    }
+	    
+	    else{
+
+	      *signal_hist_test = *getTotalKinHisto1D(&list_signal, inDir, test_region, &list_campaign, list_kin[1], data_hist_test, "signal", systematicPrefix);
+
+	      *background_hist_test = *getTotalKinHisto1D(&list_background, inDir, test_region, &list_campaign, list_kin[1], data_hist_test, "background", systematicPrefix);
+
+	    }
 
             data_hist_test = (TH1D*) data_hist_test -> Rebin( nbins_meff, data_hist_test -> GetName(), rebin_meff);
             signal_hist_test = (TH1D*) signal_hist_test -> Rebin( nbins_meff, signal_hist_test -> GetName(), rebin_meff);
@@ -576,27 +776,41 @@ int main(int argc, char** argv){
 
             for(int xbin =1; xbin < meffred_rw -> GetNbinsX(); xbin++){
 
-              double weight = meffred_rw -> GetBinContent(xbin, ybin)*jets_n_rw -> GetBinContent(ybin);
+	      double weight = (systematic != "nominal") ? meffred_rw -> GetBinContent(xbin, ybin) : meffred_rw -> GetBinContent(xbin, ybin)*jets_n_rw -> GetBinContent(ybin);
 
               signal_hist_test -> SetBinContent(xbin, signal_hist_test -> GetBinContent(xbin)*weight);
 
             }
 
-            data_hist_test -> Add(background_hist_test,-1);
-            data_hist_test -> Divide(signal_hist_test);
-
 	    std::cout << "For jets_n = " << ybin -1 << std::endl;
 
-            for(int xbin =1; xbin < meffred_rw -> GetNbinsX(); xbin++){
+	    if(systematic != "nominal"){
 
-	      std::cout << "Closure " << list_kin[1] << " bin " << xbin << " value: " << data_hist_test -> GetBinContent(xbin) << std::endl;
+	      background_hist_test -> Divide(signal_hist_test);
+	      
+	      for(int xbin =1; xbin < meffred_rw -> GetNbinsX(); xbin++){
 
-            }
+		std::cout << "Closure " << list_kin[1] << " bin " << xbin << " value: " << background_hist_test -> GetBinContent(xbin) << std::endl;
 
+	      }
+		
+	    }
+	    else{
+
+	      data_hist_test -> Add(background_hist_test,-1);
+	      data_hist_test -> Divide(signal_hist_test);
+	    
+	      for(int xbin =1; xbin < meffred_rw -> GetNbinsX(); xbin++){
+		
+		std::cout << "Closure " << list_kin[1] << " bin " << xbin << " value: " << data_hist_test -> GetBinContent(xbin) << std::endl;
+		
+	      }
+
+	    }
+	      
           }
 
         }
-
 
       }
       else if(list_kin[1] == "meff"){
@@ -742,59 +956,6 @@ int main(int argc, char** argv){
 	meff_rw -> SetName( (region + "_" + list_kin[1] + systematicPrefix).c_str() );
 	
 	meff_rw -> Write();
-      
-	// Closure Test
-      
-	if(debug){
-	  
-	  for(int ybin = 4; ybin <= meff_rw -> GetNbinsY(); ybin++){
-	    
-	    std::string test_region = "";
-	    
-	    if(signalSamples == "Zjets,"){
-	      
-	      test_region = Form("c2lep%ijex1bexZwinMLL_sf", ybin-1);
-	      if(ybin == meff_rw -> GetNbinsY()) test_region = Form("c2lep%ijin1bexZwinMLL_sf", ybin-1); 
-	      
-	    }
-	    else{
-	      test_region = Form("c1lep%ijex2bex", ybin-1);
-	      if(ybin == meff_rw -> GetNbinsY()) test_region = Form("c1lep%ijin2bex", ybin-1);
-	    }
-	    
-	    TFile* f_data_test = TFile::Open( (inDir + "/mergedData/outVLQAnalysis_Data_nominal_HIST.root").c_str(), "READ" );
-	    TH1D* data_hist_test = (TH1D*)(f_data_test -> Get( ( (test_region + "_" + list_kin[1]).c_str() ) ) );
-	    data_hist_test -> SetDirectory(0);
-	    f_data_test -> Close();
-	    TH1D* signal_hist_test = getTotalKinHisto1D(&list_signal, inDir, test_region, &list_campaign, list_kin[1], data_hist_test, "signal", systematicPrefix);
-	    TH1D* background_hist_test = getTotalKinHisto1D(&list_background, inDir, test_region, &list_campaign, list_kin[1], data_hist_test, "background", systematicPrefix);
-	    
-	    data_hist_test = (TH1D*) data_hist_test -> Rebin( nbins_meff, data_hist_test -> GetName(), rebin_meff);
-	    signal_hist_test = (TH1D*) signal_hist_test -> Rebin( nbins_meff, signal_hist_test -> GetName(), rebin_meff);
-	    background_hist_test = (TH1D*) background_hist_test -> Rebin( nbins_meff, background_hist_test -> GetName(), rebin_meff);
-	    
-	    for(int xbin =1; xbin < meff_rw -> GetNbinsX(); xbin++){
-	      
-	      double weight = meff_rw -> GetBinContent(xbin, ybin)*jets_n_rw -> GetBinContent(ybin);
-	      
-	      signal_hist_test -> SetBinContent(xbin, signal_hist_test -> GetBinContent(xbin)*weight);
-	      
-	    }
-	    
-	    data_hist_test -> Add(background_hist_test,-1);
-	    data_hist_test -> Divide(signal_hist_test);
-	    
-	    std::cout << "For jets_n = " << ybin -1 << std::endl;
-	    
-	    for(int xbin =1; xbin < meff_rw -> GetNbinsX(); xbin++){
-	      
-	      std::cout << "Closure " << list_kin[1] << " bin " << xbin << " value: " << data_hist_test -> GetBinContent(xbin) << std::endl;
-	      
-	    }
-	    
-	  }
-	  
-	}
       
       }
       
