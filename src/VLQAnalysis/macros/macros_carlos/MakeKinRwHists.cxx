@@ -333,6 +333,7 @@ int main(int argc, char** argv){
  
 
   // If we are reweighting any ttbar sample or singletopWt use the following regions
+
   if(std::find(list_signal.begin(), list_signal.end(), "ttbarbb") != list_signal.end() || 
      std::find(list_signal.begin(), list_signal.end(), "ttbarbb_pmg") != list_signal.end()){
 
@@ -349,6 +350,7 @@ int main(int argc, char** argv){
 
 
   // Define rebinning for meff
+
   double binedges_meff[19] = {0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000};
   double* rebin_meff = &binedges_meff[0];
   int nbins_meff = 18;
@@ -744,7 +746,7 @@ int main(int argc, char** argv){
 
 	    std::string test_region = Form("c1lep%ijex2bex", ybin-1);
 	    if(ybin == meffred_rw -> GetNbinsY()) test_region = Form("c1lep%ijin2bex", ybin-1);
-       
+
             TFile* f_data_test = TFile::Open( (inDir + "/mergedData/outVLQAnalysis_Data_nominal_HIST.root").c_str(), "READ" );
             TH1D* data_hist_test = (TH1D*)(f_data_test -> Get( ( (test_region + "_" + list_kin[1]).c_str() ) ) );
             data_hist_test -> SetDirectory(0);

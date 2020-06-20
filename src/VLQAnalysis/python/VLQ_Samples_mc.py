@@ -349,6 +349,7 @@ def GetSingleTopSamples( useWeightSyst=False, useObjectSyst=False, campaign="", 
         Samples     += [getSampleUncertainties(nameSChan, "410645."+campaign, ObjectSystematics , WeightSystematics)]
 
     if runSingletopSystSamples:
+
         if runWtprod:
             Samples     += [getSampleUncertainties(nameWtprod+"PowHer","411036."+campaign, ObjectSystematics , WeightSystematics)]
             Samples     += [getSampleUncertainties(nameWtprod+"PowHer","411037."+campaign, ObjectSystematics , WeightSystematics)]
