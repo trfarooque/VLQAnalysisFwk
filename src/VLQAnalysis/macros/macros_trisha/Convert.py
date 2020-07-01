@@ -37,7 +37,9 @@ def writePreamble( inFile, fout ):
         fout.write("\\pagenumbering{gobble}\n")
     if not isSyst:
         fout.write("\\documentclass[a4paper,7pt]{article}\n")
-        fout.write("\\usepackage[margin=1in]{geometry}\n")
+        # fout.write("\\usepackage[margin=1in]{geometry}\n")
+        fout.write("\\usepackage{tabularx}\n")
+        fout.write("\\newcolumntype{Y}{>{\\centering\\arraybackslash}X}\n")
         fout.write("\\begin{document}\n")
         fout.write("\\pagenumbering{gobble}\n")
         # fout.write("\\begin{table}\n")
@@ -59,10 +61,31 @@ def writeEnd(inFile,fout):
         fout.write("\\end{table}\n")
         fout.write("\\end{document}\n")
 
+##_______________________________________________________________
+##
+def transformDict( vector ):
+    # Transforms vector from ( sample , syst ) per region to ( sample , region ) per syst
+    return 0
 
 ##_______________________________________________________________
 ##
-def convertAllLines( inFile, fout ):
+def isSR(reg):
+    VRs = ['{LJ, 1b, 0fj, 0t_{h}, 0t_{l}, 0h, 1V}','{LJ, 1b, 0fj, 0t_{h}, 1t_{l}, 0h, 1V}','{LJ, 1b, 1fj, 1(t_{h}+t_{l}), 0h, 0V}','{LJ, 1b, 1fj, 1t_{h}, 0t_{l}, 0h, 1V}','{LJ, 2b, 0fj, 0t_{h}, 0t_{l}, 0h, 1V}','{LJ, 2b, 0fj, 0t_{h}, 1t_{l}, 0h, 1V}','{LJ, 2b, 1fj, 1(t_{h}+t_{l}), 0h, 0V}','{LJ, 2b, 1fj, 1t_{h}, 0t_{l}, 0h, 1V}','{LJ, 3b, 0fj, 0t_{h}, 1h, 0V}','{LJ, 3b, 1fj, 0h, 1(v+t_{l}+t_{h})}','{HJ, 1b, 0fj, 1(t_{h}+t_{l}), 0h, 1V}','{HJ, 1b, 0fj, 2(t_{h}+t_{l}), 0h, 1V}','{HJ, 1b, 1fj, 0t_{h}, 0t_{l}, 1h, 1V}','{HJ, 1b, 1fj, 2(t_{h}+t_{l}), 1h, 0V}','{HJ, 2b, 0fj, 1(t_{h}+t_{l}), 0h, 1V}','{HJ, 2b, 0fj, 2(t_{h}+t_{l}), 0h, 1V}','{HJ, 2b, 1fj, 0t_{h}, 0t_{l}, 1h, 1V}','{HJ, 2b, 1fj, 2(t_{h}+t_{l}), 1h, 0V}','{HJ, 3b, 1fj, 0h, 1(v+t_{l}+t_{h})}','{HJ, 3b, 0fj, 1h, 1(v+t_{l}+t_{h})}']
+
+    if any(v in reg.replace('$','') for v in VRs):
+        return False
+    
+    if '0fj' in reg:
+        if '4b, 0fj, 1t_{l}, 0h, 0(v+t_{h})}' in reg: # is ttbar+HF CR
+            return True
+        else:
+            return False
+    else:
+        return True
+
+##_______________________________________________________________
+##
+def convertAllLines( inFile, fout , writeSystMatrix = False):
 
     isSyst = False
     if inFile.name.find("syst")>-1: isSyst = True
@@ -71,7 +94,7 @@ def convertAllLines( inFile, fout ):
     result = dumpVector(inFile)
 
     #nSplit
-    n_split = 3
+    n_split = 4
     if(isSyst): n_split = 1000
 
     #n_tables
@@ -98,6 +121,22 @@ def convertAllLines( inFile, fout ):
         if popsVLQ:
             result.pop(popindex)
 
+    # Check if SR or VR
+    if onlySR or onlyVR:
+        popRegIndices = []
+        popRegions = False
+        for n,reg in enumerate(result[0]['columns']):
+            if onlySR and not isSR(reg):
+                popRegIndices.append(n)
+                popRegions = True
+            elif onlyVR and isSR(reg):
+                popRegIndices.append(n)
+                popRegions = True
+        if popRegions:
+            for r in result:
+                for i in reversed(sorted(popRegIndices)):
+                    r['columns'].pop(i)
+
     #gets the final table
     if len(result[0]['columns'])>n_split and (not isSyst):
         n_tables = int(math.ceil((len(result[0]['columns'])-1)/float(n_split)))
@@ -110,19 +149,23 @@ def convertAllLines( inFile, fout ):
         print 'n_tables ', n_tables
         print 'isSyst ', isSyst
 
-    fout.write("\\begin{table}[H]\n")
+    # Make regular syst and yield tables
+
+    fout.write("\\begin{table}\n")
 
     for i_table in range(n_tables):
         fout.write("  \\centering\n")
-        fout.write("  \\begin{tabular}{ | l | ")
+        fout.write("  \\begin{tabularx}{1.2\\textwidth}{ l ")
         for i_col in range(0,min(n_split,len(result[0]['columns']) - 1 - n_split*i_table)):
-            fout.write(" c | ")
+            fout.write(" Y ")
         fout.write("}\n")
 
         fout.write("    \\hline \\hline \n")
 
         count_sample = 0
         for sample in result:
+            if 'sVLQ' in sample['sample']:
+                sample['sample'] = getSignalLabel(sample['sample'])
             line = "    " + sample['sample'] + " & "
             max_col = i_table*n_split+min(n_split+1,len(result[0]['columns']) - n_split*i_table)
             for i_col in range(i_table*n_split+1,max_col):
@@ -132,20 +175,32 @@ def convertAllLines( inFile, fout ):
                 else:
                     line += " \\\\ \n"
 
-            fout.write(line)
+            if writeSystMatrix and isSyst and count_sample == 0:
+                fout.write(line)
+                fout.write("    \\hline \n")
+                continue
+            else:
+                fout.write(line)
 
-            if count_sample==0 or (not isSyst and (count_sample==len(result)-3)):
+            if count_sample==0 or (not isSyst and (count_sample==len(result)-2)):
                 fout.write("    \\hline \n")
             count_sample+=1
         fout.write("    \\hline \\hline \n")
 
-        fout.write("  \\end{tabular} \n")
+        fout.write("  \\end{tabularx} \n")
 
         if labelEachTable and isSyst:
-            fout.write("  \\caption{%s}\n"%getRegionLabel(inFile.name))
+            label = '\\texttt{'+inFile.name[inFile.name.rfind('/')+1:inFile.name.rfind('.')].replace("_VR","").replace("_postFit","").replace("_syst","").replace("HTX_","").replace("3_5","3-5")+'}'
+            label += ' - '+getRegionLabel(inFile.name)
+            fout.write("  \\caption{%s}\n"%label)
 
-        fout.write("\\end{table}\n")
-        fout.write("\n\n")
+    fout.write("\\end{table}\n")
+    fout.write("\n\n")
+
+##_______________________________________________________________
+##
+def writeTableLine(fout,result):
+    return 0
 
 ##_______________________________________________________________
 ##
@@ -170,7 +225,6 @@ def dumpVector(inFile):
 
         if inLine.replace(" ","").replace("\n","")=="": continue
         temp_line = inLine
-
 
         #Change some known words
         temp_line = temp_line.replace("#splitline", "\\makecell")
@@ -279,7 +333,7 @@ def dumpVector(inFile):
 ##
 def getRegionLabel(inFile):
     label = ""
-    region = inFile[inFile.rfind('/'):inFile.rfind('.')].replace("_VR","").replace("_postFit","").replace("_syst","")
+    region = inFile[inFile.rfind('/'):inFile.rfind('.')].replace("_VR","").replace("_postFit","").replace("_syst","").replace("HTX_","")
 
     if "Yields" in region:
         label = "Total yields"
@@ -325,6 +379,18 @@ def getRegionLabel(inFile):
 
     return label
 
+def getSignalLabel(signal):
+    if ("WTHT" in signal.upper()):
+        return "$T$($\\rightarrow Ht$)$qb$ (1.6 TeV)"
+    elif ("ZTHT" in signal.upper()):
+        return "$T$($\\rightarrow Ht$)$qt$ (1.6 TeV)"
+    elif ("WTZT" in signal.upper()):
+        return "$T$($\\rightarrow Zt$)$qb$ (1.6 TeV)"
+    elif ("ZTZT" in signal.upper()):
+        return "$T$($\\rightarrow Zt$)$qt$ (1.6 TeV)"
+    else:
+        return signal
+
 ##_______________________________________________________________
 ##
 
@@ -332,15 +398,31 @@ def getRegionLabel(inFile):
 inputDir = sys.argv[-1]
 
 # use names in config files to collect all output dirs in Results
-outputNames = [n.replace(n[:n.index("/configFile_sVLQ_")+17],"").replace(".txt","") for n in glob.glob(inputDir+"/configFile_sVLQ_*")]
-outputDirs = [d for d in glob.glob(inputDir+"/Results/*") if not "scripts" in d and any(n in d for n in outputNames)]
+# outputNames = [n.replace(n[:n.index("/configFile_sVLQ_")+17],"").replace(".txt","") for n in glob.glob(inputDir+"/configFile_sVLQ_*")]
+# outputDirs = [d for d in glob.glob(inputDir+"/Results/*") if not "scripts" in d and any(n in d for n in outputNames)]
 
-removeSignal=True
+removeSignal=False
 separateTables=False
-catTogether=True # only set to True if separateTables = False
+catTogether=False # only set to True if separateTables = False
 labelEachTable=True
-pdfLatex = True
+pdfLatex = False
 verbose = False
+onlyYieldTables = True
+makeEachSystTable = False
+onlySR = True
+onlyVR = False
+
+# Temp: use for differnt input folder than usual TRExF folder structure
+allTextFiles = glob.glob(inputDir+'/*/*.txt')
+for textFile in allTextFiles:
+    print"-> ",textFile
+    inFile = open(textFile,"read")
+    outFile = open(textFile.replace(".txt",".tex"),"write")
+    writePreamble(inFile,outFile)
+    convertAllLines(inFile,outFile)
+    writeEnd(inFile,outFile)
+
+exit()
 
 # retrieve all text files in input folder
 allTextFiles = []
@@ -350,11 +432,39 @@ for d in outputDirs:
     if os.path.isdir(d+'/Tables/VR/') and len(os.listdir(d+'/Tables/VR/'))>0:
         organized = True
 
-    if organized:
-        allTextFiles.extend(glob.glob(d+'/Tables/SR/*txt'))
-        allTextFiles.extend(glob.glob(d+'/Tables/VR/*txt'))
+    if onlyYieldTables:
+        allTextFiles.extend(glob.glob(d+'/Tables/Yields*txt'))
     else:
-        allTextFiles.extend(glob.glob(d+'/Tables/*txt'))
+        if organized:
+            allTextFiles.extend(glob.glob(d+'/Tables/SR/*txt'))
+            allTextFiles.extend(glob.glob(d+'/Tables/VR/*txt'))
+
+            allSpecificTextFiles = glob.glob(d+'/Tables/SR/*syst*txt')
+            allSpecificTextFiles.extend(glob.glob(d+'/Tables/VR/*syst*txt'))
+        else:
+            allTextFiles.extend(glob.glob(d+'/Tables/*txt'))
+            allSpecificTextFiles = glob.glob(d+'/Tables/*syst*txt')
+
+        if makeEachSystTable:
+            os.system('mkdir -p '+d+'/SystMatrixTables/')
+            inFile = open(allSpecificTextFiles[0],'r')
+            result = dumpVector(inFile)
+            systs,samples = [],[]
+            for r in result:
+                if r['sample'] == '':
+                    samples = r['columns'][1:]
+                else:
+                    syst = r['sample'][:-1].replace('$','').replace('\\','').replace('geq','').replace('{','').replace('}','').replace('.','').replace(' ','_').replace('-','_').replace('(','').replace(')','')
+                    systs.append(syst)
+    
+            for syst in systs:
+                inFile = open(allSpecificTextFiles[0],'r')
+                outFile = open(d+'/SystMatrixTables/'+syst+'.tex','w')
+                writePreamble(inFile,outFile)
+                convertAllLines(inFile,outFile)
+                exit()
+
+
 
 
 for textFile in allTextFiles:
@@ -382,11 +492,12 @@ if catTogether:
             os.system("cat %s/Tables/*VR_syst_postFit.tex > %s/Tables/Syst_tables_VR_postFit.tex"%(outFolder,outFolder))
 
         allSystTables = [t for t in glob.glob(outFolder+'/Tables/Syst_tables_*.tex')]
-        # allSystTables.extend([y for y in glob.glob(outFolder+'/Tables/Yields*.tex')])
+        allSystTables.extend([y for y in glob.glob(outFolder+'/Tables/Yields*.tex')])
 
         for tab in allSystTables:
+            print '->  '+tab
             writePreamble(open(tab,"r"),open(tab,"r"))
-            writeEnd(open(tab,"a"),open(tab,"a"))
+            writeEnd(open(tab,"r"),open(tab,"a+"))
     
             if pdfLatex:
                 os.system("pdflatex -interaction nonstopmode -output-directory=%s %s "%(tab[:tab.rfind('/')],tab))

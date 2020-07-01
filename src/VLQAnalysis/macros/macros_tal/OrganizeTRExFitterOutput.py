@@ -16,17 +16,17 @@ for d in outputDirs:
     # organize Plots
     plotDir = d+'/Plots/'
     if os.path.isdir(plotDir) and os.listdir(plotDir):
-
         if any('VR' in p for p in os.listdir(plotDir)):
+
+            os.system('mkdir -p '+plotDir+'/SR/')
+            os.system('mkdir -p '+plotDir+'/VR/')
+
             if len(os.listdir(plotDir+'/VR/'))>0:
                 continue
             else:
                 print "Organizing %s Plots in %s..."%(len(os.listdir(plotDir)),d)
         else:
             continue
-
-        os.system('mkdir -p '+plotDir+'/SR/')
-        os.system('mkdir -p '+plotDir+'/VR/')
 
         os.system('mv '+plotDir+'/HTX_*_VR*.png '+plotDir+'/VR/')
         os.system('mv '+plotDir+'/HTX_*.png '+plotDir+'/SR/')
@@ -37,15 +37,16 @@ for d in outputDirs:
     tableDir = d+'/Tables/'
     if os.path.isdir(tableDir) and os.listdir(tableDir):
         if any('VR' in p for p in os.listdir(tableDir)):
+
+            os.system('mkdir -p '+tableDir+'/SR/')
+            os.system('mkdir -p '+tableDir+'/VR/')
+
             if os.path.isdir(tableDir+'/VR/') and len(os.listdir(tableDir+'/VR/'))>0:
                 continue
             else:
                 print "Organizing %s Tables in %s..."%(len(os.listdir(tableDir)),d)
         else:
             continue
-
-        os.system('mkdir -p '+tableDir+'/SR/')
-        os.system('mkdir -p '+tableDir+'/VR/')
 
         os.system('mv '+tableDir+'/HTX_*_VR_syst* '+tableDir+'/VR/')
         os.system('mv '+tableDir+'/HTX_*_syst* '+tableDir+'/SR/')
