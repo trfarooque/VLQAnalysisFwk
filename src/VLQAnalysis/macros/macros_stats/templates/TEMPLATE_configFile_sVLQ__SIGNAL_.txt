@@ -54,7 +54,6 @@ _REGIONLIST_
 % --------------------------- %
 
 Sample: "ttbarlight_AFII"
-Title: "t#bar{t}+light-jets"
 Type: GHOST
 FillColor: 0
 LineColor: 1
@@ -62,7 +61,6 @@ HistoFiles: TtStAlt/ttbarlight.mc16a,TtStAlt/ttbarlight.mc16d,TtStAlt/ttbarlight
 LumiScales: 36207.66,44307.4,58450.1
 
 Sample: "ttbarcc_AFII"
-Title: "t#bar{t}+#geq1c"
 Type: GHOST
 FillColor: 590
 LineColor: 1
@@ -70,7 +68,6 @@ HistoFiles: TtStAlt/ttbarcc.mc16a,TtStAlt/ttbarcc.mc16d,TtStAlt/ttbarcc.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 
 Sample: "ttbarbb_AFII"
-Title: "t#bar{t}+#geq1b"
 Type: GHOST
 FillColor: 594
 LineColor: 1
@@ -78,7 +75,6 @@ HistoFiles: TtStAlt/ttbarbb.mc16a,TtStAlt/ttbarbb.mc16d,TtStAlt/ttbarbb.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 
 Sample: "Singletop_AFII"
-Title: "Single-top"
 Type: GHOST
 FillColor: 0
 LineColor: 1
@@ -86,7 +82,6 @@ HistoFiles: TtStAlt/Singletop.mc16a,TtStAlt/Singletop.mc16d,TtStAlt/Singletop.mc
 LumiScales: 36207.66,44307.4,58450.1
 
 Sample: "Singletop_Ref"
-Title: "Single-top"
 Type: GHOST
 FillColor: 0
 LineColor: 1
