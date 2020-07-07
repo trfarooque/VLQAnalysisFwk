@@ -1,0 +1,36 @@
+% ------------------------------------------ %
+% ---  SINGLE-TOP MODELLING SYSTEMATICS  --- %
+% ------------------------------------------ %
+
+Systematic: "HTX_BKGNP_SINGLETOP_GEN_HJ-1boost";"HTX_BKGNP_SINGLETOP_GEN_HJ-2boost";"HTX_BKGNP_SINGLETOP_GEN_LJ-1boost";"HTX_BKGNP_SINGLETOP_GEN_LJ-2boost";"HTX_BKGNP_SINGLETOP_GEN_HJ-3boost"
+Title: "Single-top gen. HJ-1boost";"Single-top gen. HJ-2boost";"Single-top gen. LJ-1boost";"Single-top gen. LJ-2boost";"Single-top gen. HJ-3boost"
+Type: HISTO
+Category: "Single-top generator uncertainties"
+Symmetrisation: ONESIDED
+Smoothing: 40
+Samples: Singletop
+HistoFilesUp: TtStAlt/SingletopaMCPy.mc16a,TtStAlt/SingletopaMCPy.mc16d,TtStAlt/SingletopaMCPy.mc16e
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex;HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin
+ReferenceSample: Singletop_AFII
+
+Systematic: "HTX_BKGNP_SINGLETOP_PS_HJ-1boost";"HTX_BKGNP_SINGLETOP_PS_HJ-2boost";"HTX_BKGNP_SINGLETOP_PS_LJ-1boost";"HTX_BKGNP_SINGLETOP_PS_LJ-2boost";"HTX_BKGNP_SINGLETOP_PS_HJ-3boost"
+Title: "Single-top ps. HJ-1boost";"Single-top ps. HJ-2boost";"Single-top ps. LJ-1boost";"Single-top ps. LJ-2boost";"Single-top ps. HJ-3boost"
+Type: HISTO
+Category: "Single-top parton shower uncertainties"
+Symmetrisation: ONESIDED
+Smoothing: 40
+Samples: Singletop
+HistoFilesUp: TtStAlt/SingletopPowHer.mc16a,TtStAlt/SingletopPowHer.mc16d,TtStAlt/SingletopPowHer.mc16e
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex;HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin
+ReferenceSample: Singletop_AFII
+
+Systematic: "HTX_BKGNP_SINGLETOP_DRDS_HJ-1boost";"HTX_BKGNP_SINGLETOP_DRDS_HJ-2boost";"HTX_BKGNP_SINGLETOP_DRDS_LJ-1boost";"HTX_BKGNP_SINGLETOP_DRDS_LJ-2boost";"HTX_BKGNP_SINGLETOP_DRDS_HJ-3boost"
+Title: "Single-top DR/DS HJ-1boost";"Single-top DR/DS HJ-2boost";"Single-top DR/DS LJ-1boost";"Single-top DR/DS LJ-2boost";"Single-top DR/DS HJ-3boost"
+Type: HISTO
+Category: "t#bar{t} DR/DS uncertainties"
+Symmetrisation: ONESIDED
+Smoothing: 40
+Samples: Singletop
+HistoFilesUp: TtStAlt/SingletopDiagSub.mc16a,TtStAlt/SingletopDiagSub.mc16d,TtStAlt/SingletopDiagSub.mc16e
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex;HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin
+

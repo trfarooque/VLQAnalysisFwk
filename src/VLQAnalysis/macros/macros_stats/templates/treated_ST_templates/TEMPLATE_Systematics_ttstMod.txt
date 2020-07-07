@@ -1,0 +1,57 @@
+% --------------------------- %
+% ---  TTBAR SYSTEMATICS  --- %
+% --------------------------- %
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_GEN" ; "HTX_BKGNP_TTBARCC_GEN" ; "HTX_BKGNP_TTBARBB_GEN"
+  Title: "t#bar{t}+light-jets generator" ; "t#bar{t}+#geq1c generator" ; "t#bar{t}+#geq1b generator"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  Samples: ttbarlight;ttbarcc;ttbarbb
+  HistoFilesUp: TtStAlt_Treated/ttbarlightaMCPy.mc16a,TtStAlt_Treated/ttbarlightaMCPy.mc16d,TtStAlt_Treated/ttbarlightaMCPy.mc16e ; TtStAlt_Treated/ttbarccaMCPy.mc16a,TtStAlt_Treated/ttbarccaMCPy.mc16d,TtStAlt_Treated/ttbarccaMCPy.mc16e ; TtStAlt_Treated/ttbarbbaMCPy.mc16a,TtStAlt_Treated/ttbarbbaMCPy.mc16d,TtStAlt_Treated/ttbarbbaMCPy.mc16e
+  ReferenceSample: ttbarlight_AFII;ttbarcc_AFII;ttbarbb_AFII
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_PS" ; "HTX_BKGNP_TTBARCC_PS" ; "HTX_BKGNP_TTBARBB_PS"
+  Title: "t#bar{t}+light-jets parton shower" ; "t#bar{t}+#geq1c parton shower" ; "t#bar{t}+#geq1b parton shower"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  HistoFilesUp: TtStAlt_Treated/ttbarlightPowHer.mc16a,TtStAlt_Treated/ttbarlightPowHer.mc16d,TtStAlt_Treated/ttbarlightPowHer.mc16e ; TtStAlt_Treated/ttbarccPowHer.mc16a,TtStAlt_Treated/ttbarccPowHer.mc16d,TtStAlt_Treated/ttbarccPowHer.mc16e ; TtStAlt_Treated/ttbarbbPowHer.mc16a,TtStAlt_Treated/ttbarbbPowHer.mc16d,TtStAlt_Treated/ttbarbbPowHer.mc16e
+  Samples: ttbarlight;ttbarcc;ttbarbb
+  ReferenceSample: ttbarlight_AFII;ttbarcc_AFII;ttbarbb_AFII
+
+% ------------------------------------------ %
+% ---  SINGLE-TOP MODELLING SYSTEMATICS  --- %
+% ------------------------------------------ %
+
+Systematic: "HTX_BKGNP_SINGLETOP_GEN"
+  Title: "Single-top generator"
+  Type: HISTO
+  Category: "Single-top uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  HistoFilesUp: TtStAlt_Treated/SingletopaMCPy.mc16a,TtStAlt_Treated/SingletopaMCPy.mc16d,TtStAlt_Treated/SingletopaMCPy.mc16e
+  Samples: Singletop
+  ReferenceSample: Singletop_AFII
+
+Systematic: "HTX_BKGNP_SINGLETOP_PS"
+  Title: "Single-top parton shower"
+  Type: HISTO
+  Category: "Single-top uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  HistoFilesUp: TtStAlt_Treated/SingletopPowHer.mc16a,TtStAlt_Treated/SingletopPowHer.mc16d,TtStAlt_Treated/SingletopPowHer.mc16e
+  Samples: Singletop
+  ReferenceSample: Singletop_AFII
+
+Systematic: "HTX_BKGNP_SINGLETOP_DRDS"
+  Title: "Single-top DR/DS"
+  Type: HISTO
+  Category: "Single-top uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  HistoFilesUp: TtStAlt_Treated/SingletopDiagSub.mc16a,TtStAlt_Treated/SingletopDiagSub.mc16d,TtStAlt_Treated/SingletopDiagSub.mc16e
+  Samples: Singletop
+
