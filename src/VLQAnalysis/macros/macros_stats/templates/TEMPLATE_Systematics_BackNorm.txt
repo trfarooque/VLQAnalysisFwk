@@ -2,12 +2,12 @@
 % --------  LUMI  -------- %
 % ------------------------ %
 
-Systematic: "Luminosity"
-  Title: "Luminosity"
+Systematic: "luminosity"
+  Title: "luminosity"
   Type: OVERALL
   Category: Others
-  OverallUp: 0.022
-  OverallDown: -0.022
+  OverallUp: 0.017
+  OverallDown: -0.017
 %  Exclude: QCD,QCD0L
 
 % ------------------------- %
@@ -112,8 +112,8 @@ Systematic: HTX_BKGNP_OTHERS_Singletop_XS
   Title: "Single-top norm."
   Type: OVERALL
   Category: "Background uncertainties"
-  OverallUp: 0.2
-  OverallDown: -0.2
+  OverallUp: 0.05
+  OverallDown: -0.05
   Samples: "Singletop"
   Regions: HTX_c1lep*
 
