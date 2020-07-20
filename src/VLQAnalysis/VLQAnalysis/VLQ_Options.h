@@ -81,6 +81,7 @@ public:
   inline bool DoSplitMbb() const { return m_doSplitMbb; }
   inline bool DoSumRegions() const { return m_doSumRegions; }
   inline bool ISAFII() const { return m_isAFII; }
+  inline bool ISDIAGSUB() const { return m_isDiagSub; }
   inline bool ScaleTtbarHtSlices() const { return m_scaleTtbarHtSlices; }
   inline bool ApplyTtbarNNLOCorrection() const { return m_applyTtbarNNLOCorrection; }
   inline bool RecomputeTtbarNNLOCorrection() const { return m_recomputeTtbarNNLOCorrection; }
@@ -166,6 +167,7 @@ private:
   bool m_doTwoLeptonAna;
   bool m_doZeroLeptonAna;
   bool m_isAFII;
+  bool m_isDiagSub;
 
   bool m_doPreselection, m_doExclusiveJetRegions, m_doExtendedPreselection, m_doSingleVLQRegions, m_doPairVLQRegions,
     m_doValidnRegions, m_doFitRegions, m_doLooseSystRegions, m_doLowBRegions, m_doLowJRegions,

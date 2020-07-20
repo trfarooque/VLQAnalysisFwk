@@ -617,11 +617,19 @@ bool VLQ_WeightManager::SetPMGSystWeights(){
     return true;
   }
 
-  for( auto& weightfactor : m_sampleInfo -> SystWeightFactorMap() ){
-    if( m_systMap->find(weightfactor.first) !=  m_systMap->end()){
-      UpdateSystematicComponent(weightfactor.first, (*m_systMap)[weightfactor.first]->GetComponentValue()*m_sampleInfo->SystWeightFactorMap()[weightfactor.first]);
-    }
-  }
+  for( auto& sysweight :  *m_systMap ){
+
+    if(sysweight.first.find("pmg") == std::string::npos) continue; 
+
+    //std::cout << sysweight.first << std::endl;
+
+    const string& branchName = (sysweight.second)->BranchName();
+    const std::map<std::string, double>& sysFactorMap = m_sampleInfo->SystWeightFactorMap();
+    if( sysFactorMap.find(branchName) == sysFactorMap.end() ) continue;
+    //std::cout << (sysweight.second)->GetComponentValue() << " " << branchName << " " << sysFactorMap.at(branchName) << std::endl;
+    UpdateSystematicComponent(sysweight.first, (sysweight.second)->GetComponentValue()*sysFactorMap.at(branchName));
+ 
+ }
 
   if(m_vlq_opt -> MsgLevel() == Debug::DEBUG) std::cout << "==> After SetPMGSystWeights weights" << std::endl;
 
@@ -749,6 +757,11 @@ bool VLQ_WeightManager::SetKinReweightings(  ){
 
       weight *= m_kinRw->GetKinReweight(kinpair.second, "_AFII");
       
+    }
+    else if(m_vlq_opt -> ISDIAGSUB()){
+
+      weight *= m_kinRw->GetKinReweight(kinpair.second, "_DiagSub");
+
     }
 
     SetNominalComponent( "weight_RW_"+kinpair.first, weight );

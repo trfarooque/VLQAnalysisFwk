@@ -45,6 +45,7 @@ m_doOneLeptonAna(false),
 m_doTwoLeptonAna(false),
 m_doZeroLeptonAna(false),
 m_isAFII(false),
+m_isDiagSub(false),
 m_doPreselection(true),
 m_doExclusiveJetRegions(false),
 m_doExtendedPreselection(false),
@@ -140,6 +141,7 @@ OptionsBase(q)
     m_doPreselection      = q.m_doPreselection;
     m_doExclusiveJetRegions    = q.m_doExclusiveJetRegions;
     m_isAFII              =q.m_isAFII;
+    m_isDiagSub           =q.m_isDiagSub;
     m_doExtendedPreselection   = q.m_doExtendedPreselection;
     m_doSingleVLQRegions  = q.m_doSingleVLQRegions;
     m_doPairVLQRegions    = q.m_doPairVLQRegions;
@@ -283,6 +285,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_doExclusiveJetRegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
 	} else if( temp_arg.find("--ISAFII") != std::string::npos ){
 	    m_isAFII = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if( temp_arg.find("--ISDIAGSUB") != std::string::npos ){
+	    m_isDiagSub = AnalysisUtils::BoolValue(temp_val,temp_arg);
         } else if( temp_arg.find("--DOEXTENDEDPRESELECTION") != std::string::npos ){
             m_doExtendedPreselection = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOSINGLEVLQREGIONS") != std::string::npos ){
@@ -511,6 +515,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_doPreselection          = " << m_doPreselection    << std::endl;
     std::cout << " m_doExclusiveJetRegions   = " << m_doExclusiveJetRegions << std::endl;
     std::cout << " m_isAFII                  = " << m_isAFII << std::endl;
+    std::cout << " m_isDiagSub               = " << m_isDiagSub << std::endl;
     std::cout << " m_doExtendedPreselection  = " << m_doExtendedPreselection << std::endl;
     std::cout << " m_doSingleVLQRegions      = " << m_doSingleVLQRegions<< std::endl;
     std::cout << " m_doPairVLQRegions        = " << m_doPairVLQRegions  << std::endl;
