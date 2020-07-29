@@ -111,9 +111,9 @@ Samples: ttbarbb
 Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep6jin4bin1fjin1Lex0VTex1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex;HTX_c1lep6jin1bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin3bex1fjin2VLTin1Hin,HTX_c1lep6jin4bin1fjin2VLTin1Hin
 
 Systematic: "HTX_BKGNP_TTBARLIGHT_FSR_MURF_HJ-1boost";"HTX_BKGNP_TTBARLIGHT_FSR_MURF_HJ-2boost";"HTX_BKGNP_TTBARLIGHT_FSR_MURF_LJ-1boost";"HTX_BKGNP_TTBARLIGHT_FSR_MURF_LJ-2boost";"HTX_BKGNP_TTBARLIGHT_FSR_MURF_HJ-3boost"
-Title: "t#bar{t}+light fsr #mu_{R/F} HJ-1boost";"t#bar{t}+light fsr #mu_{R/F} HJ-2boost";"t#bar{t}+light fsr #mu_{R/F} LJ-1boost";"t#bar{t}+light fsr #mu_{R/F} LJ-2boost";"t#bar{t}+light fsr #mu_{R/F} HJ-3boost"
+Title: "t#bar{t}+light fsr #mu_{R,F} HJ-1boost";"t#bar{t}+light fsr #mu_{R,F} HJ-2boost";"t#bar{t}+light fsr #mu_{R,F} LJ-1boost";"t#bar{t}+light fsr #mu_{R,F} LJ-2boost";"t#bar{t}+light fsr #mu_{R,F} HJ-3boost"
 Type: HISTO
-Category: "t#bar{t} fsr #mu_{R/F} uncertainties"
+Category: "t#bar{t} fsr #mu_{R,F} uncertainties"
 HistoNameSufUp: _weight_pmg_isr_muRfac10__fsr_muRfac20
 HistoNameSufDown: _weight_pmg_isr_muRfac10__fsr_muRfac05
 HistoPathUp: "__HISTOPATH__/TheorySys/"
@@ -123,9 +123,9 @@ Samples: ttbarlight
 Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep6jin4bin1fjin1Lex0VTex1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex;HTX_c1lep6jin1bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin3bex1fjin2VLTin1Hin,HTX_c1lep6jin4bin1fjin2VLTin1Hin
 
 Systematic: "HTX_BKGNP_TTBARCC_FSR_MURF_HJ-1boost";"HTX_BKGNP_TTBARCC_FSR_MURF_HJ-2boost";"HTX_BKGNP_TTBARCC_FSR_MURF_LJ-1boost";"HTX_BKGNP_TTBARCC_FSR_MURF_LJ-2boost";"HTX_BKGNP_TTBARCC_FSR_MURF_HJ-3boost"
-Title: "t#bar{t}+#geq1c fsr #mu_{R/F} HJ-1boost";"t#bar{t}+#geq1c fsr #mu_{R/F} HJ-2boost";"t#bar{t}+#geq1c fsr #mu_{R/F} LJ-1boost";"t#bar{t}+#geq1c fsr #mu_{R/F} LJ-2boost";"t#bar{t}+#geq1c fsr #mu_{R/F} HJ-3boost"
+Title: "t#bar{t}+#geq1c fsr #mu_{R,F} HJ-1boost";"t#bar{t}+#geq1c fsr #mu_{R,F} HJ-2boost";"t#bar{t}+#geq1c fsr #mu_{R,F} LJ-1boost";"t#bar{t}+#geq1c fsr #mu_{R,F} LJ-2boost";"t#bar{t}+#geq1c fsr #mu_{R,F} HJ-3boost"
 Type: HISTO
-Category: "t#bar{t} fsr #mu_{R/F} uncertainties"
+Category: "t#bar{t} fsr #mu_{R,F} uncertainties"
 HistoNameSufUp: _weight_pmg_isr_muRfac10__fsr_muRfac20
 HistoNameSufDown: _weight_pmg_isr_muRfac10__fsr_muRfac05
 HistoPathUp: "__HISTOPATH__/TheorySys/"
@@ -135,9 +135,9 @@ Samples: ttbarcc
 Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep6jin4bin1fjin1Lex0VTex1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex;HTX_c1lep6jin1bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin3bex1fjin2VLTin1Hin,HTX_c1lep6jin4bin1fjin2VLTin1Hin
 
 Systematic: "HTX_BKGNP_TTBARBB_FSR_MURF_HJ-1boost";"HTX_BKGNP_TTBARBB_FSR_MURF_HJ-2boost";"HTX_BKGNP_TTBARBB_FSR_MURF_LJ-1boost";"HTX_BKGNP_TTBARBB_FSR_MURF_LJ-2boost";"HTX_BKGNP_TTBARBB_FSR_MURF_HJ-3boost"
-Title: "t#bar{t}+#geq1b fsr #mu_{R/F} HJ-1boost";"t#bar{t}+#geq1b fsr #mu_{R/F} HJ-2boost";"t#bar{t}+#geq1b fsr #mu_{R/F} LJ-1boost";"t#bar{t}+#geq1b fsr #mu_{R/F} LJ-2boost";"t#bar{t}+#geq1b fsr #mu_{R/F} HJ-3boost"
+Title: "t#bar{t}+#geq1b fsr #mu_{R,F} HJ-1boost";"t#bar{t}+#geq1b fsr #mu_{R,F} HJ-2boost";"t#bar{t}+#geq1b fsr #mu_{R,F} LJ-1boost";"t#bar{t}+#geq1b fsr #mu_{R,F} LJ-2boost";"t#bar{t}+#geq1b fsr #mu_{R,F} HJ-3boost"
 Type: HISTO
-Category: "t#bar{t} fsr #mu_{R/F} uncertainties"
+Category: "t#bar{t} fsr #mu_{R,F} uncertainties"
 HistoNameSufUp: _weight_pmg_isr_muRfac10__fsr_muRfac20
 HistoNameSufDown: _weight_pmg_isr_muRfac10__fsr_muRfac05
 HistoPathUp: "__HISTOPATH__/TheorySys/"

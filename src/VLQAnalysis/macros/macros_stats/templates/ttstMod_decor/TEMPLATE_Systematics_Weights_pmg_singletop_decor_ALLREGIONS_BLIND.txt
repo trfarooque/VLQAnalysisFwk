@@ -12,6 +12,7 @@ HistoPathUp: "__HISTOPATH__/TheorySys/"
 HistoPathDown: "__HISTOPATH__/TheorySys/"
 ReferenceSample: Singletop_Ref
 Symmetrisation: TwoSided
+Smoothing: 40
 Samples: Singletop
 Regions: HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin;HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin;HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin;HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex;HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex;HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin;HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin;HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin;HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin;HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin;HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin;HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex
 
@@ -25,6 +26,7 @@ HistoPathUp: "__HISTOPATH__/TheorySys/"
 HistoPathDown: "__HISTOPATH__/TheorySys/"
 ReferenceSample: Singletop_Ref
 Symmetrisation: TwoSided
+Smoothing: 40
 Samples: Singletop
 Regions: HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin;HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin;HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin;HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex;HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex;HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin;HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin;HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin;HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin;HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin;HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin;HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex
 
@@ -38,19 +40,21 @@ HistoPathUp: "__HISTOPATH__/TheorySys/"
 HistoPathDown: "__HISTOPATH__/TheorySys/"
 ReferenceSample: Singletop_Ref
 Symmetrisation: TwoSided
+Smoothing: 40
 Samples: Singletop
 Regions: HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin;HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin;HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin;HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex;HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex;HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin;HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin;HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin;HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin;HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin;HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin;HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex
 
 Systematic: "HTX_BKGNP_SINGLETOP_FSR_MURF_HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin";"HTX_BKGNP_SINGLETOP_FSR_MURF_HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin";"HTX_BKGNP_SINGLETOP_FSR_MURF_HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin";"HTX_BKGNP_SINGLETOP_FSR_MURF_HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin";"HTX_BKGNP_SINGLETOP_FSR_MURF_HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex";"HTX_BKGNP_SINGLETOP_FSR_MURF_HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex";"HTX_BKGNP_SINGLETOP_FSR_MURF_HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex";"HTX_BKGNP_SINGLETOP_FSR_MURF_HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex";"HTX_BKGNP_SINGLETOP_FSR_MURF_HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin";"HTX_BKGNP_SINGLETOP_FSR_MURF_HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin";"HTX_BKGNP_SINGLETOP_FSR_MURF_HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin";"HTX_BKGNP_SINGLETOP_FSR_MURF_HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin";"HTX_BKGNP_SINGLETOP_FSR_MURF_HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin";"HTX_BKGNP_SINGLETOP_FSR_MURF_HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin";"HTX_BKGNP_SINGLETOP_FSR_MURF_HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex"
-Title: "Single-top fsr #mu_{R/F} LJ1b1fj0(t_{h}+t_{l})0h1V";"Single-top fsr #mu_{R/F} LJ1b1fj0t_{h}1t_{l}0h1V";"Single-top fsr #mu_{R/F} LJ2b1fj0(t_{h}+t_{l})0h1V";"Single-top fsr #mu_{R/F} LJ2b1fj0t_{h}1t_{l}0h1V";"Single-top fsr #mu_{R/F} LJ3b1fj0(t_{h}+t_{l})1h0V";"Single-top fsr #mu_{R/F} LJ3b1fj0t_{h}1t_{l}1h0V";"Single-top fsr #mu_{R/F} LJ3b1fj1t_{h}0t_{l}1h0V";"Single-top fsr #mu_{R/F} LJ4b0fj1t_{l}0h0(v+t_{h})";"Single-top fsr #mu_{R/F} HJ1b1fj1t_{h}0t_{l}0h1V";"Single-top fsr #mu_{R/F} HJ1b1fj0t_{h}1t_{l}0h1V";"Single-top fsr #mu_{R/F} HJ2b1fj1t_{h}0t_{l}0h1V";"Single-top fsr #mu_{R/F} HJ2b1fj0t_{h}1t_{l}0h1V";"Single-top fsr #mu_{R/F} HJ2b1fj2(t_{h}+t_{l})0h1V";"Single-top fsr #mu_{R/F} HJ3b1fj1t_{l}1h0(v+t_{h})";"Single-top fsr #mu_{R/F} HJ4b0fj1t_{l}0h0(v+t_{h})"
+Title: "Single-top fsr #mu_{R,F} LJ1b1fj0(t_{h}+t_{l})0h1V";"Single-top fsr #mu_{R,F} LJ1b1fj0t_{h}1t_{l}0h1V";"Single-top fsr #mu_{R,F} LJ2b1fj0(t_{h}+t_{l})0h1V";"Single-top fsr #mu_{R,F} LJ2b1fj0t_{h}1t_{l}0h1V";"Single-top fsr #mu_{R,F} LJ3b1fj0(t_{h}+t_{l})1h0V";"Single-top fsr #mu_{R,F} LJ3b1fj0t_{h}1t_{l}1h0V";"Single-top fsr #mu_{R,F} LJ3b1fj1t_{h}0t_{l}1h0V";"Single-top fsr #mu_{R,F} LJ4b0fj1t_{l}0h0(v+t_{h})";"Single-top fsr #mu_{R,F} HJ1b1fj1t_{h}0t_{l}0h1V";"Single-top fsr #mu_{R,F} HJ1b1fj0t_{h}1t_{l}0h1V";"Single-top fsr #mu_{R,F} HJ2b1fj1t_{h}0t_{l}0h1V";"Single-top fsr #mu_{R,F} HJ2b1fj0t_{h}1t_{l}0h1V";"Single-top fsr #mu_{R,F} HJ2b1fj2(t_{h}+t_{l})0h1V";"Single-top fsr #mu_{R,F} HJ3b1fj1t_{l}1h0(v+t_{h})";"Single-top fsr #mu_{R,F} HJ4b0fj1t_{l}0h0(v+t_{h})"
 Type: HISTO
-Category: "Single-top fsr #mu_{R/F} uncertainties"
+Category: "Single-top fsr #mu_{R-F} uncertainties"
 HistoNameSufUp: _weight_pmg_isr_muRfac10__fsr_muRfac20
 HistoNameSufDown: _weight_pmg_isr_muRfac10__fsr_muRfac05
 HistoPathUp: "__HISTOPATH__/TheorySys/"
 HistoPathDown: "__HISTOPATH__/TheorySys/"
 ReferenceSample: Singletop_Ref
 Symmetrisation: TwoSided
+Smoothing: 40
 Samples: Singletop
 Regions: HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin;HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin;HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin;HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex;HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex;HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin;HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin;HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin;HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin;HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin;HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin;HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex
 

@@ -97,7 +97,7 @@ ReferenceSample: Singletop_AFII
 Systematic: "HTX_BKGNP_SINGLETOP_DRDS_HJ-1boost";"HTX_BKGNP_SINGLETOP_DRDS_HJ-2boost";"HTX_BKGNP_SINGLETOP_DRDS_LJ-1boost";"HTX_BKGNP_SINGLETOP_DRDS_LJ-2boost";"HTX_BKGNP_SINGLETOP_DRDS_HJ-3boost"
 Title: "Single-top DR/DS HJ-1boost";"Single-top DR/DS HJ-2boost";"Single-top DR/DS LJ-1boost";"Single-top DR/DS LJ-2boost";"Single-top DR/DS HJ-3boost"
 Type: HISTO
-Category: "t#bar{t} DR/DS uncertainties"
+Category: "Single-top DR-DS uncertainties"
 Symmetrisation: ONESIDED
 Smoothing: 40
 Samples: Singletop

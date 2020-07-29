@@ -1,0 +1,12 @@
+% -------------------------------- %
+% ---  JMS OBJECT SYSTEMATICS  --- %
+% -------------------------------- %
+
+Systematic: "JET_JMS"
+  Title: "JMS"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoPathUp: "__HISTOPATH__/JMSUP/"
+  HistoPathDown: "__HISTOPATH__/JMSDOWN/"
+  Symmetrisation: TwoSided
+%  Exclude: QCD,QCD0L

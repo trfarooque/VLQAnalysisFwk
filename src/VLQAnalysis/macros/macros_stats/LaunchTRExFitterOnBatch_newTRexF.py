@@ -11,7 +11,7 @@ from Job import *
 ##----------------------------------------------------------
 ## Write scripts
 ##----------------------------------------------------------
-def writeScripts( scriptName, configFile, tRexFitterOutDirectory, instructions ):
+def writeScripts( scriptName, configFile, tRexFitterOutDirectory, instructions , jobParams ):
 
     script = open(scriptName,'w')
     script.write("#!/bin/bash \n")
@@ -88,11 +88,11 @@ def writeScripts( scriptName, configFile, tRexFitterOutDirectory, instructions )
     script.close()
 
     if not m_runPBS:
-        writeCondorSubmitScript(scriptName, tRexFitterOutDirectory)
+        writeCondorSubmitScript(scriptName, tRexFitterOutDirectory, jobParams )
 
 ##_________________________________________________________________________
 ##
-def writeCondorSubmitScript(scriptName, tRexFitterOutDirectory):
+def writeCondorSubmitScript(scriptName, tRexFitterOutDirectory, jobParams ):
 
     f = open(scriptName+".sub","w")
     f.write("#Basic configuration \n")
@@ -106,7 +106,9 @@ def writeCondorSubmitScript(scriptName, tRexFitterOutDirectory):
     f.write("+IsMediumJob = true")
     f.write("\n")
     f.write("\n")
-    f.write("request_memory           = 4 GB \n")
+    f.write("request_memory           = %i GB \n"%jobParams["memory"]) # default: 2 GB
+    f.write("request_cpus             = %i \n"%jobParams["cpus"])     # default: 1
+    f.write("request_disk             = %i GB \n"%jobParams["disk"]) # default: 15 GB
     f.write("#Script options \n")
     f.write("nJobs                   = 1 \n")
     f.write("\n")
@@ -145,7 +147,7 @@ def LaunchJobs( scriptName, tRexFitterOutDirectory ):
 ##----------------------------------------------------------
 ## Write scripts and launch jobs
 ##----------------------------------------------------------
-def writeScriptsAndLaunchJobs( scriptTempName, configFile, instructions ):
+def writeScriptsAndLaunchJobs( scriptTempName, configFile, instructions , jobParams ):
     pathToCreate = ""
     scriptName = scriptTempName
 
@@ -167,7 +169,7 @@ def writeScriptsAndLaunchJobs( scriptTempName, configFile, instructions ):
                 tRexFitterOutDirectory = config_line_splitted[1].replace("\"","").replace("\n","")
                 break
 
-    writeScripts(scriptName, configFile, tRexFitterOutDirectory, instructions)
+    writeScripts(scriptName, configFile, tRexFitterOutDirectory, instructions, jobParams )
     LaunchJobs(scriptName, tRexFitterOutDirectory)
 
 
@@ -200,12 +202,16 @@ m_tarballPath = "tarball.tgz"
 m_outputDir = ""
 m_action = ""
 m_inputConfigFiles = ""
-m_rankingNPMerging = 10
+m_rankingNPMerging = 20
 m_mergeJobs = False
 m_dryRun = False
 m_runPBS = False
 m_batch_queue = "at3"
 m_verbose = False
+m_memory = 12
+m_cpus = 4
+m_disk = 15
+
 for iArg in range(1,len(sys.argv)):
     splitted=sys.argv[iArg].split("=")
     argument = splitted[0].upper()
@@ -219,11 +225,21 @@ for iArg in range(1,len(sys.argv)):
     elif(argument=="RUNPBS"): m_runPBS = True
     elif(argument=="DRYRUN"): m_dryRun = True
     elif(argument=="VERBOSE"): m_verbose = True
+    elif(argument=="MEMORY"): m_memory = int(splitted[1])
+    elif(argument=="CPUS"): m_cpus = int(splitted[1])
+    elif(argument=="DISK"): m_disk = int(splitted[1])
     else:
         printWarning("/!\ Unrecognized argument ("+splitted[0]+") ! Please check !")
 if(m_inputConfigFiles==""):
     printError("<!> Please provide an input config file to use !")
     sys.exit()
+
+##------------------------------------------------------
+## Setting the job parameters
+##------------------------------------------------------
+jobParams = {"memory": m_memory,
+             "cpus":   m_cpus,
+             "disk":   m_disk }
 
 ##------------------------------------------------------
 ## Creating the output folder
@@ -270,9 +286,9 @@ for config in configFileList:
             else:
                 commands += ["r _CONFIGFILE_ 'Ranking=" + syst + "'"]
             if len(commands)==m_rankingNPMerging:
-                writeScriptsAndLaunchJobs( m_outputDir + "/scripts_RANKING"+syst, config, commands )
+                writeScriptsAndLaunchJobs( m_outputDir + "/scripts_RANKING"+syst, config, commands , jobParams )
                 commands = []
-        writeScriptsAndLaunchJobs( m_outputDir + "/scripts_RANKING_ttbbNorm", config, ["wfr _CONFIGFILE_ 'Ranking=HTX_BKGNORM_TTBARBB'",] )
+        writeScriptsAndLaunchJobs( m_outputDir + "/scripts_RANKING_Gammas", config, ["i _CONFIGFILE_ 'GroupedImpact="+'"Gammas"'+"'",] , jobParams )
     else:
         com = "w"
         if m_action.find("FIT")>-1:
@@ -283,8 +299,8 @@ for config in configFileList:
             com += "ls"
         if m_action.find("PREPLOTS")>-1: 
             com += "d"
-        writeScriptsAndLaunchJobs( m_outputDir + "/scripts_", config, [com + " _CONFIGFILE_",] )
-#        writeScriptsAndLaunchJobs( m_outputDir + "/scripts_", config, [com + " _CONFIGFILE_",], m_mergeJobs==False )
+        writeScriptsAndLaunchJobs( m_outputDir + "/scripts_", config, [com + " _CONFIGFILE_",] , jobParams )
+#        writeScriptsAndLaunchJobs( m_outputDir + "/scripts_", config, [com + " _CONFIGFILE_",], m_mergeJobs==False , jobParams )
 
 if m_mergeJobs:
     list_scripts = glob.glob(m_outputDir + "/scripts_*")

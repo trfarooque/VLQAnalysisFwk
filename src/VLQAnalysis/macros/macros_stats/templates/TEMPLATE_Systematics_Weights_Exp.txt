@@ -404,12 +404,12 @@ Systematic: "FT_EFF_extrapolation_from_charm"
 % --------   JVT  -------- %
 % ------------------------ %
 
-%Systematic: "JET_JvtEfficiency"
-%  Title: "JVT uncertainty"
-%  Type: HISTO
-%  Category: "Jet uncertainties"
-%  HistoNameSufUp: _weight_jvt_UP
-%  HistoNameSufDown: _weight_jvt_DOWN
-%  Symmetrisation: TwoSided
-%%  Exclude: QCD,QCD0L
+Systematic: "JET_JvtEfficiency"
+  Title: "JVT uncertainty"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoNameSufUp: _weight_jvt_UP
+  HistoNameSufDown: _weight_jvt_DOWN
+  Symmetrisation: TwoSided
+%  Exclude: QCD,QCD0L
 

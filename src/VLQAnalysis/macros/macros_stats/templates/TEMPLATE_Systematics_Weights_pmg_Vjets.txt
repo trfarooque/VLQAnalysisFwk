@@ -14,26 +14,26 @@ Systematic: "HTX_BKGNP_VJETS_MURF"
   DropNorm: all
   Samples: Wjets,Zjets
 
-Systematic: "HTX_BKGNP_VJETS_CKKW"
-  Title: "V+jets ckkw"
-  Type: HISTO
-  Category: "V+jets uncertainties"
-  HistoNameSufUp: _weight_pmg_ckkw30
-  HistoNameSufDown: _weight_pmg_ckkw15
-  HistoPathUp: "__HISTOPATH__/TheorySys/NewVJets/"
-  HistoPathDown: "__HISTOPATH__/TheorySys/NewVJets/"
-  Symmetrisation: TwoSided
-  DropNorm: all
-  Samples: Wjets,Zjets
-
-Systematic: "HTX_BKGNP_VJETS_QSF"
-  Title: "V+jets qsf"
-  Type: HISTO
-  Category: "V+jets uncertainties"
-  HistoNameSufUp: _weight_pmg_qsf4
-  HistoNameSufDown: _weight_pmg_qsf025
-  HistoPathUp: "__HISTOPATH__/TheorySys/NewVJets/"
-  HistoPathDown: "__HISTOPATH__/TheorySys/NewVJets/"
-  Symmetrisation: TwoSided
-  DropNorm: all
-  Samples: Wjets,Zjets
+%Systematic: "HTX_BKGNP_VJETS_CKKW"
+%  Title: "V+jets ckkw"
+%  Type: HISTO
+%  Category: "V+jets uncertainties"
+%  HistoNameSufUp: _weight_pmg_ckkw30
+%  HistoNameSufDown: _weight_pmg_ckkw15
+%  HistoPathUp: "__HISTOPATH__/TheorySys/NewVJets/"
+%  HistoPathDown: "__HISTOPATH__/TheorySys/NewVJets/"
+%  Symmetrisation: TwoSided
+%  DropNorm: all
+%  Samples: Wjets,Zjets
+%
+%Systematic: "HTX_BKGNP_VJETS_QSF"
+%  Title: "V+jets qsf"
+%  Type: HISTO
+%  Category: "V+jets uncertainties"
+%  HistoNameSufUp: _weight_pmg_qsf4
+%  HistoNameSufDown: _weight_pmg_qsf025
+%  HistoPathUp: "__HISTOPATH__/TheorySys/NewVJets/"
+%  HistoPathDown: "__HISTOPATH__/TheorySys/NewVJets/"
+%  Symmetrisation: TwoSided
+%  DropNorm: all
+%  Samples: Wjets,Zjets
