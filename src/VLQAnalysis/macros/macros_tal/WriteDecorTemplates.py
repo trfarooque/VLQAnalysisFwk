@@ -725,7 +725,7 @@ def writeDRDS_singletop(f,regions):
                 f.write('"Single-top DR/DS %s"\n'%(getRegionLabel(reg)))
 
     f.write('Type: HISTO\n')
-    f.write('Category: "t#bar{t} DR-DS uncertainties"\n')
+    f.write('Category: "Single-top DR-DS uncertainties"\n')
     f.write('Symmetrisation: ONESIDED\n')
     f.write('Smoothing: 40\n')
     f.write('Samples: Singletop\n')
@@ -798,6 +798,7 @@ def writeVar3c_singletop(f,regions):
     f.write('HistoPathDown: "__HISTOPATH__/TheorySys/"\n')
     f.write('ReferenceSample: Singletop_Ref\n')
     f.write('Symmetrisation: TwoSided\n')
+    f.write('Smoothing: 40\n')
     f.write('Samples: Singletop\n')
     f.write('Regions: ')
 
@@ -867,6 +868,7 @@ def writeISR_MUR_singletop(f,regions):
     f.write('HistoPathDown: "__HISTOPATH__/TheorySys/"\n')
     f.write('ReferenceSample: Singletop_Ref\n')
     f.write('Symmetrisation: TwoSided\n')
+    f.write('Smoothing: 40\n')
     f.write('Samples: Singletop\n')
     f.write('Regions: ')
 
@@ -936,6 +938,7 @@ def writeISR_MUF_singletop(f,regions):
     f.write('HistoPathDown: "__HISTOPATH__/TheorySys/"\n')
     f.write('ReferenceSample: Singletop_Ref\n')
     f.write('Symmetrisation: TwoSided\n')
+    f.write('Smoothing: 40\n')
     f.write('Samples: Singletop\n')
     f.write('Regions: ')
 
@@ -1005,6 +1008,7 @@ def writeFSR_MURF_singletop(f,regions):
     f.write('HistoPathDown: "__HISTOPATH__/TheorySys/"\n')
     f.write('ReferenceSample: Singletop_Ref\n')
     f.write('Symmetrisation: TwoSided\n')
+    f.write('Smoothing: 40\n')
     f.write('Samples: Singletop\n')
     f.write('Regions: ')
 
