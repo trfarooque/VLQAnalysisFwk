@@ -435,10 +435,10 @@ int main(int argc, char** argv){
   int nbins_meffred = 13;
 
   //double binedges_jets_n[10] = {-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 15.5};
-  double binedges_jets_n[12] = {-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5,15.5};
-  //double binedges_jets_n[14] = {-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 15.5};
+  //double binedges_jets_n[12] = {-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5,15.5};
+  double binedges_jets_n[14] = {-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 15.5};
   double* rebin_jets_n = &binedges_jets_n[0];
-  int nbins_jets_n = 11;
+  int nbins_jets_n = 13;
 
   for(const std::string& region : list_reg){ // Start loop through regions 
 

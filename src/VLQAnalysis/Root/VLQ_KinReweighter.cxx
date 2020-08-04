@@ -154,10 +154,6 @@ bool VLQ_KinReweighter::Init( /*std::map < int, Selection* >* selection_tree,*/ 
 
 	histName += "_meffred";
 
-	//if(m_opt->DoKinRwSmoothing()){
-	//  histName +="_fit";
-	//}
-
       }
       else if(kinpair.second == JETSN) histName += "_jets_n";
 

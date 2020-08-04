@@ -1,0 +1,12 @@
+nominal
+weight_pmg_ckkw15
+weight_pmg_ckkw30
+weight_pmg_muR05__muF05
+weight_pmg_muR05__muF10
+weight_pmg_muR10__muF05
+weight_pmg_muR10__muF10
+weight_pmg_muR10__muF20
+weight_pmg_muR20__muF10
+weight_pmg_muR20__muF20
+weight_pmg_qsf025
+weight_pmg_qsf4

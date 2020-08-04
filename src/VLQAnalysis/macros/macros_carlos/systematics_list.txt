@@ -1,0 +1,13 @@
+nominal
+aMCPy
+PowHer
+AFII
+DiagSub
+weight_pmg_Var3cDown
+weight_pmg_Var3cUp
+weight_pmg_isr_muRfac10__fsr_muRfac05
+weight_pmg_isr_muRfac10__fsr_muRfac20
+weight_pmg_muR05__muF10
+weight_pmg_muR10__muF05
+weight_pmg_muR10__muF20
+weight_pmg_muR20__muF10
