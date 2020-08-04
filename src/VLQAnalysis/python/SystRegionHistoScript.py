@@ -74,12 +74,22 @@ for fr in fitRegions:
 
 
 # pmg weight names
+# histoSuffixes = ['_weight_pmg_Var3cUp',
+#     '_weight_pmg_Var3cDown',
+#     '_weight_pmg_muR050__muF100',
+#     '_weight_pmg_muR100__muF050',
+#     '_weight_pmg_muR100__muF200',
+#     '_weight_pmg_muR200__muF100',
+#     '_weight_pmg_isr_muRfac10__fsr_muRfac20',
+#     '_weight_pmg_isr_muRfac10__fsr_muRfac05']
+
+# FIXED pmg distribution names
 histoSuffixes = ['_weight_pmg_Var3cUp',
     '_weight_pmg_Var3cDown',
-    '_weight_pmg_muR050__muF100',
-    '_weight_pmg_muR100__muF050',
-    '_weight_pmg_muR100__muF200',
-    '_weight_pmg_muR200__muF100',
+    '_weight_pmg_muR05__muF10',
+    '_weight_pmg_muR10__muF05',
+    '_weight_pmg_muR10__muF20',
+    '_weight_pmg_muR20__muF10',
     '_weight_pmg_isr_muRfac10__fsr_muRfac20',
     '_weight_pmg_isr_muRfac10__fsr_muRfac05']
 

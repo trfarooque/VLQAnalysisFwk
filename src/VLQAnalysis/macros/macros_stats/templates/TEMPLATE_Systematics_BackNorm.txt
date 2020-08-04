@@ -2,12 +2,12 @@
 % --------  LUMI  -------- %
 % ------------------------ %
 
-Systematic: "Luminosity"
-  Title: "Luminosity"
+Systematic: "luminosity"
+  Title: "luminosity"
   Type: OVERALL
   Category: Others
-  OverallUp: 0.022
-  OverallDown: -0.022
+  OverallUp: 0.017
+  OverallDown: -0.017
 %  Exclude: QCD,QCD0L
 
 % ------------------------- %
@@ -23,7 +23,7 @@ Systematic: "HTX_BKGNP_TTBAR_XS"
   Samples: ttbarlight,ttbarbb,ttbarcc
 
 Systematic: "HTX_BKGNP_TTBARCC_XS"
-  Title: "t#bar{t}+c#bar{c} norm."
+  Title: "t#bar{t}+#geq1c norm."
   Type: OVERALL
   Category: "t#bar{t} uncertainties"
   OverallUp: 0.5
@@ -31,12 +31,12 @@ Systematic: "HTX_BKGNP_TTBARCC_XS"
   Samples: ttbarcc
 
 Systematic: "HTX_BKGNP_TTBARBB_XS"
-  Title: "t#bar{t}+b#bar{b} norm."
+  Title: "t#bar{t}+#geq1b norm."
   Type: OVERALL
   Category: "t#bar{t} uncertainties"
   OverallUp: 0.5
   OverallDown: -0.5
-  Samples: ttbarcc
+  Samples: ttbarbb
 
 % ---------------------------------- %
 % --------  V+jets (1-lep)  -------- %
@@ -112,8 +112,8 @@ Systematic: HTX_BKGNP_OTHERS_Singletop_XS
   Title: "Single-top norm."
   Type: OVERALL
   Category: "Background uncertainties"
-  OverallUp: 0.2
-  OverallDown: -0.2
+  OverallUp: 0.05
+  OverallDown: -0.05
   Samples: "Singletop"
   Regions: HTX_c1lep*
 

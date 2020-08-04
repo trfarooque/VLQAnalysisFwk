@@ -1,51 +1,51 @@
 % -------------------------------------------------- %
-% ------   SINGLETOP PMG WEIGHTS SYSTEMATICS  ------ %
+% ------   TTWT PMG WEIGHTS SYSTEMATICS  ------ %
 % -------------------------------------------------- %
 
-  Systematic: "HTX_BKGNP_SINGLETOP_ISR_VAR3C"
-  Title: "Single-top isr Var3c"
+  Systematic: "HTX_BKGNP_TTWT_ISR_VAR3C"
+  Title: "t#bar{t}+Single-top Wt isr Var3c"
   Type: HISTO
-  Category: "Single-top uncertainties"
+  Category: "t#bar{t}+Single-top Wt uncertainties"
   HistoNameSufUp: _weight_pmg_Var3cUp
   HistoNameSufDown: _weight_pmg_Var3cDown
   HistoPathUp: "__HISTOPATH__/TheorySys/"
   HistoPathDown: "__HISTOPATH__/TheorySys/"
-  ReferenceSample: Singletop_Ref
+  ReferenceSample: ttWt_Ref
   Symmetrisation: TwoSided
-  Samples: Singletop
+  Samples: ttWt
 
-Systematic: "HTX_BKGNP_SINGLETOP_ISR_MUR"
-  Title: "Single-top isr #mu_{R}"
+Systematic: "HTX_BKGNP_TTWT_ISR_MUR"
+  Title: "t#bar{t}+Single-top Wt isr #mu_{R}"
   Type: HISTO
-  Category: "Single-top uncertainties"
+  Category: "t#bar{t}+Single-top Wt uncertainties"
   HistoNameSufUp: _weight_pmg_muR20__muF10
   HistoNameSufDown: _weight_pmg_muR05__muF10
   HistoPathUp: "__HISTOPATH__/TheorySys/"
   HistoPathDown: "__HISTOPATH__/TheorySys/"
-  ReferenceSample: Singletop_Ref
+  ReferenceSample: ttWt_Ref
   Symmetrisation: TwoSided
-  Samples: Singletop
+  Samples: ttWt
 
-Systematic: "HTX_BKGNP_SINGLETOP_ISR_MUF"
-  Title: "Single-top isr #mu_{F}"
+Systematic: "HTX_BKGNP_TTWT_ISR_MUF"
+  Title: "t#bar{t}+Single-top Wt isr #mu_{F}"
   Type: HISTO
-  Category: "Single-top uncertainties"
+  Category: "t#bar{t}+Single-top Wt uncertainties"
   HistoNameSufUp: _weight_pmg_muR10__muF20
   HistoNameSufDown: _weight_pmg_muR10__muF05
   HistoPathUp: "__HISTOPATH__/TheorySys/"
   HistoPathDown: "__HISTOPATH__/TheorySys/"
-  ReferenceSample: Singletop_Ref
+  ReferenceSample: ttWt_Ref
   Symmetrisation: TwoSided
-  Samples: Singletop
+  Samples: ttWt
 
-Systematic: "HTX_BKGNP_SINGLETOP_FSR_MURF"
-  Title: "Single-top fsr #mu_{R/F}"
+Systematic: "HTX_BKGNP_TTWT_FSR_MURF"
+  Title: "t#bar{t}+Single-top Wt fsr #mu_{R/F}"
   Type: HISTO
-  Category: "Single-top uncertainties"
+  Category: "t#bar{t}+Single-top Wt uncertainties"
   HistoNameSufUp: _weight_pmg_isr_muRfac10__fsr_muRfac20
   HistoNameSufDown: _weight_pmg_isr_muRfac10__fsr_muRfac05
   HistoPathUp: "__HISTOPATH__/TheorySys/"
   HistoPathDown: "__HISTOPATH__/TheorySys/"
-  ReferenceSample: Singletop_Ref
+  ReferenceSample: ttWt_Ref
   Symmetrisation: TwoSided
-  Samples: Singletop
+  Samples: ttWt

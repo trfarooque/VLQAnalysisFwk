@@ -18,8 +18,8 @@ Systematic: "HTX_BKGNP_SINGLETOP_ISR_MUR"
   Title: "Single-top isr #mu_{R}"
   Type: HISTO
   Category: "Single-top uncertainties"
-  HistoNameSufUp: _weight_pmg_muR20__muF10
-  HistoNameSufDown: _weight_pmg_muR05__muF10
+  HistoNameSufUp: _weight_pmg_muR200__muF100
+  HistoNameSufDown: _weight_pmg_muR050__muF100
   HistoPathUp: "__HISTOPATH__/TheorySys/"
   HistoPathDown: "__HISTOPATH__/TheorySys/"
   ReferenceSample: Singletop_Ref
@@ -30,8 +30,8 @@ Systematic: "HTX_BKGNP_SINGLETOP_ISR_MUF"
   Title: "Single-top isr #mu_{F}"
   Type: HISTO
   Category: "Single-top uncertainties"
-  HistoNameSufUp: _weight_pmg_muR10__muF20
-  HistoNameSufDown: _weight_pmg_muR10__muF05
+  HistoNameSufUp: _weight_pmg_muR100__muF200
+  HistoNameSufDown: _weight_pmg_muR100__muF050
   HistoPathUp: "__HISTOPATH__/TheorySys/"
   HistoPathDown: "__HISTOPATH__/TheorySys/"
   ReferenceSample: Singletop_Ref

@@ -8,8 +8,8 @@
   Category: "Single-top uncertainties"
   HistoNameSufUp: _weight_pmg_Var3cUp
   HistoNameSufDown: _weight_pmg_Var3cDown
-  HistoPathUp: "__HISTOPATH__/TheorySys/"
-  HistoPathDown: "__HISTOPATH__/TheorySys/"
+  HistoPathUp: "__HISTOPATH__/TheorySys_Treated/"
+  HistoPathDown: "__HISTOPATH__/TheorySys_Treated/"
   ReferenceSample: Singletop_Ref
   Symmetrisation: TwoSided
   Samples: Singletop
@@ -20,8 +20,8 @@ Systematic: "HTX_BKGNP_SINGLETOP_ISR_MUR"
   Category: "Single-top uncertainties"
   HistoNameSufUp: _weight_pmg_muR20__muF10
   HistoNameSufDown: _weight_pmg_muR05__muF10
-  HistoPathUp: "__HISTOPATH__/TheorySys/"
-  HistoPathDown: "__HISTOPATH__/TheorySys/"
+  HistoPathUp: "__HISTOPATH__/TheorySys_Treated/"
+  HistoPathDown: "__HISTOPATH__/TheorySys_Treated/"
   ReferenceSample: Singletop_Ref
   Symmetrisation: TwoSided
   Samples: Singletop
@@ -32,8 +32,8 @@ Systematic: "HTX_BKGNP_SINGLETOP_ISR_MUF"
   Category: "Single-top uncertainties"
   HistoNameSufUp: _weight_pmg_muR10__muF20
   HistoNameSufDown: _weight_pmg_muR10__muF05
-  HistoPathUp: "__HISTOPATH__/TheorySys/"
-  HistoPathDown: "__HISTOPATH__/TheorySys/"
+  HistoPathUp: "__HISTOPATH__/TheorySys_Treated/"
+  HistoPathDown: "__HISTOPATH__/TheorySys_Treated/"
   ReferenceSample: Singletop_Ref
   Symmetrisation: TwoSided
   Samples: Singletop
@@ -44,8 +44,8 @@ Systematic: "HTX_BKGNP_SINGLETOP_FSR_MURF"
   Category: "Single-top uncertainties"
   HistoNameSufUp: _weight_pmg_isr_muRfac10__fsr_muRfac20
   HistoNameSufDown: _weight_pmg_isr_muRfac10__fsr_muRfac05
-  HistoPathUp: "__HISTOPATH__/TheorySys/"
-  HistoPathDown: "__HISTOPATH__/TheorySys/"
+  HistoPathUp: "__HISTOPATH__/TheorySys_Treated/"
+  HistoPathDown: "__HISTOPATH__/TheorySys_Treated/"
   ReferenceSample: Singletop_Ref
   Symmetrisation: TwoSided
   Samples: Singletop

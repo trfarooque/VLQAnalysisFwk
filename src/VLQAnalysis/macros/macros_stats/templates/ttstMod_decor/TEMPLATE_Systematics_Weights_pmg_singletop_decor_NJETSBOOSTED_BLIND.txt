@@ -1,0 +1,60 @@
+% ------------------------------------------------------ %
+% --------   SINGLETOP PMG WEIGHTS SYSTEMATICS  -------- %
+% ------------------------------------------------------ %
+
+Systematic: "HTX_BKGNP_SINGLETOP_ISR_VAR3C_HJ-1boost";"HTX_BKGNP_SINGLETOP_ISR_VAR3C_HJ-2boost";"HTX_BKGNP_SINGLETOP_ISR_VAR3C_LJ-1boost";"HTX_BKGNP_SINGLETOP_ISR_VAR3C_LJ-2boost";"HTX_BKGNP_SINGLETOP_ISR_VAR3C_HJ-3boost"
+Title: "Single-top isr Var3c HJ-1boost";"Single-top isr Var3c HJ-2boost";"Single-top isr Var3c LJ-1boost";"Single-top isr Var3c LJ-2boost";"Single-top isr Var3c HJ-3boost"
+Type: HISTO
+Category: "Single-top isr Var3c uncertainties"
+HistoNameSufUp: _weight_pmg_Var3cUp
+HistoNameSufDown: _weight_pmg_Var3cDown
+HistoPathUp: "__HISTOPATH__/TheorySys/"
+HistoPathDown: "__HISTOPATH__/TheorySys/"
+ReferenceSample: Singletop_Ref
+Symmetrisation: TwoSided
+Smoothing: 40
+Samples: Singletop
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex;HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin
+
+Systematic: "HTX_BKGNP_SINGLETOP_ISR_MUR_HJ-1boost";"HTX_BKGNP_SINGLETOP_ISR_MUR_HJ-2boost";"HTX_BKGNP_SINGLETOP_ISR_MUR_LJ-1boost";"HTX_BKGNP_SINGLETOP_ISR_MUR_LJ-2boost";"HTX_BKGNP_SINGLETOP_ISR_MUR_HJ-3boost"
+Title: "Single-top isr #mu_{R} HJ-1boost";"Single-top isr #mu_{R} HJ-2boost";"Single-top isr #mu_{R} LJ-1boost";"Single-top isr #mu_{R} LJ-2boost";"Single-top isr #mu_{R} HJ-3boost"
+Type: HISTO
+Category: "Single-top isr #mu_{R} uncertainties"
+HistoNameSufUp: _weight_pmg_muR20__muF10
+HistoNameSufDown: _weight_pmg_muR05__muF10
+HistoPathUp: "__HISTOPATH__/TheorySys/"
+HistoPathDown: "__HISTOPATH__/TheorySys/"
+ReferenceSample: Singletop_Ref
+Symmetrisation: TwoSided
+Smoothing: 40
+Samples: Singletop
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex;HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin
+
+Systematic: "HTX_BKGNP_SINGLETOP_ISR_MUF_HJ-1boost";"HTX_BKGNP_SINGLETOP_ISR_MUF_HJ-2boost";"HTX_BKGNP_SINGLETOP_ISR_MUF_LJ-1boost";"HTX_BKGNP_SINGLETOP_ISR_MUF_LJ-2boost";"HTX_BKGNP_SINGLETOP_ISR_MUF_HJ-3boost"
+Title: "Single-top isr #mu_{F} HJ-1boost";"Single-top isr #mu_{F} HJ-2boost";"Single-top isr #mu_{F} LJ-1boost";"Single-top isr #mu_{F} LJ-2boost";"Single-top isr #mu_{F} HJ-3boost"
+Type: HISTO
+Category: "Single-top isr #mu_{F} uncertainties"
+HistoNameSufUp: _weight_pmg_muR10__muF20
+HistoNameSufDown: _weight_pmg_muR10__muF05
+HistoPathUp: "__HISTOPATH__/TheorySys/"
+HistoPathDown: "__HISTOPATH__/TheorySys/"
+ReferenceSample: Singletop_Ref
+Symmetrisation: TwoSided
+Smoothing: 40
+Samples: Singletop
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex;HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin
+
+Systematic: "HTX_BKGNP_SINGLETOP_FSR_MURF_HJ-1boost";"HTX_BKGNP_SINGLETOP_FSR_MURF_HJ-2boost";"HTX_BKGNP_SINGLETOP_FSR_MURF_LJ-1boost";"HTX_BKGNP_SINGLETOP_FSR_MURF_LJ-2boost";"HTX_BKGNP_SINGLETOP_FSR_MURF_HJ-3boost"
+Title: "Single-top fsr #mu_{R,F} HJ-1boost";"Single-top fsr #mu_{R,F} HJ-2boost";"Single-top fsr #mu_{R,F} LJ-1boost";"Single-top fsr #mu_{R,F} LJ-2boost";"Single-top fsr #mu_{R,F} HJ-3boost"
+Type: HISTO
+Category: "Single-top fsr #mu_{R-F} uncertainties"
+HistoNameSufUp: _weight_pmg_isr_muRfac10__fsr_muRfac20
+HistoNameSufDown: _weight_pmg_isr_muRfac10__fsr_muRfac05
+HistoPathUp: "__HISTOPATH__/TheorySys/"
+HistoPathDown: "__HISTOPATH__/TheorySys/"
+ReferenceSample: Singletop_Ref
+Symmetrisation: TwoSided
+Smoothing: 40
+Samples: Singletop
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex;HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin
+

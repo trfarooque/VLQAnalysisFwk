@@ -9,15 +9,15 @@ from ROOT import *
 sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/VLQAnalysis/" )
 from VLQ_Samples_mc import *
 
-regDict = "regions_dictionary_sVLQ_ttbarCR"
-regDict_blinded = regDict+"_blinded"
+regDict = "regions_dictionary_sVLQ"
+regDict_blinded = regDict+"_RSRs"
 doOneLep = True
 
 # Running options
 writeToNewDictionary = True
 correctEmptyBins = True
 doSR = True
-doVR = True
+doVR = False
 doPresel = False
 debugPrint = False
 
@@ -37,8 +37,9 @@ if doOneLep:
         Regions += regModule.preselection_regions_1l
 
 # Setting up input files
-inputDir = '/nfs/pic.es/user/t/tvdaalen/scratch2/SingleVLQWorkArea/br_R21_master_Mar2020/VLQAnalysisFramework/fitinputs_blinding_CRs/'
-f_bkg = {'a':TFile(inputDir+'bkg.mc16a.root','read'),'d':TFile(inputDir+'bkg.mc16a.root','read'),'e':TFile(inputDir+'bkg.mc16a.root','read')}
+# inputDir = '/nfs/pic.es/user/t/tvdaalen/scratch2/SingleVLQWorkArea/br_R21_master_Mar2020/VLQAnalysisFramework/fitinputs_blinding_CRs/'
+inputDir = '/nfs/pic.es/user/t/tvdaalen/scratch2//VLQAnalysisRun2/FitInputs_RW_allcor_Jul2020/FilesTRexF/'
+f_bkg = {'a':TFile(inputDir+'bkg.mc16a.root','read'),'d':TFile(inputDir+'bkg.mc16d.root','read'),'e':TFile(inputDir+'bkg.mc16e.root','read')}
 
 # signals = ['sVLQ_WTHt16K05','sVLQ_WTHt20K05','sVLQ_WTZt16K05','sVLQ_WTZt20K05','sVLQ_ZTHt11K05','sVLQ_ZTHt16K05','sVLQ_ZTHt20K05','sVLQ_ZTZt11K05','sVLQ_ZTZt16K05','sVLQ_WTHt11K03','sVLQ_WTHt16K03','sVLQ_WTZt11K03','sVLQ_ZTHt16K03']
 signals = ['sVLQ_WTHt16K05','sVLQ_WTHt20K05','sVLQ_WTZt16K05','sVLQ_WTZt20K05','sVLQ_ZTHt11K05','sVLQ_ZTHt16K05','sVLQ_ZTHt20K05','sVLQ_ZTZt11K05','sVLQ_WTHt11K03','sVLQ_WTHt16K03','sVLQ_WTZt11K03','sVLQ_ZTHt16K03']
@@ -161,7 +162,7 @@ for reg in Regions:
         if len(goodbins) < 2:
             goodbins = ""
 
-        newline = "\t'binning_blind':"+'"'+str(goodbins).replace('[','').replace(']','')+'",\n'
+        newline = "\t'binning_blind':"+'"'+str(goodbins).replace('[','').replace(']','').replace(' ','')+'",\n'
 
         with open('../../python/%s.py'%regDict_blinded,'r') as f:
             contents = f.readlines()

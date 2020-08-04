@@ -1,0 +1,47 @@
+% -------------------------------------------------- %
+% --------   TTBAR PMG WEIGHTS SYSTEMATICS  -------- %
+% -------------------------------------------------- %
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_ISR_VAR3C" ; "HTX_BKGNP_TTBARBB_ISR_VAR3C" ; HTX_BKGNP_TTBARCC_ISR_VAR3C"
+  Title: "t#bar{t}+light-jets isr Var3c" ; "t#bar{t}+#geq1b isr Var3c" ; "t#bar{t}+#geq1c isr Var3c"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: _weight_pmg_Var3cUp
+  HistoNameSufDown: _weight_pmg_Var3cDown
+  HistoPathUp: "__HISTOPATH__/TheorySys/"
+  HistoPathDown: "__HISTOPATH__/TheorySys/"
+  Symmetrisation: TwoSided
+  Samples: ttbarlight;ttbarbb;ttbarcc
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_ISR_MUR" ; "HTX_BKGNP_TTBARBB_ISR_MUR" ; HTX_BKGNP_TTBARCC_ISR_MUR"
+  Title: "t#bar{t}+light-jets isr #mu_{R}" ; "t#bar{t}+#geq1b isr #mu_{R}" ; "t#bar{t}+#geq1c isr #mu_{R}"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: _weight_pmg_muR20__muF10
+  HistoNameSufDown: _weight_pmg_muR05__muF10
+  HistoPathUp: "__HISTOPATH__/TheorySys/"
+  HistoPathDown: "__HISTOPATH__/TheorySys/"
+  Symmetrisation: TwoSided
+  Samples: ttbarlight;ttbarbb;ttbarcc
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_ISR_MUF" ; "HTX_BKGNP_TTBARBB_ISR_MUF" ; HTX_BKGNP_TTBARCC_ISR_MUF"
+  Title: "t#bar{t}+light-jets isr #mu_{F}" ; "t#bar{t}+#geq1b isr #mu_{F}" ; "t#bar{t}+#geq1c isr #mu_{F}"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: _weight_pmg_muR10__muF20
+  HistoNameSufDown: _weight_pmg_muR10__muF05
+  HistoPathUp: "__HISTOPATH__/TheorySys/"
+  HistoPathDown: "__HISTOPATH__/TheorySys/"
+  Symmetrisation: TwoSided
+  Samples: ttbarlight;ttbarbb;ttbarcc
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_FSR_MURF" ; "HTX_BKGNP_TTBARBB_FSR_MURF" ; HTX_BKGNP_TTBARCC_FSR_MURF"
+  Title: "t#bar{t}+light-jets fsr #mu_{R/F}" ; "t#bar{t}+#geq1b fsr #mu_{R/F}" ; "t#bar{t}+#geq1c fsr #mu_{R/F}"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: _weight_pmg_isr_muRfac10__fsr_muRfac20
+  HistoNameSufDown: _weight_pmg_isr_muRfac10__fsr_muRfac05
+  HistoPathUp: "__HISTOPATH__/TheorySys/"
+  HistoPathDown: "__HISTOPATH__/TheorySys/"
+  Symmetrisation: TwoSided
+  Samples: ttbarlight;ttbarbb;ttbarcc

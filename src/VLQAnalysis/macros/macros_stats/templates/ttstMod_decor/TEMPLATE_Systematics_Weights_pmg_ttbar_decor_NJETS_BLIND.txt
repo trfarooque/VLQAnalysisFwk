@@ -1,0 +1,148 @@
+% -------------------------------------------------- %
+% --------   TTBAR PMG WEIGHTS SYSTEMATICS  -------- %
+% -------------------------------------------------- %
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_ISR_VAR3C_HJ";"HTX_BKGNP_TTBARLIGHT_ISR_VAR3C_LJ"
+Title: "t#bar{t}+light isr Var3c HJ";"t#bar{t}+light isr Var3c LJ"
+Type: HISTO
+Category: "t#bar{t} isr Var3c uncertainties"
+HistoNameSufUp: _weight_pmg_Var3cUp
+HistoNameSufDown: _weight_pmg_Var3cDown
+HistoPathUp: "__HISTOPATH__/TheorySys/"
+HistoPathDown: "__HISTOPATH__/TheorySys/"
+Symmetrisation: TwoSided
+Samples: ttbarlight
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex,HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex
+
+Systematic: "HTX_BKGNP_TTBARCC_ISR_VAR3C_HJ";"HTX_BKGNP_TTBARCC_ISR_VAR3C_LJ"
+Title: "t#bar{t}+#geq1c isr Var3c HJ";"t#bar{t}+#geq1c isr Var3c LJ"
+Type: HISTO
+Category: "t#bar{t} isr Var3c uncertainties"
+HistoNameSufUp: _weight_pmg_Var3cUp
+HistoNameSufDown: _weight_pmg_Var3cDown
+HistoPathUp: "__HISTOPATH__/TheorySys/"
+HistoPathDown: "__HISTOPATH__/TheorySys/"
+Symmetrisation: TwoSided
+Samples: ttbarcc
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex,HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex
+
+Systematic: "HTX_BKGNP_TTBARBB_ISR_VAR3C_HJ";"HTX_BKGNP_TTBARBB_ISR_VAR3C_LJ"
+Title: "t#bar{t}+#geq1b isr Var3c HJ";"t#bar{t}+#geq1b isr Var3c LJ"
+Type: HISTO
+Category: "t#bar{t} isr Var3c uncertainties"
+HistoNameSufUp: _weight_pmg_Var3cUp
+HistoNameSufDown: _weight_pmg_Var3cDown
+HistoPathUp: "__HISTOPATH__/TheorySys/"
+HistoPathDown: "__HISTOPATH__/TheorySys/"
+Symmetrisation: TwoSided
+Samples: ttbarbb
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex,HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_ISR_MUR_HJ";"HTX_BKGNP_TTBARLIGHT_ISR_MUR_LJ"
+Title: "t#bar{t}+light isr #mu_{R} HJ";"t#bar{t}+light isr #mu_{R} LJ"
+Type: HISTO
+Category: "t#bar{t} isr #mu_{R} uncertainties"
+HistoNameSufUp: _weight_pmg_muR20__muF10
+HistoNameSufDown: _weight_pmg_muR05__muF10
+HistoPathUp: "__HISTOPATH__/TheorySys/"
+HistoPathDown: "__HISTOPATH__/TheorySys/"
+Symmetrisation: TwoSided
+Samples: ttbarlight
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex,HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex
+
+Systematic: "HTX_BKGNP_TTBARCC_ISR_MUR_HJ";"HTX_BKGNP_TTBARCC_ISR_MUR_LJ"
+Title: "t#bar{t}+#geq1c isr #mu_{R} HJ";"t#bar{t}+#geq1c isr #mu_{R} LJ"
+Type: HISTO
+Category: "t#bar{t} isr #mu_{R} uncertainties"
+HistoNameSufUp: _weight_pmg_muR20__muF10
+HistoNameSufDown: _weight_pmg_muR05__muF10
+HistoPathUp: "__HISTOPATH__/TheorySys/"
+HistoPathDown: "__HISTOPATH__/TheorySys/"
+Symmetrisation: TwoSided
+Samples: ttbarcc
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex,HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex
+
+Systematic: "HTX_BKGNP_TTBARBB_ISR_MUR_HJ";"HTX_BKGNP_TTBARBB_ISR_MUR_LJ"
+Title: "t#bar{t}+#geq1b isr #mu_{R} HJ";"t#bar{t}+#geq1b isr #mu_{R} LJ"
+Type: HISTO
+Category: "t#bar{t} isr #mu_{R} uncertainties"
+HistoNameSufUp: _weight_pmg_muR20__muF10
+HistoNameSufDown: _weight_pmg_muR05__muF10
+HistoPathUp: "__HISTOPATH__/TheorySys/"
+HistoPathDown: "__HISTOPATH__/TheorySys/"
+Symmetrisation: TwoSided
+Samples: ttbarbb
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex,HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_ISR_MUF_HJ";"HTX_BKGNP_TTBARLIGHT_ISR_MUF_LJ"
+Title: "t#bar{t}+light isr #mu_{F} HJ";"t#bar{t}+light isr #mu_{F} LJ"
+Type: HISTO
+Category: "t#bar{t} isr #mu_{F} uncertainties"
+HistoNameSufUp: _weight_pmg_muR10__muF20
+HistoNameSufDown: _weight_pmg_muR10__muF05
+HistoPathUp: "__HISTOPATH__/TheorySys/"
+HistoPathDown: "__HISTOPATH__/TheorySys/"
+Symmetrisation: TwoSided
+Samples: ttbarlight
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex,HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex
+
+Systematic: "HTX_BKGNP_TTBARCC_ISR_MUF_HJ";"HTX_BKGNP_TTBARCC_ISR_MUF_LJ"
+Title: "t#bar{t}+#geq1c isr #mu_{F} HJ";"t#bar{t}+#geq1c isr #mu_{F} LJ"
+Type: HISTO
+Category: "t#bar{t} isr #mu_{F} uncertainties"
+HistoNameSufUp: _weight_pmg_muR10__muF20
+HistoNameSufDown: _weight_pmg_muR10__muF05
+HistoPathUp: "__HISTOPATH__/TheorySys/"
+HistoPathDown: "__HISTOPATH__/TheorySys/"
+Symmetrisation: TwoSided
+Samples: ttbarcc
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex,HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex
+
+Systematic: "HTX_BKGNP_TTBARBB_ISR_MUF_HJ";"HTX_BKGNP_TTBARBB_ISR_MUF_LJ"
+Title: "t#bar{t}+#geq1b isr #mu_{F} HJ";"t#bar{t}+#geq1b isr #mu_{F} LJ"
+Type: HISTO
+Category: "t#bar{t} isr #mu_{F} uncertainties"
+HistoNameSufUp: _weight_pmg_muR10__muF20
+HistoNameSufDown: _weight_pmg_muR10__muF05
+HistoPathUp: "__HISTOPATH__/TheorySys/"
+HistoPathDown: "__HISTOPATH__/TheorySys/"
+Symmetrisation: TwoSided
+Samples: ttbarbb
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex,HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_FSR_MURF_HJ";"HTX_BKGNP_TTBARLIGHT_FSR_MURF_LJ"
+Title: "t#bar{t}+light fsr #mu_{R,F} HJ";"t#bar{t}+light fsr #mu_{R,F} LJ"
+Type: HISTO
+Category: "t#bar{t} fsr #mu_{R,F} uncertainties"
+HistoNameSufUp: _weight_pmg_isr_muRfac10__fsr_muRfac20
+HistoNameSufDown: _weight_pmg_isr_muRfac10__fsr_muRfac05
+HistoPathUp: "__HISTOPATH__/TheorySys/"
+HistoPathDown: "__HISTOPATH__/TheorySys/"
+Symmetrisation: TwoSided
+Samples: ttbarlight
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex,HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex
+
+Systematic: "HTX_BKGNP_TTBARCC_FSR_MURF_HJ";"HTX_BKGNP_TTBARCC_FSR_MURF_LJ"
+Title: "t#bar{t}+#geq1c fsr #mu_{R,F} HJ";"t#bar{t}+#geq1c fsr #mu_{R,F} LJ"
+Type: HISTO
+Category: "t#bar{t} fsr #mu_{R,F} uncertainties"
+HistoNameSufUp: _weight_pmg_isr_muRfac10__fsr_muRfac20
+HistoNameSufDown: _weight_pmg_isr_muRfac10__fsr_muRfac05
+HistoPathUp: "__HISTOPATH__/TheorySys/"
+HistoPathDown: "__HISTOPATH__/TheorySys/"
+Symmetrisation: TwoSided
+Samples: ttbarcc
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex,HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex
+
+Systematic: "HTX_BKGNP_TTBARBB_FSR_MURF_HJ";"HTX_BKGNP_TTBARBB_FSR_MURF_LJ"
+Title: "t#bar{t}+#geq1b fsr #mu_{R,F} HJ";"t#bar{t}+#geq1b fsr #mu_{R,F} LJ"
+Type: HISTO
+Category: "t#bar{t} fsr #mu_{R,F} uncertainties"
+HistoNameSufUp: _weight_pmg_isr_muRfac10__fsr_muRfac20
+HistoNameSufDown: _weight_pmg_isr_muRfac10__fsr_muRfac05
+HistoPathUp: "__HISTOPATH__/TheorySys/"
+HistoPathDown: "__HISTOPATH__/TheorySys/"
+Symmetrisation: TwoSided
+Samples: ttbarbb
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex,HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex
+
