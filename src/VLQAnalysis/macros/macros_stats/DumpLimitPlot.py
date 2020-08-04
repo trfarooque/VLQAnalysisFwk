@@ -121,6 +121,7 @@ if outSuffix != "":
 os.system("mkdir -p "+outDir)
 
 # Prepare for comparing multiple configurations in limit plots
+doMulti = False
 if inDir.startswith('[') and inDir.endswith(']'):
     inDir = map(str, inDir.strip('[]').split(','))
     doMulti = True
@@ -400,7 +401,7 @@ if drawTheory:
 ###
 #Limits
 ###
-cols = [kBlack,kBlue+1,kRed,kViolet+7] # max compare 4 configurations
+cols = [kBlack,kBlue+1,kRed,kOrange+4] # max compare 4 configurations
 fills = [3002,3004,3005,3007]
 if doMulti:
     for n in range(len(inDir)):
