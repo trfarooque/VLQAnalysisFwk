@@ -8,6 +8,13 @@
 #include "TH1.h"
 #include "TH2D.h"
 #include "TF1.h"
+#include "TFitResult.h"
+#include "TMatrixD.h"
+
+#include "Fit/BinData.h"
+#include "Math/WrappedMultiTF1.h"
+#include "HFitInterface.h"
+#include "Fit/Fitter.h"
 
 std::string inDir;
 std::string outName;
@@ -297,6 +304,22 @@ Double_t sigmoidFitFunction(Double_t *x, Double_t *par){
 
 }
 
+Double_t LogisticSFunction(Double_t *x, Double_t *par){
+
+  Double_t fitVal = par[3] - par[0]/( 1.0 + TMath::Exp(par[1]*(x[0] - par[2])));
+
+  return fitVal;
+
+}
+
+Double_t HypLogisticSFunction(Double_t *x, Double_t *par){
+
+  Double_t fitVal = 1.0/(TMath::Power(x[0],par[3])) + par[0]/( 1.0 + TMath::Exp(par[1]*(x[0] - par[2])));
+  
+  return fitVal;
+
+}
+
 Double_t sechFitFunction(Double_t *x, Double_t *par){
 
   Double_t fitVal = par[0] + par[1]/(TMath::CosH(par[2]*x[0]) );
@@ -398,20 +421,24 @@ int main(int argc, char** argv){
 
   // Define rebinning for meff
 
-  double binedges_meff[14] = {0,100,400,500,600,700,800,900,1000,1200,1400,1600,2000,5000};
-  //double binedges_meff[15] = {-200,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,5000};
+  
+  //double binedges_meff[14] = {0,100,400,500,600,700,800,900,1000,1200,1400,1600,2000,5000};
+  //double binedges_meff[16] = {0,100,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3500,5000};
+  double binedges_meff[17] = {0,100,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000};
   double* rebin_meff = &binedges_meff[0];
-  int nbins_meff = 13;
+  int nbins_meff = 16;
 
   //double binedges_meffred[15] = {-200,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,5000};
   double binedges_meffred[14] = {0,100,400,500,600,700,800,900,1000,1200,1400,1600,2000,5000}; 
+  //double binedges_meffred[17] = {0,100,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000};
   double* rebin_meffred = &binedges_meffred[0];
   int nbins_meffred = 13;
 
   //double binedges_jets_n[10] = {-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 15.5};
-  double binedges_jets_n[15] = {-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 12.5, 15.5};
+  double binedges_jets_n[12] = {-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5,15.5};
+  //double binedges_jets_n[14] = {-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 15.5};
   double* rebin_jets_n = &binedges_jets_n[0];
-  int nbins_jets_n = 14;
+  int nbins_jets_n = 11;
 
   for(const std::string& region : list_reg){ // Start loop through regions 
 
@@ -579,37 +606,87 @@ int main(int argc, char** argv){
 	    std::cout << "Fitting meffred reweighting histogram" << std::endl;
 
 	    TF1* funcHyperbola = new TF1((region + "_" + list_kin[1] + "_Hyperbolafit" + systematicPrefix).c_str(), hyperbolaFitFunction, 0, 5000, 3);
-	    TF1* funcSigmoid = new TF1((region + "_" + list_kin[1] + "_fit" + systematicPrefix).c_str(), sigmoidFitFunction, 0, 5000, 3);
+	    TF1* funcSigmoid = new TF1((region + "_" + list_kin[1] + "_Sigmoidfit" + systematicPrefix).c_str(), sigmoidFitFunction, 0, 5000, 3);
 	    TF1* funcSech = new TF1((region + "_" + list_kin[1] + "_Sechfit" + systematicPrefix).c_str(), sechFitFunction, 0, 5000, 3);
+	    TF1* funcLogisticS = new TF1((region + "_" + list_kin[1] + "_fit" + systematicPrefix).c_str(), LogisticSFunction, 0, 5000, 4);
 	    TF1* funcArcSinh = new TF1((region + "_" + list_kin[1] + "_ArcSinhfit" + systematicPrefix).c_str(), asinhFitFunction, -200, 0, 2);
 
-	    //funcSigmoid->SetParameters(1.0,1.0,0.001);
-	    funcSech->SetParameters(1.0,1.0,0.001);
-
-	    funcSigmoid->SetParameters(1.15, 0.80, 0.001);
-
-	    //funcArcSinh->SetParameters(1.0,0.01,0.8);
-	    funcArcSinh->SetParameters(0.8,0.001);
 
 
-	    //funcSech->SetParameters(1.15,0.001,2.5);
+	    std::cout<< "===========================================================================" << std::endl;
+	    ROOT::Fit::DataOptions opt;
+	    //opt.fBinVolume = true;                                                                                                                                                                    
+	    ROOT::Fit::DataRange range(0,5000);
+	    ROOT::Fit::BinData data(opt,range);
+	    ROOT::Fit::FillData(data, meffred_rw);
+	    ROOT::Math::WrappedMultiTF1 fitFunction2(*funcLogisticS, funcLogisticS->GetNdim() );
+	    ROOT::Fit::Fitter fitter2;
+	    fitter2.SetFunction( fitFunction2, false);
+	    double p0_2[4] = {1.0, 0.01, 0, 1.0};                                                                                                                                                 
+	    fitter2.Config().SetParamsSettings(4, p0_2);
+	    fitter2.Config().ParSettings(2).Fix();
+	    fitter2.Config().MinimizerOptions().SetStrategy(0);
+	    fitter2.Config().MinimizerOptions().SetPrintLevel(0);
+	    fitter2.Config().SetMinimizer("Minuit2","Migrad");
+	    fitter2.Fit(data);
+	    ROOT::Fit::FitResult result2 = fitter2.Result();
 
-	    //meffred_rw->Fit(funcHyperbola, "M WW");
-	    meffred_rw->Fit(funcSigmoid, "M WW R");
-	    //meffred_rw->Fit(funcSech, "M WW");
-	    //meffred_rw->Fit(funcArcSinh, "M WW");
+	    if(result2.Status() != 0 && result2.Status() != 1){
+	      std::cout << "WARNING: The fit did not converge with minimizer status " << result2.Status() << std::endl;
 
-	    //f_out->cd();
-	    //funcHyperbola->Write();
+	      result2.Print(std::cout);
 
+	      result2.PrintCovMatrix(std::cout);
+
+	      std::cout << "Retrying with strategy 1" << std::endl;
+
+	      fitter2.Config().MinimizerOptions().SetStrategy(1);
+
+	      fitter2.Fit(data);
+
+	      result2 = fitter2.Result();
+
+	    }
+	    if(result2.Status() != 0 && result2.Status() != 1){
+	      std::cout << "WARNING: The fit did not converge with minimizer status "<< result2.Status() << std::endl;
+
+	      result2.Print(std::cout);
+
+	      result2.PrintCovMatrix(std::cout);
+
+	      std::cout << "Retrying with strategy 2" << std::endl;
+
+	      fitter2.Config().MinimizerOptions().SetStrategy(2);
+
+	      fitter2.Fit(data);
+
+	      result2 = fitter2.Result();
+
+	    }
+
+
+	    std::cout << "Fit Status: " << result2.Status() << std::endl;
+	    result2.Print(std::cout);
+	    result2.PrintCovMatrix(std::cout);
 	    f_out->cd();
-	    funcSigmoid->Write();
 
-	    //f_out->cd();
-	    //funcSech->Write();
+	    for(int ipar = 0; ipar < funcLogisticS->GetNpar(); ipar++){
+	      std::cout << "p"+std::to_string(ipar)+": " << funcLogisticS->GetParameter(ipar) << std::endl;
+	    }
 
-	    //f_out->cd();
-	    //funcArcSinh->Write();
+	    funcLogisticS->Write();
+
+	    
+
+
+
+	    //##############################################################################3
+	    //funcSigmoid->SetParameters(1.0,1.0,0.001);
+	    /*funcSigmoid->SetParameters(1.15, 0.80, 0.001);
+	    meffred_rw->Fit(funcSigmoid, "M WW R");
+	    f_out->cd();
+	    funcSigmoid->Write();*/
+
 
 	  }
 
@@ -768,12 +845,8 @@ int main(int argc, char** argv){
 	    data_hist_meffred -> Add(background_hist_meffred, -1.0);
 	    
 	    data_hist_meffred -> Divide(signal_hist_meffred);
-	    
-	    f_out->cd();
 
 	    data_hist_meffred->SetName( (region + "_" + list_kin[1] + "_jet_" + std::to_string(ybin-1) + "_" + systematicPrefix).c_str() );
-	    
-	    data_hist_meffred->Write();
 	    
 	    if(doSmoothing){
 	      
@@ -781,42 +854,217 @@ int main(int argc, char** argv){
 	      if(ybin < meffred_rw -> GetNbinsY()) std::cout << "Fitting meff reweighting histogram for njets = " << ybin-1 << std::endl;
 	      else std::cout << "Fitting meffred reweighting histogram for njets >= " << ybin-1 << std::endl;
 	      
+	      double y_range = ybin < meffred_rw -> GetNbinsY() ? 500-(ybin-4)*50 : 0;
+
 	      TF1* funcHyperbola = new TF1((region + "_" + list_kin[1] + "_Hyperbolafit_jet_"+ std::to_string(ybin-1) + systematicPrefix).c_str(), hyperbolaFitFunction, 0, 5000, 3);
 	      
-	      TF1* funcSigmoid = new TF1((region + "_" + list_kin[1] + "_fit_jet_"+ std::to_string(ybin-1) + systematicPrefix).c_str(), sigmoidFitFunction, 0, 5000, 3);
+	      TF1* funcSigmoid = new TF1((region + "_" + list_kin[1] + "_Sigmoidfit_jet_"+ std::to_string(ybin-1) + systematicPrefix).c_str(), sigmoidFitFunction, y_range, 5000, 3);
 	    
-	      TF1* funcSech = new TF1((region + "_" + list_kin[1] + "_Sechfit_jet_" + std::to_string(ybin-1) + systematicPrefix).c_str(), sechFitFunction, 0, 5000, 3);
+	      TF1* funcLogisticS = new TF1((region + "_" + list_kin[1] + "_fit_jet_"+ std::to_string(ybin-1) + systematicPrefix).c_str(), LogisticSFunction, y_range, 5000, 4);
+
+	      TF1* funcHypLogisticS = new TF1((region + "_" + list_kin[1] + "_HypLogisticSfit_jet_"+ std::to_string(ybin-1) + systematicPrefix).c_str(), HypLogisticSFunction, y_range, 5000, 4);
+
+	      TF1* funcSech = new TF1((region + "_" + list_kin[1] + "_Sechfit_jet_" + std::to_string(ybin-1) + systematicPrefix).c_str(), sechFitFunction, y_range, 5000, 3);
 
 	      TF1* funcArcSinh = new TF1((region + "_" + list_kin[1] + "_ArcSinhfit_jet_" + std::to_string(ybin-1) + systematicPrefix).c_str(), asinhFitFunction, 0, 5000, 2);
 
 
-	      funcSigmoid->SetParameters(1.15, 0.80, 0.001);
+	      //#######################################################################
+	      ROOT::Fit::DataOptions opt;
+	      //opt.fBinVolume = true;
+	      ROOT::Fit::DataRange range(y_range,5000);
+	      if(ybin-1 == 3){
+		range.SetRange(y_range,3500);
+	      }
+	      ROOT::Fit::BinData data(opt,range);
+	      ROOT::Fit::FillData(data, data_hist_meffred);
+	      
+	      /*std::cout << "===========================================================================" << std::endl;
+	      ROOT::Math::WrappedMultiTF1 fitFunction1(*funcHypLogisticS, funcHypLogisticS->GetNdim() );
+	      ROOT::Fit::Fitter fitter1;
+	      fitter1.SetFunction( fitFunction1, false);
+	      double p0_1[4] = {1.0, 0.01, 1100, 1.0};
+	      //if(ybin == 7){
+	      //p0_1[2] = 0;
+	      //}
+	      fitter1.Config().SetParamsSettings(4, p0_1);
+	      fitter1.Config().MinimizerOptions().SetPrintLevel(0);
+	      fitter1.Config().MinimizerOptions().SetStrategy(0);
+	      fitter1.Config().SetMinimizer("Minuit2","Migrad");
+	      fitter1.Fit(data);					       
+	      ROOT::Fit::FitResult result1 = fitter1.Result();
+	      
+	      if(result1.Status() != 0 && result1.Status() != 1){
+		std::cout << "WARNING: The fit did not converge with minimizer status " << result1.Status() << std::endl;
+		
+		result1.Print(std::cout);
+		
+		result1.PrintCovMatrix(std::cout);
+		
+		std::cout << "Retrying with strategy 1" << std::endl;
+		
+		fitter1.Config().MinimizerOptions().SetStrategy(1);
+		
+		fitter1.Fit(data);
+		
+		result1 = fitter1.Result();
+
+	      }
+	      if(result1.Status() != 0 && result1.Status() != 1){
+		std::cout << "WARNING: The fit did not converge with minimizer status "<< result1.Status() << std::endl;
+
+                result1.Print(std::cout);
+
+                result1.PrintCovMatrix(std::cout);
+
+		std::cout << "Retrying with strategy 2" << std::endl;
+
+                fitter1.Config().MinimizerOptions().SetStrategy(2);
+		
+                fitter1.Fit(data);
+
+		result1 = fitter1.Result();
+
+	      } 
+
+	      std::cout << "Fit Status: " << result1.Status() << std::endl;
+
+	      result1.Print(std::cout);
+	      result1.PrintCovMatrix(std::cout);
+	      f_out->cd();
+
+	      for(int ipar = 0; ipar < funcHypLogisticS->GetNpar(); ipar++){
+		std::cout << "p"+std::to_string(ipar)+": " << funcHypLogisticS->GetParameter(ipar) << std::endl;
+	      }
+
+	      funcHypLogisticS->Write();*/
+
+	      std::cout<< "===========================================================================" << std::endl;
+	      ROOT::Math::WrappedMultiTF1 fitFunction2(*funcLogisticS, funcLogisticS->GetNdim() );
+	      ROOT::Fit::Fitter fitter2;
+              fitter2.SetFunction( fitFunction2, false);
+	      double p0_2[4] = {1.0, 0.01, 1100, 1.0};
+	      if(ybin-1 == 3){
+		p0_2[2] = 2250.0;
+	      }
+	      if(ybin-1 == 4){
+                p0_2[2] = 1700.;
+              }
+	      if(ybin-1 == 5){
+		p0_2[2] = 1700.;
+		//p0_2[2] = 1600;
+	      }
+	      if(ybin-1 == 6){
+		p0_2[2] = 1700.;
+
+	      }
+	      if(ybin-1 == 7){
+		p0_2[0] = 0.80;
+		p0_2[1] = 0.001;
+	      	p0_2[2] = 0;
+		p0_2[3] = 1.15;
+	      }
+              fitter2.Config().SetParamsSettings(4, p0_2);
+	      if(ybin-1 ==3){
+		fitter2.Config().ParSettings(2).Fix();
+	      }
+	      if(ybin -1 ==4){
+                fitter2.Config().ParSettings(2).Fix();
+              }
+	      if(ybin -1 ==5){
+	      	fitter2.Config().ParSettings(2).Fix();
+	      } 
+	      if(ybin -1 == 6){
+		fitter2.Config().ParSettings(2).Fix();
+	      }
+	      if(ybin -1 ==7){
+	      	fitter2.Config().ParSettings(2).Fix();
+	      }
+	      fitter2.Config().MinimizerOptions().SetStrategy(0);
+	      fitter2.Config().MinimizerOptions().SetPrintLevel(0);
+              fitter2.Config().SetMinimizer("Minuit2","Migrad");
+              fitter2.Fit(data);
+	      ROOT::Fit::FitResult result2 = fitter2.Result();
+
+	      if(result2.Status() != 0 && result2.Status() != 1){
+		std::cout << "WARNING: The fit did not converge with minimizer status " << result2.Status() << std::endl;
+
+                result2.Print(std::cout);
+
+                result2.PrintCovMatrix(std::cout);
+
+		std::cout << "Retrying with strategy 1" << std::endl;
+
+		fitter2.Config().MinimizerOptions().SetStrategy(1);
+
+		fitter2.Fit(data);
+
+		result2 = fitter2.Result();
+
+	      } 
+              if(result2.Status() != 0 && result2.Status() != 1){
+		std::cout << "WARNING: The fit did not converge with minimizer status "<< result2.Status() << std::endl;
+
+		result2.Print(std::cout);
+
+                result2.PrintCovMatrix(std::cout);
+
+		std::cout << "Retrying with strategy 2" << std::endl;
+
+                fitter2.Config().MinimizerOptions().SetStrategy(2);
+
+                fitter2.Fit(data);
+
+                result2 = fitter2.Result();
+
+              }
+
+
+	      std::cout << "Fit Status: " << result2.Status() << std::endl;
+              result2.Print(std::cout);
+              result2.PrintCovMatrix(std::cout);
+              f_out->cd();
+
+	      for(int ipar = 0; ipar < funcLogisticS->GetNpar(); ipar++){
+		std::cout << "p"+std::to_string(ipar)+": " << funcLogisticS->GetParameter(ipar) << std::endl;
+              }
+
+              funcLogisticS->Write();
+	      //#######################################################################
 	      
 
-	      funcSech->SetParameters(1.0,1.0,0.001);
+	      /*funcSigmoid->SetParameters(1.15, 0.80, 0.001);
+	      
+	      funcLogisticS->SetParameters(1.0, 0.01 ,1100, 1.0);
+	      
+	      if(ybin -1 == 5){
+		funcLogisticS->SetParameters(1.0, 0.1 ,1100, 1.0);
+	      }
+	      else if(ybin -1 == 7){
+		funcLogisticS->SetParameters(1.0, 0.01 ,1100, 1.0);
+	      }
 
-	      //data_hist_meffred->Fit(funcHyperbola, "M WW");
-	      
-	      data_hist_meffred->Fit(funcSigmoid, "M WW R");
-	      
-	      //data_hist_meffred->Fit(funcSech, "M WW");
-	      
-	      //data_hist_meffred->Fit(funcArcSinh, "M WW");
+	      //funcLogisticS->SetParameters(1.0, 0.01 ,11, 1.0);
 
-	      //f_out->cd();
-	      //funcHyperbola->Write();
+	      //TFitResultPtr r = data_hist_meffred->Fit(funcSigmoid, "M WW R S");
+	      TFitResultPtr r = data_hist_meffred->Fit(funcLogisticS, "M R S");
+
+	      //TMatrixD cor = r->GetCorrelationMatrix();
+	      TMatrixD cov = r->GetCovarianceMatrix();
+	      //cor.Print();
+	      cov.Print();
 	      
 	      f_out->cd();
-	      funcSigmoid->Write();
+	      //funcSigmoid->Write();
+	      funcLogisticS->Write();*/
 
-	      //f_out->cd();
-              //funcSech->Write();
 
-	      //f_out->cd();
-	      //funcArcSinh->Write();
 
 	    }
 	    
+	    f_out -> cd();
+	    data_hist_meffred->Write();
+
 	    for(int xbin = 1; xbin <= meffred_rw -> GetNbinsX(); xbin++){
 
 	      meffred_rw -> SetBinContent(xbin, ybin, data_hist_meffred -> GetBinContent(xbin));

@@ -481,19 +481,19 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "mtw",         25, 0, 1000,    ";m_{T}(W) [GeV]", otherVariables, &(m_outData -> o_mtwl) );
       m_outMngrHist -> AddStandardTH1( "ptw",         25, 0, 1000,    ";p_{T}(W) [GeV]", false, &(m_outData -> o_ptwl) );
       m_outMngrHist -> AddStandardTH1( "mll",         5, 0, 500,    ";m_{ll} [GeV]", false, &(m_outData -> o_mll) );
-      m_outMngrHist -> AddStandardTH1( "hthad",       25, 0, 3000,    ";H_{T}^{had} [GeV]", false, &(m_outData -> o_hthad) );
+      m_outMngrHist -> AddStandardTH1( "hthad",       25, 0, 3000,    ";H_{T}^{had} [GeV]", otherVariables, &(m_outData -> o_hthad) );
       m_outMngrHist -> AddStandardTH1( "hthadRC",     50, 0, 5000,    ";H_{T}^{had} (RC jets) [GeV]", false, &(m_outData -> o_hthadRC) );
       m_outMngrHist -> AddStandardTH1( "hthadRCtag",     50, 0, 5000,  ";H_{T}^{had} (tagged RC jets) [GeV]", false, &(m_outData -> o_hthadRCtag) );
       m_outMngrHist -> AddStandardTH1( "hthadRCM",     50, 0, 5000,  ";H_{T}^{had} (RC jets w/ M>100 GeV) [GeV]", false, &(m_outData -> o_hthadRCM) );
 
       m_outMngrHist -> AddStandardTH1( "truth_ht_filter",    25, 0, 3000,    ";Truth H_{T} [GeV]", false, &(m_outData -> o_truth_ht_filter ) );
       m_outMngrHist -> AddStandardTH1( "truth_met_filter",   25, 0, 1000,    ";Truth MET [GeV]", false, &(m_outData -> o_truth_met_filter ) );
-      m_outMngrHist -> AddStandardTH1( "mtbmin",      25, 0, 500,    ";m_{T}^{min}(b,MET)", false, &(m_outData->o_mTbmin) );
+      m_outMngrHist -> AddStandardTH1( "mtbmin",      25, 0, 500,    ";m_{T}^{min}(b,MET)", otherVariables, &(m_outData->o_mTbmin) );
       m_outMngrHist -> AddStandardTH1( "metsig_ev",     0.5, 0, 50,    ";E_{T}^{miss}/#sqrt{H_{T}^{had}} [#sqrt{GeV}]", false, &(m_outData -> o_metsig_ev) );
       m_outMngrHist -> AddStandardTH1( "metsig_obj",    0.5, 0, 50,    "; #sigma(E_{T}^{miss}) [#sqrt{GeV}]", false, &(m_outData -> o_metsig_obj) );
       
-      m_outMngrHist -> AddStandardTH2( "meff", "jets_n", 50, 0, 5000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} [GeV]", (RWderiv||otherVariables), &(m_outData -> o_meff), &(m_outData -> o_jets_n));
-      m_outMngrHist -> AddStandardTH2( "meffred", "jets_n", 50, 0, 5000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} reduced [GeV]", (RWderiv||otherVariables), &(m_outData -> o_meffred), &(m_outData -> o_jets_n));
+      m_outMngrHist -> AddStandardTH2( "meff", "jets_n", 50, 0, 5000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} [GeV]", true, &(m_outData -> o_meff), &(m_outData -> o_jets_n));
+      m_outMngrHist -> AddStandardTH2( "meffred", "jets_n", 50, 0, 5000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} reduced [GeV]", true, &(m_outData -> o_meffred), &(m_outData -> o_jets_n));
 
 
       /*
@@ -543,7 +543,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       
       //Jet variables
 
-      m_outMngrHist -> AddStandardTH1( "jets_n",      1, -2.5, 15.5,";Number of jets", (RWderiv||otherVariables), &(m_outData -> o_jets_n) );
+      m_outMngrHist -> AddStandardTH1( "jets_n",      1, -2.5, 15.5,";Number of jets", true, &(m_outData -> o_jets_n) );
       m_outMngrHist -> AddStandardTH1( "trkjets_n",      1, -2.5, 15.5,";Number of track-jets", otherVariables, &(m_outData -> o_trkjets_n) );
       m_outMngrHist -> AddStandardTH1( "fwdjets_n",   1, -0.5, 8.5,";Number of fwd-jets", otherVariables, &(m_outData -> o_fwdjets_n) );
       m_outMngrHist -> AddStandardTH1( "fwdjets_eta25_30_n",   1, -0.5, 8.5,";Number of fwd-jets 2.5<|#eta|<3.0", otherVariables, 
@@ -825,10 +825,10 @@ bool VLQ_Analysis_Data2015::Begin(){
       //const bool DrawSyst = (iRCJet == 0) && otherVariables;
 
       if(DrawReco){
-	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_pt",         50, 0, 1000, ";RC jet"+str_id+"  p_{T} [GeV]"      ,  false, &(m_outData -> o_rcjets), iRCJet, "Pt");
-	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_eta",        0.2, -3, 3,  ";RC jet"+str_id+"  #eta"             ,  false, &(m_outData -> o_rcjets), iRCJet, "Eta");
-	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_m",          10, 0, 500,  ";RC jet"+str_id+"  mass [GeV]"       ,  false, &(m_outData -> o_rcjets), iRCJet, "M");
-	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_nconsts",    1, -0.5,5.5, ";Number of RC jet"+str_id+"  consts" ,  false,    &(m_outData -> o_rcjets), iRCJet, "nconsts");
+	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_pt",         50, 0, 1000, ";RC jet"+str_id+"  p_{T} [GeV]"      ,  otherVariables, &(m_outData -> o_rcjets), iRCJet, "Pt");
+	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_eta",        0.2, -3, 3,  ";RC jet"+str_id+"  #eta"             ,  otherVariables, &(m_outData -> o_rcjets), iRCJet, "Eta");
+	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_m",          10, 0, 500,  ";RC jet"+str_id+"  mass [GeV]"       ,  otherVariables, &(m_outData -> o_rcjets), iRCJet, "M");
+	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_nconsts",    1, -0.5,5.5, ";Number of RC jet"+str_id+"  consts" ,  otherVariables,    &(m_outData -> o_rcjets), iRCJet, "nconsts");
 	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_nbconsts",    1, -0.5,5.5, ";Number of RC jet"+str_id+" b-tagged consts" ,  false,    &(m_outData -> o_rcjets), iRCJet, "nbconsts");
 	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_isRCTTMass", 1, -.5, 1.5, ";Mass Tag"          ,  false,    &(m_outData -> o_rcjets), iRCJet, "isRCTTMass");
 
@@ -2400,6 +2400,58 @@ bool VLQ_Analysis_Data2015::Terminate()
         histo->Scale(Scale);
       }
     }
+    
+
+    for(auto histname : m_outMngrHist->HistMngr()->GetTH2KeyList()){
+      TH2D* histo = m_outMngrHist->HistMngr()->GetTH2D(histname);
+
+      // Scaling ttbar HT slices (nominal and PMG weights)                                                                                                                                                
+      if( m_opt->ScaleTtbarHtSlices() ){
+	double Scale = 1.0;
+
+        if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
+          Scale = 1./0.99860961239196;
+          if ( m_opt -> ComputeWeightSys() ){
+            if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.00989117643996;
+            else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98630942849818;
+            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.01244857328796;
+            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.98661128202278;
+            else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.96762126478968;
+            else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.97391612230213;
+            else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.02221909345704;
+            else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.02018541245750;
+          }
+        }
+        if ( m_opt -> StrSampleID().find("407343.") != std::string::npos ){
+          Scale = 1./1.00220071443736;
+          if ( m_opt -> ComputeWeightSys() ){
+            if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.02075306498765;
+            else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98196927321205;
+            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.03193538833724;
+            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.99087003186616;
+            else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.91951515882506;
+            else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.93819392248974;
+            else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.06487669659290;
+            else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.06891808020899;
+          }
+        }
+        if ( m_opt -> StrSampleID().find("407342.") != std::string::npos ){
+          Scale = 1./1.01614066637173;
+          if ( m_opt -> ComputeWeightSys() ){
+            if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.04057257636042;
+            else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.99097386133341;
+            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.06280582379557;
+            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./1.00957616786319;
+            else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.89300718054136;
+            else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.90726044083483;
+            else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.12725897511274;
+            else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.12572488013792;
+          }
+        }
+	histo->Scale(Scale);
+      }
+    }
+
   }
 
   //
