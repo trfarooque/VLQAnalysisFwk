@@ -261,6 +261,11 @@ bool VLQ_Selector::Init(){
       if(m_opt->DeriveReweighting() ||  m_opt->DoExclusiveJetRegions()){ 
 	std::vector<std::string> v_jet_presel_ex = {"3jex","4jex","5jex","6jex","7jex","8jex","9jex","10jex","11jex"};
 	v_jet_presel.insert(v_jet_presel.end(),v_jet_presel_ex.begin(),v_jet_presel_ex.end());
+
+	if(m_opt->DeriveReweighting()){
+	  std::vector<std::string> v_jet_presel_in = {"7jin","8jin"};
+	  v_jet_presel.insert(v_jet_presel.end(),v_jet_presel_in.begin(),v_jet_presel_in.end());
+	}
       }
       
     }//sVLQ
