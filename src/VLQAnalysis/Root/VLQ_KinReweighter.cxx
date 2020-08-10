@@ -154,10 +154,6 @@ bool VLQ_KinReweighter::Init( /*std::map < int, Selection* >* selection_tree,*/ 
 
 	histName += "_meffred";
 
-	if(m_opt->DoKinRwSmoothing()){
-	  histName +="_fit";
-	}
-
       }
       else if(kinpair.second == JETSN) histName += "_jets_n";
 
@@ -302,7 +298,7 @@ double VLQ_KinReweighter::GetKinReweight( const int kinematic, const std::string
 
     if(source_reg == "c2lep3jin1bexZwinMLL_sf"){
 
-      if(m_opt->DoKinRwSmoothing()){
+      if(m_opt->DoKinRwSmoothing() && systematic == ""){
 
 	std::string histName = source_reg + "_" + kin + "_fit" + systematic;
 
@@ -347,7 +343,7 @@ double VLQ_KinReweighter::GetKinReweight( const int kinematic, const std::string
     }
     else if(source_reg == "c1lep3jin2bex"){
 
-      if(m_opt->DoKinRwSmoothing()){
+      if(m_opt->DoKinRwSmoothing() && systematic == ""){
 
 	std::string jet_prefix = (param2 < 7) ? std::to_string(param2) : "7";
 

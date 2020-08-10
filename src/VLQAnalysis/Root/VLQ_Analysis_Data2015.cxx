@@ -481,14 +481,14 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "mtw",         25, 0, 1000,    ";m_{T}(W) [GeV]", otherVariables, &(m_outData -> o_mtwl) );
       m_outMngrHist -> AddStandardTH1( "ptw",         25, 0, 1000,    ";p_{T}(W) [GeV]", false, &(m_outData -> o_ptwl) );
       m_outMngrHist -> AddStandardTH1( "mll",         5, 0, 500,    ";m_{ll} [GeV]", false, &(m_outData -> o_mll) );
-      m_outMngrHist -> AddStandardTH1( "hthad",       25, 0, 3000,    ";H_{T}^{had} [GeV]", false, &(m_outData -> o_hthad) );
+      m_outMngrHist -> AddStandardTH1( "hthad",       25, 0, 3000,    ";H_{T}^{had} [GeV]", (otherVariables||RWderiv), &(m_outData -> o_hthad) );
       m_outMngrHist -> AddStandardTH1( "hthadRC",     50, 0, 5000,    ";H_{T}^{had} (RC jets) [GeV]", false, &(m_outData -> o_hthadRC) );
       m_outMngrHist -> AddStandardTH1( "hthadRCtag",     50, 0, 5000,  ";H_{T}^{had} (tagged RC jets) [GeV]", false, &(m_outData -> o_hthadRCtag) );
       m_outMngrHist -> AddStandardTH1( "hthadRCM",     50, 0, 5000,  ";H_{T}^{had} (RC jets w/ M>100 GeV) [GeV]", false, &(m_outData -> o_hthadRCM) );
 
       m_outMngrHist -> AddStandardTH1( "truth_ht_filter",    25, 0, 3000,    ";Truth H_{T} [GeV]", false, &(m_outData -> o_truth_ht_filter ) );
       m_outMngrHist -> AddStandardTH1( "truth_met_filter",   25, 0, 1000,    ";Truth MET [GeV]", false, &(m_outData -> o_truth_met_filter ) );
-      m_outMngrHist -> AddStandardTH1( "mtbmin",      25, 0, 500,    ";m_{T}^{min}(b,MET)", false, &(m_outData->o_mTbmin) );
+      m_outMngrHist -> AddStandardTH1( "mtbmin",      25, 0, 500,    ";m_{T}^{min}(b,MET)", otherVariables, &(m_outData->o_mTbmin) );
       m_outMngrHist -> AddStandardTH1( "metsig_ev",     0.5, 0, 50,    ";E_{T}^{miss}/#sqrt{H_{T}^{had}} [#sqrt{GeV}]", false, &(m_outData -> o_metsig_ev) );
       m_outMngrHist -> AddStandardTH1( "metsig_obj",    0.5, 0, 50,    "; #sigma(E_{T}^{miss}) [#sqrt{GeV}]", false, &(m_outData -> o_metsig_obj) );
       
@@ -820,12 +820,12 @@ bool VLQ_Analysis_Data2015::Begin(){
       std::string str_id = "";
       str_id += std::to_string(iRCJet);
       if(iRCJet==-1) str_id = "s";
-      //const bool DrawSyst = (iRCJet == 0) && otherVariables;
+      const bool DrawSyst = (iRCJet == 0) && otherVariables;
 
       if(DrawReco){
-	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_pt",         50, 0, 1000, ";RC jet"+str_id+"  p_{T} [GeV]"      ,  false, &(m_outData -> o_rcjets), iRCJet, "Pt");
-	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_eta",        0.2, -3, 3,  ";RC jet"+str_id+"  #eta"             ,  false, &(m_outData -> o_rcjets), iRCJet, "Eta");
-	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_m",          10, 0, 500,  ";RC jet"+str_id+"  mass [GeV]"       ,  false, &(m_outData -> o_rcjets), iRCJet, "M");
+	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_pt",         50, 0, 1000, ";RC jet"+str_id+"  p_{T} [GeV]"      ,  DrawSyst, &(m_outData -> o_rcjets), iRCJet, "Pt");
+	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_eta",        0.2, -3, 3,  ";RC jet"+str_id+"  #eta"             ,  DrawSyst, &(m_outData -> o_rcjets), iRCJet, "Eta");
+	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_m",          10, 0, 500,  ";RC jet"+str_id+"  mass [GeV]"       ,  DrawSyst, &(m_outData -> o_rcjets), iRCJet, "M");
 	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_nconsts",    1, -0.5,5.5, ";Number of RC jet"+str_id+"  consts" ,  false,    &(m_outData -> o_rcjets), iRCJet, "nconsts");
 	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_nbconsts",    1, -0.5,5.5, ";Number of RC jet"+str_id+" b-tagged consts" ,  false,    &(m_outData -> o_rcjets), iRCJet, "nbconsts");
 	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_isRCTTMass", 1, -.5, 1.5, ";Mass Tag"          ,  false,    &(m_outData -> o_rcjets), iRCJet, "isRCTTMass");
@@ -2347,58 +2347,106 @@ bool VLQ_Analysis_Data2015::Terminate()
   //
   // Reweighting histograms with flat scales
   //
-  if( m_outData -> o_is_ttbar ){
+  if( m_outData -> o_is_ttbar && m_opt->ScaleTtbarHtSlices() ){
 
     for(auto histname : m_outMngrHist->HistMngr()->GetTH1KeyList()){
       TH1D* histo = m_outMngrHist->HistMngr()->GetTH1D(histname);
     
       // Scaling ttbar HT slices (nominal and PMG weights)
-      if( m_opt->ScaleTtbarHtSlices() ){
-          double Scale = 1.0;
 
-        if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
-          Scale = 1./0.99860961239196;
-          if ( m_opt -> ComputeWeightSys() ){
-            if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.00989117643996;
-            else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98630942849818;
-            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.01244857328796;
-            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.98661128202278;
-            else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.96762126478968;
-            else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.97391612230213;
-            else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.02221909345704;
-            else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.02018541245750;
-          }
-        }
-        if ( m_opt -> StrSampleID().find("407343.") != std::string::npos ){
-          Scale = 1./1.00220071443736;
-          if ( m_opt -> ComputeWeightSys() ){
-            if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.02075306498765;
-            else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98196927321205;
-            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.03193538833724;
-            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.99087003186616;
-            else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.91951515882506;
-            else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.93819392248974;
-            else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.06487669659290;
-            else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.06891808020899;
-          }
-        }
-        if ( m_opt -> StrSampleID().find("407342.") != std::string::npos ){
-          Scale = 1./1.01614066637173;
-          if ( m_opt -> ComputeWeightSys() ){
-            if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.04057257636042;
-            else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.99097386133341;
-            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.06280582379557;
-            else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./1.00957616786319;
-            else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.89300718054136;
-            else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.90726044083483;
-            else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.12725897511274;
-            else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.12572488013792;
-          }
-        }
-        histo->Scale(Scale);
+      double Scale = 1.0;
+
+      if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
+	Scale = 1./0.99860961239196;
+	if ( m_opt -> ComputeWeightSys() ){
+	  if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.00989117643996;
+	  else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98630942849818;
+	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.01244857328796;
+	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.98661128202278;
+	  else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.96762126478968;
+	  else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.97391612230213;
+	  else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.02221909345704;
+	  else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.02018541245750;
+	}
       }
-    }
-  }
+      if ( m_opt -> StrSampleID().find("407343.") != std::string::npos ){
+	Scale = 1./1.00220071443736;
+	if ( m_opt -> ComputeWeightSys() ){
+	  if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.02075306498765;
+	  else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98196927321205;
+	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.03193538833724;
+	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.99087003186616;
+	  else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.91951515882506;
+	  else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.93819392248974;
+	  else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.06487669659290;
+	  else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.06891808020899;
+	}
+      }
+      if ( m_opt -> StrSampleID().find("407342.") != std::string::npos ){
+	Scale = 1./1.01614066637173;
+	if ( m_opt -> ComputeWeightSys() ){
+	  if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.04057257636042;
+	  else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.99097386133341;
+	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.06280582379557;
+	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./1.00957616786319;
+	  else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.89300718054136;
+	  else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.90726044083483;
+	  else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.12725897511274;
+	  else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.12572488013792;
+	}
+      }
+      histo->Scale(Scale);
+
+    }//TH1
+
+    for(auto histname : m_outMngrHist->HistMngr()->GetTH2KeyList()){
+      TH2D* histo = m_outMngrHist->HistMngr()->GetTH2D(histname);
+    
+      double Scale = 1.0;
+
+      if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
+	Scale = 1./0.99860961239196;
+	if ( m_opt -> ComputeWeightSys() ){
+	  if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.00989117643996;
+	  else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98630942849818;
+	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.01244857328796;
+	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.98661128202278;
+	  else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.96762126478968;
+	  else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.97391612230213;
+	  else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.02221909345704;
+	  else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.02018541245750;
+	}
+      }
+      if ( m_opt -> StrSampleID().find("407343.") != std::string::npos ){
+	Scale = 1./1.00220071443736;
+	if ( m_opt -> ComputeWeightSys() ){
+	  if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.02075306498765;
+	  else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98196927321205;
+	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.03193538833724;
+	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.99087003186616;
+	  else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.91951515882506;
+	  else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.93819392248974;
+	  else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.06487669659290;
+	  else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.06891808020899;
+	}
+      }
+      if ( m_opt -> StrSampleID().find("407342.") != std::string::npos ){
+	Scale = 1./1.01614066637173;
+	if ( m_opt -> ComputeWeightSys() ){
+	  if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.04057257636042;
+	  else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.99097386133341;
+	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.06280582379557;
+	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./1.00957616786319;
+	  else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.89300718054136;
+	  else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.90726044083483;
+	  else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.12725897511274;
+	  else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.12572488013792;
+	}
+      }
+      histo->Scale(Scale);
+    }//TH2
+
+  }//scaling ttbar files
 
   //
   // Writing outputs
