@@ -41,7 +41,7 @@ m_leptopRecoOpt(0)
 
   m_resonance_maker = new VLQ_ResonanceMaker(opt, outData);
 
-  if(m_opt->LepWOpt().find("VANILLA") != std::string::npos) 
+  if(m_opt->LepWOpt().find("VANILLA") != std::string::npos)
     m_lepWRecoOpt |= VLQ_ResonanceMaker::VANILLA;
   if(m_opt->LepWOpt().find("COLLINEAR") != std::string::npos)
     m_lepWRecoOpt |= VLQ_ResonanceMaker::COLLINEAR;
@@ -49,7 +49,7 @@ m_leptopRecoOpt(0)
     m_lepWRecoOpt |= VLQ_ResonanceMaker::MW_CONSTRAINT;
 
 
-  if(m_opt->LeptopOpt().find("VETO_RCMATCH") != std::string::npos) 
+  if(m_opt->LeptopOpt().find("VETO_RCMATCH") != std::string::npos)
     m_leptopRecoOpt |= VLQ_ResonanceMaker::VETO_RCMATCH;
   if(m_opt->LeptopOpt().find("USE_LIGHT") != std::string::npos)
     m_leptopRecoOpt |= VLQ_ResonanceMaker::USE_LIGHT;
@@ -175,10 +175,10 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
   double pTmax_lep = 0;
   for(AnalysisObject* lep : *(m_outData -> o_lep)){
     if(lep->Pt() > pTmax_lep){
-      pTmax_lep = lep->Pt(); 
+      pTmax_lep = lep->Pt();
       m_outData -> o_selLep = lep;
     }
-  } 
+  }
 
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Track jets -only if trkjet b-tagging is used
@@ -191,30 +191,30 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
 	std::cout << "==> In the Track Jet builder:  pt " << m_ntupData -> d_trkjet_pt -> at(iTJet);
 	std::cout << "    eta " <<  TMath::Abs(m_ntupData -> d_trkjet_eta -> at(iTJet))  << std::endl;
       }
-      
+
       bool isSignalJet = m_ntupData -> d_trkjet_pt -> at(iTJet)  >= m_opt->TrkJetsPtCut();
       isSignalJet = isSignalJet && TMath::Abs( m_ntupData -> d_trkjet_eta -> at(iTJet) ) < 2.5;
       if( isSignalJet ){
 	AnalysisObject *obj = new AnalysisObject();
 	obj -> SetPtEtaPhiM( m_ntupData -> d_trkjet_pt -> at(iTJet), m_ntupData -> d_trkjet_eta -> at(iTJet), m_ntupData -> d_trkjet_phi -> at(iTJet), 0. );
-	
+
 	int isB = m_ntupData -> d_trkjet_isb -> at(iTJet);
 	obj -> SetMoment("isb", isB );
 	obj -> SetMoment("btagw", m_ntupData -> d_trkjet_btag_weight -> at(iTJet) );
-	
+
 	if ( !(m_opt -> IsData() || (m_opt -> StrSampleName().find("QCD") != std::string::npos)) ) {
 	  obj -> SetMoment("truthLabel", m_ntupData -> d_trkjet_truthLabel -> at(iTJet) );
 	}
-	
+
 	obj->SetMoment("calomatch",0); //initial default
 	obj -> SetMoment("bjet",isB);
-	
+
 	double reff = max(0.02,min(0.4,30./obj->Pt()));
 	obj->SetMoment("reff",reff);
-	
+
 	if( isB == 1 ){
 	  m_outData -> o_trkbjets -> push_back(obj);
-	  
+
 	  if( !m_opt->IsData() ){
 	    if( abs(obj->GetMoment("truthLabel")) == 5 ){
 	      m_outData -> o_trkbjets_truth_b -> push_back(obj);
@@ -228,15 +228,15 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
 	    else{
 	      m_outData -> o_trkbjets_truth_lqg -> push_back(obj);
 	    }
-	    
+
 	  }//MC
-	  
+
 	} else {
 	  m_outData -> o_trkljets -> push_back(obj);
 	}
-	
+
 	m_outData -> o_trkjets -> push_back(obj);
-	
+
 	if( !m_opt->IsData() ){
 	  if( abs(obj->GetMoment("truthLabel")) == 5 ){
 	    m_outData -> o_trkjets_truth_b -> push_back(obj);
@@ -250,28 +250,28 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
 	  else{
 	    m_outData -> o_trkjets_truth_lqg -> push_back(obj);
 	  }
-	  
+
 	}//MC
-	
-	
+
+
       }
-      
+
     }//loop over all track jets
-    
-    
+
+
     //=============== Re-run loop to clean concentric track jets ===========
-    
+
     for( std::vector<AnalysisObject*>::iterator tj_i = m_outData->o_trkjets->begin();
 	 tj_i < (m_outData -> o_trkjets)->end(); ){
-      
+
       double reff_i = (*tj_i)->GetMoment("reff");
       bool is_concentric = false;
-      
+
       for( std::vector<AnalysisObject*>::iterator tj_j = tj_i+1;
 	   tj_j < (m_outData -> o_trkjets)->end(); ){
-	
+
 	double reff_j = (*tj_j)->GetMoment("reff");
-	
+
 	double dr = (*tj_i)->DeltaR(*(*tj_j));
 	if(dr < min(reff_i,reff_j) ){
 	  is_concentric = true;
@@ -281,22 +281,22 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
 	else{
 	  tj_j++;
 	}
-	
+
       }//inner loop
-      
+
       if(is_concentric){
 	tj_i = (m_outData -> o_trkjets)->erase(tj_i);
       }
       else{
 	tj_i++;
       }
-      
+
     }//
-    
+
     m_outData -> o_trkjets_n      = m_outData -> o_trkjets -> size();
     m_outData -> o_trkbjets_n      = m_outData -> o_trkbjets -> size();
     m_outData -> o_trkljets_n      = m_outData -> o_trkljets -> size();
-    
+
     if( !m_opt->IsData() ){
       m_outData -> o_trkjets_truth_b_n = m_outData -> o_trkjets_truth_b -> size();
       m_outData -> o_trkjets_truth_c_n = m_outData -> o_trkjets_truth_c -> size();
@@ -312,8 +312,8 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
 
 
   } // if track jets are to be used
-  
-  
+
+
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Small-radius jets
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -326,13 +326,13 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
 
     bool isSignalJet = m_ntupData -> d_jet_pt -> at(iJet)  >= m_opt->JetsPtCut();
     isSignalJet = isSignalJet && TMath::Abs( m_ntupData -> d_jet_eta -> at(iJet) ) < m_opt->JetsEtaCut();
-    isSignalJet = isSignalJet && ( ( (m_ntupData -> d_jet_jvt -> at(iJet) > 0.11) && (TMath::Abs( m_ntupData -> d_jet_eta -> at(iJet) ) > 2.4) ) 
+    isSignalJet = isSignalJet && ( ( (m_ntupData -> d_jet_jvt -> at(iJet) > 0.11) && (TMath::Abs( m_ntupData -> d_jet_eta -> at(iJet) ) > 2.4) )
     				   || (m_ntupData -> d_jet_jvt -> at(iJet) > 0.59)
-    				   || (m_ntupData -> d_jet_pt -> at(iJet) > 120.) ); 
+    				   || (m_ntupData -> d_jet_pt -> at(iJet) > 120.) );
     if( isSignalJet ){
       AnalysisObject *obj = new AnalysisObject();
       obj -> SetPtEtaPhiE( m_ntupData -> d_jet_pt -> at(iJet), m_ntupData -> d_jet_eta -> at(iJet), m_ntupData -> d_jet_phi -> at(iJet), m_ntupData -> d_jet_E -> at(iJet) );
-     
+
       obj -> SetMoment("isb", ( m_ntupData -> d_jet_isb -> at(iJet) )  );
       obj -> SetMoment("btagw",    m_ntupData -> d_jet_btag_weight -> at(iJet) );
 
@@ -342,7 +342,7 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
       obj -> SetMoment("jvt", m_ntupData -> d_jet_jvt -> at(iJet) );
 
       obj -> SetMoment("RCtag_match", 0); //initial default
- 
+
       int isB = 0;
 
       if(m_opt->BtagCollection()==VLQ_Options::CALOTOPO || m_opt->BtagCollection()==VLQ_Options::CALOPFLOW){
@@ -359,14 +359,14 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
 	    break;
 	  }
 	}
-	
+
       }
-      
+
       obj -> SetMoment("bjet",isB);
-      
+
       if( isB == 1 ){
 	m_outData -> o_bjets -> push_back(obj);
-	
+
 	if( !m_opt->IsData() ){
 	  if( abs(obj->GetMoment("truthLabel")) == 5 ){
 	    m_outData -> o_bjets_truth_b -> push_back(obj);
@@ -380,16 +380,16 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
 	  else{
 	    m_outData -> o_bjets_truth_lqg -> push_back(obj);
 	  }
-	  
+
 	}//MC
-	
+
       } else {
 	m_outData -> o_ljets -> push_back(obj);
       }
-      
-      
+
+
       m_outData -> o_jets -> push_back(obj);
-      
+
       if( !m_opt->IsData() ){
 	if( abs(obj->GetMoment("truthLabel")) == 5 ){
 	  m_outData -> o_jets_truth_b -> push_back(obj);
@@ -403,11 +403,11 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
 	else{
 	  m_outData -> o_jets_truth_lqg -> push_back(obj);
 	}
-	
+
       }//MC
-      
+
     }
-    
+
   }//loop over all jets
 
 
@@ -423,7 +423,7 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
     // Forward jets
     bool isFwdJet = m_ntupData -> d_fwdjet_pt -> at(iFwdjet)  >= m_opt->FwdJetsPtCut();
     isFwdJet = isFwdJet && TMath::Abs( m_ntupData -> d_fwdjet_eta -> at(iFwdjet) ) < m_opt->FwdJetsEtaCut() && TMath::Abs( m_ntupData -> d_fwdjet_eta -> at(iFwdjet) ) >= m_opt->JetsEtaCut();
-    isFwdJet = isFwdJet && ( (m_ntupData -> d_fwdjet_fJvt -> at(iFwdjet) < 0.5) || (m_ntupData -> d_fwdjet_pt -> at(iFwdjet) > 120.) ); 
+    isFwdJet = isFwdJet && ( (m_ntupData -> d_fwdjet_fJvt -> at(iFwdjet) < 0.5) || (m_ntupData -> d_fwdjet_pt -> at(iFwdjet) > 120.) );
 
     if( isFwdJet ){
       AnalysisObject *obj = new AnalysisObject();
@@ -436,7 +436,7 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
     }
   }//loop over all fwd jets
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "==> After filling fwd jets  " << std::endl;
-  
+
   //If doing low-b regions, fill the low-b fake b's
   if( m_opt->DoLowBRegions() ){
     //ONLY FOR CALO-JETS
@@ -453,7 +453,7 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
   m_outData -> o_fwdjets_eta40_45_n    = m_outData -> o_fwdjets_eta40_45  -> size();
   m_outData -> o_bjets_n      = m_outData -> o_bjets -> size();
   m_outData -> o_ljets_n      = m_outData -> o_ljets -> size();
-  
+
   if( !m_opt->IsData() ){
     m_outData -> o_jets_truth_b_n = m_outData -> o_jets_truth_b -> size();
     m_outData -> o_jets_truth_c_n = m_outData -> o_jets_truth_c -> size();
@@ -501,14 +501,14 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
 	if( obj->DeltaR(*sbjet) < 1.0 ) nb_match++;
       }
       obj -> SetMoment("nbconsts",   nb_match);
-      
+
       //
       // Truth matching
       //
       obj -> SetMoment( "pdgId_truth", 0 );
       obj -> SetMoment( "nmatch_truth", 0 );
-      
-      
+
+
       //
       // Tagging by different algorithms
       //
@@ -530,7 +530,7 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
 	 isHiggs = isHiggs && ( obj -> Pt() < 500 ? m_ntupData -> d_rcjets_nconsts -> at(iRCJet) == 2 : m_ntupData -> d_rcjets_nconsts -> at(iRCJet) <= 2);
       }
       else{
-	isHiggs = isHiggs && ( m_ntupData -> d_rcjets_nconsts -> at(iRCJet) == 2 ? obj -> Pt() > 350 : 
+	isHiggs = isHiggs && ( m_ntupData -> d_rcjets_nconsts -> at(iRCJet) == 2 ? obj -> Pt() > 350 :
 			       m_ntupData -> d_rcjets_nconsts -> at(iRCJet) == 1 && obj -> Pt() > 600 );
       }
       obj -> SetMoment("isRCMHiggs", isHiggs);
@@ -547,9 +547,9 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
       // Very loose HOT jets
       const bool isLooseHOT = obj->M() > 50 && m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 1 && obj -> Pt() > 300;
       obj -> SetMoment("isLooseRCTTMass", isLooseHOT);
-      
+
       obj -> SetMoment("isRCMTopHiggs", (isTop || isHiggs) );
-      
+
       if( isHOT ){
         m_outData -> o_taggedjets.at("RCTTMass") -> push_back(obj);
       }
@@ -561,7 +561,7 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
 	if(nb_match == 0) m_outData -> o_taggedjets.at("RCMTop0b") -> push_back(obj);
 	else if(nb_match == 1) m_outData -> o_taggedjets.at("RCMTop1b") -> push_back(obj);
 	else if(nb_match >= 2) m_outData -> o_taggedjets.at("RCMTop2bin") -> push_back(obj);
-	
+
       }
       if( isHiggs ){
         m_outData -> o_taggedjets.at("RCMHiggs") -> push_back(obj);
@@ -577,21 +577,21 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
       if( isLooseHOT ){
 	m_outData -> o_taggedjets.at("LooseRCTTMass") -> push_back(obj);
       }
-      
+
       //===== Loop over small-R jet container and set a flag if it is matched to one of the tagged jets ====
       if( isTop || isHiggs || isV ){
 	for( AnalysisObject* jet : *(m_outData -> o_jets) ){
 	  if(obj -> DeltaR(*jet) < 1.0) jet->UpdateMoment("RCtag_match", 1);
 	}
       }
-      
+
       if(m_outData -> o_selLep){
 	obj -> SetMoment ("dPhi_lep", fabs(obj->DeltaPhi( *(m_outData -> o_selLep) )) );
 	obj -> SetMoment ("dR_lep", fabs(obj->DeltaR( *(m_outData -> o_selLep) )) );
       }
 
       obj -> SetMoment ("dPhi_met", fabs(obj->DeltaPhi( *(m_outData -> o_AO_met) )) );
-      
+
       m_outData -> o_rcjets -> push_back(obj);
     }
   }
@@ -798,7 +798,7 @@ bool VLQ_AnalysisTools::PassBTagRequirement( const int btag_req, const bool isIn
       if( source_bjets_n < btag_req ) return false;
       return true;
     }
-  }//Direct tagging 
+  }//Direct tagging
   else {
     if( ( m_outData -> o_TRF_bjets_n == btag_req ) && ( m_outData -> o_TRF_isIncl == isIncl ) ){
       //the TRF weights are already computed in this configuration ... not need to spend time redoing it
@@ -845,9 +845,9 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_ptwl (" << m_outData -> o_ptwl << ")"  << std::endl;
 
   AOVector v_lep;
-  v_lep.insert( v_lep.end(), m_outData -> o_el->begin(), m_outData -> o_el->end()); 
-  v_lep.insert( v_lep.end(), m_outData -> o_mu->begin(), m_outData -> o_mu->end()); 
-  m_outData -> o_mll          = m_varComputer -> GetMjjLeadingJets( v_lep ); 
+  v_lep.insert( v_lep.end(), m_outData -> o_el->begin(), m_outData -> o_el->end());
+  v_lep.insert( v_lep.end(), m_outData -> o_mu->begin(), m_outData -> o_mu->end());
+  m_outData -> o_mll          = m_varComputer -> GetMjjLeadingJets( v_lep );
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_mll (" << m_outData -> o_mll << ")"  << std::endl;
 
   m_outData -> o_hthad        = m_varComputer -> GetHtHad( *(m_outData->o_jets) );
@@ -903,7 +903,7 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
     m_outData ->  o_dRaverage_jetjet = m_varComputer -> GetAveragedR( *(m_outData->o_jets), *(m_outData->o_jets) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dRaverage_jetjet  (" << m_outData ->  o_dRaverage_jetjet << ")"  << std::endl;
     m_outData -> o_mjj_leading_jets = m_varComputer -> GetMjjLeadingJets( *(m_outData->o_jets) );
-    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_mjj_leading_jets (" << m_outData -> o_mjj_leading_jets << ")" << std::endl; 
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_mjj_leading_jets (" << m_outData -> o_mjj_leading_jets << ")" << std::endl;
     m_outData -> o_mjj_maxdR = m_varComputer -> GetMjjMaxDr( *(m_outData->o_jets) ) ;
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_mjj_maxdR (" << m_outData -> o_mjj_maxdR << ")" << std::endl;
     m_outData -> o_mjj_mindR = m_varComputer -> GetMjjMinDr( *(m_outData->o_jets) ) ;
@@ -922,7 +922,7 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtajj_maxdR (" << m_outData -> o_dEtajj_maxdR << ")" << std::endl;
   }
   this -> ComputeBTagVariables();
-  
+
   this -> UpdateBTagMoments();
 
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "Leaving VLQ_AnalysisTools::ComputeAllVariables()" << std::endl;
@@ -970,12 +970,12 @@ bool VLQ_AnalysisTools::ComputeBTagVariables() {
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_mbb_maxdR (" << m_outData -> o_mbb_maxdR << ")" << std::endl;
     m_outData -> o_dPhibb_leading_bjets = m_varComputer -> GetDphibbLeadingBjets( *(source_bjets) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dPhibb_leading_bjets (" << m_outData -> o_dPhibb_leading_bjets << ")" << std::endl;
-    m_outData -> o_dPhibb_mindR = m_varComputer -> GetDphibbMinDr( *(source_bjets) ); 
+    m_outData -> o_dPhibb_mindR = m_varComputer -> GetDphibbMinDr( *(source_bjets) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dPhibb_mindR (" << m_outData -> o_dPhibb_mindR << ")" << std::endl;
     m_outData -> o_dPhibb_maxdR = m_varComputer -> GetDphibbMaxDr( *(source_bjets) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dPhibb_maxdR (" << m_outData ->o_dPhibb_maxdR << ")" << std::endl;
     m_outData -> o_dEtabb_leading_bjets = m_varComputer -> GetDetabbLeadingBjets( *(source_bjets) );
-    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtabb_leading_bjets (" << m_outData -> o_dEtabb_leading_bjets << ")" << std::endl;  
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtabb_leading_bjets (" << m_outData -> o_dEtabb_leading_bjets << ")" << std::endl;
     m_outData -> o_dEtabb_mindR = m_varComputer -> GetDetabbMinDr( *(source_bjets) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtabb_mindR (" << m_outData -> o_dEtabb_mindR << ")" << std::endl;
     m_outData -> o_dEtabb_maxdR = m_varComputer -> GetDetabbMaxDr( *(source_bjets) );
@@ -1068,14 +1068,14 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
   AOVector* source_bjets = (m_opt->BtagCollection() == VLQ_Options::TRACK) ? m_outData -> o_trkbjets : m_outData -> o_bjets ;
 
   for(AnalysisObject* obj : *(m_outData->o_rcjets)){
-    
+
     int nb_match = 0;
     //Find number of b-tagged jets matched to this jet (//do this inside BTagVariables)
     for(AnalysisObject* sbjet : *(source_bjets )){
       if( obj->DeltaR(*sbjet) < 1.0 ) nb_match++;
     }
     obj -> UpdateMoment("nbconsts",   nb_match);
-    
+
 
     if( m_outData -> o_leptop ){
       obj -> SetMoment( "dPhi_leptop", (m_outData->o_leptop)->DeltaPhi(*obj) );

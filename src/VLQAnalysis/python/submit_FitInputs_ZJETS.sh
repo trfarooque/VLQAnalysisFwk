@@ -1,13 +1,13 @@
 #!/bin/bash
 
-for campaign in "mc16a" "mc16d" "mc16e"
+for campaign in "mc16a" #"mc16d" "mc16e"
 do
     python Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 \
 	producetarball=true \
 	--inputDir=/nfs/at3/scratch2/farooque/MBJOutputs/tag-21.2.87-htztx-3-syst/nominal/ \
 	--sampleDat=samples_info.tag-21.2.87-htztx-3-syst.${campaign}.dat \
-	--outputDirSuffix=FitInputs_RW_ZJETS_${campaign}_NOW \
-	--reweightKinematics=true --kinRWList=JETSN,MEFFRED \
+	--outputDirSuffix=FitInputs_RWPARAM_ZJETS_${campaign}_NOW \
+	--reweightKinematics=true --kinRWList=JETSN,MEFFRED --doKinRWSmoothing=TRUE \
 	--queue=at3 --NFILESPLIT=200 --NMERGE=1 --removeNull=TRUE \
 	--runData=false --runQCD=false --runSignals=false --runTtbar=false --runOtherBkgd=true \
 	--runSingleTop=false --runWjets=false --runZjets=true --runTopEW=false --runDibosons=false \
