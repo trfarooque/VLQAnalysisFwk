@@ -17,7 +17,7 @@ NuisanceParameter: "HTX_BKGNP_VJETS_MURF"
   Samples: Wjets
 
 Systematic: "HTX_BKGNP_ZJETS_MURF"
-Systematic: "HTX_BKGNP_VJETS_MURF"
+NuisanceParameter: "HTX_BKGNP_VJETS_MURF"
   Title: "V+jets #mu_{R,F}"
   Type: HISTO
   Category: "V+jets uncertainties"
