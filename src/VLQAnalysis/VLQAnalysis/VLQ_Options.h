@@ -90,6 +90,7 @@ public:
   inline bool DeriveReweighting() const { return m_deriveReweighting; }
   inline bool ReweightKinematics() const { return m_reweightKinematics; }
   inline bool DoKinRwSmoothing() const {return m_doKinRwSmoothing; }
+  inline bool DoKinRwSyst() const {return m_doKinRwSyst; }
   inline bool MakeQCD0LSystematics() const { return m_makeQCD0LSystematics; }
   inline bool DoPreselSys() const { return m_doPreselSys; }
   inline bool DoExpSys() const { return m_doExpSys; }
@@ -183,6 +184,7 @@ private:
   bool m_deriveReweighting;
   bool m_reweightKinematics;
   bool m_doKinRwSmoothing;
+  bool m_doKinRwSyst;
 
   bool m_makeQCD0LSystematics;
   bool m_doPreselSys;

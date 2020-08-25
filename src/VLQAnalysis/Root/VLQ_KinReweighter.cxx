@@ -264,8 +264,6 @@ double VLQ_KinReweighter::GetKinReweight( const int kinematic, const std::string
 
   }
 
-
-
   //
   // Reweighting
   //
@@ -347,10 +345,9 @@ double VLQ_KinReweighter::GetKinReweight( const int kinematic, const std::string
 
 	std::string jet_prefix = (param2 < 7) ? std::to_string(param2) : "7";
 
+	std::string histName = source_reg + "_" + kin + "_jet_" + jet_prefix + "_fit" +  systematic;
 
-	std::string histName = source_reg + "_" + kin + "_fit_jet_" + jet_prefix + systematic;
-
-	std::cout << histName << std::endl;
+	//std::cout << histName << std::endl;
 
 	std::map < std::string, TF1* >::iterator it = m_smoothFunction -> find(histName);
 
@@ -461,5 +458,83 @@ double VLQ_KinReweighter::GetKinReweight( const int kinematic, const std::string
 
   return 1;
 
+
+}
+
+//______________________________________________________________________________ 
+//
+double VLQ_KinReweighter::GetKinRwSyst(std::string systematic) const{
+
+  std::string source_reg = "";
+
+  if( m_outData -> o_channel_type == VLQ_Enums::MUON || m_outData -> o_channel_type == VLQ_Enums::ELECTRON ||
+      m_outData -> o_channel_type == VLQ_Enums::MUMU || m_outData -> o_channel_type == VLQ_Enums::ELEL){
+
+    if((m_opt -> SampleName() == SampleName::ZJETS) || (m_opt -> SampleName() == SampleName::WJETS)){
+
+      source_reg = "c2lep3jin1bexZwinMLL_sf";
+
+    }
+    else if((m_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP)){
+
+      source_reg = "c1lep3jin2bex";
+
+    }
+
+  }
+  else {
+
+    return 1.;
+
+  }
+
+  std::string kin = "meffred";
+  
+  double param = m_outData-> o_meffred;
+  
+  int param2 = m_outData-> o_jets_n;
+
+  std::string histName = source_reg + "_" + kin + "_fit" + systematic;
+
+  if(source_reg == "c2lep3jin1bexZwinMLL_sf"){
+
+    std::map < std::string, TF1* >::iterator it = m_smoothFunction -> find(histName);
+    
+    if( it == m_smoothFunction -> end() ){
+      return 1;
+    }
+    
+    /*std::cout << "histName : " << histName << std::endl;                                                                                                                                                                                                                
+      std::cout<<" kin : " << kin << " param : " << param << " RW : "  << it -> second -> Eval(param)                                                                                                                                                                     
+      << " source_reg : " << source_reg << " p0 = " << it -> second -> GetParameter(0)                                                                                                                                                                                    
+      << " p1 = " << it -> second -> GetParameter(1)                                                                                                                                                                                                                      
+      << " p2 = " << it -> second -> GetParameter(2) <<std::endl;*/
+    
+    return it -> second -> Eval(param);
+
+  }
+  else if(source_reg == "c1lep3jin2bex"){
+
+    std::string jet_prefix = (param2 < 7) ? std::to_string(param2) : "7";
+    
+    std::string histName = source_reg + "_" + kin + "_jet_" + jet_prefix + "_fit" +  systematic;
+
+    std::map < std::string, TF1* >::iterator it = m_smoothFunction -> find(histName);
+
+    if( it == m_smoothFunction -> end() ){
+      return 1;
+    }
+
+    /*std::cout << "histName : " << histName << std::endl;                                                                                                                                                                                                                
+      std::cout<<" kin : " << kin << " param : " << param << " RW : "  << it -> second -> Eval(param)                                                                                                                                                                     
+      << " source_reg : " << source_reg << " p0 = " << it -> second -> GetParameter(0)                                                                                                                                                                                    
+      << " p1 = " << it -> second -> GetParameter(1)                                                                                                                                                                                                                      
+      << " p2 = " << it -> second -> GetParameter(2) <<std::endl;*/
+    
+    return it -> second -> Eval(param);
+   
+  }
+
+  return 1;
 
 }

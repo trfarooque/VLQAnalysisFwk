@@ -173,6 +173,11 @@ bool VLQ_Analysis_Data2015::Begin(){
   }
   if(m_opt -> ReweightKinematics()){
     m_weightMngr -> AddKinReweightings();
+
+    if(m_opt->DoKinRwSyst() && m_opt->DoKinRwSmoothing()){
+      m_weightMngr -> AddKinRwSyst();
+    }
+ 
   }
 
   m_weightMngr -> Print( false );
@@ -2168,6 +2173,11 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 
     if( m_opt ->ReweightKinematics() ){
       m_weightMngr -> SetKinReweightings();
+
+      if(m_opt->DoKinRwSyst() && m_opt->DoKinRwSmoothing()){
+	m_weightMngr -> SetKinRwSyst();
+      }
+      
     }
     if( m_outData -> o_is_ttbar ){
       if(m_opt->RecomputeTtbarNNLOCorrection() && m_truthMngr){
