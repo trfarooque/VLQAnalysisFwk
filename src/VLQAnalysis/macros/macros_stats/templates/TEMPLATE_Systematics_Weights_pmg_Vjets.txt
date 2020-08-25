@@ -2,7 +2,8 @@
 % --------   V+JETS PMG WEIGHTS SYSTEMATICS  -------- %
 % -------------------------------------------------- %
 
-Systematic: "HTX_BKGNP_VJETS_MURF"
+Systematic: "HTX_BKGNP_WJETS_MURF"
+NuisanceParameter: "HTX_BKGNP_VJETS_MURF"
   Title: "V+jets #mu_{R,F}"
   Type: HISTO
   Category: "V+jets uncertainties"
@@ -12,7 +13,22 @@ Systematic: "HTX_BKGNP_VJETS_MURF"
   HistoPathDown: "__HISTOPATH__/TheorySys/NewVJets/"
   Symmetrisation: TwoSided
   DropNorm: all
-  Samples: Wjets,Zjets
+  ReferenceSample: Wjets_Ref
+  Samples: Wjets
+
+Systematic: "HTX_BKGNP_ZJETS_MURF"
+NuisanceParameter: "HTX_BKGNP_VJETS_MURF"
+  Title: "V+jets #mu_{R,F}"
+  Type: HISTO
+  Category: "V+jets uncertainties"
+  HistoNameSufUp: _weight_muRF_up
+  HistoNameSufDown: _weight_muRF_down
+  HistoPathUp: "__HISTOPATH__/TheorySys/NewVJets/"
+  HistoPathDown: "__HISTOPATH__/TheorySys/NewVJets/"
+  Symmetrisation: TwoSided
+  DropNorm: all
+  ReferenceSample: Zjets_Ref
+  Samples: Zjets
 
 %Systematic: "HTX_BKGNP_VJETS_CKKW"
 %  Title: "V+jets ckkw"

@@ -6,8 +6,8 @@ do
 	producetarball=true \
         --inputDir=/nfs/at3/scratch2/farooque/MBJOutputs/tag-21.2.87-htztx-3-syst/alt_samples_v2/ \
         --sampleDat=samples_info_ttst_alt.tag-21.2.87-htztx-3-syst.${campaign}.dat \
-	--outputDirSuffix=FitInputs_RW_TTSTALT_${campaign}_NOW \
-	--reweightKinematics=true --kinRWList=JETSN,MEFFRED --isAFII=true \
+	--outputDirSuffix=FitInputs_RWPARAM_TTSTALT_${campaign}_NOW \
+	--reweightKinematics=true --kinRWList=JETSN,MEFFRED --doKinRWSmoothing=TRUE --isAFII=true \
 	--queue=at3 --NFILESPLIT=200 --NMERGE=1 --removeNull=TRUE \
 	--runData=false --runQCD=false --runSignals=false --runTtbar=true --runOtherBkgd=true \
 	--runSingleTop=true --runWjets=false --runZjets=false --runTopEW=false --runDibosons=false \
@@ -35,5 +35,3 @@ do
 
     
 done
-
-    #
