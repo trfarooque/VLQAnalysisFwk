@@ -117,26 +117,26 @@ bool VLQ_Analysis_Data2015::Begin(){
   if( m_opt->UseLeptonTrigger() ){
 
     //ELEC
-    m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_e24_lhmedium_L1EM20VH", VLQ_Enums::TRIGELEC, 
+    m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_e24_lhmedium_L1EM20VH", VLQ_Enums::TRIGELEC,
 							   VLQ_Enums::DATA2015 | VLQ_Enums::DATA2016) );
     m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_e60_lhmedium", VLQ_Enums::TRIGELEC, VLQ_Enums::DATA2015) );
     m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_e120_lhloose", VLQ_Enums::TRIGELEC, VLQ_Enums::DATA2015) );
-    m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_e26_lhtight_nod0_ivarloose", VLQ_Enums::TRIGELEC, 
+    m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_e26_lhtight_nod0_ivarloose", VLQ_Enums::TRIGELEC,
 							   (VLQ_Enums::DATA2016 | VLQ_Enums::DATA2017 | VLQ_Enums::DATA2018) ) );
-    m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_e60_lhmedium_nod0", VLQ_Enums::TRIGELEC, 
+    m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_e60_lhmedium_nod0", VLQ_Enums::TRIGELEC,
 							   (VLQ_Enums::DATA2016 | VLQ_Enums::DATA2017 | VLQ_Enums::DATA2018)) );
-    m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_e140_lhloose_nod0", VLQ_Enums::TRIGELEC, 
+    m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_e140_lhloose_nod0", VLQ_Enums::TRIGELEC,
 							   (VLQ_Enums::DATA2016 | VLQ_Enums::DATA2017 | VLQ_Enums::DATA2018)) );
-    m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_e300_etcut", VLQ_Enums::TRIGELEC, 
+    m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_e300_etcut", VLQ_Enums::TRIGELEC,
 							   (VLQ_Enums::DATA2017 | VLQ_Enums::DATA2018)) );
 
     //MUON
     m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_mu20_iloose_L1MU15", VLQ_Enums::TRIGMUON, VLQ_Enums::DATA2015) );
-    m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_mu26_ivarmedium", VLQ_Enums::TRIGMUON, 
+    m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_mu26_ivarmedium", VLQ_Enums::TRIGMUON,
 							   (VLQ_Enums::DATA2016 | VLQ_Enums::DATA2017 | VLQ_Enums::DATA2018)) );
-    m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_mu50", VLQ_Enums::TRIGMUON, 
+    m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_mu50", VLQ_Enums::TRIGMUON,
 							   (VLQ_Enums::DATA2015 | VLQ_Enums::DATA2016 | VLQ_Enums::DATA2017 | VLQ_Enums::DATA2018)) );
-    m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_mu60_0eta105_msonly", VLQ_Enums::TRIGMUON, 
+    m_outData -> o_trigger_list.push_back( new TriggerInfo("HLT_mu60_0eta105_msonly", VLQ_Enums::TRIGMUON,
 							   (VLQ_Enums::DATA2017 | VLQ_Enums::DATA2018)) );
 
   }
@@ -146,12 +146,12 @@ bool VLQ_Analysis_Data2015::Begin(){
   std::cout << "=================================" << std::endl;
   std::cout << " Name    :   MET     :    ELEC   :      MUON     :    2015     :     2016   :     2017:     2018" << std::endl;
   for(TriggerInfo* trig : m_outData -> o_trigger_list){
-    std::cout << trig->Name() << "  :  " << (trig->Type() == VLQ_Enums::TRIGMET) 
-	      << "  :  " << (trig->Type() == VLQ_Enums::TRIGELEC) 
+    std::cout << trig->Name() << "  :  " << (trig->Type() == VLQ_Enums::TRIGMET)
+	      << "  :  " << (trig->Type() == VLQ_Enums::TRIGELEC)
 	      << "  :  " << (trig->Type() == VLQ_Enums::TRIGMUON)
-	      << "  :  " << (trig->Period() & VLQ_Enums::DATA2015) 
-	      << "  :  " << (trig->Period() & VLQ_Enums::DATA2016) 
-	      << "  :  " << (trig->Period() & VLQ_Enums::DATA2017) 
+	      << "  :  " << (trig->Period() & VLQ_Enums::DATA2015)
+	      << "  :  " << (trig->Period() & VLQ_Enums::DATA2016)
+	      << "  :  " << (trig->Period() & VLQ_Enums::DATA2017)
 	      << "  :  " << (trig->Period() & VLQ_Enums::DATA2018) << std::endl;
   }
   std::cout << "==================================================================================" << std::endl;
@@ -337,7 +337,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrTree->AddStandardBranch("fjets_m", "Fat jets Mass [GeV]",  &(m_outData->o_fjets), -1, "M");
       m_outMngrTree->AddStandardBranch("fjets_eta", "Fat jets #eta",  &(m_outData->o_fjets), -1, "Eta");
       m_outMngrTree->AddStandardBranch("fjets_phi", "Fat jets #phi",  &(m_outData->o_fjets), -1, "Phi");
-      
+
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -415,7 +415,7 @@ bool VLQ_Analysis_Data2015::Begin(){
     if( m_opt->DoTruthAnalysis() ){ //&& (m_opt -> SampleName() == SampleName::VLQ) ){
       for ( const std::string truthType : {"VLQ", "VLQ_Ht", "VLQ_Zt", "VLQ_Wb",
       "VLQ_Hbdect", "VLQ_Wlepb", "VLQ_Whadb", "VLQ_Zhadt",
-      "H", "Hbb", "hadtop", "leptop", 
+      "H", "Hbb", "hadtop", "leptop",
       "hadZ", "lepZ", "invZ", "hadW", "lepW"} ){
   m_outMngrTree->AddStandardBranch("truth_"+truthType+"_n", "Number of truth " + truthType,  &(m_outData->o_truth_partons_n.at(truthType)));
       }
@@ -491,19 +491,19 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "mtbmin",      25, 0, 500,    ";m_{T}^{min}(b,MET)", otherVariables, &(m_outData->o_mTbmin) );
       m_outMngrHist -> AddStandardTH1( "metsig_ev",     0.5, 0, 50,    ";E_{T}^{miss}/#sqrt{H_{T}^{had}} [#sqrt{GeV}]", false, &(m_outData -> o_metsig_ev) );
       m_outMngrHist -> AddStandardTH1( "metsig_obj",    0.5, 0, 50,    "; #sigma(E_{T}^{miss}) [#sqrt{GeV}]", false, &(m_outData -> o_metsig_obj) );
-      
+
       m_outMngrHist -> AddStandardTH2( "meff", "jets_n", 50, 0, 5000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} [GeV]", (RWderiv||otherVariables), &(m_outData -> o_meff), &(m_outData -> o_jets_n));
       m_outMngrHist -> AddStandardTH2( "meffred", "jets_n", 50, 0, 5000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} reduced [GeV]", (RWderiv||otherVariables), &(m_outData -> o_meffred), &(m_outData -> o_jets_n));
 
       /*
-      m_outMngrHist -> AddStandardTH2( "mu", "fwdjets_n", 10, 0, 80, 1, -0.5, 8.5,"<#mu>", "Number of fwd-jets", false, 
+      m_outMngrHist -> AddStandardTH2( "mu", "fwdjets_n", 10, 0, 80, 1, -0.5, 8.5,"<#mu>", "Number of fwd-jets", false,
                &(m_outData -> o_pileup_mu),&(m_outData -> o_fwdjets_n) );
-      m_outMngrHist -> AddStandardTH2( "mu", "fwdjets30_n", 10, 0, 80, 1, -0.5, 8.5,"<#mu>", "Number of fwd-jets (p_{T}>30 GeV)", false, 
+      m_outMngrHist -> AddStandardTH2( "mu", "fwdjets30_n", 10, 0, 80, 1, -0.5, 8.5,"<#mu>", "Number of fwd-jets (p_{T}>30 GeV)", false,
                &(m_outData -> o_pileup_mu),&(m_outData -> o_fwdjets30_n) );
-      m_outMngrHist -> AddStandardTH2( "mu", "fwdjets40_n", 10, 0, 80, 1, -0.5, 8.5,"<#mu>", "Number of fwd-jets (p_{T}>40 GeV)", false, 
+      m_outMngrHist -> AddStandardTH2( "mu", "fwdjets40_n", 10, 0, 80, 1, -0.5, 8.5,"<#mu>", "Number of fwd-jets (p_{T}>40 GeV)", false,
                &(m_outData -> o_pileup_mu),&(m_outData -> o_fwdjets40_n) );
 
-      m_outMngrHist -> AddStandardTH2( "meff", "mtbmin", 25, 0, 3000, 25, 0., 500,"m_{eff} [GeV]", "m_{T}^{min}(b,MET)", false, 
+      m_outMngrHist -> AddStandardTH2( "meff", "mtbmin", 25, 0, 3000, 25, 0., 500,"m_{eff} [GeV]", "m_{T}^{min}(b,MET)", false,
                    &(m_outData -> o_meff),&(m_outData -> o_mTbmin) );
       */
       //Leptonic top
@@ -526,7 +526,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "nu_m",          10, 0, 500,  ";Neutrino mass [GeV]"       ,  false, &(m_outData -> o_nu), -1, "M", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "nu_fracMET",    0.01, 0, 1,  ";Neutrino MET fraction"     ,  false, &(m_outData -> o_nu), -1, "fracMET", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "nu_dphi_MET",   0.1, 0, 4,   ";#Delta#phi(Neutrino, MET)" ,  false, &(m_outData -> o_nu), -1, "dphi_MET", hopt_nouflow);
- 
+
 
       //Semi-boosted hadronic top
       for ( int iJet=-1; iJet<=2; ++iJet ) {
@@ -539,61 +539,61 @@ bool VLQ_Analysis_Data2015::Begin(){
 	m_outMngrHist -> AddStandardTH1( "bW_hadtop"+str_id+"_m",     10, 100, 300,     ";bW Hadtop"+str_id+" mass [GeV]",    false,      &(m_outData -> o_bW_hadtop), iJet, "M");
 	m_outMngrHist -> AddStandardTH1( "bW_hadtop"+str_id+"_dR_bW", 0.1,0,6,   ";bW Hadtop"+str_id+" MV2c10",        false,      &(m_outData -> o_bW_hadtop), iJet, "dR_bW");
       }
-      
+
       //Jet variables
       m_outMngrHist -> AddStandardTH1( "jets_n",      1, -2.5, 15.5,";Number of jets", (RWderiv||otherVariables), &(m_outData -> o_jets_n) );
       m_outMngrHist -> AddStandardTH1( "trkjets_n",      1, -2.5, 15.5,";Number of track-jets", otherVariables, &(m_outData -> o_trkjets_n) );
       m_outMngrHist -> AddStandardTH1( "fwdjets_n",   1, -0.5, 8.5,";Number of fwd-jets", otherVariables, &(m_outData -> o_fwdjets_n) );
-      m_outMngrHist -> AddStandardTH1( "fwdjets_eta25_30_n",   1, -0.5, 8.5,";Number of fwd-jets 2.5<|#eta|<3.0", otherVariables, 
+      m_outMngrHist -> AddStandardTH1( "fwdjets_eta25_30_n",   1, -0.5, 8.5,";Number of fwd-jets 2.5<|#eta|<3.0", otherVariables,
 				       &(m_outData -> o_fwdjets_eta25_30_n) );
-      m_outMngrHist -> AddStandardTH1( "fwdjets_eta30_35_n",   1, -0.5, 8.5,";Number of fwd-jets 3.0<|#eta|<3.5", otherVariables, 
+      m_outMngrHist -> AddStandardTH1( "fwdjets_eta30_35_n",   1, -0.5, 8.5,";Number of fwd-jets 3.0<|#eta|<3.5", otherVariables,
 				       &(m_outData -> o_fwdjets_eta30_35_n) );
-      m_outMngrHist -> AddStandardTH1( "fwdjets_eta35_40_n",   1, -0.5, 8.5,";Number of fwd-jets 3.5<|#eta|<4.0", otherVariables, 
+      m_outMngrHist -> AddStandardTH1( "fwdjets_eta35_40_n",   1, -0.5, 8.5,";Number of fwd-jets 3.5<|#eta|<4.0", otherVariables,
 				       &(m_outData -> o_fwdjets_eta35_40_n) );
-      m_outMngrHist -> AddStandardTH1( "fwdjets_eta40_45_n",   1, -0.5, 8.5,";Number of fwd-jets 4.0<|#eta|<4.5", otherVariables, 
+      m_outMngrHist -> AddStandardTH1( "fwdjets_eta40_45_n",   1, -0.5, 8.5,";Number of fwd-jets 4.0<|#eta|<4.5", otherVariables,
 				       &(m_outData -> o_fwdjets_eta40_45_n) );
 
       m_outMngrHist -> AddStandardTH1( "bjets_n",     1, -0.5, 8.5, ";Number of b-jets", otherVariables, &(m_outData -> o_bjets_n) );
       m_outMngrHist -> AddStandardTH1( "ljets_n",     1, -0.5, 8.5, ";Number of light-jets", otherVariables, &(m_outData -> o_ljets_n) );
       m_outMngrHist -> AddStandardTH1( "trkbjets_n",     1, -0.5, 8.5, ";Number of track b-jets", otherVariables, &(m_outData -> o_trkbjets_n) );
       m_outMngrHist -> AddStandardTH1( "trkljets_n",     1, -0.5, 8.5, ";Number of track light-jets", otherVariables, &(m_outData -> o_trkljets_n) );
-      m_outMngrHist -> AddStandardTH1( "trkjets_nconcentric",      1, -2.5, 15.5,";Number of concentric track-jets", 
+      m_outMngrHist -> AddStandardTH1( "trkjets_nconcentric",      1, -2.5, 15.5,";Number of concentric track-jets",
 				       otherVariables, &(m_outData -> o_trkjets_nconcentric) );
       if(m_opt->VerboseOutput()){
-	m_outMngrHist -> AddStandardTH1( "jets_n_truth_b",  1, -2.5, 15.5,";Number of truth b-jets", 
+	m_outMngrHist -> AddStandardTH1( "jets_n_truth_b",  1, -2.5, 15.5,";Number of truth b-jets",
 					 otherVariables, &(m_outData -> o_jets_truth_b_n) );
-	m_outMngrHist -> AddStandardTH1( "jets_n_truth_c",  1, -2.5, 15.5,";Number of truth c-jets", 
+	m_outMngrHist -> AddStandardTH1( "jets_n_truth_c",  1, -2.5, 15.5,";Number of truth c-jets",
 					 otherVariables, &(m_outData -> o_jets_truth_c_n) );
-	m_outMngrHist -> AddStandardTH1( "jets_n_truth_tau", 1, -2.5, 15.5,";Number of truth #tau-jets", 
+	m_outMngrHist -> AddStandardTH1( "jets_n_truth_tau", 1, -2.5, 15.5,";Number of truth #tau-jets",
 					 otherVariables, &(m_outData -> o_jets_truth_tau_n) );
-	m_outMngrHist -> AddStandardTH1( "jets_n_truth_lqg", 1, -2.5, 15.5,";Number of truth light-jets", 
+	m_outMngrHist -> AddStandardTH1( "jets_n_truth_lqg", 1, -2.5, 15.5,";Number of truth light-jets",
 					 otherVariables, &(m_outData -> o_jets_truth_lqg_n) );
 
-	m_outMngrHist -> AddStandardTH1( "bjets_n_truth_b",  1, -2.5, 15.5,";Number of b-tagged truth b-jets", 
+	m_outMngrHist -> AddStandardTH1( "bjets_n_truth_b",  1, -2.5, 15.5,";Number of b-tagged truth b-jets",
 					 otherVariables, &(m_outData -> o_bjets_truth_b_n) );
-	m_outMngrHist -> AddStandardTH1( "bjets_n_truth_c",  1, -2.5, 15.5,";Number of b-tagged truth c-jets", 
+	m_outMngrHist -> AddStandardTH1( "bjets_n_truth_c",  1, -2.5, 15.5,";Number of b-tagged truth c-jets",
 					 otherVariables, &(m_outData -> o_bjets_truth_c_n) );
-	m_outMngrHist -> AddStandardTH1( "bjets_n_truth_tau", 1, -2.5, 15.5,";Number of b-tagged truth #tau-jets", 
+	m_outMngrHist -> AddStandardTH1( "bjets_n_truth_tau", 1, -2.5, 15.5,";Number of b-tagged truth #tau-jets",
 					 otherVariables, &(m_outData -> o_bjets_truth_tau_n) );
-	m_outMngrHist -> AddStandardTH1( "bjets_n_truth_lqg", 1, -2.5, 15.5,";Number of b-tagged truth light-jets", 
+	m_outMngrHist -> AddStandardTH1( "bjets_n_truth_lqg", 1, -2.5, 15.5,";Number of b-tagged truth light-jets",
 					 otherVariables, &(m_outData -> o_bjets_truth_lqg_n) );
 
-	m_outMngrHist -> AddStandardTH1( "trkjets_n_truth_b",  1, -2.5, 15.5,";Number of truth b-trkjets", 
+	m_outMngrHist -> AddStandardTH1( "trkjets_n_truth_b",  1, -2.5, 15.5,";Number of truth b-trkjets",
 					 otherVariables, &(m_outData -> o_trkjets_truth_b_n) );
-	m_outMngrHist -> AddStandardTH1( "trkjets_n_truth_c",  1, -2.5, 15.5,";Number of truth c-trkjets", 
+	m_outMngrHist -> AddStandardTH1( "trkjets_n_truth_c",  1, -2.5, 15.5,";Number of truth c-trkjets",
 					 otherVariables, &(m_outData -> o_trkjets_truth_c_n) );
-	m_outMngrHist -> AddStandardTH1( "trkjets_n_truth_tau", 1, -2.5, 15.5,";Number of truth #tau-trkjets", 
+	m_outMngrHist -> AddStandardTH1( "trkjets_n_truth_tau", 1, -2.5, 15.5,";Number of truth #tau-trkjets",
 					 otherVariables, &(m_outData -> o_trkjets_truth_tau_n) );
-	m_outMngrHist -> AddStandardTH1( "trkjets_n_truth_lqg", 1, -2.5, 15.5,";Number of truth light-trkjets", 
+	m_outMngrHist -> AddStandardTH1( "trkjets_n_truth_lqg", 1, -2.5, 15.5,";Number of truth light-trkjets",
 					 otherVariables, &(m_outData -> o_trkjets_truth_lqg_n) );
 
-	m_outMngrHist -> AddStandardTH1( "trkbjets_n_truth_b",  1, -2.5, 15.5,";Number of b-tagged truth b-trkjets", 
+	m_outMngrHist -> AddStandardTH1( "trkbjets_n_truth_b",  1, -2.5, 15.5,";Number of b-tagged truth b-trkjets",
 					 otherVariables, &(m_outData -> o_trkbjets_truth_b_n) );
-	m_outMngrHist -> AddStandardTH1( "trkbjets_n_truth_c",  1, -2.5, 15.5,";Number of b-tagged truth c-trkjets", 
+	m_outMngrHist -> AddStandardTH1( "trkbjets_n_truth_c",  1, -2.5, 15.5,";Number of b-tagged truth c-trkjets",
 					 otherVariables, &(m_outData -> o_trkbjets_truth_c_n) );
-	m_outMngrHist -> AddStandardTH1( "trkbjets_n_truth_tau", 1, -2.5, 15.5,";Number of b-tagged truth #tau-trkjets", 
+	m_outMngrHist -> AddStandardTH1( "trkbjets_n_truth_tau", 1, -2.5, 15.5,";Number of b-tagged truth #tau-trkjets",
 					 otherVariables, &(m_outData -> o_trkbjets_truth_tau_n) );
-	m_outMngrHist -> AddStandardTH1( "trkbjets_n_truth_lqg", 1, -2.5, 15.5,";Number of b-tagged truth light-trkjets", 
+	m_outMngrHist -> AddStandardTH1( "trkbjets_n_truth_lqg", 1, -2.5, 15.5,";Number of b-tagged truth light-trkjets",
 					 otherVariables, &(m_outData -> o_trkbjets_truth_lqg_n) );
       }
       //================ CALO JETS ======================================
@@ -602,124 +602,124 @@ bool VLQ_Analysis_Data2015::Begin(){
 	str_id += std::to_string(iJet);
 	if(iJet==-1) str_id = "s";
 	const bool DrawSyst = (iJet <= 0) && otherVariables;
-	m_outMngrHist -> AddStandardTH1( "jet"+str_id+"_pt",    10, 0, 1000,     ";Jet"+str_id+" p_{T} [GeV]",  DrawSyst,   
+	m_outMngrHist -> AddStandardTH1( "jet"+str_id+"_pt",    10, 0, 1000,     ";Jet"+str_id+" p_{T} [GeV]",  DrawSyst,
 					 &(m_outData -> o_jets), iJet, "Pt");
-	m_outMngrHist -> AddStandardTH1( "jet"+str_id+"_eta",   0.2, -3, 3,     ";Jet"+str_id+" #eta",          DrawSyst,   
+	m_outMngrHist -> AddStandardTH1( "jet"+str_id+"_eta",   0.2, -3, 3,     ";Jet"+str_id+" #eta",          DrawSyst,
 					 &(m_outData -> o_jets), iJet, "Eta");
-	m_outMngrHist -> AddStandardTH1( "jet"+str_id+"_phi",   0.2, -3.5, 3.5, ";Jet"+str_id+" #varphi",       false,      
+	m_outMngrHist -> AddStandardTH1( "jet"+str_id+"_phi",   0.2, -3.5, 3.5, ";Jet"+str_id+" #varphi",       false,
 					 &(m_outData -> o_jets), iJet, "Phi");
-	m_outMngrHist -> AddStandardTH1( "jet"+str_id+"_m",     10, 0, 200,     ";Jet"+str_id+" mass [GeV]",    false,      
+	m_outMngrHist -> AddStandardTH1( "jet"+str_id+"_m",     10, 0, 200,     ";Jet"+str_id+" mass [GeV]",    false,
 					 &(m_outData -> o_jets), iJet, "M");
-	m_outMngrHist -> AddStandardTH1( "jet"+str_id+"_btagw", 0.1,-1.1,1.1,   ";Jet"+str_id+" MV2c10",        false,      
+	m_outMngrHist -> AddStandardTH1( "jet"+str_id+"_btagw", 0.1,-1.1,1.1,   ";Jet"+str_id+" MV2c10",        false,
 					 &(m_outData -> o_jets), iJet, "btagw");
-	m_outMngrHist -> AddStandardTH1( "jet"+str_id+"_jvt",   0.1,-1.1,1.1,   ";Jet"+str_id+" JVT",           false,      
+	m_outMngrHist -> AddStandardTH1( "jet"+str_id+"_jvt",   0.1,-1.1,1.1,   ";Jet"+str_id+" JVT",           false,
 					 &(m_outData -> o_jets), iJet, "jvt");
 	//for MC
 	if(m_opt->VerboseOutput() && !m_opt->IsData() && (iJet <= 0) ){
-	  m_outMngrHist -> AddStandardTH1( "jet_truth_b"+str_id+"_pt",    10, 0, 1000,     ";Truth B-Jet"+str_id+" p_{T} [GeV]",  DrawSyst,   
+	  m_outMngrHist -> AddStandardTH1( "jet_truth_b"+str_id+"_pt",    10, 0, 1000,     ";Truth B-Jet"+str_id+" p_{T} [GeV]",  DrawSyst,
 					   &(m_outData -> o_jets_truth_b), iJet, "Pt");
-	  m_outMngrHist -> AddStandardTH1( "jet_truth_c"+str_id+"_pt",    10, 0, 1000,     ";Truth C-Jet"+str_id+" p_{T} [GeV]",  DrawSyst,   
+	  m_outMngrHist -> AddStandardTH1( "jet_truth_c"+str_id+"_pt",    10, 0, 1000,     ";Truth C-Jet"+str_id+" p_{T} [GeV]",  DrawSyst,
 					   &(m_outData -> o_jets_truth_c), iJet, "Pt");
-	  m_outMngrHist -> AddStandardTH1( "jet_truth_tau"+str_id+"_pt",    10, 0, 1000,     ";Truth #tau-Jet"+str_id+" p_{T} [GeV]",  DrawSyst,   
+	  m_outMngrHist -> AddStandardTH1( "jet_truth_tau"+str_id+"_pt",    10, 0, 1000,     ";Truth #tau-Jet"+str_id+" p_{T} [GeV]",  DrawSyst,
 					   &(m_outData -> o_jets_truth_tau), iJet, "Pt");
-	  m_outMngrHist -> AddStandardTH1( "jet_truth_lqg"+str_id+"_pt",    10, 0, 1000,     ";Truth Light-Jet"+str_id+" p_{T} [GeV]",  DrawSyst,   
+	  m_outMngrHist -> AddStandardTH1( "jet_truth_lqg"+str_id+"_pt",    10, 0, 1000,     ";Truth Light-Jet"+str_id+" p_{T} [GeV]",  DrawSyst,
 					   &(m_outData -> o_jets_truth_lqg), iJet, "Pt");
-	  
+
 	}
-	
+
       }
       for ( int iFwdJet=-1; iFwdJet<=5; ++iFwdJet ) {
 	std::string str_id = "";
 	str_id += std::to_string(iFwdJet);
 	if(iFwdJet==-1) str_id = "s";
 	const bool DrawSyst = (iFwdJet <= 0) && otherVariables;
-	m_outMngrHist -> AddStandardTH1( "fwdjet"+str_id+"_pt",    5, 0, 500,      ";Fwd-jet"+str_id+" p_{T} [GeV]",   
+	m_outMngrHist -> AddStandardTH1( "fwdjet"+str_id+"_pt",    5, 0, 500,      ";Fwd-jet"+str_id+" p_{T} [GeV]",
 					 DrawSyst,   &(m_outData -> o_fwdjets), iFwdJet, "Pt");
-	m_outMngrHist -> AddStandardTH1( "fwdjet"+str_id+"_eta",   0.2, -5, 5,     ";Fwd-jet"+str_id+" #eta",          
+	m_outMngrHist -> AddStandardTH1( "fwdjet"+str_id+"_eta",   0.2, -5, 5,     ";Fwd-jet"+str_id+" #eta",
 					 DrawSyst,   &(m_outData -> o_fwdjets), iFwdJet, "Eta");
-	m_outMngrHist -> AddStandardTH1( "fwdjet"+str_id+"_phi",   0.2, -3.5, 3.5, ";Fwd-jet"+str_id+" #varphi",       
+	m_outMngrHist -> AddStandardTH1( "fwdjet"+str_id+"_phi",   0.2, -3.5, 3.5, ";Fwd-jet"+str_id+" #varphi",
 					 false,      &(m_outData -> o_fwdjets), iFwdJet, "Phi");
-	m_outMngrHist -> AddStandardTH1( "fwdjet"+str_id+"_m",     4, 0, 100,       ";Fwd-jet"+str_id+" mass [GeV]",    
+	m_outMngrHist -> AddStandardTH1( "fwdjet"+str_id+"_m",     4, 0, 100,       ";Fwd-jet"+str_id+" mass [GeV]",
 					 false,      &(m_outData -> o_fwdjets), iFwdJet, "M");
 	if(m_opt->VerboseOutput()){
-	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta25_30"+str_id+"_pt",    5, 0, 500,      ";Fwd-jet"+str_id+" 2.5<|#eta|<3.0 p_{T} [GeV]",   
+	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta25_30"+str_id+"_pt",    5, 0, 500,      ";Fwd-jet"+str_id+" 2.5<|#eta|<3.0 p_{T} [GeV]",
 					   DrawSyst,   &(m_outData -> o_fwdjets_eta25_30), iFwdJet, "Pt");
-	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta25_30"+str_id+"_eta",   0.2, -5, 5,     ";Fwd-jet"+str_id+" 2.5<|#eta|<3.0 #eta",          
+	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta25_30"+str_id+"_eta",   0.2, -5, 5,     ";Fwd-jet"+str_id+" 2.5<|#eta|<3.0 #eta",
 					   DrawSyst,   &(m_outData -> o_fwdjets_eta25_30), iFwdJet, "Eta");
-	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta25_30"+str_id+"_phi",   0.2, -3.5, 3.5, ";Fwd-jet"+str_id+" 2.5<|#eta|<3.0 #varphi",       
+	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta25_30"+str_id+"_phi",   0.2, -3.5, 3.5, ";Fwd-jet"+str_id+" 2.5<|#eta|<3.0 #varphi",
 					   false,      &(m_outData -> o_fwdjets_eta25_30), iFwdJet, "Phi");
-	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta25_30"+str_id+"_m",     4, 0, 100,       ";Fwd-jet"+str_id+" 2.5<|#eta|<3.0 mass [GeV]",    
+	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta25_30"+str_id+"_m",     4, 0, 100,       ";Fwd-jet"+str_id+" 2.5<|#eta|<3.0 mass [GeV]",
 					   false,      &(m_outData -> o_fwdjets_eta25_30), iFwdJet, "M");
-	
-	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta30_35"+str_id+"_pt",    5, 0, 500,      ";Fwd-jet"+str_id+" 3.0<|#eta|<3.5 p_{T} [GeV]",   
+
+	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta30_35"+str_id+"_pt",    5, 0, 500,      ";Fwd-jet"+str_id+" 3.0<|#eta|<3.5 p_{T} [GeV]",
 					   DrawSyst,   &(m_outData -> o_fwdjets_eta30_35), iFwdJet, "Pt");
-	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta30_35"+str_id+"_eta",   0.2, -5, 5,     ";Fwd-jet"+str_id+" 3.0<|#eta|<3.5 #eta",          
+	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta30_35"+str_id+"_eta",   0.2, -5, 5,     ";Fwd-jet"+str_id+" 3.0<|#eta|<3.5 #eta",
 					   DrawSyst,   &(m_outData -> o_fwdjets_eta30_35), iFwdJet, "Eta");
-	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta30_35"+str_id+"_phi",   0.2, -3.5, 3.5, ";Fwd-jet"+str_id+" 3.0<|#eta|<3.5 #varphi",       
+	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta30_35"+str_id+"_phi",   0.2, -3.5, 3.5, ";Fwd-jet"+str_id+" 3.0<|#eta|<3.5 #varphi",
 					   false,      &(m_outData -> o_fwdjets_eta30_35), iFwdJet, "Phi");
-	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta30_35"+str_id+"_m",     4, 0, 100,       ";Fwd-jet"+str_id+" 3.0<|#eta|<3.5 mass [GeV]",    
+	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta30_35"+str_id+"_m",     4, 0, 100,       ";Fwd-jet"+str_id+" 3.0<|#eta|<3.5 mass [GeV]",
 					   false,      &(m_outData -> o_fwdjets_eta30_35), iFwdJet, "M");
-	
-	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta35_40"+str_id+"_pt",    5, 0, 500,      ";Fwd-jet"+str_id+" 3.5<|#eta|<4.0 p_{T} [GeV]",   
+
+	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta35_40"+str_id+"_pt",    5, 0, 500,      ";Fwd-jet"+str_id+" 3.5<|#eta|<4.0 p_{T} [GeV]",
 					   DrawSyst,   &(m_outData -> o_fwdjets_eta35_40), iFwdJet, "Pt");
-	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta35_40"+str_id+"_eta",   0.2, -5, 5,     ";Fwd-jet"+str_id+" 3.5<|#eta|<4.0 #eta",          
+	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta35_40"+str_id+"_eta",   0.2, -5, 5,     ";Fwd-jet"+str_id+" 3.5<|#eta|<4.0 #eta",
 					   DrawSyst,   &(m_outData -> o_fwdjets_eta35_40), iFwdJet, "Eta");
-	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta35_40"+str_id+"_phi",   0.2, -3.5, 3.5, ";Fwd-jet"+str_id+" 3.5<|#eta|<4.0 #varphi",       
+	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta35_40"+str_id+"_phi",   0.2, -3.5, 3.5, ";Fwd-jet"+str_id+" 3.5<|#eta|<4.0 #varphi",
 					   false,      &(m_outData -> o_fwdjets_eta35_40), iFwdJet, "Phi");
-	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta35_40"+str_id+"_m",     4, 0, 100,       ";Fwd-jet"+str_id+" 3.5<|#eta|<4.0 mass [GeV]",    
+	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta35_40"+str_id+"_m",     4, 0, 100,       ";Fwd-jet"+str_id+" 3.5<|#eta|<4.0 mass [GeV]",
 					   false,      &(m_outData -> o_fwdjets_eta35_40), iFwdJet, "M");
-	
-	
-	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta40_45"+str_id+"_pt",    5, 0, 500,      ";Fwd-jet"+str_id+" 4.0<|#eta|<4.5 p_{T} [GeV]",   
+
+
+	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta40_45"+str_id+"_pt",    5, 0, 500,      ";Fwd-jet"+str_id+" 4.0<|#eta|<4.5 p_{T} [GeV]",
 					   DrawSyst,   &(m_outData -> o_fwdjets_eta40_45), iFwdJet, "Pt");
-	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta40_45"+str_id+"_eta",   0.2, -5, 5,     ";Fwd-jet"+str_id+" 4.0<|#eta|<4.5 #eta",          
+	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta40_45"+str_id+"_eta",   0.2, -5, 5,     ";Fwd-jet"+str_id+" 4.0<|#eta|<4.5 #eta",
 					   DrawSyst,   &(m_outData -> o_fwdjets_eta40_45), iFwdJet, "Eta");
-	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta40_45"+str_id+"_phi",   0.2, -3.5, 3.5, ";Fwd-jet"+str_id+" 4.0<|#eta|<4.5 #varphi",       
+	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta40_45"+str_id+"_phi",   0.2, -3.5, 3.5, ";Fwd-jet"+str_id+" 4.0<|#eta|<4.5 #varphi",
 					   false,      &(m_outData -> o_fwdjets_eta40_45), iFwdJet, "Phi");
-	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta40_45"+str_id+"_m",     4, 0, 100,       ";Fwd-jet"+str_id+" 4.0<|#eta|<4.5 mass [GeV]",    
+	  m_outMngrHist -> AddStandardTH1( "fwdjet_eta40_45"+str_id+"_m",     4, 0, 100,       ";Fwd-jet"+str_id+" 4.0<|#eta|<4.5 mass [GeV]",
 					   false,      &(m_outData -> o_fwdjets_eta40_45), iFwdJet, "M");
 	}
-	
+
       }
-      
+
       for ( int iBJet=-1; iBJet<=3; ++iBJet ) {
 	std::string str_id = "";
 	str_id += std::to_string(iBJet);
 	if(iBJet==-1) str_id = "s";
 	const bool DrawSyst = (iBJet <= 0) && otherVariables;
-	m_outMngrHist -> AddStandardTH1( "bjet"+str_id+"_pt",    10, 0, 1000,    ";b-jet"+str_id+" p_{T} [GeV]",   
+	m_outMngrHist -> AddStandardTH1( "bjet"+str_id+"_pt",    10, 0, 1000,    ";b-jet"+str_id+" p_{T} [GeV]",
 					 false, &(m_outData -> o_bjets),  iBJet, "Pt" );
-	m_outMngrHist -> AddStandardTH1( "bjet"+str_id+"_eta",   0.2, -3, 3,    ";b-jet"+str_id+" #eta",           
+	m_outMngrHist -> AddStandardTH1( "bjet"+str_id+"_eta",   0.2, -3, 3,    ";b-jet"+str_id+" #eta",
 					 false, &(m_outData -> o_bjets),  iBJet, "Eta" );
-	m_outMngrHist -> AddStandardTH1( "bjet"+str_id+"_btagw", 0.1,-1.1,1.1,  ";b-jet"+str_id+" MV2c10",         
+	m_outMngrHist -> AddStandardTH1( "bjet"+str_id+"_btagw", 0.1,-1.1,1.1,  ";b-jet"+str_id+" MV2c10",
 					 false, &(m_outData -> o_bjets),  iBJet, "btagw" );
-	m_outMngrHist -> AddStandardTH1( "bjet"+str_id+"_jvt",   0.1,-1.1,1.1,  ";b-jet"+str_id+" JVT",            
+	m_outMngrHist -> AddStandardTH1( "bjet"+str_id+"_jvt",   0.1,-1.1,1.1,  ";b-jet"+str_id+" JVT",
 					 false, &(m_outData -> o_bjets),  iBJet, "jvt" );
-	
+
 	//for MC
 	if(m_opt->VerboseOutput() && !m_opt->IsData() && (iBJet <= 0) ){
-	  m_outMngrHist -> AddStandardTH1( "bjet_truth_b"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth B-Jet"+str_id+" p_{T} [GeV]",  DrawSyst,   
+	  m_outMngrHist -> AddStandardTH1( "bjet_truth_b"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth B-Jet"+str_id+" p_{T} [GeV]",  DrawSyst,
 					   &(m_outData -> o_bjets_truth_b), iBJet, "Pt");
-	  m_outMngrHist -> AddStandardTH1( "bjet_truth_c"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth C-Jet"+str_id+" p_{T} [GeV]",  DrawSyst,   
+	  m_outMngrHist -> AddStandardTH1( "bjet_truth_c"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth C-Jet"+str_id+" p_{T} [GeV]",  DrawSyst,
 					   &(m_outData -> o_bjets_truth_c), iBJet, "Pt");
-	  m_outMngrHist -> AddStandardTH1( "bjet_truth_tau"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth #tau-Jet"+str_id+" p_{T} [GeV]",  
+	  m_outMngrHist -> AddStandardTH1( "bjet_truth_tau"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth #tau-Jet"+str_id+" p_{T} [GeV]",
 					   DrawSyst, &(m_outData -> o_jets_truth_tau), iBJet, "Pt");
-	  m_outMngrHist -> AddStandardTH1( "bjet_truth_lqg"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth Light-Jet"+str_id+" p_{T} [GeV]",  
+	  m_outMngrHist -> AddStandardTH1( "bjet_truth_lqg"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth Light-Jet"+str_id+" p_{T} [GeV]",
 					   DrawSyst, &(m_outData -> o_bjets_truth_lqg), iBJet, "Pt");
 	}
-	
+
       }
       for ( int iLJet=-1; iLJet<=4; ++iLJet  ) {
 	std::string str_id = "";
 	str_id += std::to_string(iLJet);
 	if(iLJet==-1) str_id = "s";
-	m_outMngrHist -> AddStandardTH1( "ljet"+str_id+"_pt",    10, 0, 500,   ";light-jet"+str_id+" p_{T} [GeV]",  
+	m_outMngrHist -> AddStandardTH1( "ljet"+str_id+"_pt",    10, 0, 500,   ";light-jet"+str_id+" p_{T} [GeV]",
 					 false, &(m_outData -> o_ljets), iLJet, "Pt" );
-	m_outMngrHist -> AddStandardTH1( "ljet"+str_id+"_eta",   0.2, -3, 3,   ";light-jet"+str_id+" #eta",         
+	m_outMngrHist -> AddStandardTH1( "ljet"+str_id+"_eta",   0.2, -3, 3,   ";light-jet"+str_id+" #eta",
 					 false, &(m_outData -> o_ljets), iLJet, "Eta" );
-	m_outMngrHist -> AddStandardTH1( "ljet"+str_id+"_btagw", 0.1,-1.1,1.1, ";light-jet"+str_id+" MV2c10", 
+	m_outMngrHist -> AddStandardTH1( "ljet"+str_id+"_btagw", 0.1,-1.1,1.1, ";light-jet"+str_id+" MV2c10",
 					 false, &(m_outData -> o_ljets), iLJet, "btagw" );
-	m_outMngrHist -> AddStandardTH1( "ljet"+str_id+"_jvt",   0.1,-1.1,1.1, ";light-jet"+str_id+" JVT",    
+	m_outMngrHist -> AddStandardTH1( "ljet"+str_id+"_jvt",   0.1,-1.1,1.1, ";light-jet"+str_id+" JVT",
 					 false, &(m_outData -> o_ljets), iLJet, "jvt" );
       }
 
@@ -730,75 +730,75 @@ bool VLQ_Analysis_Data2015::Begin(){
 	  str_id += std::to_string(iTrkjet);
 	  if(iTrkjet==-1) str_id = "s";
 	  const bool DrawSyst = (iTrkjet <= 0) && otherVariables;
-	  m_outMngrHist -> AddStandardTH1( "trkjet"+str_id+"_pt",    10, 0, 1000,     ";Trkjet"+str_id+" p_{T} [GeV]",  DrawSyst,   
+	  m_outMngrHist -> AddStandardTH1( "trkjet"+str_id+"_pt",    10, 0, 1000,     ";Trkjet"+str_id+" p_{T} [GeV]",  DrawSyst,
 					   &(m_outData -> o_trkjets), iTrkjet, "Pt");
-	  m_outMngrHist -> AddStandardTH1( "trkjet"+str_id+"_eta",   0.2, -3, 3,     ";Trkjet"+str_id+" #eta",          DrawSyst,   
+	  m_outMngrHist -> AddStandardTH1( "trkjet"+str_id+"_eta",   0.2, -3, 3,     ";Trkjet"+str_id+" #eta",          DrawSyst,
 					   &(m_outData -> o_trkjets), iTrkjet, "Eta");
-	  m_outMngrHist -> AddStandardTH1( "trkjet"+str_id+"_phi",   0.2, -3.5, 3.5, ";Trkjet"+str_id+" #varphi",       false,      
+	  m_outMngrHist -> AddStandardTH1( "trkjet"+str_id+"_phi",   0.2, -3.5, 3.5, ";Trkjet"+str_id+" #varphi",       false,
 					   &(m_outData -> o_trkjets), iTrkjet, "Phi");
-	  m_outMngrHist -> AddStandardTH1( "trkjet"+str_id+"_btagw", 0.1,-1.1,1.1,   ";Trkjet"+str_id+" MV2c10",        false,      
+	  m_outMngrHist -> AddStandardTH1( "trkjet"+str_id+"_btagw", 0.1,-1.1,1.1,   ";Trkjet"+str_id+" MV2c10",        false,
 					   &(m_outData -> o_trkjets), iTrkjet, "btagw");
-	  m_outMngrHist -> AddStandardTH1( "trkjet"+str_id+"_reff", 0.05,0.,1.0,   ";Trkjet"+str_id+" R_{eff}",        false,      
+	  m_outMngrHist -> AddStandardTH1( "trkjet"+str_id+"_reff", 0.05,0.,1.0,   ";Trkjet"+str_id+" R_{eff}",        false,
 					   &(m_outData -> o_trkjets), iTrkjet, "reff");
-	  
+
 	  //for MC
 	  if(m_opt->VerboseOutput() && !m_opt->IsData() && (iTrkjet <= 0) ){
-	    m_outMngrHist -> AddStandardTH1( "trkjet_truth_b"+str_id+"_pt",    10, 0, 1000,     ";Truth B-Trkjet"+str_id+" p_{T} [GeV]",  DrawSyst,   
+	    m_outMngrHist -> AddStandardTH1( "trkjet_truth_b"+str_id+"_pt",    10, 0, 1000,     ";Truth B-Trkjet"+str_id+" p_{T} [GeV]",  DrawSyst,
 					     &(m_outData -> o_trkjets_truth_b), iTrkjet, "Pt");
-	    m_outMngrHist -> AddStandardTH1( "trkjet_truth_c"+str_id+"_pt",    10, 0, 1000,     ";Truth C-Trkjet"+str_id+" p_{T} [GeV]",  DrawSyst,   
+	    m_outMngrHist -> AddStandardTH1( "trkjet_truth_c"+str_id+"_pt",    10, 0, 1000,     ";Truth C-Trkjet"+str_id+" p_{T} [GeV]",  DrawSyst,
 					     &(m_outData -> o_trkjets_truth_c), iTrkjet, "Pt");
-	    m_outMngrHist -> AddStandardTH1( "trkjet_truth_tau"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth #tau-Trket"+str_id+" p_{T} [GeV]",  
+	    m_outMngrHist -> AddStandardTH1( "trkjet_truth_tau"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth #tau-Trket"+str_id+" p_{T} [GeV]",
 					     DrawSyst, &(m_outData -> o_trkjets_truth_tau), iTrkjet, "Pt");
-	    m_outMngrHist -> AddStandardTH1( "trkjet_truth_lqg"+str_id+"_pt",    10, 0, 1000,     ";Truth Light-Trkjet"+str_id+" p_{T} [GeV]",  DrawSyst,   
+	    m_outMngrHist -> AddStandardTH1( "trkjet_truth_lqg"+str_id+"_pt",    10, 0, 1000,     ";Truth Light-Trkjet"+str_id+" p_{T} [GeV]",  DrawSyst,
 					     &(m_outData -> o_trkjets_truth_lqg), iTrkjet, "Pt");
-	    
+
 	  }
-	  
+
 	}
-	
+
 	for ( int iBTrkjet=-1; iBTrkjet<=3; ++iBTrkjet ) {
 	  std::string str_id = "";
 	  str_id += std::to_string(iBTrkjet);
 	  if(iBTrkjet==-1) str_id = "s";
 	  const bool DrawSyst = (iBTrkjet <= 0) && otherVariables;
-	  m_outMngrHist -> AddStandardTH1( "trkbjet"+str_id+"_pt",    10, 0, 1000,    ";b-trkjet"+str_id+" p_{T} [GeV]",   
+	  m_outMngrHist -> AddStandardTH1( "trkbjet"+str_id+"_pt",    10, 0, 1000,    ";b-trkjet"+str_id+" p_{T} [GeV]",
 					   false, &(m_outData -> o_trkbjets),  iBTrkjet, "Pt" );
-	  m_outMngrHist -> AddStandardTH1( "trkbjet"+str_id+"_eta",   0.2, -3, 3,    ";b-trkjet"+str_id+" #eta",           
+	  m_outMngrHist -> AddStandardTH1( "trkbjet"+str_id+"_eta",   0.2, -3, 3,    ";b-trkjet"+str_id+" #eta",
 					   false, &(m_outData -> o_trkbjets),  iBTrkjet, "Eta" );
-	  m_outMngrHist -> AddStandardTH1( "trkbjet"+str_id+"_btagw", 0.1,-1.1,1.1,  ";b-trkjet"+str_id+" MV2c10",         
+	  m_outMngrHist -> AddStandardTH1( "trkbjet"+str_id+"_btagw", 0.1,-1.1,1.1,  ";b-trkjet"+str_id+" MV2c10",
 					   false, &(m_outData -> o_trkbjets),  iBTrkjet, "btagw" );
-	  m_outMngrHist -> AddStandardTH1( "trkbjet"+str_id+"_reff", 0.05,0.,0.4,   ";b-trkjet"+str_id+" R_{eff}",        false,      
+	  m_outMngrHist -> AddStandardTH1( "trkbjet"+str_id+"_reff", 0.05,0.,0.4,   ";b-trkjet"+str_id+" R_{eff}",        false,
 					   &(m_outData -> o_trkjets), iBTrkjet, "reff");
-	  
+
 	  //for MC
 	  if(m_opt->VerboseOutput() && !m_opt->IsData() && (iBTrkjet <= 0) ){
-	    m_outMngrHist -> AddStandardTH1( "trkbjet_truth_b"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth B-Trkjet"+str_id+" p_{T} [GeV]", 
+	    m_outMngrHist -> AddStandardTH1( "trkbjet_truth_b"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth B-Trkjet"+str_id+" p_{T} [GeV]",
 					     DrawSyst, &(m_outData -> o_trkbjets_truth_b), iBTrkjet, "Pt");
-	    m_outMngrHist -> AddStandardTH1( "trkbjet_truth_c"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth C-Trkjet"+str_id+" p_{T} [GeV]", 
+	    m_outMngrHist -> AddStandardTH1( "trkbjet_truth_c"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth C-Trkjet"+str_id+" p_{T} [GeV]",
 					     DrawSyst, &(m_outData -> o_trkbjets_truth_c), iBTrkjet, "Pt");
-	    m_outMngrHist -> AddStandardTH1( "trkbjet_truth_tau"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth #tau-Trket"+str_id+" p_{T} [GeV]",  
+	    m_outMngrHist -> AddStandardTH1( "trkbjet_truth_tau"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth #tau-Trket"+str_id+" p_{T} [GeV]",
 					     DrawSyst, &(m_outData -> o_trkbjets_truth_tau), iBTrkjet, "Pt");
-	    m_outMngrHist -> AddStandardTH1( "trkbjet_truth_lqg"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth Light-Trkjet"+str_id+" p_{T} [GeV]",  
+	    m_outMngrHist -> AddStandardTH1( "trkbjet_truth_lqg"+str_id+"_pt",    10, 0, 1000,     ";b-tagged Truth Light-Trkjet"+str_id+" p_{T} [GeV]",
 					     DrawSyst, &(m_outData -> o_trkbjets_truth_lqg), iBTrkjet, "Pt");
-	    
+
 	  }
 	}
 	for ( int iLTrkjet=-1; iLTrkjet<=4; ++iLTrkjet  ) {
 	  std::string str_id = "";
 	  str_id += std::to_string(iLTrkjet);
 	  if(iLTrkjet==-1) str_id = "s";
-	  m_outMngrHist -> AddStandardTH1( "trkljet"+str_id+"_pt",    10, 0, 500,   ";light-trkjet"+str_id+" p_{T} [GeV]",  
+	  m_outMngrHist -> AddStandardTH1( "trkljet"+str_id+"_pt",    10, 0, 500,   ";light-trkjet"+str_id+" p_{T} [GeV]",
 					   false, &(m_outData -> o_trkljets), iLTrkjet, "Pt" );
-	  m_outMngrHist -> AddStandardTH1( "trkljet"+str_id+"_eta",   0.2, -3, 3,   ";light-trkjet"+str_id+" #eta",         
+	  m_outMngrHist -> AddStandardTH1( "trkljet"+str_id+"_eta",   0.2, -3, 3,   ";light-trkjet"+str_id+" #eta",
 					   false, &(m_outData -> o_trkljets), iLTrkjet, "Eta" );
-	  m_outMngrHist -> AddStandardTH1( "trkljet"+str_id+"_btagw", 0.1,-1.1,1.1, ";light-trkjet"+str_id+" MV2c10", 
+	  m_outMngrHist -> AddStandardTH1( "trkljet"+str_id+"_btagw", 0.1,-1.1,1.1, ";light-trkjet"+str_id+" MV2c10",
 					   false, &(m_outData -> o_trkljets), iLTrkjet, "btagw" );
-	  m_outMngrHist -> AddStandardTH1( "trkljet"+str_id+"_reff", 0.05,0.,0.4,   ";light-trkjet"+str_id+" R_{eff}",        false,      
+	  m_outMngrHist -> AddStandardTH1( "trkljet"+str_id+"_reff", 0.05,0.,0.4,   ";light-trkjet"+str_id+" R_{eff}",        false,
 					   &(m_outData -> o_trkljets), iLTrkjet, "reff");
 	}
-	
+
       }//TRACK JETS
-      
+
       //Large-R jets
       if( m_opt -> UseLargeRJets() ){
 	m_outMngrHist -> AddStandardTH1( "FatJets_n", 1, -0.5, 5.5,     ";Number of large-R jets",  false, &(m_outData -> o_fjets_n) );
@@ -811,9 +811,9 @@ bool VLQ_Analysis_Data2015::Begin(){
 	  m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_m",   10, 0, 400,  ";Fat jet"+str_id+"  mass [GeV]"       ,  false, &(m_outData -> o_fjets), iLRJet, "M");
 	}
       }
-      
+
     }// DrawReco
-    
+
     //Reclustered jet"+str_id+"  variables
     m_outMngrHist -> AddStandardTH1( "RCjets_n", 1, -0.5, 5.5,     ";Number of signal RC jets", otherVariables, &(m_outData -> o_rcjets_n) );
     for ( int iRCJet=-1; iRCJet<=0; ++iRCJet  ) {
@@ -858,7 +858,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 					 , false, &(m_outData -> o_rcjets), iRCJet, "nmatch_truth");
 	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id + "_pdgId_truth", 1.,0.,30., ";RC jet"+str_id+" PDGID^{truth}"
 					 , false, &(m_outData -> o_rcjets), iRCJet, "pdgId_truth");
-	
+
 	// m_outMngrHist -> AddStandardTH2( "RCjet"+str_id+"_pt", "RCjet"+str_id+"_pdgId_truth", 50, 0, 1000, 1, 0., 26.
 	//          , "RC jet"+str_id+" p_{T} [GeV]; RC jet"+str_id+" p_{T} [GeV]; RC jet"+str_id+" PDGID^{truth}", "RC jet"+str_id+" PDGID^{truth}"
 	//          , false, &(m_outData -> o_rcjets), &(m_outData -> o_rcjets), iRCJet, iRCJet, false, "Pt", "pdgId_truth" );
@@ -873,7 +873,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 	//          , false, &(m_outData -> o_rcjets), &(m_outData -> o_rcjets), iRCJet, iRCJet, false, "nbconsts", "pdgId_truth" );
       }
     }
-    
+
 
     if(DrawTruth && m_opt->VerboseOutput()){
 
@@ -894,10 +894,10 @@ bool VLQ_Analysis_Data2015::Begin(){
 	for ( int iRCJet =-1; iRCJet <=0; ++iRCJet ) {
 	  std::string str_id = "";
 	  str_id += std::to_string(iRCJet);
-	  if(iRCJet==-1) str_id = "s";    
+	  if(iRCJet==-1) str_id = "s";
 
 	  m_outMngrHist -> AddStandardTH2( type+"_RCjet"+str_id+"_pt", type+"_RCjet"+str_id+"_m", 50, 0, 1200, 10, 0, 500
-					   , "truth "+tagstring+" RC jet"+str_id+" p_{T} [GeV]; truth "+tagstring+" RC jet"+str_id+" p_{T} [GeV]; truth "+tagstring+" RC jet"+str_id+" mass [GeV]", 
+					   , "truth "+tagstring+" RC jet"+str_id+" p_{T} [GeV]; truth "+tagstring+" RC jet"+str_id+" p_{T} [GeV]; truth "+tagstring+" RC jet"+str_id+" mass [GeV]",
 					   "truth "+tagstring+" RC jet"+str_id+" mass [GeV]"
 					   , false, &(m_outData -> o_rcjets_truthmatched.at(type)), &(m_outData -> o_rcjets_truthmatched.at(type)), iRCJet, iRCJet, false, "Pt", "M" );
 	  m_outMngrHist -> AddStandardTH2( type+"_RCjet"+str_id+"_pt", type+"_RCjet"+str_id+"_nconsts", 50, 0, 1200, 1, -0.5, 5.5
@@ -908,7 +908,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 					   , "truth "+tagstring+" RC jet"+str_id+" p_{T} [GeV]; truth "+tagstring+" RC jet"+str_id+" p_{T} [GeV]; Number of truth "+tagstring+" RC jet"+str_id
 					   +" b-tagged consts", "Number of truth "+tagstring+" RC jet"+str_id+" b-tagged consts"
 					   , false, &(m_outData -> o_rcjets_truthmatched.at(type)), &(m_outData -> o_rcjets_truthmatched.at(type)), iRCJet, iRCJet, false, "Pt", "nbconsts" );
-	
+
 	  m_outMngrHist -> AddStandardTH1( type+"_RCjet"+str_id+"_pt", 50, 0, 1200, ";truth "+tagstring+" RC jet"+str_id+" p_{T} [GeV]", false, &(m_outData -> o_rcjets_truthmatched.at(type))
 					   , iRCJet, "Pt");
 	  m_outMngrHist -> AddStandardTH1( type+"_RCjet"+str_id+"_m", 10, 0, 500, ";truth "+tagstring+" RC jet"+str_id+" mass [GeV]", false, &(m_outData -> o_rcjets_truthmatched.at(type)), iRCJet, "M");
@@ -931,31 +931,31 @@ bool VLQ_Analysis_Data2015::Begin(){
 	  if(iTT==-1) str_id = "s";
 	  const bool DrawSyst = (iTT == 0) && otherVariables;
 	  if(DrawReco){
-	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_pt", 50, 0, 5000, ";"+decayType+" reco VLQ"+str_id+" p_{T} [GeV]" ,  
+	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_pt", 50, 0, 5000, ";"+decayType+" reco VLQ"+str_id+" p_{T} [GeV]" ,
 					     DrawSyst, &(m_outData -> o_recoVLQ.at(decayType)), iTT, "Pt" );
-	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_eta", 0.2, -3, 3, ";"+decayType+" reco VLQ"+str_id+" #eta"        ,  
+	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_eta", 0.2, -3, 3, ";"+decayType+" reco VLQ"+str_id+" #eta"        ,
 					     DrawSyst, &(m_outData -> o_recoVLQ.at(decayType)), iTT, "Eta" );
-	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_m", 25, 0, 5000, ";"+decayType+" reco VLQ"+str_id+" mass [GeV]"    ,  
+	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_m", 25, 0, 5000, ";"+decayType+" reco VLQ"+str_id+" mass [GeV]"    ,
 					     true, &(m_outData -> o_recoVLQ.at(decayType)), iTT, "M" );
-	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_redm", 25, 0, 4000, ";"+decayType+" reco VLQ"+str_id+" reduced mass [GeV]"    ,  
+	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_redm", 25, 0, 4000, ";"+decayType+" reco VLQ"+str_id+" reduced mass [GeV]"    ,
 					     true, &(m_outData -> o_recoVLQ.at(decayType)), iTT, "redM" );
-	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_redm2", 25, 0, 4000, ";"+decayType+" reco VLQ"+str_id+" reduced mass [GeV]"    ,  
+	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_redm2", 25, 0, 4000, ";"+decayType+" reco VLQ"+str_id+" reduced mass [GeV]"    ,
 					     true, &(m_outData -> o_recoVLQ.at(decayType)), iTT, "redM2" );
 
-	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_m1", 10, 0, 500, ";"+decayType+" reco VLQ"+str_id+" m_{1} [GeV]"    ,  
+	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_m1", 10, 0, 500, ";"+decayType+" reco VLQ"+str_id+" m_{1} [GeV]"    ,
 					     DrawSyst, &(m_outData -> o_recoVLQ.at(decayType)), iTT, "m1" );
-	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_m2", 10, 0, 500, ";"+decayType+" reco VLQ"+str_id+" m_{2} [GeV]"    ,  
+	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_m2", 10, 0, 500, ";"+decayType+" reco VLQ"+str_id+" m_{2} [GeV]"    ,
 					     DrawSyst, &(m_outData -> o_recoVLQ.at(decayType)), iTT, "m2" );
-	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_dR12", 0.1, 0, 6, ";"+decayType+" reco VLQ"+str_id+" #DeltaR(1,2)"    ,  
+	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_dR12", 0.1, 0, 6, ";"+decayType+" reco VLQ"+str_id+" #DeltaR(1,2)"    ,
 					     DrawSyst, &(m_outData -> o_recoVLQ.at(decayType)), iTT, "dR12" );
-	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_dPhi12", 0.1, 0, 4, ";"+decayType+" reco VLQ"+str_id+" #Delta#phi(1,2)"    ,  
+	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_dPhi12", 0.1, 0, 4, ";"+decayType+" reco VLQ"+str_id+" #Delta#phi(1,2)"    ,
 					     DrawSyst, &(m_outData -> o_recoVLQ.at(decayType)), iTT, "dPhi12" );
-	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_dEta12", 0.1, 0, 6, ";"+decayType+" reco VLQ"+str_id+" #Delta#eta(1,2)"    ,  
+	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_dEta12", 0.1, 0, 6, ";"+decayType+" reco VLQ"+str_id+" #Delta#eta(1,2)"    ,
 					     DrawSyst, &(m_outData -> o_recoVLQ.at(decayType)), iTT, "dEta12" );
-	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_fpT12", 0.1, 0., 10., ";"+decayType+" reco VLQ"+str_id+" fpT(1,2)"    ,  
+	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ" + str_id + "_fpT12", 0.1, 0., 10., ";"+decayType+" reco VLQ"+str_id+" fpT(1,2)"    ,
 					     DrawSyst, &(m_outData -> o_recoVLQ.at(decayType)), iTT, "fpT12" );
 	  }
-	
+
 	  if(DrawTruth){
 	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ"+str_id + "_pT_truth", 50.,0.,3000., "; "+decayType+" reco VLQ"+str_id+" p_{T}^{truth}"
 					     , false, &(m_outData -> o_recoVLQ.at(decayType)), iTT, "pT_truth");
@@ -965,13 +965,13 @@ bool VLQ_Analysis_Data2015::Begin(){
 					     , false, &(m_outData -> o_recoVLQ.at(decayType)), iTT, "dR_truth");
 	    m_outMngrHist -> AddStandardTH1( decayType + "_recoVLQ"+str_id + "_nmatch_truth", 1.,0.,3., "; "+decayType+" reco VLQ"+str_id+" N_{match}^{truth}"
 					     , false, &(m_outData -> o_recoVLQ.at(decayType)), iTT, "nmatch_truth");
-	  
+
 	  }
-	
+
 	}//index loop
-      
+
       }//decay types
-    
+
     }//Verbose Output
 
     //
@@ -989,7 +989,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "leptop_nmatch_truth",   1, 0, 2, ";Leptonic top isTruthMatched"
                ,  false, &(m_outData -> o_leptop), -1, "nmatch_truth");
 
-      m_outMngrHist -> AddStandardTH2( "leptop_pT_truth", "leptop_fpT_truth"   
+      m_outMngrHist -> AddStandardTH2( "leptop_pT_truth", "leptop_fpT_truth"
 				       ,50, 0, 2500, 0.1, 0., 2.
 				       ,"Leptonic top p_{T}^{truth} [GeV]", "Leptonic top p_{T}^{reco}/p_{T}^{truth}"
 				       ,  false, &(m_outData -> o_leptop), &(m_outData -> o_leptop), -1, -1, true, "pT_truth", "fpT_truth");
@@ -1009,7 +1009,7 @@ bool VLQ_Analysis_Data2015::Begin(){
                ,  false, &(m_outData -> o_lepW), -1, "nmatch_truth");
 
 
-      m_outMngrHist -> AddStandardTH2( "lepW_pT_truth", "lepW_fpT_truth"   
+      m_outMngrHist -> AddStandardTH2( "lepW_pT_truth", "lepW_fpT_truth"
 				       ,50, 0, 2500, 0.1, 0., 2.
 				       ,"Leptonic W p_{T}^{truth} [GeV]", "Leptonic W p_{T}^{reco}/p_{T}^{truth}"
 				       ,  false, &(m_outData -> o_lepW), &(m_outData -> o_lepW), -1, -1, true, "pT_truth", "fpT_truth");
@@ -1041,9 +1041,9 @@ bool VLQ_Analysis_Data2015::Begin(){
 
       if(DrawReco){
 	m_outMngrHist -> AddStandardTH1( type + "_jets_n", 1, -0.5, 5.5, ";Number of "+tagstring+" jets",  otherVariables, &(m_outData -> o_taggedjets_n.at(type)) );
-	m_outMngrHist -> AddStandardTH1( type + "_leptop_dRmin",0.1, 0, 6.,";#DeltaR_{min}(Leptonic top, RC-tagged jet)", 
+	m_outMngrHist -> AddStandardTH1( type + "_leptop_dRmin",0.1, 0, 6.,";#DeltaR_{min}(Leptonic top, RC-tagged jet)",
 					 false, &(m_outData -> o_leptop), -1, "dRmin_"+type, hopt_nouflow);
-	m_outMngrHist -> AddStandardTH1( type + "_leptop_b_dRmin",0.1, 0, 6.,";#DeltaR_{min}(Leptonic top-b, RC-tagged jet)", 
+	m_outMngrHist -> AddStandardTH1( type + "_leptop_b_dRmin",0.1, 0, 6.,";#DeltaR_{min}(Leptonic top-b, RC-tagged jet)",
 					 false, &(m_outData -> o_leptop), -1, "dRmin_b_"+type, hopt_nouflow);
       }
       for ( int iTT =-1; iTT <=0; ++iTT ) {
@@ -1052,23 +1052,23 @@ bool VLQ_Analysis_Data2015::Begin(){
         if(iTT==-1) str_id = "s";
         const bool DrawSyst = (iTT == 0) && otherVariables;
 	if(DrawReco){
-	  m_outMngrHist -> AddStandardTH1( type + "_jet" + str_id + "_pt", 50, 0, 1000, ";"+tagstring+" jet"+str_id+" p_{T} [GeV]" ,  
+	  m_outMngrHist -> AddStandardTH1( type + "_jet" + str_id + "_pt", 50, 0, 1000, ";"+tagstring+" jet"+str_id+" p_{T} [GeV]" ,
 					   DrawSyst, &(m_outData -> o_taggedjets.at(type)), iTT, "Pt" );
-	  m_outMngrHist -> AddStandardTH1( type + "_jet" + str_id + "_eta", 0.2, -3, 3, ";"+tagstring+" jet"+str_id+" #eta"        ,  
+	  m_outMngrHist -> AddStandardTH1( type + "_jet" + str_id + "_eta", 0.2, -3, 3, ";"+tagstring+" jet"+str_id+" #eta"        ,
 					   DrawSyst, &(m_outData -> o_taggedjets.at(type)), iTT, "Eta" );
-	  m_outMngrHist -> AddStandardTH1( type + "_jet" + str_id + "_m", 10, 0, 500, ";"+tagstring+" jet"+str_id+" mass [GeV]"    ,  
+	  m_outMngrHist -> AddStandardTH1( type + "_jet" + str_id + "_m", 10, 0, 500, ";"+tagstring+" jet"+str_id+" mass [GeV]"    ,
 					   DrawSyst, &(m_outData -> o_taggedjets.at(type)), iTT, "M" );
-	  m_outMngrHist -> AddStandardTH1( type + "_jet" +str_id+ "_bconsts_n", 1, -0.5, 5.5, ";"+tagstring+" jet"+str_id+" N_{subjets}^{b-tagged}",  
+	  m_outMngrHist -> AddStandardTH1( type + "_jet" +str_id+ "_bconsts_n", 1, -0.5, 5.5, ";"+tagstring+" jet"+str_id+" N_{subjets}^{b-tagged}",
 					   DrawSyst, &(m_outData -> o_taggedjets.at(type)), iTT, "nbconsts" );
 	  if(type=="RCTTMass" || type=="LooseRCTTMass"){
-	    m_outMngrHist -> AddStandardTH1( type + "_jet" +str_id+ "_consts_n", 1, -0.5, 5.5, ";"+tagstring+" jet"+str_id+" N_{subjets}",  
+	    m_outMngrHist -> AddStandardTH1( type + "_jet" +str_id+ "_consts_n", 1, -0.5, 5.5, ";"+tagstring+" jet"+str_id+" N_{subjets}",
 					     DrawSyst, &(m_outData -> o_taggedjets.at(type)), iTT, "nconsts" );
 	  }
 
-	  if(m_opt->VerboseOutput()){	  
+	  if(m_opt->VerboseOutput()){
 	    // 2D variables for boosted object tagging optimization studies
 	    m_outMngrHist -> AddStandardTH2( type + "_jet" + str_id + "_pt", type + "_jet" + str_id + "_m", 50, 0, 1200, 10, 0, 500
-					     , tagstring+" jet"+str_id+" p_{T} [GeV]; "+tagstring+" jet"+str_id+" p_{T} [GeV]; "+tagstring+" jet"+str_id+" mass [GeV]", 
+					     , tagstring+" jet"+str_id+" p_{T} [GeV]; "+tagstring+" jet"+str_id+" p_{T} [GeV]; "+tagstring+" jet"+str_id+" mass [GeV]",
 					     tagstring+" jet"+str_id+" mass [GeV]"
 					     , false, &(m_outData -> o_taggedjets.at(type)), &(m_outData -> o_taggedjets.at(type)), iTT, iTT, false, "Pt", "M" );
 	    m_outMngrHist -> AddStandardTH2( type + "_jet" + str_id + "_pt", type + "_jet" + str_id + "_nconsts", 50, 0, 1200, 1, -0.5, 5.5
@@ -1079,9 +1079,9 @@ bool VLQ_Analysis_Data2015::Begin(){
 					     , tagstring+" jet"+str_id+" p_{T} [GeV]; "+tagstring+" jet"+str_id+" p_{T} [GeV]; Number of "+tagstring+" jet"+str_id+" b-tagged consts"
 					     , "Number of "+tagstring+" jet"+str_id+" b-tagged consts"
 					     , false, &(m_outData -> o_taggedjets.at(type)), &(m_outData -> o_taggedjets.at(type)), iTT, iTT, false, "Pt", "nbconsts" );
-	  }	  
+	  }
 	}//DrawReco
-	
+
 	//
 	// For truth-match studies
 	//
@@ -1097,10 +1097,10 @@ bool VLQ_Analysis_Data2015::Begin(){
 	  m_outMngrHist -> AddStandardTH1( type + "_jet"+str_id + "_pdgId_truth", 1.,0.,26., "; "+tagstring+" jet"+str_id+" PDGID^{truth}"
 					   , false, &(m_outData -> o_taggedjets.at(type)), iTT, "pdgId_truth");
 	}
-	
+
       }//index loop
     }
-    
+
     //Electron variables
     m_outMngrHist -> AddStandardTH1( "el_n", 1, -0.5, 5.5, ";Number of signal electrons", false, &(m_outData -> o_el_n) );
     for ( int iEl=-1; iEl<=0; ++iEl ) {
@@ -1132,7 +1132,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       //m_outMngrHist -> AddStandardTH1( "mu"+str_id+"_ptvarcone30",  0.01, 0, 0.2, ";Muon ptvarcone30/p_{T}"   ,  false, &(m_outData -> o_mu), iMu, "ptvarcone30" );
       //m_outMngrHist -> AddStandardTH1( "mu"+str_id+"_topoetcone20",  0.01, 0, 0.2,";Muon topoetcone20/p_{T}"  ,  false, &(m_outData -> o_mu), iMu, "topoetcone20" );
     }
-   
+
 
     //Lepton variables
     if(DrawReco){
@@ -1196,7 +1196,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 	m_outMngrHist -> AddStandardTH1( "mbb_mindR_lowb_4b",  10,0,300,  ";m_{bb}^{#DeltaR min} (LowB_4b) [GeV]", otherVariables, &(m_outData -> o_mbb_mindR_lowb_4b) );
 	m_outMngrHist -> AddStandardTH1( "dR_bjetbjet_lowb_4b", 0.25,0,5,  ";#DeltaR_{min}(b-jet,b-jet) (LowB_4b)", false, &(m_outData -> o_dRmin_bjetbjet_lowb_4b) );
       }
-      
+
     }//DrawReco
 
     //Truth variables
@@ -1204,7 +1204,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       std::vector<std::string> truthTypes = {};
 
       if(m_opt -> SampleName() == SampleName::VLQ ){
-	truthTypes = {    
+	truthTypes = {
 	  "VLQ", "VLQ_Ht", "VLQ_Zt", "VLQ_Wb",
 	  "VLQ_Hbdect", "VLQ_Wlepb", "VLQ_Whadb", "VLQ_Zhadt",
 	  "b1", "b2",
@@ -1219,13 +1219,13 @@ bool VLQ_Analysis_Data2015::Begin(){
 	};
       }
       else if( m_outData -> o_is_ttbar ){
-	truthTypes = {    
+	truthTypes = {
 	  "hadtop", "hadtop_b", "hadtop_W", "hadtop_q1", "hadtop_q2",
 	  "leptop", "leptop_b", "leptop_W", "leptop_lep", "leptop_nu"
 	};
       }
 
-      
+
       for ( const std::string type : truthTypes ){
 
 	m_outMngrHist -> AddStandardTH1( "truth_"+type + "_n", 1, -0.5, 5.5, ";Number of truth "+type,  false, &(m_outData -> o_truth_partons_n.at(type)) );
@@ -1234,12 +1234,12 @@ bool VLQ_Analysis_Data2015::Begin(){
 	  str_id += std::to_string(iTT);
 	  if(iTT==-1) str_id = "s";
 
-	  m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pt", 50, 0, 2500, "; truth "+type+", "+str_id+" p_{T} [GeV]" ,  
+	  m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pt", 50, 0, 2500, "; truth "+type+", "+str_id+" p_{T} [GeV]" ,
 					   false, &(m_outData -> o_truth_partons.at(type)), iTT, "Pt" );
-	  m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_eta", 0.2, -4, 4, "; truth "+type+", "+str_id+" #eta"        ,  
+	  m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_eta", 0.2, -4, 4, "; truth "+type+", "+str_id+" #eta"        ,
 					   false, &(m_outData -> o_truth_partons.at(type)), iTT, "Eta" );
 	  double  mmax_part = (type.find("VLQ") == std::string::npos) ? 500. : 2000.;
-	  m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_m", 10, 0, mmax_part, "; truth "+type+", "+str_id+" mass [GeV]"    ,  
+	  m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_m", 10, 0, mmax_part, "; truth "+type+", "+str_id+" mass [GeV]"    ,
 					   false, &(m_outData -> o_truth_partons.at(type)), iTT, "M" );
 
 	  if(type.find("_nu") != std::string::npos || (type.find("invZ") != std::string::npos)){
@@ -1249,7 +1249,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 					     , false, &(m_outData -> o_truth_partons.at(type)), iTT, "frac_MET"/*, hopt_nouflow*/  );
 	  }
 	  if(type.find("VLQ") != std::string::npos){
-	  
+
 	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_fpT12",  0.25,0,5,  "; truth"+type+", "+str_id+" fpT_{12}"
 					     , false, &(m_outData -> o_truth_partons.at(type)), iTT, "fpT12"/*, hopt_nouflow*/  );
 	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dR12",  0.1,0,6,  "; truth"+type+", "+str_id+" #DeltaR_{12}"
@@ -1269,14 +1269,14 @@ bool VLQ_Analysis_Data2015::Begin(){
 					       , false, &(m_outData -> o_truth_partons.at(type)), iTT, "dPhi_blep"/*, hopt_nouflow*/  );
 	      m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dPhi_bnu",  0.1,0.,4,  "; truth"+type+", "+str_id+" #Delta#phi(b,#nu)"
 					       , false, &(m_outData -> o_truth_partons.at(type)), iTT, "dPhi_bnu"/*, hopt_nouflow*/  );
-	      m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_mT_bnu", 25, 0, 3000, "; truth "+type+", "+str_id+" m_{T}(b,#nu) [GeV]"    ,  
+	      m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_mT_bnu", 25, 0, 3000, "; truth "+type+", "+str_id+" m_{T}(b,#nu) [GeV]"    ,
 					       false, &(m_outData -> o_truth_partons.at(type)), iTT, "mT_bnu"/*, hopt_nouflow*/ );
 	    }//leptop
 	    if(type=="hadtop"){
 	      m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dRmax_bq",  0.25,0,5,  "; truth"+type+", "+str_id+" #DeltaR_{max}(b,q_{1},q_{2})"
 					       , false, &(m_outData -> o_truth_partons.at(type)), iTT, "dRmax_bq"/*, hopt_nouflow*/  );
 	    }//hadtop
-	  
+
 	  }//top
 	  if(type == "H"){
 	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dR_bb",  0.25,0,5,  "; truth"+type+", "+str_id+" #DeltaR(b_{1},b_{2})"
@@ -1287,7 +1287,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 					     , false, &(m_outData -> o_truth_partons.at(type)), iTT, "dPhi_lepnu"/*, hopt_nouflow*/  );
 	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dEta_lepnu",  0.1,0,8,  "; truth"+type+", "+str_id+" #Delta#eta(lep,#nu)"
 					     , false, &(m_outData -> o_truth_partons.at(type)), iTT, "dEta_lepnu"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_mT_lepnu", 25, 0, 3000, "; truth "+type+", "+str_id+" m_{T}(lep,#nu) [GeV]"    ,  
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_mT_lepnu", 25, 0, 3000, "; truth "+type+", "+str_id+" m_{T}(lep,#nu) [GeV]"    ,
 					     false, &(m_outData -> o_truth_partons.at(type)), iTT, "mT_lepnu"/*, hopt_nouflow*/ );
 	    if(type == "leptop"){
 	      //Truth-matching
@@ -1352,8 +1352,8 @@ bool VLQ_Analysis_Data2015::Begin(){
 	  }
 
 
-	  if( (type == "leptop") || (type == "hadtop") || (type == "hadtop_W") || 
-	      (type == "Hbb") || (type == "Hnonbb") || 
+	  if( (type == "leptop") || (type == "hadtop") || (type == "hadtop_W") ||
+	      (type == "Hbb") || (type == "Hnonbb") ||
 	      (type == "hadW") || (type == "hadZ") ){
 
 	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pT_reco", 50.,0.,2000., "; truth"+type+", "+str_id+" p_{T}^{RC}"
@@ -1381,7 +1381,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 	  }
 
 	}//Number of objects of a type
-      
+
       }//Type of truth
 
       m_outMngrHist -> AddStandardTH1( "truth_dRmin_bb",  0.25,0,5,  "; truth #DeltaR_min(b,b)"
@@ -1588,27 +1588,27 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     m_outData -> o_truth_met_filter = met_truth;
     if( m_opt -> FilterType() == VLQ_Options::APPLYFILTER ){
 
-      if( ( m_opt -> StrSampleID().find("410470.") != std::string::npos ) 
-	  || ( m_opt -> StrSampleID().find("410464.") != std::string::npos ) || ( m_opt -> StrSampleID().find("410465.") != std::string::npos ) 
+      if( ( m_opt -> StrSampleID().find("410470.") != std::string::npos )
+	  || ( m_opt -> StrSampleID().find("410464.") != std::string::npos ) || ( m_opt -> StrSampleID().find("410465.") != std::string::npos )
 	  || ( m_opt -> StrSampleID().find("410557.") != std::string::npos ) || ( m_opt -> StrSampleID().find("410558.") != std::string::npos ) ){
 	if( ht_truth > 600 ) return false;
-      } 
+      }
       else if( ( m_opt -> StrSampleID().find("407344.") != std::string::npos )
 	       || ( m_opt -> StrSampleID().find("407350.") != std::string::npos )
 	       || ( m_opt -> StrSampleID().find("407356.") != std::string::npos ) ){
 	if( ht_truth < 600 || ht_truth > 1000 ) return false;
-      } 
+      }
       else if( ( m_opt -> StrSampleID().find("407343.") != std::string::npos )
 	       || ( m_opt -> StrSampleID().find("407349.") != std::string::npos )
 	       || ( m_opt -> StrSampleID().find("407355.") != std::string::npos ) ){
 	if( ht_truth < 1000 || ht_truth > 1500 ) return false;
-      } 
+      }
       else if( ( m_opt -> StrSampleID().find("407342.") != std::string::npos )
 	       || ( m_opt -> StrSampleID().find("407348.") != std::string::npos )
 	       || ( m_opt -> StrSampleID().find("407354.") != std::string::npos ) ){
 	if( ht_truth < 1500 ) return false;
       }
-      
+
     }//filter
   }//ttbar
 
@@ -1707,10 +1707,10 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 	}
       }
       m_outData -> o_selLep = lepton;
-    }//1-lepton 
+    }//1-lepton
     else if ( (m_outData -> o_mu_n + m_outData -> o_el_n) == 0 ) {
       m_outData-> o_channel_type = VLQ_Enums::FULLHAD;
-    }//0-lepton 
+    }//0-lepton
     else if ( (m_outData -> o_mu_n + m_outData -> o_el_n) == 2 ) {
       if( m_outData -> o_el_n == 2){
 	m_outData-> o_channel_type = VLQ_Enums::ELEL;
@@ -1749,8 +1749,8 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     if( m_opt -> UseMETTriggerOneLep() && trigMETPass && m_outData -> o_AO_met -> Pt() > 200 ) checkTriggerMatching = false;
     if( checkTriggerMatching ){
 
-      bool ele_ch = (m_outData-> o_channel_type == VLQ_Enums::ELECTRON) || (m_outData-> o_channel_type == VLQ_Enums::ELEL); 
-      bool mu_ch = (m_outData-> o_channel_type == VLQ_Enums::MUON) || (m_outData-> o_channel_type == VLQ_Enums::MUMU); 
+      bool ele_ch = (m_outData-> o_channel_type == VLQ_Enums::ELECTRON) || (m_outData-> o_channel_type == VLQ_Enums::ELEL);
+      bool mu_ch = (m_outData-> o_channel_type == VLQ_Enums::MUON) || (m_outData-> o_channel_type == VLQ_Enums::MUMU);
 
       if(m_outData-> o_channel_type == VLQ_Enums::ELMU){
 	ele_ch = m_outData -> o_el -> at(0)->Pt() > m_outData -> o_mu -> at(0)->Pt();
@@ -1809,22 +1809,22 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 
   if( isElectronChannel || isElectronChannelHMET ){
     m_outData-> o_channel_type = VLQ_Enums::ELECTRON;
-  } 
+  }
   else if( isMuonChannel || isMuonChannelHMET ){
     m_outData-> o_channel_type = VLQ_Enums::MUON;
-  } 
+  }
   else if( isElElChannel || isElElChannelHMET ){
     m_outData-> o_channel_type = VLQ_Enums::ELEL;
-  } 
+  }
   else if( isMuMuChannel || isMuMuChannelHMET ){
     m_outData-> o_channel_type = VLQ_Enums::MUMU;
-  } 
+  }
   else if( isElMuChannel || isElMuChannelHMET ){
     m_outData-> o_channel_type = VLQ_Enums::ELMU;
-  } 
+  }
   else if( is0LeptonChannel ){
     m_outData-> o_channel_type = VLQ_Enums::FULLHAD;
-  } 
+  }
   else {
     m_outData-> o_channel_type = VLQ_Enums::UNDEFINED;
   }
@@ -1910,9 +1910,9 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
   // C8: Additional Met cut/veto in 1-lep channel             #
   //                                                          #
   //###########################################################
-  if( ( m_outData-> o_channel_type == VLQ_Enums::ELECTRON || m_outData-> o_channel_type == VLQ_Enums::MUON ) && 
-      ( (m_outData -> o_AO_met->Pt() < m_opt->MinMetCutOneLep()) 
-  || (m_opt->MaxMetCutOneLep() > 0. && m_outData -> o_AO_met->Pt() > m_opt->MaxMetCutOneLep()) ) ){ 
+  if( ( m_outData-> o_channel_type == VLQ_Enums::ELECTRON || m_outData-> o_channel_type == VLQ_Enums::MUON ) &&
+      ( (m_outData -> o_AO_met->Pt() < m_opt->MinMetCutOneLep())
+  || (m_opt->MaxMetCutOneLep() > 0. && m_outData -> o_AO_met->Pt() > m_opt->MaxMetCutOneLep()) ) ){
     m_outData -> o_rejectEvent |= 1 << VLQ_Enums::METONELEP_REJECTED;
   }
 
@@ -1922,14 +1922,14 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
   //                                                          #
   //###########################################################
   if( (m_outData-> o_channel_type == VLQ_Enums::FULLHAD) &&
-      ( (m_outData -> o_AO_met->Pt() < m_opt->MinMetCutZeroLep()) 
-  || (m_opt->MaxMetCutZeroLep() > 0. && m_outData -> o_AO_met->Pt() > m_opt->MaxMetCutZeroLep()) ) ){ 
+      ( (m_outData -> o_AO_met->Pt() < m_opt->MinMetCutZeroLep())
+  || (m_opt->MaxMetCutZeroLep() > 0. && m_outData -> o_AO_met->Pt() > m_opt->MaxMetCutZeroLep()) ) ){
     m_outData -> o_rejectEvent |= 1 << VLQ_Enums::METZEROLEP_REJECTED;
   }
 
 
-  if( (m_outData-> o_channel_type == VLQ_Enums::ELEL || m_outData-> o_channel_type == VLQ_Enums::MUMU || 
-       m_outData-> o_channel_type == VLQ_Enums::ELMU) && 
+  if( (m_outData-> o_channel_type == VLQ_Enums::ELEL || m_outData-> o_channel_type == VLQ_Enums::MUMU ||
+       m_outData-> o_channel_type == VLQ_Enums::ELMU) &&
       (m_opt->MaxMetCutTwoLep() > 0. && m_outData -> o_AO_met->Pt() > m_opt->MaxMetCutTwoLep())){
 
     m_outData -> o_rejectEvent |= 1 << VLQ_Enums::METTWOLEP_REJECTED;
@@ -1979,17 +1979,17 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
       //m_truthMngr -> Initialize();
       //m_truthMngr -> FillParticlesPartonsVectors();
       m_truthMngr -> CalculateTruthVariables();
-      
+
       //
       // Truth-matched fat jet studies
-      
+
       //
       // Match required partons to fat jets
       //
       std::vector<std::string> heavy_list = {};
       if( m_opt -> SampleName() == SampleName::VLQ ){ heavy_list = { "leptop", "hadtop", "hadtop_W", "Hbb", "Hnonbb", "hadW", "hadZ" }; }
       if( m_outData -> o_is_ttbar ){ heavy_list = {"leptop", "hadtop", "hadtop_W"}; }
-      
+
       for( const std::string & restype : heavy_list ){
 	AOVector* rescol = (m_outData -> o_truth_partons).at(restype);
 	if(!rescol){
@@ -1997,16 +1997,16 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 	  continue;
 	}
 	for( AnalysisObject* parton : *rescol ){
-	  m_truthMngr -> MatchPartonToFatJets(*(m_outData -> o_rcjets), parton, 0.75 /*maxDR*/, true /*rcCollection*/, false /*tagCollection*/, 
-					      true /*containment*/, 1.0 /*drcontained*/, true /*checkPt*/); 
-	  
+	  m_truthMngr -> MatchPartonToFatJets(*(m_outData -> o_rcjets), parton, 0.75 /*maxDR*/, true /*rcCollection*/, false /*tagCollection*/,
+					      true /*containment*/, 1.0 /*drcontained*/, true /*checkPt*/);
+
 	  //===== Fill truth matched RC jets map =====
 	  for( AnalysisObject* rcjet : *(m_outData -> o_rcjets) ){
-	    
+
 	    bool isTop = rcjet->M() > 140;
 	    bool isHiggs = rcjet->M() > 105 && rcjet->M() < 140;
 	    bool isV = rcjet->M() > 70 && rcjet->M() < 105;
-	    
+
 	    if( rcjet -> GetMoment("pdgId_truth") == 6 ){
 	      m_outData -> o_rcjets_truthmatched.at("truthTop") -> push_back(rcjet);
 	      if( isTop ){
@@ -2040,30 +2040,30 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 	  m_outData -> o_rcjets_truthmatched_n.at("truthW")     = m_outData -> o_rcjets_truthmatched.at("truthW")     -> size();
 	  m_outData -> o_rcjets_truthmatched_n.at("truthHiggs") = m_outData -> o_rcjets_truthmatched.at("truthHiggs") -> size();
 	  m_outData -> o_rcjets_truthmatched_n.at("truthOther") = m_outData -> o_rcjets_truthmatched.at("truthOther") -> size();
-	  
+
 	  m_outData -> o_rcjets_truthmatched_n.at("truthTop_inMassWindow")   = m_outData -> o_rcjets_truthmatched.at("truthTop_inMassWindow")   -> size();
 	  m_outData -> o_rcjets_truthmatched_n.at("truthZ_inMassWindow")     = m_outData -> o_rcjets_truthmatched.at("truthZ_inMassWindow")     -> size();
 	  m_outData -> o_rcjets_truthmatched_n.at("truthW_inMassWindow")     = m_outData -> o_rcjets_truthmatched.at("truthW_inMassWindow")     -> size();
 	  m_outData -> o_rcjets_truthmatched_n.at("truthHiggs_inMassWindow") = m_outData -> o_rcjets_truthmatched.at("truthHiggs_inMassWindow") -> size();
-	  
+
 	}//each parton in collection
-	
+
       }//each collection of heavy resonance
-      
-      
+
+
       if( m_opt -> SampleName() == SampleName::VLQ ){
 	for ( const std::string decayType : {"Ht", "Zt", "Wb"} ){
-	  
+
 	  AOVector& recoVLQCollection = *(m_outData -> o_recoVLQ.at(decayType));
 	  for( AnalysisObject* partonVLQ : *(m_outData -> o_truth_partons.at("VLQ_"+decayType)) ){
-	    m_truthMngr -> MatchPartonToFatJets( recoVLQCollection, partonVLQ, 1. /*maxDR*/, false /*rcCollection*/, false /*tagCollection*/, 
+	    m_truthMngr -> MatchPartonToFatJets( recoVLQCollection, partonVLQ, 1. /*maxDR*/, false /*rcCollection*/, false /*tagCollection*/,
 						 false /*containment*/, 1.0 /*drcontained*/, true /*checkPt*/ );
 	  }
-	  
+
 	}
       }// VLQ samples
-      
-      
+
+
       //
       // Match leptonic W parton to reconstructed leptonic W
       //
@@ -2077,8 +2077,8 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 	double drmatch_truth_lepW = 100.; //Take all lepW
 	AnalysisObject* truth_lepW_match = m_varComputer -> GetClosestAO( m_outData->o_lepW, truth_lepW, drmatch_truth_lepW );
 	if(truth_lepW_match){
-	  
-	  double dr_truthreco_lepW = truth_lepW_match->DeltaR( *(m_outData->o_lepW) ); 
+
+	  double dr_truthreco_lepW = truth_lepW_match->DeltaR( *(m_outData->o_lepW) );
 	  if(dr_truthreco_lepW < 0.75){
 	    truth_lepW_match->SetMoment("nmatch_reco",1);
 	    m_outData->o_lepW->SetMoment("nmatch_truth",1);
@@ -2087,13 +2087,13 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 	    truth_lepW_match->SetMoment("nmatch_reco",0);
 	    m_outData->o_lepW->SetMoment("nmatch_truth",0);
 	  }
-	  
+
 	  truth_lepW_match->SetMoment("pT_reco", (m_outData->o_lepW)->Pt());
 	  truth_lepW_match->SetMoment("fpT_reco", (m_outData->o_lepW)->Pt()/truth_lepW_match->Pt());
 	  truth_lepW_match->SetMoment("m_reco", (m_outData->o_lepW)->M());
 	  truth_lepW_match->SetMoment("dR_reco", dr_truthreco_lepW);
-	  
-	  
+
+
 	  m_outData->o_lepW->SetMoment("pT_truth", truth_lepW_match->Pt());
 	  m_outData->o_lepW->SetMoment("fpT_truth", (m_outData->o_lepW)->Pt()/truth_lepW_match->Pt());
 	  m_outData->o_lepW->SetMoment("dR_truth", dr_truthreco_lepW);
@@ -2102,21 +2102,21 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 	  m_outData->o_lepW->SetMoment("nmatch_truth",0);
 	}
       }
-      
+
       //
       // Match leptonic top parton to reconstructed leptonic top
       //
-      for( AnalysisObject* obj : *(m_outData -> o_truth_partons.at("leptop")) ){ 
+      for( AnalysisObject* obj : *(m_outData -> o_truth_partons.at("leptop")) ){
 	obj -> SetMoment("nmatch_reco", 0);
 	obj -> SetMoment("nmatch_reco_leptop", 0);
       }
       if( m_outData -> o_leptop ){
 	double drmatch_truth_leptop = 100.; //Take all leptop
-	AnalysisObject* truth_leptop_match = m_varComputer -> 
+	AnalysisObject* truth_leptop_match = m_varComputer ->
 	  GetClosestAO( m_outData->o_leptop, *(m_outData -> o_truth_partons.at("leptop")), drmatch_truth_leptop );
 	if(truth_leptop_match){
-	  
-	  double dr_truthreco_leptop = truth_leptop_match->DeltaR( *(m_outData->o_leptop) ); 
+
+	  double dr_truthreco_leptop = truth_leptop_match->DeltaR( *(m_outData->o_leptop) );
 	  if(dr_truthreco_leptop < 0.75){
 	    truth_leptop_match->SetMoment("nmatch_reco_leptop",1);
 	    m_outData->o_leptop->SetMoment("nmatch_truth",1);
@@ -2125,13 +2125,13 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 	    truth_leptop_match->SetMoment("nmatch_reco_leptop",0);
 	    m_outData->o_leptop->SetMoment("nmatch_truth",0);
 	  }
-	  
+
 	  //truth_leptop_match->SetMoment("nmatch_reco_leptop",1);
 	  truth_leptop_match->SetMoment("pT_reco_leptop", (m_outData->o_leptop)->Pt());
 	  truth_leptop_match->SetMoment("fpT_reco_leptop", (m_outData->o_leptop)->Pt()/truth_leptop_match->Pt());
 	  truth_leptop_match->SetMoment("m_reco_leptop", (m_outData->o_leptop)->M());
 	  truth_leptop_match->SetMoment("dR_reco_leptop", dr_truthreco_leptop);
-	  
+
 	  //m_outData->o_leptop->SetMoment("nmatch_truth",1);
 	  m_outData->o_leptop->SetMoment("pT_truth", truth_leptop_match->Pt());
 	  m_outData->o_leptop->SetMoment("fpT_truth", (m_outData->o_leptop)->Pt()/truth_leptop_match->Pt());
@@ -2141,7 +2141,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 	  m_outData->o_leptop->SetMoment("nmatch_truth",0);
 	}
       }
-      
+
 
       //
       // Match small-R jets to b-quarks
@@ -2181,7 +2181,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
       }
       m_weightMngr -> SetTtbarFractionWeight();
     }
-    if( m_outData -> o_is_ttbar || (m_opt -> StrSampleName().find("SINGLETOP") != std::string::npos) 
+    if( m_outData -> o_is_ttbar || (m_opt -> StrSampleName().find("SINGLETOP") != std::string::npos)
 	|| (m_opt -> StrSampleName().find("WJETS") != std::string::npos) || (m_opt -> StrSampleName().find("ZJETS") != std::string::npos) ){
       m_weightMngr -> SetPMGSystWeights();
       if((m_opt -> ReweightKinematics()) && (m_opt -> ComputeWeightSys())){
@@ -2191,7 +2191,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
   } else if (m_opt -> StrSampleName().find("QCD") != std::string::npos){
     m_weightMngr -> SetQCDWeight();
   }
-  
+
   //###########################################################
   //                                                          #
   // TRF                                                      #
@@ -2214,7 +2214,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     m_weightMngr -> ComputeSystematicWeights();
   }
 
-  if(m_opt -> MsgLevel() == Debug::DEBUG) m_weightMngr -> Print( true ); 
+  if(m_opt -> MsgLevel() == Debug::DEBUG) m_weightMngr -> Print( true );
 
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "==> After setting the weight " << entry << std::endl;
 
@@ -2351,7 +2351,7 @@ bool VLQ_Analysis_Data2015::Terminate()
 
     for(auto histname : m_outMngrHist->HistMngr()->GetTH1KeyList()){
       TH1D* histo = m_outMngrHist->HistMngr()->GetTH1D(histname);
-    
+
       // Scaling ttbar HT slices (nominal and PMG weights)
 
       double Scale = 1.0;
@@ -2401,7 +2401,7 @@ bool VLQ_Analysis_Data2015::Terminate()
 
     for(auto histname : m_outMngrHist->HistMngr()->GetTH2KeyList()){
       TH2D* histo = m_outMngrHist->HistMngr()->GetTH2D(histname);
-    
+
       double Scale = 1.0;
 
       if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
@@ -2455,14 +2455,14 @@ bool VLQ_Analysis_Data2015::Terminate()
   if(m_outMngrHist){
 
     if(m_opt->DoSumRegions()){
- 
+
       SumAnalysisRegions(true);
       for( const std::pair<int, Selection*> &sel : *(m_selector->GetSelectionTree()) ){
 	if(sel.second->PassFlagAtBit(VLQ_Selector::PRESEL)){
 	  m_outMngrHist -> SaveStandardTH1(nameHist, false, AnalysisUtils::ReplaceString(sel.second->Name(),"-",""));
 	}
       }
-      
+
     }
     else{
       m_outMngrHist -> SaveStandardTH1(nameHist);
@@ -2492,16 +2492,16 @@ bool VLQ_Analysis_Data2015::Terminate()
 }
 
 bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
-  
-  struct{ 
+
+  struct{
     void operator()(TH1D* hist, TH1D** target, const std::string& name, double scale = 1.){
       if(*target != NULL){ (*target)->Add(hist, scale); }
-      else{ 
+      else{
 	*target = (TH1D*)(hist->Clone(name.c_str()));
 	(*target)->SetDirectory(0);
 	(*target)->Scale(scale);
-      } 
-      
+      }
+
       return;
     };
   } AddHistogramToTarget;
@@ -2509,9 +2509,9 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 
   std::vector<std::string> regList{};
   std::map<std::string, std::vector<std::string> > targetPrintList{};
-  
+
   if( m_opt->DoOneLeptonAna() ){
-    
+
     if( m_opt->DoFitRegions() ){
       std::vector<std::string> regList_1L_fit = {
 	"c1lep0Tex0Hex6jin2bex",
@@ -2535,7 +2535,7 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
       };
       regList.insert(regList.end(), regList_1L_fit.begin(), regList_1L_fit.end());
     }//fit
-    
+
     if( m_opt->DoValidnRegions() ){
       std::vector<std::string> regList_1L_valid = {
 	"c1lep0Tex0Hex5jex2bex",
@@ -2557,19 +2557,19 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
       };
       regList.insert(regList.end(), regList_1L_valid.begin(), regList_1L_valid.end());
     }//valid
-    
+
 
     std::map<std::string, std::vector<std::string> > targetPrintList_1L = {
-      {"sum1lep5jin2bin", {}}, 
-      {"sum1lep5jin3bin", {}}, 
+      {"sum1lep5jin2bin", {}},
+      {"sum1lep5jin3bin", {}},
       {"sum1lep6jin2bin", {}},
       {"sum1lep6jin3bin", {}},
       {"sum1lep1THin6jin3bin", {}}
     };
-    
+
     targetPrintList.insert(targetPrintList_1L.begin(), targetPrintList_1L.end());
-    
-    
+
+
   }//1-lepton
 
   if( m_opt->DoZeroLeptonAna() ){
@@ -2633,23 +2633,23 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
     }//valid
 
     std::map<std::string, std::vector<std::string> > targetPrintList_0L = {
-      {"sum0lep6jin2bin", {}},  
-      {"sum0lep7jin2bin", {}},  
-      {"sum0lep6jin3bin", {}},  
-      {"sum0lep7jin3bin", {}},  
-      
+      {"sum0lep6jin2bin", {}},
+      {"sum0lep7jin2bin", {}},
+      {"sum0lep6jin3bin", {}},
+      {"sum0lep7jin3bin", {}},
+
       {"sum0lep1THin7jin2bin", {}}
     };
-    
+
     targetPrintList.insert(targetPrintList_0L.begin(), targetPrintList_0L.end());
 
   }//0-lep
-  
-  /* 
-     {"sum0lep6jin2bin", {}}, 
-    {"sum0lep7jin2bin", {}},  
-    {"sum0lep6jin3bin", {}},  
-    {"sum0lep7jin3bin", {}},  
+
+  /*
+     {"sum0lep6jin2bin", {}},
+    {"sum0lep7jin2bin", {}},
+    {"sum0lep6jin3bin", {}},
+    {"sum0lep7jin3bin", {}},
   */
     //{"sum0lep0Tex0Hex7jin2bin", {}},
     //{"sum0lep1THin7jin2bin", {}},
@@ -2682,8 +2682,8 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
     */
     //=====================================
   /*
-    {"sum1lep5jin2bin", {}}, 
-    {"sum1lep5jin3bin", {}}, 
+    {"sum1lep5jin2bin", {}},
+    {"sum1lep5jin3bin", {}},
     {"sum1lep6jin2bin", {}},
     {"sum1lep6jin3bin", {}},
   */
@@ -2714,14 +2714,14 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
     std::string boostcat = "";
     if(region.find("0Tex0Hex") != std::string::npos){ boostcat = "0Tex0Hex"; }
     else if( (region.find("1Tex0Hex") != std::string::npos) || (region.find("0Tex1Hex") != std::string::npos) ){ boostcat = "1THex"; }
-    else if( (region.find("2THin") != std::string::npos) || (region.find("2Tin0_1Hwin") != std::string::npos) 
+    else if( (region.find("2THin") != std::string::npos) || (region.find("2Tin0_1Hwin") != std::string::npos)
 	     || (region.find("1Tex1Hex") != std::string::npos) || (region.find("0Tin2Hin") != std::string::npos) ){ boostcat = "2THin"; }
 
 
-    //else 
+    //else
     /*
       if( (region.find("1Tex0Hex") != std::string::npos) || (region.find("0Tex1Hex") != std::string::npos)
-      || (region.find("2THin") != std::string::npos) || (region.find("2Tin0_1Hwin") != std::string::npos) 
+      || (region.find("2THin") != std::string::npos) || (region.find("2Tin0_1Hwin") != std::string::npos)
       || (region.find("1Tex1Hex") != std::string::npos) || (region.find("0Tin2Hin") != std::string::npos) )
       { boostcat = "1THin"; }
     */
@@ -2732,7 +2732,7 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
     else if(region.find("5jin") != std::string::npos){ jetcat = "5jin"; }
     else if(region.find("6jin") != std::string::npos){ jetcat = "6jin"; }
     else if(region.find("7jin") != std::string::npos){ jetcat = "7jin"; }
-    
+
     std::string bcat = "";
     if(region.find("2bex") != std::string::npos){ bcat = "2bex"; }
     else if(region.find("2bin") != std::string::npos){ bcat = "2bin"; }
@@ -2746,14 +2746,14 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
       if(region.find("7jin") != std::string::npos){
 	targetPrintList.at("sum0lep7jin2bin").push_back(region);
       }
-      
+
       if( (region.find("3bex") != std::string::npos) || (region.find("4bin") != std::string::npos) ){
 	targetPrintList.at("sum0lep6jin3bin").push_back(region);
-	
+
 	if(region.find("7jin") != std::string::npos){
 	  targetPrintList.at("sum0lep7jin3bin").push_back(region);
 	}//7jin3bin
-	
+
       }//3bin
 
       //targetPrintList.at("sum0lep"+boostcat+"6jin2bin").push_back(region);
@@ -2763,7 +2763,7 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 	}
       }
       //targetPrintList.at("sum0lep"+boostcat+jetcat+bcat).push_back(region);
-      
+
     }//0L regions
 
     //===================== 1L REGIONS ========================================
@@ -2772,10 +2772,10 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
       if(region.find("6jin") != std::string::npos){
 	targetPrintList.at("sum1lep6jin2bin").push_back(region);
       }
-      
+
       if( (region.find("3bex") != std::string::npos) || (region.find("4bin") != std::string::npos) ){
 	targetPrintList.at("sum1lep5jin3bin").push_back(region);
-	
+
 	if(region.find("6jin") != std::string::npos){
 	  targetPrintList.at("sum1lep6jin3bin").push_back(region);
 	  if( !boostcat.empty() && (boostcat.find("0Tex0Hex") == std::string::npos) ){
@@ -2783,11 +2783,11 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 	  }
 	  //targetPrintList.at("sum1lep"+boostcat+"6jin3bin").push_back(region);
 	}//6jin3bin
-	
+
 	//targetPrintList.at("sum1lep"+boostcat+jetcat+bcat).push_back(region);
-	
+
       }//3bin
-      
+
     }//1L regions
 
   }
@@ -2803,19 +2803,19 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
     }
   }
 
-  std::vector<std::string> lepchannels{""}; 
+  std::vector<std::string> lepchannels{""};
   if(m_opt->DoSplitEMu()){
-    lepchannels.push_back("_el"); 
+    lepchannels.push_back("_el");
     lepchannels.push_back("_mu");
   }
-  
+
   std::vector<std::string> wgtList{""};
   for(std::pair<std::string, WeightObject*> sysPair : *(m_weightMngr->SystMap()) ){
     //with the exception of QCD1L
     wgtList.push_back("_"+sysPair.first);
   }
 
-  std::map<std::string, std::string> boostcat_systs = { 
+  std::map<std::string, std::string> boostcat_systs = {
     {"0T0H","0Tex0Hex"},{"1T0H","1Tex0Hex"},{"0T1H","0Tex1Hex"},
     {"1T1H","1Tex1Hex"},{"2T0_1H","2Tin0_1Hwin"},{"0T2H","0Tin2Hin"},{"2TH","2THin"}
   };
@@ -2836,10 +2836,10 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
     DRDSPropagator->WriteAllSystHistograms(false,false);
     delete DRDSPropagator;
   }
-      
+
   std::string fileMode = newFile ? "RECREATE" : "UPDATE";
   TFile* outfile = TFile::Open( m_opt->OutputFile().c_str(), fileMode.c_str());
-  
+
   for( std::pair< std::string, OutputHistManager::h1Def* > hpair : *(m_outMngrHist->StdTH1Def()) ){
 
     if( !hpair.second->hasSyst ){ continue; }
@@ -2854,20 +2854,20 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 	variable += "_";
       }
       variable +=  variable_base;
-      
+
       for(std::pair<std::string, std::vector<std::string> > targetPair : targetPrintList){
-      
+
 	if(is_QCD && targetPair.first.find("0lep") != std::string::npos){continue;}
 	if(is_QCD0L && targetPair.first.find("1lep") != std::string::npos){continue;}
 
 	for(const std::string& channel : lepchannels){
-  
-	  if(!channel.empty() && targetPair.first.find("1lep") == std::string::npos){ continue; }   
-  
+
+	  if(!channel.empty() && targetPair.first.find("1lep") == std::string::npos){ continue; }
+
 	  //Regular weight systematics
 	  for(std::string sys : wgtList){
-      
-	    //std::cout<<"============================ TARGET : "<<targetPair.first<<" ========================="<<std::endl;   
+
+	    //std::cout<<"============================ TARGET : "<<targetPair.first<<" ========================="<<std::endl;
 	    TH1D* targethist = NULL;
 	    double sumint = 0.;
 	    for(std::string source_reg : targetPair.second){
@@ -2885,7 +2885,7 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 	    //std::cout<<"======================================================================================"<<std::endl;
 	  }//systematics + nominal
 
-	  //Region dependent weight systematics, including proxies for normalisation uncertainties 
+	  //Region dependent weight systematics, including proxies for normalisation uncertainties
 	  for(std::pair<std::string, std::string> boostcat : boostcat_systs){
 
 	    //============================ V+jets samples ===========================================================================
@@ -2896,30 +2896,30 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 	      TH1D* targethist_Vjets_XS_down = NULL;
 	      for(std::string source_reg : targetPair.second){
 		TH1D* sourcehist = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable).c_str() );
-	  
+
 		//If source region is in the  boost category of the systematic, then scale it up and down
 		double sc_up = (source_reg.find(boostcat.second) != std::string::npos) ? 1.3 : 1.;
 		double sc_down = (source_reg.find(boostcat.second) != std::string::npos) ? 0.7 : 1.;
-	  
+
 		AddHistogramToTarget(sourcehist, &targethist_Vjets_XS_up, targetPair.first + channel + "_" + variable + "_weight_Vjets_XS_"+boostcat.first+"_up", sc_up);
 		AddHistogramToTarget(sourcehist, &targethist_Vjets_XS_down, targetPair.first + channel + "_" + variable + "_weight_Vjets_XS_"+boostcat.first+"_down", sc_down);
 	      }//source regions
-	
+
 	      if(is_VjetsHF){
 		//only XS uncertainty
 		TH1D* targethist_VjetsHF_XS_up = NULL;
 		TH1D* targethist_VjetsHF_XS_down = NULL;
 		for(std::string source_reg : targetPair.second){
 		  TH1D* sourcehist = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable).c_str() );
-	    
+
 		  //If source region is in the  boost category of the systematic, then scale it up and down
 		  double sc_up = (source_reg.find(boostcat.second) != std::string::npos) ? 1.3 : 1.;
 		  double sc_down = (source_reg.find(boostcat.second) != std::string::npos) ? 0.7 : 1.;
-	    
+
 		  AddHistogramToTarget(sourcehist, &targethist_VjetsHF_XS_up, targetPair.first + channel + "_" + variable + "_weight_VjetsHF_XS_"+boostcat.first+"_up", sc_up);
 		  AddHistogramToTarget(sourcehist, &targethist_VjetsHF_XS_down, targetPair.first + channel + "_" + variable + "_weight_VjetsHF_XS_"+boostcat.first+"_down", sc_down);
 		}//source regions
-	  
+
 		outfile->cd();
 		if(targethist_VjetsHF_XS_up){
 		  HistManager::FinaliseTH1Bins(targethist_VjetsHF_XS_up);
@@ -2945,7 +2945,7 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 		targethist_Vjets_XS_down->Write();
 		delete targethist_Vjets_XS_down;
 	      }
-	
+
 	    }//Vjets sample
 	    //================================================= V+jets samples ===========================================================
 
@@ -2957,15 +2957,15 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 	      TH1D* targethist_Diboson_XS_down = NULL;
 	      for(std::string source_reg : targetPair.second){
 		TH1D* sourcehist = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable).c_str() );
-	  
+
 		//If source region is in the  boost category of the systematic, then scale it up and down
 		double sc_up = (source_reg.find(boostcat.second) != std::string::npos) ? 1.48 : 1.;
 		double sc_down = (source_reg.find(boostcat.second) != std::string::npos) ? 0.52 : 1.;
-	  
+
 		AddHistogramToTarget(sourcehist, &targethist_Diboson_XS_up, targetPair.first + channel + "_" + variable + "_weight_Dibosons_XS_"+boostcat.first+"_up", sc_up);
 		AddHistogramToTarget(sourcehist, &targethist_Diboson_XS_down, targetPair.first + channel + "_" + variable + "_weight_Dibosons_XS_"+boostcat.first+"_down", sc_down);
 	      }//source regions
-	
+
 	      outfile->cd();
 	      if(targethist_Diboson_XS_up){
 		HistManager::FinaliseTH1Bins(targethist_Diboson_XS_up);
@@ -2977,7 +2977,7 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 		targethist_Diboson_XS_down->Write();
 		delete targethist_Diboson_XS_down;
 	      }
-	
+
 	    }//Diboson sample
 	    //================================================= Diboson samples ===========================================================
 
@@ -2985,13 +2985,13 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 	    if(is_singletop){
 
 	      std::vector<std::string> mtblist{};
-	      if(targetPair.first.find("0lep") != std::string::npos){ 
+	      if(targetPair.first.find("0lep") != std::string::npos){
 		mtblist =  {"","LowMtbmin","HighMtbmin"};
-	      } 
-	      else{ 
-		mtblist = {""}; 
 	      }
-	
+	      else{
+		mtblist = {""};
+	      }
+
 	      for(const std::string& mtbcat : mtblist){
 
 		std::string mtbsuffix = (mtbcat.empty()) ? mtbcat : "_"+mtbcat;
@@ -3000,16 +3000,16 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 		TH1D* targethist_Singletop_XS_up = NULL;
 		TH1D* targethist_Singletop_DRDS_up = NULL;
 		TH1D* targethist_Singletop_XS_down = NULL;
-	  
+
 		//std::cout << std::endl <<" STARTING Target region: " << targetPair.first << " BOOSTCAT : " << boostcat.second << std::endl;
-	  
+
 		for(std::string source_reg : targetPair.second){
 		  TH1D* sourcehist = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable).c_str() );
-	    
-		  bool is_regmatch = ( (source_reg.find(boostcat.second) != std::string::npos) 
-				       && ( (mtbcat.empty() && (source_reg.find("Mtbmin") == std::string::npos)) 
-					    || (!mtbcat.empty() && (source_reg.find(mtbcat) != std::string::npos)) ) ); 
-	    
+
+		  bool is_regmatch = ( (source_reg.find(boostcat.second) != std::string::npos)
+				       && ( (mtbcat.empty() && (source_reg.find("Mtbmin") == std::string::npos))
+					    || (!mtbcat.empty() && (source_reg.find(mtbcat) != std::string::npos)) ) );
+
 		  //If source region is in the  boost category of the systematic, then scale it up and down
 		  //also add DRDS variation
 		  double sc_up = 1.;
@@ -3029,13 +3029,13 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 		    AddHistogramToTarget(sourcehist, &targethist_Singletop_DRDS_up
 					 , targetPair.first + channel + "_" + variable + "_SingletopDRDS_"+boostcat.first+mtbsuffix);
 		  }
-	    
-		  AddHistogramToTarget(sourcehist, &targethist_Singletop_XS_up, 
+
+		  AddHistogramToTarget(sourcehist, &targethist_Singletop_XS_up,
 				       targetPair.first + channel + "_" + variable + "_weight_Singletop_XS_"+boostcat.first+mtbsuffix+"_up", sc_up);
-		  AddHistogramToTarget(sourcehist, &targethist_Singletop_XS_down, 
+		  AddHistogramToTarget(sourcehist, &targethist_Singletop_XS_down,
 				       targetPair.first + channel + "_" + variable + "_weight_Singletop_XS_"+boostcat.first+mtbsuffix+"_down", sc_down);
 		}//source regions
-	  
+
 		outfile->cd();
 		if(targethist_Singletop_XS_up){
 		  HistManager::FinaliseTH1Bins(targethist_Singletop_XS_up);
@@ -3053,7 +3053,7 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 		  targethist_Singletop_DRDS_up->Write();
 		  delete targethist_Singletop_DRDS_up;
 		}
-	  
+
 	      }//mtbmin categories
 
 	    }//single top samples
@@ -3066,24 +3066,24 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 	      std::vector<std::string> mtblist =  {"","LowMtbmin","HighMtbmin"};
 
 	      for(const std::string& mtbcat : mtblist){
-	  
+
 		//XS uncertainty
 		TH1D* targethist_QCD0L_XS_up = NULL;
 		TH1D* targethist_QCD0L_XS_down = NULL;
 		for(std::string source_reg : targetPair.second){
 		  TH1D* sourcehist = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable).c_str() );
-	    
-		  bool is_regmatch = ( (source_reg.find(boostcat.second) != std::string::npos) 
-				       && ( (mtbcat.empty() && (source_reg.find("Mtbmin") == std::string::npos)) 
-					    || (!mtbcat.empty() && (source_reg.find(mtbcat) != std::string::npos)) ) ); 
-	    
+
+		  bool is_regmatch = ( (source_reg.find(boostcat.second) != std::string::npos)
+				       && ( (mtbcat.empty() && (source_reg.find("Mtbmin") == std::string::npos))
+					    || (!mtbcat.empty() && (source_reg.find(mtbcat) != std::string::npos)) ) );
+
 		  //If source region is in the  boost category of the systematic, then scale it up and down
 		  double sc_up = is_regmatch ? 2. : 1.;
 		  double sc_down = is_regmatch ? 0. : 1.;
 		  /*
 		    if(is_regmatch){
-		    std::cout << " is_regmatch = " << is_regmatch << " source_reg = "<<source_reg 
-		    << " mtbcat = " << mtbcat << " boostcat = " << boostcat.second 
+		    std::cout << " is_regmatch = " << is_regmatch << " source_reg = "<<source_reg
+		    << " mtbcat = " << mtbcat << " boostcat = " << boostcat.second
 		    << " sc_up " << sc_up << std::endl;
 		    }
 		  */
@@ -3091,9 +3091,9 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 		  AddHistogramToTarget(sourcehist, &targethist_QCD0L_XS_up, targetPair.first + channel + "_" + variable + "_weight_QCD0L_XS_"+boostcat.first+mtbsuffix+"_up", sc_up);
 		  AddHistogramToTarget(sourcehist, &targethist_QCD0L_XS_down, targetPair.first + channel + "_" + variable + "_weight_QCD0L_XS_"+boostcat.first+mtbsuffix+"_down", sc_down);
 		}//source regions
-	  
+
 		//DR/DS uncertainty (TO DO)
-	  
+
 		outfile->cd();
 		if(targethist_QCD0L_XS_up){
 		  HistManager::FinaliseTH1Bins(targethist_QCD0L_XS_up);
@@ -3105,10 +3105,10 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 		  targethist_QCD0L_XS_down->Write();
 		  delete targethist_QCD0L_XS_down;
 		}
-	  
+
 	      }//mtbmin categories
-	
-	    }//QCD0L samples 
+
+	    }//QCD0L samples
 
 
 	    if(is_QCD){
@@ -3118,14 +3118,14 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 	      TH1D* targethist_QCD_mu_up = NULL;
 
 	      for(std::string source_reg : targetPair.second){
-	  
+
 		if(source_reg.find(boostcat.second) != std::string::npos){
 		  //If source region is in the  boost category of the systematic, add the systematically varied histograms
 		  TH1D* sourcehist_el_up = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable + "_weight_qcd_el_up").c_str() );
 		  //TH1D* sourcehist_el_down = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable + "_weight_qcd_el_down").c_str() );
 		  TH1D* sourcehist_mu_up = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable + "_weight_qcd_mu_up").c_str() );
 		  //TH1D* sourcehist_mu_down = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable + "_weight_qcd_mu_down").c_str() );
-	    
+
 		  AddHistogramToTarget(sourcehist_el_up, &targethist_QCD_el_up, targetPair.first + channel + "_" + variable + "_weight_qcd_el_"+boostcat.first+"_up");
 		  //AddHistogramToTarget(sourcehist_el_down, &targethist_QCD_el_down, targetPair.first + channel + "_" + variable + "_weight_qcd_el_"+boostcat.first+"_down");
 		  AddHistogramToTarget(sourcehist_mu_up, &targethist_QCD_mu_up, targetPair.first + channel + "_" + variable + "_weight_qcd_mu_"+boostcat.first+"_up");
@@ -3139,7 +3139,7 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 		  //AddHistogramToTarget(sourcehist, &targethist_QCD_mu_down, targetPair.first + channel + "_" + variable + "_weight_qcd_mu_"+boostcat.first+"_down");
 		}
 	      }//source regions
-	
+
 	      outfile->cd();
 	      if(targethist_QCD_el_up){
 		HistManager::FinaliseTH1Bins(targethist_QCD_el_up);
@@ -3159,21 +3159,21 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
 		targethist_QCD_mu_down->Write();
 		delete targethist_QCD_mu_down;
 		}*/
-	
+
 	    }//QCD samples
-      
+
 	    //================================================= QCD samples ===========================================================
-      
+
 	  }//Boosted categories
-    
+
 	}//lepton channels
 
       }//target regions
-      
+
     }//vlq decays
-    
+
   }//variables
-  
+
   //==== Normalisation ===
   //Vjets_XS -- split by lepton channel and boosted category 30% (additional histograms for charm and beauty)
   //Dibosons_XS -- split by lepton channel and boosted category (48%)
@@ -3184,11 +3184,11 @@ bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
   //QCD_1L -- split by boosted category and mtbmin category and lepton flavour category
   //Singletop_DRDS -- split by lepton channel, boosted category and mtbmin category
 
-  
+
   wgtList.clear();
   regList.clear();
   targetPrintList.clear();
-  
+
   outfile->Close();
   return true;
 }

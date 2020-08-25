@@ -94,6 +94,8 @@ public:
   inline bool DoPreselSys() const { return m_doPreselSys; }
   inline bool DoExpSys() const { return m_doExpSys; }
   inline bool DoTheorySys() const { return m_doTheorySys; }
+  inline bool DoJMRSys() const { return m_doJMRSys; }
+  inline bool DoJMSSys() const { return m_doJMSSys; }
 
   // strings
   inline std::string DoRecoVLQ() const { return m_doRecoVLQ; }
@@ -188,7 +190,9 @@ private:
   bool m_doPreselSys;
   bool m_doExpSys;
   bool m_doTheorySys;
+  bool m_doJMRSys;
 
+  int m_doJMSSys;
   int m_maxb;
   int m_RCNsubjetsCut;
   double m_RCJetsPtCut;
