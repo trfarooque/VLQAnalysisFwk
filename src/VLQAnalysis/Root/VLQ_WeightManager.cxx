@@ -261,6 +261,22 @@ bool VLQ_WeightManager::AddKinReweightings(  ){
 
 //______________________________________________________________________________
 //
+bool VLQ_WeightManager::AddKinRwSyst(){
+  
+  if( m_vlq_opt -> ReweightKinematics() && m_vlq_opt->DoKinRwSyst()){
+
+    AddAndInitWeight("weight_RW_MEFFRED_UP", "", false, false, "", "weight_RW_MEFFRED");
+
+    AddAndInitWeight("weight_RW_MEFFRED_DOWN", "", false, false, "", "weight_RW_MEFFRED");
+
+  } // background reweighting uncertainty  
+  
+  return true;
+
+}
+
+//______________________________________________________________________________
+//
 bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
 
   //QCD systematics
@@ -425,7 +441,6 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
     }
 
   }//theory sys
-
 
   return true;
 }
@@ -749,6 +764,22 @@ bool VLQ_WeightManager::SetKinReweightings(  ){
   }
 
   return true;
+}
+
+//______________________________________________________________________________
+//
+bool VLQ_WeightManager::SetKinRwSyst(){
+
+  double weight_up = m_kinRw->GetKinRwSyst("_upBand2S");
+  
+  double weight_dn = m_kinRw->GetKinRwSyst("_dnBand2S");
+
+  SetSystematicComponent("weight_RW_MEFFRED_UP", weight_up);
+
+  SetSystematicComponent("weight_RW_MEFFRED_DOWN", weight_dn);
+
+  return true;
+
 }
 
 //______________________________________________________________________________

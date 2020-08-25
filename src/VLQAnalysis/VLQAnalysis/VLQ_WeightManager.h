@@ -51,6 +51,7 @@ public:
     bool AddVLQNominalWeights();
     bool AddVLQSystematicWeights( const bool dump_config = false );
     bool AddKinReweightings();
+    bool AddKinRwSyst();
 
     bool SetLeptonSFWeights( const bool apply_trigger_weights );
     bool SetCrossSectionWeight();
@@ -64,6 +65,7 @@ public:
     bool SetNNLOWeight( const double topPt );
 
     bool SetKinReweightings();
+    bool SetKinRwSyst();
     bool UpdateSysReweighting();
 
 private:
