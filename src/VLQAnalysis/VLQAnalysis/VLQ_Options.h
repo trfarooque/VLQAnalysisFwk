@@ -96,7 +96,6 @@ public:
   inline bool DoExpSys() const { return m_doExpSys; }
   inline bool DoTheorySys() const { return m_doTheorySys; }
   inline bool DoJMRSys() const { return m_doJMRSys; }
-  inline bool DoJMSSys() const { return m_doJMSSys; }
 
   // strings
   inline std::string DoRecoVLQ() const { return m_doRecoVLQ; }
@@ -129,6 +128,7 @@ public:
   inline double MaxMetCutTwoLep() const {return m_maxMetCutTwoLep; }
   inline double MaxLeptopDR() const { return m_maxLeptopDR; }
   // ints
+  inline int DoJMSSys() const { return m_doJMSSys; }
   inline int MaxTRFB() const { return m_maxb; }
   inline double RCNsubjetsCut() const { return m_RCNsubjetsCut; }
 
