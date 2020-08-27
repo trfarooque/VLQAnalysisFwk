@@ -192,7 +192,11 @@ bool VLQ_WeightManager::AddVLQNominalWeights(){
     AddAndInitWeight("weight_qcd", "", true/*in nominal*/, false/*is input*/);
   }
   else{
-    AddAndInitWeight("weight_mc");
+
+    bool wmc_isinput = (m_vlq_opt->VLQRWBranch() != "nom_mass_K100") ;
+    std::string wmc_branch = wmc_isinput ? ((m_vlq_opt->VLQRWBranch() != "") ? m_vlq_opt->VLQRWBranch() : "weight_mc") : "";
+    AddAndInitWeight("weight_mc","",true, wmc_isinput, wmc_branch );
+
     AddAndInitWeight("weight_jvt");
     AddAndInitWeight("weight_norm", "", true, false);
 
@@ -557,7 +561,10 @@ bool VLQ_WeightManager::SetCrossSectionWeight(){
   if( m_vlq_opt -> IsData() || m_opt -> StrSampleName().find("QCD") != std::string::npos ){
     return false;
   }
-  SetNominalComponent( "weight_norm", m_sampleInfo -> NormFactor() );
+
+  SetNominalComponent( "weight_norm", m_sampleInfo -> NormFactor(m_vlq_opt->VLQRWBranch()) );
+  if(m_vlq_opt->VLQRWBranch() == "nom_mass_K100"){ SetNominalComponent("weight_mc", 1.); }
+
   return true;
 }
 
@@ -619,25 +626,29 @@ bool VLQ_WeightManager::SetQCDWeight(){
 
 //______________________________________________________________________________
 //
-bool VLQ_WeightManager::SetPMGSystWeights(){
+bool VLQ_WeightManager::SetPMGSystNorm(){
+
   if(!m_vlq_opt->ComputeWeightSys()){
     return true;
   }
-
+  double nev_nom = m_sampleInfo->NWeightedEvents();
   for( auto& sysweight :  *m_systMap ){
 
     if(sysweight.first.find("pmg") == std::string::npos) continue;
 
     const string& branchName = (sysweight.second)->BranchName();
-    const std::map<std::string, double>& sysFactorMap = m_sampleInfo->SystWeightFactorMap();
-    if( sysFactorMap.find(branchName) == sysFactorMap.end() ) continue;
-    UpdateSystematicComponent(sysweight.first, (sysweight.second)->GetComponentValue()*sysFactorMap.at(branchName));
+    double nev_sys = m_sampleInfo->NWeightedEvents(branchName);
+    //const std::map<std::string, double>& sysFactorMap = m_sampleInfo->SystWeightFactorMap();                                                               
+    //if( sysFactorMap.find(branchName) == sysFactorMap.end() ) continue;                                                                                    
+    double sys_factor = (nev_sys > 0.) ? nev_nom/nev_sys : 1.;
+    UpdateSystematicComponent(sysweight.first, (sysweight.second)->GetComponentValue()*sys_factor);
 
   }
 
   if(m_vlq_opt -> MsgLevel() == Debug::DEBUG) std::cout << "==> After SetPMGSystWeights weights" << std::endl;
 
   return true;
+
 }
 
 //______________________________________________________________________________
