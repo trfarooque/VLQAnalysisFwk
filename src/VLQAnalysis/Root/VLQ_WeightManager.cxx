@@ -267,11 +267,35 @@ bool VLQ_WeightManager::AddKinReweightings(  ){
 //
 bool VLQ_WeightManager::AddKinRwSyst(){
   
-  if( m_vlq_opt -> ReweightKinematics() && m_vlq_opt->DoKinRwSyst()){
+  if( m_vlq_opt -> ReweightKinematics() && m_vlq_opt->DoKinRwSyst() ){
 
-    AddAndInitWeight("weight_RW_MEFFRED_UP", "", false, false, "", "weight_RW_MEFFRED");
+    if( (m_vlq_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP) ){
 
-    AddAndInitWeight("weight_RW_MEFFRED_DOWN", "", false, false, "", "weight_RW_MEFFRED");
+      std::string replace = ( (m_vlq_opt->StrSampleName().find("SINGLETOPSCHAN") != std::string::npos) 
+			      || (m_vlq_opt->StrSampleName().find("SINGLETOPTCHAN") != std::string::npos) ) 
+	? "" : "weight_RW_MEFFRED";
+ 
+      AddAndInitWeight("weight_RW_MEFFRED_3JEX_UP", "", false, false, "", replace);
+      AddAndInitWeight("weight_RW_MEFFRED_3JEX_DOWN", "", false, false, "", replace);
+
+      AddAndInitWeight("weight_RW_MEFFRED_4JEX_UP", "", false, false, "", replace);
+      AddAndInitWeight("weight_RW_MEFFRED_4JEX_DOWN", "", false, false, "", replace);
+
+      AddAndInitWeight("weight_RW_MEFFRED_5JEX_UP", "", false, false, "", replace);
+      AddAndInitWeight("weight_RW_MEFFRED_5JEX_DOWN", "", false, false, "", replace);
+
+      AddAndInitWeight("weight_RW_MEFFRED_6JEX_UP", "", false, false, "", replace);
+      AddAndInitWeight("weight_RW_MEFFRED_6JEX_DOWN", "", false, false, "", replace);
+
+      AddAndInitWeight("weight_RW_MEFFRED_7JIN_UP", "", false, false, "", replace);
+      AddAndInitWeight("weight_RW_MEFFRED_7JIN_DOWN", "", false, false, "", replace);
+
+    }
+    else{
+      AddAndInitWeight("weight_RW_MEFFRED_UP", "", false, false, "", "weight_RW_MEFFRED");
+      AddAndInitWeight("weight_RW_MEFFRED_DOWN", "", false, false, "", "weight_RW_MEFFRED");
+    }
+
 
   } // background reweighting uncertainty  
   
@@ -372,7 +396,7 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
   if(m_vlq_opt->DoTheorySys()){
 
     //ttbar and singletop systematics
-    if( (m_vlq_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP) ){
+     if( (m_vlq_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP) ){
       // PMG weights
       if(m_vlq_outData -> o_is_ttbar){
         AddAndInitWeight("weight_pmg_muR10__muF20","",false, true, "weight_pmg_muR10__muF20", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
@@ -781,13 +805,50 @@ bool VLQ_WeightManager::SetKinReweightings(  ){
 //
 bool VLQ_WeightManager::SetKinRwSyst(){
 
-  double weight_up = m_kinRw->GetKinRwSyst("_upBand2S");
-  
-  double weight_dn = m_kinRw->GetKinRwSyst("_dnBand2S");
+  double weight_up = 1.;
+  double weight_dn = 1.;
+  double weight_nom = 1.;
 
-  SetSystematicComponent("weight_RW_MEFFRED_UP", weight_up);
+  if(m_kinRw){
+    weight_nom = GetWeightObject("weight_RW_MEFFRED")->GetComponentValue();
+    weight_up = m_kinRw->GetKinRwSyst("_upBand2S");
+    weight_dn = m_kinRw->GetKinRwSyst("_dnBand2S");
+  }
 
-  SetSystematicComponent("weight_RW_MEFFRED_DOWN", weight_dn);
+  std::string wname = "weight_RW_MEFFRED";
+  if( (m_vlq_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP) ){
+
+    SetSystematicComponent("weight_RW_MEFFRED_3JEX_UP", weight_nom);
+    SetSystematicComponent("weight_RW_MEFFRED_3JEX_DOWN", weight_nom);
+
+    SetSystematicComponent("weight_RW_MEFFRED_4JEX_UP", weight_nom);
+    SetSystematicComponent("weight_RW_MEFFRED_4JEX_DOWN", weight_nom);
+
+    SetSystematicComponent("weight_RW_MEFFRED_5JEX_UP", weight_nom);
+    SetSystematicComponent("weight_RW_MEFFRED_5JEX_DOWN", weight_nom);
+
+    SetSystematicComponent("weight_RW_MEFFRED_6JEX_UP", weight_nom);
+    SetSystematicComponent("weight_RW_MEFFRED_6JEX_DOWN", weight_nom);
+
+    SetSystematicComponent("weight_RW_MEFFRED_7JIN_UP", weight_nom);
+    SetSystematicComponent("weight_RW_MEFFRED_7JIN_DOWN", weight_nom);
+
+
+    if( m_vlq_outData -> o_jets_n == 3 ) wname += "_3JEX";
+    else if( m_vlq_outData -> o_jets_n == 4 ) wname += "_4JEX";
+    else if( m_vlq_outData -> o_jets_n == 5 ) wname += "_5JEX";
+    else if( m_vlq_outData -> o_jets_n == 6 ) wname += "_6JEX";
+    else if( m_vlq_outData -> o_jets_n >= 7 ) wname += "_7JIN";
+
+    UpdateSystematicComponent(wname+"_UP", weight_up);
+    UpdateSystematicComponent(wname+"_DOWN", weight_dn);
+    
+  }
+  else{
+    SetSystematicComponent(wname+"_UP", weight_up);
+    SetSystematicComponent(wname+"_DOWN", weight_dn);    
+  }
+
 
   return true;
 

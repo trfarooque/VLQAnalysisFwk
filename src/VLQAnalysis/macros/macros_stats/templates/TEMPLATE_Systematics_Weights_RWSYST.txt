@@ -1,0 +1,74 @@
+% -------------------------------------------------- %
+% --------   RWSYST SYSTEMATICS  -------- %
+% -------------------------------------------------- %
+Systematic: "HTX_BKGNP_TTWT_RWSYST_3JEX"
+  Title: "t#bar{t}+Wt RW 3jex"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoPathUp: "__HISTOPATH__/RWSYST/"
+  HistoPathDown: "__HISTOPATH__/RWSYST/"
+  HistoNameSufUp: _weight_RW_MEFFRED_3JEX_UP
+  HistoNameSufDown: _weight_RW_MEFFRED_3JEX_DOWN
+  Symmetrisation: TwoSided
+  Samples: ttbarlight,ttbarcc,ttbarbb,Singletop
+  Regions: HTX_c1lep3_5jwin*
+
+Systematic: "HTX_BKGNP_TTWT_RWSYST_4JEX"
+  Title: "t#bar{t}+Wt RW 4jex"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoPathUp: "__HISTOPATH__/RWSYST/"
+  HistoPathDown: "__HISTOPATH__/RWSYST/"
+  HistoNameSufUp: _weight_RW_MEFFRED_4JEX_UP
+  HistoNameSufDown: _weight_RW_MEFFRED_4JEX_DOWN
+  Symmetrisation: TwoSided
+  Samples: ttbarlight,ttbarcc,ttbarbb,Singletop
+  Regions: HTX_c1lep3_5jwin*
+
+Systematic: "HTX_BKGNP_TTWT_RWSYST_5JEX"
+  Title: "t#bar{t}+Wt RW 5jex"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoPathUp: "__HISTOPATH__/RWSYST/"
+  HistoPathDown: "__HISTOPATH__/RWSYST/"
+  HistoNameSufUp: _weight_RW_MEFFRED_5JEX_UP
+  HistoNameSufDown: _weight_RW_MEFFRED_5JEX_DOWN
+  Symmetrisation: TwoSided
+  Samples: ttbarlight,ttbarcc,ttbarbb,Singletop
+  Regions: HTX_c1lep3_5jwin*
+
+Systematic: "HTX_BKGNP_TTWT_RWSYST_6JEX"
+  Title: "t#bar{t}+Wt RW 6jex"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoPathUp: "__HISTOPATH__/RWSYST/"
+  HistoPathDown: "__HISTOPATH__/RWSYST/"
+  HistoNameSufUp: _weight_RW_MEFFRED_5JEX_UP
+  HistoNameSufDown: _weight_RW_MEFFRED_5JEX_DOWN
+  Symmetrisation: TwoSided
+  Samples: ttbarlight,ttbarcc,ttbarbb,Singletop
+  Regions: HTX_c1lep6jin*
+
+Systematic: "HTX_BKGNP_TTWT_RWSYST_7JIN"
+  Title: "t#bar{t}+Wt RW 7jin"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoPathUp: "__HISTOPATH__/RWSYST/"
+  HistoPathDown: "__HISTOPATH__/RWSYST/"
+  HistoNameSufUp: _weight_RW_MEFFRED_7JIN_UP
+  HistoNameSufDown: _weight_RW_MEFFRED_7JIN_DOWN
+  Symmetrisation: TwoSided
+  Samples: ttbarlight,ttbarcc,ttbarbb,Singletop
+  Regions: HTX_c1lep6jin*
+
+
+Systematic: "HTX_BKGNP_VJETS_RWSYST"
+  Title: "t#bar{t}+Wt RW"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoPathUp: "__HISTOPATH__/RWSYST/"
+  HistoPathDown: "__HISTOPATH__/RWSYST/"
+  HistoNameSufUp: _weight_RW_MEFFRED_UP
+  HistoNameSufDown: _weight_RW_MEFFRED_DOWN
+  Symmetrisation: TwoSided
+  Samples: Wjets,Zjets
