@@ -2200,7 +2200,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     }
     if( m_outData -> o_is_ttbar || (m_opt -> StrSampleName().find("SINGLETOP") != std::string::npos)
 	|| (m_opt -> StrSampleName().find("WJETS") != std::string::npos) || (m_opt -> StrSampleName().find("ZJETS") != std::string::npos) ){
-      m_weightMngr -> SetPMGSystWeights();
+      m_weightMngr -> SetPMGSystNorm();
       if((m_opt -> ReweightKinematics()) && (m_opt -> ComputeWeightSys())){
 	m_weightMngr -> UpdateSysReweighting();
       }
