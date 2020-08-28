@@ -73,6 +73,8 @@ m_makeQCD0LSystematics(false),
 m_doPreselSys(false),
 m_doExpSys(true),
 m_doTheorySys(true),
+m_doJMRSys(false),
+m_doJMSSys(0),
 m_maxb(4),
 m_RCNsubjetsCut(2),
 m_RCJetsPtCut(300.),
@@ -169,6 +171,8 @@ OptionsBase(q)
     m_doPreselSys       = q.m_doPreselSys;
     m_doExpSys          = q.m_doExpSys;
     m_doTheorySys       = q.m_doTheorySys;
+    m_doJMRSys          = q.m_doJMRSys;
+    m_doJMSSys          = q.m_doJMSSys;
     m_RecTtBbRw         = q.m_RecTtBbRw;
     m_RwTtFractions     = q.m_RwTtFractions;
     m_RCNsubjetsCut     = q.m_RCNsubjetsCut;
@@ -341,6 +345,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_doExpSys = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOTHEORYSYS") != std::string::npos ){
             m_doTheorySys = AnalysisUtils::BoolValue(temp_val, temp_arg);
+        } else if( temp_arg.find("--DOJMRSYS") != std::string::npos ){
+            m_doJMRSys = AnalysisUtils::BoolValue(temp_val, temp_arg);
         }
 
         //
@@ -426,6 +432,9 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
         //
         // Int arguments
         //
+        else if( temp_arg.find("--DOJMSSYS") != std::string::npos ){
+          m_doJMSSys = atoi(temp_val.c_str());
+        }
         else if( temp_arg.find("--MAXTRFB") != std::string::npos ){
             m_maxb = atoi(temp_val.c_str());
         }
@@ -544,6 +553,8 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_doPreselSys             = " << m_doPreselSys       << std::endl;
     std::cout << " m_doExpSys                = " << m_doExpSys          << std::endl;
     std::cout << " m_doTheorySys             = " << m_doTheorySys       << std::endl;
+    std::cout << " m_doJMRSys                = " << m_doJMRSys          << std::endl;
+    std::cout << " m_doJMSSys                = " << m_doJMSSys          << std::endl;
     std::cout << " m_applyVjetsSherpa22RW    = " << m_applyVjetsSherpa22RW   << std::endl;
     std::cout << " m_filterType              = " << m_filterType        << std::endl;
     std::cout << " m_RecTtBbRw               = " << m_RecTtBbRw         << std::endl;

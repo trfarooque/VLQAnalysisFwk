@@ -1,3 +1,4 @@
+#include <TRandom3.h>
 #include "VLQAnalysis/VLQ_AnalysisTools.h"
 
 #include "IFAETopFramework/OutputHistManager.h"
@@ -478,6 +479,10 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Reclustered jets
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  gRandom = new TRandom3();
+  gRandom->SetSeed( (m_outData -> o_jets_n) + m_ntupData -> d_rcjets_pt -> size() + (m_outData -> o_fwdjets_n) );
+
   for ( unsigned int iRCJet = 0; iRCJet < m_ntupData -> d_rcjets_pt -> size(); ++iRCJet ) {
 
     if(m_opt -> MsgLevel() == Debug::DEBUG){
@@ -491,8 +496,51 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
     if( isSignalRCJet ){
       AnalysisObject *obj = new AnalysisObject();
       obj -> SetPtEtaPhiM( m_ntupData -> d_rcjets_pt -> at(iRCJet), m_ntupData -> d_rcjets_eta -> at(iRCJet),
-      m_ntupData -> d_rcjets_phi -> at(iRCJet), m_ntupData -> d_rcjets_m -> at(iRCJet) );
-      obj -> SetMoment("nconsts",     m_ntupData -> d_rcjets_nconsts -> at(iRCJet));
+			   m_ntupData -> d_rcjets_phi -> at(iRCJet), m_ntupData -> d_rcjets_m -> at(iRCJet) );
+
+      //DoJMSSys == 0  --> No JMS                                                                                                                                 //DoJMSSys == +/-1  --> 5% up/down shift of JMS                                                                                                             //DoJMSSys == 2  --> Recalculate RC jet mass without any shift in JMS
+
+      if( (m_opt->DoJMSSys()!=0) || (m_opt->DoJMRSys())){
+
+        //Effective radius
+        double reff = max(0.4,min(1.5,550./obj->Pt()));
+        obj->SetMoment("reff",reff);
+
+        AnalysisObject obj_jmsr;
+        AnalysisObject sj_jmsr;
+
+        int nconsts_jmsr=0;
+
+        const double SC_JMS=0.05;
+        const double SIG_JMR=0.20;
+
+        obj_jmsr.SetPtEtaPhiM(0.,0.,0.,0.);
+
+        //Quick loop over small-R jets to recalculate RC jet 4-mom
+        for(auto sj : *(m_outData->o_jets)){
+
+          if(sj->DeltaR(*obj) < reff){
+            nconsts_jmsr++;
+            double m_jmsr = sj->M();
+            if( m_opt->DoJMSSys() == 1) m_jmsr *= (1 + SC_JMS);
+            else if( m_opt->DoJMSSys() == -1) m_jmsr *= (1 - SC_JMS);
+	    else if( m_opt->DoJMRSys() ){
+	      //Gaussian smear
+	      m_jmsr *= gRandom->Gaus(1.,SIG_JMR);
+	    }
+
+            sj_jmsr.SetPtEtaPhiM(sj->Pt(),sj->Eta(),sj->Phi(),m_jmsr);
+            obj_jmsr += sj_jmsr;
+          }
+
+        }
+        obj->SetPtEtaPhiM(obj->Pt(), obj->Eta(), obj->Phi(), obj_jmsr.M());
+        obj -> SetMoment("nconsts",  nconsts_jmsr );
+
+      }
+      else{
+        obj -> SetMoment("nconsts",     m_ntupData -> d_rcjets_nconsts -> at(iRCJet));
+      }
 
       int nb_match = 0;
       //Find number of b-tagged jets matched to this jet (//do this inside BTagVariables)
