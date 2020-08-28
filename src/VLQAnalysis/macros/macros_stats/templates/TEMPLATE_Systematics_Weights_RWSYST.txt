@@ -63,7 +63,7 @@ Systematic: "HTX_BKGNP_TTWT_RWSYST_7JIN"
 
 
 Systematic: "HTX_BKGNP_VJETS_RWSYST"
-  Title: "t#bar{t}+Wt RW"
+  Title: "V+jets RW"
   Type: HISTO
   Category: "t#bar{t} uncertainties"
   HistoPathUp: "__HISTOPATH__/RWSYST/"
