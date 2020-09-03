@@ -6,10 +6,10 @@ VLQAna --outputFile=test_nominal_weight_systematics_v0.root \
 --inputTree=nominal --isData=false --sampleDat=samples_info.tag-21.2.87-htztx-3-syst.mc16e.dat \
 --dumpHistos=true --dumpOverlapTree=false --dumpTree=false --doTruthAnalysis=false --splitVLQDecays=false \
 --otherVariables=true --doBlind=false \
---useObjectSyst=false --useWeightSyst=false --onlyDumpSystHistograms=true \
+--onlyDumpSystHistograms=true \
 --doOneLeptonAna=true --doZeroLeptonAna=false --doTwoLeptonAna=true --doSplitEMu=false \
 --doLowBRegions=true --doLowJRegions=false \
---doFitRegions=true --doValidnRegions=true --DOSINGLEVLQREGIONS=true --doSingleVLQPreselection=true --doExtendedPreselection=false \
+--doFitRegions=true --doValidnRegions=true --DOSINGLEVLQREGIONS=true --doExtendedPreselection=false \
 --doExclusiveJetRegions=true --DOPRESELSYS=true --DOPRESELECTION=true \
 --computeWeightSys=false --DOEXPSYS=false --DOTHEORYSYS=false \
 --ISAFII=false \
@@ -21,7 +21,8 @@ VLQAna --outputFile=test_nominal_weight_systematics_v0.root \
 --TRFCDI=xAODBTaggingEfficiency/13TeV/2017-21-13TeV-MC16-CDI-2019-07-30_v1.root \
 --btagCollection=TRACK --trkJetPtCut=20. \
 --applyTtbarNNLOCorrection=false --applyVJetsSherpa22RW=false --applyTtbbCorrection=false \
---filterType=APPLYFILTER --useSlices=true --scaleTtbarHtSlices=false \
+--filterType=APPLYFILTER --scaleTtbarHtSlices=false \
 --jetPtCut=25 --fwdJetPtCut=20 --RCJetPtCut=200 --RCNsubjetsCut=0 --RCCollection=VR_rho550 \
 --minMeffCut=600 \
---REWEIGHTKINEMATICS=true --KINRWLIST=JETSN,MEFFRED --DOKINRWSMOOTHING=true --DOKINRWSYST=true
+--DERIVEREWEIGHTING=true \
+--REWEIGHTKINEMATICS=true --KINRWLIST=JETSN,MEFFRED --DOKINRWSMOOTHING=false --DOKINRWSYST=false

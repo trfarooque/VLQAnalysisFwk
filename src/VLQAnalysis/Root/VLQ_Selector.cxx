@@ -247,12 +247,13 @@ bool VLQ_Selector::Init(){
     AddVLQSelection("c-all",do_runop, false, PRESEL);
 
     std::vector<std::string> v_bjet_presel = {"1bin","2bin","2bex","3bin"};
-    if(m_opt->DeriveReweighting()){
-      v_bjet_presel.push_back("1bex");
-    }
+
     if(m_opt->DoLowBRegions()){
       v_bjet_presel.push_back("0bin");
       v_bjet_presel.push_back("0bex");
+      v_bjet_presel.push_back("1bex");
+    }
+    else if(m_opt->DeriveReweighting()){
       v_bjet_presel.push_back("1bex");
     }
 
