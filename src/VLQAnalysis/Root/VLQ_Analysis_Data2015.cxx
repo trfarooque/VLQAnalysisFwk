@@ -478,8 +478,8 @@ bool VLQ_Analysis_Data2015::Begin(){
     if( DrawReco ){
       //Event variables
       m_outMngrHist -> AddStandardTH1( "mu",          1, 0, 80,       ";<#mu>",         false, &(m_outData -> o_pileup_mu) );
-      m_outMngrHist -> AddStandardTH1( "meff",        50, 0, 3500,    ";m_{eff} [GeV]", true, &(m_outData -> o_meff) );
-      m_outMngrHist -> AddStandardTH1( "meffred",     50, 0, 3500,    ";m_{eff} reduced [GeV]", true, &(m_outData -> o_meffred) );
+      m_outMngrHist -> AddStandardTH1( "meff",        50, 0, RWderiv ? 5000 : 3500,    ";m_{eff} [GeV]", true, &(m_outData -> o_meff) );
+      m_outMngrHist -> AddStandardTH1( "meffred",     50, 0, RWderiv ? 5000 : 3500,    ";m_{eff} reduced [GeV]", true, &(m_outData -> o_meffred) );
       m_outMngrHist -> AddStandardTH1( "mJsum",       25, 0, 2000,    ";m_{J}^{#Sigma} [GeV]", otherVariables, &(m_outData -> o_mJsum) );
       m_outMngrHist -> AddStandardTH1( "met",         20, 0, 1000,    ";E_{T}^{miss} [GeV]",otherVariables, &(m_outData -> o_met) );
       m_outMngrHist -> AddStandardTH1( "met_phi",     0.2, -3.5, 3.5, ";#phi_{MET}", false, &(m_outData->o_AO_met), -1, "Phi");
@@ -546,7 +546,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       }
 
       //Jet variables
-      m_outMngrHist -> AddStandardTH1( "jets_n",      1, -2.5, 15.5,";Number of jets", true, &(m_outData -> o_jets_n) );
+      m_outMngrHist -> AddStandardTH1( "jets_n",      1, RWderiv ? -0.5 : -2.5, 15.5,";Number of jets", true, &(m_outData -> o_jets_n) );
       m_outMngrHist -> AddStandardTH1( "trkjets_n",      1, -2.5, 15.5,";Number of track-jets", otherVariables, &(m_outData -> o_trkjets_n) );
       m_outMngrHist -> AddStandardTH1( "fwdjets_n",   1, -0.5, 8.5,";Number of fwd-jets", otherVariables, &(m_outData -> o_fwdjets_n) );
       m_outMngrHist -> AddStandardTH1( "fwdjets_eta25_30_n",   1, -0.5, 8.5,";Number of fwd-jets 2.5<|#eta|<3.0", otherVariables,

@@ -388,12 +388,12 @@ double VLQ_KinReweighter::GetKinReweight( const int kinematic, const std::string
 	if( binx > max_xbin) binx = max_xbin;
 
 	if( biny > max_ybin) biny = max_ybin;
-
+	
 	/*std::cout << "histName : " << histName << std::endl;
 	  std::cout <<" kin : " << kin << " param1 : " << param << " param2 : " << param2 << " RW : "  << it -> second -> GetBinContent(binx, biny)
-  	  << " source_reg : " << source_reg << " binx = " << binx << " max_xbin = " << max_xbin
+	  << " source_reg : " << source_reg << " binx = " << binx << " max_xbin = " << max_xbin
 	  << " biny = " << biny <<" max_ybin = " << max_ybin <<std::endl;*/
-
+	
 	return it -> second -> GetBinContent(binx,biny);
 
       }
