@@ -57,3 +57,12 @@ atlas_add_executable( MakeKinRwHists
 				     FakeLeptonEstimation 
 				     ${ROOT_LIBRARIES}			  
 				     VLQAnalysis)
+
+atlas_add_executable( KinRwHistSmoother
+                      macros/macros_carlos/KinRwHistSmoother.cxx
+                      LINK_LIBRARIES IFAETopFramework
+                                     IFAEReweightingTools
+                                     BtaggingTRFandRW
+                                     FakeLeptonEstimation
+                                     ${ROOT_LIBRARIES}
+                                     VLQAnalysis)

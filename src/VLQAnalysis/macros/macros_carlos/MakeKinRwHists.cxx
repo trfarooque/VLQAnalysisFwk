@@ -3,253 +3,24 @@
 #include <iostream>
 #include <string>
 #include <stdlib.h>
+#include <sstream>
+#include <algorithm>
+#include <map>
 #include "TFile.h"
 #include "TMath.h"
 #include "TH1.h"
 #include "TH2D.h"
-#include "TF1.h"
-#include "TFitResult.h"
-#include "TMatrixD.h"
 
-#include "Fit/BinData.h"
-#include "Math/WrappedMultiTF1.h"
-#include "HFitInterface.h"
-#include "Fit/Fitter.h"
-
-std::string inDir;
-std::string outName;
-std::string signalSamples;
-std::string backgroundSamples;
-std::string systematicsList;
-bool doSmoothing = false;
-bool debug = false;
+std::string sampleList;
+std::string variableList;
+std::string systematicList;
 
 // Utility function for splitting input string with a given delimiter. Each substring
-// is stored in an output vector
-//______________________________________________________________________________
-//
-std::vector<std::string> splitString(std::string input, std::string delimiter){
-
-  std::vector<std::string> stringCollection = {};
-
-  size_t pos = 0;
-  
-  std::string token;
-
-  while( (pos = input.find(delimiter)) != std::string::npos){
-
-    token = input.substr(0,pos);
-    input.erase(0, pos + delimiter.length());
-    stringCollection.push_back(token);
-    //std::cout << token << std::endl;
-
-
-  }
-
-  for(unsigned i = 0; i < stringCollection.size(); i++){
-    
-    std::cout << "Sample i = " << i << " " << stringCollection.at(i) << std::endl;
-
-  }
-
-  return stringCollection;
-
-}
-
-// Function that adds the 2D histograms from a collection of samples and scales them 
-// with the corresponding luminosity of the MC campaign
-//______________________________________________________________________________
-//
-TH2D* getTotalKinHisto2D( std::vector<std::string>* samples, std::string inputDir, std::string region, 
-			  std::vector<std::string>* campaigns, std::vector<std::string>* kinematics, TH2D* histTemp,
-			  std::string nameHisto, std::string systematicPrefix){
-
-  TH2D* totalHist = (TH2D*)(histTemp -> Clone ( ( std::string(histTemp -> GetName()) + "_" + std::string(nameHisto) ).c_str() ) );
-
-  totalHist -> Reset();
-
-  for(const std::string& sample : *samples){
-    
-    std::string sampleName = sample;
-
-    if(sample == "ttbarbb" || sample == "ttbarcc" || sample == "ttbarlight" || sample == "SingletopWtprod"){
-
-      if(systematicPrefix == "_aMCPy" || systematicPrefix == "_PowHer" || systematicPrefix == "_AFII"){
-	
-	sampleName += systematicPrefix;
-
-      }
-      else if(systematicPrefix == "_DiagSub"){
-	
-	sampleName += systematicPrefix;
-
-      } 
-      else if(systematicPrefix != ""){
-
-	sampleName += "_pmg";
-
-      }
-      
-    }
-    else if(sample == "Zjets"){
-      
-      if(systematicPrefix != ""){
-
-	sampleName += "_pmg";
-
-      }
-
-    }
-
-
-    std::string systPrex = systematicPrefix;
-
-    for(const std::string& campaign : *campaigns){
-
-      if(sample == "ttH" && campaign == "merged_mc16e") continue;
-
-      if(sampleName == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR10__muF20") systPrex = "_weight_pmg_muR100__muF200";
-      if(sampleName == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR10__muF05") systPrex = "_weight_pmg_muR100__muF050";
-      if(sampleName == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR20__muF10") systPrex = "_weight_pmg_muR200__muF100";
-      if(sampleName == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR05__muF10") systPrex = "_weight_pmg_muR050__muF100";
-
-      if(debug){
-	std::cout << "Opening: " << inputDir + "/" + campaign + "/outVLQAnalysis_" + sampleName + "_nominal_HIST.root" << std::endl;
-	std::cout << "Retrieving: " << region + "_" + (kinematics -> at(0)) + "_vs_" + (kinematics -> at(1)) + systPrex << std::endl;
-      }
-
-      TFile* f = TFile::Open( (inputDir + "/" + campaign + "/outVLQAnalysis_" + sampleName + "_nominal_HIST.root").c_str(), "READ" );
-
-      TH2D* h_i = ((TH2D*)(f -> Get( ( std::string(region) + "_" + (kinematics -> at(0)) + "_vs_" + (kinematics -> at(1)) + systPrex ).c_str() ) ) );
-
-      if(!h_i){
-	h_i = ((TH2D*)(f -> Get( ( std::string(region) + "_" + (kinematics -> at(0)) + "_vs_" + (kinematics -> at(1)) ).c_str() ) ) );
-	if(debug) std::cout << region + "_" + (kinematics -> at(0)) + "_vs_" + (kinematics -> at(1)) + systPrex << " not found." << std::endl;
-      }
-
-      h_i -> SetDirectory(0);
-
-      if(campaign == "merged_mc16a"){
-	h_i -> Scale(36207.66);
-      }
-      else if(campaign == "merged_mc16d"){
-	h_i -> Scale(44307.4);
-      }
-      else if(campaign == "merged_mc16e"){
-	h_i -> Scale(58450.1);
-      }
-      else{
-	std::cout << "MC campaign unrecognized, unable to scale histogram with campaign luminosity" << std::endl;
-      }
-
-      totalHist -> Add(h_i);
-      delete h_i;
-      f -> Close();
-    }
-
-  }
-
-  return totalHist;
-
-
-}
-
-//______________________________________________________________________________
-//
-TH1D* getTotalKinHisto1D( std::vector<std::string>* samples, std::string inputDir, std::string region,
-                          std::vector<std::string>* campaigns, std::string kinematics, TH1D* histTemp,
-                          std::string nameHisto, std::string systematicPrefix){
-
-  TH1D* totalHist = (TH1D*)(histTemp -> Clone ( ( std::string(histTemp -> GetName()) + "_" + std::string(nameHisto) ).c_str() ) );
-
-  totalHist -> Reset();
-
-  for(const std::string& sample : *samples){
-
-    std::string sampleName = sample;
-
-    if(sample == "ttbarbb" || sample == "ttbarcc" || sample == "ttbarlight" || sample == "SingletopWtprod"){
-
-
-      if(systematicPrefix == "_aMCPy" || systematicPrefix == "_PowHer" || systematicPrefix == "_AFII"){
-	
-	sampleName += systematicPrefix;
-
-      }
-      else if(systematicPrefix == "_DiagSub"){
-	
-	sampleName += systematicPrefix;
-
-      }
-      else if(systematicPrefix != ""){
-
-	sampleName += "_pmg";
-
-      }
-
-    }
-    else if(sample == "Zjets"){
-      
-      if(systematicPrefix != ""){
-
-	sampleName += "_pmg";
-
-      }
-
-    }
-
-    for(const std::string& campaign : *campaigns){
-
-      if(sample == "ttH" && campaign == "merged_mc16e") continue;
-
-      if(sample == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR10__muF20") systematicPrefix = "_weight_pmg_muR100__muF200";
-      if(sample == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR10__muF05") systematicPrefix = "_weight_pmg_muR100__muF050";
-      if(sample == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR20__muF10") systematicPrefix = "_weight_pmg_muR200__muF100";
-      if(sample == "SingletopWtprod_pmg" && systematicPrefix == "_weight_pmg_muR05__muF10") systematicPrefix = "_weight_pmg_muR050__muF100";
-
-      TFile* f = TFile::Open( (inputDir + "/" + campaign + "/outVLQAnalysis_" + sampleName + "_nominal_HIST.root").c_str(), "READ" );
-
-      TH1D* h_i = ((TH1D*)(f -> Get( ( std::string(region) + "_" + kinematics + systematicPrefix ).c_str() ) ) );
-
-      /*if(debug){
-	std::cout << inputDir + "/" + campaign + "/outVLQAnalysis_" + sampleName + "_nominal_HIST.root" << std::endl;
-	std::cout << region + "_" + kinematics + systematicPrefix << std::endl;
-      }*/
-
-      if(!h_i){
-	h_i = ((TH1D*)(f -> Get( ( std::string(region) + "_" + kinematics ).c_str() ) ) );
-      }
-
-      h_i -> SetDirectory(0);
-                                                                                                                                                                                                         
-      if(campaign == "merged_mc16a"){
-        h_i -> Scale(36207.66);
-      }
-      else if(campaign == "merged_mc16d"){
-        h_i -> Scale(44307.4);
-      }
-      else if(campaign == "merged_mc16e"){
-        h_i -> Scale(58450.1);
-      }
-      else{
-	std::cout << "MC campaign unrecognized, unable to scale histogram with campaign luminosity" << std::endl;
-      }
-
-      totalHist -> Add(h_i);
-      delete h_i;
-      f -> Close();
-    }
-
-  }
-
-  return totalHist;
-
-}
-
-//______________________________________________________________________________ 
-//
+// is stored in an output vector 
+//______________________________________________________________________________                                                                                                               
+//                                                                                                                                                                                                      
 void parseUserOptions(int arc, char** argv){
-  
+
   for(int i = 1; i < arc; i++){
 
     std::string opt(argv[i]);
@@ -264,1051 +35,715 @@ void parseUserOptions(int arc, char** argv){
 
     value=opt.erase(0, pos + 1);
 
-    if(argument == "--INDIR") inDir = value;
-    else if(argument == "--OUTPUT") outName = value;
-    else if(argument == "--SIGNAL") signalSamples = value;
-    else if(argument == "--BACKGROUND") backgroundSamples = value;
-    else if(argument == "--SYSTEMATICS") systematicsList = value;
-    else if(argument == "--DOSMOOTHING"){
-      std::transform(value.begin(), value.end(), value.begin(), toupper);
-      doSmoothing = (value == "TRUE") ? true : false;
-    }
-    else if(argument == "--DEBUG"){
+    std::transform(argument.begin(), argument.end(), argument.begin(), toupper);
 
-      std::transform(value.begin(), value.end(), value.begin(), toupper);
-      debug = (value == "TRUE") ? true : false;
-    }
+    if(argument == "--SAMPLELIST") sampleList = value;
+    else if(argument == "--VARIABLELIST") variableList = value;
+    else if(argument == "--SYSTEMATICLIST") systematicList = value;
+
   }
-  
+
 }
 
+// Utility function that reads configurations from a text file and stores each entry in a 
+// map of strings. All entries are then stored in a vector of these maps
 //______________________________________________________________________________
 //
-Double_t hyperbolaFitFunction(Double_t *x, Double_t *par){
-  
-  Double_t fitVal = par[0] + par[1]/(TMath::Power(x[0],par[2]));
+std::vector< std::map< std::string, std::string > > readFromTextFile(std::string fileName, char delim){
 
-  return fitVal;
+  std::cout << "Opening file " << fileName << std::endl;
+
+  std::ifstream file(fileName);
+
+  std::vector< std::map< std::string, std::string> > vectorMap = {};
+
+  if(!file.is_open()){
+
+    std::cout << "< ERROR > : The file  " << fileName << " does not exist! Exiting from program." << std::endl;
+
+    exit(EXIT_FAILURE);
+
+  }
+
+  std::string line;
+
+  while(getline(file,line)){
+
+    if(line == "NEW"){
+
+      std::cout << "#####################################" << std::endl;
+      std::cout << "#     Found reweighting option      #" << std::endl;
+      std::cout << "#####################################" << std::endl;
+
+      std::map< std::string, std::string > optMap;
+
+      while(getline(file,line) && line != "END"){
+
+	std::string key = line.substr(0, line.find(delim));
+
+	std::string opt = line.substr(line.find(delim)+1);
+
+	std::cout << key << " : " << opt <<std::endl;
+
+        optMap[key] = opt;
+
+      }
+
+      vectorMap.push_back(optMap);
+
+
+    }
+
+  }
+
+  std::cout << "#####################################" << std::endl;
+  std::cout << "Closing file "  << fileName << std::endl;
+
+  return vectorMap;
 
 }
 
+// Function that books the histogram templates that are to be used for kinematic reweighting
+// Inputs:
+// kinematics: a vector of maps that contains the information of the the kinematic
+// variables to be reweighted
+// samples: a vector of maps that contains the information of all the samples needed
+// for reweighting
+// histo1DMap: a 3D map of TH1D with keys [kinematic name][sample type][systematic] used to
+// store the TH1D histogram templates for reweighting
+// histo2DMap: a 3D map of TH2D with keys [kinematic name][sample type][systematic] used to
+// store the TH2D histogram templates for reweighting
 //______________________________________________________________________________
 //
-Double_t sigmoidFitFunction(Double_t *x, Double_t *par){
+void setupReweightingHistograms(std::vector< std::map < std::string, std::string > > kinematics,
+				std::vector< std::map < std::string, std::string > > samples,
+				std::map< std::string, std::map< std::string, std::map< std::string, TH1D* > > >& histo1DMap,
+				std::map< std::string, std::map< std::string, std::map< std::string, TH2D* > > >& histo2DMap){
 
-  //Double_t fitVal = par[0]/(par[1] + TMath::Exp( par[2]*x[0]) );
+  std::map< std::string, std::vector< std::string > >::iterator kinIt;
 
-  Double_t fitVal = par[0] - (par[1]/(1.0 + TMath::Exp( par[2]*x[0] ) ) );
+  std::map< std::string, std::vector< std::string > >::iterator samIt;
 
-  return fitVal;
+  for(std::map< std::string, std::string > kinMap : kinematics){ // start loop through kinematic maps
+    
+    for(std::map < std::string, std::string> sampleMap : samples){ // start loop through sample maps
 
-}
+      std::vector< std::string > systematics = {};
+      
+      std::stringstream ssSyst(sampleMap["SYSTEMATICS"]);
+      
+      std::string systName;
+      
+      // read the systematics available for the current sample and stored them in a vector
+      while(getline(ssSyst, systName, ',')) systematics.push_back(systName);
+      
+      for(std::string systematic : systematics){ // start loop through systematics
+	
+	if(kinMap["FORMAT"] == "TH1D"){ // start if kinematic to reweight is stored in a TH1D
+	  
+	  if(histo1DMap[kinMap["NAME"]][sampleMap["SAMPLE"]][systematic] == NULL){
+	  
+	    TFile* f = TFile::Open((sampleMap["NAME"]).c_str(), "READ");
 
-Double_t LogisticSFunction(Double_t *x, Double_t *par){
-
-  Double_t fitVal = par[3] - par[0]/( 1.0 + TMath::Exp(par[1]*(x[0] - par[2])));
-
-  return fitVal;
-
-}
-
-Double_t HypLogisticSFunction(Double_t *x, Double_t *par){
-
-  Double_t fitVal = 1.0/(TMath::Power(x[0],par[3])) + par[0]/( 1.0 + TMath::Exp(par[1]*(x[0] - par[2])));
+	    f->cd();
   
-  return fitVal;
+	    // histogram to store template of kinematic to reweight
+	    TH1D* temp = (TH1D*) f->Get((kinMap["NAME"]).c_str());
+
+	    temp->SetDirectory(0);
+
+	    f->Close();
+
+	    std::cout << "Booking histogram " << kinMap["NAME"]+"_"+sampleMap["SAMPLE"]+"_"+systematic << std::endl;
+	      
+	    // store the template for the current systematic, sample type, and systematic
+	    histo1DMap[kinMap["NAME"]][sampleMap["SAMPLE"]][systematic] = (TH1D*) temp->Clone((kinMap["NAME"]+"_"+sampleMap["SAMPLE"]+"_"+systematic).c_str());
+	    
+	    histo1DMap[kinMap["NAME"]][sampleMap["SAMPLE"]][systematic]->Reset();
+
+	    delete f;
+
+	    delete temp;
+	    
+	  }
+	  
+	} // end if kinematic ro reweight is stored in a TH1D
+	
+	else if(kinMap["FORMAT"] == "TH2D"){ // start if kinematic to reweight is stored in a TH2D
+	  	  
+	  if(histo2DMap[kinMap["NAME"]][sampleMap["SAMPLE"]][systematic] == NULL){
+	    
+	    TFile* f = TFile::Open((sampleMap["NAME"]).c_str(), "READ");
+
+	    f->cd();
+	    
+	    // histogram to store template of kinematic to reweight
+            TH2D* temp = (TH2D*) f->Get((kinMap["NAME"]).c_str());
+
+	    temp->SetDirectory(0);
+
+            f->Close();
+
+	    std::cout << "Booking histogram " << kinMap["NAME"]+"_"+sampleMap["SAMPLE"]+"_"+systematic << std::endl;
+	    
+	    // store the template for the current systematic, sample type, and systematic
+	    histo2DMap[kinMap["NAME"]][sampleMap["SAMPLE"]][systematic] = (TH2D*) temp->Clone((kinMap["NAME"]+"_"+sampleMap["SAMPLE"]+"_"+systematic).c_str());
+
+            histo2DMap[kinMap["NAME"]][sampleMap["SAMPLE"]][systematic]->Reset();
+
+            delete f;
+
+            delete temp;
+
+	  }
+	  
+	} // end if kinematic to reweight is stored in a TH2d
+	
+      } // end loop through systematics
+      
+    } // end loop through sample maps
+    
+  } // end loop through kinematic maps
 
 }
 
-Double_t sechFitFunction(Double_t *x, Double_t *par){
+// Function that fills the histogram templates for reweighting with the required histograms
+// Inputs:                                                                                                                                                                                             
+// kinematics: a vector of maps that contains the information of the the kinematic                                                                                                                    
+// variables to be reweighted                                                                                                                                                                         
+// samples: a vector of maps that contains the information of all the samples needed                                                                                                                  
+// for reweighting                                                                                                                                                                                    
+// histo1DMap: a 3D map of TH1D with keys [kinematic name][sample type][systematic] that contains            
+// the histogram templates required for reweighting a kinematic stored in a TH1D                                                                                                     
+// histo2DMap: a 3D map of TH2D with keys [kinematic name][sample type][systematic] that contains
+// the histogram templates required for reweighting a kinematic stored in a TH2D
+//______________________________________________________________________________
+//
+void fillReweightingHistograms(std::map < std::string, std::map< std::string, std::map< std::string, TH1D* > > >& histo1DMap,
+			       std::map < std::string, std::map< std::string, std::map< std::string, TH2D* > > >& histo2DMap,
+			       std::vector< std::map < std::string, std::string > > samples,
+			       std::vector< std::map < std::string, std::string > > kinematics){
 
-  Double_t fitVal = par[0] + par[1]/(TMath::CosH(par[2]*x[0]) );
-  //Double_t fitVal = par[0]/(TMath::CosH( TMath::Power(par[1]*x[0],par[2]) ) );
+  for(std::map< std::string, std::string > kinMap : kinematics){ // start loop through kinematic maps
 
+    for(std::map < std::string, std::string > sampleMap : samples){ // start loop through sample maps
 
-  return fitVal;
+      std::vector< std::string > systematics = {};
+
+      std::stringstream ssSyst(sampleMap["SYSTEMATICS"]);
+
+      std::string systName;
+
+      // read the systematics available for the current sample and store them in a vector
+      while(getline(ssSyst, systName, ',')) systematics.push_back(systName);
+
+      for(std::string systematic : systematics){ // start loop through systematics
+
+	std::string kinSuffix = "";
+
+	// if the current systematic is stored as a weight in the ROOT file, append
+	// the name of the systematic to the name of the kinematic
+        if(sampleMap["SYSTTYPE"] == "weight") kinSuffix += ("_"+systematic);
+
+        if(kinMap["FORMAT"] == "TH1D"){ // start if kinematic to reweight is stored in a TH1D
+
+	  //std::cout << "Opening file " << sampleMap["NAME"] << std::endl;
+
+	  // open file for the corresponding sample
+          TFile* f = TFile::Open((sampleMap["NAME"]).c_str(),"READ");
+
+	  // retrieve the kinematic histogram for the given sample and systematic
+          TH1D* histo = (TH1D*) f->Get((kinMap["NAME"] + kinSuffix).c_str());
+
+          if(!histo){
+
+	    std::cout << "< ERROR > : The histogram " << kinMap["NAME"] + kinSuffix << " does not exist! Exiting from program." << std::endl;
+
+            exit(EXIT_FAILURE);
+
+          }
+	  
+	  // scale the histogram with the corresponding MC campaign luminosity
+	  histo->Scale(std::stod(sampleMap["SCALE"]));
+
+	  // add current histogram to corresponding template
+	  histo1DMap[kinMap["NAME"]][sampleMap["SAMPLE"]][systematic]->Add(histo);
+
+          f->Close();
+
+        } // end if kinematic to reweight is stored in a TH1D
+	else if(kinMap["FORMAT"] == "TH2D"){ // start if kinematic to reweight is stored in a TH2D
+
+	  //std::cout << "Opening file " << sampleMap["NAME"] << std::endl;
+
+	  // open file for the corresponding sample
+          TFile* f = TFile::Open((sampleMap["NAME"]).c_str(),"READ");
+
+	  // retrieve the kinematic histogram for the given sample and systematic
+          TH2D* histo = (TH2D*) f->Get((kinMap["NAME"] + kinSuffix).c_str());
+
+          if(!histo){
+
+	    std::cout << "< ERROR > : The histogram " << kinMap["NAME"] + kinSuffix << " does not exist! Exiting from program." << std::endl;
+
+            exit(EXIT_FAILURE);
+
+          }
+
+	  // scale the histogram with the corresponding MC campaign luminosity
+	  histo->Scale(std::stod(sampleMap["SCALE"]));
+
+	  // add current histogram to corresponding templat
+          histo2DMap[kinMap["NAME"]][sampleMap["SAMPLE"]][systematic]->Add(histo);
+
+          f->Close();
+
+        } // end if kinematic to reweight is stored in a TH2D
+
+      } // end loop through systematics
+
+    } // end loop through sample maps
+
+  } // end loop through kinematic maps
 
 }
 
-Double_t asinhFitFunction(Double_t *x, Double_t*par){
-
-  //Double_t fitVal = par[0] + par[2]*TMath::ASinH(-par[1]*x[0] );
+// Function that reweights a kinematic stored in a TH1D for a given systematic
+// Inputs:
+// histoMap: map of histogram templates required to derive a kinematic reweighting
+// kinematic: map containing the options of a kinematic variable to be reweighted
+// systematic: name of the systematic variation to be reweighted
+// doMCRatio: option to derive a MC to MC ratio between the nominal kinematic variable
+// and the systematic variation of the kinematic variable instead of deriving a 
+// new reweighting for the systematic variation
+// Returns:
+// TH1D pointer of the reweighting histogram or MC to MC ratio for the given kinematic
+// variable and systematic variation
+//______________________________________________________________________________ 
+//
+TH1D* reweightKinTH1D(std::map < std::string, std::map< std::string, std::map< std::string, TH1D* > > >& histoMap,
+		     std::map < std::string, std::string > kinematic, std::string systematic, bool doMCRatio = false){
   
-  //Double_t fitVal = -par[0]*TMath::Power(x[0],2.0) - TMath::ASinH(par[1]*x[0] );
+  std::string systSuffix = (systematic == "nominal") ? "" : "_"+systematic;
 
-  Double_t fitVal = -(par[0] + TMath::Power(par[1]*x[0],3.0) + TMath::ASinH(par[1]*x[0]));
+  std::vector<double> XbinEdges = {};
+  
+  // retrieve the desired binning for the reweighting histogram
+  std::stringstream XbinSS(kinematic["XBIN"]);
 
-  return fitVal;
+  std::string binEdge;
+
+  // store the binning in a vector
+  while(getline(XbinSS, binEdge, ',')) XbinEdges.push_back(std::stod(binEdge));
+
+  // define the name of the reweighting histogram
+  std::string kinRwName = (kinematic["RENAME"] != "") ? kinematic["RENAME"]+systSuffix : kinematic["NAME"] + systSuffix;
+
+  // define the reweighting histogram
+  TH1D* kinRw = new TH1D((kinRwName).c_str(), "", XbinEdges.size()-1, &XbinEdges[0]);
+
+  if(systematic != "nominal" && doMCRatio){ // start if systematic variation is not nominal and user wants to calculate a MC to MC ratio
+
+    // define numerator histogram for the MC to MC ratio
+    TH1D* numerator = new TH1D();
+
+    // define denominator histogram for the MC to MC ratio
+    TH1D* denominator =new TH1D();
+
+    // store the nominal variation of the histogram in the numerator 
+    *numerator = *(histoMap[kinematic["NAME"]]["signal"]["nominal"]);
+
+    // store the systematic variation of the histogram in the denominator
+    *denominator = *(histoMap[kinematic["NAME"]]["signal"][systematic]);
+
+    /*for(int xbins = 1; xbins <= denominator->GetNbinsX(); xbins++){
+      
+      std::cout << "nominal value at xbin=" << xbins << ": " << numerator->GetBinContent(xbins) << std::endl;
+      
+      std::cout << "systematic value at xbin=" << xbins << ": " << denominator->GetBinContent(xbins) << std::endl;
+      
+      }*/
+    
+    // rebin numerator histogram to the same binning as the reweighting histogram
+    numerator = (TH1D*) numerator->Rebin(XbinEdges.size()-1, numerator->GetName(), &XbinEdges[0]);
+
+    // rebin denominator histogram to the same binning as the reweighting histogram
+    denominator = (TH1D*) denominator->Rebin(XbinEdges.size()-1, denominator->GetName(), &XbinEdges[0]);
+    
+    // calculate the MC to MC ratio by dividing the denominator histogram to the numerator histogram
+    kinRw->Divide(numerator, denominator);
+
+  } // end if systematic variation is not nominal and user wants to calculate a MC to MC ratio
+  else{ // start if systematic variation is nominal or user does not want to calculate a MC to MC ratio
+
+    // define numerator histogram for reweighting
+    TH1D* numerator = new TH1D();
+
+    // define denominator histogram for reweighting
+    TH1D* denominator =new TH1D();
+
+    // store the data histogram in the numerator
+    *numerator = *(histoMap[kinematic["NAME"]]["data"]["nominal"]);
+
+    // store the background to be reweighted histogram in the denominator
+    *denominator = *(histoMap[kinematic["NAME"]]["signal"][systematic]);
+
+    // subtract backgrounds to not be reweighted to the data histogram
+    numerator->Add(histoMap[kinematic["NAME"]]["background"]["nominal"], -1);
+
+    // rebin numerator histogram to the same binning as the reweighting histogram
+    numerator =(TH1D*)numerator->Rebin(XbinEdges.size()-1, numerator->GetName(), &XbinEdges[0]);
+
+    // rebin denominator histogram to the same binning as the reweighting histogram
+    denominator = (TH1D*) denominator->Rebin(XbinEdges.size()-1, denominator->GetName(), &XbinEdges[0]);
+
+    // calculate the kinematic reweighting by dividing the denominator histogram to the numerator histogram
+    kinRw->Divide(numerator, denominator);
+
+  } // end  if systematic variation is nominal or user does not want to calculate a MC to MC ratio
+
+  return kinRw;
 
 }
 
+// Function that reweights a kinematic stored in a TH2D for a given systematic                                  
+// Inputs:                                                                                                                                                                                           
+// histoMap: map of histogram templates required to derive a kinematic reweighting                                                                                                                      
+// kinematic: map containing the options of a kinematic variable to be reweighted                                                                                                                      
+// systematic: name of the systematic variation to be reweighted                                                                                                                                       
+// doMCRatio: option to derive a MC to MC ratio between the nominal kinematic variable                                                                                                                 
+// and the systematic variation of the kinematic variable instead of deriving a                                                                                                                        
+// new reweighting for the systematic variation                                                                                                                                                        
+// rW_dep: pointer to a TH1D containing a kinematic reweighting that needs to be
+// applied before deriving the kinematic reweighting for the current variable
+// Returns:                                                                                                                                                                                            
+// TH2D pointer of the reweighting histogram or MC to MC ratio for the given kinematic                                                                                                               
+// variable and systematic variation 
+//______________________________________________________________________________
+//
+TH2D* reweightKinTH2D(std::map < std::string,std::map< std::string, std::map< std::string, TH2D* > > >& histoMap,
+		      std::map < std::string, std::string > kinematic, std::string systematic, bool doMCRatio = false, TH1D* rW_dep = NULL){
 
-// Main function that calculates the jets_n reweighting for the given samples to be 
-// reweighted, applies it to meff and then calculates the meff reweighting for the samples
-// to be reweighted
+  std::string systSuffix = (systematic == "nominal") ? "" : "_"+systematic;
+
+  std::vector<double> XbinEdges = {};
+
+  std::vector<double> YbinEdges = {};
+
+  // retrieve the desired x-axis binning for the reweighting histogram
+  std::stringstream XbinSS(kinematic["XBIN"]);
+
+  // retrieve the desired y-axis binning for the reweighting histogram
+  std::stringstream YbinSS(kinematic["YBIN"]);
+
+  std::string binEdge;
+
+  // store the x-axis binning in a vector
+  while(getline(XbinSS, binEdge, ',')) XbinEdges.push_back(std::stod(binEdge));
+
+  // store the y-axis binning in a vector
+  while(getline(YbinSS, binEdge, ',')) YbinEdges.push_back(std::stod(binEdge));
+
+  // define the name of the reweighting histogram
+  std::string kinRwName = (kinematic["RENAME"] != "") ? kinematic["RENAME"]+systSuffix : kinematic["NAME"] + systSuffix;
+
+  // define the reweighting histogram
+  TH2D* kinRw = new TH2D( kinRwName.c_str(), "", XbinEdges.size()-1, &XbinEdges[0], YbinEdges.size()-1, &YbinEdges[0]);
+
+  if(systematic != "nominal" && doMCRatio){ // start if systematic variation is not nominal and user wants to calculate a MC to MC ratio
+
+    // define numerator histogram for the MC to MC ratio
+    TH2D* numerator = new TH2D();
+
+    // define denominator histogram for the MC to MC ratio
+    TH2D* denominator = new TH2D();
+
+    // store the nominal variation of the kinematic histogram in the numerator
+    *numerator = *(histoMap[kinematic["NAME"]]["signal"]["nominal"]);
+
+    // store the systematic variation of the kinematic histogram in the denominator
+    *denominator = *(histoMap[kinematic["NAME"]]["signal"][systematic]);
+    
+    if(rW_dep != NULL){ // start if there is a kinematic reweighting to be applied before deriving the MC to MC ratio
+
+      //std::cout << rW_dep->GetName() << std::endl;
+
+      for(int ybins = 1; ybins <= denominator->GetNbinsY(); ybins++){ // start loop through denominator/numerator y bins
+
+	/*int test_bin = (ybins <= rW_dep->GetNbinsX()) ? ybins : rW_dep->GetNbinsX();
+
+	std::cout << "At Njets bin " << ybins << ": [" << denominator->GetYaxis()->GetBinLowEdge(ybins) << "," << denominator->GetYaxis()->GetBinUpEdge(ybins) << "]" << std::endl;
+
+	std::cout << "At Njets bin " << test_bin << ": [" << rW_dep->GetXaxis()->GetBinLowEdge(test_bin) << "," << rW_dep->GetXaxis()->GetBinUpEdge(test_bin) << "]" <<std::endl;*/
+
+	// obtain the kinematic reweighting to be applied prior to calculating the MC to MC ratio
+	double weight = (ybins <= rW_dep->GetNbinsX()) ? rW_dep->GetBinContent(ybins) : rW_dep->GetBinContent(rW_dep->GetNbinsX());
+
+        for(int xbins = 1; xbins <= denominator->GetNbinsX(); xbins++){ // start loop through denominator/numerator x bins
+
+	  // apply kinematic reweighting to the denominator histogram
+          denominator->SetBinContent(xbins, ybins, denominator->GetBinContent(xbins,ybins) * weight);
+
+	  // scale denominator histogram errors by the kinematic reweighting
+	  denominator->SetBinError(xbins,ybins, denominator->GetBinError(xbins,ybins) * weight);
+
+        } // end loop through denominator/numerator x bins
+
+      } // end loop through denominator/numerator y bins
+
+    } // end if there is a kinematic reweighting to be applied before deriving the MC to MC ratio
+
+    for(int ybins = 1; ybins <= kinRw->GetNbinsY(); ybins++){ // start loop through kinRw y bins
+
+      // define the last y-axis bin to project down the numerator and denominator histograms
+      int lastybin = (ybins < kinRw->GetNbinsY()) ? ybins : numerator->GetNbinsY();
+
+      /*std::cout << "projecting y axis bins " << ybins << " to " << lastybin << std::endl;
+
+	std::cout << "[" << denominator->GetYaxis()->GetBinLowEdge(ybins) << "," << denominator->GetYaxis()->GetBinUpEdge(lastybin) << "]" << std::endl;*/
+
+      // project down the numerator histogram along the x-axis for the y bin range [ybins,lastybin]
+      TH1D* numerator_projx = (TH1D*)(numerator->ProjectionX((std::string(numerator->GetName())+"_px").c_str(), ybins, lastybin, "e"));
+
+      // project down the denominator histogram along the x-axis for the y bin range [ybins,lastybin] 
+      TH1D* denominator_projx =(TH1D*)(denominator->ProjectionX((std::string(denominator->GetName())+"_px").c_str(), ybins, lastybin, "e"));
+
+      // rebin the x-axis of the numerator projection to have the same x-axis binning as the reweighting histogram
+      numerator_projx = (TH1D*) numerator_projx->Rebin(XbinEdges.size()-1, numerator_projx->GetName(), &XbinEdges[0]);
+
+      // rebin the x-axis of the denominator projection to have the same x-axis binning as the reweighting histogram
+      denominator_projx = (TH1D*) denominator_projx->Rebin(XbinEdges.size()-1, denominator_projx->GetName(), &XbinEdges[0]);
+
+      //numerator_projx->Divide(denominator_projx);
+      
+      TH1D* ratio_projx = (TH1D*) numerator_projx->Clone("ratio_projx");
+
+      ratio_projx->Reset();
+
+      // calculate the ratio of the numerator histogram projection to the denominator histogram projection
+      ratio_projx->Divide(numerator_projx, denominator_projx);
+
+      for(int xbins = 1; xbins <= kinRw->GetNbinsX(); xbins++){ // start loop through kinRw x bins
+
+	// set the bin content of kinRw for the bins [xbins,ybins] equal to the bin content of the ratio at the bins xbins
+        kinRw->SetBinContent(xbins, ybins, ratio_projx->GetBinContent(xbins));
+
+	kinRw->SetBinError(xbins, ybins, ratio_projx->GetBinError(xbins));
+
+      } // end loop through kinRw x bins
+
+    } // end loop through kinRw y bins
+
+  } // end if systematic variation is not nominal and user wants to calculate a MC to MC ratio
+  else{ // start if systeamtic variation is nominal or user does not want to calculate a MC to MC ratio
+
+    TH2D* numerator = new TH2D();
+
+    TH2D* denominator =new TH2D();
+
+    *numerator = *(histoMap[kinematic["NAME"]]["data"]["nominal"]);
+
+    *denominator = *(histoMap[kinematic["NAME"]]["signal"][systematic]);
+
+    numerator->Add(histoMap[kinematic["NAME"]]["background"]["nominal"], -1);
+
+    if(rW_dep != NULL){
+
+      for(int ybins = 1; ybins <= denominator->GetNbinsY(); ybins++){
+
+	int test_bin = (ybins <= rW_dep->GetNbinsX()) ? ybins : rW_dep->GetNbinsX();
+
+	//std::cout << "At Njets bin " << ybins << ": [" << denominator->GetYaxis()->GetBinLowEdge(ybins) << "," << denominator->GetYaxis()->GetBinUpEdge(ybins) << "]" << std::endl;
+
+	//std::cout << "At Njets bin " << test_bin << ": [" << rW_dep->GetXaxis()->GetBinLowEdge(test_bin) << "," << rW_dep->GetXaxis()->GetBinUpEdge(test_bin) << "]" <<std::endl;
+
+	double weight = (ybins <= rW_dep->GetNbinsX()) ? rW_dep->GetBinContent(ybins) : rW_dep->GetBinContent(rW_dep->GetNbinsX());
+	
+	for(int xbins = 1; xbins <= denominator->GetNbinsX(); xbins++){
+	  
+	  //std::cout << denominator->GetBinContent(xbins,ybins) << " " << weight << std::endl;
+
+	  denominator->SetBinContent(xbins, ybins, denominator->GetBinContent(xbins,ybins) * weight);
+	  
+	  denominator->SetBinError(xbins,ybins, denominator->GetBinError(xbins,ybins) * weight);
+
+	}
+	
+      }
+
+    }
+
+    for(int ybins = 1; ybins <= kinRw->GetNbinsY(); ybins++){
+
+      int lastybin = (ybins < kinRw->GetNbinsY()) ? ybins : numerator->GetNbinsY();
+
+      //std::cout << "projecting y axis bins " << ybins << " to " << lastybin << std::endl;
+      
+      //std::cout << "[" << denominator->GetYaxis()->GetBinLowEdge(ybins) << "," << denominator->GetYaxis()->GetBinUpEdge(lastybin) << "]" << std::endl; 
+
+      TH1D* numerator_projx = (TH1D*)(numerator->ProjectionX((std::string(numerator->GetName())+"_px").c_str(), ybins, lastybin, "e"));
+
+      TH1D* denominator_projx =(TH1D*)(denominator->ProjectionX((std::string(denominator->GetName())+"_px").c_str(), ybins, lastybin, "e"));
+
+      numerator_projx = (TH1D*) numerator_projx->Rebin(XbinEdges.size()-1, numerator_projx->GetName(), &XbinEdges[0]);
+
+      denominator_projx = (TH1D*) denominator_projx->Rebin(XbinEdges.size()-1, denominator_projx->GetName(), &XbinEdges[0]);
+
+      TH1D* ratio_projx = (TH1D*) numerator_projx->Clone("ratio_projx");
+
+      ratio_projx->Reset();
+
+      ratio_projx->Divide(numerator_projx, denominator_projx);
+
+      //numerator_projx->Divide(denominator_projx);
+
+      for(int xbins = 1; xbins <= kinRw->GetNbinsX(); xbins++){
+
+	//kinRw->SetBinContent(xbins, ybins, numerator_projx->GetBinContent(xbins));
+
+	kinRw->SetBinContent(xbins, ybins, ratio_projx->GetBinContent(xbins));
+
+	//std::cout << ratio_projx->GetBinError(xbins) << std::endl;
+
+	kinRw->SetBinError(xbins, ybins, ratio_projx->GetBinError(xbins));
+
+      }
+      
+    }
+
+  }
+
+  return kinRw;
+  
+}
+
 //______________________________________________________________________________
 //
 int main(int argc, char** argv){
 
   parseUserOptions(argc, argv);
 
-  std::cout << " inDir = " << inDir << std::endl;
-  std::cout << " outName = " << outName << std::endl;
-  std::cout << " signalSamples = " << signalSamples << std::endl;
-  std::cout << " backgroundSamples = " << backgroundSamples << std::endl;
-  std::cout << " systematicsList = " << systematicsList << std::endl;
-  std::cout << " doSmoothing = " << doSmoothing << std::endl;
-  std::cout << " debug = "<< debug << std::endl;
+  std::cout << "=======================================================================" << std::endl;
+  std::cout << "=================       Reading sample options        =================" << std::endl;
+  std::cout << "=======================================================================" << std::endl;
+  std::vector< std::map < std::string, std::string > > sampleAttributes = readFromTextFile(sampleList, ':');
+  std::cout << "=======================================================================" << std::endl << std::endl;
 
-  TFile* f_out = TFile::Open( outName.c_str(), "UPDATE" );
+  std::cout << "=======================================================================" << std::endl;
+  std::cout << "=================       Reading variable options       ================" << std::endl;
+  std::cout << "=======================================================================" << std::endl;
+  std::vector< std::map < std::string, std::string > > variableAttributes = readFromTextFile(variableList, ':');
+  std::cout << "=======================================================================" << std::endl << std::endl;
 
+  std::map < std::string, std::map< std::string, std::map< std::string, TH1D* > > > histo1DMap;
 
-  // Store all the samples to be reweighted
-  std::vector<std::string> list_signal = splitString(signalSamples, ",");
+  std::map < std::string, std::map< std::string, std::map< std::string, TH2D* > > > histo2DMap;
   
-  // Store all the background samples
-  std::vector<std::string> list_background = splitString(backgroundSamples, ",");
-  
-  std::vector<std::string> list_campaign = {"merged_mc16a","merged_mc16d","merged_mc16e"};
-  
-  // Vector containing the kinematics to be reweighted
-  std::vector<std::string> list_kin = {"jets_n","meffred"};
-  //std::vector<std::string> list_kin = {"jets_n","meff"};
+  std::cout << "=======================================================================" << std::endl;
+  std::cout << "==============  Booking reweighting histogram templates  ==============" << std::endl;
+  std::cout << "=======================================================================" << std::endl;
+  setupReweightingHistograms(variableAttributes, sampleAttributes, histo1DMap, histo2DMap);
+  std::cout << "=======================================================================" << std::endl << std::endl;
 
-  std::vector<std::string> list_reg{};
+  std::cout << "=======================================================================" << std::endl;
+  std::cout << "==============  Filling reweighting histogram templates  ==============" << std::endl;
+  std::cout << "=======================================================================" << std::endl;
+  fillReweightingHistograms(histo1DMap, histo2DMap, sampleAttributes, variableAttributes);
+  std::cout << "=======================================================================" << std::endl << std::endl;
 
-  std::ifstream systFile(systematicsList);
+  // vector to store systematic variations
+  std::vector< std::string > systematics = {};
 
-  std::vector<std::string> systematics;
+  for(std::map < std::string, std::string > sampleMap : sampleAttributes){
 
-  if(!systFile.is_open()){
-    std::cout << "Couldn't find the systematics file: " << systematicsList << std::endl;
-    std::cout << "Will continue running the program using nominal systematics only." << std::endl;
-    systematics.push_back("nominal");
-  }
-  else{
-    std::string systematic;
+    std::stringstream ssSyst(sampleMap["SYSTEMATICS"]);
 
-    while( getline(systFile, systematic) ){
+    std::string systName;
+
+    while(getline(ssSyst, systName, ',')){
       
-      std::cout << "Found systematic: " << systematic << std::endl;
+      if(std::find(systematics.begin(), systematics.end(), systName) == systematics.end()) systematics.push_back(systName);
 
-      systematics.push_back(systematic);
-      
     }
 
-    systFile.close();
-
-  }
- 
-
-  // If we are reweighting any ttbar sample or singletopWt use the following regions
-
-  if(std::find(list_signal.begin(), list_signal.end(), "ttbarbb") != list_signal.end() || 
-     std::find(list_signal.begin(), list_signal.end(), "ttbarbb_pmg") != list_signal.end()){
-
-    list_reg.push_back("c1lep3jin2bex");
-
   }
 
-  // If we are reweighting Zjets use the following regions
-  if(std::find(list_signal.begin(), list_signal.end(), "Zjets") != list_signal.end()){    
+  std::map< std::string, TH1D* > kinRw1D;
 
-    list_reg.push_back("c2lep3jin1bexZwinMLL_sf");
+  std::map< std::string, TH2D* > kinRw2D;
 
-  }
+  std::cout << "=======================================================================" << std::endl;
+  std::cout << "==============         Entering reweighting loop         ==============" << std::endl;
+  std::cout << "=======================================================================" << std::endl;
+  for(std::map < std::string, std::string > kinMap : variableAttributes){ // begin loop through kinematic maps
 
+    for(std::string syst : systematics){ // begin loop through systematics
 
-  // Define rebinning for meff
+      std::cout << "Reweighting kinematic " << kinMap["NAME"] << " for systematic variation " << syst << std::endl;
 
-  
-  //double binedges_meff[14] = {0,100,400,500,600,700,800,900,1000,1200,1400,1600,2000,5000};
-  //double binedges_meff[16] = {0,100,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3500,5000};
-  double binedges_meff[17] = {0,100,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000};
-  double* rebin_meff = &binedges_meff[0];
-  int nbins_meff = 16;
+      if(kinMap["FORMAT"] == "TH1D"){ // start if kinematic to reweight is stored in a TH1D
 
-  //double binedges_meffred[15] = {-200,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,5000};
-  double binedges_meffred[14] = {0,100,400,500,600,700,800,900,1000,1200,1400,1600,2000,5000}; 
-  //double binedges_meffred[17] = {0,100,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000};
-  double* rebin_meffred = &binedges_meffred[0];
-  int nbins_meffred = 13;
-
-  //double binedges_jets_n[10] = {-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 15.5};
-  //double binedges_jets_n[12] = {-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5,15.5};
-  double binedges_jets_n[14] = {-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 15.5};
-  double* rebin_jets_n = &binedges_jets_n[0];
-  int nbins_jets_n = 13;
-
-  for(const std::string& region : list_reg){ // Start loop through regions 
-
-    for(const std::string& systematic : systematics){ // Start loop through systematics
-
-      std::cout << "########################################################################" << std::endl;
-      std::cout << "Running systematic: " << systematic << std::endl;
-      std::cout << "########################################################################" << std::endl;
-      
-      std::string systematicPrefix = (systematic == "nominal") ? "" : "_" + systematic;
-
-
-      TFile* f_data = TFile::Open( (inDir + "/mergedData/outVLQAnalysis_Data_nominal_HIST.root").c_str(), "READ" );
-
-      // Retrieve jets_n and meff 2D histogram                                                                                                                                                          
-      TH2D* data_hist = (TH2D*)(f_data -> Get( ( (region + "_" + list_kin[0] + "_vs_" + list_kin[1]).c_str() ) ) );
-
-      data_hist -> SetDirectory(0);
-
-      f_data -> Close();
-
-      TH2D* signal_hist = new TH2D();
-
-      TH2D* background_hist = new TH2D();
-
-      TH1D* jets_n_rw = ( (TH2D*)(data_hist -> Clone(data_hist -> GetName() ) ) ) -> ProjectionY();
-
-      TH1D* jets_n_MC_ratio = ( (TH2D*)(data_hist -> Clone(data_hist -> GetName() ) ) ) -> ProjectionY();
-
-      jets_n_rw -> SetName( (region + "_jets_n"+systematicPrefix).c_str() );
-
-      jets_n_rw = (TH1D*) jets_n_rw->Rebin(nbins_jets_n, jets_n_rw   -> GetName(), rebin_jets_n);
-
-      jets_n_MC_ratio -> SetName( (region + "_jets_n"+systematicPrefix).c_str() );
-
-      jets_n_MC_ratio = (TH1D*) jets_n_MC_ratio->Rebin(nbins_jets_n, jets_n_MC_ratio   -> GetName(), rebin_jets_n);
-
-      *signal_hist = *getTotalKinHisto2D(&list_signal, inDir, region, &list_campaign, &list_kin, data_hist, "signal", "");
-
-      *background_hist = *getTotalKinHisto2D(&list_background, inDir, region, &list_campaign, &list_kin, data_hist, "background", "");
-
-      TH2D* numeratorHist = (TH2D*)(data_hist -> Clone ( "numerator" ) );
-
-      numeratorHist->Reset();
-
-      numeratorHist -> Add(data_hist, background_hist, 1.0, -1.0);
-
-      TH1D* numerator_jets_n = numeratorHist -> ProjectionY();
-
-      TH1D* denominator_jets_n = signal_hist -> ProjectionY();
-
-      numerator_jets_n   = (TH1D*) numerator_jets_n   -> Rebin(nbins_jets_n, numerator_jets_n   -> GetName(), rebin_jets_n);
-
-      denominator_jets_n = (TH1D*) denominator_jets_n -> Rebin(nbins_jets_n, denominator_jets_n -> GetName(), rebin_jets_n);
-
-      jets_n_rw -> Divide(numerator_jets_n, denominator_jets_n);
-
-      if(systematic != "nominal"){
-
-	signal_hist->Reset();
+	kinRw1D[kinMap["NAME"]+"_"+syst] = reweightKinTH1D(histo1DMap, kinMap, syst, true);
 	
-	background_hist->Reset();
+      } // end if kinematic to reweight is stored in a TH1D
+      else if(kinMap["FORMAT"] == "TH2D"){ // start if kinematic to reweight is stored in a TH2D
 
-	*signal_hist = *getTotalKinHisto2D(&list_signal, inDir, region, &list_campaign, &list_kin, data_hist, "signal", systematicPrefix);
+	TH1D* kinRw_dep = (kinMap["DEPENDS"] != "") ? kinRw1D[kinMap["DEPENDS"]+"_"+syst] : NULL; 
 
-	*background_hist = *getTotalKinHisto2D(&list_signal, inDir, region, &list_campaign, &list_kin, data_hist, "background", "");
-	
-	TH1D* numerator_jets_n_MC_ratio = background_hist -> ProjectionY();
+	TH2D* kinRw = reweightKinTH2D(histo2DMap, kinMap, syst, true, kinRw_dep);
 
-	TH1D* denominator_jets_n_MC_ratio = signal_hist -> ProjectionY();
+	if(kinMap["SAVEPROJX"] == "true"){ // start if kinematic reweighting should be stored as a TH1D projection on the x-axis
 
-	numerator_jets_n_MC_ratio   = (TH1D*) numerator_jets_n_MC_ratio   -> Rebin(nbins_jets_n, numerator_jets_n_MC_ratio   -> GetName(), rebin_jets_n);
+	  std::string nametemp = kinRw->GetName();
 
-	denominator_jets_n_MC_ratio = (TH1D*) denominator_jets_n_MC_ratio -> Rebin(nbins_jets_n, denominator_jets_n_MC_ratio -> GetName(), rebin_jets_n);
-	
-	jets_n_MC_ratio -> Divide(numerator_jets_n_MC_ratio, denominator_jets_n_MC_ratio);
+	  kinRw->SetName((nametemp+"_2D").c_str());
 
-	f_out->cd();
+	  kinRw1D[kinMap["NAME"]+"_"+syst] = (TH1D*) kinRw->ProjectionX(nametemp.c_str(), std::stoi(kinMap["PROJXLOWBINY"]), std::stoi(kinMap["PROJXUPBINY"]) ,"e");
 
-	jets_n_MC_ratio -> Write();
-
-      }
-      else{
-
-	f_out->cd();
-
-	jets_n_rw -> Write();
-
-      }
-
-      if(list_kin[1] == "meffred" && region == "c2lep3jin1bexZwinMLL_sf"){
-
-	TH1D* meffred_rw = new TH1D( (region + "_" + list_kin[1] + systematicPrefix).c_str(), "", nbins_meffred, binedges_meffred);
-	
-	if(systematic != "nominal"){
-
-	  signal_hist->Reset();
-
-	  *signal_hist = *getTotalKinHisto2D(&list_signal, inDir, region, &list_campaign, &list_kin, data_hist, "signal", systematicPrefix);
-
-	  background_hist->Reset();
-
-          *background_hist = *getTotalKinHisto2D(&list_signal, inDir, region, &list_campaign, &list_kin, data_hist, "background", "");
-
-	  for(int ybin = 4; ybin <= signal_hist -> GetNbinsY(); ybin++){
-
-            for(int xbin = 1; xbin <= signal_hist -> GetNbinsX(); xbin++){
-
-              signal_hist->SetBinContent(xbin, ybin, (jets_n_rw -> GetBinContent(ybin)) * (jets_n_MC_ratio -> GetBinContent(ybin)) * (signal_hist->GetBinContent(xbin, ybin)) );
-
-	      background_hist->SetBinContent(xbin, ybin, (jets_n_rw -> GetBinContent(ybin)) * (background_hist->GetBinContent(xbin, ybin)) );
-
-            }
-
-	  }
-
-	  TH1D* background_hist_meffred = ( (TH2D*)(background_hist -> Clone(background_hist -> GetName() ) ) ) -> ProjectionX();
-
-	  TH1D* signal_hist_meffred = ( (TH2D*)(signal_hist -> Clone(signal_hist -> GetName() ) ) ) -> ProjectionX();
-
-	  background_hist_meffred = (TH1D*) background_hist_meffred -> Rebin( nbins_meffred, background_hist_meffred -> GetName(), rebin_meffred);
-
-          signal_hist_meffred = (TH1D*) signal_hist_meffred -> Rebin( nbins_meffred, signal_hist_meffred -> GetName(), rebin_meffred);
-
-	  background_hist_meffred->Sumw2(kFALSE);
-
-	  meffred_rw->Add(background_hist_meffred, 1.0);
-	  
-	  meffred_rw->Divide(signal_hist_meffred);
-
-	}
+	} 
 	else{
 
-	  for(int ybin = 4; ybin <= signal_hist -> GetNbinsY(); ybin++){
-
-	    for(int xbin = 1; xbin <= signal_hist -> GetNbinsX(); xbin++){
-
-	      signal_hist->SetBinContent(xbin, ybin, (jets_n_rw -> GetBinContent(ybin)) * (signal_hist->GetBinContent(xbin, ybin)) );
-
-	    }
-
-	  }
-
-	  TH1D* data_hist_meffred = ( (TH2D*)(data_hist -> Clone(data_hist -> GetName() ) ) ) -> ProjectionX();
-
-	  TH1D* background_hist_meffred = ( (TH2D*)(background_hist -> Clone(background_hist -> GetName() ) ) ) -> ProjectionX();
-
-	  TH1D* signal_hist_meffred = ( (TH2D*)(signal_hist -> Clone(signal_hist -> GetName() ) ) ) -> ProjectionX();
-
-	  data_hist_meffred = (TH1D*) data_hist_meffred -> Rebin( nbins_meffred, data_hist_meffred -> GetName(), rebin_meffred);
-
-	  data_hist_meffred->Sumw2(kFALSE);
-
-	  background_hist_meffred = (TH1D*) background_hist_meffred -> Rebin( nbins_meffred, background_hist_meffred -> GetName(), rebin_meffred);
-
-	  signal_hist_meffred = (TH1D*) signal_hist_meffred -> Rebin( nbins_meffred, signal_hist_meffred -> GetName(), rebin_meffred);
-
-	  meffred_rw -> Add(data_hist_meffred, background_hist_meffred, 1.0, -1.0);
-
-	  meffred_rw -> Divide(signal_hist_meffred);
-
-	  if(doSmoothing){
-
-	    std::cout << "#######################################################################" << std::endl;
-	    std::cout << "Fitting meffred reweighting histogram" << std::endl;
-
-	    TF1* funcHyperbola = new TF1((region + "_" + list_kin[1] + "_Hyperbolafit" + systematicPrefix).c_str(), hyperbolaFitFunction, 0, 5000, 3);
-	    TF1* funcSigmoid = new TF1((region + "_" + list_kin[1] + "_Sigmoidfit" + systematicPrefix).c_str(), sigmoidFitFunction, 0, 5000, 3);
-	    TF1* funcSech = new TF1((region + "_" + list_kin[1] + "_Sechfit" + systematicPrefix).c_str(), sechFitFunction, 0, 5000, 3);
-	    TF1* funcLogisticS = new TF1((region + "_" + list_kin[1] + "_fit" + systematicPrefix).c_str(), LogisticSFunction, 0, 5000, 4);
-	    TF1* funcArcSinh = new TF1((region + "_" + list_kin[1] + "_ArcSinhfit" + systematicPrefix).c_str(), asinhFitFunction, -200, 0, 2);
-
-
-
-	    std::cout<< "===========================================================================" << std::endl;
-	    ROOT::Fit::DataOptions opt;
-	    //opt.fBinVolume = true;                                                                                                                                                                    
-	    ROOT::Fit::DataRange range(0,5000);
-	    ROOT::Fit::BinData data(opt,range);
-	    ROOT::Fit::FillData(data, meffred_rw);
-	    ROOT::Math::WrappedMultiTF1 fitFunction2(*funcLogisticS, funcLogisticS->GetNdim() );
-	    ROOT::Fit::Fitter fitter2;
-	    fitter2.SetFunction( fitFunction2, false);
-	    double p0_2[4] = {1.0, 0.01, 0, 1.0};                                                                                                                                                 
-	    fitter2.Config().SetParamsSettings(4, p0_2);
-	    fitter2.Config().ParSettings(2).Fix();
-	    fitter2.Config().MinimizerOptions().SetStrategy(0);
-	    fitter2.Config().MinimizerOptions().SetPrintLevel(0);
-	    fitter2.Config().SetMinimizer("Minuit2","Migrad");
-	    fitter2.Fit(data);
-	    ROOT::Fit::FitResult result2 = fitter2.Result();
-
-	    if(result2.Status() != 0 && result2.Status() != 1){
-	      std::cout << "WARNING: The fit did not converge with minimizer status " << result2.Status() << std::endl;
-
-	      result2.Print(std::cout);
-
-	      result2.PrintCovMatrix(std::cout);
-
-	      std::cout << "Retrying with strategy 1" << std::endl;
-
-	      fitter2.Config().MinimizerOptions().SetStrategy(1);
-
-	      fitter2.Fit(data);
-
-	      result2 = fitter2.Result();
-
-	    }
-	    if(result2.Status() != 0 && result2.Status() != 1){
-	      std::cout << "WARNING: The fit did not converge with minimizer status "<< result2.Status() << std::endl;
-
-	      result2.Print(std::cout);
-
-	      result2.PrintCovMatrix(std::cout);
-
-	      std::cout << "Retrying with strategy 2" << std::endl;
-
-	      fitter2.Config().MinimizerOptions().SetStrategy(2);
-
-	      fitter2.Fit(data);
-
-	      result2 = fitter2.Result();
-
-	    }
-
-
-	    std::cout << "Fit Status: " << result2.Status() << std::endl;
-	    result2.Print(std::cout);
-	    result2.PrintCovMatrix(std::cout);
-	    f_out->cd();
-
-	    for(int ipar = 0; ipar < funcLogisticS->GetNpar(); ipar++){
-	      std::cout << "p"+std::to_string(ipar)+": " << funcLogisticS->GetParameter(ipar) << std::endl;
-	    }
-
-	    funcLogisticS->Write();
-
-	    
-
-
-
-	    //##############################################################################3
-	    //funcSigmoid->SetParameters(1.0,1.0,0.001);
-	    /*funcSigmoid->SetParameters(1.15, 0.80, 0.001);
-	    meffred_rw->Fit(funcSigmoid, "M WW R");
-	    f_out->cd();
-	    funcSigmoid->Write();*/
-
-
-	  }
+	  kinRw2D[kinMap["NAME"]+"_"+syst] = kinRw;
 
 	}
 
-        meffred_rw -> SetName( (region + "_" + list_kin[1] + systematicPrefix).c_str() );
-
-        f_out -> cd();
-
-        meffred_rw -> Write();
-
-      }
-      else if(list_kin[1] == "meffred" && region == "c1lep3jin2bex"){
-
-	int nbins_jets_n_new = 8;
-	double binedges_jets_n_new[9] = {-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 15.5};
+	//kinRw2D[kinMap["NAME"]+"_"+*sysIt] = reweightKinTH2D(histo2DMap, kinMap, *sysIt, true, kinRw_dep);
 	
-	TH2D* meffred_rw = new TH2D( (region + "_" + list_kin[1] + systematicPrefix).c_str(), "", nbins_meff, binedges_meff, nbins_jets_n_new, binedges_jets_n_new);
-
-	if(systematic != "nominal"){
-
-          signal_hist->Reset();
-
-          *signal_hist = *getTotalKinHisto2D(&list_signal, inDir, region, &list_campaign, &list_kin, data_hist, "signal", systematicPrefix);
-
-          background_hist->Reset();
-
-          *background_hist = *getTotalKinHisto2D(&list_signal, inDir, region, &list_campaign, &list_kin, data_hist, "background", "");
-
-	  for(int ybin = 4; ybin <= signal_hist -> GetNbinsY(); ybin++){
-
-            for(int xbin = 1; xbin <= signal_hist -> GetNbinsX(); xbin++){
-
-	      signal_hist->SetBinContent(xbin, ybin, (jets_n_rw -> GetBinContent(ybin)) * (jets_n_MC_ratio -> GetBinContent(ybin)) * (signal_hist->GetBinContent(xbin, ybin)) );
-
-              background_hist->SetBinContent(xbin, ybin, (jets_n_rw -> GetBinContent(ybin)) * (background_hist->GetBinContent(xbin, ybin)) );
-
-            }
-
-          }
-
-	  for(int ybin = 4; ybin <= meffred_rw -> GetNbinsY(); ybin++){
-
-	    TH1D* signal_hist_meffred = ((TH2D*)(signal_hist -> Clone(signal_hist->GetName() ) ) ) -> ProjectionX();
-	    signal_hist_meffred -> Reset();
-
-	    TH1D* background_hist_meffred = ((TH2D*)(background_hist -> Clone(background_hist->GetName() ) ) ) -> ProjectionX();
-	    background_hist_meffred -> Reset();
-
-	    background_hist_meffred -> Sumw2(kFALSE);
-
-	    if(ybin < meffred_rw -> GetNbinsY()){
-
-	      for(int xbin = 1; xbin <= data_hist -> GetNbinsX(); xbin++){
-
-		signal_hist_meffred -> SetBinContent(xbin, signal_hist -> GetBinContent(xbin,ybin));
-
-		signal_hist -> SetBinContent(xbin,ybin,0);
-
-		background_hist_meffred -> SetBinContent(xbin, background_hist -> GetBinContent(xbin,ybin));
-
-		background_hist ->SetBinContent(xbin,ybin,0);
-
-	      }
-
-	    }
-	    else{
-
-	      signal_hist_meffred = ((TH2D*)(signal_hist -> Clone(signal_hist->GetName() ) ) ) -> ProjectionX();
-	      
-	      background_hist_meffred = ((TH2D*)(background_hist -> Clone(background_hist->GetName() ) ) ) -> ProjectionX();
-
-	    }
-
-
-	    signal_hist_meffred = (TH1D*) signal_hist_meffred -> Rebin( nbins_meff, signal_hist_meffred -> GetName(), rebin_meff);
-
-	    background_hist_meffred = (TH1D*) background_hist_meffred -> Rebin( nbins_meff, background_hist_meffred -> GetName(), rebin_meff);
-
-	    background_hist_meffred -> Divide(signal_hist_meffred);
-
-	    for(int xbin = 1; xbin <= meffred_rw -> GetNbinsX(); xbin++){
-
-	      meffred_rw -> SetBinContent(xbin, ybin, background_hist_meffred -> GetBinContent(xbin));
-
-	    }
-
-	  }
-
-        }
-	else{
-
-
-	  for(int ybin = 4; ybin <= signal_hist -> GetNbinsY(); ybin++){
-	    
-	    for(int xbin = 1; xbin <= signal_hist -> GetNbinsX(); xbin++){
-	      
-	      signal_hist->SetBinContent(xbin, ybin, (jets_n_rw -> GetBinContent(ybin)) * (signal_hist->GetBinContent(xbin, ybin)) );
-	      
-	    }
-	    
-	  }
-	  
-	  for(int ybin = 4; ybin <= meffred_rw -> GetNbinsY(); ybin++){
-	  
-	    TH1D* data_hist_meffred = ((TH2D*)(data_hist -> Clone(data_hist->GetName() ) ) ) -> ProjectionX();
-	    data_hist_meffred -> Reset();
-	    
-	    data_hist_meffred->Sumw2(kFALSE);
-	    
-	    TH1D* signal_hist_meffred = ((TH2D*)(signal_hist -> Clone(signal_hist->GetName() ) ) ) -> ProjectionX();
-	    signal_hist_meffred -> Reset();
-	    
-	    TH1D* background_hist_meffred = ((TH2D*)(background_hist -> Clone(background_hist->GetName() ) ) ) -> ProjectionX();
-	    background_hist_meffred -> Reset();	  
-	    
-	    if(ybin < meffred_rw -> GetNbinsY()){
-	      
-	      for(int xbin = 1; xbin <= data_hist -> GetNbinsX(); xbin++){ 
-		
-		data_hist_meffred -> SetBinContent(xbin, data_hist -> GetBinContent(xbin,ybin));
-		
-		data_hist -> SetBinContent(xbin,ybin,0);
-		
-		signal_hist_meffred -> SetBinContent(xbin, signal_hist -> GetBinContent(xbin,ybin));
-		
-		signal_hist -> SetBinContent(xbin,ybin,0);
-	      
-		background_hist_meffred -> SetBinContent(xbin, background_hist -> GetBinContent(xbin,ybin));
-		
-		background_hist ->SetBinContent(xbin,ybin,0);
-	      
-	      } 
-
-	    }
-	    else{
-	      
-	      data_hist_meffred = ((TH2D*)(data_hist -> Clone(data_hist->GetName() ) )) -> ProjectionX();
-	      
-	      data_hist_meffred->Sumw2(kFALSE);
-	      
-	      signal_hist_meffred = ((TH2D*)(signal_hist -> Clone(signal_hist->GetName() ) ) ) -> ProjectionX();
-	      
-	      background_hist_meffred = ((TH2D*)(background_hist -> Clone(background_hist->GetName() ) ) ) -> ProjectionX();
-	      
-	    }
-
-	    data_hist_meffred->Sumw2(kTRUE);
-	    
-	    data_hist_meffred = (TH1D*) data_hist_meffred -> Rebin( nbins_meff, data_hist_meffred -> GetName(), rebin_meff);
-	    
-	    signal_hist_meffred = (TH1D*) signal_hist_meffred -> Rebin( nbins_meff, signal_hist_meffred -> GetName(), rebin_meff);
-	    
-	    background_hist_meffred = (TH1D*) background_hist_meffred -> Rebin( nbins_meff, background_hist_meffred -> GetName(), rebin_meff);
-	    
-	    data_hist_meffred -> Add(background_hist_meffred, -1.0);
-	    
-	    data_hist_meffred -> Divide(signal_hist_meffred);
-
-	    data_hist_meffred->SetName( (region + "_" + list_kin[1] + "_jet_" + std::to_string(ybin-1) + "_" + systematicPrefix).c_str() );
-	    
-	    if(doSmoothing){
-	      
-	      std::cout << "#######################################################################" << std::endl;
-	      if(ybin < meffred_rw -> GetNbinsY()) std::cout << "Fitting meff reweighting histogram for njets = " << ybin-1 << std::endl;
-	      else std::cout << "Fitting meffred reweighting histogram for njets >= " << ybin-1 << std::endl;
-	      
-	      double y_range = ybin < meffred_rw -> GetNbinsY() ? 500-(ybin-4)*50 : 0;
-
-	      TF1* funcHyperbola = new TF1((region + "_" + list_kin[1] + "_Hyperbolafit_jet_"+ std::to_string(ybin-1) + systematicPrefix).c_str(), hyperbolaFitFunction, 0, 5000, 3);
-	      
-	      TF1* funcSigmoid = new TF1((region + "_" + list_kin[1] + "_Sigmoidfit_jet_"+ std::to_string(ybin-1) + systematicPrefix).c_str(), sigmoidFitFunction, y_range, 5000, 3);
-	    
-	      TF1* funcLogisticS = new TF1((region + "_" + list_kin[1] + "_fit_jet_"+ std::to_string(ybin-1) + systematicPrefix).c_str(), LogisticSFunction, y_range, 5000, 4);
-
-	      TF1* funcHypLogisticS = new TF1((region + "_" + list_kin[1] + "_HypLogisticSfit_jet_"+ std::to_string(ybin-1) + systematicPrefix).c_str(), HypLogisticSFunction, y_range, 5000, 4);
-
-	      TF1* funcSech = new TF1((region + "_" + list_kin[1] + "_Sechfit_jet_" + std::to_string(ybin-1) + systematicPrefix).c_str(), sechFitFunction, y_range, 5000, 3);
-
-	      TF1* funcArcSinh = new TF1((region + "_" + list_kin[1] + "_ArcSinhfit_jet_" + std::to_string(ybin-1) + systematicPrefix).c_str(), asinhFitFunction, 0, 5000, 2);
-
-
-	      //#######################################################################
-	      ROOT::Fit::DataOptions opt;
-	      //opt.fBinVolume = true;
-	      ROOT::Fit::DataRange range(y_range,5000);
-	      if(ybin-1 == 3){
-		range.SetRange(y_range,3500);
-	      }
-	      ROOT::Fit::BinData data(opt,range);
-	      ROOT::Fit::FillData(data, data_hist_meffred);
-	      
-	      /*std::cout << "===========================================================================" << std::endl;
-	      ROOT::Math::WrappedMultiTF1 fitFunction1(*funcHypLogisticS, funcHypLogisticS->GetNdim() );
-	      ROOT::Fit::Fitter fitter1;
-	      fitter1.SetFunction( fitFunction1, false);
-	      double p0_1[4] = {1.0, 0.01, 1100, 1.0};
-	      //if(ybin == 7){
-	      //p0_1[2] = 0;
-	      //}
-	      fitter1.Config().SetParamsSettings(4, p0_1);
-	      fitter1.Config().MinimizerOptions().SetPrintLevel(0);
-	      fitter1.Config().MinimizerOptions().SetStrategy(0);
-	      fitter1.Config().SetMinimizer("Minuit2","Migrad");
-	      fitter1.Fit(data);					       
-	      ROOT::Fit::FitResult result1 = fitter1.Result();
-	      
-	      if(result1.Status() != 0 && result1.Status() != 1){
-		std::cout << "WARNING: The fit did not converge with minimizer status " << result1.Status() << std::endl;
-		
-		result1.Print(std::cout);
-		
-		result1.PrintCovMatrix(std::cout);
-		
-		std::cout << "Retrying with strategy 1" << std::endl;
-		
-		fitter1.Config().MinimizerOptions().SetStrategy(1);
-		
-		fitter1.Fit(data);
-		
-		result1 = fitter1.Result();
-
-	      }
-	      if(result1.Status() != 0 && result1.Status() != 1){
-		std::cout << "WARNING: The fit did not converge with minimizer status "<< result1.Status() << std::endl;
-
-                result1.Print(std::cout);
-
-                result1.PrintCovMatrix(std::cout);
-
-		std::cout << "Retrying with strategy 2" << std::endl;
-
-                fitter1.Config().MinimizerOptions().SetStrategy(2);
-		
-                fitter1.Fit(data);
-
-		result1 = fitter1.Result();
-
-	      } 
-
-	      std::cout << "Fit Status: " << result1.Status() << std::endl;
-
-	      result1.Print(std::cout);
-	      result1.PrintCovMatrix(std::cout);
-	      f_out->cd();
-
-	      for(int ipar = 0; ipar < funcHypLogisticS->GetNpar(); ipar++){
-		std::cout << "p"+std::to_string(ipar)+": " << funcHypLogisticS->GetParameter(ipar) << std::endl;
-	      }
-
-	      funcHypLogisticS->Write();*/
-
-	      std::cout<< "===========================================================================" << std::endl;
-	      ROOT::Math::WrappedMultiTF1 fitFunction2(*funcLogisticS, funcLogisticS->GetNdim() );
-	      ROOT::Fit::Fitter fitter2;
-              fitter2.SetFunction( fitFunction2, false);
-	      double p0_2[4] = {1.0, 0.01, 1100, 1.0};
-	      if(ybin-1 == 3){
-		p0_2[2] = 2250.0;
-	      }
-	      if(ybin-1 == 4){
-                p0_2[2] = 1700.;
-              }
-	      if(ybin-1 == 5){
-		p0_2[2] = 1700.;
-		//p0_2[2] = 1600;
-	      }
-	      if(ybin-1 == 6){
-		p0_2[2] = 1700.;
-
-	      }
-	      if(ybin-1 == 7){
-		p0_2[0] = 0.80;
-		p0_2[1] = 0.001;
-	      	p0_2[2] = 0;
-		p0_2[3] = 1.15;
-	      }
-              fitter2.Config().SetParamsSettings(4, p0_2);
-	      if(ybin-1 ==3){
-		fitter2.Config().ParSettings(2).Fix();
-	      }
-	      if(ybin -1 ==4){
-                fitter2.Config().ParSettings(2).Fix();
-              }
-	      if(ybin -1 ==5){
-	      	fitter2.Config().ParSettings(2).Fix();
-	      } 
-	      if(ybin -1 == 6){
-		fitter2.Config().ParSettings(2).Fix();
-	      }
-	      if(ybin -1 ==7){
-	      	fitter2.Config().ParSettings(2).Fix();
-	      }
-	      fitter2.Config().MinimizerOptions().SetStrategy(0);
-	      fitter2.Config().MinimizerOptions().SetPrintLevel(0);
-              fitter2.Config().SetMinimizer("Minuit2","Migrad");
-              fitter2.Fit(data);
-	      ROOT::Fit::FitResult result2 = fitter2.Result();
-
-	      if(result2.Status() != 0 && result2.Status() != 1){
-		std::cout << "WARNING: The fit did not converge with minimizer status " << result2.Status() << std::endl;
-
-                result2.Print(std::cout);
-
-                result2.PrintCovMatrix(std::cout);
-
-		std::cout << "Retrying with strategy 1" << std::endl;
-
-		fitter2.Config().MinimizerOptions().SetStrategy(1);
-
-		fitter2.Fit(data);
-
-		result2 = fitter2.Result();
-
-	      } 
-              if(result2.Status() != 0 && result2.Status() != 1){
-		std::cout << "WARNING: The fit did not converge with minimizer status "<< result2.Status() << std::endl;
-
-		result2.Print(std::cout);
-
-                result2.PrintCovMatrix(std::cout);
-
-		std::cout << "Retrying with strategy 2" << std::endl;
-
-                fitter2.Config().MinimizerOptions().SetStrategy(2);
-
-                fitter2.Fit(data);
-
-                result2 = fitter2.Result();
-
-              }
-
-
-	      std::cout << "Fit Status: " << result2.Status() << std::endl;
-              result2.Print(std::cout);
-              result2.PrintCovMatrix(std::cout);
-              f_out->cd();
-
-	      for(int ipar = 0; ipar < funcLogisticS->GetNpar(); ipar++){
-		std::cout << "p"+std::to_string(ipar)+": " << funcLogisticS->GetParameter(ipar) << std::endl;
-              }
-
-              funcLogisticS->Write();
-	      //#######################################################################
-	      
-
-	      /*funcSigmoid->SetParameters(1.15, 0.80, 0.001);
-	      
-	      funcLogisticS->SetParameters(1.0, 0.01 ,1100, 1.0);
-	      
-	      if(ybin -1 == 5){
-		funcLogisticS->SetParameters(1.0, 0.1 ,1100, 1.0);
-	      }
-	      else if(ybin -1 == 7){
-		funcLogisticS->SetParameters(1.0, 0.01 ,1100, 1.0);
-	      }
-
-	      //funcLogisticS->SetParameters(1.0, 0.01 ,11, 1.0);
-
-	      //TFitResultPtr r = data_hist_meffred->Fit(funcSigmoid, "M WW R S");
-	      TFitResultPtr r = data_hist_meffred->Fit(funcLogisticS, "M R S");
-
-	      //TMatrixD cor = r->GetCorrelationMatrix();
-	      TMatrixD cov = r->GetCovarianceMatrix();
-	      //cor.Print();
-	      cov.Print();
-	      
-	      f_out->cd();
-	      //funcSigmoid->Write();
-	      funcLogisticS->Write();*/
-
-
-
-	    }
-	    
-	    f_out -> cd();
-	    data_hist_meffred->Write();
-
-	    for(int xbin = 1; xbin <= meffred_rw -> GetNbinsX(); xbin++){
-
-	      meffred_rw -> SetBinContent(xbin, ybin, data_hist_meffred -> GetBinContent(xbin));
-	      
-	    } 
-
-	  }
-
-	}
-
-        f_out -> cd();
-
-        meffred_rw -> SetName( (region + "_" + list_kin[1] + systematicPrefix).c_str() );
-
-        meffred_rw -> Write();
-	
-	if(debug){
-
-          for(int ybin = 4; ybin <= meffred_rw -> GetNbinsY(); ybin++){
-
-	    std::string test_region = Form("c1lep%ijex2bex", ybin-1);
-	    if(ybin == meffred_rw -> GetNbinsY()) test_region = Form("c1lep%ijin2bex", ybin-1);
-
-            TFile* f_data_test = TFile::Open( (inDir + "/mergedData/outVLQAnalysis_Data_nominal_HIST.root").c_str(), "READ" );
-            TH1D* data_hist_test = (TH1D*)(f_data_test -> Get( ( (test_region + "_" + list_kin[1]).c_str() ) ) );
-            data_hist_test -> SetDirectory(0);
-            f_data_test -> Close();
-
-	    TH1D* signal_hist_test = new TH1D();
-
-	    TH1D* background_hist_test = new TH1D();
-
-	    if(systematic != "nominal"){
-
-	      *signal_hist_test = *getTotalKinHisto1D(&list_signal, inDir, test_region, &list_campaign, list_kin[1], data_hist_test, "signal", systematicPrefix);
-
-	      *background_hist_test = *getTotalKinHisto1D(&list_signal, inDir, test_region, &list_campaign, list_kin[1], data_hist_test, "background", "");
-
-	    }
-	    
-	    else{
-
-	      *signal_hist_test = *getTotalKinHisto1D(&list_signal, inDir, test_region, &list_campaign, list_kin[1], data_hist_test, "signal", systematicPrefix);
-
-	      *background_hist_test = *getTotalKinHisto1D(&list_background, inDir, test_region, &list_campaign, list_kin[1], data_hist_test, "background", systematicPrefix);
-
-	    }
-
-            data_hist_test = (TH1D*) data_hist_test -> Rebin( nbins_meff, data_hist_test -> GetName(), rebin_meff);
-            signal_hist_test = (TH1D*) signal_hist_test -> Rebin( nbins_meff, signal_hist_test -> GetName(), rebin_meff);
-            background_hist_test = (TH1D*) background_hist_test -> Rebin( nbins_meff, background_hist_test -> GetName(), rebin_meff);
-
-            for(int xbin =1; xbin < meffred_rw -> GetNbinsX(); xbin++){
-
-	      double weight = (systematic != "nominal") ? meffred_rw -> GetBinContent(xbin, ybin) : meffred_rw -> GetBinContent(xbin, ybin)*jets_n_rw -> GetBinContent(ybin);
-
-              signal_hist_test -> SetBinContent(xbin, signal_hist_test -> GetBinContent(xbin)*weight);
-
-            }
-
-	    std::cout << "For jets_n = " << ybin -1 << std::endl;
-
-	    if(systematic != "nominal"){
-
-	      background_hist_test -> Divide(signal_hist_test);
-	      
-	      for(int xbin =1; xbin < meffred_rw -> GetNbinsX(); xbin++){
-
-		std::cout << "Closure " << list_kin[1] << " bin " << xbin << " value: " << background_hist_test -> GetBinContent(xbin) << std::endl;
-
-	      }
-		
-	    }
-	    else{
-
-	      data_hist_test -> Add(background_hist_test,-1);
-	      data_hist_test -> Divide(signal_hist_test);
-	    
-	      for(int xbin =1; xbin < meffred_rw -> GetNbinsX(); xbin++){
-		
-		std::cout << "Closure " << list_kin[1] << " bin " << xbin << " value: " << data_hist_test -> GetBinContent(xbin) << std::endl;
-		
-	      }
-
-	    }
-	      
-          }
-
-        }
-
-      }
-      else if(list_kin[1] == "meff"){
-	
-	// Define histogram that will contain the meff reweighting after applying the jets_n reweighting
-	TH2D* meff_rw = new TH2D( (region + "_" + list_kin[1] + systematicPrefix).c_str(), "", nbins_meff, binedges_meff, nbins_jets_n, binedges_jets_n);
-	
-	for(int ybin =4; ybin <= meff_rw -> GetNbinsY(); ybin++){ // Start loop through jets_n bins
-	  
-	  // Define 1D histograms that will contain the meff values for data, samples to be reweighted, and
-	  // background samples
-	  
-	  TH1D* data_hist_meff = ((TH2D*)(data_hist -> Clone(data_hist->GetName() ) ) ) -> ProjectionX();
-	  data_hist_meff -> Reset();
-	  
-	  data_hist_meff->Sumw2(kFALSE);
-	  
-	  TH1D* signal_hist_meff = ((TH2D*)(signal_hist -> Clone(signal_hist->GetName() ) ) ) -> ProjectionX();
-	  signal_hist_meff -> Reset();
-	  
-	  TH1D* background_hist_meff = ((TH2D*)(background_hist -> Clone(background_hist->GetName() ) ) ) -> ProjectionX();
-	  background_hist_meff -> Reset();
-	  
-	  // std::cout << "At ybin: " << ybin << std::endl;
-	  
-	  if(ybin < meff_rw -> GetNbinsY()){ // Start if ybin is lower than jets_n = 8 
-	    
-	    for(int xbin = 1; xbin <= data_hist -> GetNbinsX(); xbin++){ // Start loop through meff bins
-	      
-	      // Get the meff values from the 2D histograms for the current ybin and store them in the 1D histos
-	      
-	      data_hist_meff -> SetBinContent(xbin, data_hist -> GetBinContent(xbin,ybin));
-	      
-	      // Apply the jets_n reweighting to the samples to be reweighted for the current jets_n bin
-	      signal_hist_meff -> SetBinContent(xbin, signal_hist -> GetBinContent(xbin,ybin) * jets_n_rw -> GetBinContent( ybin ));
-	      
-	      background_hist_meff -> SetBinContent(xbin, background_hist -> GetBinContent(xbin,ybin));
-	      
-	    } // End loop through meff bns
-	    
-	  } // End if ybin is lower than jets_n = 8
-	  else{ // Start if ybin is greater than jets_n = 8
-	    
-	    for(int ybin_tail = ybin; ybin_tail <= data_hist -> GetNbinsY(); ybin_tail++){ // Start loop through jets_n bins greater than jets_n = 8 bin
-	      
-	      // Define temporary histograms that will contain the meff values for jets_n bins greater than jets_n = 8
-	      // This value will be added to data_hist_meff, signal_hist_meff and background_hist_meff so that they
-	      // contain the total meff for the merged jets_n bin
-	      
-	      TH1D* hd = (TH1D*) data_hist_meff -> Clone(data_hist_meff -> GetName() );
-	      hd -> Reset();
-	      
-	      TH1D* hs = (TH1D*) signal_hist_meff -> Clone(signal_hist_meff -> GetName() );
-	      hs -> Reset();
-	      
-	      TH1D* hb = (TH1D*) background_hist_meff -> Clone(background_hist_meff -> GetName() );
-	      hb -> Reset();
-	      
-	      for(int xbin = 1; xbin <= data_hist -> GetNbinsX(); xbin++){ // Start loop through meff bins
-		
-		hd -> SetBinContent(xbin, data_hist -> GetBinContent(xbin, ybin_tail));
-		
-		// Apply the jets_n reweighting from the last jets_n bin
-		hs -> SetBinContent(xbin, signal_hist -> GetBinContent(xbin,ybin_tail) * jets_n_rw -> GetBinContent(ybin) );
-		
-		hb -> SetBinContent(xbin, background_hist -> GetBinContent(xbin,ybin_tail) );
-		
-	      } // End loop through meff bins
-	      
-	      // Add the meff histograms for the current jets_n bin
-	      
-	      data_hist_meff -> Add( hd );
-	      
-	      signal_hist_meff -> Add( hs );
-	      
-	      background_hist_meff -> Add( hb );
-	      
-	    } // End loop through jets_n bins greater than jets_n = 8 bin
-	    
-	  
-	  } // End if ybin is greater than jets_n = 8
-	  
-	  data_hist_meff->Sumw2(kTRUE);
-	  
-	  // Apply meff rebinning
-	  
-	  data_hist_meff = (TH1D*) data_hist_meff -> Rebin( nbins_meff, data_hist_meff -> GetName(), rebin_meff);
-	  
-	  signal_hist_meff = (TH1D*) signal_hist_meff -> Rebin( nbins_meff, signal_hist_meff -> GetName(), rebin_meff);
-	  
-	  background_hist_meff = (TH1D*) background_hist_meff -> Rebin( nbins_meff, background_hist_meff -> GetName(), rebin_meff);
-	  
-	  // Define histogram containing numerator for meff reweighting
-	  data_hist_meff -> Add(background_hist_meff, -1.0);
-	  
-	  // Calculate meff reweighting by dividing numerator by samples to be reweighted
-	  data_hist_meff -> Divide(signal_hist_meff);
-	  
-	  f_out->cd();
-	  
-	  data_hist_meff->SetName( (region + "_" + list_kin[1] + "_jet_" + std::to_string(ybin-1) + "_" + systematicPrefix).c_str() );
-	  
-	  // Uncomment this to store individual TH1 meff reweighting histograms into output file
-	  data_hist_meff->Write();
-	  
-	  if(doSmoothing){
-	  
-	    std::cout << "#######################################################################" << std::endl;
-	    if(ybin < meff_rw -> GetNbinsY()) std::cout << "Fitting meff reweighting histogram for njets = " << ybin-1 << std::endl;
-	    else std::cout << "Fitting meff reweighting histogram for njets >= " << ybin-1 << std::endl;
-	    
-	    TF1* funcHyperbola = new TF1(("meffFitFuncHyperbola_jet_"+ std::to_string(ybin-1)).c_str(), hyperbolaFitFunction, 600, 5000, 3);
-	    
-	    TF1* funcSigmoid = new TF1(("meffFitFuncSigmoid_jet_"+ std::to_string(ybin-1)).c_str(), sigmoidFitFunction, 600, 5000, 3);
-	    
-	    data_hist_meff->Fit(funcHyperbola, "M WW");
-
-	    data_hist_meff->Fit(funcSigmoid, "M WW");
-	    
-	    f_out->cd();
-	    funcHyperbola->Write();
-
-	    f_out->cd();
-	    funcSigmoid->Write();
-	    
-	  }
-	  
-	  // Store meff reweighting values for the current jets_n bin
-	  for(int xbin = 1; xbin <= meff_rw -> GetNbinsX(); xbin++){ // Start loop through meff bins
-	    
-	    meff_rw -> SetBinContent(xbin, ybin, data_hist_meff -> GetBinContent(xbin));
-	    
-	    // std::cout << data_hist_meff -> GetBinContent(xbin) << std::endl;
-	    
-	  } // End loop through meff bins
-	  
-	} // End loop through jets_n bins
-	
-	//meff_rw -> Draw("COLZ");  
-	
-	f_out -> cd();
-	
-	meff_rw -> SetName( (region + "_" + list_kin[1] + systematicPrefix).c_str() );
-	
-	meff_rw -> Write();
-      
       }
       
-    } // End loop through regions
+      std::cout << "Finished reweighting kinematic " << kinMap["NAME"] << " for systematic variation " << syst << std::endl << std::endl;
 
-  } // End loop through systematics
+    }
 
-  f_out->Close();
+  }
+  std::cout << "=======================================================================" << std::endl;
+  std::cout << "==============         Exiting reweighting loop          ==============" << std::endl;
+  std::cout << "=======================================================================" << std::endl;
+
+  TFile* out = new TFile("test.root","RECREATE");
+
+  std::map< std::string, TH1D* >::iterator kinRw1D_it;
+
+  std::map< std::string, TH2D* >::iterator kinRw2D_it;
+
+  for(kinRw1D_it = kinRw1D.begin(); kinRw1D_it != kinRw1D.end(); kinRw1D_it++){
+    
+    out->cd();
+
+    (kinRw1D_it->second)->Write();
+
+  }
+
+  for(kinRw2D_it = kinRw2D.begin(); kinRw2D_it != kinRw2D.end(); kinRw2D_it++){
+
+    out->cd();
+
+    (kinRw2D_it->second)->Write();
+
+  }
+
+  out->Close();
 
   return 0;
 
 }
-
