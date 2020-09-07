@@ -14,9 +14,8 @@
 std::string sampleList;
 std::string variableList;
 std::string systematicList;
+std::string outputName;
 
-// Utility function for splitting input string with a given delimiter. Each substring
-// is stored in an output vector 
 //______________________________________________________________________________                                                                                                               
 //                                                                                                                                                                                                      
 void parseUserOptions(int arc, char** argv){
@@ -40,6 +39,7 @@ void parseUserOptions(int arc, char** argv){
     if(argument == "--SAMPLELIST") sampleList = value;
     else if(argument == "--VARIABLELIST") variableList = value;
     else if(argument == "--SYSTEMATICLIST") systematicList = value;
+    else if(argument == "--OUTPUTNAME") outputName = value;
 
   }
 
@@ -551,10 +551,8 @@ TH2D* reweightKinTH2D(std::map < std::string,std::map< std::string, std::map< st
 
       for(int ybins = 1; ybins <= denominator->GetNbinsY(); ybins++){
 
-	int test_bin = (ybins <= rW_dep->GetNbinsX()) ? ybins : rW_dep->GetNbinsX();
-
+	//int test_bin = (ybins <= rW_dep->GetNbinsX()) ? ybins : rW_dep->GetNbinsX();
 	//std::cout << "At Njets bin " << ybins << ": [" << denominator->GetYaxis()->GetBinLowEdge(ybins) << "," << denominator->GetYaxis()->GetBinUpEdge(ybins) << "]" << std::endl;
-
 	//std::cout << "At Njets bin " << test_bin << ": [" << rW_dep->GetXaxis()->GetBinLowEdge(test_bin) << "," << rW_dep->GetXaxis()->GetBinUpEdge(test_bin) << "]" <<std::endl;
 
 	double weight = (ybins <= rW_dep->GetNbinsX()) ? rW_dep->GetBinContent(ybins) : rW_dep->GetBinContent(rW_dep->GetNbinsX());
@@ -681,31 +679,63 @@ int main(int argc, char** argv){
 
       std::cout << "Reweighting kinematic " << kinMap["NAME"] << " for systematic variation " << syst << std::endl;
 
+      bool doMCRatio = kinMap["DOMCRATIO"] == "true";
+
       if(kinMap["FORMAT"] == "TH1D"){ // start if kinematic to reweight is stored in a TH1D
 
-	kinRw1D[kinMap["NAME"]+"_"+syst] = reweightKinTH1D(histo1DMap, kinMap, syst, true);
+	kinRw1D[kinMap["NAME"]+"_"+syst] = reweightKinTH1D(histo1DMap, kinMap, syst, doMCRatio);
 	
       } // end if kinematic to reweight is stored in a TH1D
       else if(kinMap["FORMAT"] == "TH2D"){ // start if kinematic to reweight is stored in a TH2D
 
 	TH1D* kinRw_dep = (kinMap["DEPENDS"] != "") ? kinRw1D[kinMap["DEPENDS"]+"_"+syst] : NULL; 
 
-	TH2D* kinRw = reweightKinTH2D(histo2DMap, kinMap, syst, true, kinRw_dep);
+	TH2D* kinRw = reweightKinTH2D(histo2DMap, kinMap, syst, doMCRatio, kinRw_dep);
 
 	if(kinMap["SAVEPROJX"] == "true"){ // start if kinematic reweighting should be stored as a TH1D projection on the x-axis
 
-	  std::string nametemp = kinRw->GetName();
+	  std::stringstream projectionNameSS(kinMap["PROJXNAME"]);
 
-	  kinRw->SetName((nametemp+"_2D").c_str());
+	  std::stringstream projectionLowBinYSS(kinMap["PROJXLOWBINY"]);
 
-	  kinRw1D[kinMap["NAME"]+"_"+syst] = (TH1D*) kinRw->ProjectionX(nametemp.c_str(), std::stoi(kinMap["PROJXLOWBINY"]), std::stoi(kinMap["PROJXUPBINY"]) ,"e");
+	  std::stringstream projectionUpBinYSS(kinMap["PROJXUPBINY"]);
+
+	  std::string projxname;
+
+	  std::string projxlowbiny;
+
+	  std::string projxupbiny;
+
+	  std::vector< std::string > projXNames = {};
+
+	  std::vector < int > projXLowBinsY = {};
+
+	  std::vector< int > projXUpBinsY = {};
+
+	  while(getline(projectionNameSS, projxname, ',')) projXNames.push_back(projxname);
+	  
+	  while(getline(projectionLowBinYSS, projxlowbiny, ',')) projXLowBinsY.push_back(std::stoi(projxlowbiny));
+	  
+	  while(getline(projectionUpBinYSS, projxupbiny, ',')) projXUpBinsY.push_back(std::stoi(projxupbiny));
+	  
+	  std::string syst_suffix = syst == "nominal" ? "" : "_"+syst;
+
+	  for(unsigned int i = 0; i < projXNames.size(); i++){
+	    
+	    kinRw1D[projXNames[i]+"_"+syst] = (TH1D*) kinRw->ProjectionX((projXNames[i]+syst_suffix).c_str(), projXLowBinsY[i], projXUpBinsY[i] ,"e");
+		    
+	  }
+	  
+	  
+	  /*std::string nametemp = kinRw->GetName();
+	    
+	    kinRw->SetName((nametemp+"_2D").c_str());
+
+	    kinRw1D[kinMap["NAME"]+"_"+syst] = (TH1D*) kinRw->ProjectionX(nametemp.c_str(), std::stoi(kinMap["PROJXLOWBINY"]), std::stoi(kinMap["PROJXUPBINY"]) ,"e");*/
 
 	} 
-	else{
-
-	  kinRw2D[kinMap["NAME"]+"_"+syst] = kinRw;
-
-	}
+	
+	kinRw2D[kinMap["NAME"]+"_"+syst] = kinRw;
 
 	//kinRw2D[kinMap["NAME"]+"_"+*sysIt] = reweightKinTH2D(histo2DMap, kinMap, *sysIt, true, kinRw_dep);
 	
@@ -720,7 +750,7 @@ int main(int argc, char** argv){
   std::cout << "==============         Exiting reweighting loop          ==============" << std::endl;
   std::cout << "=======================================================================" << std::endl;
 
-  TFile* out = new TFile("test.root","RECREATE");
+  TFile* out = new TFile(outputName.c_str(),"RECREATE");
 
   std::map< std::string, TH1D* >::iterator kinRw1D_it;
 

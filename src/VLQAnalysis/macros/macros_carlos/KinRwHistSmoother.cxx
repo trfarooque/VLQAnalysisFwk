@@ -24,6 +24,9 @@
 
 std::string histoList;
 std::string inputFile;
+std::string method = "";
+double CL = 0.954;
+int nSteps = 1000;
 
 //______________________________________________________________________________                                                                                                                        
 //                                                                                                                                                                                                       
@@ -47,16 +50,22 @@ void parseUserOptions(int arc, char** argv){
 
     if(argument == "--HISTOLIST") histoList = value;
     else if(argument == "--INPUTFILE") inputFile = value;
+    else if(argument == "--UNCERTAINTYMETHOD") method = value;
+    else if(argument == "--CONFIDENCELEVEL") CL = std::stod(value);
+    else if(argument == "--NUMBEROFSTEPS") nSteps = std::stoi(value);
+
 
   }
 
 }
 
+
+// Utility function that reads configurations from a text file and stores each entry in a                                                                                                               
+// map of strings. All entries are then stored in a vector of these maps
 //______________________________________________________________________________
 //
 std::vector< std::map< std::string, std::string > > readFromTextFile(std::string fileName, char delim){
   
-  std::cout << "=======================================================================" << std::endl;
   std::cout << "Opening file " << fileName << std::endl;
 
   std::ifstream file(fileName);
@@ -106,28 +115,41 @@ std::vector< std::map< std::string, std::string > > readFromTextFile(std::string
 
   std::cout << "Closing file "  << fileName << std::endl;
   
-  std::cout << "=======================================================================" << std::endl;
-  
   return vectorMap;
 
 }
 
+// Function that fits a histogram to a given function 
+// Inputs:
+// histo: histogram to fit
+// fit: TF1 object containing the smooth function that will be used to fit the histogram
+// rWMap: map containing configuration options of the histogram to be reweighted
+// Output:
+// ROOT::Fit::FitResult object that contains the summary of the fit
 //______________________________________________________________________________
+//
 ROOT::Fit::FitResult fitHistogram(TH1D* histo, TF1* fit, std::map< std::string, std::string > &rWMap){
 
-  ROOT::Fit::DataOptions opt;
+  // Setup the fitter
 
+  ROOT::Fit::DataOptions opt;
+  
+  // Fit the histogram only the range specified by the user
   ROOT::Fit::DataRange range(std::stod(rWMap["XMIN"]),std::stod(rWMap["XMAX"]));
 
   ROOT::Fit::BinData data(opt,range);
 
+  // Provide the histogram to fit
   ROOT::Fit::FillData(data, histo);
 
+  // Provide the smooth function template
   ROOT::Math::WrappedMultiTF1 fitFunction(*fit, fit->GetNdim() );
 
   ROOT::Fit::Fitter fitter;
 
   fitter.SetFunction( fitFunction, false);
+
+  // Read initial parameters of the smooth function
 
   std::vector< double > fitParams = {};
 
@@ -148,8 +170,9 @@ ROOT::Fit::FitResult fitHistogram(TH1D* histo, TF1* fit, std::map< std::string, 
   fitter.Config().SetParamsSettings(fitParams.size(), &fitParams[0]);
 
   std::vector< int > freeParamIndex = {};
-
-  for(int i = 0; i < optParams.size(); i++){
+  
+  // Fix parameters specified by user
+  for(unsigned int i = 0; i < optParams.size(); i++){
 
     if(optParams[i] == "FIXED"){
 
@@ -164,6 +187,7 @@ ROOT::Fit::FitResult fitHistogram(TH1D* histo, TF1* fit, std::map< std::string, 
 
   }
 
+  // Set fit minimizer
   fitter.Config().MinimizerOptions().SetStrategy(0);
 
   fitter.Config().MinimizerOptions().SetPrintLevel(0);
@@ -172,9 +196,10 @@ ROOT::Fit::FitResult fitHistogram(TH1D* histo, TF1* fit, std::map< std::string, 
 
   fitter.Fit(data);
 
+  // Perform the fit
   ROOT::Fit::FitResult result = fitter.Result();
 
-  if(result.Status() != 0 && result.Status() != 1){
+  if(result.Status() != 0 && result.Status() != 1){ // start if fit didn't converge with strategy 0
 
     std::cout << "< WARNING >: The fit did not converge with minimizer status " << result.Status() << std::endl;
 
@@ -191,7 +216,7 @@ ROOT::Fit::FitResult fitHistogram(TH1D* histo, TF1* fit, std::map< std::string, 
     result = fitter.Result();
 
   }
-  if(result.Status() != 0 && result.Status() != 1){
+  if(result.Status() != 0 && result.Status() != 1){ // start if fit didn't converge with strategy 1
 
     std::cout << "< WARNING >: The fit did not converge with minimizer status "<< result.Status() << std::endl;
 
@@ -215,14 +240,11 @@ ROOT::Fit::FitResult fitHistogram(TH1D* histo, TF1* fit, std::map< std::string, 
 
   fit->SetFitResult(result);
 
-  //std::cout << fit->GetChisquare() << " " << fit->GetNDF() << " " << fit->GetParError(0) << " " << fit->GetParError(3) << std::endl;
-
-  //std::cout << result.Chi2() << " " << result.Ndf() << " " << result.ParError(0) << " " << result.ParError(3) << std::endl;
-
   return result;
 
 }
 
+// Experimental method to calculate the fit uncertainty
 //______________________________________________________________________________
 //
 std::vector< TF1* > getFitEigenVariationsMethodA(TF1* fit, TMatrixD* cov, TMatrixD* eVec, std::map< std::string, std::string > rWMap){
@@ -252,7 +274,7 @@ std::vector< TF1* > getFitEigenVariationsMethodA(TF1* fit, TMatrixD* cov, TMatri
 
   double* param = new double[freeParamIndex.size()];
 
-  for(int i = 0; i < freeParamIndex.size(); i++) param[i]  = fit->GetParameter(freeParamIndex[i]);
+  for(unsigned int i = 0; i < freeParamIndex.size(); i++) param[i]  = fit->GetParameter(freeParamIndex[i]);
  
   TVectorD* paramVec = new TVectorD(freeParamIndex.size(), param);
 
@@ -286,9 +308,9 @@ std::vector< TF1* > getFitEigenVariationsMethodA(TF1* fit, TMatrixD* cov, TMatri
 
     TF1* fitVar = new TF1((rWMap["NAME"] + "_fit_eigenVar"+std::to_string(i)).c_str(), (rWMap["FUNCTION"]).c_str(), std::stod(rWMap["XMIN"]), 5000);
 
-    for(int nPar = 0; nPar < freeParamIndex.size(); nPar++) fitVar->SetParameter(freeParamIndex[nPar], (*paramVecVar)[nPar]);
+    for(unsigned int nPar = 0; nPar < freeParamIndex.size(); nPar++) fitVar->SetParameter(freeParamIndex[nPar], (*paramVecVar)[nPar]);
 
-    for(int nPar = 0; nPar < fixedParamIndex.size(); nPar++) fitVar->SetParameter(fixedParamIndex[nPar], fit->GetParameter(fixedParamIndex[nPar]));
+    for(unsigned int nPar = 0; nPar < fixedParamIndex.size(); nPar++) fitVar->SetParameter(fixedParamIndex[nPar], fit->GetParameter(fixedParamIndex[nPar]));
 
 
     fitEigenVariations.push_back(fitVar);
@@ -301,6 +323,7 @@ std::vector< TF1* > getFitEigenVariationsMethodA(TF1* fit, TMatrixD* cov, TMatri
 
 }
 
+// Experimental method to calculate the fit uncertainty based on the SM 4-tops anaylsis method
 //______________________________________________________________________________
 //
 std::vector< TF1* > getFitEigenVariationsMethodB(TF1* fit, TVectorD* eVal, TMatrixD* eVec, std::map< std::string, std::string > rWMap){
@@ -343,7 +366,7 @@ std::vector< TF1* > getFitEigenVariationsMethodB(TF1* fit, TVectorD* eVal, TMatr
   
   TF1* fitVarDn = new TF1((rWMap["NAME"] + "_fit_eigenVar_Dn").c_str(), (rWMap["FUNCTION"]).c_str(), std::stod(rWMap["XMIN"]), 5000);
 
-  for(int nPar = 0; nPar < freeParamIndex.size(); nPar++){
+  for(unsigned int nPar = 0; nPar < freeParamIndex.size(); nPar++){
 
     (*eigenVarsUp)[nPar] = fit->GetParameter(freeParamIndex[nPar]) + (*eigenVarsUp)[nPar];
     
@@ -351,7 +374,7 @@ std::vector< TF1* > getFitEigenVariationsMethodB(TF1* fit, TVectorD* eVal, TMatr
 
   }
 
-  for(int nPar = 0; nPar < freeParamIndex.size(); nPar++){
+  for(unsigned int nPar = 0; nPar < freeParamIndex.size(); nPar++){
 
     fitVarUp->SetParameter(freeParamIndex[nPar], (*eigenVarsUp)[nPar]);
     
@@ -359,7 +382,7 @@ std::vector< TF1* > getFitEigenVariationsMethodB(TF1* fit, TVectorD* eVal, TMatr
 
   }
 
-  for(int nPar = 0; nPar < fixedParamIndex.size(); nPar++){
+  for(unsigned int nPar = 0; nPar < fixedParamIndex.size(); nPar++){
 
     fitVarUp->SetParameter(fixedParamIndex[nPar], fit->GetParameter(fixedParamIndex[nPar]));
 
@@ -381,16 +404,27 @@ std::vector< TF1* > getFitEigenVariationsMethodB(TF1* fit, TVectorD* eVal, TMatr
 
 }
 
+// Function that calculates the confidence interval of a histogram fit
+// Inputs:
+// fit: TF1 containing the template of the histogram fit
+// cov: Covariance matrix of the fit
+// rWMap: map containing the options of the histogram to fit
+// xStepSize: Number of points to calculate the fit confidence interval along the x-axis
+// cl: Confidence level to calculate the confidence interval
+// upBand: TGraph object used to store the upper band of the confidence interval
+// dnBand: TGraph object used to store the down band of the confidence interval
 //______________________________________________________________________________
 //
-TGraphErrors*  getFitCI(TF1* fit, TMatrixD* cov, std::map< std::string, std::string > rWMap, int xStepSize, double cl, TGraph* upBand, TGraph* dnBand){
+void getFitCI(TF1* fit, TMatrixD* cov, std::map< std::string, std::string > rWMap, int xStepSize, double cl, TGraph* upBand, TGraph* dnBand){
 
   std::vector< TGraph* > fitCIBands = {};
   
-  TGraphErrors* fitCIGraph = new TGraphErrors(xStepSize);
+  //TGraphErrors* fitCIGraph = new TGraphErrors(xStepSize);
 
+  // calculate the grid spacing along the x-axis to calculate the CI
   double deltaX = (5000.0 - std::stod(rWMap["XMIN"]))/xStepSize;
 
+  // calculate the correction factor needed for the CI
   double correctionFactor = TMath::StudentQuantile(0.5 + cl/2.0, fit->GetNDF())*TMath::Sqrt(fit->GetChisquare()/fit->GetNDF());
 
   std::stringstream optParamSS(rWMap["PARAMOPT"]);
@@ -412,12 +446,16 @@ TGraphErrors*  getFitCI(TF1* fit, TMatrixD* cov, std::map< std::string, std::str
 
   double xmin = std::stod(rWMap["XMIN"]);
 
+  // vector to hold the values of the derivatives of the fit w.r.t the free parameters
   std::vector< double > grad(freeParamIndex.size());
 
-  for(int ndx = 0; ndx < xStepSize; ndx++){
+  for(int ndx = 0; ndx < xStepSize; ndx++){ // start loop through the grid points along the x-axis
 
-    for(int ipar = 0; ipar < freeParamIndex.size(); ipar++){
+    // Calculate the derivative of the fit w.r.t the free parameters numerically
 
+    for(unsigned int ipar = 0; ipar < freeParamIndex.size(); ipar++){ // start loop through free parameters of the fit
+      
+      // step size for the deriviate w.r.t the free parameter
       double parStepSize = 0;
 
       //std::cout << fit->GetParError(freeParamIndex[ipar]) << std::endl;
@@ -439,21 +477,22 @@ TGraphErrors*  getFitCI(TF1* fit, TMatrixD* cov, std::map< std::string, std::str
       
       f_par_m2h->SetParameter(freeParamIndex[ipar], fit->GetParameter(freeParamIndex[ipar]) - 2.0*parStepSize);
 
+
+      // estimate the first derivative as f'(p) = [2.0*f(p+h) + 3.0*f(p) - 6.0*f(p-h) + f(p-2h)]/(6.0*h)
       grad[ipar] = (2.0*( f_par_ph->Eval( xmin+( ndx*deltaX ) ) ) 
 		    + 3.0*( f_par->Eval( xmin+( ndx*deltaX ) ) ) 
 		    - 6.0*( f_par_mh->Eval( xmin+( ndx*deltaX ) ) ) 
 		    + f_par_m2h->Eval( xmin+( ndx*deltaX ) ) )/(6.0*parStepSize);
 
+    } // end loop through free parameters of the fit
 
-      //for(int jpar = 0; jpar < fit->GetNpar(); jpar++) std::cout << fit->GetParameter(jpar) << " " << f_par_ph->GetParameter(jpar) << " " << f_par->GetParameter(jpar) << " " << f_par_mh->GetParameter(jpar) << " " << f_par_m2h->GetParameter(jpar) << std::endl;
-    
-    }
-
+    // variable used to store the standard deviation of the fit
     double r2 = 0;
+    
+    // Calculate the standard deviation of the fit at the current grid point along the x-axis
+    for(unsigned int ipar = 0; ipar < freeParamIndex.size(); ipar++){
 
-    for(int ipar = 0; ipar < freeParamIndex.size(); ipar++){
-
-      for(int jpar = 0; jpar < freeParamIndex.size(); jpar++){
+      for(unsigned int jpar = 0; jpar < freeParamIndex.size(); jpar++){
 
 	r2 += grad[ipar]*((*cov)[ipar][jpar])*grad[jpar];
 
@@ -463,19 +502,18 @@ TGraphErrors*  getFitCI(TF1* fit, TMatrixD* cov, std::map< std::string, std::str
 
     double r = TMath::Sqrt(r2)*correctionFactor;
 
-    fitCIGraph->SetPoint(ndx, xmin+( ndx*deltaX ), fit->Eval( xmin+( ndx*deltaX ) ) );
+    //fitCIGraph->SetPoint(ndx, xmin+( ndx*deltaX ), fit->Eval( xmin+( ndx*deltaX ) ) );
+    //fitCIGraph->SetPointError(ndx, 0, r);
 
-    fitCIGraph->SetPointError(ndx, 0, r);
-
+    // propagate the up variation of the confidence interval
     upBand->SetPoint(ndx, xmin+( ndx*deltaX ), fit->Eval( xmin+( ndx*deltaX ) ) + r);
     
+    // propagate the down variation of the confidence inteval
     dnBand->SetPoint(ndx, xmin+( ndx*deltaX ), fit->Eval( xmin+( ndx*deltaX ) ) - r);
-
-    //std::cout << r << std::endl;
 
   }
 
-  return fitCIGraph;
+  //return fitCIGraph;
 
 }
 
@@ -485,28 +523,37 @@ int main(int argc, char** argv){
 
   parseUserOptions(argc, argv);
 
+  std::cout << "=======================================================================" << std::endl;
+  std::cout << "=================      Reading smoothing options      =================" << std::endl;
+  std::cout << "=======================================================================" << std::endl;
   std::vector < std::map< std::string, std::string > > rWOpt = readFromTextFile(histoList,':');
+  std::cout << "=======================================================================" << std::endl << std::endl;;
 
   TFile* input = TFile::Open(inputFile.c_str(), "UPDATE");
 
-  std::cout << "Starting to fit histograms" << std::endl;
-
+  std::cout << "=======================================================================" << std::endl;
+  std::cout << "=================       Entering smoothing loop       =================" << std::endl;
+  std::cout << "=======================================================================" << std::endl;
   for(std::map < std::string, std::string> rWMap : rWOpt){
-    
+
+    // Get histogram to fit
     TH1D* histo = (TH1D*) input->Get(rWMap["NAME"].c_str());
 
+    //Get smooth function template to fit the histogram
     TF1* fit = new TF1((rWMap["RENAME"]).c_str(), (rWMap["FUNCTION"]).c_str(), std::stod(rWMap["XMIN"]), 5000);
 
-    std::cout << "=======================================================================" << std::endl;
-    std::cout << "Fitting histogram " << histo->GetName() << std::endl;
+    std::cout << "Smoothing histogram " << histo->GetName() << std::endl;
 
+    // Fit the function to the histogram
     ROOT::Fit::FitResult* result = new ROOT::Fit::FitResult(fitHistogram(histo, fit, rWMap));
 
+    // Obtain the covariance matrix of the fit
     TMatrixD* cov = new TMatrixD(result->NTotalParameters(),result->NTotalParameters());
 
     result->GetCovarianceMatrix(*cov);
 
     //===============================================================================
+    // Resize the covariance matrix to be consistent with the number of free parameters
 
     std::vector< std::string > optParams = {};
 
@@ -518,7 +565,7 @@ int main(int argc, char** argv){
 
     std::vector< int > freeParamIndex = {};
 
-    for(int i = 0; i < optParams.size(); i++){
+    for(unsigned int i = 0; i < optParams.size(); i++){
 
       if(optParams[i] != "FIXED"){
 
@@ -530,7 +577,7 @@ int main(int argc, char** argv){
 
     if(result->NFreeParameters() != result->NTotalParameters()){
       
-      for(int i = 0; i < freeParamIndex.size(); i++){
+      for(unsigned int i = 0; i < freeParamIndex.size(); i++){
 
 	TMatrixDColumn(*cov, i) = TMatrixDColumn(*cov, freeParamIndex[i]);
 
@@ -549,166 +596,77 @@ int main(int argc, char** argv){
 
     fit->Write();
 
-    //================================================================================
-    
-    /*TGraphErrors* confidenceIntGraph = new TGraphErrors();
-
-    std::string ci_name = std::string(histo->GetName()) + "_confidence_interval";
-
-    // This function by decault normalizes the confidence interval by the chi2/NDOF
-    // https://root.cern.ch/doc/v608/HFitInterface_8cxx_source.html#l00976
-    // The correction factor is given by TMath::StudentQuantile(0.5 + cl/2, fNdf) * std::sqrt(fChi2/fNdf))
-    // The method that is used to calculate the CI can be found here
-    // https://root.cern.ch/doc/v608/FitResult_8cxx_source.html#l00560
-    std::cout << "blah" << std::endl;
-    ROOT::Fit::GetConfidenceIntervals(histo, *result, confidenceIntGraph, 0.68);
-
-    confidenceIntGraph->SetName((ci_name).c_str());
-
-    std::cout << "Confidence interval values" << std::endl;
-
-    confidenceIntGraph->Print();
-
-    input->cd();
-
-    confidenceIntGraph->Write();*/
-    //================================================================================
-
     TVectorD* eVal = new TVectorD(cov->GetNcols());
-
+    
+    // calculate the eigen values and eigen vectors of the fit covariance matrix
     TMatrixD* eVec = new TMatrixD(cov->EigenVectors(*eVal));
-
-    /*TMatrixD* eMtxCheck = new TMatrixD( (*cov) * (*eVec));
-
-    for(int nCols = 0; nCols < cov->GetNcols(); nCols++){
-
-      TVectorD* eVecCheck = new TVectorD(cov->GetNrows());
-
-      for(int nRows = 0; nRows < cov->GetNrows(); nRows++){
-
-	(*eVecCheck)[nRows] = ((*eMtxCheck)[nRows][nCols])/((*eVal)[nCols]);
-
-      }
-
-
-      eVecCheck->Print();
-
-      }*/
 
     std::cout << "Eigen vectors:" << std::endl;
 
     eVec->Print();
 
-    std::cout << "Calculating fit parameter eigenvariations for " << histo->GetName() << std::endl;
+    std::cout << "Calculating fit uncertainty for " << histo->GetName() << std::endl;
 
-    std::vector< TF1* > fitEigenVariationsA = getFitEigenVariationsMethodA(fit, cov, eVec, rWMap);
+    if(method == "A"){
+      std::vector< TF1* > fitEigenVariationsA = getFitEigenVariationsMethodA(fit, cov, eVec, rWMap);
 
-    std::vector< TF1* > fitEigenVariationsB = getFitEigenVariationsMethodB(fit, eVal, eVec, rWMap);
+      for(TF1* variation : fitEigenVariationsA){
+	
+	input->cd();
 
-    TGraph* upBand1S = new TGraph(1000);
+	variation->Write();
 
-    TGraph* dnBand1S = new TGraph(1000);
+      } 
 
-    TGraph* upBand2S = new TGraph(1000);
+    }
+    else if(method == "B"){
+      std::vector< TF1* > fitEigenVariationsB = getFitEigenVariationsMethodB(fit, eVal, eVec, rWMap);
+      
+      for(TF1* variation : fitEigenVariationsB){
+	
+	input->cd();
 
-    TGraph* dnBand2S = new TGraph(1000);
+	variation->Write();
 
-    TGraph* upBand3S = new TGraph(1000);
+      }
+      
+    }
+    else{
 
-    TGraph* dnBand3S = new TGraph(1000);
+      TGraph* upBand = new TGraph(1000);
 
-    TGraphErrors* fitCI1S = getFitCI(fit, cov, rWMap, 1000, 0.682, upBand1S, dnBand1S); 
+      TGraph* dnBand = new TGraph(1000);
 
-    TGraphErrors* fitCI2S = getFitCI(fit, cov, rWMap, 1000, 0.954, upBand2S, dnBand2S);
+      getFitCI(fit, cov, rWMap, nSteps, CL, upBand, dnBand);
 
-    TGraphErrors* fitCI3S = getFitCI(fit, cov, rWMap, 1000, 0.996, upBand3S, dnBand3S);
+      TF1* fitUpBand = new TF1((std::string(fit->GetName()) + "_upBand").c_str(), [&](double* x, double* p){ return p[0]*upBand->Eval(x[0]); }, std::stod(rWMap["XMIN"]), 5000, 1 );
 
-    //std::cout << upBand->Eval(3500) << " " << fit->Eval(3500) << " " << dnBand->Eval(3500) << std::endl;
+      TF1* fitDnBand = new TF1((std::string(fit->GetName()) + "_dnBand").c_str(), [&](double* x, double* p){ return p[0]*dnBand->Eval(x[0]); }, std::stod(rWMap["XMIN"]), 5000, 1 );
 
-    TF1* fitUpBand1S = new TF1((std::string(fit->GetName()) + "_upBand1S").c_str(), [&](double* x, double* p){ return p[0]*upBand1S->Eval(x[0]); }, std::stod(rWMap["XMIN"]), 5000, 1 );
+      fitUpBand->SetParameter(0,1.0);
+      
+      fitDnBand->SetParameter(0,1.0);
+      
+      input->cd();
+      
+      fitUpBand->Write();
+      
+      input->cd();
 
-    TF1* fitDnBand1S = new TF1((std::string(fit->GetName()) + "_dnBand1S").c_str(), [&](double* x, double* p){ return p[0]*dnBand1S->Eval(x[0]); }, std::stod(rWMap["XMIN"]), 5000, 1 );
-
-    TF1* fitUpBand2S = new TF1((std::string(fit->GetName()) + "_upBand2S").c_str(), [&](double* x, double* p){ return p[0]*upBand2S->Eval(x[0]); }, std::stod(rWMap["XMIN"]), 5000, 1 );
-
-    TF1* fitDnBand2S = new TF1((std::string(fit->GetName()) + "_dnBand2S").c_str(), [&](double* x, double* p){ return p[0]*dnBand2S->Eval(x[0]); }, std::stod(rWMap["XMIN"]), 5000, 1 );
-
-    TF1* fitUpBand3S = new TF1((std::string(fit->GetName()) + "_upBand3S").c_str(), [&](double* x, double* p){ return p[0]*upBand3S->Eval(x[0]); }, std::stod(rWMap["XMIN"]), 5000, 1 );
-
-    TF1* fitDnBand3S = new TF1((std::string(fit->GetName()) + "_dnBand3S").c_str(), [&](double* x, double* p){ return p[0]*dnBand3S->Eval(x[0]); }, std::stod(rWMap["XMIN"]), 5000, 1 );
-
-    fitUpBand1S->SetParameter(0,1.0);
-
-    fitDnBand1S->SetParameter(0,1.0);
-
-    fitUpBand2S->SetParameter(0,1.0);
-
-    fitDnBand2S->SetParameter(0,1.0);
-
-    fitUpBand3S->SetParameter(0,1.0);
-
-    fitDnBand3S->SetParameter(0,1.0);
-
-    /*input->cd();
-
-    fitUpBand1S->Write();
-
-    input->cd();
-
-    fitDnBand1S->Write();*/
-
-    input->cd();
-
-    fitUpBand2S->Write();
-
-    input->cd();
-
-    fitDnBand2S->Write();
-
-    /*input->cd();
-
-    fitUpBand3S->Write();
-
-    input->cd();
-
-    fitDnBand3S->Write();*/
-
-    fitCI1S->SetName((std::string(histo->GetName()) + "_CI1S").c_str());
-
-    fitCI2S->SetName((std::string(histo->GetName()) + "_CI2S").c_str());
-
-    fitCI3S->SetName((std::string(histo->GetName()) + "_CI3S").c_str());
-
-    input->cd();
-
-    fitCI1S->Write();
-
-    input->cd();
-
-    fitCI2S->Write();
-
-    input->cd();
-
-    fitCI3S->Write();
-
-    /*for(TF1* fitVar : fitEigenVariationsA){
+      fitDnBand->Write();
+      
+      /*fitCI->SetName((std::string(histo->GetName()) + "_CI2S").c_str());
 
       input->cd();
       
-      fitVar->Write();
-
+      fitCI->Write();*/
+      
     }
 
-    for(TF1* fitVar : fitEigenVariationsB){
-
-      input->cd();
-
-      fitVar->Write();
-
-    }*/
-
-
   }
+  std::cout << "=======================================================================" << std::endl;
+  std::cout << "==============          Exiting smoothing loop           ==============" << std::endl;
+  std::cout << "=======================================================================" << std::endl;
 
   input->Close();
 
