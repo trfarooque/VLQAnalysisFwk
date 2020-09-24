@@ -23,6 +23,8 @@ SystLarge: 10.
 %GetChi2: FALSE
 PlotOptions: YIELDS
 %PlotOptions: CHI2
+RankingMaxNP: 20
+RankingPlot: all
 
 % -------------------------- %
 % -------    FIT     ------- %
@@ -41,7 +43,6 @@ POIAsimov: __FITPOIASIMOV__
 Limit: "limit"
 LimitType: ASYMPTOTIC
 LimitBlind: __LIMITBLIND__
-POIAsimov: __LIMITPOIASIMOV__
 
 % -------------------------- %
 % --------- REGIONS -------- %

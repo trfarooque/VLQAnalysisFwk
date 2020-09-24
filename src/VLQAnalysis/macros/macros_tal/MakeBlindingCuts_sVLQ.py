@@ -10,7 +10,7 @@ sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/VLQAnalysis/" 
 from VLQ_Samples_mc import *
 
 regDict = "regions_dictionary_sVLQ"
-regDict_blinded = regDict+"_RSRs"
+regDict_blinded = regDict
 doOneLep = True
 
 # Running options
@@ -22,7 +22,7 @@ doPresel = False
 debugPrint = False
 
 # Blinding options
-SBcut = 0.1
+SBcut = 0.3
 doMinMeffCut = True
 
 # Setting up regions
@@ -38,7 +38,7 @@ if doOneLep:
 
 # Setting up input files
 # inputDir = '/nfs/pic.es/user/t/tvdaalen/scratch2/SingleVLQWorkArea/br_R21_master_Mar2020/VLQAnalysisFramework/fitinputs_blinding_CRs/'
-inputDir = '/nfs/pic.es/user/t/tvdaalen/scratch2//VLQAnalysisRun2/FitInputs_RW_allcor_Jul2020/FilesTRexF/'
+inputDir = '/nfs/pic.es/user/t/tvdaalen/scratch2//VLQAnalysisRun2/FitInputs_totalBkgOnly_RWPARAM/'
 f_bkg = {'a':TFile(inputDir+'bkg.mc16a.root','read'),'d':TFile(inputDir+'bkg.mc16d.root','read'),'e':TFile(inputDir+'bkg.mc16e.root','read')}
 
 # signals = ['sVLQ_WTHt16K05','sVLQ_WTHt20K05','sVLQ_WTZt16K05','sVLQ_WTZt20K05','sVLQ_ZTHt11K05','sVLQ_ZTHt16K05','sVLQ_ZTHt20K05','sVLQ_ZTZt11K05','sVLQ_ZTZt16K05','sVLQ_WTHt11K03','sVLQ_WTHt16K03','sVLQ_WTZt11K03','sVLQ_ZTHt16K03']

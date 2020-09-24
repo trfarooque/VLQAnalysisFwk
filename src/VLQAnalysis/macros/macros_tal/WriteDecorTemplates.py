@@ -74,6 +74,7 @@ regions_dict = {'LJ-1boost':['HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin',
 regions_dict_blind = {'LJ-1boost':['HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin',
                                   'HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin',
                                   'HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex',
+                                  'HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex',
                                   'HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex'],
                       'LJ-2boost':['HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin',
                                   'HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin',
@@ -82,10 +83,12 @@ regions_dict_blind = {'LJ-1boost':['HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin',
                       'HJ-1boost':['HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex'],
                       'HJ-g2boost':['HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin',
                                   'HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin',
+                                  'HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin',
                                   'HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin',
                                   'HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin',
                                   'HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin',
-                                  'HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin'] #'HJ-3boost'
+                                  'HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin',
+                                  'HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin'] #'HJ-3boost'
                 }
 
 
@@ -739,7 +742,10 @@ def writeDRDS(f,regions):
                     f.write('"%s DR/DS %s"\n'%(flav[1],getRegionLabel(reg)))
 
         f.write('Type: HISTO\n')
-        f.write('Category: "Single-top DR-DS uncertainties"\n')
+        if flav[0]=='Singletop':
+            f.write('Category: "Single-top DR-DS uncertainties"\n')
+        else:
+            f.write('Category: "t#bar{t} DR-DS uncertainties"\n')
         f.write('Symmetrisation: ONESIDED\n')
         f.write('Smoothing: 40\n')
         f.write('Samples: %s\n'%flav[0])

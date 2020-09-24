@@ -6,8 +6,9 @@ import glob
 # input argument is TRExFitter output folder (containing config files and "Results" folder)
 inputDir = sys.argv[-1]
 
-# use names in config files to collect all output dirs in Results
+# use names in config files to collect all output dirs in Results and necessary later for systs
 outputNames = [n.replace(n[:n.index("/configFile_sVLQ_")+17],"").replace(".txt","") for n in glob.glob(inputDir+"/configFile_sVLQ_*")]
+outputNames = [n.replace(n[[m.start() for m in re.finditer('_',n)][1]:],"") for n in outputNames]
 outputDirs = [d for d in glob.glob(inputDir+"/Results/*") if not "scripts" in d and any(n in d for n in outputNames)]
 
 # loop through output dirs
@@ -21,10 +22,10 @@ for d in outputDirs:
             os.system('mkdir -p '+plotDir+'/SR/')
             os.system('mkdir -p '+plotDir+'/VR/')
 
-            if len(os.listdir(plotDir+'/VR/'))>0:
-                continue
-            else:
-                print "Organizing %s Plots in %s..."%(len(os.listdir(plotDir)),d)
+            # if len(os.listdir(plotDir+'/VR/'))>0:
+            #     continue
+            # else:
+            print "Organizing %s Plots in %s..."%(len(os.listdir(plotDir)),d)
         else:
             continue
 
@@ -41,10 +42,10 @@ for d in outputDirs:
             os.system('mkdir -p '+tableDir+'/SR/')
             os.system('mkdir -p '+tableDir+'/VR/')
 
-            if os.path.isdir(tableDir+'/VR/') and len(os.listdir(tableDir+'/VR/'))>0:
-                continue
-            else:
-                print "Organizing %s Tables in %s..."%(len(os.listdir(tableDir)),d)
+            # if os.path.isdir(tableDir+'/VR/') and len(os.listdir(tableDir+'/VR/'))>0:
+            #     continue
+            # else:
+            print "Organizing %s Tables in %s..."%(len(os.listdir(tableDir)),d)
         else:
             continue
 

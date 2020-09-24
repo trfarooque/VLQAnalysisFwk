@@ -46,6 +46,7 @@ parser.add_option("-x","--suffix",help="suffix of input directory of each mass p
 parser.add_option("-t","--theory",help="draw theory",dest="drawTheory",action="store_true",default=False)
 parser.add_option("-f","--forceranges",help="force ranges",dest="forceRanges",action="store_true",default=False)
 parser.add_option("-c","--outsuffix",help="suffix in output file",dest="outSuffix",default="")
+parser.add_option("-b","--labels",help="list of labels",dest="labels",default="")
 parser.add_option
 
 (options, args) = parser.parse_args()
@@ -61,10 +62,23 @@ suffix=options.suffix
 drawTheory=options.drawTheory
 forceRanges=options.forceRanges
 outSuffix=options.outSuffix
+labels=options.labels
 if outSuffix != "":
     outSuffix = '_'+outSuffix
 
 os.system("mkdir -p "+outDir)
+
+# Build labels
+labels = map(str, labels.strip('[]').split(','))
+
+# Prepare for comparing multiple configurations in mu plots
+doMulti = False
+if inDir.startswith('[') and inDir.endswith(']'):
+    inDir = map(str, inDir.strip('[]').split(','))
+    doMulti = True
+    if len(labels) != len(inDir):
+        print "<!> ERROR !! Give labels of equal length when giving multiple input directories !!"
+        sys.exit(-1)
 
 ###
 # Getting the values of the masses and cross-sections
@@ -133,43 +147,42 @@ if(energy=="13"):
 ###
 # Effectively building the plots
 ###
-tg_mu = TGraphAsymmErrors(len(masses))
-tg_mu2 = TGraphAsymmErrors(len(masses))
+if doMulti:
+    tg_mu = [TGraphAsymmErrors(len(masses)) for i in range(len(inDir))]
+else:
+    tg_mu = TGraphAsymmErrors(len(masses))
 
-#All mus
+# Multiple configurations
 counter = -1
-for mass in masses:
-    counter += 1
-    files = glob.glob(inDir + "/*"+mass['name']+suffix+"*/Fits/*"+mass['name']+"*.txt")
+if doMulti:
+    for mass in masses: # Assume same masses and signals available in all folders if doMulti
+        counter += 1
+        for n,indir in enumerate(inDir):
+            files = glob.glob(indir + "/*"+mass['name']+suffix+"*/Fits/*"+mass['name']+"*.txt")
 
-    if len(files)==0 or len(files)>1:
-        print "<!> ERROR for mass " + `mass['mass']` + " !!"
-    else:
-        mu_signal, minus1, plus1 = GetMuSignal(files[0])
-        print  " Mass: ", mass['mass'], " mu : ", mu_signal, "+"+str(plus1), minus1
+            if len(files)==0 or len(files)>1:
+                print "<!> ERROR for mass " + `mass['mass']` + " !!"
+            else:
+                mu_signal, minus1, plus1 = GetMuSignal(files[0])
+                print  " Mass: ", mass['mass'], " mu : ", mu_signal, "+"+str(plus1), minus1
 
-        if secDir != "":
-            tg_mu.SetPoint(counter,mass['mass']-4,mu_signal)
-        else:
-            tg_mu.SetPoint(counter,mass['mass'],mu_signal)
+                tg_mu[n].SetPoint(counter,mass['mass'],mu_signal)
+                tg_mu[n].SetPointError(counter,0.,0.,minus1,plus1)
 
-        tg_mu.SetPointError(counter,0.,0.,minus1,plus1)
-
-
-#All mus for 2nd dir
-if secDir != "":
+else:
     counter = -1
     for mass in masses:
         counter += 1
-        files = glob.glob(secDir + "/*"+mass['name']+suffix+"*/Fits/*"+mass['name']+"*.txt")
-    
+        files = glob.glob(inDir + "/*"+mass['name']+suffix+"*/Fits/*"+mass['name']+"*.txt")
+
         if len(files)==0 or len(files)>1:
             print "<!> ERROR for mass " + `mass['mass']` + " !!"
         else:
             mu_signal, minus1, plus1 = GetMuSignal(files[0])
             print  " Mass: ", mass['mass'], " mu : ", mu_signal, "+"+str(plus1), minus1
-            tg_mu2.SetPoint(counter,mass['mass']+4,mu_signal)
-            tg_mu2.SetPointError(counter,0.,0.,minus1,plus1)
+
+            tg_mu.SetPoint(counter,mass['mass'],mu_signal)
+            tg_mu.SetPointError(counter,0.,0.,minus1,plus1)
 
 ###
 # Creating signal label
@@ -200,7 +213,7 @@ else:
 # Creating the canvas
 ###
 can = TCanvas("1DLimit_"+signal,"1DLimit_"+signal,1000,800)
-leg = TLegend(0.55,0.7,0.95,0.92)
+leg = TLegend(0.55,0.65,0.95,0.92)
 leg.SetFillColor(0)
 leg.SetLineColor(0)
 
@@ -208,55 +221,63 @@ leg.SetLineColor(0)
 # Making axis limits
 ###
 ylim_min = -1
-ylim_max = 3.5
+ylim_max = 5
 
 ###
-#Limits
+# Mus
 ###
+cols = [kBlue+1,kRed,kOrange-3,kCyan+1] # max compare 4 configurations
 
-tg_mu.GetXaxis().SetLimits(1000.,2100.)
-tg_mu.SetMinimum(ylim_min)
-tg_mu.SetMaximum(ylim_max)
-tg_mu.GetXaxis().SetNdivisions(406)
-tg_mu.SetTitle("")
-tg_mu.GetXaxis().SetTitle("m_{T} [GeV]")
-tg_mu.GetYaxis().SetTitle("#mu")
-tg_mu.GetHistogram().GetXaxis().SetLabelSize(tg_mu.GetHistogram().GetXaxis().GetLabelSize()*1.2)
-tg_mu.GetHistogram().GetYaxis().SetLabelSize(tg_mu.GetHistogram().GetYaxis().GetLabelSize()*1.2)
-tg_mu.GetHistogram().GetXaxis().SetTitleSize(tg_mu.GetHistogram().GetXaxis().GetTitleSize()*1.4)
-tg_mu.GetHistogram().GetYaxis().SetTitleSize(tg_mu.GetHistogram().GetYaxis().GetTitleSize()*1.4)
-tg_mu.GetHistogram().GetXaxis().SetTitleOffset(1.35)
-tg_mu.GetHistogram().GetYaxis().SetTitleOffset(1.3)
-# tg_mu.SetMarkerColor(kBlue+1)
-# tg_mu.SetLineColor(kBlue+1)
-tg_mu.SetMarkerColor(kBlue+1)
-tg_mu.SetLineColor(kBlue+1)
-tg_mu.SetLineWidth(2)
-tg_mu.SetMarkerStyle(23)
-tg_mu.SetMarkerSize(2)
-tg_mu.Draw("a2")
-tg_mu.Draw("p")
+if doMulti:
+    for n in range(len(inDir)):
+        if n==0:
+            tg_mu[n].GetXaxis().SetLimits(1000.,2100.)
+            tg_mu[n].SetMinimum(ylim_min)
+            tg_mu[n].SetMaximum(ylim_max)
+            tg_mu[n].GetXaxis().SetNdivisions(406)
+            tg_mu[n].SetTitle("")
+            tg_mu[n].GetXaxis().SetTitle("m_{T} [GeV]")
+            tg_mu[n].GetYaxis().SetTitle("#mu")
+            tg_mu[n].GetHistogram().GetXaxis().SetLabelSize(tg_mu[n].GetHistogram().GetXaxis().GetLabelSize()*1.2)
+            tg_mu[n].GetHistogram().GetYaxis().SetLabelSize(tg_mu[n].GetHistogram().GetYaxis().GetLabelSize()*1.2)
+            tg_mu[n].GetHistogram().GetXaxis().SetTitleSize(tg_mu[n].GetHistogram().GetXaxis().GetTitleSize()*1.4)
+            tg_mu[n].GetHistogram().GetYaxis().SetTitleSize(tg_mu[n].GetHistogram().GetYaxis().GetTitleSize()*1.4)
+            tg_mu[n].GetHistogram().GetXaxis().SetTitleOffset(1.35)
+            tg_mu[n].GetHistogram().GetYaxis().SetTitleOffset(1.3)
+            tg_mu[n].SetMarkerColor(cols[n])
+            tg_mu[n].SetLineColor(cols[n])
+            tg_mu[n].SetLineWidth(2)
+            tg_mu[n].SetMarkerStyle(23)
+            tg_mu[n].SetMarkerSize(2)
+            tg_mu[n].Draw("a2")
+            tg_mu[n].Draw("p")
+        else:
+            tg_mu[n].SetMarkerColor(cols[n])
+            tg_mu[n].SetLineColor(cols[n])
+            tg_mu[n].SetLineWidth(2)
+            tg_mu[n].SetMarkerStyle(22)
+            tg_mu[n].SetMarkerSize(2)
+            tg_mu[n].Draw("2")
+            tg_mu[n].Draw("p")
 
 ###
 #Drawing some dotted lines
 ###
 
-if secDir != "":
-    tg_mu2.SetMarkerColor(kRed)
-    tg_mu2.SetLineColor(kRed)
-    tg_mu2.SetLineWidth(2)
-    tg_mu2.SetMarkerStyle(22)
-    tg_mu2.SetMarkerSize(2)
-    tg_mu2.Draw("2")
-    tg_mu2.Draw("p")
-
+# gPad.SetGridy(1)
 
 tline_0 = TLine(1000.,0.,2100.,0.)
 tline_1 = TLine(1000.,1.,2100.,1.)
+# tline_05 = TLine(1000.,.5,2100.,.5)
+tline_2 = TLine(1000.,2.,2100.,2.)
 tline_0.SetLineStyle(4)
 tline_1.SetLineStyle(2)
+# tline_05.SetLineStyle(2)
+tline_2.SetLineStyle(2)
 tline_0.Draw('same')
 tline_1.Draw('same')
+# tline_05.Draw('same')
+tline_2.Draw('same')
 
 ##
 # Legend
@@ -295,7 +316,7 @@ if(addText!=""):
 
 if signal_label!="":
 
-    if secDir != "":
+    if doMulti:
         leg.AddEntry(TObject(), "Fit to S+B Asimov dataset", "")
     
         tg_dummy = TGraph()
@@ -306,19 +327,29 @@ if signal_label!="":
         tg_dummy.SetLineWidth(2)
         leg.AddEntry(tg_dummy,"Best fit #mu","ep")
 
-        mu1 = leg.AddEntry(TObject(), signal_label+" (#mu=1)", "")
-        mu1.SetTextColor(kRed)
-        mu0 = leg.AddEntry(TObject(), signal_label+" (#mu=0)", "")
-        mu0.SetTextColor(kBlue+1)
+        for n in reversed(range(len(inDir))):
+            if n==0:
+                n0 = leg.AddEntry(TObject(), signal_label+" "+labels[n], "")
+                n0.SetTextColor(cols[n])
+            if n==1:
+                n1 = leg.AddEntry(TObject(), signal_label+" "+labels[n], "")
+                n1.SetTextColor(cols[n])
+            if n==2:
+                n2 = leg.AddEntry(TObject(), signal_label+" "+labels[n], "")
+                n2.SetTextColor(cols[n])
+            if n==3:
+                n3 = leg.AddEntry(TObject(), signal_label+" "+labels[n], "")
+                n3.SetTextColor(cols[n])
 
     else:
-        # leg.AddEntry(TObject(), "Fit to blinded data", "")
-        # leg.AddEntry(tg_mu,"Best fit #mu","ep")
-        # leg.AddEntry(TObject(), signal_label+" (#mu=0)", "")
-
-        leg.AddEntry(TObject(), "Fit to S+B Asimov dataset", "")
+        leg.AddEntry(TObject(), "Fit to blinded data", "")
+        # leg.AddEntry(TObject(), "Fit to S+B Asimov dataset", "")
         leg.AddEntry(tg_mu,"Best fit #mu","ep")
-        leg.AddEntry(TObject(), signal_label+" (#mu=1)", "")
+        leg.AddEntry(TObject(), signal_label, "")
+
+        # leg.AddEntry(TObject(), "Fit to S+B Asimov dataset", "")
+        # leg.AddEntry(tg_mu,"Best fit #mu","ep")
+        # leg.AddEntry(TObject(), signal_label+" (#mu=1)", "")
 
 gPad.RedrawAxis()
 can.SetTickx()
