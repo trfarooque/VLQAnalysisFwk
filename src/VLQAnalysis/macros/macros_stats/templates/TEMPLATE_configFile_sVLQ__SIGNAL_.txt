@@ -199,13 +199,11 @@ LumiScales: 36207.66,44307.4,58450.1
 %Group: Non-t#bar{t}
 Group: Others
 
-#Sample: QCD
-#Title: QCD
-#Type: background
-#FillColor: 410
-#LineColor: 1
-#HistoFile: QCD
-#Group: Non-t#bar{t}
-#NormalizedByTheory: FALSE
-#Regions: HTX_c1lep*
-
+Sample: QCD
+Title: QCD
+Type: background
+FillColor: 618
+LineColor: 1
+HistoFiles: QCDFiles/Dijet.mc16a,QCDFiles/Dijet.mc16d,QCDFiles/Dijet.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+%Group: Others
