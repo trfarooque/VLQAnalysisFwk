@@ -498,5 +498,35 @@
     "410659.mc16a": {
         "crossSection": 26.275157500000002, 
         "nWeightedEvents": 87072182.75668424
+    },
+    "364702.mc16a": {
+        "crossSection": 23996922.3,
+        "nWeightedEvents": 5911.889536891849
+    },
+    "364703.mc16a": {
+        "crossSection": 308354.1,
+        "nWeightedEvents": 115.94722365577394
+    },
+    "364704.mc16a": {
+        "crossSection": 3403.11726,
+        "nWeightedEvents": 3.5555153574575327
+    },
+    "364705.mc16a": {
+        "crossSection": 66.13542540000002,
+        "nWeightedEvents": 0.13352421476491289
+    },
+    "364706.mc16a": {
+        "crossSection": 2.439779436,
+        "nWeightedEvents": 0.021822444617527366
+    },
+    "364707.mc16a": {
+        "crossSection": 0.17993785499999998,
+        "nWeightedEvents": 0.0030593283993499247
+    },
+    "364708.mc16a": {
+        "crossSection": 0.00634810936,
+        "nWeightedEvents": 0.0008843122677849816
     }
+
+
 }

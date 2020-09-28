@@ -178,7 +178,7 @@ else:
             Samples += GetOtherBackgroundSamples( useObjectSyst=useSystematics, campaign=mc_campaign
                                                   , includeSingleTop=True, splitSTChannels=splitSingletop
                                                   , includeWjets=True, includeZjets=True
-                                                  , includeTopEW=True, includeDibosons=True
+                                                  , includeTopEW=True, includeDibosons=True, includeDijet=True
                                                   , includeSingletopSystSamples=False )
             
     ObjectSystematics = []
