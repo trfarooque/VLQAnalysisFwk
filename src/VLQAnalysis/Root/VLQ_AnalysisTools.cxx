@@ -1,4 +1,4 @@
-#include <TRandom3.h>
+
 #include "VLQAnalysis/VLQ_AnalysisTools.h"
 
 #include "IFAETopFramework/OutputHistManager.h"
@@ -12,6 +12,7 @@
 #include "VLQAnalysis/VLQ_TRFManager.h"
 #include "VLQAnalysis/VLQ_VariableComputer.h"
 #include "VLQAnalysis/VLQ_ResonanceMaker.h"
+#include "VLQAnalysis/VLQ_SmearingTool.h"
 
 #include "VLQAnalysis/VLQ_WeightManager.h"
 #include "VLQAnalysis/VLQ_Enums.h"
@@ -36,6 +37,7 @@ m_weightMngr(weightManager),
 m_trfMngr(trfMngr),
 m_varComputer(varCptr),
 m_resonance_maker(nullptr),
+m_smearing_tool(nullptr),
 m_lepWRecoOpt(0),
 m_leptopRecoOpt(0)
 {
@@ -57,6 +59,9 @@ m_leptopRecoOpt(0)
   if(m_opt->LeptopOpt().find("PREF_BTAG") != std::string::npos)
     m_leptopRecoOpt |= VLQ_ResonanceMaker::PREF_BTAG;
 
+
+  m_smearing_tool = new VLQ_SmearingTool();
+  m_smearing_tool -> Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/JMR.root"), "IQR_PFlow", 0.2);
 }
 
 //_________________________________________________________________________
@@ -69,12 +74,14 @@ VLQ_AnalysisTools::VLQ_AnalysisTools( const VLQ_AnalysisTools &q )
   m_outData           = q.m_outData;
   m_trfMngr           = q.m_trfMngr;
   m_resonance_maker   = q.m_resonance_maker;
+  m_smearing_tool     = q.m_smearing_tool;
 }
 
 //_________________________________________________________________________
 //
 VLQ_AnalysisTools::~VLQ_AnalysisTools(){
   delete m_resonance_maker;
+  delete m_smearing_tool;
 }
 
 //_________________________________________________________________________
@@ -480,9 +487,6 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
   // Reclustered jets
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  gRandom = new TRandom3();
-  gRandom->SetSeed( (m_outData -> o_jets_n) + m_ntupData -> d_rcjets_pt -> size() + (m_outData -> o_fwdjets_n) );
-
   for ( unsigned int iRCJet = 0; iRCJet < m_ntupData -> d_rcjets_pt -> size(); ++iRCJet ) {
 
     if(m_opt -> MsgLevel() == Debug::DEBUG){
@@ -526,7 +530,7 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
             else if( m_opt->DoJMSSys() == -1) m_jmsr *= (1 - SC_JMS);
 	    else if( m_opt->DoJMRSys() ){
 	      //Gaussian smear
-	      m_jmsr *= gRandom->Gaus(1.,SIG_JMR);
+	      m_jmsr *= m_smearing_tool->GetSmearFactor1D(sj->Pt());
 	    }
 
             sj_jmsr.SetPtEtaPhiM(sj->Pt(),sj->Eta(),sj->Phi(),m_jmsr);

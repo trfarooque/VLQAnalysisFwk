@@ -140,7 +140,7 @@ def GetTtbarSamples( useWeightSyst=False, useObjectSyst=False, hfSplitted=True, 
 def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campaign = ""
                                 , includeSingleTop=True 
                                 , includeWjets=True, includeZjets=True
-                                , includeTopEW=True, includeDibosons=True
+                                , includeTopEW=True, includeDibosons=True, includeDijet=False
                                 , includeSingletopSystSamples=False 
                                 , splitSTChannels=False
                                 , includeTchan=True, includeWtprod=True, includeSchan=True
@@ -160,6 +160,8 @@ def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campai
         Samples += GetTtHSamples( useWeightSyst, useObjectSyst, campaign )
     if includeDibosons:
         Samples += GetDibosonSamples( useWeightSyst, useObjectSyst, campaign )
+    if includeDijet:
+        Samples += GetDijetSamples( useWeightSyst, useObjectSyst, campaign )
     # Samples += Get4TopsSamples( useWeightSyst, useObjectSyst, campaign )
 
     return Samples
@@ -442,6 +444,33 @@ def Get4TopsSamples( useWeightSyst=False, useObjectSyst=False, campaign="", name
 
     Samples     =  []
     Samples     += [getSampleUncertainties(name,"410080."+campaign, ObjectSystematics , WeightSystematics)]
+    return Samples
+
+##______________________________________________________________________
+##
+def GetDijetSamples( useWeightSyst=False, useObjectSyst=False, campaign="", name = "Dijet"):
+
+    ObjectSystematics = []
+    WeightSystematics = []
+    if useObjectSyst:
+        ObjectSystematics += CommonObjectSystematics
+    else:
+        ObjectSystematics = [getSystematics(name="nominal",nameUp="",oneSided=True)]
+
+    Samples     =  []
+    #Samples     += [getSampleUncertainties(name,"364700."+campaign, ObjectSystematics , WeightSystematics)]
+    #Samples     += [getSampleUncertainties(name,"364701."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties(name,"364702."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties(name,"364703."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties(name,"364704."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties(name,"364705."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties(name,"364706."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties(name,"364707."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties(name,"364708."+campaign, ObjectSystematics , WeightSystematics)]
+    #Samples     += [getSampleUncertainties(name,"364709."+campaign, ObjectSystematics , WeightSystematics)]
+    #Samples     += [getSampleUncertainties(name,"364710."+campaign, ObjectSystematics , WeightSystematics)]
+    #Samples     += [getSampleUncertainties(name,"364711."+campaign, ObjectSystematics , WeightSystematics)]
+    #Samples     += [getSampleUncertainties(name,"364712."+campaign, ObjectSystematics , WeightSystematics)]
     return Samples
 
 ##______________________________________________________________________
