@@ -246,7 +246,7 @@ bool VLQ_Selector::Init(){
 
     AddVLQSelection("c-all",do_runop, false, PRESEL);
 
-    std::vector<std::string> v_bjet_presel = {"1bin","2bin","2bex","3bin"};
+    std::vector<std::string> v_bjet_presel = {"1bex","1bin","2bin","2bex","3bin","3bex","4bin"};
     if(m_opt->DoLowBRegions()){
       v_bjet_presel.push_back("0bin");
       v_bjet_presel.push_back("0bex");
@@ -256,7 +256,7 @@ bool VLQ_Selector::Init(){
     std::vector<std::string> v_jet_presel = {};
 
     if(m_opt->DoSingleVLQRegions()){
-      v_jet_presel = {"3jin","4jin","5jin","6jin"};
+      v_jet_presel = {"3_5jwin","3jin","4jin","5jin","6jin"};
 
       if(m_opt->DeriveReweighting() ||  m_opt->DoExclusiveJetRegions()){
 	std::vector<std::string> v_jet_presel_ex = {"3jex","4jex","5jex","6jex","7jex","8jex","9jex","10jex","11jex"};
@@ -319,11 +319,11 @@ bool VLQ_Selector::Init(){
       }//jet
 
       if(m_opt->DoSingleVLQRegions() && m_opt->DoExtendedPreselection()){
-	std::vector<std::string> v_supr_svlq = {"0fjex", "1fjin", "1fjin-0Hex-0Vex"};
+	std::vector<std::string> v_supr_svlq = {"0fjex", "1fjin"}; //, "1fjin-0Hex-0Vex"};
 	for(const std::string& supr : v_supr_svlq){
 	  for(const std::string& lepsuf : lep_ch_pair.second){
 	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-"+supr+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
-	    AddVLQSelection(lep_prefix+"6jin-2bin-"+supr+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
+	    AddVLQSelection(lep_prefix+"6jin-1bin-"+supr+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
 	  }//lepflav channels
 	}//signal suppressing
       }//Extended preselection
@@ -417,10 +417,91 @@ bool VLQ_Selector::Init(){
 
 	  // Loose regions for syst extrapolation
 	  if(m_opt->DoLooseSystRegions()){
-	    AddVLQSelection(lep_prefix+"3_5jwin-1_2bwin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-	    AddVLQSelection(lep_prefix+"3_5jwin-3bin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-	    AddVLQSelection(lep_prefix+"6jin-1_2bwin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-	    AddVLQSelection(lep_prefix+"6jin-3bin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
+	    // Signal regions
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-1fjin-0LTex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR1-a
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-1fjin-0Tex-1Lin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ); //SR1-b ORIG
+
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-1fjin-0LTex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);    //SR2-a
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-1fjin-0Tex-1Lin-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);    //SR2-b ORIG
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-1fjin-1Tin-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
+	    AddVLQSelection(lep_prefix+"6jin-1bin-1fjin-1Lex-0Tex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-a
+	    AddVLQSelection(lep_prefix+"6jin-1bin-1fjin-0Lex-1Tex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-b
+	    AddVLQSelection(lep_prefix+"6jin-1bin-1fjin-2LTin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-c
+
+	    AddVLQSelection(lep_prefix+"6jin-1bin-1fjin-1Lex-0VTex-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-a
+	    AddVLQSelection(lep_prefix+"6jin-1bin-1fjin-0Lex-1VTex-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-b
+	    AddVLQSelection(lep_prefix+"6jin-1bin-1fjin-2VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-c
+
+	    // Ttbar+HF control regions
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-0fjex-1Lin-0VTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-1bin-0fjex-1Lin-0VTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
+
+
+	    // CONVENTIONAL VALIDATION REGIONS
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-0fjex-0Tex-0Lex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-0fjex-0Tex-1Lin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-1fjin-1LTin-0Hex-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-1fjin-1Tin-0Lex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-0fjex-0Tex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-1fjin-1VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
+	    AddVLQSelection(lep_prefix+"6jin-1bin-0fjex-1LTex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-1bin-0fjex-2LTin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-1bin-1fjin-0Tex-0Lex-1Hin-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-1bin-1fjin-2LTin-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
+	    AddVLQSelection(lep_prefix+"6jin-1bin-0fjex-1VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-1bin-1fjin-1VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
+	    //========== FWDJet INCLUSIVE ===================
+	    // Signal regions
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-0LTex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR1-a
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-0Tex-1Lin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ); //SR1-b ORIG
+
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-0LTex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);    //SR2-a
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-0Tex-1Lin-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);    //SR2-b ORIG
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-1Tin-0Lex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
+	    AddVLQSelection(lep_prefix+"6jin-1bin-1Lex-0Tex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-a
+	    AddVLQSelection(lep_prefix+"6jin-1bin-0Lex-1Tex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-b
+	    AddVLQSelection(lep_prefix+"6jin-1bin-2LTin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR3-c
+
+	    AddVLQSelection(lep_prefix+"6jin-1bin-1Lex-0VTex-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-a
+	    AddVLQSelection(lep_prefix+"6jin-1bin-0Lex-1VTex-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-b
+	    AddVLQSelection(lep_prefix+"6jin-1bin-2VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);        //SR4-c
+
+	    // Ttbar+HF control regions
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-1Lin-0VTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-1bin-1Lin-0VTex-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
+
+
+	    // CONVENTIONAL VALIDATION REGIONS
+	    //AddVLQSelection(lep_prefix+"3_5jwin-1bin-0Tex-0Lex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    //AddVLQSelection(lep_prefix+"3_5jwin-1bin-0Tex-1Lin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-1LTin-0Hex-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-1Tin-0Lex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-0Tex-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-1VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
+	    AddVLQSelection(lep_prefix+"6jin-1bin-1LTex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    //AddVLQSelection(lep_prefix+"6jin-1bin-2LTin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-1bin-0Tex-0Lex-1Hin-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-1bin-2LTin-1Hin-0Vex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
+	    AddVLQSelection(lep_prefix+"6jin-1bin-1VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    AddVLQSelection(lep_prefix+"6jin-1bin-1VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+
+
+	    //AddVLQSelection(lep_prefix+"3_5jwin-1_2bwin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    //AddVLQSelection(lep_prefix+"3_5jwin-3bin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    //AddVLQSelection(lep_prefix+"6jin-1_2bwin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
+	    //AddVLQSelection(lep_prefix+"6jin-3bin-1VLTHin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	  }
 
 	}//lepflav channels

@@ -16,6 +16,7 @@ class VLQ_TRFManager;
 class VLQ_VariableComputer;
 class VLQ_WeightManager;
 class VLQ_ResonanceMaker;
+class VLQ_SmearingTool;
 
 class VLQ_AnalysisTools {
 
@@ -86,6 +87,8 @@ private:
     VLQ_TRFManager* m_trfMngr;
     VLQ_VariableComputer* m_varComputer;
     VLQ_ResonanceMaker* m_resonance_maker;
+    VLQ_SmearingTool* m_smearing_tool;
+
     int m_lepWRecoOpt;
     int m_leptopRecoOpt;
 };

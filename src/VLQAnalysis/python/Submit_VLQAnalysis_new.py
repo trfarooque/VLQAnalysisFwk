@@ -41,6 +41,7 @@ param_runWjets = True
 param_runZjets = True
 param_runTopEW = True
 param_runDibosons = True
+param_runDijet = True
 param_runTtSyst = False
 param_runSTSyst = False
 param_splitSTChannels = False
@@ -114,6 +115,8 @@ if(len(sys.argv))>1:
             param_runTopEW = (value.upper()=="TRUE")
         elif(argument=="RUNDIBOSONS"):
             param_runDibosons = (value.upper()=="TRUE")
+        elif(argument=="RUNDIJET"):
+            param_runDijet = (value.upper()=="TRUE")
         elif(argument=="RUNTTSYST"):
             param_runTtSyst = (value.upper()=="TRUE")
         elif(argument=="RUNSTSYST"):
@@ -184,6 +187,7 @@ print "param_runWjets = ", param_runWjets
 print "param_runZjets = ", param_runZjets
 print "param_runTopEW = ", param_runTopEW
 print "param_runDibosons = ", param_runDibosons
+print "param_runDijet = ", param_runDijet
 print "param_runTtSyst = ", param_runTtSyst
 print "param_runSTSyst = ", param_runSTSyst
 print "param_splitSTChannels = ", param_splitSTChannels
@@ -255,6 +259,7 @@ if param_runOtherBkgd:
                                             , includeSingleTop = param_runSingleTop
                                             , includeWjets = param_runWjets, includeZjets = param_runZjets
                                             , includeTopEW = param_runTopEW, includeDibosons = param_runDibosons
+                                            , includeDijet = param_runDijet
                                             , includeSingletopSystSamples = param_runSTSyst
                                             , splitSTChannels = param_splitSTChannels
                                             , includeTchan=param_runTchanSingleTop, includeWtprod=param_runWtSingleTop, includeSchan=param_runSchanSingleTop
