@@ -11,7 +11,7 @@ Systematic: "EG_RESOLUTION_ALL"
   HistoFileSufDown: _EG_RESOLUTION_ALL__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "EG_SCALE_ALL"
@@ -22,7 +22,7 @@ Systematic: "EG_SCALE_ALL"
   HistoFileSufDown: _EG_SCALE_ALL__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 % ------------------------------ %
@@ -37,7 +37,7 @@ Systematic: "MUON_ID"
   HistoFileSufDown: _MUON_ID__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "MUON_MS"
@@ -48,7 +48,7 @@ Systematic: "MUON_MS"
   HistoFileSufDown: _MUON_MS__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "MUON_SCALE"
@@ -59,7 +59,7 @@ Systematic: "MUON_SCALE"
   HistoFileSufDown: _MUON_SCALE__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "MUON_SAGITTA_RESBIAS"
@@ -70,7 +70,7 @@ Systematic: "MUON_SAGITTA_RESBIAS"
   HistoFileSufDown: _MUON_SAGITTA_RESBIAS__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "MUON_SAGITTA_RHO"
@@ -81,7 +81,7 @@ Systematic: "MUON_SAGITTA_RHO"
   HistoFileSufDown: _MUON_SAGITTA_RHO__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 % ------------------------------ %
@@ -96,7 +96,7 @@ Systematic: "JET_BJES_Response"
   HistoFileSufDown: _JET_BJES_Response__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EffectiveNP_Detector1"
   Title: "Effective NP Detector1"
@@ -106,7 +106,7 @@ Systematic: "JET_EffectiveNP_Detector1"
   HistoFileSufDown: _JET_EffectiveNP_Detector1__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EffectiveNP_Detector2"
   Title: "Effective NP Detector2"
@@ -116,7 +116,7 @@ Systematic: "JET_EffectiveNP_Detector2"
   HistoFileSufDown: _JET_EffectiveNP_Detector2__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EffectiveNP_Mixed1"
   Title: "Effective NP Mixed1"
@@ -126,7 +126,7 @@ Systematic: "JET_EffectiveNP_Mixed1"
   HistoFileSufDown: _JET_EffectiveNP_Mixed1__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EffectiveNP_Mixed2"
   Title: "Effective NP Mixed2"
@@ -136,7 +136,7 @@ Systematic: "JET_EffectiveNP_Mixed2"
   HistoFileSufDown: _JET_EffectiveNP_Mixed2__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EffectiveNP_Mixed3"
   Title: "Effective NP Mixed3"
@@ -146,7 +146,7 @@ Systematic: "JET_EffectiveNP_Mixed3"
   HistoFileSufDown: _JET_EffectiveNP_Mixed3__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EffectiveNP_Modelling1"
   Title: "Effective NP Modelling1"
@@ -156,7 +156,7 @@ Systematic: "JET_EffectiveNP_Modelling1"
   HistoFileSufDown: _JET_EffectiveNP_Modelling1__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EffectiveNP_Modelling2"
   Title: "Effective NP Modelling2"
@@ -166,7 +166,7 @@ Systematic: "JET_EffectiveNP_Modelling2"
   HistoFileSufDown: _JET_EffectiveNP_Modelling2__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EffectiveNP_Modelling3"
   Title: "Effective NP Modelling3"
@@ -176,7 +176,7 @@ Systematic: "JET_EffectiveNP_Modelling3"
   HistoFileSufDown: _JET_EffectiveNP_Modelling3__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EffectiveNP_Modelling4"
   Title: "Effective NP Modelling4"
@@ -186,7 +186,7 @@ Systematic: "JET_EffectiveNP_Modelling4"
   HistoFileSufDown: _JET_EffectiveNP_Modelling4__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EffectiveNP_Statistical1"
   Title: "Effective NP Statistical1"
@@ -196,7 +196,7 @@ Systematic: "JET_EffectiveNP_Statistical1"
   HistoFileSufDown: _JET_EffectiveNP_Statistical1__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EffectiveNP_Statistical2"
   Title: "Effective NP Statistical2"
@@ -206,7 +206,7 @@ Systematic: "JET_EffectiveNP_Statistical2"
   HistoFileSufDown: _JET_EffectiveNP_Statistical2__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EffectiveNP_Statistical3"
   Title: "Effective NP Statistical3"
@@ -216,7 +216,7 @@ Systematic: "JET_EffectiveNP_Statistical3"
   HistoFileSufDown: _JET_EffectiveNP_Statistical3__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EffectiveNP_Statistical4"
   Title: "Effective NP Statistical4"
@@ -226,7 +226,7 @@ Systematic: "JET_EffectiveNP_Statistical4"
   HistoFileSufDown: _JET_EffectiveNP_Statistical4__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EffectiveNP_Statistical5"
   Title: "Effective NP Statistical5"
@@ -236,7 +236,7 @@ Systematic: "JET_EffectiveNP_Statistical5"
   HistoFileSufDown: _JET_EffectiveNP_Statistical5__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EffectiveNP_Statistical6"
   Title: "Effective NP Statistical6"
@@ -246,7 +246,7 @@ Systematic: "JET_EffectiveNP_Statistical6"
   HistoFileSufDown: _JET_EffectiveNP_Statistical6__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EtaIntercalibration_Modelling"
   Title: "#eta intercalib. (model)"
@@ -256,7 +256,7 @@ Systematic: "JET_EtaIntercalibration_Modelling"
   HistoFileSufDown: _JET_EtaIntercalibration_Modelling__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EtaIntercalibration_NonClosure_2018data"
   Title: "#eta intercalib. (non-closure 2018)"
@@ -266,7 +266,7 @@ Systematic: "JET_EtaIntercalibration_NonClosure_2018data"
   HistoFileSufDown: _JET_EtaIntercalibration_NonClosure_2018data__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EtaIntercalibration_NonClosure_highE"
   Title: "#eta intercalib. (non-closure highE)"
@@ -276,7 +276,7 @@ Systematic: "JET_EtaIntercalibration_NonClosure_highE"
   HistoFileSufDown: _JET_EtaIntercalibration_NonClosure_highE__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EtaIntercalibration_NonClosure_negEta"
   Title: "#eta intercalib. (non-closure neg.eta)"
@@ -286,7 +286,7 @@ Systematic: "JET_EtaIntercalibration_NonClosure_negEta"
   HistoFileSufDown: _JET_EtaIntercalibration_NonClosure_negEta__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EtaIntercalibration_NonClosure_posEta"
   Title: "#eta intercalib. (non-closure pos.eta)"
@@ -296,7 +296,7 @@ Systematic: "JET_EtaIntercalibration_NonClosure_posEta"
   HistoFileSufDown: _JET_EtaIntercalibration_NonClosure_posEta__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_EtaIntercalibration_TotalStat"
   Title: "#eta intercalib. (stat.)"
@@ -306,7 +306,7 @@ Systematic: "JET_EtaIntercalibration_TotalStat"
   HistoFileSufDown: _JET_EtaIntercalibration_TotalStat__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_Flavor_Composition"
   Title: "Flavour composition"
@@ -316,7 +316,7 @@ Systematic: "JET_Flavor_Composition"
   HistoFileSufDown: _JET_Flavor_Composition__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_Flavor_Response"
   Title: "Flavor response"
@@ -326,7 +326,7 @@ Systematic: "JET_Flavor_Response"
   HistoFileSufDown: _JET_Flavor_Response__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_Pileup_OffsetMu"
   Title: "Pile-up offset mu term"
@@ -336,7 +336,7 @@ Systematic: "JET_Pileup_OffsetMu"
   HistoFileSufDown: _JET_Pileup_OffsetMu__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_Pileup_OffsetNPV"
   Title: "Pile-up offset NPV term"
@@ -346,7 +346,7 @@ Systematic: "JET_Pileup_OffsetNPV"
   HistoFileSufDown: _JET_Pileup_OffsetNPV__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_Pileup_PtTerm"
   Title: "Pile-up offset p_{T} term"
@@ -356,7 +356,7 @@ Systematic: "JET_Pileup_PtTerm"
   HistoFileSufDown: _JET_Pileup_PtTerm__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_Pileup_RhoTopology"
   Title: "#rho topology"
@@ -366,7 +366,7 @@ Systematic: "JET_Pileup_RhoTopology"
   HistoFileSufDown: _JET_Pileup_RhoTopology__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_PunchThrough_MC16"
   Title: "Punch-through correction"
@@ -376,7 +376,7 @@ Systematic: "JET_PunchThrough_MC16"
   HistoFileSufDown: _JET_PunchThrough_MC16__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_SingleParticle_HighPt"
   Title: "High-p_{T} term"
@@ -386,7 +386,7 @@ Systematic: "JET_SingleParticle_HighPt"
   HistoFileSufDown: _JET_SingleParticle_HighPt__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 #Systematic: "JET_Rtrk_Baseline_mass"
 #  Title: "JMS baseline"
@@ -396,7 +396,7 @@ Systematic: "JET_SingleParticle_HighPt"
 #  HistoFileSufDown: _JET_Rtrk_Baseline_mass__1down
 #  Symmetrisation: TwoSided
 #  Smoothing: 40
-#%  Exclude: QCD,QCD0L
+#  Exclude: QCD
 #
 #Systematic: "JET_Rtrk_Modelling_mass"
 #  Title: "JMS modelling"
@@ -406,7 +406,7 @@ Systematic: "JET_SingleParticle_HighPt"
 #  HistoFileSufDown: _JET_Rtrk_Modelling_mass__1down
 #  Symmetrisation: TwoSided
 #  Smoothing: 40
-#%  Exclude: QCD,QCD0L
+#  Exclude: QCD
 #
 #Systematic: "JET_Rtrk_TotalStat_mass"
 #  Title: "JMS stat."
@@ -416,7 +416,7 @@ Systematic: "JET_SingleParticle_HighPt"
 #  HistoFileSufDown: _JET_Rtrk_TotalStat_mass__1down
 #  Symmetrisation: TwoSided
 #  Smoothing: 40
-#%  Exclude: QCD,QCD0L
+#  Exclude: QCD
 #
 #Systematic: "JET_Rrk_Tracking_mass"
 #  Title: "JMS tracking"
@@ -426,7 +426,7 @@ Systematic: "JET_SingleParticle_HighPt"
 #  HistoFileSufDown: _JET_Rrk_Tracking_mass__1down
 #  Symmetrisation: TwoSided
 #  Smoothing: 40
-#%  Exclude: QCD,QCD0L
+#  Exclude: QCD
 
 Systematic: "JET_JER_DataVsMC_MC16"
   Title: "JER Data/MC"
@@ -436,7 +436,7 @@ Systematic: "JET_JER_DataVsMC_MC16"
   HistoFileSufDown:  _JET_JER_DataVsMC_MC16__1down
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_JER_EffectiveNP_1"
   Title: "JER NP1"
@@ -445,7 +445,7 @@ Systematic: "JET_JER_EffectiveNP_1"
   HistoFileSufUp: _JET_JER_EffectiveNP_1__1up
   Symmetrisation: OneSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_JER_EffectiveNP_2"
   Title: "JER NP2"
@@ -454,7 +454,7 @@ Systematic: "JET_JER_EffectiveNP_2"
   HistoFileSufUp: _JET_JER_EffectiveNP_2__1up
   Symmetrisation: OneSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_JER_EffectiveNP_3"
   Title: "JER NP3"
@@ -463,7 +463,7 @@ Systematic: "JET_JER_EffectiveNP_3"
   HistoFileSufUp: _JET_JER_EffectiveNP_3__1up
   Symmetrisation: OneSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_JER_EffectiveNP_4"
   Title: "JER NP4"
@@ -472,7 +472,7 @@ Systematic: "JET_JER_EffectiveNP_4"
   HistoFileSufUp: _JET_JER_EffectiveNP_4__1up
   Symmetrisation: OneSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_JER_EffectiveNP_5"
   Title: "JER NP5"
@@ -481,7 +481,7 @@ Systematic: "JET_JER_EffectiveNP_5"
   HistoFileSufUp: _JET_JER_EffectiveNP_5__1up
   Symmetrisation: OneSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_JER_EffectiveNP_6"
   Title: "JER NP6"
@@ -490,7 +490,7 @@ Systematic: "JET_JER_EffectiveNP_6"
   HistoFileSufUp: _JET_JER_EffectiveNP_6__1up
   Symmetrisation: OneSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "JET_JER_EffectiveNP_7restTerm"
   Title: "JER NP7"
@@ -499,17 +499,31 @@ Systematic: "JET_JER_EffectiveNP_7restTerm"
   HistoFileSufUp: _JET_JER_EffectiveNP_7restTerm__1up
   Symmetrisation: OneSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
+% -------------------------------- %
+% ---  JMS/R OBJECT SYSTEMATICS  --- %
+% -------------------------------- %
 
-#Systematic: "HTX_JET_JMR__1up"
-#  Title: "JMR"
-#  Type: HISTO
-#  Category: "Jet uncertainties"
-#  HistoFileSufUp: _JET_JMR__1up
-#  Symmetrisation: OneSided
-#  Smoothing: 40
-#%  Exclude: QCD,QCD0L
+Systematic: "JET_JMS"
+  Title: "JMS"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoPathUp: "__HISTOPATH__/JMSRSYST/JMSUP/"
+  HistoPathDown: "__HISTOPATH__/JMSRSYST/JMSDOWN/"
+  HistoPathUpRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
+  HistoPathDownRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
+  Symmetrisation: TwoSided
+  Exclude: QCD
+
+Systematic: "JET_JMR"
+  Title: "JMR"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoPathUp: "__HISTOPATH__/JMSRSYST/JMR/"
+  HistoPathUpRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
+  Symmetrisation: OneSided
+  Exclude: QCD
 
 % ------------------------------ %
 % -----------   MET  ----------- %
@@ -522,7 +536,7 @@ Systematic: "MET_SoftTrk_ResoPara"
   HistoFileSufUp: _MET_SoftTrk_ResoPara
   Symmetrisation: OneSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "MET_SoftTrk_ResoPerp"
   Title: "MET TST reso. perp."
@@ -531,7 +545,7 @@ Systematic: "MET_SoftTrk_ResoPerp"
   HistoFileSufUp: _MET_SoftTrk_ResoPerp
   Symmetrisation: OneSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "MET_SoftTrk_Scale"
   Title: "MET TST scale"
@@ -541,4 +555,4 @@ Systematic: "MET_SoftTrk_Scale"
   HistoFileSufDown: _MET_SoftTrk_ScaleDown
   Symmetrisation: TwoSided
   Smoothing: 40
-%  Exclude: QCD,QCD0L
+  Exclude: QCD

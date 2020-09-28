@@ -9,7 +9,7 @@ Systematic: "EL_EFF_ID_TOTAL_1NPCOR_PLUS_UNCOR"
   HistoNameSufUp: _weight_elec_ID_UP
   HistoNameSufDown: _weight_elec_ID_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR"
@@ -19,7 +19,7 @@ Systematic: "EL_EFF_Iso_TOTAL_1NPCOR_PLUS_UNCOR"
   HistoNameSufUp: _weight_elec_Iso_UP
   HistoNameSufDown: _weight_elec_Iso_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR"
@@ -29,7 +29,7 @@ Systematic: "EL_EFF_Reco_TOTAL_1NPCOR_PLUS_UNCOR"
   HistoNameSufUp: _weight_elec_Reco_UP
   HistoNameSufDown: _weight_elec_Reco_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR"
@@ -39,7 +39,7 @@ Systematic: "EL_EFF_Trigger_TOTAL_1NPCOR_PLUS_UNCOR"
   HistoNameSufUp: _weight_elec_Trigger_UP
   HistoNameSufDown: _weight_elec_Trigger_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "EL_EFF_TriggerEff_TOTAL_1NPCOR_PLUS_UNCOR"
@@ -49,7 +49,7 @@ Systematic: "EL_EFF_TriggerEff_TOTAL_1NPCOR_PLUS_UNCOR"
   HistoNameSufUp: _weight_elec_TriggerEff_UP
   HistoNameSufDown: _weight_elec_TriggerEff_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 % -------------------------- %
@@ -63,7 +63,7 @@ Systematic: "MUON_BADMUON_STAT"
   HistoNameSufUp: _weight_muon_BADMUON_STAT_UP
   HistoNameSufDown: _weight_muon_BADMUON_STAT_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "MUON_BADMUON_SYS"
@@ -73,7 +73,7 @@ Systematic: "MUON_BADMUON_SYS"
   HistoNameSufUp: _weight_muon_BADMUON_SYS_UP
   HistoNameSufDown: _weight_muon_BADMUON_SYS_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "MUON_EFF_STAT_LOWPT"
@@ -83,7 +83,7 @@ Systematic: "MUON_EFF_STAT_LOWPT"
   HistoNameSufUp: _weight_muon_EFF_STAT_LOWPT_UP
   HistoNameSufDown: _weight_muon_EFF_STAT_LOWPT_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "MUON_EFF_STAT"
@@ -93,7 +93,7 @@ Systematic: "MUON_EFF_STAT"
   HistoNameSufUp: _weight_muon_EFF_STAT_UP
   HistoNameSufDown: _weight_muon_EFF_STAT_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "MUON_EFF_SYS_LOWPT"
@@ -103,7 +103,7 @@ Systematic: "MUON_EFF_SYS_LOWPT"
   HistoNameSufUp: _weight_muon_EFF_SYS_LOWPT_UP
   HistoNameSufDown: _weight_muon_EFF_SYS_LOWPT_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "MUON_EFF_SYS"
@@ -113,7 +113,7 @@ Systematic: "MUON_EFF_SYS"
   HistoNameSufUp: _weight_muon_EFF_SYS_UP
   HistoNameSufDown: _weight_muon_EFF_SYS_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "MUON_ISO_STAT"
@@ -123,7 +123,7 @@ Systematic: "MUON_ISO_STAT"
   HistoNameSufUp: _weight_muon_ISO_STAT_UP
   HistoNameSufDown: _weight_muon_ISO_STAT_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "MUON_ISO_SYS"
@@ -133,7 +133,7 @@ Systematic: "MUON_ISO_SYS"
   HistoNameSufUp: _weight_muon_ISO_SYS_UP
   HistoNameSufDown: _weight_muon_ISO_SYS_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "MUON_TTVA_STAT"
@@ -143,7 +143,7 @@ Systematic: "MUON_TTVA_STAT"
   HistoNameSufUp: _weight_muon_TTVA_STAT_UP
   HistoNameSufDown: _weight_muon_TTVA_STAT_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "MUON_TTVA_SYS"
@@ -153,7 +153,7 @@ Systematic: "MUON_TTVA_SYS"
   HistoNameSufUp: _weight_muon_TTVA_SYS_UP
   HistoNameSufDown: _weight_muon_TTVA_SYS_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "MUON_EFF_TrigStatUncertainty"
@@ -163,7 +163,7 @@ Systematic: "MUON_EFF_TrigStatUncertainty"
   HistoNameSufUp: _weight_muon_TrigStatUncertainty_UP
   HistoNameSufDown: _weight_muon_TrigStatUncertainty_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 Systematic: "MUON_EFF_TrigSystUncertainty"
@@ -173,7 +173,7 @@ Systematic: "MUON_EFF_TrigSystUncertainty"
   HistoNameSufUp: _weight_muon_TrigSystUncertainty_UP
   HistoNameSufDown: _weight_muon_TrigSystUncertainty_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
   Regions: HTX_c1lep*
 
 % ---------------------------- %
@@ -188,7 +188,7 @@ Systematic: "PRW_DATASF"
   HistoNameSufDown: _weight_pu_DOWN
   Symmetrisation: "TwoSided"
   Smoothing: 40
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 % ------------------------------ %
 % --------   B-TAGGING  -------- %
@@ -201,7 +201,7 @@ Systematic: "FT_EFF_Eigen_B_0"
   HistoNameSufUp: _weight_btag_B_EV_Up_0
   HistoNameSufDown: _weight_btag_B_EV_Down_0
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_B_1"
   Title: "b-tag (B) EV1"
@@ -210,7 +210,7 @@ Systematic: "FT_EFF_Eigen_B_1"
   HistoNameSufUp: _weight_btag_B_EV_Up_1
   HistoNameSufDown: _weight_btag_B_EV_Down_1
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_B_2"
   Title: "b-tag (B) EV2"
@@ -219,7 +219,7 @@ Systematic: "FT_EFF_Eigen_B_2"
   HistoNameSufUp: _weight_btag_B_EV_Up_2
   HistoNameSufDown: _weight_btag_B_EV_Down_2
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_B_3"
   Title: "b-tag (B) EV3"
@@ -228,7 +228,7 @@ Systematic: "FT_EFF_Eigen_B_3"
   HistoNameSufUp: _weight_btag_B_EV_Up_3
   HistoNameSufDown: _weight_btag_B_EV_Down_3
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_B_4"
   Title: "b-tag (B) EV4"
@@ -237,7 +237,7 @@ Systematic: "FT_EFF_Eigen_B_4"
   HistoNameSufUp: _weight_btag_B_EV_Up_4
   HistoNameSufDown: _weight_btag_B_EV_Down_4
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_B_5"
   Title: "b-tag (B) EV5"
@@ -246,7 +246,7 @@ Systematic: "FT_EFF_Eigen_B_5"
   HistoNameSufUp: _weight_btag_B_EV_Up_5
   HistoNameSufDown: _weight_btag_B_EV_Down_5
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 % ---------------------------------- %
 % --------   C MIS-TAGGING  -------- %
@@ -259,7 +259,7 @@ Systematic: "FT_EFF_Eigen_C_0"
   HistoNameSufUp: _weight_btag_C_EV_Up_0
   HistoNameSufDown: _weight_btag_C_EV_Down_0
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_C_1"
   Title: "b-tag (C) EV1"
@@ -268,7 +268,7 @@ Systematic: "FT_EFF_Eigen_C_1"
   HistoNameSufUp: _weight_btag_C_EV_Up_1
   HistoNameSufDown: _weight_btag_C_EV_Down_1
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_C_2"
   Title: "b-tag (C) EV2"
@@ -277,7 +277,7 @@ Systematic: "FT_EFF_Eigen_C_2"
   HistoNameSufUp: _weight_btag_C_EV_Up_2
   HistoNameSufDown: _weight_btag_C_EV_Down_2
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_C_3"
   Title: "b-tag (C) EV3"
@@ -286,7 +286,7 @@ Systematic: "FT_EFF_Eigen_C_3"
   HistoNameSufUp: _weight_btag_C_EV_Up_3
   HistoNameSufDown: _weight_btag_C_EV_Down_3
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 % ---------------------------------- %
 % --------   L MIS-TAGGING  -------- %
@@ -299,7 +299,7 @@ Systematic: "FT_EFF_Eigen_Light_0"
   HistoNameSufUp: _weight_btag_Light_EV_Up_0
   HistoNameSufDown: _weight_btag_Light_EV_Down_0
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_Light_1"
   Title: "b-tag (L) EV1"
@@ -308,7 +308,7 @@ Systematic: "FT_EFF_Eigen_Light_1"
   HistoNameSufUp: _weight_btag_Light_EV_Up_1
   HistoNameSufDown: _weight_btag_Light_EV_Down_1
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_Light_2"
   Title: "b-tag (L) EV2"
@@ -317,7 +317,7 @@ Systematic: "FT_EFF_Eigen_Light_2"
   HistoNameSufUp: _weight_btag_Light_EV_Up_2
   HistoNameSufDown: _weight_btag_Light_EV_Down_2
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_Light_3"
   Title: "b-tag (L) EV3"
@@ -326,7 +326,7 @@ Systematic: "FT_EFF_Eigen_Light_3"
   HistoNameSufUp: _weight_btag_Light_EV_Up_3
   HistoNameSufDown: _weight_btag_Light_EV_Down_3
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_Light_4"
   Title: "b-tag (L) EV4"
@@ -335,7 +335,7 @@ Systematic: "FT_EFF_Eigen_Light_4"
   HistoNameSufUp: _weight_btag_Light_EV_Up_4
   HistoNameSufDown: _weight_btag_Light_EV_Down_4
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_Light_5"
   Title: "b-tag (L) EV5"
@@ -344,7 +344,7 @@ Systematic: "FT_EFF_Eigen_Light_5"
   HistoNameSufUp: _weight_btag_Light_EV_Up_5
   HistoNameSufDown: _weight_btag_Light_EV_Down_5
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_Light_6"
   Title: "b-tag (L) EV6"
@@ -353,7 +353,7 @@ Systematic: "FT_EFF_Eigen_Light_6"
   HistoNameSufUp: _weight_btag_Light_EV_Up_6
   HistoNameSufDown: _weight_btag_Light_EV_Down_6
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_Light_7"
   Title: "b-tag (L) EV7"
@@ -362,7 +362,7 @@ Systematic: "FT_EFF_Eigen_Light_7"
   HistoNameSufUp: _weight_btag_Light_EV_Up_7
   HistoNameSufDown: _weight_btag_Light_EV_Down_7
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_Light_8"
   Title: "b-tag (L) EV8"
@@ -371,7 +371,7 @@ Systematic: "FT_EFF_Eigen_Light_8"
   HistoNameSufUp: _weight_btag_Light_EV_Up_8
   HistoNameSufDown: _weight_btag_Light_EV_Down_8
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_Light_9"
   Title: "b-tag (L) EV9"
@@ -380,7 +380,7 @@ Systematic: "FT_EFF_Eigen_Light_9"
   HistoNameSufUp: _weight_btag_Light_EV_Up_9
   HistoNameSufDown: _weight_btag_Light_EV_Down_9
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_Light_10"
   Title: "b-tag (L) EV10"
@@ -389,7 +389,7 @@ Systematic: "FT_EFF_Eigen_Light_10"
   HistoNameSufUp: _weight_btag_Light_EV_Up_10
   HistoNameSufDown: _weight_btag_Light_EV_Down_10
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_Light_11"
   Title: "b-tag (L) EV11"
@@ -398,7 +398,7 @@ Systematic: "FT_EFF_Eigen_Light_11"
   HistoNameSufUp: _weight_btag_Light_EV_Up_11
   HistoNameSufDown: _weight_btag_Light_EV_Down_11
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_Light_12"
   Title: "b-tag (L) EV12"
@@ -407,7 +407,7 @@ Systematic: "FT_EFF_Eigen_Light_12"
   HistoNameSufUp: _weight_btag_Light_EV_Up_12
   HistoNameSufDown: _weight_btag_Light_EV_Down_12
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_Light_13"
   Title: "b-tag (L) EV13"
@@ -416,7 +416,7 @@ Systematic: "FT_EFF_Eigen_Light_13"
   HistoNameSufUp: _weight_btag_Light_EV_Up_13
   HistoNameSufDown: _weight_btag_Light_EV_Down_13
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_Light_14"
   Title: "b-tag (L) EV14"
@@ -425,7 +425,7 @@ Systematic: "FT_EFF_Eigen_Light_14"
   HistoNameSufUp: _weight_btag_Light_EV_Up_14
   HistoNameSufDown: _weight_btag_Light_EV_Down_14
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_Light_15"
   Title: "b-tag (L) EV15"
@@ -434,7 +434,7 @@ Systematic: "FT_EFF_Eigen_Light_15"
   HistoNameSufUp: _weight_btag_Light_EV_Up_15
   HistoNameSufDown: _weight_btag_Light_EV_Down_15
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_Eigen_Light_16"
   Title: "b-tag (L) EV16"
@@ -443,7 +443,7 @@ Systematic: "FT_EFF_Eigen_Light_16"
   HistoNameSufUp: _weight_btag_Light_EV_Up_16
   HistoNameSufDown: _weight_btag_Light_EV_Down_16
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_extrapolation"
   Title: "b-tag extrap."
@@ -452,7 +452,7 @@ Systematic: "FT_EFF_extrapolation"
   HistoNameSufUp: _weight_btag_extrapolation_Up
   HistoNameSufDown: _weight_btag_extrapolation_Down
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 Systematic: "FT_EFF_extrapolation_from_charm"
   Title: "b-tag extrap. from charm"
@@ -461,7 +461,7 @@ Systematic: "FT_EFF_extrapolation_from_charm"
   HistoNameSufUp: _weight_btag_extrapolation_from_charm_Up
   HistoNameSufDown: _weight_btag_extrapolation_from_charm_Down
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 % ------------------------ %
 % --------   JVT  -------- %
@@ -474,7 +474,7 @@ Systematic: "JET_JvtEfficiency"
   HistoNameSufUp: _weight_jvt_UP
   HistoNameSufDown: _weight_jvt_DOWN
   Symmetrisation: "TwoSided"
-  Exclude: QCD,QCD0L
+  Exclude: QCD
 
 % ------------------------------ %
 % --------   TTBB unc.  -------- %
