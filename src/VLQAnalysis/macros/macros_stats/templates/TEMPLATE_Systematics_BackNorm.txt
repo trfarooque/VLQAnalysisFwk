@@ -129,3 +129,15 @@ Systematic: HTX_MET_TRIGGER_1L
   OverallDown: -0.02
 %  Exclude: QCD0L,QCD
   Regions: HTX_c1lep*
+
+% ------------------------- %
+% --------   QCD   -------- %
+% ------------------------- %
+
+Systematic: "HTX_BKGNP_QCD_NORM"
+  Title: "QCD norm."
+  Type: OVERALL
+  Category: "QCD uncertainties"
+  OverallUp: 0.5
+  OverallDown: -0.5
+  Samples: QCD
