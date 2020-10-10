@@ -40,6 +40,7 @@ histogramName="cut_flow"
 mccampaign=""
 configName = "configFile_MV2_"+mccampaign+".dat"
 doSysWeights = False
+doVLQSignalSumWeights = False
 badFileList = []
 
 if(len(sys.argv))>1:
@@ -65,6 +66,10 @@ if(len(sys.argv))>1:
                 doSysWeights = True
             elif splitted[1].upper()=="FALSE":
                 doSysWeights = False
+        elif(argument=="DOVLQSIGNALSUMWEIGHTS"):
+            if splitted[1].upper()=="TRUE":
+                doVLQSignalSumWeights = True
+            # doVLQSignalSumWeights is False by default
 
 ##........................................................
 
@@ -181,10 +186,43 @@ for sample in Samples:
                 else:
                     weightDict[weightname] += sumOfWeightsAdjusted
 
+        if doVLQSignalSumWeights:
+            try:
+                h_vlqSumOfWeights = root_f.Get('vlqRW_sumOfWeights').Clone()
+            except ReferenceError:
+                printError("<!> No 'vlqRW_sumOfWeights' histogram found in file "+f+" ... Aborting for this sample.")
+                doVLQSignalSumWeights = False
+                continue
+            if not h_vlqSumOfWeights.Integral() > 0.:
+                printError("<!> Unfilled 'vlqRW_sumOfWeights' histogram in file "+f+" ... Aborting for this sample.")
+                doVLQSignalSumWeights = False
+                continue
+
+            couplings = [0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6]
+            
+            for i in range(40):
+                #
+                weight_name = "sumOfWeights_"
+                if i == 33:
+                    weight_name += "nom_mass_K100"
+                    weightDict[weight_name] = 1.0
+                elif i > 33:
+                    weight_name += "nom_mass_K"+str(int(couplings[i%20]*100))
+                    weightDict[weight_name] = h_vlqSumOfWeights.GetBinContent(i)
+                else:
+                    if i < 20:
+                        weight_name += "low_mass_K"+str(int(couplings[i]*100))
+                    else:
+                        weight_name += "nom_mass_K"+str(int(couplings[i%20]*100))
+                    weightDict[weight_name] = h_vlqSumOfWeights.GetBinContent(i+1)
+
+
     if jsonOutput:
         configDict[dsid] = {'crossSection': crossSection, 'nWeightedEvents': nEventsWeighted}
 
         if doSysWeights_temp:
+            configDict[dsid].update(weightDict)
+        if doVLQSignalSumWeights:
             configDict[dsid].update(weightDict)
 
     else:
