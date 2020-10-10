@@ -102,6 +102,7 @@ m_sampleDat("samples_info_MBJ-2.4.24-1-0.dat"),
 m_lepWOpt("VANILLA"),
 m_leptopOpt("VETO_RCMATCH"),
 m_RCCollection("VR_rho550"),
+m_vlqRWBranch("nom_mass_K100"),
 m_filterType(NOFILTER),
 m_btagCollection(CALOPFLOW)
 {}
@@ -200,6 +201,7 @@ OptionsBase(q)
     m_leptopOpt         = q.m_leptopOpt;
     m_RCCollection      = q.m_RCCollection;
     m_kinRWList         = q.m_kinRWList;
+    m_vlqRWBranch       = q.m_vlqRWBranch;
     m_filterType        = q.m_filterType;
     m_btagCollection    = q.m_btagCollection;
 }
@@ -422,6 +424,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_RCCollection = temp_val;
         } else if( temp_arg.find("--KINRWLIST") != std::string::npos ){
 	    m_kinRWList = temp_val;
+        } else if( temp_arg.find("--VLQRWBRANCH") != std::string::npos ){
+            m_vlqRWBranch = temp_val;
         }
         //
         // Int arguments
@@ -553,6 +557,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_leptopOpt               = " << m_leptopOpt         << std::endl;
     std::cout << " m_RCCollection            = " << m_RCCollection      << std::endl;
     std::cout << " m_kinRWList               = " << m_kinRWList         << std::endl;
+    std::cout << " m_vlqRWBranch             = " << m_vlqRWBranch       << std::endl;
     std::cout << "============================================="        << std::endl;
     std::cout << "" << std::endl;
 }

@@ -195,6 +195,9 @@ bool VLQ_WeightManager::AddVLQNominalWeights(){
 
     bool wmc_isinput = (m_vlq_opt->VLQRWBranch() != "nom_mass_K100") ;
     std::string wmc_branch = wmc_isinput ? ((m_vlq_opt->VLQRWBranch() != "") ? m_vlq_opt->VLQRWBranch() : "weight_mc") : "";
+    if(m_vlq_opt->VLQRWBranch() != "" && m_vlq_opt->VLQRWBranch() != "nom_mass_K100"){
+      wmc_branch.insert(0,"weight_vlqRW_");
+    }
     AddAndInitWeight("weight_mc","",true, wmc_isinput, wmc_branch );
 
     AddAndInitWeight("weight_jvt");
@@ -586,8 +589,14 @@ bool VLQ_WeightManager::SetCrossSectionWeight(){
     return false;
   }
 
-  SetNominalComponent( "weight_norm", m_sampleInfo -> NormFactor(m_vlq_opt->VLQRWBranch()) );
-  if(m_vlq_opt->VLQRWBranch() == "nom_mass_K100"){ SetNominalComponent("weight_mc", 1.); }
+  if(m_vlq_opt->VLQRWBranch() != "nom_mass_K100"){
+    SetNominalComponent( "weight_norm", m_sampleInfo -> NormFactor(m_vlq_opt->VLQRWBranch()) );
+  }
+  else{
+    SetNominalComponent( "weight_norm", m_sampleInfo -> NormFactor() );
+    SetNominalComponent( "weight_mc", 1. );
+  }
+  //if(m_vlq_opt->VLQRWBranch() == "nom_mass_K100"){ SetNominalComponent("weight_mc", 1.); }
 
   return true;
 }
@@ -661,11 +670,12 @@ bool VLQ_WeightManager::SetPMGSystNorm(){
     if(sysweight.first.find("pmg") == std::string::npos) continue;
 
     const string& branchName = (sysweight.second)->BranchName();
-    double nev_sys = m_sampleInfo->NWeightedEvents(branchName);
-    //const std::map<std::string, double>& sysFactorMap = m_sampleInfo->SystWeightFactorMap();                                                               
-    //if( sysFactorMap.find(branchName) == sysFactorMap.end() ) continue;                                                                                    
-    double sys_factor = (nev_sys > 0.) ? nev_nom/nev_sys : 1.;
-    UpdateSystematicComponent(sysweight.first, (sysweight.second)->GetComponentValue()*sys_factor);
+    //double nev_sys = m_sampleInfo->NWeightedEvents(branchName); // commented lines added for implementing reweighting signal samples
+    const std::map<std::string, double>& sysFactorMap = m_sampleInfo->SystWeightFactorMap();                                                               
+    if( sysFactorMap.find(branchName) == sysFactorMap.end() ) continue;                                                                                    
+    //double sys_factor = (nev_sys > 0.) ? nev_nom/nev_sys : 1.;
+    UpdateSystematicComponent(sysweight.first, (sysweight.second)->GetComponentValue()*sysFactorMap.at(branchName));
+    //UpdateSystematicComponent(sysweight.first, (sysweight.second)->GetComponentValue()*sys_factor);
 
   }
 
