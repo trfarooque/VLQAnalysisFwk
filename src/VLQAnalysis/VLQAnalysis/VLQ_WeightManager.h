@@ -15,6 +15,7 @@ class VLQ_NtupleData;
 class VLQ_VariableComputer;
 class VLQ_TtbarSystematicsManager;
 class VLQ_KinReweighter;
+class VLQ_FJVTCalibTool;
 
 //in IFAEReweightingTools
 class ttbbNLO_syst;
@@ -52,10 +53,12 @@ public:
     bool AddVLQSystematicWeights( const bool dump_config = false );
     bool AddKinReweightings();
     bool AddKinRwSyst();
+    bool AddFJvtSFWeights();
 
     bool SetLeptonSFWeights( const bool apply_trigger_weights );
     bool SetCrossSectionWeight();
     bool SetQCDWeight();
+    bool SetFJvtSFWeights();
     bool SetPMGSystWeights();
     bool SetTtccWeights();
     bool SetTtbarGeneratorSystematics( const std::string &region );
@@ -82,6 +85,7 @@ private:
     VLQ_TtbarSystematicsManager *m_ttbar_syst_weight;
     //NNLOReweighter* m_nnlo_rw;
     VLQ_KinReweighter* m_kinRw;
+    VLQ_FJVTCalibTool* m_fJvt_calibTool;
 
     std::vector<std::string>* m_syst_regions;
 

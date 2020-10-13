@@ -516,8 +516,6 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
         int nconsts_jmsr=0;
 
         const double SC_JMS=0.05;
-        const double SIG_JMR=0.20;
-
         obj_jmsr.SetPtEtaPhiM(0.,0.,0.,0.);
 
         //Quick loop over small-R jets to recalculate RC jet 4-mom

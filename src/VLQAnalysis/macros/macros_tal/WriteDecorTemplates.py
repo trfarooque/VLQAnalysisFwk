@@ -346,7 +346,7 @@ def writeVar3c_ttbar(f,regions):
 
 ##_______________________________________________________________
 ##
-def writeISR_MUR_ttbar(f,regions):
+def write_MUR_ttbar(f,regions):
     flavs = [['light','light'],['cc','#geq1c'],['bb','#geq1b']]
 
     for flav in flavs:
@@ -356,34 +356,34 @@ def writeISR_MUR_ttbar(f,regions):
         if type(regions)==dict:
             for regtype in regions.keys():
                 if not regtype == regions.keys()[-1]:
-                    f.write('"HTX_BKGNP_TTBAR%s_ISR_MUR_%s";'%(flav[0].upper(),regtype))
+                    f.write('"HTX_BKGNP_TTBAR%s_MUR_%s";'%(flav[0].upper(),regtype))
                 else:
-                    f.write('"HTX_BKGNP_TTBAR%s_ISR_MUR_%s"\n'%(flav[0].upper(),regtype))
+                    f.write('"HTX_BKGNP_TTBAR%s_MUR_%s"\n'%(flav[0].upper(),regtype))
 
             f.write('Title: ')
             for regtype in regions.keys():
                 if not regtype == regions.keys()[-1]:
-                    f.write('"t#bar{t}+%s isr #mu_{R} %s";'%(flav[1],regtype))
+                    f.write('"t#bar{t}+%s #mu_{R} %s";'%(flav[1],regtype))
                 else:
-                    f.write('"t#bar{t}+%s isr #mu_{R} %s"\n'%(flav[1],regtype))
+                    f.write('"t#bar{t}+%s #mu_{R} %s"\n'%(flav[1],regtype))
 
         # received region list
         else:
             for reg in regions:
                 if not reg == regions[-1]:
-                    f.write('"HTX_BKGNP_TTBAR%s_ISR_MUR_%s";'%(flav[0].upper(),reg))
+                    f.write('"HTX_BKGNP_TTBAR%s_MUR_%s";'%(flav[0].upper(),reg))
                 else:
-                    f.write('"HTX_BKGNP_TTBAR%s_ISR_MUR_%s"\n'%(flav[0].upper(),reg))
+                    f.write('"HTX_BKGNP_TTBAR%s_MUR_%s"\n'%(flav[0].upper(),reg))
 
             f.write('Title: ')
             for reg in regions:
                 if not reg == regions[-1]:
-                    f.write('"t#bar{t}+%s isr #mu_{R} %s";'%(flav[1],getRegionLabel(reg)))
+                    f.write('"t#bar{t}+%s #mu_{R} %s";'%(flav[1],getRegionLabel(reg)))
                 else:
-                    f.write('"t#bar{t}+%s isr #mu_{R} %s"\n'%(flav[1],getRegionLabel(reg)))
+                    f.write('"t#bar{t}+%s #mu_{R} %s"\n'%(flav[1],getRegionLabel(reg)))
 
         f.write('Type: HISTO\n')
-        f.write('Category: "t#bar{t} isr #mu_{R} uncertainties"\n')
+        f.write('Category: "t#bar{t} #mu_{R} uncertainties"\n')
         f.write('HistoNameSufUp: _weight_pmg_muR20__muF10\n')
         f.write('HistoNameSufDown: _weight_pmg_muR05__muF10\n')
         #f.write('HistoPathUp: "__HISTOPATH__/TheorySys/"\n')
@@ -416,7 +416,7 @@ def writeISR_MUR_ttbar(f,regions):
 
 ##_______________________________________________________________
 ##
-def writeISR_MUF_ttbar(f,regions):
+def write_MUF_ttbar(f,regions):
     flavs = [['light','light'],['cc','#geq1c'],['bb','#geq1b']]
 
     for flav in flavs:
@@ -426,34 +426,34 @@ def writeISR_MUF_ttbar(f,regions):
         if type(regions)==dict:
             for regtype in regions.keys():
                 if not regtype == regions.keys()[-1]:
-                    f.write('"HTX_BKGNP_TTBAR%s_ISR_MUF_%s";'%(flav[0].upper(),regtype))
+                    f.write('"HTX_BKGNP_TTBAR%s_MUF_%s";'%(flav[0].upper(),regtype))
                 else:
-                    f.write('"HTX_BKGNP_TTBAR%s_ISR_MUF_%s"\n'%(flav[0].upper(),regtype))
+                    f.write('"HTX_BKGNP_TTBAR%s_MUF_%s"\n'%(flav[0].upper(),regtype))
 
             f.write('Title: ')
             for regtype in regions.keys():
                 if not regtype == regions.keys()[-1]:
-                    f.write('"t#bar{t}+%s isr #mu_{F} %s";'%(flav[1],regtype))
+                    f.write('"t#bar{t}+%s #mu_{F} %s";'%(flav[1],regtype))
                 else:
-                    f.write('"t#bar{t}+%s isr #mu_{F} %s"\n'%(flav[1],regtype))
+                    f.write('"t#bar{t}+%s #mu_{F} %s"\n'%(flav[1],regtype))
 
         # received region list
         else:
             for reg in regions:
                 if not reg == regions[-1]:
-                    f.write('"HTX_BKGNP_TTBAR%s_ISR_MUF_%s";'%(flav[0].upper(),reg))
+                    f.write('"HTX_BKGNP_TTBAR%s_MUF_%s";'%(flav[0].upper(),reg))
                 else:
-                    f.write('"HTX_BKGNP_TTBAR%s_ISR_MUF_%s"\n'%(flav[0].upper(),reg))
+                    f.write('"HTX_BKGNP_TTBAR%s_MUF_%s"\n'%(flav[0].upper(),reg))
 
             f.write('Title: ')
             for reg in regions:
                 if not reg == regions[-1]:
-                    f.write('"t#bar{t}+%s isr #mu_{F} %s";'%(flav[1],getRegionLabel(reg)))
+                    f.write('"t#bar{t}+%s #mu_{F} %s";'%(flav[1],getRegionLabel(reg)))
                 else:
-                    f.write('"t#bar{t}+%s isr #mu_{F} %s"\n'%(flav[1],getRegionLabel(reg)))
+                    f.write('"t#bar{t}+%s #mu_{F} %s"\n'%(flav[1],getRegionLabel(reg)))
                     
         f.write('Type: HISTO\n')
-        f.write('Category: "t#bar{t} isr #mu_{F} uncertainties"\n')
+        f.write('Category: "t#bar{t} #mu_{F} uncertainties"\n')
         f.write('HistoNameSufUp: _weight_pmg_muR10__muF20\n')
         f.write('HistoNameSufDown: _weight_pmg_muR10__muF05\n')
         #f.write('HistoPathUp: "__HISTOPATH__/TheorySys/"\n')
