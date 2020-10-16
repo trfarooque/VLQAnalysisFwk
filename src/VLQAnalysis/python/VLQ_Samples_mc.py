@@ -162,7 +162,7 @@ def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campai
         Samples += GetDibosonSamples( useWeightSyst, useObjectSyst, campaign )
     if includeDijet:
         Samples += GetDijetSamples( useWeightSyst, useObjectSyst, campaign )
-    # Samples += Get4TopsSamples( useWeightSyst, useObjectSyst, campaign )
+    Samples += Get4TopsSamples( useWeightSyst, useObjectSyst, campaign )
 
     return Samples
 
