@@ -404,21 +404,21 @@ def GetTopEWSamples( useWeightSyst=False, useObjectSyst=False, campaign="", name
         ObjectSystematics = [getSystematics(name="nominal",nameUp="",oneSided=True)]
 
     Samples     =  []
-    # Samples     += [getSampleUncertainties(name,"410155."+campaign, ObjectSystematics , WeightSystematics)] #ttW
-    # Samples     += [getSampleUncertainties(name,"410156."+campaign, ObjectSystematics , WeightSystematics)] #ttZnunu
-    # Samples     += [getSampleUncertainties(name,"410157."+campaign, ObjectSystematics , WeightSystematics)] #ttZqq
-    # Samples     += [getSampleUncertainties(name,"410218."+campaign, ObjectSystematics , WeightSystematics)] #ttee
-    # Samples     += [getSampleUncertainties(name,"410219."+campaign, ObjectSystematics , WeightSystematics)] #ttmumu
-    # Samples     += [getSampleUncertainties(name,"410220."+campaign, ObjectSystematics , WeightSystematics)] #tttautau
-    # Samples     += [getSampleUncertainties(name,"410276."+campaign, ObjectSystematics , WeightSystematics)] #ttee_mll_1_5
-    # Samples     += [getSampleUncertainties(name,"410277."+campaign, ObjectSystematics , WeightSystematics)] #ttmumu_mll_1_5
-    # Samples     += [getSampleUncertainties(name,"410278."+campaign, ObjectSystematics , WeightSystematics)] #tttautau_mll_1_5
+    Samples     += [getSampleUncertainties(name,"410155."+campaign, ObjectSystematics , WeightSystematics)] #ttW
+    Samples     += [getSampleUncertainties(name,"410156."+campaign, ObjectSystematics , WeightSystematics)] #ttZnunu
+    Samples     += [getSampleUncertainties(name,"410157."+campaign, ObjectSystematics , WeightSystematics)] #ttZqq
+    Samples     += [getSampleUncertainties(name,"410218."+campaign, ObjectSystematics , WeightSystematics)] #ttee
+    Samples     += [getSampleUncertainties(name,"410219."+campaign, ObjectSystematics , WeightSystematics)] #ttmumu
+    Samples     += [getSampleUncertainties(name,"410220."+campaign, ObjectSystematics , WeightSystematics)] #tttautau
+    Samples     += [getSampleUncertainties(name,"410276."+campaign, ObjectSystematics , WeightSystematics)] #ttee_mll_1_5
+    Samples     += [getSampleUncertainties(name,"410277."+campaign, ObjectSystematics , WeightSystematics)] #ttmumu_mll_1_5
+    Samples     += [getSampleUncertainties(name,"410278."+campaign, ObjectSystematics , WeightSystematics)] #tttautau_mll_1_5
     Samples     += [getSampleUncertainties(name,"410560."+campaign, ObjectSystematics , WeightSystematics)] #tZ
     return Samples
 
 ##______________________________________________________________________
 ##
-def GetTtHSamples( useWeightSyst=False, useObjectSyst=False, campaign="", name = "ttH"):
+def GetHiggsSamples( useWeightSyst=False, useObjectSyst=False, campaign=""):
 
     ObjectSystematics = []
     WeightSystematics = []
@@ -430,7 +430,9 @@ def GetTtHSamples( useWeightSyst=False, useObjectSyst=False, campaign="", name =
     Samples     =  []
     # Samples     += [getSampleUncertainties(name,"345874."+campaign, ObjectSystematics , WeightSystematics)] #ttH125_hdamp352p5_semilep
     # Samples     += [getSampleUncertainties(name,"345875."+campaign, ObjectSystematics , WeightSystematics)] #ttH125_hdamp352p5_dilep
-    Samples     += [getSampleUncertainties(name,"3463445."+campaign, ObjectSystematics , WeightSystematics)] #ttH125_semilep
+    Samples     += [getSampleUncertainties("ttH","3463445."+campaign, ObjectSystematics , WeightSystematics)] #ttH125_semilep
+    Samples     += [getSampleUncertainties("VH","342284."+campaign, ObjectSystematics , WeightSystematics)] #WH
+    Samples     += [getSampleUncertainties("VH","342285."+campaign, ObjectSystematics , WeightSystematics)] #ZH
     return Samples
 
 ##______________________________________________________________________
