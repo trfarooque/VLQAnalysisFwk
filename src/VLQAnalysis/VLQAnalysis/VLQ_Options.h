@@ -96,6 +96,7 @@ public:
   inline bool DoPreselSys() const { return m_doPreselSys; }
   inline bool DoExpSys() const { return m_doExpSys; }
   inline bool DoTheorySys() const { return m_doTheorySys; }
+  inline bool DoPDFSys() const { return m_doPDFSys; }
   inline bool DoJMRSys() const { return m_doJMRSys; }
 
   // strings
@@ -194,6 +195,7 @@ private:
   bool m_doPreselSys;
   bool m_doExpSys;
   bool m_doTheorySys;
+  bool m_doPDFSys;
   bool m_doJMRSys;
 
   int m_doJMSSys;

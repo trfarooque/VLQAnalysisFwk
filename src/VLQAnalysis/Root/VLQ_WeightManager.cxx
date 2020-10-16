@@ -407,6 +407,17 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
 
   }//INSTRUMENTAL UNCERTAINTIES
 
+  if(m_vlq_opt->DoPDFSys()){
+
+    //Using LHAPDF sets
+    int baseIdx = 90900; 
+    for( int i =1; i<=30; i++ ){
+      std::string wname_PDF = Form("weight_pmg_PDFset%i", baseIdx+i);
+      AddAndInitWeight(wname_PDF,"",false, true, wname_PDF, "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+    }
+
+  }
+
   if(m_vlq_opt->DoTheorySys()){
 
     //ttbar and singletop systematics
