@@ -399,7 +399,7 @@ if drawTheory:
     tg_theory.GetHistogram().GetYaxis().SetTitleOffset(1.5)
 
 ###
-#Limits
+# Limits
 ###
 cols = [kBlack,kBlue+1,kRed,kOrange+4] # max compare 4 configurations
 fills = [3002,3004,3005,3007]
@@ -571,8 +571,8 @@ if ratio:
         
         if n==0:            
             tg_ratio[n].GetXaxis().SetLimits(masses[0]['mass'],masses[len(masses)-1]['mass'])
-            tg_ratio[n].SetMinimum(0.8)
-            tg_ratio[n].SetMaximum(3.2)
+            tg_ratio[n].SetMinimum(0.95)
+            tg_ratio[n].SetMaximum(1.2)
             tg_ratio[n].GetXaxis().SetNdivisions(406)
             tg_ratio[n].SetTitle("")
             tg_ratio[n].GetXaxis().SetTitle("m_{T} [GeV]")

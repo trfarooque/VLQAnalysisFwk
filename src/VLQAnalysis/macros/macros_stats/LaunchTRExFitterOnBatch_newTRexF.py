@@ -208,8 +208,8 @@ m_dryRun = False
 m_runPBS = False
 m_batch_queue = "at3"
 m_verbose = False
-m_memory = 12
-m_cpus = 4
+m_memory = 16
+m_cpus = 1
 m_disk = 15
 
 for iArg in range(1,len(sys.argv)):
@@ -271,7 +271,7 @@ for config in configFileList:
         f_config = open(config,'r')
         syst_list = []
         for config_line in f_config:
-            if config_line.find("Systematic: ")>-1:
+            if config_line.find("Systematic: ")>-1 and not "#" in config_line and not "%" in config_line:
                 temp_line = config_line
                 temp_line = temp_line.replace("Systematic: ","").replace("\"","")
                 syst_list += temp_line.split(";")

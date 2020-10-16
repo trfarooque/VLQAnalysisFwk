@@ -1840,7 +1840,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
   //                                                          #
   //###########################################################
   if( m_opt -> ApplyMetMtwCuts() && ( m_outData-> o_channel_type == VLQ_Enums::ELECTRON || m_outData-> o_channel_type == VLQ_Enums::MUON ) ){
-    bool lowMETMTW = ( m_outData -> o_AO_met -> Pt() < 20 ) || ( (m_outData -> o_AO_met -> Pt() + m_varComputer -> GetMTw( *(m_outData->o_el), *(m_outData->o_mu), m_outData -> o_AO_met )) < 60 );
+    bool lowMETMTW = ( m_outData -> o_AO_met -> Pt() < 20 ) || ( (m_outData -> o_AO_met -> Pt() + m_varComputer -> GetMTw( *(m_outData->o_el), *(m_outData->o_mu), m_outData -> o_AO_met )) < 60 ); 
     if( (!m_opt -> InvertMetMtwCuts() && lowMETMTW) || (m_opt -> InvertMetMtwCuts() && !lowMETMTW) ){
       m_outData -> o_rejectEvent |= 1 << VLQ_Enums::METMTW_REJECTED;
     }

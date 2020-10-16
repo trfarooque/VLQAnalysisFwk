@@ -3,9 +3,10 @@
 
 for campaign in "mc16a" "mc16d" "mc16e"
 do
-    for jmsopt in "JMSUP" "JMSDOWN" "JMSRECALC"
+    for jmsopt in "JMR" #"JMSUP" "JMSDOWN" "JMSRECALC"
     do
 	jmsval=0
+	jmrval="FALSE"
 	if [ ${jmsopt} == "JMSUP" ]
 	then
 	    jmsval=1
@@ -15,6 +16,9 @@ do
 	elif [ ${jmsopt} == "JMSRECALC" ]
 	then
 	    jmsval=2
+	elif [ ${jmsopt} == "JMR" ]
+	then
+	    jmrval="TRUE"
 	fi
 
 	python Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 \
@@ -45,7 +49,8 @@ do
 	    --applyTtbarNNLOCorrection=false --applyVJetsSherpa22RW=false --applyTtbbCorrection=false \
 	    --filterType=APPLYFILTER --useSlices=true --scaleTtbarHtSlices=true \
 	    --jetPtCut=25 --fwdJetPtCut=20 --RCJetPtCut=200 --RCNsubjetsCut=0 \
-	    --leptopOpt=VETO_RCMATCH --maxLeptopDR=1.0 --minMeffCut=600 --RCCollection=VR_rho550 --doJMSSys=${jmsval}
+	    --leptopOpt=VETO_RCMATCH --maxLeptopDR=1.0 --minMeffCut=600 --RCCollection=VR_rho550 \
+	    --doJMSSys=${jmsval} --doJMRSys=${jmrval}
     done	
     
 done
