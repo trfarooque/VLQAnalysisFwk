@@ -1,0 +1,12 @@
+NEW
+NAME:c2lep3jin1bexZwinMLL_sf_meffred
+RENAME:c2lep3jin1bexZwinMLL_sf_meffred_fit
+FUNCTION:[0] - [1]/(1.0 + exp([2]*(x - [3])))
+FUNCTION_PD_0:1.0
+FUNCTION_PD_1:-1.0/(1.0 + exp([2]*(x - [3])))
+FUNCTION_PD_2:[1]*(x - [3])*exp([2]*(x - [3]))*pow((1.0 + exp([2]*(x - [3]))) , -2.0)
+XMIN:0
+XMAX:3500
+PARAMETERS:1.0,1.0,0.01,0
+PARAMOPT:FREE,FREE,FREE,FIXED
+END

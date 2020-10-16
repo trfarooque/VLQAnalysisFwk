@@ -1,0 +1,49 @@
+NEW
+NAME:c1lep3jin2bex_meffred_jet_3_
+RENAME:c1lep3jin2bex_meffred_jet_3_fit
+FUNCTION:[0] - [1]/(1.0 + exp([2]*(x - [3])))
+XMIN:550
+XMAX:3500
+PARAMETERS:1.0,1.0,0.01,2250
+PARAMOPT:FREE,FREE,FREE,FIXED
+END
+
+NEW
+NAME:c1lep3jin2bex_meffred_jet_4_
+RENAME:c1lep3jin2bex_meffred_jet_4_fit
+FUNCTION:[0] - [1]/(1.0 + exp([2]*(x - [3])))
+XMIN:500
+XMAX:3500
+PARAMETERS:1.0,1.0,0.01,1700
+PARAMOPT:FREE,FREE,FREE,FIXED
+END
+
+NEW
+NAME:c1lep3jin2bex_meffred_jet_5_
+RENAME:c1lep3jin2bex_meffred_jet_5_fit
+FUNCTION:[0] - [1]/(1.0 + exp([2]*(x - [3])))
+XMIN:450
+XMAX:5000
+PARAMETERS:1.0,1.0,0.01,1700
+PARAMOPT:FREE,FREE,FREE,FIXED
+END
+
+NEW
+NAME:c1lep3jin2bex_meffred_jet_6_
+RENAME:c1lep3jin2bex_meffred_jet_6_fit
+FUNCTION:[0] - [1]/(1.0 + exp([2]*(x - [3])))
+XMIN:400
+XMAX:3500
+PARAMETERS:1.0,1.0,0.01,1700
+PARAMOPT:FREE,FREE,FREE,FIXED
+END
+
+NEW
+NAME:c1lep3jin2bex_meffred_jet_7_
+RENAME:c1lep3jin2bex_meffred_jet_7_fit
+FUNCTION:[0] - [1]/(1.0 + exp([2]*(x - [3])))
+XMIN:0
+XMAX:5000
+PARAMETERS:0.080,1.15,0.001,0
+PARAMOPT:FREE,FREE,FREE,FIXED
+END
