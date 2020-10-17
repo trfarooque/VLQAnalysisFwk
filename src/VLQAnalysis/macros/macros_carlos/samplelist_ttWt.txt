@@ -199,7 +199,7 @@ SYSTTYPE:file
 END
 
 NEW
-NAME:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/NewProd_2020_tag-21.2.87-htztx-3-syst_August_26_2020/Zjets_RW/merged_mc16a/outVLQAnalysis_Wjets_RW_nominal_HIST.root
+NAME:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/NewProd_2020_tag-21.2.87-htztx-3-syst_August_26_2020/Zjets_smooth_RW/merged_mc16a/outVLQAnalysis_Wjets_RW_smooth_nominal_HIST.root
 SCALE:36207.66
 SAMPLE:background
 SYSTEMATICS:nominal
@@ -207,7 +207,7 @@ SYSTTYPE:file
 END
 
 NEW
-NAME:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/NewProd_2020_tag-21.2.87-htztx-3-syst_August_26_2020/Zjets_RW/merged_mc16d/outVLQAnalysis_Wjets_RW_nominal_HIST.root
+NAME:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/NewProd_2020_tag-21.2.87-htztx-3-syst_August_26_2020/Zjets_smooth_RW/merged_mc16d/outVLQAnalysis_Wjets_RW_smooth_nominal_HIST.root
 SCALE:44307.4
 SAMPLE:background
 SYSTEMATICS:nominal
@@ -215,7 +215,7 @@ SYSTTYPE:file
 END
 
 NEW
-NAME:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/NewProd_2020_tag-21.2.87-htztx-3-syst_August_26_2020/Zjets_RW/merged_mc16e/outVLQAnalysis_Wjets_RW_nominal_HIST.root
+NAME:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/NewProd_2020_tag-21.2.87-htztx-3-syst_August_26_2020/Zjets_smooth_RW/merged_mc16e/outVLQAnalysis_Wjets_RW_smooth_nominal_HIST.root
 SCALE:58450.1
 SAMPLE:background
 SYSTEMATICS:nominal
@@ -223,7 +223,7 @@ SYSTTYPE:file
 END
 
 NEW
-NAME:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/NewProd_2020_tag-21.2.87-htztx-3-syst_August_26_2020/Zjets_RW/merged_mc16a/outVLQAnalysis_Zjets_RW_nominal_HIST.root
+NAME:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/NewProd_2020_tag-21.2.87-htztx-3-syst_August_26_2020/Zjets_smooth_RW/merged_mc16a/outVLQAnalysis_Zjets_RW_smooth_nominal_HIST.root
 SCALE:36207.66
 SAMPLE:background
 SYSTEMATICS:nominal
@@ -231,7 +231,7 @@ SYSTTYPE:file
 END
 
 NEW
-NAME:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/NewProd_2020_tag-21.2.87-htztx-3-syst_August_26_2020/Zjets_RW/merged_mc16d/outVLQAnalysis_Zjets_RW_nominal_HIST.root
+NAME:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/NewProd_2020_tag-21.2.87-htztx-3-syst_August_26_2020/Zjets_smooth_RW/merged_mc16d/outVLQAnalysis_Zjets_RW_smooth_nominal_HIST.root
 SCALE:44307.4
 SAMPLE:background
 SYSTEMATICS:nominal
@@ -239,7 +239,7 @@ SYSTTYPE:file
 END
 
 NEW
-NAME:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/NewProd_2020_tag-21.2.87-htztx-3-syst_August_26_2020/Zjets_RW/merged_mc16e/outVLQAnalysis_Zjets_RW_nominal_HIST.root
+NAME:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/NewProd_2020_tag-21.2.87-htztx-3-syst_August_26_2020/Zjets_smooth_RW/merged_mc16e/outVLQAnalysis_Zjets_RW_smooth_nominal_HIST.root
 SCALE:58450.1
 SAMPLE:background
 SYSTEMATICS:nominal

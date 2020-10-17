@@ -246,7 +246,7 @@ bool VLQ_Selector::Init(){
 
     AddVLQSelection("c-all",do_runop, false, PRESEL);
 
-    std::vector<std::string> v_bjet_presel = {"1bex","1bin","2bin","2bex","3bin","3bex","4bin"};
+    std::vector<std::string> v_bjet_presel = {"1bin","2bin","2bex","3bin","3bex","4bin"};
     if(m_opt->DoLowBRegions()){
       v_bjet_presel.push_back("0bin");
       v_bjet_presel.push_back("0bex");
