@@ -160,11 +160,8 @@ Title: "ttH"
 Type: background
 FillColor: 806
 LineColor: 1
-HistoFile: ttH.mc16a
-LumiScale: 139020.02
+HistoFiles: ttH.mc16a,ttH.mc16d,ttH.mc16e
 LumiScales: 36207.66,44307.4,58450.1
-%HistoFiles: ttH.mc16a,ttH.mc16d,ttH.mc16e
-%LumiScales: 36207.66,44307.4,58450.1
 %HistoFile: ttH
 %Group: Non-t#bar{t}
 Group: Others
@@ -208,3 +205,36 @@ LineColor: 1
 HistoFiles: QCDFiles/Dijet.mc16a,QCDFiles/Dijet.mc16d,QCDFiles/Dijet.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 %Group: Others
+
+Sample: "SM4tops"
+Title: "t#bar{t}t#bar{t}"
+Type: background
+FillColor: 806
+LineColor: 1
+HistoFiles: SM4tops.mc16a,SM4tops.mc16d,SM4tops.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+%HistoFile: SM4tops
+%Group: Non-t#bar{t}
+Group: Others
+
+Sample: "tZ"
+Title: "tZ"
+Type: background
+FillColor: 806
+LineColor: 1
+HistoFiles: tZ.mc16a,tZ.mc16d,tZ.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+%HistoFile: tZ
+%Group: Non-t#bar{t}
+Group: Others
+
+Sample: "VH"
+Title: "VH"
+Type: background
+FillColor: 806
+LineColor: 1
+HistoFiles: VH.mc16a,VH.mc16d,VH.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+%HistoFile: VH
+%Group: Non-t#bar{t}
+Group: Others
