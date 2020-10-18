@@ -157,7 +157,7 @@ def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campai
                                         runSingletopSystSamples=includeSingletopSystSamples)
     if includeTopEW:
         Samples += GetTopEWSamples( useWeightSyst, useObjectSyst, campaign )
-        Samples += GetTtHSamples( useWeightSyst, useObjectSyst, campaign )
+        Samples += GetHiggsSamples( useWeightSyst, useObjectSyst, campaign )
     if includeDibosons:
         Samples += GetDibosonSamples( useWeightSyst, useObjectSyst, campaign )
     if includeDijet:
