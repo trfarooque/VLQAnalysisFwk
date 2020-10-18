@@ -458,6 +458,26 @@
     "364708.mc16e": {
         "crossSection": 0.00634810936,
         "nWeightedEvents": 0.0015499928909428941
+    },
+    "342284.mc16e": {
+        "crossSection": 1.1020999999999999, 
+        "nWeightedEvents": 100000.0
+    }, 
+    "342285.mc16e": {
+        "crossSection": 0.60072, 
+        "nWeightedEvents": 100000.0
+    }, 
+    "346344.mc16e": {
+        "crossSection": 0.22998636359999997, 
+        "nWeightedEvents": 4340987.712714672
+    }, 
+    "410080.mc16e": {
+        "crossSection": 0.009200497931878854, 
+        "nWeightedEvents": 200000.0
+    }, 
+    "410560.mc16e": {
+        "crossSection": 0.24041, 
+        "nWeightedEvents": 57.83406007321901
     }
 
 }
