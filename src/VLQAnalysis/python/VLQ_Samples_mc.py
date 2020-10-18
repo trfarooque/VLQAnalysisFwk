@@ -157,7 +157,7 @@ def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campai
                                         runSingletopSystSamples=includeSingletopSystSamples)
     if includeTopEW:
         Samples += GetTopEWSamples( useWeightSyst, useObjectSyst, campaign )
-        Samples += GetTtHSamples( useWeightSyst, useObjectSyst, campaign )
+        Samples += GetHiggsSamples( useWeightSyst, useObjectSyst, campaign )
     if includeDibosons:
         Samples += GetDibosonSamples( useWeightSyst, useObjectSyst, campaign )
     if includeDijet:
@@ -430,7 +430,7 @@ def GetHiggsSamples( useWeightSyst=False, useObjectSyst=False, campaign=""):
     Samples     =  []
     # Samples     += [getSampleUncertainties(name,"345874."+campaign, ObjectSystematics , WeightSystematics)] #ttH125_hdamp352p5_semilep
     # Samples     += [getSampleUncertainties(name,"345875."+campaign, ObjectSystematics , WeightSystematics)] #ttH125_hdamp352p5_dilep
-    Samples     += [getSampleUncertainties("ttH","3463445."+campaign, ObjectSystematics , WeightSystematics)] #ttH125_semilep
+    Samples     += [getSampleUncertainties("ttH","346344."+campaign, ObjectSystematics , WeightSystematics)] #ttH125_semilep
     Samples     += [getSampleUncertainties("VH","342284."+campaign, ObjectSystematics , WeightSystematics)] #WH
     Samples     += [getSampleUncertainties("VH","342285."+campaign, ObjectSystematics , WeightSystematics)] #ZH
     return Samples
