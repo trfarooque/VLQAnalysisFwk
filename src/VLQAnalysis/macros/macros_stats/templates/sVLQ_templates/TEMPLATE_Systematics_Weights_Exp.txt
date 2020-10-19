@@ -424,5 +424,5 @@ Systematic: "JET_FJvtEfficiency"
   HistoNameSufUp: _weight_fJvt_UP
   HistoNameSufDown: _weight_fJvt_DOWN
   Symmetrisation: TwoSided
-  Exclude: QCD
+  Exclude: QCD,ttH,SM4tops,tZ,VH
 

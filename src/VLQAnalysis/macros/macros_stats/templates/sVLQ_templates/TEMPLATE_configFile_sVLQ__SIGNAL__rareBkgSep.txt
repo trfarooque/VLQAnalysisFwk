@@ -103,34 +103,6 @@ LineColor: 1
 HistoFiles: TheorySys/NewVJets/Zjets.mc16a,TheorySys/NewVJets/Zjets.mc16d,TheorySys/NewVJets/Zjets.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 
-Sample: "Singletop_PDFRef"
-Type: GHOST
-FillColor: 0
-LineColor: 1
-HistoFiles: PDFSYSTS/NewFiles/Singletop.mc16a,PDFSYSTS/NewFiles/Singletop.mc16d,PDFSYSTS/NewFiles/Singletop.mc16e
-LumiScales: 36207.66,44307.4,58450.1
-
-Sample: "ttbarlight_PDFRef"
-Type: GHOST
-FillColor: 0
-LineColor: 1
-HistoFiles: PDFSYSTS/NewFiles/ttbarlight.mc16a,PDFSYSTS/NewFiles/ttbarlight.mc16d,PDFSYSTS/NewFiles/ttbarlight.mc16e
-LumiScales: 36207.66,44307.4,58450.1
-
-Sample: "ttbarcc_PDFRef"
-Type: GHOST
-FillColor: 590
-LineColor: 1
-HistoFiles: PDFSYSTS/NewFiles/ttbarcc.mc16a,PDFSYSTS/NewFiles/ttbarcc.mc16d,PDFSYSTS/NewFiles/ttbarcc.mc16e
-LumiScales: 36207.66,44307.4,58450.1
-
-Sample: "ttbarbb_PDFRef"
-Type: GHOST
-FillColor: 594
-LineColor: 1
-HistoFiles: PDFSYSTS/NewFiles//ttbarbb.mc16a,PDFSYSTS/NewFiles/ttbarbb.mc16d,PDFSYSTS/NewFiles/ttbarbb.mc16e
-LumiScales: 36207.66,44307.4,58450.1
-
 
 % --------------------------- %
 % --------  SAMPLES  -------- %
@@ -186,13 +158,13 @@ Group: Others
 Sample: "ttH"
 Title: "ttH"
 Type: background
-FillColor: 806
+FillColor: 829
 LineColor: 1
 HistoFiles: ttH.mc16a,ttH.mc16d,ttH.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 %HistoFile: ttH
 %Group: Non-t#bar{t}
-Group: Others
+%Group: Others
 
 Sample: "Wjets"
 Title: "W+jets"
@@ -237,32 +209,32 @@ LumiScales: 36207.66,44307.4,58450.1
 Sample: "SM4tops"
 Title: "t#bar{t}t#bar{t}"
 Type: background
-FillColor: 806
+FillColor: 433
 LineColor: 1
 HistoFiles: SM4tops.mc16a,SM4tops.mc16d,SM4tops.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 %HistoFile: SM4tops
 %Group: Non-t#bar{t}
-Group: Others
+%Group: Others
 
 Sample: "tZ"
 Title: "tZ"
 Type: background
-FillColor: 806
+FillColor: 392
 LineColor: 1
 HistoFiles: tZ.mc16a,tZ.mc16d,tZ.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 %HistoFile: tZ
 %Group: Non-t#bar{t}
-Group: Others
+%Group: Others
 
 Sample: "VH"
 Title: "VH"
 Type: background
-FillColor: 806
+FillColor: 626
 LineColor: 1
 HistoFiles: VH.mc16a,VH.mc16d,VH.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 %HistoFile: VH
 %Group: Non-t#bar{t}
-Group: Others
+%Group: Others
