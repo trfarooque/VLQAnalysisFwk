@@ -27,6 +27,7 @@ if(len(sys.argv)<3):
     print "    singletopSyst=<TRUE/FALSE> files for singletop systematics *only*"
     print "    splitSingletop=<TRUE/FALSE> split singletop channels"
     print "    mergeSingletop=<TRUE/FALSE> merge split singletop channels at the end"
+    print "    mergeRareBkg=<TRUE/FALSE> merge rare background samples at the end"
     print "    singletopNominalDir=<path to singletop nominal input files (required for DiagSub merging)>"
     print "    useData=<TRUE/FALSE> use the real data"
     print "    useBkgd=<TRUE/FALSE> use background samples"
@@ -52,6 +53,7 @@ ttbarSyst=False
 singletopSyst=False
 splitSingletop=False
 mergeSingletop=False
+mergeRareBkg=False
 singletopNominalDir=""
 useData = True
 useBkgd = True
@@ -102,6 +104,13 @@ for iArg in range(1,len(sys.argv)):
             mergeSingletop = False
         else:
             printWarning("/!\ The argument for mergeSingletop is not recognised ... Please check !")
+    elif(argument=="MERGERAREBKG"):
+        if splitted[1].upper()=="TRUE":
+            mergeRareBkg = True
+        elif splitted[1].upper()=="FALSE":
+            mergeRareBkg = False
+        else:
+            printWarning("/!\ The argument for mergeRareBkg is not recognised ... Please check !")
     elif(argument=="SINGLETOPNOMINALDIR"): 
         singletopNominalDir = splitted[1]
     elif(argument=="OUTPUTDIR"):
@@ -221,6 +230,7 @@ else:
                                                                        ,"", ObjectSystematics , [])]
     elif(signal=="SINGLE"):
         Samples +=  GetSingleVLQSamples( useObjectSyst=useSystematics )
+
 printGoodNews("--> All samples recovered")
 ##........................................................
 
@@ -266,9 +276,7 @@ for sample in Samples:
         if syst.upper().find("NOMINAL")==-1:
             name_temp_rootfile += "_"+syst
         name_temp_rootfile += ".root"
-        ###TEMP TEMP TEMP 
-        #name_temp_rootfile = name_temp_rootfile.replace("topEW", "tZ")
-        
+
         if not name_temp_rootfile in Combination:
             Combination += [name_temp_rootfile]
             com = "hadd " + name_temp_rootfile
@@ -349,4 +357,39 @@ if mergeSingletop:
             com += singletopNominalDir+"/Singletopschan"+mc_campaign+".root "
             com += singletopNominalDir+"/Singletoptchan"+mc_campaign+".root "
             com += folderRootFiles+"/SingletopWtprodDiagSub"+mc_campaign+".root "
+            os.system(com)
+
+##------------------------------------------------------
+## Merge rare backgrounds (tZ, SM4tops, VH)
+##------------------------------------------------------
+if mergeRareBkg:
+    printGoodNews("--> Now merging rare backgrounds")
+    systVar = []
+
+    RBfiles = glob.glob(folderRootFiles+"/tZ*mc16*root")
+    RBfiles.extend(glob.glob(folderRootFiles+"/SM4tops*mc16*root"))
+    RBfiles.extend(glob.glob(folderRootFiles+"/VH*mc16*root"))
+
+    for f in RBfiles:
+        systclean = f.replace(folderRootFiles,"").replace("mc16a_","").replace("mc16d_","").replace("mc16e_","").replace(".root","")
+        systclean = systclean.replace("mc16a","").replace("mc16d","").replace("mc16e","")
+        systclean = systclean.replace("tZ.","").replace("SM4tops.","").replace("VH.","")
+
+        systVar.append(systclean)
+    systVar = list(set(systVar))
+
+    for mc_campaign in campaigns:
+        if mc_campaign:
+            mc_campaign = "."+mc_campaign
+        for syst in systVar:
+            if syst=="":
+                filesuffix = syst+mc_campaign+".root "
+            else:
+                filesuffix = mc_campaign+"_"+syst+".root "
+            printGoodNews("  --> "+mc_campaign+" ; "+syst)
+            com = "hadd "+folderRootFiles+"/rareBkg"+filesuffix
+            com += folderRootFiles+"/tZ"+filesuffix
+            com += folderRootFiles+"/SM4tops"+filesuffix
+            com += folderRootFiles+"/VH"+filesuffix
+
             os.system(com)

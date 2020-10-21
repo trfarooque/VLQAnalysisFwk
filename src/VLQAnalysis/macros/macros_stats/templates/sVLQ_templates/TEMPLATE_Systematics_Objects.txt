@@ -514,7 +514,7 @@ Systematic: "JET_JMS"
   HistoPathUpRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
   HistoPathDownRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
   Symmetrisation: TwoSided
-  Exclude: QCD,ttH,SM4tops,tZ,VH
+  Exclude: QCD,ttH,rareBkg
 
 Systematic: "JET_JMR"
   Title: "JMR"
@@ -523,7 +523,7 @@ Systematic: "JET_JMR"
   HistoPathUp: "__HISTOPATH__/JMSRSYST/JMR/"
   HistoPathUpRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
   Symmetrisation: OneSided
-  Exclude: QCD,ttH,SM4tops,tZ,VH
+  Exclude: QCD,ttH,rareBkg
 
 % ------------------------------ %
 % -----------   MET  ----------- %
