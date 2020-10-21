@@ -266,7 +266,9 @@ for sample in Samples:
         if syst.upper().find("NOMINAL")==-1:
             name_temp_rootfile += "_"+syst
         name_temp_rootfile += ".root"
-
+        ###TEMP TEMP TEMP 
+        #name_temp_rootfile = name_temp_rootfile.replace("topEW", "tZ")
+        
         if not name_temp_rootfile in Combination:
             Combination += [name_temp_rootfile]
             com = "hadd " + name_temp_rootfile

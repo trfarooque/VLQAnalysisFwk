@@ -351,8 +351,8 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
       std::map<std::string, std::vector<std::string> > mu_sys_comp = {
 	{"RECO", {"STAT", "SYS", "STAT_LOWPT", "SYS_LOWPT"}},
 	{"ISO",{"STAT", "SYS"}},
-	{"TTVA", {"STAT", "SYS"}},
-	{"BADMUON", {"STAT", "SYS"}}
+	{"TTVA", {"STAT", "SYS"}}
+	//{"BADMUON", {"STAT", "SYS"}}
       };
       for(std::pair<std::string, std::vector<std::string> > mu_sys_pair : mu_sys_comp){
 	for(const std::string& mu_sys : mu_sys_pair.second){
