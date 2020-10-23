@@ -509,10 +509,10 @@ Systematic: "JET_JMS"
   Title: "JMS"
   Type: HISTO
   Category: "Jet uncertainties"
-  HistoPathUp: "__HISTOPATH__/JMSRSYST/JMSUP/"
-  HistoPathDown: "__HISTOPATH__/JMSRSYST/JMSDOWN/"
-  HistoPathUpRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
-  HistoPathDownRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
+  HistoPathUp: "__HISTOPATH__/JMSRSYST/JMSUP/Extrapolated/"
+  HistoPathDown: "__HISTOPATH__/JMSRSYST/JMSDOWN/Extrapolated/"
+  HistoPathUpRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/Extrapolated/"
+  HistoPathDownRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/Extrapolated/"
   Symmetrisation: TwoSided
   Exclude: QCD,ttH,rareBkg
 
@@ -520,8 +520,8 @@ Systematic: "JET_JMR"
   Title: "JMR"
   Type: HISTO
   Category: "Jet uncertainties"
-  HistoPathUp: "__HISTOPATH__/JMSRSYST/JMR/"
-  HistoPathUpRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
+  HistoPathUp: "__HISTOPATH__/JMSRSYST/JMR/Extrapolated/"
+  HistoPathUpRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/Extrapolated/"
   Symmetrisation: OneSided
   Exclude: QCD,ttH,rareBkg
 
