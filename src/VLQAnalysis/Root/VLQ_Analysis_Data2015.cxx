@@ -177,8 +177,12 @@ bool VLQ_Analysis_Data2015::Begin(){
     if(m_opt->DoKinRwSyst() && m_opt->DoKinRwSmoothing()){
       m_weightMngr -> AddKinRwSyst();
     }
- 
+
   }
+  if(m_opt->DoFJvtSFWeights()){
+    m_weightMngr -> AddFJvtSFWeights();
+  }
+ 
 
   m_weightMngr -> Print( false );
 
@@ -1840,7 +1844,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
   //                                                          #
   //###########################################################
   if( m_opt -> ApplyMetMtwCuts() && ( m_outData-> o_channel_type == VLQ_Enums::ELECTRON || m_outData-> o_channel_type == VLQ_Enums::MUON ) ){
-    bool lowMETMTW = ( m_outData -> o_AO_met -> Pt() < 20 ) || ( (m_outData -> o_AO_met -> Pt() + m_varComputer -> GetMTw( *(m_outData->o_el), *(m_outData->o_mu), m_outData -> o_AO_met )) < 60 );
+    bool lowMETMTW = ( m_outData -> o_AO_met -> Pt() < 20 ) || ( (m_outData -> o_AO_met -> Pt() + m_varComputer -> GetMTw( *(m_outData->o_el), *(m_outData->o_mu), m_outData -> o_AO_met )) < 60 ); 
     if( (!m_opt -> InvertMetMtwCuts() && lowMETMTW) || (m_opt -> InvertMetMtwCuts() && !lowMETMTW) ){
       m_outData -> o_rejectEvent |= 1 << VLQ_Enums::METMTW_REJECTED;
     }
@@ -2171,13 +2175,16 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     const bool use_met_trigger = isElectronChannelHMET || isMuonChannelHMET || isElElChannelHMET || isMuMuChannelHMET || isElMuChannelHMET;
     m_weightMngr -> SetLeptonSFWeights( !use_met_trigger );
 
+    if(m_opt->DoFJvtSFWeights()){
+      m_weightMngr -> SetFJvtSFWeights();
+    }
+
     if( m_opt ->ReweightKinematics() ){
       m_weightMngr -> SetKinReweightings();
 
       if(m_opt->DoKinRwSyst() && m_opt->DoKinRwSmoothing()){
 	m_weightMngr -> SetKinRwSyst();
-      }
-      
+      }      
     }
     if( m_outData -> o_is_ttbar ){
       if(m_opt->RecomputeTtbarNNLOCorrection() && m_truthMngr){

@@ -91,10 +91,13 @@ public:
   inline bool ReweightKinematics() const { return m_reweightKinematics; }
   inline bool DoKinRwSmoothing() const {return m_doKinRwSmoothing; }
   inline bool DoKinRwSyst() const {return m_doKinRwSyst; }
+  inline bool DoFJvtSFWeights() const {return m_doFJvtSFWeights; }
   inline bool MakeQCD0LSystematics() const { return m_makeQCD0LSystematics; }
   inline bool DoPreselSys() const { return m_doPreselSys; }
   inline bool DoExpSys() const { return m_doExpSys; }
   inline bool DoTheorySys() const { return m_doTheorySys; }
+  inline bool DoPDFSys() const { return m_doPDFSys; }
+  inline bool DoJMRSys() const { return m_doJMRSys; }
 
   // strings
   inline std::string DoRecoVLQ() const { return m_doRecoVLQ; }
@@ -128,6 +131,7 @@ public:
   inline double MaxMetCutTwoLep() const {return m_maxMetCutTwoLep; }
   inline double MaxLeptopDR() const { return m_maxLeptopDR; }
   // ints
+  inline int DoJMSSys() const { return m_doJMSSys; }
   inline int MaxTRFB() const { return m_maxb; }
   inline double RCNsubjetsCut() const { return m_RCNsubjetsCut; }
 
@@ -186,12 +190,16 @@ private:
   bool m_reweightKinematics;
   bool m_doKinRwSmoothing;
   bool m_doKinRwSyst;
+  bool m_doFJvtSFWeights;
 
   bool m_makeQCD0LSystematics;
   bool m_doPreselSys;
   bool m_doExpSys;
   bool m_doTheorySys;
+  bool m_doPDFSys;
+  bool m_doJMRSys;
 
+  int m_doJMSSys;
   int m_maxb;
   int m_RCNsubjetsCut;
   double m_RCJetsPtCut;

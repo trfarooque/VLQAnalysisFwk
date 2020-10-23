@@ -74,6 +74,7 @@ regions_dict = {'LJ-1boost':['HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin',
 regions_dict_blind = {'LJ-1boost':['HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin',
                                   'HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin',
                                   'HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex',
+                                  'HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex',
                                   'HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex'],
                       'LJ-2boost':['HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin',
                                   'HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin',
@@ -82,10 +83,12 @@ regions_dict_blind = {'LJ-1boost':['HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin',
                       'HJ-1boost':['HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex'],
                       'HJ-g2boost':['HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin',
                                   'HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin',
+                                  'HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin',
                                   'HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin',
                                   'HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin',
                                   'HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin',
-                                  'HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin'] #'HJ-3boost'
+                                  'HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin',
+                                  'HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin'] #'HJ-3boost'
                 }
 
 
@@ -273,7 +276,7 @@ def writePS_ttbar(f,regions):
 
 ##_______________________________________________________________
 ##
-def writeVar3c_ttbar(f,regions):
+def writeISRVar3c_ttbar(f,regions):
     flavs = [['light','light'],['cc','#geq1c'],['bb','#geq1b']]
 
     for flav in flavs:
@@ -343,7 +346,7 @@ def writeVar3c_ttbar(f,regions):
 
 ##_______________________________________________________________
 ##
-def writeISR_MUR_ttbar(f,regions):
+def writeMUR_ttbar(f,regions):
     flavs = [['light','light'],['cc','#geq1c'],['bb','#geq1b']]
 
     for flav in flavs:
@@ -353,34 +356,34 @@ def writeISR_MUR_ttbar(f,regions):
         if type(regions)==dict:
             for regtype in regions.keys():
                 if not regtype == regions.keys()[-1]:
-                    f.write('"HTX_BKGNP_TTBAR%s_ISR_MUR_%s";'%(flav[0].upper(),regtype))
+                    f.write('"HTX_BKGNP_TTBAR%s_MUR_%s";'%(flav[0].upper(),regtype))
                 else:
-                    f.write('"HTX_BKGNP_TTBAR%s_ISR_MUR_%s"\n'%(flav[0].upper(),regtype))
+                    f.write('"HTX_BKGNP_TTBAR%s_MUR_%s"\n'%(flav[0].upper(),regtype))
 
             f.write('Title: ')
             for regtype in regions.keys():
                 if not regtype == regions.keys()[-1]:
-                    f.write('"t#bar{t}+%s isr #mu_{R} %s";'%(flav[1],regtype))
+                    f.write('"t#bar{t}+%s #mu_{R} %s";'%(flav[1],regtype))
                 else:
-                    f.write('"t#bar{t}+%s isr #mu_{R} %s"\n'%(flav[1],regtype))
+                    f.write('"t#bar{t}+%s #mu_{R} %s"\n'%(flav[1],regtype))
 
         # received region list
         else:
             for reg in regions:
                 if not reg == regions[-1]:
-                    f.write('"HTX_BKGNP_TTBAR%s_ISR_MUR_%s";'%(flav[0].upper(),reg))
+                    f.write('"HTX_BKGNP_TTBAR%s_MUR_%s";'%(flav[0].upper(),reg))
                 else:
-                    f.write('"HTX_BKGNP_TTBAR%s_ISR_MUR_%s"\n'%(flav[0].upper(),reg))
+                    f.write('"HTX_BKGNP_TTBAR%s_MUR_%s"\n'%(flav[0].upper(),reg))
 
             f.write('Title: ')
             for reg in regions:
                 if not reg == regions[-1]:
-                    f.write('"t#bar{t}+%s isr #mu_{R} %s";'%(flav[1],getRegionLabel(reg)))
+                    f.write('"t#bar{t}+%s #mu_{R} %s";'%(flav[1],getRegionLabel(reg)))
                 else:
-                    f.write('"t#bar{t}+%s isr #mu_{R} %s"\n'%(flav[1],getRegionLabel(reg)))
+                    f.write('"t#bar{t}+%s #mu_{R} %s"\n'%(flav[1],getRegionLabel(reg)))
 
         f.write('Type: HISTO\n')
-        f.write('Category: "t#bar{t} isr #mu_{R} uncertainties"\n')
+        f.write('Category: "t#bar{t} #mu_{R} uncertainties"\n')
         f.write('HistoNameSufUp: _weight_pmg_muR20__muF10\n')
         f.write('HistoNameSufDown: _weight_pmg_muR05__muF10\n')
         #f.write('HistoPathUp: "__HISTOPATH__/TheorySys/"\n')
@@ -413,7 +416,7 @@ def writeISR_MUR_ttbar(f,regions):
 
 ##_______________________________________________________________
 ##
-def writeISR_MUF_ttbar(f,regions):
+def writeMUF_ttbar(f,regions):
     flavs = [['light','light'],['cc','#geq1c'],['bb','#geq1b']]
 
     for flav in flavs:
@@ -423,34 +426,34 @@ def writeISR_MUF_ttbar(f,regions):
         if type(regions)==dict:
             for regtype in regions.keys():
                 if not regtype == regions.keys()[-1]:
-                    f.write('"HTX_BKGNP_TTBAR%s_ISR_MUF_%s";'%(flav[0].upper(),regtype))
+                    f.write('"HTX_BKGNP_TTBAR%s_MUF_%s";'%(flav[0].upper(),regtype))
                 else:
-                    f.write('"HTX_BKGNP_TTBAR%s_ISR_MUF_%s"\n'%(flav[0].upper(),regtype))
+                    f.write('"HTX_BKGNP_TTBAR%s_MUF_%s"\n'%(flav[0].upper(),regtype))
 
             f.write('Title: ')
             for regtype in regions.keys():
                 if not regtype == regions.keys()[-1]:
-                    f.write('"t#bar{t}+%s isr #mu_{F} %s";'%(flav[1],regtype))
+                    f.write('"t#bar{t}+%s #mu_{F} %s";'%(flav[1],regtype))
                 else:
-                    f.write('"t#bar{t}+%s isr #mu_{F} %s"\n'%(flav[1],regtype))
+                    f.write('"t#bar{t}+%s #mu_{F} %s"\n'%(flav[1],regtype))
 
         # received region list
         else:
             for reg in regions:
                 if not reg == regions[-1]:
-                    f.write('"HTX_BKGNP_TTBAR%s_ISR_MUF_%s";'%(flav[0].upper(),reg))
+                    f.write('"HTX_BKGNP_TTBAR%s_MUF_%s";'%(flav[0].upper(),reg))
                 else:
-                    f.write('"HTX_BKGNP_TTBAR%s_ISR_MUF_%s"\n'%(flav[0].upper(),reg))
+                    f.write('"HTX_BKGNP_TTBAR%s_MUF_%s"\n'%(flav[0].upper(),reg))
 
             f.write('Title: ')
             for reg in regions:
                 if not reg == regions[-1]:
-                    f.write('"t#bar{t}+%s isr #mu_{F} %s";'%(flav[1],getRegionLabel(reg)))
+                    f.write('"t#bar{t}+%s #mu_{F} %s";'%(flav[1],getRegionLabel(reg)))
                 else:
-                    f.write('"t#bar{t}+%s isr #mu_{F} %s"\n'%(flav[1],getRegionLabel(reg)))
+                    f.write('"t#bar{t}+%s #mu_{F} %s"\n'%(flav[1],getRegionLabel(reg)))
                     
         f.write('Type: HISTO\n')
-        f.write('Category: "t#bar{t} isr #mu_{F} uncertainties"\n')
+        f.write('Category: "t#bar{t} #mu_{F} uncertainties"\n')
         f.write('HistoNameSufUp: _weight_pmg_muR10__muF20\n')
         f.write('HistoNameSufDown: _weight_pmg_muR10__muF05\n')
         #f.write('HistoPathUp: "__HISTOPATH__/TheorySys/"\n')
@@ -526,6 +529,79 @@ def writeFSR_MURF_ttbar(f,regions):
         #f.write('HistoPathUp: "__HISTOPATH__/TheorySys/"\n')
         #f.write('HistoPathDown: "__HISTOPATH__/TheorySys/"\n')
         f.write('Symmetrisation: TwoSided\n')
+        f.write('Samples: ttbar%s\n'%flav[0])
+        f.write('Regions: ')
+
+        # received region dict
+        if type(regions)==dict:
+            for regtype in regions.keys():
+                for reg in regions[regtype]:
+                    if not reg == regions[regtype][-1]:
+                        f.write(reg+',')
+                    else:
+                        f.write(reg)
+                if not regtype == regions.keys()[-1]:
+                    f.write(';')
+                else:
+                    f.write('\n')
+
+        # received region list
+        else:
+            for reg in regions:
+                if not reg == regions[-1]:
+                    f.write(reg+';')
+                else:
+                    f.write(reg+'\n')
+        f.write('\n')
+
+##_______________________________________________________________
+##
+def writePDF_ttbar(f,regions):
+    flavs = [['light','light'],['cc','#geq1c'],['bb','#geq1b']]
+
+    for flav in flavs:
+        f.write('Systematic: ')
+
+        # received region dict
+        if type(regions)==dict:
+            for regtype in regions.keys():
+                if not regtype == regions.keys()[-1]:
+                    f.write('"HTX_BKGNP_TTBAR%s_PDF_%s";'%(flav[0].upper(),regtype))
+                else:
+                    f.write('"HTX_BKGNP_TTBAR%s_PDF_%s"\n'%(flav[0].upper(),regtype))
+
+            f.write('Title: ')
+            for regtype in regions.keys():
+                if not regtype == regions.keys()[-1]:
+                    f.write('"t#bar{t}+%s PDF %s";'%(flav[1],regtype))
+                else:
+                    f.write('"t#bar{t}+%s PDF %s"\n'%(flav[1],regtype))
+
+        # received region list
+        else:
+            for reg in regions:
+                if not reg == regions[-1]:
+                    f.write('"HTX_BKGNP_TTBAR%s_PDF_%s";'%(flav[0].upper(),reg))
+                else:
+                    f.write('"HTX_BKGNP_TTBAR%s_PDF_%s"\n'%(flav[0].upper(),reg))
+
+            f.write('Title: ')
+            for reg in regions:
+                if not reg == regions[-1]:
+                    f.write('"t#bar{t}+%s PDF %s";'%(flav[1],getRegionLabel(reg)))
+                else:
+                    f.write('"t#bar{t}+%s PDF %s"\n'%(flav[1],getRegionLabel(reg)))
+
+        f.write('Type: HISTO\n')
+        f.write('Category: "t#bar{t} PDF uncertainties"\n')
+
+        f.write('HistoNameSufUp: _weight_PDF_up\n')
+        f.write('HistoNameSufDown: _weight_PDF_down\n')
+        f.write('HistoPathUp: "__HISTOPATH__/PDFSYSTS/NewFiles/"\n')
+        f.write('HistoPathDown: "__HISTOPATH__/PDFSYSTS/NewFiles/"\n')
+        f.write('ReferenceSample: ttbar%s_PDFRef\n'%flav[0])
+        f.write('Symmetrisation: TwoSided\n')
+        f.write('Smoothing: 40\n')
         f.write('Samples: ttbar%s\n'%flav[0])
         f.write('Regions: ')
 
@@ -739,7 +815,10 @@ def writeDRDS(f,regions):
                     f.write('"%s DR/DS %s"\n'%(flav[1],getRegionLabel(reg)))
 
         f.write('Type: HISTO\n')
-        f.write('Category: "Single-top DR-DS uncertainties"\n')
+        if flav[0]=='Singletop':
+            f.write('Category: "Single-top DR-DS uncertainties"\n')
+        else:
+            f.write('Category: "t#bar{t} DR-DS uncertainties"\n')
         f.write('Symmetrisation: ONESIDED\n')
         f.write('Smoothing: 40\n')
         f.write('Samples: %s\n'%flav[0])
@@ -837,7 +916,7 @@ def writeDRDS(f,regions):
 #
 ##_______________________________________________________________
 ##
-def writeVar3c_singletop(f,regions):
+def writeISRVar3c_singletop(f,regions):
 
     f.write('Systematic: ')
 
@@ -907,7 +986,7 @@ def writeVar3c_singletop(f,regions):
 
 ##_______________________________________________________________
 ##
-def writeISR_MUR_singletop(f,regions):
+def writeMUR_singletop(f,regions):
 
     f.write('Systematic: ')
 
@@ -977,7 +1056,7 @@ def writeISR_MUR_singletop(f,regions):
 
 ##_______________________________________________________________
 ##
-def writeISR_MUF_singletop(f,regions):
+def writeMUF_singletop(f,regions):
 
     f.write('Systematic: ')
 
@@ -1116,6 +1195,77 @@ def writeFSR_MURF_singletop(f,regions):
     f.write('\n')
 
 ##_______________________________________________________________
+##
+def writePDF_singletop(f,regions):
+
+    f.write('Systematic: ')
+
+    # received region dict
+    if type(regions)==dict:
+        for regtype in regions.keys():
+            if not regtype == regions.keys()[-1]:
+                f.write('"HTX_BKGNP_SINGLETOP_PDF_%s";'%(regtype))
+            else:
+                f.write('"HTX_BKGNP_SINGLETOP_PDF_%s"\n'%(regtype))
+
+        f.write('Title: ')
+        for regtype in regions.keys():
+            if not regtype == regions.keys()[-1]:
+                f.write('"Single-top PDF %s";'%(regtype))
+            else:
+                f.write('"Single-top PDF %s"\n'%(regtype))
+
+    # received region list
+    else:
+        for reg in regions:
+            if not reg == regions[-1]:
+                f.write('"HTX_BKGNP_SINGLETOP_PDF_%s";'%(reg))
+            else:
+                f.write('"HTX_BKGNP_SINGLETOP_PDF_%s"\n'%(reg))
+
+        f.write('Title: ')
+        for reg in regions:
+            if not reg == regions[-1]:
+                f.write('"Single-top PDF %s";'%(getRegionLabel(reg)))
+            else:
+                f.write('"Single-top PDF %s"\n'%(getRegionLabel(reg)))
+
+    f.write('Type: HISTO\n')
+    f.write('Category: "Single-top PDF uncertainties"\n')
+    f.write('HistoNameSufUp: _weight_PDF_up\n')
+    f.write('HistoNameSufDown: _weight_PDF_down\n')
+    f.write('HistoPathUp: "__HISTOPATH__/PDFSYSTS/NewFiles/"\n')
+    f.write('HistoPathDown: "__HISTOPATH__/PDFSYSTS/NewFiles/"\n')
+    f.write('ReferenceSample: Singletop_PDFRef\n')
+    f.write('Symmetrisation: TwoSided\n')
+    f.write('Smoothing: 40\n')
+    f.write('Samples: Singletop\n')
+    f.write('Regions: ')
+
+    # received region dict
+    if type(regions)==dict:
+        for regtype in regions.keys():
+            for reg in regions[regtype]:
+                if not reg == regions[regtype][-1]:
+                    f.write(reg+',')
+                else:
+                    f.write(reg)
+            if not regtype == regions.keys()[-1]:
+                f.write(';')
+            else:
+                f.write('\n')
+
+    # received region list
+    else:
+        for reg in regions:
+            if not reg == regions[-1]:
+                f.write(reg+';')
+            else:
+                f.write(reg+'\n')
+    f.write('\n')
+
+
+##_______________________________________________________________
 ##_______________________________________________________________
 ##
 
@@ -1170,10 +1320,11 @@ def writePMG_ttbar(f,regions):
     f.write('% -------------------------------------------------- %\n')
     f.write('\n')
 
-    writeVar3c_ttbar(f,regions)
-    writeISR_MUR_ttbar(f,regions)
-    writeISR_MUF_ttbar(f,regions)
+    writeISRVar3c_ttbar(f,regions)
+    writeMUR_ttbar(f,regions)
+    writeMUF_ttbar(f,regions)
     writeFSR_MURF_ttbar(f,regions)
+    writePDF_ttbar(f,regions)
 
 ##_______________________________________________________________
 ##
@@ -1183,16 +1334,17 @@ def writePMG_singletop(f,regions):
     f.write('% ------------------------------------------------------ %\n')
     f.write('\n')
 
-    writeVar3c_singletop(f,regions)
-    writeISR_MUR_singletop(f,regions)
-    writeISR_MUF_singletop(f,regions)
+    writeISRVar3c_singletop(f,regions)
+    writeMUR_singletop(f,regions)
+    writeMUF_singletop(f,regions)
     writeFSR_MURF_singletop(f,regions)
+    writePDF_singletop(f,regions)
 
 ##_______________________________________________________________
 # Decorrelate among ALL REGIONS
 ##
 
-decorAllRegions = True
+decorAllRegions = False
 if decorAllRegions:
     with open('TEMPLATE_Systematics_ttstMod_decor_ALLREGIONS.txt','w') as f:
         writeGENPS(f,regions)
@@ -1221,15 +1373,15 @@ if decorNjetsNboosted:
     with open('TEMPLATE_Systematics_ttstMod_decor_NJETSBOOSTED_BLIND.txt','w') as f:
         writeGENPS(f,regions_dict_blind)
 
-    with open('TEMPLATE_Systematics_ttMod_decor_NJETSBOOSTED.txt','w') as f:
-        writeGENPS_ttbarOnly(f,regions_dict)
-    with open('TEMPLATE_Systematics_ttMod_decor_NJETSBOOSTED_BLIND.txt','w') as f:
-        writeGENPS_ttbarOnly(f,regions_dict_blind)
+    # with open('TEMPLATE_Systematics_ttMod_decor_NJETSBOOSTED.txt','w') as f:
+    #     writeGENPS_ttbarOnly(f,regions_dict)
+    # with open('TEMPLATE_Systematics_ttMod_decor_NJETSBOOSTED_BLIND.txt','w') as f:
+    #     writeGENPS_ttbarOnly(f,regions_dict_blind)
 
-    with open('TEMPLATE_Systematics_stMod_decor_NJETSBOOSTED.txt','w') as f:
-        writeGENPS_singletopOnly(f,regions_dict)
-    with open('TEMPLATE_Systematics_stMod_decor_NJETSBOOSTED_BLIND.txt','w') as f:
-        writeGENPS_singletopOnly(f,regions_dict_blind)
+    # with open('TEMPLATE_Systematics_stMod_decor_NJETSBOOSTED.txt','w') as f:
+    #     writeGENPS_singletopOnly(f,regions_dict)
+    # with open('TEMPLATE_Systematics_stMod_decor_NJETSBOOSTED_BLIND.txt','w') as f:
+    #     writeGENPS_singletopOnly(f,regions_dict_blind)
     
     with open('TEMPLATE_Systematics_Weights_pmg_ttbar_decor_NJETSBOOSTED.txt','w') as f:
         writePMG_ttbar(f,regions_dict)

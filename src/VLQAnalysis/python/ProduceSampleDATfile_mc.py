@@ -84,6 +84,7 @@ Samples = []
 #Samples += GetTtbarSamples(hfSplitted=False,ttbarSystSamples=True,useHTSlices=True,campaign=mccampaign)
 #Samples += GetOtherBackgroundSamples (campaign=mccampaign,includeSingletopSystSamples=False)
 Samples += GetSingleVLQSamples( campaign=mccampaign ) #includeSingleVLQ=True, #not sure why this was included in the arguments 
+#Samples += GetDijetSamples( campaign=mccampaign )
 printGoodNews("--> All samples recovered")
 ##........................................................
 

@@ -1,3 +1,4 @@
+
 #include "VLQAnalysis/VLQ_AnalysisTools.h"
 
 #include "IFAETopFramework/OutputHistManager.h"
@@ -11,6 +12,7 @@
 #include "VLQAnalysis/VLQ_TRFManager.h"
 #include "VLQAnalysis/VLQ_VariableComputer.h"
 #include "VLQAnalysis/VLQ_ResonanceMaker.h"
+#include "VLQAnalysis/VLQ_SmearingTool.h"
 
 #include "VLQAnalysis/VLQ_WeightManager.h"
 #include "VLQAnalysis/VLQ_Enums.h"
@@ -35,6 +37,7 @@ m_weightMngr(weightManager),
 m_trfMngr(trfMngr),
 m_varComputer(varCptr),
 m_resonance_maker(nullptr),
+m_smearing_tool(nullptr),
 m_lepWRecoOpt(0),
 m_leptopRecoOpt(0)
 {
@@ -56,6 +59,9 @@ m_leptopRecoOpt(0)
   if(m_opt->LeptopOpt().find("PREF_BTAG") != std::string::npos)
     m_leptopRecoOpt |= VLQ_ResonanceMaker::PREF_BTAG;
 
+
+  m_smearing_tool = new VLQ_SmearingTool();
+  m_smearing_tool -> Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/JMR.root"), "IQR_PFlow", 0.2);
 }
 
 //_________________________________________________________________________
@@ -68,12 +74,14 @@ VLQ_AnalysisTools::VLQ_AnalysisTools( const VLQ_AnalysisTools &q )
   m_outData           = q.m_outData;
   m_trfMngr           = q.m_trfMngr;
   m_resonance_maker   = q.m_resonance_maker;
+  m_smearing_tool     = q.m_smearing_tool;
 }
 
 //_________________________________________________________________________
 //
 VLQ_AnalysisTools::~VLQ_AnalysisTools(){
   delete m_resonance_maker;
+  delete m_smearing_tool;
 }
 
 //_________________________________________________________________________
@@ -478,6 +486,7 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Reclustered jets
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
   for ( unsigned int iRCJet = 0; iRCJet < m_ntupData -> d_rcjets_pt -> size(); ++iRCJet ) {
 
     if(m_opt -> MsgLevel() == Debug::DEBUG){
@@ -491,8 +500,49 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
     if( isSignalRCJet ){
       AnalysisObject *obj = new AnalysisObject();
       obj -> SetPtEtaPhiM( m_ntupData -> d_rcjets_pt -> at(iRCJet), m_ntupData -> d_rcjets_eta -> at(iRCJet),
-      m_ntupData -> d_rcjets_phi -> at(iRCJet), m_ntupData -> d_rcjets_m -> at(iRCJet) );
-      obj -> SetMoment("nconsts",     m_ntupData -> d_rcjets_nconsts -> at(iRCJet));
+			   m_ntupData -> d_rcjets_phi -> at(iRCJet), m_ntupData -> d_rcjets_m -> at(iRCJet) );
+
+      //DoJMSSys == 0  --> No JMS                                                                                                                                 //DoJMSSys == +/-1  --> 5% up/down shift of JMS                                                                                                             //DoJMSSys == 2  --> Recalculate RC jet mass without any shift in JMS
+
+      if( (m_opt->DoJMSSys()!=0) || (m_opt->DoJMRSys())){
+
+        //Effective radius
+        double reff = max(0.4,min(1.5,550./obj->Pt()));
+        obj->SetMoment("reff",reff);
+
+        AnalysisObject obj_jmsr;
+        AnalysisObject sj_jmsr;
+
+        int nconsts_jmsr=0;
+
+        const double SC_JMS=0.05;
+        obj_jmsr.SetPtEtaPhiM(0.,0.,0.,0.);
+
+        //Quick loop over small-R jets to recalculate RC jet 4-mom
+        for(auto sj : *(m_outData->o_jets)){
+
+          if(sj->DeltaR(*obj) < reff){
+            nconsts_jmsr++;
+            double m_jmsr = sj->M();
+            if( m_opt->DoJMSSys() == 1) m_jmsr *= (1 + SC_JMS);
+            else if( m_opt->DoJMSSys() == -1) m_jmsr *= (1 - SC_JMS);
+	    else if( m_opt->DoJMRSys() ){
+	      //Gaussian smear
+	      m_jmsr *= m_smearing_tool->GetSmearFactor1D(sj->Pt());
+	    }
+
+            sj_jmsr.SetPtEtaPhiM(sj->Pt(),sj->Eta(),sj->Phi(),m_jmsr);
+            obj_jmsr += sj_jmsr;
+          }
+
+        }
+        obj->SetPtEtaPhiM(obj->Pt(), obj->Eta(), obj->Phi(), obj_jmsr.M());
+        obj -> SetMoment("nconsts",  nconsts_jmsr );
+
+      }
+      else{
+        obj -> SetMoment("nconsts",     m_ntupData -> d_rcjets_nconsts -> at(iRCJet));
+      }
 
       int nb_match = 0;
       //Find number of b-tagged jets matched to this jet (//do this inside BTagVariables)
