@@ -63,7 +63,7 @@ Systematic: "MUON_BADMUON_STAT"
   HistoNameSufUp: _weight_muon_BADMUON_STAT_UP
   HistoNameSufDown: _weight_muon_BADMUON_STAT_DOWN
   Symmetrisation: TwoSided
-  Exclude: QCD,tZ,VH,SM4tops,ttH
+  Exclude: QCD,ttH,rareBkg
   Regions: HTX_c1lep*
 
 Systematic: "MUON_BADMUON_SYS"
@@ -73,7 +73,7 @@ Systematic: "MUON_BADMUON_SYS"
   HistoNameSufUp: _weight_muon_BADMUON_SYS_UP
   HistoNameSufDown: _weight_muon_BADMUON_SYS_DOWN
   Symmetrisation: TwoSided
-  Exclude: QCD,tZ,VH,SM4tops,ttH
+  Exclude: QCD,ttH,rareBkg
   Regions: HTX_c1lep*
 
 Systematic: "MUON_EFF_RECO_STAT_LOWPT"
@@ -424,5 +424,5 @@ Systematic: "JET_FJvtEfficiency"
   HistoNameSufUp: _weight_fJvt_UP
   HistoNameSufDown: _weight_fJvt_DOWN
   Symmetrisation: TwoSided
-  Exclude: QCD
+  Exclude: QCD,ttH,rareBkg
 

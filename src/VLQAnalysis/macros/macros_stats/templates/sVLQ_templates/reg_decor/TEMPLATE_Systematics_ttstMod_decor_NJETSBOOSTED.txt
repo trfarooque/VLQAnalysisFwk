@@ -98,7 +98,7 @@ Systematic: "HTX_BKGNP_TTBARLIGHT_DRDS_HJ-1boost";"HTX_BKGNP_TTBARLIGHT_DRDS_HJ-
 NuisanceParameter: "HTX_BKGNP_DRDS_HJ-1boost";"HTX_BKGNP_DRDS_HJ-g2boost";"HTX_BKGNP_DRDS_LJ-1boost";"HTX_BKGNP_DRDS_LJ-2boost"
 Title: "t#bar{t}+light DRDS HJ-1boost";"t#bar{t}+light DRDS HJ-g2boost";"t#bar{t}+light DRDS LJ-1boost";"t#bar{t}+light DRDS LJ-2boost"
 Type: HISTO
-Category: "Single-top DR-DS uncertainties"
+Category: "t#bar{t} DR-DS uncertainties"
 Symmetrisation: ONESIDED
 Smoothing: 40
 Samples: ttbarlight
@@ -109,7 +109,7 @@ Systematic: "HTX_BKGNP_TTBARCC_DRDS_HJ-1boost";"HTX_BKGNP_TTBARCC_DRDS_HJ-g2boos
 NuisanceParameter: "HTX_BKGNP_DRDS_HJ-1boost";"HTX_BKGNP_DRDS_HJ-g2boost";"HTX_BKGNP_DRDS_LJ-1boost";"HTX_BKGNP_DRDS_LJ-2boost"
 Title: "t#bar{t}+#geq1c DRDS HJ-1boost";"t#bar{t}+#geq1c DRDS HJ-g2boost";"t#bar{t}+#geq1c DRDS LJ-1boost";"t#bar{t}+#geq1c DRDS LJ-2boost"
 Type: HISTO
-Category: "Single-top DR-DS uncertainties"
+Category: "t#bar{t} DR-DS uncertainties"
 Symmetrisation: ONESIDED
 Smoothing: 40
 Samples: ttbarcc
@@ -120,7 +120,7 @@ Systematic: "HTX_BKGNP_TTBARBB_DRDS_HJ-1boost";"HTX_BKGNP_TTBARBB_DRDS_HJ-g2boos
 NuisanceParameter: "HTX_BKGNP_DRDS_HJ-1boost";"HTX_BKGNP_DRDS_HJ-g2boost";"HTX_BKGNP_DRDS_LJ-1boost";"HTX_BKGNP_DRDS_LJ-2boost"
 Title: "t#bar{t}+#geq1b DRDS HJ-1boost";"t#bar{t}+#geq1b DRDS HJ-g2boost";"t#bar{t}+#geq1b DRDS LJ-1boost";"t#bar{t}+#geq1b DRDS LJ-2boost"
 Type: HISTO
-Category: "Single-top DR-DS uncertainties"
+Category: "t#bar{t} DR-DS uncertainties"
 Symmetrisation: ONESIDED
 Smoothing: 40
 Samples: ttbarbb
