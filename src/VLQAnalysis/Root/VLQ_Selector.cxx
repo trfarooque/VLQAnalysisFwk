@@ -417,7 +417,7 @@ bool VLQ_Selector::Init(){
 
 	  // Loose regions for syst extrapolation
 	  if(m_opt->DoLooseSystRegions()){
-
+	    /*
 	    // Signal regions
 	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-1fjin-0LTex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR1-a
 	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-1fjin-0Tex-1Lin-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ); //SR1-b ORIG
@@ -456,7 +456,7 @@ bool VLQ_Selector::Init(){
 
 	    AddVLQSelection(lep_prefix+"6jin-1bin-0fjex-1VLTin-1Hin"+lepsuf, do_runop, do_syst, SINGLEVLQ);
 	    AddVLQSelection(lep_prefix+"6jin-1bin-1fjin-1VLTin-0Hex"+lepsuf, do_runop, do_syst, SINGLEVLQ);
-
+	    */
 	    //========== FWDJet INCLUSIVE ===================
 	    // Signal regions
 	    AddVLQSelection(lep_prefix+"3_5jwin-1bin-0LTex-0Hex-1Vin"+lepsuf, do_runop, do_syst, SINGLEVLQ);       //SR1-a

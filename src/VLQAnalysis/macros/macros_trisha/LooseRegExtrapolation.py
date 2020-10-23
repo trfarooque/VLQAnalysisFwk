@@ -7,12 +7,15 @@ import importlib
 sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/VLQAnalysis/" )
 
 # default params
-indir  = '/nfs/at3/scratch2/tfarooque/VLQAnalysisRun2/QCDRegions/FilesTRexF/'
+indir  = '/nfs/at3/scratch2/tfarooque/VLQAnalysisRun2/JMSRSYSTFiles/FilesTRexF/JMSRECALC/'
 var = 'meff'
 regDict = "regions_dictionary_sVLQ"
-outdir = 'QCDFiles/'
+outdir = 'Extrapolation/'
 
-samples = ['Dijet'] #SingletopWtprod','Singletopschan','Singletoptchan']
+#samples = ['ttbarlight', 'ttbarcc', 'ttbarbb', 'sVLQ_WTHt16K05', 'sVLQ_WTZt16K05', 'sVLQ_ZTHt16K05', 'sVLQ_ZTZt16K05'] 
+samples = ['Singletop', 'Wjets', 'Zjets', 'topEW', 'Dibosons', 'ttH', 'tZ', 'VH', 'SM4tops']
+
+#SingletopWtprod','Singletopschan','Singletoptchan']
 
 # user input
 if(len(sys.argv))>1:
@@ -106,11 +109,12 @@ def LoadHist(f,hname):
     return h
 
 # loop through files
-for campaign in ['a','d','e']:
+#for campaign in ['','.mc16a','.mc16d','.mc16e']:
+for campaign in ['.mc16a','.mc16d','.mc16e']:
 
     for sample in samples:
 
-        fname_short = sample+'.mc16'+campaign+'.root'
+        fname_short = sample+campaign+'.root'
         fname = indir+fname_short
         fout = outdir+fname_short
 

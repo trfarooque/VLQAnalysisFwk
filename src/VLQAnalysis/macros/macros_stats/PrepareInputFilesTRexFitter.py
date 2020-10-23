@@ -180,7 +180,7 @@ else:
                                                   , includeWjets=True, includeZjets=True
                                                   , includeTopEW=True, includeDibosons=True, includeDijet=True
                                                   , includeSingletopSystSamples=False )
-            
+
     ObjectSystematics = []
     if useSystematics:
         ObjectSystematics += CommonObjectSystematics
@@ -220,7 +220,7 @@ else:
                                                                        "_BR_%.2f_%.2f_%.2f" %(coupling_Wb,coupling_Zt,coupling_Ht)+campaign
                                                                        ,"", ObjectSystematics , [])]
     elif(signal=="SINGLE"):
-        Samples +=  GetSingleVLQSamples( useObjectSyst=useSystematics )
+        Samples +=  GetOldSingleVLQSamples( useObjectSyst=useSystematics )
 printGoodNews("--> All samples recovered")
 ##........................................................
 
