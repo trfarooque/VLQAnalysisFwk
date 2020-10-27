@@ -3,7 +3,7 @@
 
 for campaign in "mc16a" "mc16d" "mc16e"
 do
-    for jmsopt in "JMR" #"JMSUP" "JMSDOWN" "JMSRECALC"
+    for jmsopt in "JMR" "JMSUP" "JMSDOWN" "JMSRECALC"
     do
 	jmsval=0
 	jmrval="FALSE"
@@ -25,11 +25,11 @@ do
 	    producetarball=true \
 	    --inputDir=/nfs/at3/scratch2/farooque/MBJOutputs/tag-21.2.87-htztx-3-syst/nominal/ \
 	    --sampleDat=samples_info.tag-21.2.87-htztx-3-syst.${campaign}.dat \
-	    --outputDirSuffix=FitInputs_${jmsopt}_${campaign}_NOW \
+	    --outputDirSuffix=FitInputs_Extrapolation_SIGNAL_${jmsopt}_${campaign}_NOW \
 	    --reweightKinematics=true --kinRWList=JETSN,MEFFRED --doKinRWSmoothing=TRUE \
 	    --queue=at3 --NFILESPLIT=200 --NMERGE=1 --removeNull=TRUE \
-	    --runData=false --runQCD=false --runSignals=true --runTtbar=true --runOtherBkgd=true \
-	    --runSingleTop=true --runWjets=true --runZjets=true --runTopEW=true --runDibosons=true \
+	    --runData=false --runQCD=false --runSignals=true --runTtbar=false --runOtherBkgd=false \
+	    --runSingleTop=true --runWjets=true --runZjets=true --runTopEW=true --runDibosons=true --runDijet=false \
 	    --runTtSyst=false --runStSyst=false --splitSTChannels=true \
 	    --dumpHistos=true --dumpOverlapTree=false --dumpTree=false --doTruthAnalysis=false --splitVLQDecays=false \
 	    --otherVariables=false --doBlind=false \
@@ -37,7 +37,8 @@ do
 	    --doExpSys=false --doTheorySys=false \
 	    --doOneLeptonAna=true --doTwoLeptonAna=false --doZeroLeptonAna=false \
 	    --doExclusiveJetRegions=false --doLowBRegions=false --doLowJRegions=false --doSplitEMu=false --doSplitMtb=false \
-	    --doFitRegions=true --doValidnRegions=true --doPreselection=true --doPreselSys=true --doExtendedPreselection=false --doLooseSystRegions=true \
+	    --doFitRegions=false --doValidnRegions=false --doPreselection=true --doPreselSys=true \
+	    --doExtendedPreselection=true --doLooseSystRegions=true \
 	    --doSingleVLQRegions=true --doPairVLQRegions=false \
 	    --doOldBoost=false \
 	    --useLeptonTrigger=true --useMETTriggerOneLep=true --useMETTrigger=true \

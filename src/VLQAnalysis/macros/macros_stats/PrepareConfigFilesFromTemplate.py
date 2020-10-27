@@ -224,7 +224,7 @@ if(signalType=="PAIR"):
         Signals += [getSampleUncertainties("VLQ_BB_" + mass + "_ZbZb","VLQ_BB_" + mass + "_ZbZb", CommonObjectSystematics , [])]
 
 elif(signalType=="SINGLE"):
-    Signals += GetSingleVLQSamples( )
+    Signals += GetOldSingleVLQSamples( )
 
     
 #for mass in ["1000","1200","1400","1600","1800"]:

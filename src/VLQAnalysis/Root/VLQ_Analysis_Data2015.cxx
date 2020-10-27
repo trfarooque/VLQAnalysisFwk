@@ -177,8 +177,12 @@ bool VLQ_Analysis_Data2015::Begin(){
     if(m_opt->DoKinRwSyst() && m_opt->DoKinRwSmoothing()){
       m_weightMngr -> AddKinRwSyst();
     }
- 
+
   }
+  if(m_opt->DoFJvtSFWeights()){
+    m_weightMngr -> AddFJvtSFWeights();
+  }
+ 
 
   m_weightMngr -> Print( false );
 
@@ -2171,13 +2175,16 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     const bool use_met_trigger = isElectronChannelHMET || isMuonChannelHMET || isElElChannelHMET || isMuMuChannelHMET || isElMuChannelHMET;
     m_weightMngr -> SetLeptonSFWeights( !use_met_trigger );
 
+    if(m_opt->DoFJvtSFWeights()){
+      m_weightMngr -> SetFJvtSFWeights();
+    }
+
     if( m_opt ->ReweightKinematics() ){
       m_weightMngr -> SetKinReweightings();
 
       if(m_opt->DoKinRwSyst() && m_opt->DoKinRwSmoothing()){
 	m_weightMngr -> SetKinRwSyst();
-      }
-      
+      }      
     }
     if( m_outData -> o_is_ttbar ){
       if(m_opt->RecomputeTtbarNNLOCorrection() && m_truthMngr){
