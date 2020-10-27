@@ -91,10 +91,12 @@ public:
   inline bool ReweightKinematics() const { return m_reweightKinematics; }
   inline bool DoKinRwSmoothing() const {return m_doKinRwSmoothing; }
   inline bool DoKinRwSyst() const {return m_doKinRwSyst; }
+  inline bool DoFJvtSFWeights() const {return m_doFJvtSFWeights; }
   inline bool MakeQCD0LSystematics() const { return m_makeQCD0LSystematics; }
   inline bool DoPreselSys() const { return m_doPreselSys; }
   inline bool DoExpSys() const { return m_doExpSys; }
   inline bool DoTheorySys() const { return m_doTheorySys; }
+  inline bool DoPDFSys() const { return m_doPDFSys; }
   inline bool DoJMRSys() const { return m_doJMRSys; }
 
   // strings
@@ -187,11 +189,13 @@ private:
   bool m_reweightKinematics;
   bool m_doKinRwSmoothing;
   bool m_doKinRwSyst;
+  bool m_doFJvtSFWeights;
 
   bool m_makeQCD0LSystematics;
   bool m_doPreselSys;
   bool m_doExpSys;
   bool m_doTheorySys;
+  bool m_doPDFSys;
   bool m_doJMRSys;
 
   int m_doJMSSys;

@@ -157,12 +157,12 @@ def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campai
                                         runSingletopSystSamples=includeSingletopSystSamples)
     if includeTopEW:
         Samples += GetTopEWSamples( useWeightSyst, useObjectSyst, campaign )
-        Samples += GetTtHSamples( useWeightSyst, useObjectSyst, campaign )
+        Samples += GetHiggsSamples( useWeightSyst, useObjectSyst, campaign )
+        Samples += Get4TopsSamples( useWeightSyst, useObjectSyst, campaign )
     if includeDibosons:
         Samples += GetDibosonSamples( useWeightSyst, useObjectSyst, campaign )
     if includeDijet:
         Samples += GetDijetSamples( useWeightSyst, useObjectSyst, campaign )
-    # Samples += Get4TopsSamples( useWeightSyst, useObjectSyst, campaign )
 
     return Samples
 
@@ -177,7 +177,7 @@ def GetSignalSamples(useWeightSyst=False, useObjectSyst=False, campaign=""
         Samples += Get4topsCISamples( useWeightSyst, useObjectSyst )
         Samples += GetUEDRPPSamples( useWeightSyst, useObjectSyst )
     if includeSingleVLQ:
-        Samples += GetSingleVLQSamples( useWeightSyst, useObjectSyst, campaign )
+        Samples += GetOldSingleVLQSamples( useWeightSyst, useObjectSyst, campaign )
     if includePairVLQ:
         Samples += GetVLQTSamples( useWeightSyst, useObjectSyst )
 
@@ -413,11 +413,12 @@ def GetTopEWSamples( useWeightSyst=False, useObjectSyst=False, campaign="", name
     Samples     += [getSampleUncertainties(name,"410276."+campaign, ObjectSystematics , WeightSystematics)] #ttee_mll_1_5
     Samples     += [getSampleUncertainties(name,"410277."+campaign, ObjectSystematics , WeightSystematics)] #ttmumu_mll_1_5
     Samples     += [getSampleUncertainties(name,"410278."+campaign, ObjectSystematics , WeightSystematics)] #tttautau_mll_1_5
+    Samples     += [getSampleUncertainties(name,"410560."+campaign, ObjectSystematics , WeightSystematics)] #tZ
     return Samples
 
 ##______________________________________________________________________
 ##
-def GetTtHSamples( useWeightSyst=False, useObjectSyst=False, campaign="", name = "ttH"):
+def GetHiggsSamples( useWeightSyst=False, useObjectSyst=False, campaign=""):
 
     ObjectSystematics = []
     WeightSystematics = []
@@ -427,8 +428,11 @@ def GetTtHSamples( useWeightSyst=False, useObjectSyst=False, campaign="", name =
         ObjectSystematics = [getSystematics(name="nominal",nameUp="",oneSided=True)]
 
     Samples     =  []
-    Samples     += [getSampleUncertainties(name,"345874."+campaign, ObjectSystematics , WeightSystematics)] #ttH125_hdamp352p5_semilep
-    Samples     += [getSampleUncertainties(name,"345875."+campaign, ObjectSystematics , WeightSystematics)] #ttH125_hdamp352p5_dilep
+    # Samples     += [getSampleUncertainties(name,"345874."+campaign, ObjectSystematics , WeightSystematics)] #ttH125_hdamp352p5_semilep
+    # Samples     += [getSampleUncertainties(name,"345875."+campaign, ObjectSystematics , WeightSystematics)] #ttH125_hdamp352p5_dilep
+    Samples     += [getSampleUncertainties("ttH","346344."+campaign, ObjectSystematics , WeightSystematics)] #ttH125_semilep
+    Samples     += [getSampleUncertainties("VH","342284."+campaign, ObjectSystematics , WeightSystematics)] #WH
+    Samples     += [getSampleUncertainties("VH","342285."+campaign, ObjectSystematics , WeightSystematics)] #ZH
     return Samples
 
 ##______________________________________________________________________
@@ -530,9 +534,10 @@ def GetVLQTSamples( useWeightSyst=False, useObjectSyst=False, campaign=""):
 
     return Samples
 
+
 ##______________________________________________________________________
 ##
-def GetSingleVLQSamples( useWeightSyst=False, useObjectSyst=False, campaign=""):
+def GetOldSingleVLQSamples( useWeightSyst=False, useObjectSyst=False, campaign=""):
 
     ObjectSystematics = []
     WeightSystematics = []
@@ -544,10 +549,9 @@ def GetSingleVLQSamples( useWeightSyst=False, useObjectSyst=False, campaign=""):
     Samples     =  []
 
     Samples     += [getSampleUncertainties("sVLQ_WTHt11K03","310778."+campaign, ObjectSystematics , WeightSystematics)]
-    Samples     += [getSampleUncertainties("sVLQ_WTHt16K03","311376."+campaign, ObjectSystematics , WeightSystematics)]
+    # Samples     += [getSampleUncertainties("sVLQ_WTHt16K03","311376."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties("sVLQ_WTHt16K05","311377."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties("sVLQ_WTHt20K05","310777."+campaign, ObjectSystematics , WeightSystematics)]
-    #Samples     += [getSampleUncertainties("sVLQ_WTHt20K05R20","307018."+campaign, ObjectSystematics , WeightSystematics)]
 
     Samples     += [getSampleUncertainties("sVLQ_WTZt11K03","310776."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties("sVLQ_WTZt16K05","306997."+campaign, ObjectSystematics , WeightSystematics)]
@@ -561,6 +565,65 @@ def GetSingleVLQSamples( useWeightSyst=False, useObjectSyst=False, campaign=""):
     Samples     += [getSampleUncertainties("sVLQ_ZTZt11K05","307042."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties("sVLQ_ZTZt16K05","307047."+campaign, ObjectSystematics , WeightSystematics)]
 
+    return Samples
+
+##______________________________________________________________________
+##
+def GetSingleVLQSamples( useWeightSyst=False, useObjectSyst=False, campaign=""):
+
+    ObjectSystematics = []
+    WeightSystematics = []
+    if useObjectSyst:
+        ObjectSystematics += CommonObjectSystematics
+    else:
+        ObjectSystematics = [getSystematics(name="nominal",nameUp="",oneSided=True)]
+        
+    Samples     =  []
+
+    Samples     += [getSampleUncertainties("WTZt1100","312349."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("WTZt1300","312350."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("WTZt1500","312351."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("WTZt1700","312352."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("WTZt1900","312353."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("WTZt2100","312354."+campaign, ObjectSystematics , WeightSystematics)]
+
+    Samples     += [getSampleUncertainties("WTHt1100","313330."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("WTHt1300","313331."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("WTHt1500","313332."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("WTHt1700","313333."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("WTHt1900","313334."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("WTHt2100","313335."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("WTHt2300","313336."+campaign, ObjectSystematics , WeightSystematics)]
+
+    Samples     += [getSampleUncertainties("ZTHt1100","313374."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTHt1300","313375."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTHt1500","313376."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTHt1700","313377."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTHt1900","313378."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTHt2100","313379."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTHt2300","313380."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTHt1100","313381."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTHt1300","313382."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTHt1500","313383."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTHt1700","313384."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTHt1900","313385."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTHt2100","313386."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTHt2300","313387."+campaign, ObjectSystematics , WeightSystematics)]
+
+    Samples     += [getSampleUncertainties("ZTZt1100","313316."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTZt1300","313317."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTZt1500","313318."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTZt1700","313319."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTZt1900","313320."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTZt2100","313321."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTZt2300","313322."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTZt1100","313323."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTZt1300","313324."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTZt1500","313325."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTZt1700","313326."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTZt1900","313327."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTZt2100","313328."+campaign, ObjectSystematics , WeightSystematics)]
+    Samples     += [getSampleUncertainties("ZTZt2300","313329."+campaign, ObjectSystematics , WeightSystematics)]
     return Samples
 
 def GetVLQBSamples( useWeight=False, useObjectSys=False, campaign=""):

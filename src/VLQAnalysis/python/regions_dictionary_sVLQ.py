@@ -64,7 +64,7 @@ reg_1lep3_5jwin4bin1fjin0LTex1Hin0Vex = {
 reg_1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex = {
 	'name':"HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex",
 	'legend': "#scale[0.75]{LJ, 4b, 1fj, 0t_{h}, 1t_{l}, 1h, 0V}",
-	'binning':"900,1150,1400,1700,3500",
+	'binning':"900,1150,1400,3500",
 	'binning_blind':"",
 	'type':"SIGNAL"
 }

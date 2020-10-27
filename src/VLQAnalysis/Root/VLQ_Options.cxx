@@ -69,10 +69,12 @@ m_deriveReweighting(false),
 m_reweightKinematics(false),
 m_doKinRwSmoothing(false),
 m_doKinRwSyst(false),
+m_doFJvtSFWeights(false),
 m_makeQCD0LSystematics(false),
 m_doPreselSys(false),
 m_doExpSys(true),
 m_doTheorySys(true),
+m_doPDFSys(true),
 m_doJMRSys(false),
 m_doJMSSys(0),
 m_maxb(4),
@@ -167,10 +169,12 @@ OptionsBase(q)
     m_reweightKinematics = q.m_reweightKinematics;
     m_doKinRwSmoothing = q.m_doKinRwSmoothing;
     m_doKinRwSyst       = q.m_doKinRwSyst;
+    m_doFJvtSFWeights   = q.m_doFJvtSFWeights;
     m_makeQCD0LSystematics = q.m_makeQCD0LSystematics;
     m_doPreselSys       = q.m_doPreselSys;
     m_doExpSys          = q.m_doExpSys;
     m_doTheorySys       = q.m_doTheorySys;
+    m_doPDFSys          = q.m_doPDFSys;
     m_doJMRSys          = q.m_doJMRSys;
     m_doJMSSys          = q.m_doJMSSys;
     m_RecTtBbRw         = q.m_RecTtBbRw;
@@ -337,6 +341,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
 	    m_doKinRwSmoothing = AnalysisUtils::BoolValue(temp_val, temp_arg);
 	} else if ( temp_arg.find("--DOKINRWSYST") != std::string::npos ){
 	    m_doKinRwSyst = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if ( temp_arg.find("--DOFJVTSFWEIGHTS") != std::string::npos ){
+	    m_doFJvtSFWeights = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--MAKEQCD0LSYSTEMATICS") != std::string::npos ){
             m_makeQCD0LSystematics = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOPRESELSYS") != std::string::npos ){
@@ -345,6 +351,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_doExpSys = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOTHEORYSYS") != std::string::npos ){
             m_doTheorySys = AnalysisUtils::BoolValue(temp_val, temp_arg);
+        } else if( temp_arg.find("--DOPDFSYS") != std::string::npos ){
+            m_doPDFSys = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOJMRSYS") != std::string::npos ){
             m_doJMRSys = AnalysisUtils::BoolValue(temp_val, temp_arg);
         }
@@ -547,12 +555,15 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_recomputeTtbarNNLOCorrection= " << m_recomputeTtbarNNLOCorrection   << std::endl;
     std::cout << " m_deriveReweighting       = " << m_deriveReweighting << std::endl;
     std::cout << " m_reweightKinematics      = " << m_reweightKinematics << std::endl;
-    std::cout << " m_doKinRwSmoothing        = " << m_doKinRwSmoothing << std::endl;
+    std::cout << " m_doKinRwSmoothing        = " << m_doKinRwSmoothing  << std::endl;
     std::cout << " m_doKinRwSyst             = " << m_doKinRwSyst       << std::endl;
+    std::cout << " m_doFJvtSFWeights         = " << m_doFJvtSFWeights   << std::endl;
+
     std::cout << " m_makeQCD0LSystematics    = " << m_makeQCD0LSystematics << std::endl;
     std::cout << " m_doPreselSys             = " << m_doPreselSys       << std::endl;
     std::cout << " m_doExpSys                = " << m_doExpSys          << std::endl;
     std::cout << " m_doTheorySys             = " << m_doTheorySys       << std::endl;
+    std::cout << " m_doPDFSys                = " << m_doPDFSys          << std::endl;
     std::cout << " m_doJMRSys                = " << m_doJMRSys          << std::endl;
     std::cout << " m_doJMSSys                = " << m_doJMSSys          << std::endl;
     std::cout << " m_applyVjetsSherpa22RW    = " << m_applyVjetsSherpa22RW   << std::endl;

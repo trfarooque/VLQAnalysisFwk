@@ -11,6 +11,7 @@
 #include "VLQAnalysis/VLQ_TtbarSystematicsManager.h"
 #include "VLQAnalysis/VLQ_VariableComputer.h"
 #include "VLQAnalysis/VLQ_KinReweighter.h"
+#include "VLQAnalysis/VLQ_FJVTCalibTool.h"
 
 #include "IFAEReweightingTools/HFSystDataMembers.h"
 #include "IFAEReweightingTools/ttbbNLO_syst.h"
@@ -45,6 +46,7 @@ VLQ_WeightManager::VLQ_WeightManager( VLQ_Options *opt, const VLQ_NtupleData* nt
   m_tool_ttFractionRw(0),
   m_ttbar_syst_weight(0),
   m_kinRw(0),
+  m_fJvt_calibTool(0),
   m_syst_regions(0)
 {
 
@@ -124,6 +126,12 @@ void VLQ_WeightManager::Init( std::map < int, Selection* >* selection_tree ){
   m_qcdWeight = new FakeLeptonEstimation();
   m_qcdWeight -> Init();
   m_varComputer = new VLQ_VariableComputer(m_vlq_opt);
+
+  //////////////////////////////////////
+  // FJVT calibration tool
+  //////////////////////////////////////
+  m_fJvt_calibTool = new VLQ_FJVTCalibTool(m_vlq_ntupData, m_vlq_opt);
+  m_fJvt_calibTool -> Init("/cvmfs/atlas.cern.ch/repo/sw/database/GroupData/JetJvtEfficiency/May2020/fJvtSFFile.EMPFlow.root");
 
   //
   // ttbar-related
@@ -247,6 +255,18 @@ bool VLQ_WeightManager::AddVLQNominalWeights(){
 
 //______________________________________________________________________________
 //
+bool VLQ_WeightManager::AddFJvtSFWeights(  ){
+
+  //if(!m_fJvt_calibTool) return true;
+  AddAndInitWeight("weight_fJvt", "", true, false);
+  AddAndInitWeight("weight_fJvt_UP", "", false, false, "", "weight_fJvt");
+  AddAndInitWeight("weight_fJvt_DOWN", "", false, false, "", "weight_fJvt");
+  
+  return true;
+}
+
+//______________________________________________________________________________
+//
 bool VLQ_WeightManager::AddKinReweightings(  ){
 
   if(!m_kinRw) return true;
@@ -313,8 +333,6 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
     //JVT systematics
     AddAndInitWeight("weight_jvt_UP", "", false, true, "weight_jvt_JET_JvtEfficiency__1up", "weight_jvt");
     AddAndInitWeight("weight_jvt_DOWN", "", false, true, "weight_jvt_JET_JvtEfficiency__1down", "weight_jvt");
-    //AddAndInitWeight("weight_fJvt_UP", "", false, true, "weight_jvt_JET_fJvtEfficiency__1up", "weight_fJvt");
-    //AddAndInitWeight("weight_fJvt_DOWN", "", false, true, "weight_jvt_JET_fJvtEfficiency__1down", "weight_fJvt");
 
     //PU systematics
     //if(m_vlq_opt->UsePileUpWeight()){
@@ -333,8 +351,8 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
       std::map<std::string, std::vector<std::string> > mu_sys_comp = {
 	{"RECO", {"STAT", "SYS", "STAT_LOWPT", "SYS_LOWPT"}},
 	{"ISO",{"STAT", "SYS"}},
-	{"TTVA", {"STAT", "SYS"}},
-	{"BADMUON", {"STAT", "SYS"}}
+	{"TTVA", {"STAT", "SYS"}}
+	//{"BADMUON", {"STAT", "SYS"}}
       };
       for(std::pair<std::string, std::vector<std::string> > mu_sys_pair : mu_sys_comp){
 	for(const std::string& mu_sys : mu_sys_pair.second){
@@ -388,6 +406,17 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
     AddAndInitWeight(btag_name+"_extrapolation_from_charm_Down", "", false, btag_isinput, btag_name+"_FT_EFF_extrapolation_from_charm__1down", btag_name);
 
   }//INSTRUMENTAL UNCERTAINTIES
+
+  if(m_vlq_opt->DoPDFSys()){
+
+    //Using LHAPDF sets
+    int baseIdx = 90900; 
+    for( int i =1; i<=30; i++ ){
+      std::string wname_PDF = Form("weight_pmg_PDFset%i", baseIdx+i);
+      AddAndInitWeight(wname_PDF,"",false, true, wname_PDF, "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+    }
+
+  }
 
   if(m_vlq_opt->DoTheorySys()){
 
@@ -584,6 +613,24 @@ bool VLQ_WeightManager::SetCrossSectionWeight(){
   SetNominalComponent( "weight_norm", m_sampleInfo -> NormFactor() );
   return true;
 }
+
+//______________________________________________________________________________
+bool VLQ_WeightManager::SetFJvtSFWeights(){
+
+  if( m_vlq_opt -> IsData() || m_opt -> StrSampleName().find("QCD") != std::string::npos ){
+    return false;
+  }
+  if( !m_vlq_opt->DoFJvtSFWeights() || !m_fJvt_calibTool ) return true;
+
+  SetNominalComponent( "weight_fJvt", m_fJvt_calibTool -> GetFJVTEventWeight() );
+  SetSystematicComponent( "weight_fJvt_UP", m_fJvt_calibTool -> GetFJVTEventWeight(1.) );
+  SetSystematicComponent( "weight_fJvt_DOWN", m_fJvt_calibTool -> GetFJVTEventWeight(-1.) );
+  
+
+  return true;
+
+}
+
 
 //______________________________________________________________________________
 //

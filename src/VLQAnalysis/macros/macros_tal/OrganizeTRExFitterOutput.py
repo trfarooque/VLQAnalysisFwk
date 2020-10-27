@@ -11,6 +11,7 @@ outputNames = [n.replace(n[:n.index("/configFile_sVLQ_")+17],"").replace(".txt",
 outputNames = [n.replace(n[[m.start() for m in re.finditer('_',n)][1]:],"") for n in outputNames]
 outputDirs = [d for d in glob.glob(inputDir+"/Results/*") if not "scripts" in d and any(n in d for n in outputNames)]
 
+
 # loop through output dirs
 for d in outputDirs:
 
@@ -92,3 +93,17 @@ for d in outputDirs:
                 else:
                     os.system('mv '+systDir+'/*'+sample+'*'+syst+'*.png '+systDir+'/'+sample)
 
+
+# loop through output dirs
+for d in outputDirs:
+    # organize log files
+    logDir = d+'/Logs/'
+    os.system("mkdir -p %s"%logDir)
+
+    logs = glob.glob(d+'/logFileRunning*')
+    print "Organizing %s log files in %s..."%(len(logs),d)
+
+    for log in logs:
+        logname = log[[i.start() for i in re.finditer('/',log)][-1]:].replace('/','')
+        os.system("mkdir -p %s/%s"%(logDir,logname))
+        os.system("mv %s %s/%s/%s.txt"%(log,logDir,logname,logname))

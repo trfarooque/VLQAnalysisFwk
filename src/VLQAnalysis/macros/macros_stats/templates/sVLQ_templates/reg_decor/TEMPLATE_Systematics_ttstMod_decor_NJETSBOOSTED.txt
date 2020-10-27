@@ -1,0 +1,140 @@
+% ------------------------------------- %
+% ---  TTBAR MODELLING SYSTEMATICS  --- %
+% ------------------------------------- %
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_GEN_HJ-1boost";"HTX_BKGNP_TTBARLIGHT_GEN_HJ-g2boost";"HTX_BKGNP_TTBARLIGHT_GEN_LJ-1boost";"HTX_BKGNP_TTBARLIGHT_GEN_LJ-2boost"
+Title: "t#bar{t}+light gen. HJ-1boost";"t#bar{t}+light gen. HJ-g2boost";"t#bar{t}+light gen. LJ-1boost";"t#bar{t}+light gen. LJ-2boost"
+Type: HISTO
+Category: "t#bar{t} generator uncertainties"
+Symmetrisation: ONESIDED
+Smoothing: 40
+Samples: ttbarlight
+HistoFilesUp: TtStAlt/ttbarlightaMCPy.mc16a,TtStAlt/ttbarlightaMCPy.mc16d,TtStAlt/ttbarlightaMCPy.mc16e
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep6jin4bin1fjin1Lex0VTex1Hin,HTX_c1lep6jin1bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin3bex1fjin2VLTin1Hin,HTX_c1lep6jin4bin1fjin2VLTin1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex
+ReferenceSample: ttbarlight_AFII
+
+Systematic: "HTX_BKGNP_TTBARCC_GEN_HJ-1boost";"HTX_BKGNP_TTBARCC_GEN_HJ-g2boost";"HTX_BKGNP_TTBARCC_GEN_LJ-1boost";"HTX_BKGNP_TTBARCC_GEN_LJ-2boost"
+Title: "t#bar{t}+#geq1c gen. HJ-1boost";"t#bar{t}+#geq1c gen. HJ-g2boost";"t#bar{t}+#geq1c gen. LJ-1boost";"t#bar{t}+#geq1c gen. LJ-2boost"
+Type: HISTO
+Category: "t#bar{t} generator uncertainties"
+Symmetrisation: ONESIDED
+Smoothing: 40
+Samples: ttbarcc
+HistoFilesUp: TtStAlt/ttbarccaMCPy.mc16a,TtStAlt/ttbarccaMCPy.mc16d,TtStAlt/ttbarccaMCPy.mc16e
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep6jin4bin1fjin1Lex0VTex1Hin,HTX_c1lep6jin1bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin3bex1fjin2VLTin1Hin,HTX_c1lep6jin4bin1fjin2VLTin1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex
+ReferenceSample: ttbarcc_AFII
+
+Systematic: "HTX_BKGNP_TTBARBB_GEN_HJ-1boost";"HTX_BKGNP_TTBARBB_GEN_HJ-g2boost";"HTX_BKGNP_TTBARBB_GEN_LJ-1boost";"HTX_BKGNP_TTBARBB_GEN_LJ-2boost"
+Title: "t#bar{t}+#geq1b gen. HJ-1boost";"t#bar{t}+#geq1b gen. HJ-g2boost";"t#bar{t}+#geq1b gen. LJ-1boost";"t#bar{t}+#geq1b gen. LJ-2boost"
+Type: HISTO
+Category: "t#bar{t} generator uncertainties"
+Symmetrisation: ONESIDED
+Smoothing: 40
+Samples: ttbarbb
+HistoFilesUp: TtStAlt/ttbarbbaMCPy.mc16a,TtStAlt/ttbarbbaMCPy.mc16d,TtStAlt/ttbarbbaMCPy.mc16e
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep6jin4bin1fjin1Lex0VTex1Hin,HTX_c1lep6jin1bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin3bex1fjin2VLTin1Hin,HTX_c1lep6jin4bin1fjin2VLTin1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex
+ReferenceSample: ttbarbb_AFII
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_PS_HJ-1boost";"HTX_BKGNP_TTBARLIGHT_PS_HJ-g2boost";"HTX_BKGNP_TTBARLIGHT_PS_LJ-1boost";"HTX_BKGNP_TTBARLIGHT_PS_LJ-2boost"
+Title: "t#bar{t}+light ps. HJ-1boost";"t#bar{t}+light ps. HJ-g2boost";"t#bar{t}+light ps. LJ-1boost";"t#bar{t}+light ps. LJ-2boost"
+Type: HISTO
+Category: "t#bar{t} parton shower uncertainties"
+Symmetrisation: ONESIDED
+Smoothing: 40
+Samples: ttbarlight
+HistoFilesUp: TtStAlt/ttbarlightPowHer.mc16a,TtStAlt/ttbarlightPowHer.mc16d,TtStAlt/ttbarlightPowHer.mc16e
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep6jin4bin1fjin1Lex0VTex1Hin,HTX_c1lep6jin1bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin3bex1fjin2VLTin1Hin,HTX_c1lep6jin4bin1fjin2VLTin1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex
+ReferenceSample: ttbarlight_AFII
+
+Systematic: "HTX_BKGNP_TTBARCC_PS_HJ-1boost";"HTX_BKGNP_TTBARCC_PS_HJ-g2boost";"HTX_BKGNP_TTBARCC_PS_LJ-1boost";"HTX_BKGNP_TTBARCC_PS_LJ-2boost"
+Title: "t#bar{t}+#geq1c ps. HJ-1boost";"t#bar{t}+#geq1c ps. HJ-g2boost";"t#bar{t}+#geq1c ps. LJ-1boost";"t#bar{t}+#geq1c ps. LJ-2boost"
+Type: HISTO
+Category: "t#bar{t} parton shower uncertainties"
+Symmetrisation: ONESIDED
+Smoothing: 40
+Samples: ttbarcc
+HistoFilesUp: TtStAlt/ttbarccPowHer.mc16a,TtStAlt/ttbarccPowHer.mc16d,TtStAlt/ttbarccPowHer.mc16e
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep6jin4bin1fjin1Lex0VTex1Hin,HTX_c1lep6jin1bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin3bex1fjin2VLTin1Hin,HTX_c1lep6jin4bin1fjin2VLTin1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex
+ReferenceSample: ttbarcc_AFII
+
+Systematic: "HTX_BKGNP_TTBARBB_PS_HJ-1boost";"HTX_BKGNP_TTBARBB_PS_HJ-g2boost";"HTX_BKGNP_TTBARBB_PS_LJ-1boost";"HTX_BKGNP_TTBARBB_PS_LJ-2boost"
+Title: "t#bar{t}+#geq1b ps. HJ-1boost";"t#bar{t}+#geq1b ps. HJ-g2boost";"t#bar{t}+#geq1b ps. LJ-1boost";"t#bar{t}+#geq1b ps. LJ-2boost"
+Type: HISTO
+Category: "t#bar{t} parton shower uncertainties"
+Symmetrisation: ONESIDED
+Smoothing: 40
+Samples: ttbarbb
+HistoFilesUp: TtStAlt/ttbarbbPowHer.mc16a,TtStAlt/ttbarbbPowHer.mc16d,TtStAlt/ttbarbbPowHer.mc16e
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep6jin4bin1fjin1Lex0VTex1Hin,HTX_c1lep6jin1bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin3bex1fjin2VLTin1Hin,HTX_c1lep6jin4bin1fjin2VLTin1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex
+ReferenceSample: ttbarbb_AFII
+
+% ------------------------------------------ %
+% ---  SINGLE-TOP MODELLING SYSTEMATICS  --- %
+% ------------------------------------------ %
+
+Systematic: "HTX_BKGNP_SINGLETOP_GEN_HJ-1boost";"HTX_BKGNP_SINGLETOP_GEN_HJ-g2boost";"HTX_BKGNP_SINGLETOP_GEN_LJ-1boost";"HTX_BKGNP_SINGLETOP_GEN_LJ-2boost"
+Title: "Single-top gen. HJ-1boost";"Single-top gen. HJ-g2boost";"Single-top gen. LJ-1boost";"Single-top gen. LJ-2boost"
+Type: HISTO
+Category: "Single-top generator uncertainties"
+Symmetrisation: ONESIDED
+Smoothing: 40
+Samples: Singletop
+HistoFilesUp: TtStAlt/SingletopaMCPy.mc16a,TtStAlt/SingletopaMCPy.mc16d,TtStAlt/SingletopaMCPy.mc16e
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep6jin4bin1fjin1Lex0VTex1Hin,HTX_c1lep6jin1bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin3bex1fjin2VLTin1Hin,HTX_c1lep6jin4bin1fjin2VLTin1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex
+ReferenceSample: Singletop_AFII
+
+Systematic: "HTX_BKGNP_SINGLETOP_PS_HJ-1boost";"HTX_BKGNP_SINGLETOP_PS_HJ-g2boost";"HTX_BKGNP_SINGLETOP_PS_LJ-1boost";"HTX_BKGNP_SINGLETOP_PS_LJ-2boost"
+Title: "Single-top ps. HJ-1boost";"Single-top ps. HJ-g2boost";"Single-top ps. LJ-1boost";"Single-top ps. LJ-2boost"
+Type: HISTO
+Category: "Single-top parton shower uncertainties"
+Symmetrisation: ONESIDED
+Smoothing: 40
+Samples: Singletop
+HistoFilesUp: TtStAlt/SingletopPowHer.mc16a,TtStAlt/SingletopPowHer.mc16d,TtStAlt/SingletopPowHer.mc16e
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep6jin4bin1fjin1Lex0VTex1Hin,HTX_c1lep6jin1bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin3bex1fjin2VLTin1Hin,HTX_c1lep6jin4bin1fjin2VLTin1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex
+ReferenceSample: Singletop_AFII
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_DRDS_HJ-1boost";"HTX_BKGNP_TTBARLIGHT_DRDS_HJ-g2boost";"HTX_BKGNP_TTBARLIGHT_DRDS_LJ-1boost";"HTX_BKGNP_TTBARLIGHT_DRDS_LJ-2boost"
+NuisanceParameter: "HTX_BKGNP_DRDS_HJ-1boost";"HTX_BKGNP_DRDS_HJ-g2boost";"HTX_BKGNP_DRDS_LJ-1boost";"HTX_BKGNP_DRDS_LJ-2boost"
+Title: "t#bar{t}+light DRDS HJ-1boost";"t#bar{t}+light DRDS HJ-g2boost";"t#bar{t}+light DRDS LJ-1boost";"t#bar{t}+light DRDS LJ-2boost"
+Type: HISTO
+Category: "t#bar{t} DR-DS uncertainties"
+Symmetrisation: ONESIDED
+Smoothing: 40
+Samples: ttbarlight
+HistoFilesUp: RWDS/ttbarlight.mc16a,RWDS/ttbarlight.mc16d,RWDS/ttbarlight.mc16e
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep6jin4bin1fjin1Lex0VTex1Hin,HTX_c1lep6jin1bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin3bex1fjin2VLTin1Hin,HTX_c1lep6jin4bin1fjin2VLTin1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex
+
+Systematic: "HTX_BKGNP_TTBARCC_DRDS_HJ-1boost";"HTX_BKGNP_TTBARCC_DRDS_HJ-g2boost";"HTX_BKGNP_TTBARCC_DRDS_LJ-1boost";"HTX_BKGNP_TTBARCC_DRDS_LJ-2boost"
+NuisanceParameter: "HTX_BKGNP_DRDS_HJ-1boost";"HTX_BKGNP_DRDS_HJ-g2boost";"HTX_BKGNP_DRDS_LJ-1boost";"HTX_BKGNP_DRDS_LJ-2boost"
+Title: "t#bar{t}+#geq1c DRDS HJ-1boost";"t#bar{t}+#geq1c DRDS HJ-g2boost";"t#bar{t}+#geq1c DRDS LJ-1boost";"t#bar{t}+#geq1c DRDS LJ-2boost"
+Type: HISTO
+Category: "t#bar{t} DR-DS uncertainties"
+Symmetrisation: ONESIDED
+Smoothing: 40
+Samples: ttbarcc
+HistoFilesUp: RWDS/ttbarcc.mc16a,RWDS/ttbarcc.mc16d,RWDS/ttbarcc.mc16e
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep6jin4bin1fjin1Lex0VTex1Hin,HTX_c1lep6jin1bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin3bex1fjin2VLTin1Hin,HTX_c1lep6jin4bin1fjin2VLTin1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex
+
+Systematic: "HTX_BKGNP_TTBARBB_DRDS_HJ-1boost";"HTX_BKGNP_TTBARBB_DRDS_HJ-g2boost";"HTX_BKGNP_TTBARBB_DRDS_LJ-1boost";"HTX_BKGNP_TTBARBB_DRDS_LJ-2boost"
+NuisanceParameter: "HTX_BKGNP_DRDS_HJ-1boost";"HTX_BKGNP_DRDS_HJ-g2boost";"HTX_BKGNP_DRDS_LJ-1boost";"HTX_BKGNP_DRDS_LJ-2boost"
+Title: "t#bar{t}+#geq1b DRDS HJ-1boost";"t#bar{t}+#geq1b DRDS HJ-g2boost";"t#bar{t}+#geq1b DRDS LJ-1boost";"t#bar{t}+#geq1b DRDS LJ-2boost"
+Type: HISTO
+Category: "t#bar{t} DR-DS uncertainties"
+Symmetrisation: ONESIDED
+Smoothing: 40
+Samples: ttbarbb
+HistoFilesUp: RWDS/ttbarbb.mc16a,RWDS/ttbarbb.mc16d,RWDS/ttbarbb.mc16e
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep6jin4bin1fjin1Lex0VTex1Hin,HTX_c1lep6jin1bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin3bex1fjin2VLTin1Hin,HTX_c1lep6jin4bin1fjin2VLTin1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex
+
+Systematic: "HTX_BKGNP_SINGLETOP_DRDS_HJ-1boost";"HTX_BKGNP_SINGLETOP_DRDS_HJ-g2boost";"HTX_BKGNP_SINGLETOP_DRDS_LJ-1boost";"HTX_BKGNP_SINGLETOP_DRDS_LJ-2boost"
+NuisanceParameter: "HTX_BKGNP_DRDS_HJ-1boost";"HTX_BKGNP_DRDS_HJ-g2boost";"HTX_BKGNP_DRDS_LJ-1boost";"HTX_BKGNP_DRDS_LJ-2boost"
+Title: "Single-top DRDS HJ-1boost";"Single-top DRDS HJ-g2boost";"Single-top DRDS LJ-1boost";"Single-top DRDS LJ-2boost"
+Type: HISTO
+Category: "Single-top DR-DS uncertainties"
+Symmetrisation: ONESIDED
+Smoothing: 40
+Samples: Singletop
+HistoFilesUp: RWDS/SingletopDiagSub.mc16a,RWDS/SingletopDiagSub.mc16d,RWDS/SingletopDiagSub.mc16e
+Regions: HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex;HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep6jin4bin1fjin1Lex0VTex1Hin,HTX_c1lep6jin1bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin3bex1fjin2VLTin1Hin,HTX_c1lep6jin4bin1fjin2VLTin1Hin;HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex;HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex
+
