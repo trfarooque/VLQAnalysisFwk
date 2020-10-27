@@ -170,6 +170,7 @@ HistoFiles: Singletop.mc16a,Singletop.mc16d,Singletop.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 %HistoFile: Singletop
 %Group: Non-t#bar{t}
+Exclude: HTX_c1lep6jin4bin1fjin2VLTin1Hin
 
 Sample: "topEW"
 Title: "topEW"
@@ -212,6 +213,7 @@ HistoFiles: Zjets.mc16a,Zjets.mc16d,Zjets.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 %HistoFile: Zjets
 %Group: Non-t#bar{t}
+Exclude: HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex
 
 Sample: "Dibosons"
 Title: "Dibosons"
@@ -223,6 +225,7 @@ LumiScales: 36207.66,44307.4,58450.1
 %HistoFile: Dibosons
 %Group: Non-t#bar{t}
 Group: Others
+Exclude: HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin
 
 Sample: QCD
 Title: QCD
