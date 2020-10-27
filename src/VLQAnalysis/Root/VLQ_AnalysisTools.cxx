@@ -516,8 +516,6 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
         int nconsts_jmsr=0;
 
         const double SC_JMS=0.05;
-        const double SIG_JMR=0.20;
-
         obj_jmsr.SetPtEtaPhiM(0.,0.,0.,0.);
 
         //Quick loop over small-R jets to recalculate RC jet 4-mom
@@ -1098,13 +1096,11 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
 
       for( AnalysisObject* tagjet : *(tagcol.second) ){
 
-  double dr_leptop = (m_outData->o_leptop)->DeltaR(*tagjet);
-  double dr_leptop_b = (m_outData->o_leptop_b)->DeltaR(*tagjet);
-
-  if(dr_leptop < drmin_leptop) { drmin_leptop = dr_leptop; }
-  if(dr_leptop_b < drmin_leptop_b) { drmin_leptop_b = dr_leptop_b; }
-
-
+	double dr_leptop = (m_outData->o_leptop)->DeltaR(*tagjet);
+	double dr_leptop_b = (m_outData->o_leptop_b)->DeltaR(*tagjet);
+	
+	if(dr_leptop < drmin_leptop) { drmin_leptop = dr_leptop; }
+	if(dr_leptop_b < drmin_leptop_b) { drmin_leptop_b = dr_leptop_b; }
 
       }//Loop over tagged jet
 
@@ -1120,7 +1116,7 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
   AOVector* source_bjets = (m_opt->BtagCollection() == VLQ_Options::TRACK) ? m_outData -> o_trkbjets : m_outData -> o_bjets ;
 
   for(AnalysisObject* obj : *(m_outData->o_rcjets)){
-
+    
     int nb_match = 0;
     //Find number of b-tagged jets matched to this jet (//do this inside BTagVariables)
     for(AnalysisObject* sbjet : *(source_bjets )){
