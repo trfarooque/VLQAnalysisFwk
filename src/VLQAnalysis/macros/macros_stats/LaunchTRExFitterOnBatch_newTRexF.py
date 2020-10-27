@@ -208,7 +208,7 @@ m_dryRun = False
 m_runPBS = False
 m_batch_queue = "at3"
 m_verbose = False
-m_memory = 12
+m_memory = 16
 m_cpus = 4
 m_disk = 15
 
@@ -288,7 +288,37 @@ for config in configFileList:
             if len(commands)==m_rankingNPMerging:
                 writeScriptsAndLaunchJobs( m_outputDir + "/scripts_RANKING"+syst, config, commands , jobParams )
                 commands = []
-        writeScriptsAndLaunchJobs( m_outputDir + "/scripts_RANKING_Gammas", config, ["i _CONFIGFILE_ 'GroupedImpact="+'"Gammas"'+"'",] , jobParams )
+
+    if m_action == "RANKING_GAMMAS":
+        #Finding the gammas to run over
+        f_config = open(config,'r')
+        gam_list = []
+        sig_index = open(config,'r').read().split('\n').index('  Type: signal') - 2
+        sig_name = open(config,'r').read().split('\n')[sig_index].replace('Sample: ','').replace('"','')
+        for line_number,config_line in enumerate(f_config):
+            if config_line.find("Region: HTX")>-1 and not "VR" in config_line and not "#" in config_line and not "%" in config_line:
+                reg_line = config_line
+                reg_line = reg_line.replace("Region: ","").replace("\n","")
+                bin_line = [line for line in open(config,'r').read().split('\n')[line_number:] if "Binning: " in line][0]
+                bin_line = bin_line.replace("Binning: ","").replace("\"","")
+                bin_length = len(map(int, bin_line.split(',')))
+
+                for bin_i in range(bin_length-2):
+                    gam_list.append('gamma_stat_%s_bin_%s'%(reg_line,bin_i))
+                    gam_list.append('gamma_shape_stat_%s_%s_bin_%s'%(sig_name,reg_line,bin_i))
+        f_config.close()
+
+        #Splits into subjobs to maximize efficiency ...
+        commands = []
+        for gamma in gam_list:
+            if commands == []:
+                commands += ["wfr _CONFIGFILE_ 'Ranking=" + gamma + "'"]
+            else:
+                commands += ["r _CONFIGFILE_ 'Ranking=" + gamma + "'"]
+            if len(commands)==m_rankingNPMerging:
+                writeScriptsAndLaunchJobs( m_outputDir + "/scripts_RANKING_GAMMAS_"+gamma, config, commands , jobParams )
+                commands = []
+
     else:
         com = "w"
         if m_action.find("FIT")>-1:
