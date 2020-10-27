@@ -388,46 +388,6 @@ Systematic: "JET_SingleParticle_HighPt"
   Smoothing: 40
   Exclude: QCD
 
-#Systematic: "JET_Rtrk_Baseline_mass"
-#  Title: "JMS baseline"
-#  Type: HISTO
-#  Category: "Jet uncertainties"
-#  HistoFileSufUp: _JET_Rtrk_Baseline_mass__1up
-#  HistoFileSufDown: _JET_Rtrk_Baseline_mass__1down
-#  Symmetrisation: TwoSided
-#  Smoothing: 40
-#  Exclude: QCD
-#
-#Systematic: "JET_Rtrk_Modelling_mass"
-#  Title: "JMS modelling"
-#  Type: HISTO
-#  Category: "Jet uncertainties"
-#  HistoFileSufUp: _JET_Rtrk_Modelling_mass__1up
-#  HistoFileSufDown: _JET_Rtrk_Modelling_mass__1down
-#  Symmetrisation: TwoSided
-#  Smoothing: 40
-#  Exclude: QCD
-#
-#Systematic: "JET_Rtrk_TotalStat_mass"
-#  Title: "JMS stat."
-#  Type: HISTO
-#  Category: "Jet uncertainties"
-#  HistoFileSufUp: _JET_Rtrk_TotalStat_mass__1up
-#  HistoFileSufDown: _JET_Rtrk_TotalStat_mass__1down
-#  Symmetrisation: TwoSided
-#  Smoothing: 40
-#  Exclude: QCD
-#
-#Systematic: "JET_Rrk_Tracking_mass"
-#  Title: "JMS tracking"
-#  Type: HISTO
-#  Category: "Jet uncertainties"
-#  HistoFileSufUp: _JET_Rrk_Tracking_mass__1up
-#  HistoFileSufDown: _JET_Rrk_Tracking_mass__1down
-#  Symmetrisation: TwoSided
-#  Smoothing: 40
-#  Exclude: QCD
-
 Systematic: "JET_JER_DataVsMC_MC16"
   Title: "JER Data/MC"
   Type: HISTO
@@ -514,7 +474,7 @@ Systematic: "JET_JMS"
   HistoPathUpRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/Extrapolated/"
   HistoPathDownRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/Extrapolated/"
   Symmetrisation: TwoSided
-  Exclude: QCD,rareBkg
+  Exclude: QCD
 
 Systematic: "JET_JMR"
   Title: "JMR"
@@ -523,7 +483,7 @@ Systematic: "JET_JMR"
   HistoPathUp: "__HISTOPATH__/JMSRSYST/JMR/Extrapolated/"
   HistoPathUpRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/Extrapolated/"
   Symmetrisation: OneSided
-  Exclude: QCD,rareBkg
+  Exclude: QCD
 
 % ------------------------------ %
 % -----------   MET  ----------- %
