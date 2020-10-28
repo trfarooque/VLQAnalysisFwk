@@ -13,6 +13,11 @@ from ROOT import *
 sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/IFAETopFramework/")
 from BatchTools import *
 
+sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/SignalTools/")
+from VLQCouplingCalculator import VLQCouplingCalculator as couplingCalculator
+from VLQCouplingCalculator import VLQMixAngleCalculator as mixangleCalculator
+from VLQCrossSectionCalculator import *
+
 ##_____________________________________________________________________________________________
 ##
 def FitFunctionAndDefineIntersection( Theory, Med, isData ):
@@ -187,15 +192,94 @@ if(energy=="13"):
         if(signal.upper()=="ZTZT"):
            type="ZTZt"
 
+        #b-associated production
         if(signal.upper()=="WTHT" or signal.upper()=="WTZT"):
-            masses += [{'name': "sVLQ_"+type+"11K03", 'mass':1100, 'xsec':0.1 }]
+            
+            Masses = [1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000]
+
+            Kappa = 0.5
+
+            for M in Masses:
+
+                Mode = 'T'
+                Multiplet = 'T' #Singlet
+                mixangleCalc = mixangleCalculator(M, Mode, Multiplet)
+            
+                # Set Kappa = K, xiW = 0.5, xiZ = 0.25, xiH = 1-xiW-xiZ (singlet case)
+                mixangleCalc.setKappaxi(Kappa, 0.5, 0.25)
+
+                # Get full decay width
+                Gamma = mixangleCalc.getGamma()
+
+                typesuffix = str(M/100)+str(Kappa)
+                typesuffix = typesuffix.replace('.','')
+
+                if(signal.upper()=="WTHT"):
+                
+                    # Get branching ratio and boson coupling constant
+                    BRH = mixangleCalc.getBRs()[2]                
+                    cH = mixangleCalc.getcVals()[2]                
+                    # Calculate process Xsec
+                    XSec = XS_NWA(M, cH)*BRH/PNWA(proc='WTHt', mass=M, GM=Gamma/M)
+
+                    print "M =",M,", kappa =",Kappa,", width/mass =",Gamma/M
+                    print "  Xsec(Wb->T->Ht) = ", XSec, "pb"
+
+                    masses +=[{'name': "sVLQ_"+type+typesuffix, 'mass':M, 'xsec':XSec}]
+
+                else:
+
+                    BRZ = mixangleCalc.getBRs()[1]
+                    cZ = mixangleCalc.getcVals()[1]
+                    XSec = XS_NWA(M, cZ)*BRZ/PNWA(proc='WTZt', mass=Mass, GM=Gamma/M)
+                    
+                    print "M =",M,", kappa =",Kappa,", width/mass =",Gamma/M
+                    print "  Xsec(Wb->T->Zt) = ", XSec, "pb"
+
+                    masses +=[{'name': "sVLQ_"+type+typesuffix, 'mass':M, 'xsec':XSec}]
+
+        #t-associated production
         else:
-            masses += [{'name': "sVLQ_"+type+"11K05", 'mass':1100, 'xsec':0.1 }]
+            
+            Masses = [1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000]
+            
+            Kappa = 0.5
+            
+            for M in Masses:
 
-        masses += [{'name': "sVLQ_"+type+"16K05", 'mass':1600, 'xsec':0.1 }]
+                Mode = 'T'
+                Multiplet = 'T'
+                mixangleCalc = mixangleCalculator(M, Mode, Multiplet)
+                
+                # Set Kappa = K, xiW = 0.5, xiZ = 0.25, xiH = 1-xiW-xiZ (singlet case)                                                                                    
+                mixangleCalc.setKappaxi(Kappa, 0.5, 0.25)
+                
+                Gamma = mixangleCalc.getGamma()
 
-        if(not(signal.upper()=="ZTZT")):
-            masses += [{'name': "sVLQ_"+type+"20K05", 'mass':2000, 'xsec':0.1 }]
+                typesuffix = str(M/100)+str(Kappa)
+                typesuffix = typesuffix.replace('.','')
+
+                if(signal.upper()=="ZTHT"):
+
+                    BRH = mixangleCalc.getBRs()[2]
+                    cH = mixangleCalc.getcVals()[2]
+                    XSec = XS_NWA(M, cH)*BRH/PNWA(proc='ZTHt', mass=M, GM=Gamma/M)
+
+                    print "M =",M,", kappa =",Kappa,", width/mass =",Gamma/M
+                    print "  Xsec(Zt->T->Ht) = ", XSec, "pb"
+
+                    masses +=[{'name': "sVLQ_"+type+typesuffix, 'mass':M, 'xsec':XSec}]
+
+                else:
+
+                    BRZ = mixangleCalc.getBRs()[1]
+                    cZ = mixangleCalc.getcVals()[1]
+                    XSec = XS_NWA(M, cZ)*BRZ/PNWA(proc='ZTZt', mass=Mass, GM=Gamma/M)
+
+                    print "M =",M,", kappa =",Kappa,", width/mass =",Gamma/M
+                    print "  Xsec(Zt->T->Zt) = ", XSec, "pb"
+
+                    masses +=[{'name': "sVLQ_"+typesuffix, 'mass':M, 'xsec':XSec}]
 
 if len(masses)==1:
     mass = masses[0]
@@ -271,7 +355,7 @@ if doMulti:
                 if ratio:
                     tg_ratio[n].SetPoint(counter,mass['mass'],tg_exp[n].Eval(mass['mass'])/tg_exp[0].Eval(mass['mass']))
 
-else:
+'''else:
     for mass in masses:
         counter += 1
         files = glob.glob(inDir + "/*"+mass['name']+suffix+"*/Limits/asymptotics/*.root")
@@ -288,7 +372,7 @@ else:
             tg_exp2s.SetPoint(counter,mass['mass'],limtree.exp_upperlimit_plus2*mass['xsec'])
             tg_exp1s.SetPoint(2*len(masses)-counter-1,mass['mass'],limtree.exp_upperlimit_minus1*mass['xsec'])
             tg_exp2s.SetPoint(2*len(masses)-counter-1,mass['mass'],limtree.exp_upperlimit_minus2*mass['xsec'])
-            rootfile.Close()
+            rootfile.Close()'''
 
 ###
 # Creating signal label
@@ -403,7 +487,7 @@ if drawTheory:
 ###
 cols = [kBlack,kBlue+1,kRed,kOrange+4] # max compare 4 configurations
 fills = [3002,3004,3005,3007]
-if doMulti:
+'''if doMulti:
     for n in range(len(inDir)):
         tg_exp2s[n].SetLineColorAlpha(cols[n],0.5)
         tg_exp2s[n].SetFillColorAlpha(cols[n],0.5)
@@ -470,7 +554,7 @@ else:
     tg_exp.SetLineColor(kBlack)
     tg_exp.SetLineWidth(3)
     tg_exp.SetLineStyle(2)
-    tg_exp.Draw("l")
+    tg_exp.Draw("l")'''
 
 ########################
 
@@ -489,7 +573,7 @@ if drawTheory:
 if data:
     leg.AddEntry(tg_obs,"95% CL observed limit","l")
 
-if doMulti:
+'''if doMulti:
 
     # set up dummy graph for legend
     tg_dummy_exp,tg_dummy_exp1s,tg_dummy_exp2s = TGraph(),TGraph(),TGraph()
@@ -511,7 +595,7 @@ if doMulti:
 else:
     leg.AddEntry(tg_exp,"95% CL expected limit","l")
     leg.AddEntry(tg_exp1s,"95% CL expected limit #pm1#sigma","f")
-    leg.AddEntry(tg_exp2s,"95% CL expected limit #pm2#sigma","f")
+    leg.AddEntry(tg_exp2s,"95% CL expected limit #pm2#sigma","f")'''
 
 leg.SetTextSize(0.028)
 leg.Draw()
@@ -648,9 +732,9 @@ else:
         tg_theory.SetMinimum(ylim_min_log)
         tg_theory.SetMaximum(ylim_max_log)
         tg_theory.Draw("al3")
-        tg_exp2s.Draw("af")
-        tg_exp1s.Draw("f")
-        tg_exp.Draw("l")
+        #tg_exp2s.Draw("af")
+        #tg_exp1s.Draw("f")
+        #tg_exp.Draw("l")
         leg.Draw()
         tl_atlas.Draw()
         tl_int.Draw()
