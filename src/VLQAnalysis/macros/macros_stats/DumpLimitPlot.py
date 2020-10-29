@@ -231,7 +231,7 @@ if(energy=="13"):
 
                     BRZ = mixangleCalc.getBRs()[1]
                     cZ = mixangleCalc.getcVals()[1]
-                    XSec = XS_NWA(M, cZ)*BRZ/PNWA(proc='WTZt', mass=Mass, GM=Gamma/M)
+                    XSec = XS_NWA(M, cZ)*BRZ/PNWA(proc='WTZt', mass=M, GM=Gamma/M)
                     
                     print "M =",M,", kappa =",Kappa,", width/mass =",Gamma/M
                     print "  Xsec(Wb->T->Zt) = ", XSec, "pb"
@@ -274,7 +274,7 @@ if(energy=="13"):
 
                     BRZ = mixangleCalc.getBRs()[1]
                     cZ = mixangleCalc.getcVals()[1]
-                    XSec = XS_NWA(M, cZ)*BRZ/PNWA(proc='ZTZt', mass=Mass, GM=Gamma/M)
+                    XSec = XS_NWA(M, cZ)*BRZ/PNWA(proc='ZTZt', mass=M, GM=Gamma/M)
 
                     print "M =",M,", kappa =",Kappa,", width/mass =",Gamma/M
                     print "  Xsec(Zt->T->Zt) = ", XSec, "pb"
