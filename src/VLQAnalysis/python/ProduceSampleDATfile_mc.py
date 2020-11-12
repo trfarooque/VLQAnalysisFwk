@@ -78,7 +78,8 @@ os.system("mkdir -p " + listFolder) #list files folder
 Samples = []
 Samples += GetTtbarSamples(hfSplitted=False,ttbarSystSamples=True,useHTSlices=True,campaign=mccampaign)
 Samples += GetOtherBackgroundSamples (campaign=mccampaign,includeSingletopSystSamples=False)
-Samples += GetSingleVLQSamples( campaign=mccampaign )
+#Samples += GetSingleVLQSamples( campaign=mccampaign )
+Samples += GetVLQTSamples(useWeightSyst=False, useObjectSyst=False, campaign=mccampaign)
 #Samples += GetDijetSamples( campaign=mccampaign )
 printGoodNews("--> All samples recovered")
 ##........................................................
