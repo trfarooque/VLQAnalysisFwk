@@ -102,7 +102,7 @@ m_sampleDat("samples_info_MBJ-2.4.24-1-0.dat"),
 m_lepWOpt("VANILLA"),
 m_leptopOpt("VETO_RCMATCH"),
 m_RCCollection("VR_rho550"),
-m_vlqRWBranch("nom_mass_K100"),
+m_vlqRWBranch(""),
 m_filterType(NOFILTER),
 m_btagCollection(CALOPFLOW)
 {}

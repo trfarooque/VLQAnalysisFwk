@@ -123,6 +123,7 @@ for sample in Samples:
         continue
 
     files = joblist[0]['filelist'].split(",")
+    nEvents = 0
     nEventsWeighted = 0
     crossSection = -1
     dsid = SName
@@ -148,6 +149,7 @@ for sample in Samples:
             badFileList.append(f)
             continue
 
+        nEvents += h_nEvents.GetBinContent(1)
         nEventsWeighted += h_nEvents.GetBinContent(2)
         d_SampleInfo = weights.get(SName.replace("."+mccampaign,""))
         if not d_SampleInfo:
@@ -204,7 +206,7 @@ for sample in Samples:
                 weight_name = "sumOfWeights_"
                 if i == 33:
                     weight_name += "nom_mass_K100"
-                    weightDict[weight_name] = 1.0
+                    weightDict[weight_name] = nEvents
                 elif i > 33:
                     weight_name += "nom_mass_K"+str(int(couplings[i%20]*100))
                     weightDict[weight_name] = h_vlqSumOfWeights.GetBinContent(i)

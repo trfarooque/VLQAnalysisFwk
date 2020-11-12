@@ -589,13 +589,13 @@ bool VLQ_WeightManager::SetCrossSectionWeight(){
     return false;
   }
 
-  if(m_vlq_opt->VLQRWBranch() != "nom_mass_K100"){
-    SetNominalComponent( "weight_norm", m_sampleInfo -> NormFactor(m_vlq_opt->VLQRWBranch()) );
+  if(m_vlq_opt->VLQRWBranch() != ""){
+    SetNominalComponent( "weight_norm", m_sampleInfo->VLQNormFactor(m_vlq_opt->VLQRWBranch(), 1.0) );
   }
   else{
-    SetNominalComponent( "weight_norm", m_sampleInfo -> NormFactor() );
-    SetNominalComponent( "weight_mc", 1. );
+    SetNominalComponent( "weight_norm", m_sampleInfo -> NormFactor("nominal", 1.0) );
   }
+  SetNominalComponent( "weight_mc", 1. );
   //if(m_vlq_opt->VLQRWBranch() == "nom_mass_K100"){ SetNominalComponent("weight_mc", 1.); }
 
   return true;
@@ -664,7 +664,7 @@ bool VLQ_WeightManager::SetPMGSystNorm(){
   if(!m_vlq_opt->ComputeWeightSys()){
     return true;
   }
-  double nev_nom = m_sampleInfo->NWeightedEvents();
+  double nev_nom = m_sampleInfo->NWeightedEvents("nominal");
   for( auto& sysweight :  *m_systMap ){
 
     if(sysweight.first.find("pmg") == std::string::npos) continue;

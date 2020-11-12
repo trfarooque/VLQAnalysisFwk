@@ -532,7 +532,8 @@ def GetSingleVLQSamples( useWeightSyst=False, useObjectSyst=False, campaign=""):
 #    Samples     += [getSampleUncertainties("sVLQ_ZTZt11K05","307042."+campaign, ObjectSystematics , WeightSystematics)]
 #    Samples     += [getSampleUncertainties("sVLQ_ZTZt16K05","307047."+campaign, ObjectSystematics , WeightSystematics)]
 
-    Samples    += [getSampleUncertainties("sVLQ_WTHt17K10","313333."+campaign, ObjectSystematics, WeightSystematics)]
+    Samples    += [getSampleUncertainties("ZTZt1700","313319."+campaign, ObjectSystematics, WeightSystematics)]
+#    Samples    += [getSampleUncertainties("sVLQ_WTHt17K10","313333."+campaign, ObjectSystematics, WeightSystematics)]
 
     return Samples
 
