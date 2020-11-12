@@ -13,10 +13,23 @@ from optparse import OptionParser
 
 sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "python/VLQAnalysis/" )
 from VLQ_BR import *
-from VLQ_Samples import *
-from regions_dictionary import *
+from VLQ_Samples_mc import *
+from regions_dictionary_pVLQ import *
+#from regions_dictionary import *
+
+from BatchTools import *
+from Job import *
 
 gROOT.SetBatch(1)
+
+##______________________________________________________________________________
+## Defines some useful variables
+platform = socket.gethostname()
+now = datetime.datetime.now().strftime("%Y_%m_%d_%H%M")
+here = os.getcwd()
+sleep=1
+##..............................................................................
+
 
 ##____________________________________________________
 ## Options
@@ -48,14 +61,18 @@ nMerge=options.nMerge
 debug=options.debug
 allRegions=options.allRegions
 os.system("mkdir -p " + outputDir)
+os.system("mkdir -p " + outputDir + "/Scripts")
 ##........................................................
 
 ##________________________________________________________
 ## Getting all signal samples and their associated weight/object systematics
+
+VLQMass=[600,800,1000,1100,1200,1300,1400,1500,1600,1700,1800,2000]
 #VLQMass = [600,700,750,800,850,900,950,1000,1050,1100,1150,1200,1300,1400]
-VLQMass = [1400]
+
 if doAllBR:#just some mass points (not sensitive otherwise)
-    VLQMass = [700,800,900,1000,1100,1200,1300]
+    VLQMass=[600,800,1000,1100,1200,1300,1400,1500,1600,1700,1800,2000]
+    #VLQMass = [700,800,900,1000,1100,1200,1300]
 ##........................................................
 
 ##________________________________________________________
@@ -529,6 +546,7 @@ else: #the TRExFitter inputs
 
 ##________________________________________________________
 ## Defining the list of regions to look at
+Regions = []
 if allRegions:
     Regions = [{'name':"all"}]
 else:
@@ -580,72 +598,78 @@ if doAllBR:
     c.Print("c_Zh_BR.png")
 ##........................................................
 
-##________________________________________________________
-## Now writes scripts ... and submits jobs !
-merging = 0
-scriptName = ""
+## Creating tarball                                                                                                                                                           
+tarballPath = outputDir + "AnaCode_forBatch.tgz"
+if not (os.path.exists(tarballPath) or debug):
+    prepareTarBall(here+"/../../",tarballPath)
+    prepareTarBall(os.getenv("VLQAnalysisFramework_DIR")+"/../../",tarballPath)
+
+##________________________________________________________                                                                                                                                                                        
+## Now writes scripts ... and submits jobs !   
+JOSet = JobSet(platform)
+JOSet.setBatch("condor")
+JOSet.setScriptDir(outputDir+"/Scripts")
+JOSet.setLogDir(outputDir)
+JOSet.setTarBall(tarballPath)
+JOSet.setJobRecoveryFile(outputDir+"/Scripts/JobCheck.chk")
+JOSet.setQueue(queue)
+
 for sample in VLQMass:
     for br in BRs:
-
         printGoodNews("=> VLQ_TT_"+`sample`+"_"+br.split(",")[0])
-        openOption = "w"
-        if merging==0:
-            scriptName = outputDir + "/script_reweighting_" + `sample` + "_br_" + br
-        else:
-            openOption = "a"
+        
+        jO = Job(platform)
+        jO.setExecutable("python VLQCouplingReweighter.py")
+        jO.setDebug(False)
+        jO.setOutDir(outputDir)
 
-        script = open(scriptName,openOption)
+        jOName = `sample`+"_br_"+br
+        jO.setName(jOName)
+        
+        jO.addOption("inputDir",   inputDir)
+        jO.addOption("outputDir", "./")
 
-        if openOption=="w":
-            script.write("export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase \n")
-            script.write("source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh \n")
-            script.write("source " + os.getenv("VLQAnalysisFramework_DIR") + "/../rcSetup.sh \n")
-            script.write("cd $TMPDIR \n")
-            script.write("\n")
-            script.write("cp " + os.getenv("VLQAnalysisFramework_DIR") + "/python/VLQAnalysis/VLQCouplingReweighter.py VLQCouplingReweighter.py \n")
-            script.write("cp " + os.getenv("VLQAnalysisFramework_DIR") + "/python/VLQAnalysis/VLQ_BR.py VLQ_BR.py \n")
-            script.write("cp " + os.getenv("VLQAnalysisFramework_DIR") + "/python/VLQAnalysis/VLQ_Samples.py VLQ_Samples.py \n")
+        if(statOnly):
+            jO.addOption("statOnly", "True")
+        
+        jO.addOption("mass", "%.0f " %(sample))
+        jO.addOption("vlqCoupling", br)
+    
+        regOpt = ""
 
-        script.write("mkdir -p inputs/ \n")
-        script.write("cp "+inputDir+"/out*VLQ_TT_%.0f_30*.root inputs/ \n" %(sample))
-
-        com = "python VLQCouplingReweighter.py -i inputs/ -o ./"
-        if statOnly:
-            com += " -s "
-        com += " -m %.0f " %(sample)
-        com += " -c " + br
-        com += " -r "
         for reg in Regions:
-            com += (reg['name']).replace("HTX_","")
+            regOpt += (reg['name']).replace("HTX_","")
             if reg != Regions[len(Regions)-1]:
-                com += ","
-        com += " -v "
+                regOpt += ","
+            
+        jO.addOption("regions", regOpt)
+
+        varOpt = ""
+        
         for var in Variables:
-            com += var
+            varOpt += var
             if var != Variables[len(Variables)-1]:
-                com += ","
-        script.write(com + " >& logfile_reweighting_" + `sample` + "_br_" + br +" \n")
-        script.write("mv *.root "+outputDir+"/ \n")
-        script.write("rm -rf inputs/ \n ")
-        script.write("\n")
-        script.write("\n")
+                varOpt += ","
 
-        if openOption=="a" and merging==(nMerge-1):
-            script.write("mv logfile_* "+outputDir+"\n")
-            script.write("rm -rf $TMPDIR \n")
-        else:
-            script.write("mv logfile_* "+outputDir+"\n")
-            script.write("rm -rf $TMPDIR \n")
+        jO.addOption("variables", varOpt)
 
-        script.close()
+        JOSet.addJob(jO)
 
-        if merging==(nMerge-1):
-            submission = "qsub -q " + queue + " " + scriptName + " -o " + outputDir + " -e " + outputDir
-            if not debug:
-                os.system(submission)
-            else:
-                print " ==> Should execute command: " + submission
-            merging = 0
-        else:
-            merging += 1
+        if(JOSet.size()==nMerge):
+            
+            JOSet.writeScript()
+
+            if(not debug):
+                JOSet.submitSet()
+
+            JOSet.clear()
+
+if(JOSet.size()>0):
+    JOSet.writeScript()
+
+    if(not debug):
+        JOSet.submitSet()
+    JOSet.clear()
+
+os.system("sleep "+`sleep`)
 ##........................................................
