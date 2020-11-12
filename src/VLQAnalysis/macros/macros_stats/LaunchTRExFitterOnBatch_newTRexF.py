@@ -46,7 +46,10 @@ def writeScripts( scriptName, configFile, tRexFitterOutDirectory, instructions ,
     for inst in instructions:
         script.write("echo \"    " + inst + "\"\n")
 
-    counter = 0
+    if "RANKING" in jobParams["action"]:
+        counter = jobParams["counter"]
+    else:
+        counter = 0
     script.write("trex-fitter h configFile.txt >& logFileRunning_h \n")
     for inst in instructions:
         script.write("echo \"==> Now executing the instruction: " + inst + "\"\n")
@@ -239,7 +242,8 @@ if(m_inputConfigFiles==""):
 ##------------------------------------------------------
 jobParams = {"memory": m_memory,
              "cpus":   m_cpus,
-             "disk":   m_disk }
+             "disk":   m_disk ,
+             "action": m_action}
 
 ##------------------------------------------------------
 ## Creating the output folder
@@ -279,14 +283,20 @@ for config in configFileList:
 
         #Splits into subjobs to maximize efficiency ...
         commands = []
-        for systematic in syst_list:
+        for n_syst,systematic in enumerate(syst_list):
             syst = systematic.replace("\"","").replace(" ","").replace("\n","")
             if commands == []:
                 commands += ["wfr _CONFIGFILE_ 'Ranking=" + syst + "'"]
             else:
                 commands += ["r _CONFIGFILE_ 'Ranking=" + syst + "'"]
             if len(commands)==m_rankingNPMerging:
+                jobParams["counter"] = n_syst - m_rankingNPMerging + 1
                 writeScriptsAndLaunchJobs( m_outputDir + "/scripts_RANKING"+syst, config, commands , jobParams )
+                commands = []
+            elif commands != [] and n_syst == len(syst_list)-1:
+                jobParams["counter"] = n_syst - len(syst_list)%m_rankingNPMerging + 1
+                writeScriptsAndLaunchJobs( m_outputDir + "/scripts_RANKING"+syst, config, commands , jobParams )
+                jobParams["counter"] = len(syst_list)
                 commands = []
 
     if m_action == "RANKING_GAMMAS":
@@ -310,15 +320,20 @@ for config in configFileList:
 
         #Splits into subjobs to maximize efficiency ...
         commands = []
-        for gamma in gam_list:
+        for n_gam,gamma in enumerate(gam_list):
             if commands == []:
                 commands += ["wfr _CONFIGFILE_ 'Ranking=" + gamma + "'"]
             else:
                 commands += ["r _CONFIGFILE_ 'Ranking=" + gamma + "'"]
             if len(commands)==m_rankingNPMerging:
+                jobParams["counter"] = n_gam - m_rankingNPMerging + 1
                 writeScriptsAndLaunchJobs( m_outputDir + "/scripts_RANKING_GAMMAS_"+gamma, config, commands , jobParams )
                 commands = []
-
+            elif commands != [] and n_gam == len(gam_list)-1:
+                jobParams["counter"] = n_gam - len(gam_list)%m_rankingNPMerging + 1
+                writeScriptsAndLaunchJobs( m_outputDir + "/scripts_RANKING_GAMMAS_"+gamma, config, commands , jobParams )
+                jobParams["counter"] = len(gam_list)
+                commands = []
     else:
         com = "w"
         if m_action.find("FIT")>-1:
