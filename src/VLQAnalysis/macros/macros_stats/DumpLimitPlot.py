@@ -10,6 +10,8 @@ from array import array
 from optparse import OptionParser
 from ROOT import *
 
+import numpy as np
+
 sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/IFAETopFramework/")
 from BatchTools import *
 
@@ -96,6 +98,8 @@ parser.add_option("-l","--lumi",help="luminosity",dest="lumi",default="3.2")
 parser.add_option("-d","--data",help="consider data",dest="data",action="store_true",default=False)
 parser.add_option("-x","--suffix",help="suffix of input directory of each mass point",dest="suffix",default="")
 parser.add_option("-t","--theory",help="draw theory",dest="drawTheory",action="store_true",default=False)
+parser.add_option("-n","--nonTheory",help="draw expected and observed limits",dest="drawNonTheory",action="store_true",default=False)
+parser.add_option("-k","--kappa",type="float",help="kappa value of single VLQ signal",dest="Kappa",default=1.0)
 parser.add_option("-f","--forceranges",help="force ranges",dest="forceRanges",action="store_true",default=False)
 parser.add_option("-c","--outsuffix",help="suffix in output file",dest="outSuffix",default="")
 parser.add_option("-b","--labels",help="list of labels",dest="labels",default="")
@@ -112,6 +116,8 @@ lumi=options.lumi
 data=options.data
 suffix=options.suffix
 drawTheory=options.drawTheory
+drawNonTheory=options.drawNonTheory
+Kappa=options.Kappa
 forceRanges=options.forceRanges
 outSuffix=options.outSuffix
 labels=options.labels
@@ -195,21 +201,23 @@ if(energy=="13"):
         #b-associated production
         if(signal.upper()=="WTHT" or signal.upper()=="WTZT"):
             
-            Masses = [1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000]
-
-            Kappa = 0.5
+            Masses = np.linspace(1000, 2000,num=50 ,endpoint=True)
 
             for M in Masses:
 
                 Mode = 'T'
-                Multiplet = 'T' #Singlet
-                mixangleCalc = mixangleCalculator(M, Mode, Multiplet)
-            
+
+                # Initialize calculator with mass point, VLQ, and multiplet
+                mixangleCalcSinglet = mixangleCalculator(M, Mode, 'T')
+                mixangleCalcDoublet = mixangleCalculator(M, Mode, 'XT')
+
                 # Set Kappa = K, xiW = 0.5, xiZ = 0.25, xiH = 1-xiW-xiZ (singlet case)
-                mixangleCalc.setKappaxi(Kappa, 0.5, 0.25)
+                mixangleCalcSinglet.setKappaxi(Kappa, 0.5, 0.25)
+                mixangleCalcDoublet.setKappaxi(Kappa, 0, 0.5)
 
                 # Get full decay width
-                Gamma = mixangleCalc.getGamma()
+                GammaSinglet = mixangleCalcSinglet.getGamma()
+                GammaDoublet = mixangleCalcDoublet.getGamma()
 
                 typesuffix = str(M/100)+str(Kappa)
                 typesuffix = typesuffix.replace('.','')
@@ -217,69 +225,102 @@ if(energy=="13"):
                 if(signal.upper()=="WTHT"):
                 
                     # Get branching ratio and boson coupling constant
-                    BRH = mixangleCalc.getBRs()[2]                
-                    cH = mixangleCalc.getcVals()[2]                
+                    BRHSinglet = mixangleCalcSinglet.getBRs()[2]                
+                    cHSinglet = mixangleCalcSinglet.getcVals()[2]                
+                    
+                    BRHDoublet = mixangleCalcDoublet.getBRs()[2]
+                    cHDoublet = mixangleCalcDoublet.getcVals()[2]
+
                     # Calculate process Xsec
-                    XSec = XS_NWA(M, cH)*BRH/PNWA(proc='WTHt', mass=M, GM=Gamma/M)
+                    XSecSinglet = XS_NWA(M, cHSinglet)*BRHSinglet/PNWA(proc='WTHt', mass=M, GM=GammaSinglet/M)
+                    XSecDoublet = XS_NWA(M, cHDoublet)*BRHDoublet/PNWA(proc='WTHt', mass=M, GM=GammaDoublet/M)
 
-                    print "M =",M,", kappa =",Kappa,", width/mass =",Gamma/M
-                    print "  Xsec(Wb->T->Ht) = ", XSec, "pb"
+                    print "M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M
+                    print "Xsec(Wb->T->Ht) Singlet = ", XSecSinglet, "pb"
 
-                    masses +=[{'name': "sVLQ_"+type+typesuffix, 'mass':M, 'xsec':XSec}]
+                    print "M =",M,", kappa =",Kappa,", width/mass =",GammaDoublet/M
+                    print "Xsec(Wb->T->Ht) Doublet = ", XSecDoublet, "pb"
+
+                    masses +=[{'name': "sVLQ_"+type+typesuffix, 'mass':M, 'xsecSinglet':XSecSinglet, 'xsecDoublet':XSecDoublet}]
 
                 else:
 
-                    BRZ = mixangleCalc.getBRs()[1]
-                    cZ = mixangleCalc.getcVals()[1]
-                    XSec = XS_NWA(M, cZ)*BRZ/PNWA(proc='WTZt', mass=M, GM=Gamma/M)
-                    
-                    print "M =",M,", kappa =",Kappa,", width/mass =",Gamma/M
-                    print "  Xsec(Wb->T->Zt) = ", XSec, "pb"
+                    BRZSinglet = mixangleCalcSinglet.getBRs()[1]
+                    cZSinglet = mixangleCalcSinglet.getcVals()[1]
 
-                    masses +=[{'name': "sVLQ_"+type+typesuffix, 'mass':M, 'xsec':XSec}]
+                    BRZDoublet = mixangleCalcDoublet.getBRs()[1]
+                    cZDoublet = mixangleCalcDoublet.getcVals()[1]
+
+                    
+                    XSecSinglet = XS_NWA(M, cZSinglet)*BRZSinglet/PNWA(proc='WTZt', mass=M, GM=GammaSinglet/M)
+                    XSecDoublet = XS_NWA(M, cZDoublet)*BRZDoublet/PNWA(proc='WTZt', mass=M, GM=GammaDoublet/M)
+                    
+                    print "M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M
+                    print "Xsec(Wb->T->Zt) Singlet = ", XSecSinglet, "pb"
+
+                    print "M =",M,", kappa =",Kappa,", width/mass =",GammaDoublet/M
+                    print "Xsec(Wb->T->Zt) Doublet = ", XSecDoublet, "pb"
+
+                    masses +=[{'name': "sVLQ_"+type+typesuffix, 'mass':M, 'xsecSinglet':XSecSinglet, 'xsecDoublet':XSecDoublet}]
 
         #t-associated production
         else:
             
-            Masses = [1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000]
-            
-            Kappa = 0.5
+            Masses = np.linspace(1000, 2000,num=50 ,endpoint=True)
             
             for M in Masses:
 
                 Mode = 'T'
-                Multiplet = 'T'
-                mixangleCalc = mixangleCalculator(M, Mode, Multiplet)
-                
+              
+                mixangleCalcSinglet = mixangleCalculator(M, Mode, 'T')
+                mixangleCalcDoublet = mixangleCalculator(M, Mode, 'XT')
+  
                 # Set Kappa = K, xiW = 0.5, xiZ = 0.25, xiH = 1-xiW-xiZ (singlet case)                                                                                    
-                mixangleCalc.setKappaxi(Kappa, 0.5, 0.25)
+                mixangleCalcSinglet.setKappaxi(Kappa, 0.5, 0.25)
+                mixangleCalcDoublet.setKappaxi(Kappa, 0, 0.5)
                 
-                Gamma = mixangleCalc.getGamma()
+                GammaSinglet = mixangleCalcSinglet.getGamma()
+                GammaDoublet = mixangleCalcDoublet.getGamma()
 
                 typesuffix = str(M/100)+str(Kappa)
                 typesuffix = typesuffix.replace('.','')
 
                 if(signal.upper()=="ZTHT"):
 
-                    BRH = mixangleCalc.getBRs()[2]
-                    cH = mixangleCalc.getcVals()[2]
-                    XSec = XS_NWA(M, cH)*BRH/PNWA(proc='ZTHt', mass=M, GM=Gamma/M)
+                    BRHSinglet = mixangleCalcSinglet.getBRs()[2]
+                    cHSinglet = mixangleCalcSinglet.getcVals()[2]
+                    XSecSinglet = XS_NWA(M, cHSinglet)*BRHSinglet/PNWA(proc='ZTHt', mass=M, GM=GammaSinglet/M)
 
-                    print "M =",M,", kappa =",Kappa,", width/mass =",Gamma/M
-                    print "  Xsec(Zt->T->Ht) = ", XSec, "pb"
+                    print "M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M
+                    print "Xsec(Zt->T->Ht) Singlet = ", XSecSinglet, "pb"
 
-                    masses +=[{'name': "sVLQ_"+type+typesuffix, 'mass':M, 'xsec':XSec}]
+                    BRHDoublet = mixangleCalcDoublet.getBRs()[2]
+                    cHDoublet = mixangleCalcDoublet.getcVals()[2]
+                    XSecDoublet = XS_NWA(M, cHDoublet)*BRHDoublet/PNWA(proc='ZTHt', mass=M, GM=GammaDoublet/M)
+
+                    print "M =",M,", kappa =",Kappa,", width/mass =",GammaDoublet/M
+                    print "Xsec(Zt->T->Ht) Doublet = ", XSecDoublet, "pb"
+
+                    masses +=[{'name': "sVLQ_"+type+typesuffix, 'mass':M, 'xsecSinglet':XSecSinglet, 'xsecDoublet':XSecDoublet}]
 
                 else:
 
-                    BRZ = mixangleCalc.getBRs()[1]
-                    cZ = mixangleCalc.getcVals()[1]
-                    XSec = XS_NWA(M, cZ)*BRZ/PNWA(proc='ZTZt', mass=M, GM=Gamma/M)
+                    BRZSinglet = mixangleCalcSinglet.getBRs()[1]
+                    cZSinglet = mixangleCalcSinglet.getcVals()[1]
+                    XSecSinglet = XS_NWA(M, cZSinglet)*BRZSinglet/PNWA(proc='ZTZt', mass=M, GM=GammaSinglet/M)
 
-                    print "M =",M,", kappa =",Kappa,", width/mass =",Gamma/M
-                    print "  Xsec(Zt->T->Zt) = ", XSec, "pb"
+                    print "M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M
+                    print "Xsec(Zt->T->Zt) Singlet = ", XSecSinglet, "pb"
 
-                    masses +=[{'name': "sVLQ_"+typesuffix, 'mass':M, 'xsec':XSec}]
+                    BRZDoublet = mixangleCalcDoublet.getBRs()[1]
+                    cZDoublet = mixangleCalcDoublet.getcVals()[1]
+                    XSecDoublet = XS_NWA(M, cZDoublet)*BRZDoublet/PNWA(proc='ZTZt', mass=M, GM=GammaDoublet/M)
+
+                    print "M =",M,", kappa =",Kappa,", width/mass =",GammaDoublet/M
+                    print "Xsec(Zt->T->Zt) Doublet = ", XSecDoublet, "pb"
+
+                    masses +=[{'name': "sVLQ_"+type+typesuffix, 'mass':M, 'xsecSinglet':XSecSinglet, 'xsecDoublet':XSecDoublet}]
+                    
 
 if len(masses)==1:
     mass = masses[0]
@@ -302,25 +343,32 @@ if len(masses)==1:
 # Effectively building the plots
 ###
 tg_theory = TGraphErrors(len(masses))
+tg_theory_doublet = TGraphErrors(len(masses))
 
 # if comparing mutliple configurations
-if doMulti:
-    tg_obs = [TGraph(len(masses)) for i in range(len(inDir))]
-    tg_exp = [TGraph(len(masses)) for i in range(len(inDir))]
-    tg_exp1s = [TGraph(2*len(masses)) for i in range(len(inDir))]
-    tg_exp2s = [TGraph(2*len(masses)) for i in range(len(inDir))]
-
-    if ratio:
-        tg_ratio = [TGraph(len(masses)) for i in range(len(inDir))]
-else:
-    tg_obs = TGraph(len(masses))
-    tg_exp = TGraph(len(masses))
-    tg_exp1s = TGraph(2*len(masses))
-    tg_exp2s = TGraph(2*len(masses))
+if drawNonTheory:
+    if doMulti:
+        tg_obs = [TGraph(len(masses)) for i in range(len(inDir))]
+        tg_exp = [TGraph(len(masses)) for i in range(len(inDir))]
+        tg_exp1s = [TGraph(2*len(masses)) for i in range(len(inDir))]
+        tg_exp2s = [TGraph(2*len(masses)) for i in range(len(inDir))]
+        
+        if ratio:
+            tg_ratio = [TGraph(len(masses)) for i in range(len(inDir))]
+    else:
+        tg_obs = TGraph(len(masses))
+        tg_exp = TGraph(len(masses))
+        tg_exp1s = TGraph(2*len(masses))
+        tg_exp2s = TGraph(2*len(masses))
 
 #Theory plot
 for iMass in range(len(masses)):
-    tg_theory.SetPoint(iMass,masses[iMass]['mass'],masses[iMass]['xsec'])
+    if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+        tg_theory.SetPoint(iMass,masses[iMass]['mass'],masses[iMass]['xsecSinglet'])
+        tg_theory_doublet.SetPoint(iMass,masses[iMass]['mass'],masses[iMass]['xsecDoublet'])
+    else:
+        tg_theory.SetPoint(iMass,masses[iMass]['mass'],masses[iMass]['xsec'])
+    
 #    if 'err' in masses[iMass].keys():
 #        tg_theory.SetPointError(iMass,0,masses[iMass]['err'])
 #    else:
@@ -330,12 +378,36 @@ for iMass in range(len(masses)):
 #All limits
 
 # Multiple configurations
-counter = -1
-if doMulti:
-    for mass in masses: # Assume same masses and signals available in all folders if doMulti
-        counter += 1
-        for n,indir in enumerate(inDir):
-            files = glob.glob(indir + "/*"+mass['name']+suffix+"*/Limits/asymptotics/*.root")
+if drawNonTheory:
+    counter = -1
+    if doMulti:
+        for mass in masses: # Assume same masses and signals available in all folders if doMulti
+            counter += 1
+            for n,indir in enumerate(inDir):
+                files = glob.glob(indir + "/*"+mass['name']+suffix+"*/Limits/asymptotics/*.root")
+                if len(files)==0 or len(files)>1:
+                    print "<!> ERROR for mass " + `mass['mass']` + " !!"
+                else:
+                    rootfile = TFile(files[0],"read")
+                    limtree = rootfile.Get('stats')
+                    limtree.GetEntry(0)
+                    print  " Mass: ", mass['mass'], " mu : ", limtree.obs_upperlimit, " xsec : ", mass['xsec']
+                    tg_obs[n].SetPoint(counter,mass['mass'],limtree.obs_upperlimit*mass['xsec'])
+                    tg_exp[n].SetPoint(counter,mass['mass'],limtree.exp_upperlimit*mass['xsec'])
+                    tg_exp1s[n].SetPoint(counter,mass['mass'],limtree.exp_upperlimit_plus1*mass['xsec'])
+                    tg_exp2s[n].SetPoint(counter,mass['mass'],limtree.exp_upperlimit_plus2*mass['xsec'])
+                    tg_exp1s[n].SetPoint(2*len(masses)-counter-1,mass['mass'],limtree.exp_upperlimit_minus1*mass['xsec'])
+                    tg_exp2s[n].SetPoint(2*len(masses)-counter-1,mass['mass'],limtree.exp_upperlimit_minus2*mass['xsec'])
+                    rootfile.Close()
+                    
+                    # Build ratio plot
+                    if ratio:
+                        tg_ratio[n].SetPoint(counter,mass['mass'],tg_exp[n].Eval(mass['mass'])/tg_exp[0].Eval(mass['mass']))
+
+    else:
+        for mass in masses:
+            counter += 1
+            files = glob.glob(inDir + "/*"+mass['name']+suffix+"*/Limits/asymptotics/*.root")
             if len(files)==0 or len(files)>1:
                 print "<!> ERROR for mass " + `mass['mass']` + " !!"
             else:
@@ -343,36 +415,13 @@ if doMulti:
                 limtree = rootfile.Get('stats')
                 limtree.GetEntry(0)
                 print  " Mass: ", mass['mass'], " mu : ", limtree.obs_upperlimit, " xsec : ", mass['xsec']
-                tg_obs[n].SetPoint(counter,mass['mass'],limtree.obs_upperlimit*mass['xsec'])
-                tg_exp[n].SetPoint(counter,mass['mass'],limtree.exp_upperlimit*mass['xsec'])
-                tg_exp1s[n].SetPoint(counter,mass['mass'],limtree.exp_upperlimit_plus1*mass['xsec'])
-                tg_exp2s[n].SetPoint(counter,mass['mass'],limtree.exp_upperlimit_plus2*mass['xsec'])
-                tg_exp1s[n].SetPoint(2*len(masses)-counter-1,mass['mass'],limtree.exp_upperlimit_minus1*mass['xsec'])
-                tg_exp2s[n].SetPoint(2*len(masses)-counter-1,mass['mass'],limtree.exp_upperlimit_minus2*mass['xsec'])
+                tg_obs.SetPoint(counter,mass['mass'],limtree.obs_upperlimit*mass['xsec'])
+                tg_exp.SetPoint(counter,mass['mass'],limtree.exp_upperlimit*mass['xsec'])
+                tg_exp1s.SetPoint(counter,mass['mass'],limtree.exp_upperlimit_plus1*mass['xsec'])
+                tg_exp2s.SetPoint(counter,mass['mass'],limtree.exp_upperlimit_plus2*mass['xsec'])
+                tg_exp1s.SetPoint(2*len(masses)-counter-1,mass['mass'],limtree.exp_upperlimit_minus1*mass['xsec'])
+                tg_exp2s.SetPoint(2*len(masses)-counter-1,mass['mass'],limtree.exp_upperlimit_minus2*mass['xsec'])
                 rootfile.Close()
-
-                # Build ratio plot
-                if ratio:
-                    tg_ratio[n].SetPoint(counter,mass['mass'],tg_exp[n].Eval(mass['mass'])/tg_exp[0].Eval(mass['mass']))
-
-'''else:
-    for mass in masses:
-        counter += 1
-        files = glob.glob(inDir + "/*"+mass['name']+suffix+"*/Limits/asymptotics/*.root")
-        if len(files)==0 or len(files)>1:
-            print "<!> ERROR for mass " + `mass['mass']` + " !!"
-        else:
-            rootfile = TFile(files[0],"read")
-            limtree = rootfile.Get('stats')
-            limtree.GetEntry(0)
-            print  " Mass: ", mass['mass'], " mu : ", limtree.obs_upperlimit, " xsec : ", mass['xsec']
-            tg_obs.SetPoint(counter,mass['mass'],limtree.obs_upperlimit*mass['xsec'])
-            tg_exp.SetPoint(counter,mass['mass'],limtree.exp_upperlimit*mass['xsec'])
-            tg_exp1s.SetPoint(counter,mass['mass'],limtree.exp_upperlimit_plus1*mass['xsec'])
-            tg_exp2s.SetPoint(counter,mass['mass'],limtree.exp_upperlimit_plus2*mass['xsec'])
-            tg_exp1s.SetPoint(2*len(masses)-counter-1,mass['mass'],limtree.exp_upperlimit_minus1*mass['xsec'])
-            tg_exp2s.SetPoint(2*len(masses)-counter-1,mass['mass'],limtree.exp_upperlimit_minus2*mass['xsec'])
-            rootfile.Close()'''
 
 ###
 # Creating signal label
@@ -442,11 +491,27 @@ if forceRanges:
 else:
     if drawTheory:
         if doMulti:
-            ymin = tg_theory.GetHistogram().GetMinimum() if tg_theory.GetHistogram().GetMinimum() < min([t.GetHistogram().GetMinimum() for t in tg_exp2s]) else min([t.GetHistogram().GetMinimum() for t in tg_exp2s])
-            ymax = tg_theory.GetHistogram().GetMaximum() if tg_theory.GetHistogram().GetMaximum() > max([t.GetHistogram().GetMaximum() for t in tg_exp2s]) else max([t.GetHistogram().GetMaximum() for t in tg_exp2s])
+            if drawNonTheory:
+                ymin = tg_theory.GetHistogram().GetMinimum() if tg_theory.GetHistogram().GetMinimum() < min([t.GetHistogram().GetMinimum() for t in tg_exp2s]) else min([t.GetHistogram().GetMinimum() for t in tg_exp2s])
+                ymax = tg_theory.GetHistogram().GetMaximum() if tg_theory.GetHistogram().GetMaximum() > max([t.GetHistogram().GetMaximum() for t in tg_exp2s]) else max([t.GetHistogram().GetMaximum() for t in tg_exp2s])
+            else:
+                if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+                    ymin = min([tg_theory.GetHistogram().GetMinimum(), tg_theory_doublet.GetHistogram().GetMinimum()])
+                    ymax = max([tg_theory.GetHistogram().GetMaximum(), tg_theory_doublet.GetHistogram().GetMaximum()])
+                else:
+                    ymin = tg_theory.GetHistogram().GetMinimum()
+                    ymax = tg_theory.GetHistogram().GetMaximum()
         else:
-            ymin = tg_theory.GetHistogram().GetMinimum() if tg_theory.GetHistogram().GetMinimum() < tg_exp2s.GetHistogram().GetMinimum() else tg_exp2s.GetHistogram().GetMinimum()
-            ymax = tg_theory.GetHistogram().GetMaximum() if tg_theory.GetHistogram().GetMaximum() > tg_exp2s.GetHistogram().GetMaximum() else tg_exp2s.GetHistogram().GetMaximum()
+            if drawNonTheory:
+                ymin = tg_theory.GetHistogram().GetMinimum() if tg_theory.GetHistogram().GetMinimum() < tg_exp2s.GetHistogram().GetMinimum() else tg_exp2s.GetHistogram().GetMinimum()
+                ymax = tg_theory.GetHistogram().GetMaximum() if tg_theory.GetHistogram().GetMaximum() > tg_exp2s.GetHistogram().GetMaximum() else tg_exp2s.GetHistogram().GetMaximum()
+            else:
+                if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+                    ymin = min([tg_theory.GetHistogram().GetMinimum(), tg_theory_doublet.GetHistogram().GetMinimum()])
+                    ymax = max([tg_theory.GetHistogram().GetMaximum(), tg_theory_doublet.GetHistogram().GetMaximum()])
+                else:
+                    ymin = tg_theory.GetHistogram().GetMinimum()
+                    ymax = tg_theory.GetHistogram().GetMaximum()
     else:
         if doMulti:
             ymin = min([t.GetHistogram().GetMinimum() for t in tg_exp2s])
@@ -481,82 +546,104 @@ if drawTheory:
     tg_theory.GetHistogram().GetYaxis().SetTitleSize(tg_theory.GetHistogram().GetYaxis().GetTitleSize()*1.2)
     tg_theory.GetHistogram().GetXaxis().SetTitleOffset(1.35)
     tg_theory.GetHistogram().GetYaxis().SetTitleOffset(1.5)
+    
+    if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+        tg_theory_doublet.SetLineColor(kBlue)
+        tg_theory_doublet.SetFillColor(kBlue-9)
+        
+        tg_theory_doublet.GetXaxis().SetLimits(masses[0]['mass'],masses[len(masses)-1]['mass'])
+        tg_theory_doublet.SetMinimum(ylim_min)
+        tg_theory_doublet.SetMaximum(ylim_max)
+        tg_theory_doublet.GetXaxis().SetNdivisions(406)
+        tg_theory_doublet.SetLineWidth(2)
+        
+        tg_theory_doublet.Draw("l3")
+        tg_theory_doublet.SetTitle("")
+        tg_theory_doublet.GetHistogram().GetXaxis().SetLabelSize(tg_theory_doublet.GetHistogram().GetXaxis().GetLabelSize()*1.2)
+        tg_theory_doublet.GetHistogram().GetYaxis().SetLabelSize(tg_theory_doublet.GetHistogram().GetYaxis().GetLabelSize()*1.2)
+        tg_theory_doublet.GetHistogram().GetXaxis().SetTitleSize(tg_theory_doublet.GetHistogram().GetXaxis().GetTitleSize()*1.4)
+        tg_theory_doublet.GetHistogram().GetYaxis().SetTitleSize(tg_theory_doublet.GetHistogram().GetYaxis().GetTitleSize()*1.2)
+        tg_theory_doublet.GetHistogram().GetXaxis().SetTitleOffset(1.35)
+        tg_theory_doublet.GetHistogram().GetYaxis().SetTitleOffset(1.5)
+
 
 ###
 # Limits
 ###
 cols = [kBlack,kBlue+1,kRed,kOrange+4] # max compare 4 configurations
 fills = [3002,3004,3005,3007]
-'''if doMulti:
-    for n in range(len(inDir)):
-        tg_exp2s[n].SetLineColorAlpha(cols[n],0.5)
-        tg_exp2s[n].SetFillColorAlpha(cols[n],0.5)
-        tg_exp2s[n].SetFillStyle(3354)
-        if not drawTheory:
-            tg_exp2s[n].GetXaxis().SetLimits(masses[0]['mass'],masses[len(masses)-1]['mass'])
-            tg_exp2s[n].SetMinimum(ylim_min)
-            tg_exp2s[n].SetMaximum(ylim_max)
-            tg_exp2s[n].GetXaxis().SetNdivisions(406)
-            tg_exp2s[n].SetTitle("")
-            tg_exp2s[n].GetXaxis().SetTitle("m_{T} [GeV]")
-            tg_exp2s[n].GetYaxis().SetTitle("#sigma(%s) [pb]"%signal_label)
-            tg_exp2s[n].GetHistogram().GetXaxis().SetLabelSize(tg_exp2s[n].GetHistogram().GetXaxis().GetLabelSize()*1.2)
-            tg_exp2s[n].GetHistogram().GetYaxis().SetLabelSize(tg_exp2s[n].GetHistogram().GetYaxis().GetLabelSize()*1.2)
-            tg_exp2s[n].GetHistogram().GetXaxis().SetTitleSize(tg_exp2s[n].GetHistogram().GetXaxis().GetTitleSize()*1.4)
-            tg_exp2s[n].GetHistogram().GetYaxis().SetTitleSize(tg_exp2s[n].GetHistogram().GetYaxis().GetTitleSize()*1.2)
-            tg_exp2s[n].GetHistogram().GetXaxis().SetTitleOffset(1.35)
-            tg_exp2s[n].GetHistogram().GetYaxis().SetTitleOffset(1.5)
-            if n==0:
-                tg_exp2s[n].Draw("afl")
+
+if drawNonTheory:
+    if doMulti:
+        for n in range(len(inDir)):
+            tg_exp2s[n].SetLineColorAlpha(cols[n],0.5)
+            tg_exp2s[n].SetFillColorAlpha(cols[n],0.5)
+            tg_exp2s[n].SetFillStyle(3354)
+            if not drawTheory:
+                tg_exp2s[n].GetXaxis().SetLimits(masses[0]['mass'],masses[len(masses)-1]['mass'])
+                tg_exp2s[n].SetMinimum(ylim_min)
+                tg_exp2s[n].SetMaximum(ylim_max)
+                tg_exp2s[n].GetXaxis().SetNdivisions(406)
+                tg_exp2s[n].SetTitle("")
+                tg_exp2s[n].GetXaxis().SetTitle("m_{T} [GeV]")
+                tg_exp2s[n].GetYaxis().SetTitle("#sigma(%s) [pb]"%signal_label)
+                tg_exp2s[n].GetHistogram().GetXaxis().SetLabelSize(tg_exp2s[n].GetHistogram().GetXaxis().GetLabelSize()*1.2)
+                tg_exp2s[n].GetHistogram().GetYaxis().SetLabelSize(tg_exp2s[n].GetHistogram().GetYaxis().GetLabelSize()*1.2)
+                tg_exp2s[n].GetHistogram().GetXaxis().SetTitleSize(tg_exp2s[n].GetHistogram().GetXaxis().GetTitleSize()*1.4)
+                tg_exp2s[n].GetHistogram().GetYaxis().SetTitleSize(tg_exp2s[n].GetHistogram().GetYaxis().GetTitleSize()*1.2)
+                tg_exp2s[n].GetHistogram().GetXaxis().SetTitleOffset(1.35)
+                tg_exp2s[n].GetHistogram().GetYaxis().SetTitleOffset(1.5)
+                if n==0:
+                    tg_exp2s[n].Draw("afl")
+                else:
+                    tg_exp2s[n].Draw("fl")
             else:
-                tg_exp2s[n].Draw("fl")
+                tg_exp2s.Draw("f")
+
+            tg_exp1s[n].SetLineColorAlpha(cols[n],0.2)
+            tg_exp1s[n].SetFillColorAlpha(cols[n],0.2)
+            tg_exp1s[n].SetFillStyle(3005)
+            tg_exp1s[n].Draw("fl")
+            
+            tg_exp[n].SetLineColor(cols[n])
+            tg_exp[n].SetFillColor(cols[n])
+            tg_exp[n].SetFillStyle(3005)
+            tg_exp[n].SetLineWidth(3)
+            tg_exp[n].SetLineStyle(2)
+            tg_exp[n].Draw("l")
+
+            ########################
+    else:
+        tg_exp2s.SetLineColor(kYellow)
+        tg_exp2s.SetFillColor(kYellow)
+        if not drawTheory:
+            tg_exp2s.GetXaxis().SetLimits(masses[0]['mass'],masses[len(masses)-1]['mass'])
+            tg_exp2s.SetMinimum(ylim_min)
+            tg_exp2s.SetMaximum(ylim_max)
+            tg_exp2s.GetXaxis().SetNdivisions(406)
+            tg_exp2s.SetTitle("")
+            tg_exp2s.GetXaxis().SetTitle("m_{T} [GeV]")
+            tg_exp2s.GetYaxis().SetTitle("#sigma(%s) [pb]"%signal_label)
+            tg_exp2s.GetHistogram().GetXaxis().SetLabelSize(tg_exp2s.GetHistogram().GetXaxis().GetLabelSize()*1.2)
+            tg_exp2s.GetHistogram().GetYaxis().SetLabelSize(tg_exp2s.GetHistogram().GetYaxis().GetLabelSize()*1.2)
+            tg_exp2s.GetHistogram().GetXaxis().SetTitleSize(tg_exp2s.GetHistogram().GetXaxis().GetTitleSize()*1.4)
+            tg_exp2s.GetHistogram().GetYaxis().SetTitleSize(tg_exp2s.GetHistogram().GetYaxis().GetTitleSize()*1.2)
+            tg_exp2s.GetHistogram().GetXaxis().SetTitleOffset(1.35)
+            tg_exp2s.GetHistogram().GetYaxis().SetTitleOffset(1.5)
+            tg_exp2s.Draw("af")
         else:
             tg_exp2s.Draw("f")
 
-        tg_exp1s[n].SetLineColorAlpha(cols[n],0.2)
-        tg_exp1s[n].SetFillColorAlpha(cols[n],0.2)
-        tg_exp1s[n].SetFillStyle(3005)
-        tg_exp1s[n].Draw("fl")
-    
-        tg_exp[n].SetLineColor(cols[n])
-        tg_exp[n].SetFillColor(cols[n])
-        tg_exp[n].SetFillStyle(3005)
-        tg_exp[n].SetLineWidth(3)
-        tg_exp[n].SetLineStyle(2)
-        tg_exp[n].Draw("l")
+        tg_exp1s.SetLineColor(kGreen)
+        tg_exp1s.SetFillColor(kGreen)
+        tg_exp1s.Draw("f")
 
-########################
-else:
-    tg_exp2s.SetLineColor(kYellow)
-    tg_exp2s.SetFillColor(kYellow)
-    if not drawTheory:
-        tg_exp2s.GetXaxis().SetLimits(masses[0]['mass'],masses[len(masses)-1]['mass'])
-        tg_exp2s.SetMinimum(ylim_min)
-        tg_exp2s.SetMaximum(ylim_max)
-        tg_exp2s.GetXaxis().SetNdivisions(406)
-        tg_exp2s.SetTitle("")
-        tg_exp2s.GetXaxis().SetTitle("m_{T} [GeV]")
-        tg_exp2s.GetYaxis().SetTitle("#sigma(%s) [pb]"%signal_label)
-        tg_exp2s.GetHistogram().GetXaxis().SetLabelSize(tg_exp2s.GetHistogram().GetXaxis().GetLabelSize()*1.2)
-        tg_exp2s.GetHistogram().GetYaxis().SetLabelSize(tg_exp2s.GetHistogram().GetYaxis().GetLabelSize()*1.2)
-        tg_exp2s.GetHistogram().GetXaxis().SetTitleSize(tg_exp2s.GetHistogram().GetXaxis().GetTitleSize()*1.4)
-        tg_exp2s.GetHistogram().GetYaxis().SetTitleSize(tg_exp2s.GetHistogram().GetYaxis().GetTitleSize()*1.2)
-        tg_exp2s.GetHistogram().GetXaxis().SetTitleOffset(1.35)
-        tg_exp2s.GetHistogram().GetYaxis().SetTitleOffset(1.5)
-        tg_exp2s.Draw("af")
-    else:
-        tg_exp2s.Draw("f")
-
-    tg_exp1s.SetLineColor(kGreen)
-    tg_exp1s.SetFillColor(kGreen)
-    tg_exp1s.Draw("f")
-
-    tg_exp.SetLineColor(kBlack)
-    tg_exp.SetLineWidth(3)
-    tg_exp.SetLineStyle(2)
-    tg_exp.Draw("l")'''
-
-########################
+        tg_exp.SetLineColor(kBlack)
+        tg_exp.SetLineWidth(3)
+        tg_exp.SetLineStyle(2)
+        tg_exp.Draw("l")
+        
+        ########################
 
 if data:
     tg_obs.SetLineColor(kBlack)
@@ -566,36 +653,43 @@ if data:
 
 if drawTheory:
     if signal.find("UEDRPP")==-1:
-       leg.AddEntry(tg_theory,"Theory (NNLO prediction #pm1#sigma)","lf")
+        #leg.AddEntry(tg_theory,"Theory (NNLO prediction #pm1#sigma)","lf")
+        leg.AddEntry(tg_theory,"Theory Singlet","lf")
+        if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+            leg.AddEntry(tg_theory_doublet,"Theory Doublet","lf")
     else:
        leg.AddEntry(tg_theory,"Theory (LO prediction)","l")
 
 if data:
     leg.AddEntry(tg_obs,"95% CL observed limit","l")
 
-'''if doMulti:
+if drawNonTheory:
 
-    # set up dummy graph for legend
-    tg_dummy_exp,tg_dummy_exp1s,tg_dummy_exp2s = TGraph(),TGraph(),TGraph()
-    tg_dummy_exp.SetLineColor(kGray+2)
-    tg_dummy_exp.SetLineWidth(3)
-    tg_dummy_exp.SetLineStyle(2)
-    tg_dummy_exp2s.SetFillColorAlpha(kGray+2,0.2)
-    tg_dummy_exp2s.SetFillStyle(3354)
-    tg_dummy_exp1s.SetFillColorAlpha(kGray+2,0.5)
-    tg_dummy_exp1s.SetFillStyle(3005)
+    if doMulti:
 
-    leg.AddEntry(tg_dummy_exp,"95% CL expected limit","l")
-    leg.AddEntry(tg_dummy_exp1s,"95% CL expected limit #pm1#sigma","f")
-    leg.AddEntry(tg_dummy_exp2s,"95% CL expected limit #pm2#sigma","f")
+        # set up dummy graph for legend
+        tg_dummy_exp,tg_dummy_exp1s,tg_dummy_exp2s = TGraph(),TGraph(),TGraph()
+        tg_dummy_exp.SetLineColor(kGray+2)
+        tg_dummy_exp.SetLineWidth(3)
+        tg_dummy_exp.SetLineStyle(2)
+        tg_dummy_exp2s.SetFillColorAlpha(kGray+2,0.2)
+        tg_dummy_exp2s.SetFillStyle(3354)
+        tg_dummy_exp1s.SetFillColorAlpha(kGray+2,0.5)
+        tg_dummy_exp1s.SetFillStyle(3005)
+        
+        leg.AddEntry(tg_dummy_exp,"95% CL expected limit","l")
+        leg.AddEntry(tg_dummy_exp1s,"95% CL expected limit #pm1#sigma","f")
+        leg.AddEntry(tg_dummy_exp2s,"95% CL expected limit #pm2#sigma","f")
 
-    for n in range(len(inDir)):
-        leg.AddEntry(tg_exp[n],labels[n],"fl")
+        for n in range(len(inDir)):
+            leg.AddEntry(tg_exp[n],labels[n],"fl")
 
-else:
-    leg.AddEntry(tg_exp,"95% CL expected limit","l")
-    leg.AddEntry(tg_exp1s,"95% CL expected limit #pm1#sigma","f")
-    leg.AddEntry(tg_exp2s,"95% CL expected limit #pm2#sigma","f")'''
+    else:
+        leg.AddEntry(tg_exp,"95% CL expected limit","l")
+        leg.AddEntry(tg_exp1s,"95% CL expected limit #pm1#sigma","f")
+        leg.AddEntry(tg_exp2s,"95% CL expected limit #pm2#sigma","f")
+
+
 
 leg.SetTextSize(0.028)
 leg.Draw()
@@ -695,10 +789,16 @@ if doMulti:
         tg_theory.SetMinimum(ylim_min_log)
         tg_theory.SetMaximum(ylim_max_log)
         tg_theory.Draw("al3")
-        for n in range(len(inDir)):
-            tg_exp2s[n].Draw("af")
-            tg_exp1s[n].Draw("f")
-            tg_exp[n].Draw("l")
+        if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+            tg_theory_doublet.GetXaxis().SetLimits(masses[0]['mass'],masses[len(masses)-1]['mass'])
+            tg_theory_doublet.SetMinimum(ylim_min_log)
+            tg_theory_doublet.SetMaximum(ylim_max_log)
+            tg_theory_doublet.Draw("l3")
+        if drawNonTheory:
+            for n in range(len(inDir)):
+                tg_exp2s[n].Draw("af")
+                tg_exp1s[n].Draw("f")
+                tg_exp[n].Draw("l")
         leg.Draw()
         tl_atlas.Draw()
         tl_int.Draw()
@@ -707,7 +807,10 @@ if doMulti:
             tl_addtext.Draw()
         tg_theory.GetXaxis().Draw()
         tg_theory.GetYaxis().Draw()
-    else:
+        if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+            tg_theory_doublet.GetXaxis().Draw()
+            tg_theory_doublet.GetYaxis().Draw()
+    elif drawNonTheory:
         for n in range(len(inDir)):
             tg_exp2s[n].GetXaxis().SetLimits(masses[0]['mass'],masses[len(masses)-1]['mass'])
             tg_exp2s[n].SetMinimum(ylim_min_log)
@@ -732,9 +835,16 @@ else:
         tg_theory.SetMinimum(ylim_min_log)
         tg_theory.SetMaximum(ylim_max_log)
         tg_theory.Draw("al3")
-        #tg_exp2s.Draw("af")
-        #tg_exp1s.Draw("f")
-        #tg_exp.Draw("l")
+        if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+            tg_theory_doublet.GetXaxis().SetLimits(masses[0]['mass'],masses[len(masses)-1]['mass'])
+            tg_theory_doublet.SetMinimum(ylim_min_log)
+            tg_theory_doublet.SetMaximum(ylim_max_log)
+            tg_theory_doublet.Draw("l3")
+
+        if drawNonTheory:
+            tg_exp2s.Draw("af")
+            tg_exp1s.Draw("f")
+            tg_exp.Draw("l")
         leg.Draw()
         tl_atlas.Draw()
         tl_int.Draw()
@@ -743,7 +853,10 @@ else:
             tl_addtext.Draw()
         tg_theory.GetXaxis().Draw()
         tg_theory.GetYaxis().Draw()
-    else:
+        if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+            tg_theory_doublet.GetXaxis().Draw()
+            tg_theory_doublet.GetYaxis().Draw()
+    elif drawNonTheory:
         tg_exp2s.GetXaxis().SetLimits(masses[0]['mass'],masses[len(masses)-1]['mass'])
         tg_exp2s.SetMinimum(ylim_min_log)
         tg_exp2s.SetMaximum(ylim_max_log)
