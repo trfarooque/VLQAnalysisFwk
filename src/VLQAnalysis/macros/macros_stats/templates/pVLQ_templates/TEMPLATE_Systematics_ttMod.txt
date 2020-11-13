@@ -1,0 +1,23 @@
+% --------------------------- %
+% ---  TTBAR SYSTEMATICS  --- %
+% --------------------------- %
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_GEN" ; "HTX_BKGNP_TTBARBB_GEN" ; "HTX_BKGNP_TTBARCC_GEN"
+  Title: "t#bar{t}+light-jets generator" ; "t#bar{t}+#geq1b generator" ; "t#bar{t}+#geq1c generator"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  Samples: ttbarlight;ttbarbb;ttbarcc
+  HistoFilesUp: TtStAlt/ttbarlightaMCPy.mc16a,TtStAlt/ttbarlightaMCPy.mc16d,TtStAlt/ttbarlightaMCPy.mc16e ; TtStAlt/ttbarccaMCPy.mc16a,TtStAlt/ttbarccaMCPy.mc16d,TtStAlt/ttbarccaMCPy.mc16e ; TtStAlt/ttbarbbaMCPy.mc16a,TtStAlt/ttbarbbaMCPy.mc16d,TtStAlt/ttbarbbaMCPy.mc16e
+  ReferenceSample: ttbarlight_AFII;ttbarbb_AFII;ttbarcc_AFII
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_PS" ; "HTX_BKGNP_TTBARBB_PS" ; "HTX_BKGNP_TTBARCC_PS"
+  Title: "t#bar{t}+light-jets parton shower" ; "t#bar{t}+#geq1b parton shower" ; "t#bar{t}+#geq1c parton shower"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  HistoFilesUp: TtStAlt/ttbarlightPowHer.mc16a,TtStAlt/ttbarlightPowHer.mc16d,TtStAlt/ttbarlightPowHer.mc16e ; TtStAlt/ttbarccPowHer.mc16a,TtStAlt/ttbarccPowHer.mc16d,TtStAlt/ttbarccPowHer.mc16e ; TtStAlt/ttbarbbPowHer.mc16a,TtStAlt/ttbarbbPowHer.mc16d,TtStAlt/ttbarbbPowHer.mc16e
+  Samples: ttbarlight;ttbarbb;ttbarcc
+  ReferenceSample: ttbarlight_AFII;ttbarbb_AFII;ttbarcc_AFII
