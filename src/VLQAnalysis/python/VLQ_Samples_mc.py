@@ -179,7 +179,7 @@ def GetSignalSamples(useWeightSyst=False, useObjectSyst=False, campaign=""
     if includeSingleVLQ:
         Samples += GetOldSingleVLQSamples( useWeightSyst, useObjectSyst, campaign )
     if includePairVLQ:
-        Samples += GetVLQTSamples( useWeightSyst, useObjectSyst )
+        Samples += GetVLQTSamples( useWeightSyst, useObjectSyst, campaign )
 
     return Samples
 
@@ -515,27 +515,26 @@ def GetVLQTSamples( useWeightSyst=False, useObjectSyst=False, campaign=""):
         ObjectSystematics = [getSystematics(name="nominal",nameUp="",oneSided=True)]
 
     Samples     =  []
-    Samples     =  []
-    Samples     += [getSampleUncertainties("VLQ_TT_600","302469."+campaign,  ObjectSystematics , WeightSystematics)]#TT 600                                                     
-    Samples     += [getSampleUncertainties("VLQ_TT_800","302472."+campaign,  ObjectSystematics , WeightSystematics)]#TT 800                                                     
-    Samples     += [getSampleUncertainties("VLQ_TT_1000","302476."+campaign, ObjectSystematics , WeightSystematics)]#TT 1000                                                    
-    Samples     += [getSampleUncertainties("VLQ_TT_1100","302478."+campaign, ObjectSystematics , WeightSystematics)]#TT 1100                                                    
-    Samples     += [getSampleUncertainties("VLQ_TT_1200","302480."+campaign, ObjectSystematics , WeightSystematics)]#TT 1200                                                    
-    Samples     += [getSampleUncertainties("VLQ_TT_1300","302481."+campaign, ObjectSystematics , WeightSystematics)]#TT 1300                                                    
-    Samples     += [getSampleUncertainties("VLQ_TT_1400","302482."+campaign, ObjectSystematics , WeightSystematics)]#TT 1400                                                    
-    Samples     += [getSampleUncertainties("VLQ_TT_1500","308294."+campaign, ObjectSystematics , WeightSystematics)]#TT 1500                                                    
-    Samples     += [getSampleUncertainties("VLQ_TT_1600","308295."+campaign, ObjectSystematics , WeightSystematics)]#TT 1600                                                    
-    Samples     += [getSampleUncertainties("VLQ_TT_1700","308296."+campaign, ObjectSystematics , WeightSystematics)]#TT 1700                                                    
-    Samples     += [getSampleUncertainties("VLQ_TT_1800","308297."+campaign, ObjectSystematics , WeightSystematics)]#TT 1800                                                    
+    Samples     += [getSampleUncertainties("VLQ_TT_600","302469."+campaign,  ObjectSystematics , WeightSystematics)]#TT 600                                                    
+    Samples     += [getSampleUncertainties("VLQ_TT_800","302472."+campaign,  ObjectSystematics , WeightSystematics)]#TT 800                                                    
+    Samples     += [getSampleUncertainties("VLQ_TT_1000","302476."+campaign, ObjectSystematics , WeightSystematics)]#TT 1000                                                   
+    Samples     += [getSampleUncertainties("VLQ_TT_1100","302478."+campaign, ObjectSystematics , WeightSystematics)]#TT 1100                                                   
+    Samples     += [getSampleUncertainties("VLQ_TT_1200","302480."+campaign, ObjectSystematics , WeightSystematics)]#TT 1200                                                  
+    Samples     += [getSampleUncertainties("VLQ_TT_1300","302481."+campaign, ObjectSystematics , WeightSystematics)]#TT 1300                                                   
+    Samples     += [getSampleUncertainties("VLQ_TT_1400","302482."+campaign, ObjectSystematics , WeightSystematics)]#TT 1400                                                   
+    Samples     += [getSampleUncertainties("VLQ_TT_1500","308294."+campaign, ObjectSystematics , WeightSystematics)]#TT 1500                                                   
+    Samples     += [getSampleUncertainties("VLQ_TT_1600","308295."+campaign, ObjectSystematics , WeightSystematics)]#TT 1600                                                   
+    Samples     += [getSampleUncertainties("VLQ_TT_1700","308296."+campaign, ObjectSystematics , WeightSystematics)]#TT 1700                                                   
+    Samples     += [getSampleUncertainties("VLQ_TT_1800","308297."+campaign, ObjectSystematics , WeightSystematics)]#TT 1800                                                   
     Samples     += [getSampleUncertainties("VLQ_TT_2000","308299."+campaign, ObjectSystematics , WeightSystematics)]#TT 2000  
     
-    # Not available                                                                                                                                                             
-    #Samples     += [getSampleUncertainties("VLQ_TT_700","302470."+campaign,  ObjectSystematics , WeightSystematics)]#TT 700                                                    
-    #Samples     += [getSampleUncertainties("VLQ_TT_750","302471."+campaign,  ObjectSystematics , WeightSystematics)]#TT 750                                                    
-    #Samples     += [getSampleUncertainties("VLQ_TT_850","302473."+campaign,  ObjectSystematics , WeightSystematics)]#TT 850                                                    
-    #Samples     += [getSampleUncertainties("VLQ_TT_900","302474."+campaign,  ObjectSystematics , WeightSystematics)]#TT 900                                                    
-    #Samples     += [getSampleUncertainties("VLQ_TT_950","302475."+campaign,  ObjectSystematics , WeightSystematics)]#TT 950                                                    
-    #Samples     += [getSampleUncertainties("VLQ_TT_1050","302477."+campaign, ObjectSystematics , WeightSystematics)]#TT 1050                                                   
+    # Not available                                                                                                                                                            
+    #Samples     += [getSampleUncertainties("VLQ_TT_700","302470."+campaign,  ObjectSystematics , WeightSystematics)]#TT 700                                                 
+    #Samples     += [getSampleUncertainties("VLQ_TT_750","302471."+campaign,  ObjectSystematics , WeightSystematics)]#TT 750                                                   
+    #Samples     += [getSampleUncertainties("VLQ_TT_850","302473."+campaign,  ObjectSystematics , WeightSystematics)]#TT 850                                                   
+    #Samples     += [getSampleUncertainties("VLQ_TT_900","302474."+campaign,  ObjectSystematics , WeightSystematics)]#TT 900                                                   
+    #Samples     += [getSampleUncertainties("VLQ_TT_950","302475."+campaign,  ObjectSystematics , WeightSystematics)]#TT 950                                                   
+    #Samples     += [getSampleUncertainties("VLQ_TT_1050","302477."+campaign, ObjectSystematics , WeightSystematics)]#TT 1050                                                  
     #Samples     += [getSampleUncertainties("VLQ_TT_1150","302479."+campaign, ObjectSystematics , WeightSystematics)]#TT 1150 
 
 
