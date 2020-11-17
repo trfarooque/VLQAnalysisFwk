@@ -198,9 +198,12 @@ bool VLQ_Analysis_Data2015::Begin(){
   // Declaration of the TRFManager
   //
   //############################################################################
-  m_TRFMngr = new VLQ_TRFManager( m_opt, m_weightMngr, m_ntupData, m_outData );
-  m_TRFMngr -> Init();
+  if(m_opt->RecomputeTRF() || m_opt->RecomputeBtagSF()){
 
+    m_TRFMngr = new VLQ_TRFManager( m_opt, m_weightMngr, m_ntupData, m_outData );
+    m_TRFMngr -> Init();
+
+  }
   //############################################################################
   //
   // Declaration of the VariableComputer
