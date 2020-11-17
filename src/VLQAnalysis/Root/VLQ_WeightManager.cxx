@@ -595,8 +595,7 @@ bool VLQ_WeightManager::SetCrossSectionWeight(){
   else{
     SetNominalComponent( "weight_norm", m_sampleInfo -> NormFactor("nominal", 1.0) );
   }
-  SetNominalComponent( "weight_mc", 1. );
-  //if(m_vlq_opt->VLQRWBranch() == "nom_mass_K100"){ SetNominalComponent("weight_mc", 1.); }
+  if(m_vlq_opt->VLQRWBranch() == "nom_mass_K100"){ SetNominalComponent("weight_mc", 1.); }
 
   return true;
 }
