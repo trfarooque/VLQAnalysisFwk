@@ -41,6 +41,8 @@ mccampaign=""
 configName = "configFile_MV2_"+mccampaign+".dat"
 doSysWeights = False
 doVLQSignalSumWeights = False
+useDefaultVLQCrossSection = False
+
 badFileList = []
 
 if(len(sys.argv))>1:
@@ -69,7 +71,13 @@ if(len(sys.argv))>1:
         elif(argument=="DOVLQSIGNALSUMWEIGHTS"):
             if splitted[1].upper()=="TRUE":
                 doVLQSignalSumWeights = True
-            # doVLQSignalSumWeights is False by default
+                # doVLQSignalSumWeights is False by default
+        # This option changes the cross section for every sample in the list provided.
+        # Use caution, this should only be used when generating a .dat file for VLQ signal samples ONLY
+        elif(argument=="USEDEFAULTVLQXS"):
+            if splitted[1].upper()=="TRUE":
+                useDefaultVLQCrossSection = True
+                # useDefaultVLQCrossSection is False by default
 
 ##........................................................
 
@@ -81,8 +89,8 @@ os.system("mkdir -p " + listFolder) #list files folder
 ##________________________________________________________
 ## Getting all samples and their associated weight/object systematics
 Samples = []
-Samples += GetTtbarSamples(hfSplitted=False,ttbarSystSamples=True,useHTSlices=True,campaign=mccampaign)
-Samples += GetOtherBackgroundSamples (campaign=mccampaign,includeSingletopSystSamples=False)
+#Samples += GetTtbarSamples(hfSplitted=False,ttbarSystSamples=True,useHTSlices=True,campaign=mccampaign)
+#Samples += GetOtherBackgroundSamples (campaign=mccampaign,includeSingletopSystSamples=False)
 Samples += GetSingleVLQSamples( campaign=mccampaign )
 #Samples += GetDijetSamples( campaign=mccampaign )
 printGoodNews("--> All samples recovered")
@@ -128,6 +136,8 @@ for sample in Samples:
     nEventsWeighted = 0
     crossSection = -1
     dsid = SName
+    defaultVLQCrossSection = 0.1 # default VLQ XS set to 0.1pb
+
 
     weightDict = {}
     doSysWeights_temp = doSysWeights
@@ -218,6 +228,10 @@ for sample in Samples:
                         weight_name += "nom_mass_K"+str(int(couplings[i%20]*100))
                     weightDict[weight_name] = h_vlqSumOfWeights.GetBinContent(i+1)
 
+    # This flag changes the cross section for all samples included in the list of samples.
+    if useDefaultVLQCrossSection:
+        crossSection = defaultVLQCrossSection
+        
 
     if jsonOutput:
         configDict[dsid] = {'crossSection': crossSection, 'nWeightedEvents': nEventsWeighted}
