@@ -618,12 +618,8 @@ bool VLQ_WeightManager::SetCrossSectionWeight(){
     return false;
   }
 
-  if(m_vlq_opt->VLQRWBranch() != ""){
-    SetNominalComponent( "weight_norm", m_sampleInfo->VLQNormFactor(m_vlq_opt->VLQRWBranch(), 1.0) );
-  }
-  else{
-    SetNominalComponent( "weight_norm", m_sampleInfo -> NormFactor("nominal", 1.0) );
-  }
+
+  SetNominalComponent( "weight_norm", m_sampleInfo->NormFactor(m_vlq_opt->VLQRWBranch(), 1.0) );
   if(m_vlq_opt->VLQRWBranch() == "nom_mass_K100"){ SetNominalComponent("weight_mc", 1.); }
 
   return true;
@@ -716,12 +712,11 @@ bool VLQ_WeightManager::SetPMGSystNorm(){
     if(sysweight.first.find("pmg") == std::string::npos) continue;
 
     const string& branchName = (sysweight.second)->BranchName();
-    //double nev_sys = m_sampleInfo->NWeightedEvents(branchName); // commented lines added for implementing reweighting signal samples
-    const std::map<std::string, double>& sysFactorMap = m_sampleInfo->SystWeightFactorMap();                                                               
-    if( sysFactorMap.find(branchName) == sysFactorMap.end() ) continue;                                                                                    
-    //double sys_factor = (nev_sys > 0.) ? nev_nom/nev_sys : 1.;
-    UpdateSystematicComponent(sysweight.first, (sysweight.second)->GetComponentValue()*sysFactorMap.at(branchName));
-    //UpdateSystematicComponent(sysweight.first, (sysweight.second)->GetComponentValue()*sys_factor);
+    double nev_sys = m_sampleInfo->NWeightedEvents(branchName, true /*ignore branch if missing*/ ); 
+                 
+    double sys_factor = (nev_sys > 0.) ? nev_nom/nev_sys : 1.;
+
+    UpdateSystematicComponent(sysweight.first, (sysweight.second)->GetComponentValue()*sys_factor);
 
   }
 
