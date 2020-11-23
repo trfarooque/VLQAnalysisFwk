@@ -54,6 +54,7 @@ param_runPairVLQ = False
 param_run4tops = False
 param_runUEDRPP = False
 
+param_RWName = "nom_mass_K100"
 param_useSlices = True
 param_useObjectSyst = False
 param_useWeightSyst = False
@@ -159,6 +160,9 @@ if(len(sys.argv))>1:
             param_outputDirSuffix = value
         else:
             userParams += [{'arg':argument,'value':value}]
+            if(argument=="VLQRWBRANCH"):
+                param_RWName = value
+
 else:
     printError("<!> No arguments seen ... Aborting !")
     sys.exit(-1)
@@ -197,6 +201,7 @@ print "param_runPairVLQ = ", param_runPairVLQ
 print "param_run4tops = ", param_run4tops
 print "param_runUEDRPP = ", param_runUEDRPP
 
+print "param_RWName = ", param_RWName
 print "param_useSlices = ", param_useSlices
 print "param_useObjectSyst = ", param_useObjectSyst
 print "param_useWeightSyst = ", param_useWeightSyst
@@ -255,20 +260,23 @@ if param_runTtbar:
                                  useHTSlices = param_useSlices, campaign = param_campaign )
 
 if param_runOtherBkgd:
-    Samples += GetOtherBackgroundSamples (  useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, campaign=param_campaign
+    Samples += GetOtherBackgroundSamples (  useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst
+                                            , campaign=param_campaign
                                             , includeSingleTop = param_runSingleTop
                                             , includeWjets = param_runWjets, includeZjets = param_runZjets
                                             , includeTopEW = param_runTopEW, includeDibosons = param_runDibosons
                                             , includeDijet = param_runDijet
                                             , includeSingletopSystSamples = param_runSTSyst
                                             , splitSTChannels = param_splitSTChannels
-                                            , includeTchan=param_runTchanSingleTop, includeWtprod=param_runWtSingleTop, includeSchan=param_runSchanSingleTop
+                                            , includeTchan=param_runTchanSingleTop
+                                            , includeWtprod=param_runWtSingleTop
+                                            , includeSchan=param_runSchanSingleTop
                                             , removeNull = param_removeNull )
 
 if param_runSignal:
     Samples += GetSignalSamples( useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, campaign = param_campaign
                                  , includeSingleVLQ = param_runSingleVLQ, includePairVLQ = param_runPairVLQ
-                                 , include4tops = param_run4tops)
+                                 , include4tops = param_run4tops, RWName = param_RWName)
 
 printGoodNews("--> All samples recovered")
 ##..............................................................................
@@ -300,9 +308,9 @@ for channel in channels:
         JOSet.setJobRecoveryFile(scriptFolder+"/JobCheck.chk")
         JOSet.setQueue(param_queue)
 
-        setCom=""
-        setCom+="rcSetup Base,2.4.43 \n "
-        JOSet.setSetUpCommand(setCom)
+        #setCom=""
+        #setCom+="rcSetup Base,2.4.43 \n "
+        #JOSet.setSetUpCommand(setCom)
         ##______________________________________________________________________
         ## Loop over jobs for this sample (multiple files or systematics)
         for iJob in range(len(joblist)):
