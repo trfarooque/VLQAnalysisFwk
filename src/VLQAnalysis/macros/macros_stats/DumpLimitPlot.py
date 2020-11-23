@@ -15,9 +15,9 @@ import numpy as np
 sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/IFAETopFramework/")
 from BatchTools import *
 
+#sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/VLQAnalysis/")
 sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/SignalTools/")
 from VLQCouplingCalculator import VLQCouplingCalculator as couplingCalculator
-from VLQCouplingCalculator import VLQMixAngleCalculator as mixangleCalculator
 from VLQCrossSectionCalculator import *
 
 ##_____________________________________________________________________________________________
@@ -188,140 +188,70 @@ if(energy=="13"):
         masses += [{'name':"SM4tops",'mass':1800,'xsec':0.009201}]
 
     elif(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
-        type="WTHt"
+        sigtype="WTHt"
         if(signal.upper()=="WTHT"):
-           type="WTHt"
+           sigtype="WTHt"
         if(signal.upper()=="ZTHT"):
-           type="ZTHt"
+           sigtype="ZTHt"
         if(signal.upper()=="WTZT"):
-           type="WTZt"
+           sigtype="WTZt"
         if(signal.upper()=="ZTZT"):
-           type="ZTZt"
+           sigtype="ZTZt"
 
-        #b-associated production
-        if(signal.upper()=="WTHT" or signal.upper()=="WTZT"):
+        Masses = np.linspace(1000, 2000,num=50 ,endpoint=True)
+        Mode = 'T'
+
+
+        for M in Masses:
+
+            typesuffix = str(M/100)+str(Kappa)
+            typesuffix = typesuffix.replace('.','')
             
-            Masses = np.linspace(1000, 2000,num=50 ,endpoint=True)
+            
+            vlqSinglet = couplingCalculator(M, Mode)
+            vlqDoublet = couplingCalculator(M, Mode)
+            
+            
+            ## Set the VLQ Parameters: kappa, xi parameterization as in https://arxiv.org/pdf/1305.4172.pdf
+            vlqSinglet.setKappaxi(Kappa, 0.5, 0.25) # kappa, xiW, xiZ. xiH = 1 - xiW - xiZ                  
+            vlqDoublet.setKappaxi(Kappa, 0., 0.5) # kappa, xiW, xiZ. xiH = 1 - xiW - xiZ                  
+            
+            cSinglet = vlqSinglet.getcVals()
+            cDoublet = vlqDoublet.getcVals()
+            
+            BRSinglet = vlqSinglet.getBRs()
+            BRDoublet = vlqDoublet.getBRs()
+            
+            GammaSinglet = vlqSinglet.getGamma()
+            GammaDoublet = vlqDoublet.getGamma()
 
-            for M in Masses:
+            # 0=W; 1=Z; 2=H
+            prodIndex = -1
+            decayIndex = -1
 
-                Mode = 'T'
+            if(sigtype=="WTHt" or sigtype=="WTZt"):
+                prodIndex = 0 #W-mediated production 
+            elif(sigtype=="ZTHt" or sigtype=="ZTZt"):
+                prodIndex = 1 #Z-mediated production 
 
-                # Initialize calculator with mass point, VLQ, and multiplet
-                mixangleCalcSinglet = mixangleCalculator(M, Mode, 'T')
-                mixangleCalcDoublet = mixangleCalculator(M, Mode, 'XT')
+            if(sigtype=="WTZt" or sigtype=="ZTZt"):
+                decayIndex = 1 #decay to Z
+            elif(sigtype=="WTHt" or sigtype=="ZTHt"):
+                decayIndex = 2 #decay to H
 
-                # Set Kappa = K, xiW = 0.5, xiZ = 0.25, xiH = 1-xiW-xiZ (singlet case)
-                mixangleCalcSinglet.setKappaxi(Kappa, 0.5, 0.25)
-                mixangleCalcDoublet.setKappaxi(Kappa, 0, 0.5)
-
-                # Get full decay width
-                GammaSinglet = mixangleCalcSinglet.getGamma()
-                GammaDoublet = mixangleCalcDoublet.getGamma()
-
-                typesuffix = str(M/100)+str(Kappa)
-                typesuffix = typesuffix.replace('.','')
-
-                if(signal.upper()=="WTHT"):
+            print "sigtype : ",sigtype," prodIndex : ",prodIndex," decayIndex : ",decayIndex 
                 
-                    # Get branching ratio and boson coupling constant
-                    BRHSinglet = mixangleCalcSinglet.getBRs()[2]                
-                    cHSinglet = mixangleCalcSinglet.getcVals()[2]                
-                    
-                    BRHDoublet = mixangleCalcDoublet.getBRs()[2]
-                    cHDoublet = mixangleCalcDoublet.getcVals()[2]
-
-                    # Calculate process Xsec
-                    XSecSinglet = XS_NWA(M, cHSinglet)*BRHSinglet/PNWA(proc='WTHt', mass=M, GM=GammaSinglet/M)
-                    XSecDoublet = XS_NWA(M, cHDoublet)*BRHDoublet/PNWA(proc='WTHt', mass=M, GM=GammaDoublet/M)
-
-                    print "M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M
-                    print "Xsec(Wb->T->Ht) Singlet = ", XSecSinglet, "pb"
-
-                    print "M =",M,", kappa =",Kappa,", width/mass =",GammaDoublet/M
-                    print "Xsec(Wb->T->Ht) Doublet = ", XSecDoublet, "pb"
-
-                    masses +=[{'name': "sVLQ_"+type+typesuffix, 'mass':M, 'xsecSinglet':XSecSinglet, 'xsecDoublet':XSecDoublet}]
-
-                else:
-
-                    BRZSinglet = mixangleCalcSinglet.getBRs()[1]
-                    cZSinglet = mixangleCalcSinglet.getcVals()[1]
-
-                    BRZDoublet = mixangleCalcDoublet.getBRs()[1]
-                    cZDoublet = mixangleCalcDoublet.getcVals()[1]
-
-                    
-                    XSecSinglet = XS_NWA(M, cZSinglet)*BRZSinglet/PNWA(proc='WTZt', mass=M, GM=GammaSinglet/M)
-                    XSecDoublet = XS_NWA(M, cZDoublet)*BRZDoublet/PNWA(proc='WTZt', mass=M, GM=GammaDoublet/M)
-                    
-                    print "M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M
-                    print "Xsec(Wb->T->Zt) Singlet = ", XSecSinglet, "pb"
-
-                    print "M =",M,", kappa =",Kappa,", width/mass =",GammaDoublet/M
-                    print "Xsec(Wb->T->Zt) Doublet = ", XSecDoublet, "pb"
-
-                    masses +=[{'name': "sVLQ_"+type+typesuffix, 'mass':M, 'xsecSinglet':XSecSinglet, 'xsecDoublet':XSecDoublet}]
-
-        #t-associated production
-        else:
-            
-            Masses = np.linspace(1000, 2000,num=50 ,endpoint=True)
-            
-            for M in Masses:
-
-                Mode = 'T'
-              
-                mixangleCalcSinglet = mixangleCalculator(M, Mode, 'T')
-                mixangleCalcDoublet = mixangleCalculator(M, Mode, 'XT')
-  
-                # Set Kappa = K, xiW = 0.5, xiZ = 0.25, xiH = 1-xiW-xiZ (singlet case)                                                                                    
-                mixangleCalcSinglet.setKappaxi(Kappa, 0.5, 0.25)
-                mixangleCalcDoublet.setKappaxi(Kappa, 0, 0.5)
+            XSecSinglet = XS_NWA(M, cSinglet[prodIndex])*BRSinglet[decayIndex]/PNWA(proc=sigtype, mass=M, GM=GammaSinglet/M)
+            XSecDoublet = XS_NWA(M, cDoublet[prodIndex])*BRDoublet[decayIndex]/PNWA(proc=sigtype, mass=M, GM=GammaDoublet/M)
                 
-                GammaSinglet = mixangleCalcSinglet.getGamma()
-                GammaDoublet = mixangleCalcDoublet.getGamma()
+            print "process : ",sigtype," M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M
+            print "Xsec Singlet = ", XSecSinglet, "pb"
 
-                typesuffix = str(M/100)+str(Kappa)
-                typesuffix = typesuffix.replace('.','')
-
-                if(signal.upper()=="ZTHT"):
-
-                    BRHSinglet = mixangleCalcSinglet.getBRs()[2]
-                    cHSinglet = mixangleCalcSinglet.getcVals()[2]
-                    XSecSinglet = XS_NWA(M, cHSinglet)*BRHSinglet/PNWA(proc='ZTHt', mass=M, GM=GammaSinglet/M)
-
-                    print "M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M
-                    print "Xsec(Zt->T->Ht) Singlet = ", XSecSinglet, "pb"
-
-                    BRHDoublet = mixangleCalcDoublet.getBRs()[2]
-                    cHDoublet = mixangleCalcDoublet.getcVals()[2]
-                    XSecDoublet = XS_NWA(M, cHDoublet)*BRHDoublet/PNWA(proc='ZTHt', mass=M, GM=GammaDoublet/M)
-
-                    print "M =",M,", kappa =",Kappa,", width/mass =",GammaDoublet/M
-                    print "Xsec(Zt->T->Ht) Doublet = ", XSecDoublet, "pb"
-
-                    masses +=[{'name': "sVLQ_"+type+typesuffix, 'mass':M, 'xsecSinglet':XSecSinglet, 'xsecDoublet':XSecDoublet}]
-
-                else:
-
-                    BRZSinglet = mixangleCalcSinglet.getBRs()[1]
-                    cZSinglet = mixangleCalcSinglet.getcVals()[1]
-                    XSecSinglet = XS_NWA(M, cZSinglet)*BRZSinglet/PNWA(proc='ZTZt', mass=M, GM=GammaSinglet/M)
-
-                    print "M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M
-                    print "Xsec(Zt->T->Zt) Singlet = ", XSecSinglet, "pb"
-
-                    BRZDoublet = mixangleCalcDoublet.getBRs()[1]
-                    cZDoublet = mixangleCalcDoublet.getcVals()[1]
-                    XSecDoublet = XS_NWA(M, cZDoublet)*BRZDoublet/PNWA(proc='ZTZt', mass=M, GM=GammaDoublet/M)
-
-                    print "M =",M,", kappa =",Kappa,", width/mass =",GammaDoublet/M
-                    print "Xsec(Zt->T->Zt) Doublet = ", XSecDoublet, "pb"
-
-                    masses +=[{'name': "sVLQ_"+type+typesuffix, 'mass':M, 'xsecSinglet':XSecSinglet, 'xsecDoublet':XSecDoublet}]
-                    
-
+            print "process : ",sigtype," M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M
+            print "Xsec Doublet = ", XSecDoublet, "pb"
+                
+            masses +=[{'name': "sVLQ_"+sigtype+typesuffix, 'mass':M, 'xsecSinglet':XSecSinglet, 'xsecDoublet':XSecDoublet}]
+                
 if len(masses)==1:
     mass = masses[0]
     files = glob.glob(inDir + "/*"+mass['name']+suffix+"*/Limits/asymptotics/*.root")
