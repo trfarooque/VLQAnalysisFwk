@@ -92,6 +92,7 @@ parser = OptionParser()
 parser.add_option("-i","--inputDir",help="location of the log files ",dest="inDir",default="")
 parser.add_option("-o","--outDir",help="output folder",dest="outDir",default="./test/")
 parser.add_option("-s","--signal",help="signal sample",dest="signal",default="TTD")
+parser.add_option("-m","--mode",help="single VLQ signal mode", dest="mode", default="WTHt")
 parser.add_option("-e","--energy",help="energy",dest="energy",default="13")
 parser.add_option("-a","--addText",help="additional text to plot",dest="addText",default="")
 parser.add_option("-l","--lumi",help="luminosity",dest="lumi",default="3.2")
@@ -110,6 +111,7 @@ parser.add_option
 inDir=options.inDir
 outDir=options.outDir
 signal=options.signal
+mode=options.mode
 energy=options.energy
 addText=options.addText.replace("_"," ")
 lumi=options.lumi
@@ -187,19 +189,24 @@ if(energy=="13"):
     elif(signal.upper()=="SM4TOPS"):
         masses += [{'name':"SM4tops",'mass':1800,'xsec':0.009201}]
 
-    elif(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
-        sigtype="WTHt"
-        if(signal.upper()=="WTHT"):
-           sigtype="WTHt"
-        if(signal.upper()=="ZTHT"):
-           sigtype="ZTHt"
-        if(signal.upper()=="WTZT"):
-           sigtype="WTZt"
-        if(signal.upper()=="ZTZT"):
-           sigtype="ZTZt"
+
+    elif(signal.upper()=="TS" or signal.upper()=="TD"):
+        if(mode.upper()=="WTHT"):
+            sigtype=["WTHt"]
+        elif(mode.upper()=="WTZT"):
+            sigtype=["WTZt"]
+        elif(mode.upper()=="ZTHT"):
+            sigtype=["ZTHt"]
+        elif(mode.upper()=="ZTZT"):
+            sigtype=["ZTZt"]
+        elif(mode.upper()=="ALL"):
+            sigtype=["WTHt","WTZt","ZTHt","ZTZt"]
+        else:
+            print "<!> ERROR !! Unrecognized single VLQ mode! Valid options are WTHt, WTZt, ZTHt, ZTZt, or all."
+            sys.exit(-1)
 
         Masses = np.linspace(1000, 2000,num=50 ,endpoint=True)
-        Mode = 'T'
+        vlqMode = 'T'
 
 
         for M in Masses:
@@ -208,8 +215,8 @@ if(energy=="13"):
             typesuffix = typesuffix.replace('.','')
             
             
-            vlqSinglet = couplingCalculator(M, Mode)
-            vlqDoublet = couplingCalculator(M, Mode)
+            vlqSinglet = couplingCalculator(M, vlqMode)
+            vlqDoublet = couplingCalculator(M, vlqMode)
             
             
             ## Set the VLQ Parameters: kappa, xi parameterization as in https://arxiv.org/pdf/1305.4172.pdf
@@ -226,32 +233,46 @@ if(energy=="13"):
             GammaDoublet = vlqDoublet.getGamma()
 
             # 0=W; 1=Z; 2=H
-            prodIndex = -1
-            decayIndex = -1
 
-            if(sigtype=="WTHt" or sigtype=="WTZt"):
-                prodIndex = 0 #W-mediated production 
-            elif(sigtype=="ZTHt" or sigtype=="ZTZt"):
-                prodIndex = 1 #Z-mediated production 
+            if(mode.upper()=="WTHT" or mode.upper()=="WTZT"):
+                prodIndex = [0] # W-mediated production
+            elif(mode.upper()=="ZTHT" or mode.upper()=="ZTZT"):
+                prodIndex = [1] # Z-mediated production
+            elif(mode.upper()=="ALL"):
+                prodIndex = [0,1]
 
-            if(sigtype=="WTZt" or sigtype=="ZTZt"):
-                decayIndex = 1 #decay to Z
-            elif(sigtype=="WTHt" or sigtype=="ZTHt"):
-                decayIndex = 2 #decay to H
+            if(mode.upper()=="WTZT" or mode.upper()=="ZTZT"):
+                decayIndex = [1] # T decay to Z
+            elif(mode.upper()=="WTHT" or mode.upper()=="ZTHT"):
+                decayIndex = [2] # T decay to H
+            elif(mode.upper()=="ALL"):
+                decayIndex = [1,2]
 
-            print "sigtype : ",sigtype," prodIndex : ",prodIndex," decayIndex : ",decayIndex 
-                
-            XSecSinglet = XS_NWA(M, cSinglet[prodIndex])*BRSinglet[decayIndex]/PNWA(proc=sigtype, mass=M, GM=GammaSinglet/M)
-            XSecDoublet = XS_NWA(M, cDoublet[prodIndex])*BRDoublet[decayIndex]/PNWA(proc=sigtype, mass=M, GM=GammaDoublet/M)
-                
-            print "process : ",sigtype," M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M
-            print "Xsec Singlet = ", XSecSinglet, "pb"
 
-            print "process : ",sigtype," M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M
-            print "Xsec Doublet = ", XSecDoublet, "pb"
-                
-            masses +=[{'name': "sVLQ_"+sigtype+typesuffix, 'mass':M, 'xsecSinglet':XSecSinglet, 'xsecDoublet':XSecDoublet}]
-                
+            TotalXSecSinglet = 0
+            TotalXSecDoublet = 0
+
+            for sig in sigtype:
+                for decay in decayIndex:
+                    for prod in prodIndex:
+
+                        print "sigtype : ",sig," prodIndex : ",prod," decayIndex : ",decay
+                    
+                        XSecSinglet = XS_NWA(M, cSinglet[prod])*BRSinglet[decay]/PNWA(proc=sig, mass=M, GM=GammaSinglet/M)
+                        XSecDoublet = XS_NWA(M, cDoublet[prod])*BRDoublet[decay]/PNWA(proc=sig, mass=M, GM=GammaDoublet/M)
+
+                        TotalXSecSinglet += XSecSinglet
+                        TotalXSecDoublet += XSecDoublet
+
+                        print "process : ",sig," M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M
+                        print "Xsec Singlet = ", XSecSinglet, "pb"
+            
+                        print "process : ",sig," M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M
+                        print "Xsec Doublet = ", XSecDoublet, "pb"
+                        
+            masses +=[{'name': "sVLQ_"+mode+typesuffix, 'mass':M, 'xsecSinglet':TotalXSecSinglet, 'xsecDoublet':TotalXSecDoublet}]
+
+
 if len(masses)==1:
     mass = masses[0]
     files = glob.glob(inDir + "/*"+mass['name']+suffix+"*/Limits/asymptotics/*.root")
@@ -293,7 +314,7 @@ if drawNonTheory:
 
 #Theory plot
 for iMass in range(len(masses)):
-    if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+    if(signal.upper()=="TS" or signal.upper()=="TD"):
         tg_theory.SetPoint(iMass,masses[iMass]['mass'],masses[iMass]['xsecSinglet'])
         tg_theory_doublet.SetPoint(iMass,masses[iMass]['mass'],masses[iMass]['xsecDoublet'])
     else:
@@ -367,14 +388,18 @@ elif(signal.upper()=="TTZTZT"):
     signal_label = "BR(T#rightarrowZt) = 1"
 elif(signal=="UEDRPP11"):
     signal_label = "Tier (1,1)"
-elif (signal.upper()=="WTHT"):
-    signal_label = "pp #rightarrow T(#rightarrowHt)qb"
-elif (signal.upper()=="ZTHT"):
-    signal_label = "pp #rightarrow T(#rightarrowHt)qt"
-elif (signal.upper()=="WTZT"):
-    signal_label = "pp #rightarrow T(#rightarrowZt)qb"
-elif (signal.upper()=="ZTZT"):
-    signal_label = "pp #rightarrow T(#rightarrowZt)qt"
+elif(signal.upper() == "TS" or signal.upper() == "TD"):
+    if(mode.upper() == "WTHT"):
+        signal_label = "pp #rightarrow T(#rightarrowHt)qb"
+    elif (mode.upper()=="ZTHT"):
+        signal_label = "pp #rightarrow T(#rightarrowHt)qt"
+    elif (mode.upper()=="WTZT"):
+        signal_label = "pp #rightarrow T(#rightarrowZt)qb"
+    elif (mode.upper()=="ZTZT"):
+        signal_label = "pp #rightarrow T(#rightarrowZt)qt"
+    else:
+        signal_label = "pp #rightarrow T"
+        
 else:
     signal_label = signal
 
@@ -425,7 +450,7 @@ else:
                 ymin = tg_theory.GetHistogram().GetMinimum() if tg_theory.GetHistogram().GetMinimum() < min([t.GetHistogram().GetMinimum() for t in tg_exp2s]) else min([t.GetHistogram().GetMinimum() for t in tg_exp2s])
                 ymax = tg_theory.GetHistogram().GetMaximum() if tg_theory.GetHistogram().GetMaximum() > max([t.GetHistogram().GetMaximum() for t in tg_exp2s]) else max([t.GetHistogram().GetMaximum() for t in tg_exp2s])
             else:
-                if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+                if(signal.upper()=="TS" or signal.upper()=="TD"):
                     ymin = min([tg_theory.GetHistogram().GetMinimum(), tg_theory_doublet.GetHistogram().GetMinimum()])
                     ymax = max([tg_theory.GetHistogram().GetMaximum(), tg_theory_doublet.GetHistogram().GetMaximum()])
                 else:
@@ -436,7 +461,7 @@ else:
                 ymin = tg_theory.GetHistogram().GetMinimum() if tg_theory.GetHistogram().GetMinimum() < tg_exp2s.GetHistogram().GetMinimum() else tg_exp2s.GetHistogram().GetMinimum()
                 ymax = tg_theory.GetHistogram().GetMaximum() if tg_theory.GetHistogram().GetMaximum() > tg_exp2s.GetHistogram().GetMaximum() else tg_exp2s.GetHistogram().GetMaximum()
             else:
-                if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+                if(signal.upper()=="TS" or signal.upper()=="TD"):
                     ymin = min([tg_theory.GetHistogram().GetMinimum(), tg_theory_doublet.GetHistogram().GetMinimum()])
                     ymax = max([tg_theory.GetHistogram().GetMaximum(), tg_theory_doublet.GetHistogram().GetMaximum()])
                 else:
@@ -477,7 +502,7 @@ if drawTheory:
     tg_theory.GetHistogram().GetXaxis().SetTitleOffset(1.35)
     tg_theory.GetHistogram().GetYaxis().SetTitleOffset(1.5)
     
-    if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+    if(signal.upper()=="TS" or signal.upper()=="TD"):
         tg_theory_doublet.SetLineColor(kBlue)
         tg_theory_doublet.SetFillColor(kBlue-9)
         
@@ -585,7 +610,7 @@ if drawTheory:
     if signal.find("UEDRPP")==-1:
         #leg.AddEntry(tg_theory,"Theory (NNLO prediction #pm1#sigma)","lf")
         leg.AddEntry(tg_theory,"Theory Singlet","lf")
-        if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+        if(signal.upper()=="TS" or signal.upper()=="TD"):
             leg.AddEntry(tg_theory_doublet,"Theory Doublet","lf")
     else:
        leg.AddEntry(tg_theory,"Theory (LO prediction)","l")
@@ -719,7 +744,7 @@ if doMulti:
         tg_theory.SetMinimum(ylim_min_log)
         tg_theory.SetMaximum(ylim_max_log)
         tg_theory.Draw("al3")
-        if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+        if(signal.upper()=="TS" or signal.upper()=="TD"):
             tg_theory_doublet.GetXaxis().SetLimits(masses[0]['mass'],masses[len(masses)-1]['mass'])
             tg_theory_doublet.SetMinimum(ylim_min_log)
             tg_theory_doublet.SetMaximum(ylim_max_log)
@@ -737,7 +762,7 @@ if doMulti:
             tl_addtext.Draw()
         tg_theory.GetXaxis().Draw()
         tg_theory.GetYaxis().Draw()
-        if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+        if(signal.upper()=="TS" or signal.upper()=="TD"):
             tg_theory_doublet.GetXaxis().Draw()
             tg_theory_doublet.GetYaxis().Draw()
     elif drawNonTheory:
@@ -765,7 +790,7 @@ else:
         tg_theory.SetMinimum(ylim_min_log)
         tg_theory.SetMaximum(ylim_max_log)
         tg_theory.Draw("al3")
-        if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+        if(signal.upper()=="TS" or signal.upper()=="TD"):
             tg_theory_doublet.GetXaxis().SetLimits(masses[0]['mass'],masses[len(masses)-1]['mass'])
             tg_theory_doublet.SetMinimum(ylim_min_log)
             tg_theory_doublet.SetMaximum(ylim_max_log)
@@ -783,7 +808,7 @@ else:
             tl_addtext.Draw()
         tg_theory.GetXaxis().Draw()
         tg_theory.GetYaxis().Draw()
-        if(signal.upper()=="WTHT" or signal.upper()=="WTZT" or signal.upper()=="ZTHT" or signal.upper()=="ZTZT"):
+        if(signal.upper()=="TS" or signal.upper()=="TD"):
             tg_theory_doublet.GetXaxis().Draw()
             tg_theory_doublet.GetYaxis().Draw()
     elif drawNonTheory:
