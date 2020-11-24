@@ -207,7 +207,6 @@ if(energy=="13"):
         Masses = np.linspace(1000, 2000,num=50 ,endpoint=True)
         vlqMode = 'T'
 
-
         for M in Masses:
 
             typesuffix = str(M/100)+str(Kappa)
@@ -232,42 +231,35 @@ if(energy=="13"):
             GammaDoublet = vlqDoublet.getGamma()
 
             # Key map: 0=W; 1=Z; 2=H
-            if(mode.upper()=="WTHT" or mode.upper()=="WTZT"):
-                prodIndex = [0] # W-mediated production
-            elif(mode.upper()=="ZTHT" or mode.upper()=="ZTZT"):
-                prodIndex = [1] # Z-mediated production
-            elif(mode.upper()=="ALL"):
-                prodIndex = [0,0,1,1]
-
-            if(mode.upper()=="WTZT" or mode.upper()=="ZTZT"):
-                decayIndex = [1] # T decay to Z
-            elif(mode.upper()=="WTHT" or mode.upper()=="ZTHT"):
-                decayIndex = [2] # T decay to H
-            elif(mode.upper()=="ALL"):
-                decayIndex = [2,1,2,1]
-
-
-            signalZip = zip(sigtype, prodIndex, decayIndex)
-
+            keyDictionary = {
+            "WT": 0,
+            "ZT": 1,
+            "HT": 2
+            }
+            
             TotalXSecSinglet = 0
             TotalXSecDoublet = 0
 
-            for sig, prod, decay in signalZip:
+            for sig in sigtype:
 
-                print "sigtype : ",sig," prodIndex : ",prod," decayIndex : ",decay
+                prodIndex = keyDictionary[sig[:2:]]
+                decayIndex = keyDictionary[sig[2::].upper()]
                 
-                XSecSinglet = XS_NWA(M, cSinglet[prod])*BRSinglet[decay]/PNWA(proc=sig, mass=M, GM=GammaSinglet/M)
-                XSecDoublet = XS_NWA(M, cDoublet[prod])*BRDoublet[decay]/PNWA(proc=sig, mass=M, GM=GammaDoublet/M)
-            
-                TotalXSecSinglet += XSecSinglet
-                TotalXSecDoublet += XSecDoublet
+                print "sigtype : ",sig," prodIndex : ",prodIndex," decayIndex : ",decayIndex
 
-                print "process : ",sig," M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M
-                print "Xsec Singlet = ", XSecSinglet, "pb"
-                
-                print "process : ",sig," M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M
+                XSecSinglet = XS_NWA(M, cSinglet[prodIndex], sig[:2:])*BRSinglet[decayIndex]/PNWA(proc=sig, mass=M, GM=GammaSinglet/M)
+                XSecDoublet = XS_NWA(M, cDoublet[prodIndex], sig[:2:])*BRDoublet[decayIndex]/PNWA(proc=sig, mass=M, GM=GammaDoublet/M)    
+
+                TotalXSecSinglet += XSecSinglet                                                                                                                      
+                TotalXSecDoublet += XSecDoublet                                                                                                                            
+
+                print "process : ",sig," M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M                                                                     
+                print "Xsec Singlet = ", XSecSinglet, "pb"                                                                                                               
+
+                print "process : ",sig," M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M                                                                              
                 print "Xsec Doublet = ", XSecDoublet, "pb"
-                        
+
+
             masses +=[{'name': "sVLQ_"+mode+typesuffix, 'mass':M, 'xsecSinglet':TotalXSecSinglet, 'xsecDoublet':TotalXSecDoublet}]
 
 
