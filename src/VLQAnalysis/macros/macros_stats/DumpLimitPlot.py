@@ -256,7 +256,7 @@ if(energy=="13"):
                 print "process : ",sig," M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M                                                                     
                 print "Xsec Singlet = ", XSecSinglet, "pb"                                                                                                               
 
-                print "process : ",sig," M =",M,", kappa =",Kappa,", width/mass =",GammaSinglet/M                                                                              
+                print "process : ",sig," M =",M,", kappa =",Kappa,", width/mass =",GammaDoublet/M                                                                              
                 print "Xsec Doublet = ", XSecDoublet, "pb"
 
 
