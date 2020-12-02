@@ -8,7 +8,9 @@ inputDir = sys.argv[-1]
 
 # use names in config files to collect all output dirs in Results and necessary later for systs
 outputNames = [n.replace(n[:n.index("/configFile_sVLQ_")+17],"").replace(".txt","") for n in glob.glob(inputDir+"/configFile_sVLQ_*")]
-outputNames = [n.replace(n[[m.start() for m in re.finditer('_',n)][1]:],"") for n in outputNames]
+outputNames = [n.replace(n[[m.start() for m in re.finditer('_',n)][0]:],"") for n in outputNames]
+# FOR names starting with sVLQ_ :
+# outputNames = [n.replace(n[[m.start() for m in re.finditer('_',n)][1]:],"") for n in outputNames]
 outputDirs = [d for d in glob.glob(inputDir+"/Results/*") if not "scripts" in d and any(n in d for n in outputNames)]
 
 
