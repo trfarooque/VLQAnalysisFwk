@@ -7,15 +7,22 @@ import importlib
 sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/VLQAnalysis/" )
 
 # default params
-indir  = '/nfs/at3/scratch2/tfarooque/VLQAnalysisRun2/JMSRSYSTFiles/FilesTRexF/JMSRECALC/'
+indir  = '/nfs/at3/scratch2/tfarooque/VLQAnalysisRun2/FitInputs_RWPARAM/FilesTRexF/JMSRSYST/JMSRECALC/'
 var = 'meff'
 regDict = "regions_dictionary_sVLQ"
-outdir = 'Extrapolation/'
+outdir = 'Extrapolated/'
 
-#samples = ['ttbarlight', 'ttbarcc', 'ttbarbb', 'sVLQ_WTHt16K05', 'sVLQ_WTZt16K05', 'sVLQ_ZTHt16K05', 'sVLQ_ZTZt16K05'] 
-samples = ['Singletop', 'Wjets', 'Zjets', 'topEW', 'Dibosons', 'ttH', 'tZ', 'VH', 'SM4tops']
+sVLQ_channels = ['WTHt', 'WTZt', 'ZTHt', 'ZTZt']
+sVLQ_masses = ['1000', '1200', '1400', '1600', '1800', '2000']
+sVLQ_couplings = ['K50']
 
-#SingletopWtprod','Singletopschan','Singletoptchan']
+samples = [ ]
+for channel in sVLQ_channels:
+    for mass in sVLQ_masses:
+        for coupling in sVLQ_couplings:
+            samples += [channel+mass+coupling]
+
+#samples += ['ttbarlight', 'ttbarcc', 'ttbarbb','Singletop', 'Wjets', 'Zjets', 'topEW', 'Dibosons', 'ttH', 'tZ', 'VH', 'SM4tops']
 
 # user input
 if(len(sys.argv))>1:
@@ -50,7 +57,7 @@ regModule = importlib.import_module(regDict)
 fitRegions = []
 
 regMap = {}
-for fr in regModule.all_regions_1l:
+for fr in regModule.tight_regions_1l:
     frname = fr['name'].replace('HTX_','')
     fitRegions.append(frname)
 
@@ -109,7 +116,6 @@ def LoadHist(f,hname):
     return h
 
 # loop through files
-#for campaign in ['','.mc16a','.mc16d','.mc16e']:
 for campaign in ['.mc16a','.mc16d','.mc16e']:
 
     for sample in samples:

@@ -8,6 +8,10 @@ sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/VLQAnalysis/" 
 from VLQ_Samples_mc import *
 #from regions_dictionary import *
 
+sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/SignalTools/")
+from VLQCouplingCalculator import VLQCouplingCalculator as couplingCalculator
+from VLQCrossSectionCalculator import *
+
 ##------------------------------------------------------
 ## Checking the arguments
 ##------------------------------------------------------
@@ -21,13 +25,18 @@ if(len(sys.argv)<5):
     print "    inputTemplate=<path to the template config file>"
     print "    outputFolder=<place where to store the config files>"
     print "    inputDir=<absolute path to rootfiles for TRexFitter>"
+    print "    sampleInfo=<name of sample_info.dat file; only mc16a version is needed, and only if scaling signals to a new cross section>"
     print "    systConfig=<coma separated list of absolute paths to the systematics template config files>"
     print "    addition=<additional information to be stored in the names of the jobs, scripts, folders, ...>"
     print "    signal=<ALL/ONE> ALL: all signals are put in the config file (default), ONE: only one signal in each config file (default is ALL)"
     print "    normfactor=<Init,Low,High> settings for the signal normalisation factor (default is: 1,0,100)"
     print "    signalType=<PAIR/SINGLE> (default is PAIR)"
-    print "    signalScaling=<DEFAULT/BENCHMARK> (default is DEFAULT)"
+    print "    signalScaling=<DEFAULT/BENCHMARK/THEORY> (default is DEFAULT. BENCHMARK can be used to scale to a constant benchmark cross section. **ONLY FOR SVLQ***, THEORY will scale signals to cross sections calculated in the theory model)"
     print "    signalBenchmark=Benchmark cross section for signal normalisation"
+
+    print "    sVLQMass=Single VLQ signal mass point (default is 0.=ALL)"
+    print "    sVLQMode=Single VLQ signal production/decay mode: ALL (default), WTHT,WTZT,ZTHT,ZTZT,TSINGLET,TDOUBLET"
+
     print "    doZeroLep=TRUE/FALSE use the zero lepton regions"
     print "    doOneLep=TRUE/FALSE use the one lepton regions"
     print "    doOneLepEMu=TRUE/FALSE use the separate e/mu regions in one lepton"
@@ -71,6 +80,7 @@ _ARGUMENTS_ += [{'arg':"__LIMITPOIASIMOV__",'value':"0"}]
 inputTemplateConfigFile = ""
 outputFolder = ""
 inputDir = ""
+sampleInfo = ""
 addition = ""
 signalHandling = "ALL"
 signalType = "PAIR"
@@ -106,6 +116,8 @@ for iArg in range(1,len(sys.argv)):
         outputFolder = splitted[1]
     elif(argument=="INPUTDIR"):
         inputDir = splitted[1]
+    elif(argument=="SAMPLEINFO"):
+        sampleInfo = splitted[1]
     elif(argument=="SIGNAL"):
         signalHandling = splitted[1].upper()
     elif(argument=="NORMFACTOR"):
@@ -176,6 +188,10 @@ if(inputTemplateConfigFile==""):
     printError("<!> Please provide an input config file to use !")
     sys.exit()
 
+if( (signalScaling == "THEORY") or (signalScaling == "BENCHMARK") ) and (sampleInfo == ""):
+    printError("<!> Please provide a sampleInfo file for cross section scaling!")
+    sys.exit()
+
 ##------------------------------------------------------
 ## Options (that can only be filled aftewards ...)
 ##------------------------------------------------------
@@ -185,12 +201,16 @@ _ARGUMENTS_ += [{'arg':"__HISTOPATH__",'value':inputDir}]
 ## Creating the output folder
 ##------------------------------------------------------
 os.system( "mkdir -p " + outputFolder )
+
+
 ##------------------------------------------------------
 ## Getting all signals
 ##------------------------------------------------------
-Signals = []
+SignalSets = {}
 
 if(signalType=="PAIR"):
+
+    Signals = []
     VLQ_masses = ["600","700","750","800","850","900","950","1000","1050","1100","1150","1200","1300","1400"]
     VLQB_masses = ["600","700","750","800","850","900","950","1000","1050","1100","1150","1200","1300","1400","1500","1600"]
     if doAllBR:
@@ -223,8 +243,51 @@ if(signalType=="PAIR"):
         Signals += [getSampleUncertainties("VLQ_BB_" + mass + "_HbHb","VLQ_BB_" + mass + "_HbHb", CommonObjectSystematics , [])]
         Signals += [getSampleUncertainties("VLQ_BB_" + mass + "_ZbZb","VLQ_BB_" + mass + "_ZbZb", CommonObjectSystematics , [])]
 
+    if signalHandling=="ONE":
+        for sample in sVLQ_samples.items():
+            SType = sample['sampleType']
+            SignalSets[SType] = [sample]
+    else:
+        SignalSets["pVLQ"] += Signals
+                
+    #SignalSets["pVLQ"] = Signals
+
+
 elif(signalType=="SINGLE"):
-    Signals += GetOldSingleVLQSamples( )
+
+    VLQ_masses = [1100, 1300] #, 1500, 1700, 1900, 2100, 2300]
+    VLQ_massRW = ["low_mass"] #, "nom_mass"]                                                                                             
+    VLQ_couplings =["K30"] #, "K50", "K70"]
+
+    if signalHandling=="ALL":
+        SignalSets["sVLQ"] = []
+
+    for vlq_coupling in VLQ_couplings:
+
+        for massRW in VLQ_massRW:
+
+            for vlqMass in VLQ_masses:
+
+                sVLQ_samples =  GetSingleVLQSamples( RWName=massRW+"_"+vlq_coupling, mode="", mass=vlqMass )
+                if signalHandling=="ONE":
+                    for sample in sVLQ_samples:
+                        SType = sample['sampleType']
+                        if SType in SignalSets:
+                            SignalSets[SType] += [sample]
+                        else:
+                            SignalSets[SType] = [sample]
+                else:
+                    SignalSets["sVLQ"] += sVLQ_samples
+
+
+                strParam=vlq_coupling+str(vlqMass)+massRW
+                SignalSets["sVLQ_TS"+strParam] = sVLQ_samples
+                SignalSets["sVLQ_TD"+strParam] = []
+                SignalSets["sVLQ_TD"+strParam] += GetSingleVLQSamples( RWName=massRW+"_"+vlq_coupling, mode="ZTHt", mass=vlqMass )
+                SignalSets["sVLQ_TD"+strParam] += GetSingleVLQSamples( RWName=massRW+"_"+vlq_coupling, mode="ZTZt", mass=vlqMass )
+                
+            
+    #Signals += GetOldSingleVLQSamples( )
 
     
 #for mass in ["1000","1200","1400","1600","1800"]:
@@ -259,160 +322,279 @@ if doZeroLep:
 ## Creating all the config files
 ##------------------------------------------------------
 
-#open json xsec database if needed
-##________________________________________________________                                                                                                                                                
-## Looking into the XSe DB file                                                                                                                                                                           
-with open(os.getenv("VLQAnalysisFramework_DIR") + '/data/VLQAnalysis/xsec_list.json','r') as f:
+##________________________________________________________
+#open sampleInfo if needed
+with open(os.getenv("VLQAnalysisFramework_DIR") + '/data/VLQAnalysis/'+sampleInfo,'r') as f:
     xsecdata = json.load(f)
 
-for counter,sample in enumerate(Signals):
 
-    #Sample characteristics
-    SName = sample['name']
-    SType = sample['sampleType']
-    TypeTemp = SType
+def GetSVLQSampleXSec( vlqMultiplet, samples ):
 
-    printGoodNews("-> Generating config file for " + SType)
+    #VQAqMK
+    #Parse the sampleType
+    xSec = 0.
+    for sampleType in samples.split(','):
+        sigType = ""
+        if 'WTHt' in sampleType:
+            sigType = "WTHt"
+        elif 'WTZt' in sampleType:
+            sigType = "WTZt"
+        elif 'ZTHt' in sampleType:
+            sigType = "ZTHt"
+        elif 'ZTZt' in sampleType:
+            sigType = "ZTZt"
+            
+        params = sampleType.replace(sigType,'')
+        kappaIndex = params.index('K')
+        kappa = float( params[kappaIndex+1:] )/100.
+        mass = float( params[:kappaIndex] )
 
-    cleaned_sampleType = SType.replace("#","").replace(" ","").replace("{","").replace("}","").replace("+","").replace("(","").replace(")","")
+        xiW=0
+        xiZ=0
+        if vlqMultiplet.upper()=="TSINGLET":
+            xiW=0.5
+            xiZ=0.25
+        elif vlqMultiplet.upper()=="TDOUBLET":
+            xiW=0.
+            xiZ=0.5
+        else: #dummy singlet values for now
+            xiW=0.5
+            xiZ=0.25
+
+        xSec += GetSVLQXSec(sigType, mass, kappa, xiW, xiZ)
+
+    return xSec
+
+
+def GetSVLQXSec( sigTypes, M, kappa, xiW, xiZ ):
+
+    xSec = 0.;
+
+    for sigtype in sigTypes.split(','):
+        vlq = couplingCalculator(M, 'T')
+        vlq.setKappaxi(kappa, xiW, xiZ) # kappa, xiW, xiZ. xiH = 1 - xiW - xiZ
+        
+        cVals = vlq.getcVals()
+        BRs = vlq.getBRs()
+        Gamma = vlq.getGamma()
+
+        # 0=W; 1=Z; 2=H
+        prodIndex = -1
+        decayIndex = -1
+        
+        if(sigtype=="WTHt" or sigtype=="WTZt"):
+            prodIndex = 0 #W-mediated production
+        elif(sigtype=="ZTHt" or sigtype=="ZTZt"):
+            prodIndex = 1 #Z-mediated production
+
+        if(sigtype=="WTZt" or sigtype=="ZTZt"):
+            decayIndex = 1 #decay to Z
+        elif(sigtype=="WTHt" or sigtype=="ZTHt"):
+            decayIndex = 2 #decay to H
+
+        xSec += XS_NWA(M, cVals[prodIndex])*BRs[decayIndex]/PNWA(proc=sigtype, mass=M, GM=Gamma/M)
+
+    return xSec
+
+
+for setName,Signals in SignalSets.items():
+
+    printGoodNews("-> Generating config file for the SignalSet :: " + setName)
+    print "Number of signals in set : ", len(Signals)
+
+    #Get relevant information about the signals
+    #e.g. name, title, histoFileNames, theoryXSec, inputXSec
+
+    SignalInfos = {}
+
+    #setInputXSec = 0.;
+    setTheoryXSec = 0.;
+
+    for sample in Signals:
+
+        #Sample characteristics
+        SName = sample['name']
+        SType = sample['sampleType']
+        TypeTemp = SType
+        cleaned_sampleType = SType.replace("#","").replace(" ","").replace("{","").replace("}","").replace("+","").replace("(","").replace(")","")
+
+        inputXSec = 0.
+        theoryXSec = 0.
+
+        ###############################################
+        ####   Input cross section
+        ###############################################
+        searchname = SName.replace(".",".mc16a")
+        d_SampleInfo = xsecdata.get(searchname)
+        if not d_SampleInfo:
+            printError("<!> Sample not found in json file for benchmark xsec scaling")
+            sys.exit()
+        inputXSec = d_SampleInfo.get('crossSection')
+
+
+        ###############################################
+        ####   Theory cross section
+        ###############################################
+        multiplet=""
+        if 'sVLQ_TS' in setName:
+            multiplet="TSINGLET"
+        elif 'sVLQ_TD' in setName:
+            multiplet="TDOUBLET"
+        theoryXSec = GetSVLQSampleXSec(multiplet, SType )
+        setTheoryXSec += theoryXSec    
+
+
+        ###############################################
+        ####   Add signal info
+        ###############################################
+        if SType in SignalInfos:
+            SignalInfos[SType]['inputXSec'] += inputXSec
+            continue
+        else:
+            SignalInfos[SType] = { 'name':SType, 'title':TypeTemp, 'fileName':cleaned_sampleType, 'inputXSec':inputXSec, 'theoryXSec': theoryXSec }
+
+
+################################################################
 
     #Open the template file
     f_template = open(inputTemplateConfigFile,'r')
-
+    
     #Open the new file adapted to the signal
     template_file_path_split = inputTemplateConfigFile.split("/")
     template_file_name = template_file_path_split[len(template_file_path_split)-1]
-    f_adapted = 0
-    if signalHandling=="ONE":
-        f_adapted = open(outputFolder + "/" + template_file_name.replace("_SIGNAL_",SType).replace("TEMPLATE_","").replace(".txt",addition+".txt"),'w')
-    else:
-        mode = 'w'
-        if counter>0:
-            mode='a'
-        f_adapted = open(outputFolder + "/" + template_file_name.replace("_SIGNAL_","AllSignals").replace("TEMPLATE_","").replace(".txt",addition+".txt"),mode)
+    f_adapted = open(outputFolder + "/" + template_file_name.replace("_SIGNAL_",setName).replace("TEMPLATE_","").replace(".txt",addition+".txt"),'w')
 
-    #Updating the config file with the user's configuration
-    if (signalHandling=="ONE" or counter==0):
-        for inputLine in f_template:
-            corrected_line = inputLine
-            if inputLine.find("_REGIONLIST_")>-1:
-                    corrected_line = "\n"
-                    for reg in Regions:
-                        LepChannels = [""]
-                        if (reg['name'].find("c1lep")>-1) and doOneLepEMu:
-                            LepChannels += ["_el","_mu"]
-                        binning_key = "binning"
-                        if useBlindingCuts:
-                            binning_key = "binning_blind"
-                        #if(reg['name'].find("c1lep")>-1 and reg['name'].find("6jin")>-1):
-                        #    binning_key = "binning_low"
+    for inputLine in f_template:
+        corrected_line = inputLine
+        if inputLine.find("_REGIONLIST_")>-1:
+                corrected_line += "\n"
+                for reg in Regions:
+                    LepChannels = [""]
+                    if (reg['name'].find("c1lep")>-1) and doOneLepEMu:
+                        LepChannels += ["_el","_mu"]
+                    binning_key = "binning"
+                    if useBlindingCuts:
+                        binning_key = "binning_blind"
+                    #if(reg['name'].find("c1lep")>-1 and reg['name'].find("6jin")>-1):
+                    #    binning_key = "binning_low"
 
-                        if reg[binning_key]=="":
-                            print "=> The binning seems to be undefined for this region ("+reg['name']+"). Skipping the region."
-                            continue
-                        for channel in LepChannels:    
-                            corrected_line += "\n"
-                            if reg['type']=="VALIDATION":
-                                corrected_line += "Region: " + reg['name'] + "_VR" + channel + "\n"
+                    if reg[binning_key]=="":
+                        print "=> The binning seems to be undefined for this region ("+reg['name']+"). Skipping the region."
+                        continue
+                    for channel in LepChannels:    
+                        corrected_line += "\n"
+                        if reg['type']=="VALIDATION":
+                            corrected_line += "Region: " + reg['name'] + "_VR" + channel + "\n"
+                        else:
+                            corrected_line += "Region: " + reg['name'] + channel + "\n"
+                        corrected_line += "Type: " + reg['type'] + "\n"
+
+                        reg_discriminant = discriminant
+                        if (discriminant=="recoVLQ0_m"):
+                            if('0Hex' in reg['name']):
+                                reg_discriminant = "Zt_" + discriminant
                             else:
-                                corrected_line += "Region: " + reg['name'] + channel + "\n"
-                            corrected_line += "Type: " + reg['type'] + "\n"
+                                reg_discriminant = "Ht_" + discriminant
 
-                            reg_discriminant = discriminant
-                            if (discriminant=="recoVLQ0_m"):
-                                if('0Hex' in reg['name']):
-                                    reg_discriminant = "Zt_" + discriminant
-                                else:
-                                    reg_discriminant = "Ht_" + discriminant
+                        corrected_line += "HistoName: " + reg['name'].replace("HTX_","") + channel + "_" + reg_discriminant + "\n"
+                        corrected_line += "VariableTitle: " + discriminant_title +"\n"
+                        corrected_line += "Binning: " + reg[binning_key] + "\n"
+                        corrected_line += "Label: " + "\"" + reg['legend'] + "\"\n"
+                        corrected_line += "ShortLabel: " + "\"" + reg['legend'] + "\"\n"
+                        #if(reg['name'].find("c1lep")>-1 and inputDir.find("/1lep")==-1):
+                         #   corrected_line += "HistoPathSuff: 1lep/ \n"
+                        #elif(reg['name'].find("c0lep")>-1 and inputDir.find("/0lep")==-1):
+                        #    corrected_line += "HistoPathSuff: 0lep/ \n"
+                        corrected_line += "\n"
 
-                            corrected_line += "HistoName: " + reg['name'].replace("HTX_","") + channel + "_" + reg_discriminant + "\n"
-                            corrected_line += "VariableTitle: " + discriminant_title +"\n"
-                            corrected_line += "Binning: " + reg[binning_key] + "\n"
-                            corrected_line += "Label: " + "\"" + reg['legend'] + "\"\n"
-                            corrected_line += "ShortLabel: " + "\"" + reg['legend'] + "\"\n"
-                            #if(reg['name'].find("c1lep")>-1 and inputDir.find("/1lep")==-1):
-                             #   corrected_line += "HistoPathSuff: 1lep/ \n"
-                            #elif(reg['name'].find("c0lep")>-1 and inputDir.find("/0lep")==-1):
-                            #    corrected_line += "HistoPathSuff: 0lep/ \n"
-                            corrected_line += "\n"
-            if signalHandling=="ONE":
-                corrected_line = corrected_line.replace("_SIGNAL_",SType)
-            for arg in _ARGUMENTS_:
-                corrected_line = corrected_line.replace(arg['arg'],arg['value'])
-            f_adapted.write(corrected_line)
+        corrected_line = corrected_line.replace("_SIGNAL_",setName)
+        for arg in _ARGUMENTS_:
+            corrected_line = corrected_line.replace(arg['arg'],arg['value'])
+        f_adapted.write(corrected_line)
 
-        #Adding the data sample if needed
-        if(useData):
-            f_adapted.write("\n")
-            f_adapted.write("Sample: \"Data\"\n")
-            f_adapted.write("Title: \"Data\"\n")
-            f_adapted.write("Type: data \n")
-            f_adapted.write("HistoFiles: Data.grp15,Data.grp16,Data.grp17,Data.grp18 \n")
+    #Adding the data sample if needed
+    if(useData):
+        f_adapted.write("\n")
+        f_adapted.write("Sample: \"Data\"\n")
+        f_adapted.write("Title: \"Data\"\n")
+        f_adapted.write("Type: data \n")
+        f_adapted.write("HistoFiles: Data.grp15,Data.grp16,Data.grp17,Data.grp18 \n")
 
-        #Adding the SM 4tops as a background in case this is not the investigated signal ... Check if the option is set before
-        #if(useFourTopsAsBack and SName.find("SM4tops")==-1):
-        #    f_adapted.write("\n")
-        #    f_adapted.write("Sample: \"OTHERS_BackSM4tops\"\n")
-        #    f_adapted.write("Title: \"SM 4tops\"\n")
-        #    f_adapted.write("Type: \"background\"\n")
-        #    f_adapted.write("FillColor: 410\n")
-        #    f_adapted.write("LineColor: 1\n")
-        #    f_adapted.write("HistoFile: \"SM4tops\"\n")
-        #    f_adapted.write("Group: \"Non-t#bar{t}\"\n\n")
+    #Adding the SM 4tops as a background in case this is not the investigated signal ... Check if the option is set before
+    #if(useFourTopsAsBack and SName.find("SM4tops")==-1):
+    #    f_adapted.write("\n")
+    #    f_adapted.write("Sample: \"OTHERS_BackSM4tops\"\n")
+    #    f_adapted.write("Title: \"SM 4tops\"\n")
+    #    f_adapted.write("Type: \"background\"\n")
+    #    f_adapted.write("FillColor: 410\n")
+    #    f_adapted.write("LineColor: 1\n")
+    #    f_adapted.write("HistoFile: \"SM4tops\"\n")
+    #    f_adapted.write("Group: \"Non-t#bar{t}\"\n\n")
 
     #Copying the content of the template systematics config file
     f_adapted.write("\n")
     #Adding the signal at the very end of the config file
-    if counter==0 or signalHandling=="ONE":
 
-        for systfile in systConfig:
-            f_templateSysts = open(systfile,'r')
-            for systLine in f_templateSysts:
-                corrected_systLine = systLine
-                for arg in _ARGUMENTS_:
-                    corrected_systLine = corrected_systLine.replace(arg['arg'],arg['value'])
-                f_adapted.write(corrected_systLine)
-            f_adapted.write("\n")
+    for systfile in systConfig:
+        f_templateSysts = open(systfile,'r')
+        for systLine in f_templateSysts:
+            corrected_systLine = systLine
+            for arg in _ARGUMENTS_:
+                corrected_systLine = corrected_systLine.replace(arg['arg'],arg['value'])
+            f_adapted.write(corrected_systLine)
+        f_adapted.write("\n")
 
+
+    for name,sample in SignalInfos.items():
+
+        printGoodNews("-> Adding signal " + name)
         f_adapted.write(" \n")
         f_adapted.write("% --------------------------- %\n")
         f_adapted.write("% --------- SIGNALS --------- %\n")
         f_adapted.write("% --------------------------- %\n")
         f_adapted.write(" \n")
+    
+        lumiscale_mc16a = 36207.66
+        lumiscale_mc16d = 44307.4
+        lumiscale_mc16e = 58450.1
 
+        ###############################################
+        ####   Cross section scaling
+        ###############################################
 
-    lumiscale = 1.
-    for arg in _ARGUMENTS_:
-        if arg['arg'] == "__LUMIVALUE__":
-            lumiscale = float(arg['value'])
-            break
-    #####
-    #Cross section scaling
-    if signalScaling=="BENCHMARK":
-        searchname = SName.replace(".","")
-        d_SampleInfo = xsecdata.get(searchname)
-        if not d_SampleInfo:
-            printError("<!> Sample not found in json file for benchmark xsec scaling")
-            sys.exit()
+        scaleFactor = 1.
+        #if scaling by theory
+        if signalScaling=="THEORY":
+            scaleFactor = (sample['theoryXSec']/sample['inputXSec'])
+            
+        if signalScaling=="BENCHMARK":
 
+            scaleFactor = signalBenchmark / sample['inputXSec']
 
-        crossSection = d_SampleInfo.get('xsec')
-        kFactor = d_SampleInfo.get('kFactor')
-        filterEff = d_SampleInfo.get('genFiltEff')
-        crossSection = float(crossSection*filterEff*kFactor)
+            #if we are scaling a combination of signals, need to preserve the relative theoretical cross section between them
+            if ('sVLQ_TS' in setName) or ('sVLQ_TD' in setName):
+                scaleFactor *= (sample['theoryXSec']/setTheoryXSec)
 
-        lumiscale = (signalBenchmark / crossSection)*lumiscale;
-        
-    f_adapted.write("Sample: \""+SType+"\"\n")
-    f_adapted.write("  Title: \""+TypeTemp+"\"\n")
-    f_adapted.write("  Type: signal\n")
-    f_adapted.write("  NormFactor: \"mu_signal\","+SignalNormFactor+"\n")
-    f_adapted.write("  SeparateGammas: TRUE\n")
-    f_adapted.write("  FillColor: 2\n")
-    f_adapted.write("  LineColor: 2\n")
-    f_adapted.write("  HistoFile: "+cleaned_sampleType+"\n")
-    f_adapted.write("  LumiScale: "+str(lumiscale)+"\n")
-    f_adapted.write(" \n")
+        lumiscale_mc16a *= scaleFactor
+        lumiscale_mc16d *= scaleFactor
+        lumiscale_mc16e *= scaleFactor
 
+#        SignalInfos[SType] = { 'name':SType, 'title':TypeTemp, 'fileName':cleaned_sampleType, 'inputXSec':inputXSec, 'theoryXSec': theory }
+
+        f_adapted.write("Sample: \""+sample['name']+"\"\n")
+        f_adapted.write("  Title: \""+sample['title']+"\"\n")
+        f_adapted.write("  Type: signal\n")
+        f_adapted.write("  NormFactor: \"mu_signal\","+SignalNormFactor+"\n")
+        f_adapted.write("  SeparateGammas: TRUE\n")
+        f_adapted.write("  FillColor: 2\n")
+        f_adapted.write("  LineColor: 2\n")
+        #f_adapted.write("  HistoFile: "+cleaned_sampleType+"\n")
+        #f_adapted.write("  LumiScale: "+str(lumiscale)+"\n")
+        f_adapted.write("  HistoFiles: "+sample['fileName']+".mc16a,"+sample['fileName']+".mc16d,"+sample['fileName']+".mc16e\n")
+        f_adapted.write("  LumiScales: %.2f,%.2f,%.2f" % (lumiscale_mc16a, lumiscale_mc16d, lumiscale_mc16e) +"\n")
+        f_adapted.write(" \n")
+    
     f_adapted.close()
     f_template.close()
+    
+  

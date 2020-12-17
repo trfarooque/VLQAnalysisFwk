@@ -1238,6 +1238,10 @@ bool VLQ_Analysis_Data2015::Begin(){
       }
 
 
+      m_outMngrHist -> AddStandardTH1( "all_truth_b_n", 1, -0.5, 7.5, ";N umber of truth b",  false, &(m_outData -> o_truth_all_b_n) );
+      m_outMngrHist -> AddStandardTH1( "all_truth_bpartons_n", 1, -0.5, 7.5, ";Number of truth bpartons",  
+				       false, &(m_outData -> o_truth_all_bpartons_n) );
+
       for ( const std::string type : truthTypes ){
 
 	m_outMngrHist -> AddStandardTH1( "truth_"+type + "_n", 1, -0.5, 5.5, ";Number of truth "+type,  false, &(m_outData -> o_truth_partons_n.at(type)) );

@@ -298,6 +298,9 @@ public:
     std::map< std::string, int > o_truth_partons_n;
     std::map< std::string, std::vector< AnalysisObject* >* > o_truth_partons;
 
+    int o_truth_all_bpartons_n;
+    int o_truth_all_b_n;
+
     double o_truth_dRmin_bb;
     double o_truth_minv_bb;
     double o_truth_dPhiMin_lepmet;

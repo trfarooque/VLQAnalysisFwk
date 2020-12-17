@@ -572,7 +572,7 @@ def GetOldSingleVLQSamples( useWeightSyst=False, useObjectSyst=False, campaign="
 
 ##______________________________________________________________________
 ##
-def GetSingleVLQSamples( useWeightSyst=False, useObjectSyst=False, campaign="", RWName="nom_mass_K100"):
+def GetSingleVLQSamples( useWeightSyst=False, useObjectSyst=False, campaign="", RWName="nom_mass_K100", mode="", mass=0 ):
 
     ObjectSystematics = []
     WeightSystematics = []
@@ -634,11 +634,14 @@ def GetSingleVLQSamples( useWeightSyst=False, useObjectSyst=False, campaign="", 
     Samples     =  []
 
     for dsidSet in DSIDmap:
-        mass = dsidSet['mass']
+        sample_mass = dsidSet['mass']
         if "low_mass_" in RWName:
-            mass -= 100
-        Samples     += [getSampleUncertainties(dsidSet['mode']+str(mass)+couplingName, dsidSet['dsid']+campaign
-                                               , ObjectSystematics , WeightSystematics)]
+            sample_mass -= 100
+
+        if (not mode) or ( mode==dsidSet['mode'] ):
+            if (mass==0) or ( mass==dsidSet['mass'] ):
+                Samples     += [getSampleUncertainties(dsidSet['mode']+str(sample_mass)+couplingName, dsidSet['dsid']+campaign
+                                                       , ObjectSystematics , WeightSystematics)]
 
     return Samples
 

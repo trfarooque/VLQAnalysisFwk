@@ -80,6 +80,8 @@ if(len(sys.argv))>1:
                 # useDefaultVLQCrossSection is False by default
 
 ##........................................................
+#print "useDefaultVLQCrossSection : ", useDefaultVLQCrossSection
+#print "doVLQSignalSumWeights : ", doVLQSignalSumWeights
 
 ##________________________________________________________
 ## Creating usefull repositories
@@ -163,14 +165,11 @@ for sample in Samples:
         nEvents += h_nEvents.GetBinContent(1)
         nEventsWeighted += h_nEvents.GetBinContent(2)
         d_SampleInfo = weights.get(SName.replace("."+mccampaign,""))
-        if not d_SampleInfo:
-            continue
-
-        crossSection = d_SampleInfo.get('xsec')
-        kFactor = d_SampleInfo.get('kFactor')
-        filterEff = d_SampleInfo.get('genFiltEff')
-
-        crossSection = float(crossSection*filterEff*kFactor)
+        if d_SampleInfo:
+            crossSection = d_SampleInfo.get('xsec')
+            kFactor = d_SampleInfo.get('kFactor')
+            filterEff = d_SampleInfo.get('genFiltEff')
+            crossSection = float(crossSection*filterEff*kFactor)
 
         if doSysWeights_temp:
             try:
@@ -215,30 +214,35 @@ for sample in Samples:
             for i in range(40):
                 #
                 weight_name = "sumOfWeights_"
+                sumWeights = 0
                 if i == 33:
                     weight_name += "nom_mass_K100"
-                    weightDict[weight_name] = nEvents
-                elif i > 33:
-                    weight_name += "nom_mass_K"+str(int(couplings[i%20]*100))
-                    weightDict[weight_name] = h_vlqSumOfWeights.GetBinContent(i)
+                    sumWeights = nEvents
                 else:
-                    if i < 20:
-                        weight_name += "low_mass_K"+str(int(couplings[i]*100))
-                    else:
+                    if i > 33:
                         weight_name += "nom_mass_K"+str(int(couplings[i%20]*100))
-                    weightDict[weight_name] = h_vlqSumOfWeights.GetBinContent(i+1)
+                        sumWeights = h_vlqSumOfWeights.GetBinContent(i) #Skipped nom_mass_K100
+                    else:
+                        sumWeights = h_vlqSumOfWeights.GetBinContent(i+1)
+                        if i < 20:
+                            weight_name += "low_mass_K"+str(int(couplings[i]*100))
+                        else:
+                            weight_name += "nom_mass_K"+str(int(couplings[i%20]*100))
+                    
+                if not weightDict.has_key(weight_name):
+                    weightDict[weight_name] = sumWeights
+                else:
+                    weightDict[weight_name] += sumWeights
+
 
     # This flag changes the cross section for all samples included in the list of samples.
     if useDefaultVLQCrossSection:
         crossSection = defaultVLQCrossSection
         
-
     if jsonOutput:
         configDict[dsid] = {'crossSection': crossSection, 'nWeightedEvents': nEventsWeighted}
 
-        if doSysWeights_temp:
-            configDict[dsid].update(weightDict)
-        if doVLQSignalSumWeights:
+        if doSysWeights_temp or doVLQSignalSumWeights:
             configDict[dsid].update(weightDict)
 
     else:

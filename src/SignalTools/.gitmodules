@@ -1,0 +1,3 @@
+[submodule "InterferenceStudies"]
+	path = InterferenceStudies
+	url = https://gitlab.cern.ch/SingleVLQtoWb_Run2/InterferenceStudies.git

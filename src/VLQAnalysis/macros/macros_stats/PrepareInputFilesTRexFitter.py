@@ -229,8 +229,13 @@ else:
                                                                        "_BR_%.2f_%.2f_%.2f" %(coupling_Wb,coupling_Zt,coupling_Ht)+campaign
                                                                        ,"", ObjectSystematics , [])]
     elif(signal=="SINGLE"):
-        Samples +=  GetOldSingleVLQSamples( useObjectSyst=useSystematics )
-
+        VLQ_masses = ["low_mass"] #, "nom_mass"]
+        VLQ_couplings = ["K50"]
+        for mc_campaign in campaigns:
+            for vlq_mass in VLQ_masses:
+                for vlq_coupling in VLQ_couplings:
+                    Samples +=  GetSingleVLQSamples( useObjectSyst=useSystematics, campaign=mc_campaign, RWName=vlq_mass+"_"+vlq_coupling )
+                    
 printGoodNews("--> All samples recovered")
 ##........................................................
 
@@ -253,7 +258,7 @@ for sample in Samples:
         MC_campaign=".mc16e"
 
 
-    print "-> Sample: " + SType + "; " + SName + "; " + MC_campaign
+    #print "-> Sample: " + SType + "; " + SName + "; " + MC_campaign
 
     cleaned_sampleType = SType.replace("#","").replace(" ","").replace("{","").replace("}","").replace("+","").replace("(","").replace(")","")
 

@@ -70,6 +70,7 @@ o_truth_dR_Wb(0), o_truth_top_pt(0),o_truth_ht_filter(0),o_truth_met_filter(0),
 o_truth_dRmin_isHiggs_b(0),
 o_truth_all_particles(0), o_truth_all_partons(0), o_truth_all_MEParticles(0),
 o_truth_all_bpartons(0), o_truth_all_b(0), o_truth_all_q(0), o_truth_all_lep(0), o_truth_partonMET(0),
+  o_truth_all_bpartons_n(0), o_truth_all_b_n(0),
 o_truth_dRmin_bb(0.),o_truth_minv_bb(0.),
 o_truth_dPhiMin_lepmet(0.), o_truth_dPhiMin_jetmet(0.), o_truth_mtw(0.), o_truth_ptw(0.), o_truth_mtbmin(0.),
 //TRF-weights storage
@@ -657,6 +658,9 @@ void VLQ_OutputData::ClearOutputData()
   o_truth_all_b->clear();
   o_truth_all_q->clear();
   o_truth_all_lep->clear();
+
+  o_truth_all_bpartons_n = 0;
+  o_truth_all_b_n = 0;
 
   AnalysisUtils::CleanContainer(*o_truth_all_particles);
 

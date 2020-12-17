@@ -478,3 +478,7 @@ all_regions_1l =  []
 all_regions_1l += fit_regions_1l
 all_regions_1l += validation_regions_1l
 all_regions_1l += preselection_regions_1l
+
+tight_regions_1l =  []
+tight_regions_1l += fit_regions_1l
+tight_regions_1l += validation_regions_1l

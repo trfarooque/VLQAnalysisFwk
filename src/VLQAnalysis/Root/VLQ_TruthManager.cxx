@@ -1830,6 +1830,10 @@ int VLQ_TruthManager::CalculateTruthVariables(){
 
   //  1. Add b's to collection of q's
   m_outData -> o_truth_all_q -> insert ( m_outData -> o_truth_all_q -> end(), m_outData -> o_truth_all_b -> begin(), m_outData -> o_truth_all_b -> end() );
+  
+  m_outData -> o_truth_all_b_n = (m_outData -> o_truth_all_b) ? (m_outData -> o_truth_all_b)->size() : 0;
+  m_outData -> o_truth_all_bpartons_n = (m_outData -> o_truth_all_bpartons) ? (m_outData -> o_truth_all_bpartons)->size() : 0;
+
 
   //  2. Sort vectors by pT
   AOVector sorted_b = AnalysisUtils::SortObjectValues( *(m_outData->o_truth_all_b));
