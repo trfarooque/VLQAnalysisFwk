@@ -255,9 +255,9 @@ if(signalType=="PAIR"):
 
 elif(signalType=="SINGLE"):
 
-    VLQ_masses = [1100, 1300] #, 1500, 1700, 1900, 2100, 2300]
-    VLQ_massRW = ["low_mass"] #, "nom_mass"]                                                                                             
-    VLQ_couplings =["K30"] #, "K50", "K70"]
+    VLQ_masses = [1100, 1300, 1500, 1700, 1900, 2100, 2300]
+    VLQ_massRW = ["low_mass"]#, "nom_mass"]
+    VLQ_couplings =["K30","K50","K70"]
 
     if signalHandling=="ALL":
         SignalSets["sVLQ"] = []

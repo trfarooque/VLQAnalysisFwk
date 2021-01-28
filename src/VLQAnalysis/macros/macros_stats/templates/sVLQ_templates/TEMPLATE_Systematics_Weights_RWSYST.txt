@@ -43,8 +43,8 @@ Systematic: "HTX_BKGNP_TTWT_RWSYST_6JEX"
   Category: "t#bar{t} uncertainties"
   HistoPathUp: "__HISTOPATH__/RWSYST/"
   HistoPathDown: "__HISTOPATH__/RWSYST/"
-  HistoNameSufUp: _weight_RW_MEFFRED_5JEX_UP
-  HistoNameSufDown: _weight_RW_MEFFRED_5JEX_DOWN
+  HistoNameSufUp: _weight_RW_MEFFRED_6JEX_UP
+  HistoNameSufDown: _weight_RW_MEFFRED_6JEX_DOWN
   Symmetrisation: TwoSided
   Samples: ttbarlight,ttbarcc,ttbarbb,Singletop
   Regions: HTX_c1lep6jin*
