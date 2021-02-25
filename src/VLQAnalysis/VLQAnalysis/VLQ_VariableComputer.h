@@ -59,9 +59,13 @@ public:
                     std::vector< AnalysisObject* > &v_obj2,
                     const std::string &mom1 = "", const std::string &mom2 = "" ) const;
 
+    double GetLeadingdR( std::vector< AnalysisObject* > &v_obj1, std::vector< AnalysisObject* > &v_obj2) const;
+
     double GetAveragedR( std::vector< AnalysisObject* > &v_obj1,
 			 std::vector< AnalysisObject* > &v_obj2,
 			 const std::string &mom1 = "", const std::string &mom2 = "" ) const;
+
+    double GetMinPairVLQMassAsymm( std::map< std::string, std::vector< AnalysisObject* >*  > &recoVLQs, const std::string vlqDecay1, const std::string vlqDecay2) const;
     
     double GetMindPhi( AnalysisObject *v_obj1, std::vector< AnalysisObject* > &v_obj2, const int maxVec = -1, const std::string &mom = "" ) const ;
     

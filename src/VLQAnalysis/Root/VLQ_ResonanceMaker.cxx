@@ -486,12 +486,12 @@ int VLQ_ResonanceMaker::MakePairVLQ( const std::string& decay, const double drma
 
       if(drcur < drmax){
 
-  res1 -> SetMoment("VLQchild", 0);
-  res2 -> SetMoment("VLQchild", 0);
-
-  pair_dr.push_back(std::pair<int,double>(index,drcur));
-  pair_res.push_back( std::pair<AnalysisObject*, AnalysisObject*>(res1, res2) );
-  index++;
+	res1 -> SetMoment("VLQchild", 0);
+	res2 -> SetMoment("VLQchild", 0);
+	
+	pair_dr.push_back(std::pair<int,double>(index,drcur));
+	pair_res.push_back( std::pair<AnalysisObject*, AnalysisObject*>(res1, res2) );
+	index++;
 
       }
     }
@@ -521,6 +521,7 @@ int VLQ_ResonanceMaker::MakePairVLQ( const std::string& decay, const double drma
     recoVLQ->SetMoment("dEta12", fabs(res1->Eta() - res2->Eta()));
     recoVLQ->SetMoment("m1", res1->M());
     recoVLQ->SetMoment("m2", res2->M());
+    //recoVLQ->SetMoment("mAsymm", fabs(res1->M() - res2->M()));
     recoVLQ->SetMoment("redM", recoVLQ->M() - res1->M() - res2->M());
     if(decay == "Ht"){
       recoVLQ->SetMoment("redM2", recoVLQ->M() - fabs(res1->M()-125.18) - fabs(res2->M()-172.84));

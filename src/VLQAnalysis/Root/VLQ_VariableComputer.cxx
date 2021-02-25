@@ -232,7 +232,7 @@ double VLQ_VariableComputer::GetMindR( AnalysisObject *obj1, AOVector &v_obj2, c
 
 //________________________________________________________________
 //
-double VLQ_VariableComputer::GetMindR(  AOVector &v_obj1, AOVector &v_obj2, const std::string &mom1, const std::string &mom2 ) const
+double VLQ_VariableComputer::GetMindR(  AOVector &v_obj1, AOVector &v_obj2, const std::string &mom1, const std::string &mom2) const
 {
     double dRmin = 100;
     for ( const AnalysisObject* obj1 : v_obj1 ){
@@ -245,6 +245,27 @@ double VLQ_VariableComputer::GetMindR(  AOVector &v_obj1, AOVector &v_obj2, cons
         }
     }
     return dRmin;
+}
+
+//________________________________________________________________
+//
+double VLQ_VariableComputer::GetLeadingdR( AOVector &v_obj1, AOVector &v_obj2 ) const
+{
+  
+  double dR = -100.;
+
+  if(v_obj1.size() >=1 && v_obj2.size() >=1){
+
+    if(v_obj1[0] != v_obj2[0]){
+      dR = v_obj1[0] -> DeltaR( *v_obj2[0] );
+    }
+    else if(v_obj1.size() > 1){
+      dR = v_obj1[0] -> DeltaR( *v_obj2[1] );
+    }
+
+  }
+
+  return dR;
 }
 
 //________________________________________________________________
@@ -264,6 +285,55 @@ double VLQ_VariableComputer::GetAveragedR(  AOVector &v_obj1, AOVector &v_obj2, 
     }
     dRaverage=dRaverage/npairs;
     return dRaverage;
+}
+
+//________________________________________________________________ 
+//
+double VLQ_VariableComputer::GetMinPairVLQMassAsymm( std::map< std::string, AOVector*  > &recoVLQs, const std::string vlqDecay1, const std::string vlqDecay2) const{
+
+  double minMAsymm = -100.;
+
+  if(vlqDecay1 == vlqDecay2){
+    
+    if(recoVLQs[vlqDecay1]->size() < 2) return minMAsymm;
+
+    minMAsymm = TMath::Abs(recoVLQs[vlqDecay1]->at(0)->M() - recoVLQs[vlqDecay1]->at(1)->M());
+
+    for(int i = 0; i < recoVLQs[vlqDecay1]->size(); i++){
+      
+      for(int j = i+1; j < recoVLQs[vlqDecay1]->size(); j++ ){
+	
+	double mAsymm = TMath::Abs(recoVLQs[vlqDecay1]->at(i)->M() - recoVLQs[vlqDecay1]->at(j)->M());
+
+	if(minMAsymm > mAsymm) minMAsymm = mAsymm;
+
+      }
+
+    }
+
+  }
+  else{
+
+    if(recoVLQs[vlqDecay1]->size() == 0 || recoVLQs[vlqDecay2]->size() == 0) return minMAsymm;
+
+    minMAsymm = TMath::Abs(recoVLQs[vlqDecay1]->at(0)->M() - recoVLQs[vlqDecay2]->at(0)->M());
+    
+    for(int i = 0; i < recoVLQs[vlqDecay1]->size(); i++){
+
+      for(int j = 0; j < recoVLQs[vlqDecay2]->size(); j++){
+	
+	double mAsymm = TMath::Abs(recoVLQs[vlqDecay1]->at(i)->M() - recoVLQs[vlqDecay2]->at(j)->M());
+	
+	if(minMAsymm > mAsymm) minMAsymm = mAsymm;
+      
+      }
+
+    }
+
+  }
+
+  return minMAsymm;
+
 }
 
 //________________________________________________________________

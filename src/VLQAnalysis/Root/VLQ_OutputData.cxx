@@ -50,7 +50,12 @@ o_bW_hadtop(0),
 o_fjets_topmatched(0),o_fjets_topmatchboost_TTL(0),o_fjets_topmatchboost_TTT(0),
 o_nhadtops(0),o_nboosthadtops(0),o_matchingeff(0),o_tageff_TTL(0),o_tageff_TTT(0),
 //Kinematic variables
-o_dRmin_lepjet(0),o_dRmin_ejets(0), o_dRmin_mujets(0),o_dRmin_lepbjet(0), o_dRmin_jetjet(0), o_dRmin_bjetbjet(0), o_dRmin_bjetbjet_lowb_3b(0), o_dRmin_bjetbjet_lowb_4b(0),
+o_dRmin_lepjet(0),o_dRmin_ejets(0), o_dRmin_mujets(0),o_dRmin_lepbjet(0), o_dRmin_jetjet(0), 
+o_dRmin_RCMHiggsRCMHiggs(0), o_dRmin_RCMHiggsRCMV(0), o_dRmin_RCMHiggsRCMTop(0), o_dRmin_RCMVRCMV(0),
+o_dRmin_RCMVRCMTop(0), o_dRmin_RCMTopRCMTop(0), o_leadingdR_RCMHiggsRCMHiggs(0), o_leadingdR_RCMHiggsRCMV(0),
+o_leadingdR_RCMHiggsRCMTop(0), o_leadingdR_RCMVRCMV(0), o_leadingdR_RCMVRCMTop(0), o_leadingdR_RCMTopRCMTop(0),
+o_minRecoVLQMAsymm_HtHt(0), o_minRecoVLQMAsymm_HtZt(0), o_minRecoVLQMAsymm_HtWb(0),
+o_dRmin_bjetbjet(0), o_dRmin_bjetbjet_lowb_3b(0), o_dRmin_bjetbjet_lowb_4b(0),
 o_dR_TTL_bjets(0),o_dR_TTT_bjets(0), o_dR_TTLooser_bjets(0), o_mbb_mindR(0), o_mbb_mindR_lowb_3b(0), o_mbb_mindR_lowb_4b(0),
 o_dPhi_lepmet(0), o_dPhi_jetmet(0), o_dPhi_jetmet5(0), o_dPhi_jetmet6(0), o_dPhi_jetmet7(0),o_dPhi_lepjet(0),o_dPhi_lepbjet(0),
 o_dRmin_ebjets(0), o_dRmin_mubjets(0), o_mTbmin(0), o_mTbmin_lowb_3b(0), o_mTbmin_lowb_4b(0),
@@ -360,11 +365,26 @@ void VLQ_OutputData::ClearOutputData()
   //
   // Flat variables
   //
-  o_dRmin_lepjet = 99.,
+  o_dRmin_lepjet = 99.;
   o_dRmin_ejets = 99.;
   o_dRmin_mujets = 99.;
-  o_dRmin_lepbjet = 99.,
+  o_dRmin_lepbjet = 99.;
   o_dRmin_jetjet = 99.;
+  o_dRmin_RCMHiggsRCMHiggs = -100.;
+  o_dRmin_RCMHiggsRCMV = -100.;
+  o_dRmin_RCMHiggsRCMTop = -100.; 
+  o_dRmin_RCMVRCMV = -100.;
+  o_dRmin_RCMVRCMTop = -100.; 
+  o_dRmin_RCMTopRCMTop = -100.;
+  o_leadingdR_RCMHiggsRCMHiggs = -100.;
+  o_leadingdR_RCMHiggsRCMV = -100.;
+  o_leadingdR_RCMHiggsRCMTop = -100.;
+  o_leadingdR_RCMVRCMV = -100.;
+  o_leadingdR_RCMVRCMTop = -100.;
+  o_leadingdR_RCMTopRCMTop = -100.;
+  o_minRecoVLQMAsymm_HtHt = -100.;
+  o_minRecoVLQMAsymm_HtZt = -100.;
+  o_minRecoVLQMAsymm_HtWb = -100.;
   o_dRmin_bjetbjet = 99.;
   o_dRmin_bjetbjet_lowb_3b = 99.;
   o_dRmin_bjetbjet_lowb_4b = 99.;

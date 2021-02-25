@@ -54,7 +54,7 @@ bool VLQ_TruthManager::Initialize() {
     temp -> SetMoment( "pdgId", m_ntupData -> d_mc_pdgId -> at(iTruth) );
     temp -> SetMoment( "absPdgId", TMath::Abs(m_ntupData -> d_mc_pdgId -> at(iTruth)) );
     temp -> SetMoment( "children_n", m_ntupData -> d_mc_children_index -> at(iTruth).size() );
-
+    
     //Children information
     int counter = 0;
     for ( const int index : m_ntupData -> d_mc_children_index -> at(iTruth) ) {
@@ -77,15 +77,16 @@ bool VLQ_TruthManager::Initialize() {
     }
     temp -> SetMoment( "decayType", code );
     m_outData -> o_truth_all_particles -> push_back(temp);
+
   }
 
-    if(m_opt -> SampleName () == SampleName::VLQ){
-     m_doVLQ=true;
-    }
-    if( m_outData -> o_is_ttbar ){
-     m_dottbar=true;
-    }
-    //PrintTruthContent();
+  if(m_opt -> SampleName () == SampleName::VLQ){
+    m_doVLQ=true;
+  }
+  if( m_outData -> o_is_ttbar ){
+    m_dottbar=true;
+  }
+  //PrintTruthContent();
   return true;
 }
 
