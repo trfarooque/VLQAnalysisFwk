@@ -51,6 +51,7 @@ m_doExclusiveJetRegions(false),
 m_doExtendedPreselection(false),
 m_doSingleVLQRegions(true),
 m_doPairVLQRegions(false),
+m_doOldPairProdRegions(false),
 m_doValidnRegions(false),
 m_doFitRegions(true),
 m_doLooseSystRegions(true),
@@ -150,6 +151,7 @@ OptionsBase(q)
     m_doExtendedPreselection   = q.m_doExtendedPreselection;
     m_doSingleVLQRegions  = q.m_doSingleVLQRegions;
     m_doPairVLQRegions    = q.m_doPairVLQRegions;
+    m_doOldPairProdRegions = q.m_doOldPairProdRegions;
     m_doValidnRegions     = q.m_doValidnRegions;
     m_doFitRegions        = q.m_doFitRegions;
     m_doLooseSystRegions  = q.m_doLooseSystRegions;
@@ -303,6 +305,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_doSingleVLQRegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOPAIRVLQREGIONS") != std::string::npos ){
             m_doPairVLQRegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if( temp_arg.find("--DOOLDPAIRPRODREGIONS") != std::string::npos ){
+	    m_doOldPairProdRegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOVALIDNREGIONS") != std::string::npos ){
             m_doValidnRegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOFITREGIONS") != std::string::npos ){
@@ -540,6 +544,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_doExtendedPreselection  = " << m_doExtendedPreselection << std::endl;
     std::cout << " m_doSingleVLQRegions      = " << m_doSingleVLQRegions<< std::endl;
     std::cout << " m_doPairVLQRegions        = " << m_doPairVLQRegions  << std::endl;
+    std::cout << " m_doOldPairProdRegions    = " << m_doOldPairProdRegions << std::endl;
     std::cout << " m_doValidnRegions         = " << m_doValidnRegions   << std::endl;
     std::cout << " m_doFitRegions            = " << m_doFitRegions      << std::endl;
     std::cout << " m_doLooseSystRegions      = " << m_doLooseSystRegions<< std::endl;

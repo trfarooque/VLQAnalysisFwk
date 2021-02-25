@@ -52,7 +52,7 @@ public:
 		   /*Higgs-tagged jet multiplicities*/
 		   c_0Hex, c_0Hin, c_1Hex, c_1Hin, c_2Hin, c_0_1Hwin,
 		   /*V-tagged jet multiplicities*/
-		   c_0Vex, c_0Vin, c_1Vex, c_1Vin, c_2Vin, 
+		   c_0Vex, c_0Vin, c_1Vex, c_1Vin, c_2Vin, c_3Vin,
 		   /*Forward jet multiplicities*/
 		   c_0fjex, c_0fjin, c_1fjex, c_1fjin, c_2fjin,
 		   /*T+H multiplicities*/
