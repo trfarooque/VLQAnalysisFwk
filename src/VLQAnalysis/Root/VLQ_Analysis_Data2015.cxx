@@ -273,12 +273,19 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_outMngrOvlerlapTree->AddStandardBranch("jets_n",        "jets_n",       &(m_outData->o_jets_n));
     m_outMngrOvlerlapTree->AddStandardBranch("fwdjets_n",     "fwdjets_n",    &(m_outData->o_fwdjets_n));
     m_outMngrOvlerlapTree->AddStandardBranch("lep_n",         "lep_n",        &(m_outData->o_lep_n));
+    m_outMngrOvlerlapTree->AddStandardBranch("topjets_n",     "topjets_n",    &(m_outData->o_taggedjets_n.at("RCMTop")));
+    m_outMngrOvlerlapTree->AddStandardBranch("higgsjets_n",   "higgsjets_n",  &(m_outData->o_taggedjets_n.at("RCMHiggs")));
+    m_outMngrOvlerlapTree->AddStandardBranch("vjets_n",       "vjets_n",      &(m_outData->o_taggedjets_n.at("RCMV")));
+
     m_outMngrOvlerlapTree->AddStandardBranch("meff",          "meff",         &(m_outData->o_meff));
     m_outMngrOvlerlapTree->AddStandardBranch("meffred",       "meffred",      &(m_outData->o_meffred));
     m_outMngrOvlerlapTree->AddStandardBranch("met",           "met",          &(m_outData->o_met));
     m_outMngrOvlerlapTree->AddStandardBranch("mtw",           "mtw",          &(m_outData->o_mtwl));
+
     m_outMngrOvlerlapTree->AddStandardBranch("weight",        "weight",       &(m_outData->o_eventWeight_Nom));
     m_outMngrOvlerlapTree->AddStandardBranch("region",        "region",       &(m_outData->o_region));
+
+
     m_outMngrOvlerlapTree->BookStandardTree("overlap", "small tree");
   }
 

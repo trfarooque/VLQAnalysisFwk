@@ -217,8 +217,12 @@ for param in userParams:
 
 ##______________________________________________________________________________
 ## Defining the paths and the tarball
-listFolder = param_outputDir + "/Lists_Analysis_" + param_outputDir.split("/")[len(param_outputDir.split("/"))-1] #name of the folder containing the file lists
-scriptFolder = param_outputDir + "/Scripts_Analysis_" + param_outputDir.split("/")[len(param_outputDir.split("/"))-1] #name of the folder containing the scripts
+#listFolder = param_outputDir + "/Lists_Analysis_" + param_outputDir.split("/")[len(param_outputDir.split("/"))-1] #name of the folder containing the file lists
+#scriptFolder = param_outputDir + "/Scripts_Analysis_" + param_outputDir.split("/")[len(param_outputDir.split("/"))-1] #name of the folder containing the scripts
+
+listFolder = param_outputDir + "/Lists_Analysis/"
+scriptFolder = param_outputDir + "/Scripts_Analysis/"
+
 ##..............................................................................
 
 ##______________________________________________________________________________

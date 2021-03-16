@@ -1,8 +1,8 @@
 #!/bin/bash
 
-for mass in "low_mass" #"nom_mass"
+for mass in "low_mass" "nom_mass"
 do
-    for coupling in "K50" #"K30" "K70"
+    for coupling in "K20" "K25" "K30" "K40" "K50" "K60" "K70" "K80" "K90" "K100" "K110" "K120" "K130" "K140" "K150" "K160"
     do
         RWName="${mass}_${coupling}"
 	for campaign in "mc16a" "mc16d" "mc16e"
@@ -12,7 +12,7 @@ do
 		producetarball=true \
 		--inputDir=/nfs/at3/scratch2/tvdaalen/VLQ_FullRun2/Production_tag-21.2.121-htztx-3-syst_Signal_FullGrid/ \
 		--sampleDat=samples_info.tag-21.2.121-htztx-3-syst_Signal.${campaign}.dat \
-		--outputDirSuffix=FitInputs_FJVTSF_SIGNAL_${mass}_${coupling}_${campaign}_NOW \
+		--outputDirSuffix=FitInputs_FJVTSF_FULLGRID_SIGNAL_${mass}_${coupling}_${campaign} \
 		--reweightKinematics=false \
 		--vlqRWbranch=${RWName} \
 		--kinRWList=JETSN,MEFFRED --doKinRWSmoothing=TRUE \

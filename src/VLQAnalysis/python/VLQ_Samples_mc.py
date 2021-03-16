@@ -581,8 +581,9 @@ def GetSingleVLQSamples( useWeightSyst=False, useObjectSyst=False, campaign="", 
     else:
         ObjectSystematics = [getSystematics(name="nominal",nameUp="",oneSided=True)]
 
-    couplingName = RWName.replace("nom_mass_","")
-    couplingName = RWName.replace("low_mass_","")
+    couplingName = RWName
+    couplingName = couplingName.replace("nom_mass_","")
+    couplingName = couplingName.replace("low_mass_","")
 
     DSIDmap = []
     DSIDmap += [{ 'dsid': "312349.", 'mode': "WTZt", 'mass' : 1100}]

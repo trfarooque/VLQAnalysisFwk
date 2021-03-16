@@ -229,12 +229,12 @@ else:
                                                                        "_BR_%.2f_%.2f_%.2f" %(coupling_Wb,coupling_Zt,coupling_Ht)+campaign
                                                                        ,"", ObjectSystematics , [])]
     elif(signal=="SINGLE"):
-        VLQ_masses = ["low_mass"] #, "nom_mass"]
-        VLQ_couplings = ["K50"]
+        VLQ_masses = ["low_mass", "nom_mass"]
+        VLQ_couplings = ["K20", "K25", "K30", "K50", "K70", "K40", "K60", "K80", "K90", "K100", "K110", "K120", "K130", "K140", "K150", "K160"]
         for mc_campaign in campaigns:
             for vlq_mass in VLQ_masses:
                 for vlq_coupling in VLQ_couplings:
-                    Samples +=  GetSingleVLQSamples( useObjectSyst=useSystematics, campaign=mc_campaign, RWName=vlq_mass+"_"+vlq_coupling )
+                    Samples +=  GetSingleVLQSamples( useObjectSyst=useSystematics, campaign=mc_campaign, RWName=vlq_mass+"_"+vlq_coupling)
                     
 printGoodNews("--> All samples recovered")
 ##........................................................
@@ -258,7 +258,7 @@ for sample in Samples:
         MC_campaign=".mc16e"
 
 
-    #print "-> Sample: " + SType + "; " + SName + "; " + MC_campaign
+    print "-> Sample: " + SType + "; " + SName + "; " + MC_campaign
 
     cleaned_sampleType = SType.replace("#","").replace(" ","").replace("{","").replace("}","").replace("+","").replace("(","").replace(")","")
 
@@ -275,16 +275,16 @@ for sample in Samples:
     ## Loop over the systematics
     ##------------------------------------------------------
     for syst in systList:
-        print "   -> Syst: " + syst
+        #print "   -> Syst: " + syst
         name_temp_rootfile = folderRootFiles+"/"+cleaned_sampleType+MC_campaign
-        print name_temp_rootfile
+        #print name_temp_rootfile
         if syst.upper().find("NOMINAL")==-1:
             name_temp_rootfile += "_"+syst
         name_temp_rootfile += ".root"
 
         if not name_temp_rootfile in Combination:
             Combination += [name_temp_rootfile]
-            com = "hadd " + name_temp_rootfile
+            com = "hadd -v 0 " + name_temp_rootfile
             usedFiles = []
             SType = sample['sampleType']
             for f in listfiles:
@@ -314,13 +314,14 @@ for sample in Samples:
 ##------------------------------------------------------
 for Comm in Commands:
     command = Comm
-    splittedCommand = Comm.split(" ")
-    if len(splittedCommand)==3:
-        com = "cp "+splittedCommand[2]+" "+splittedCommand[1]
-        printGoodNews("-> Copying file for sample: " + splittedCommand[1])
+    command = command.replace("hadd -v 0 ", "")
+    splittedCommand = command.split(" ")
+    if len(splittedCommand)==2:
+        com = "cp "+splittedCommand[1]+" "+splittedCommand[0]
+        printGoodNews("-> Copying file for sample: " + splittedCommand[0])
         os.system(com)
-    elif len(splittedCommand)>3:
-        printGoodNews("-> Hadding files for sample: " + splittedCommand[1])
+    elif len(splittedCommand)>2:
+        printGoodNews("-> Hadding files for sample: " + splittedCommand[0])
         os.system(Comm)
     else:
         printError( "Invalid command line: " + Comm )
@@ -349,7 +350,7 @@ if mergeSingletop:
                 filesuffix = syst+mc_campaign+".root "
             else:
                 filesuffix = mc_campaign+"_"+syst+".root "
-            com = "hadd "+folderRootFiles+"/Singletop"+filesuffix
+            com = "hadd -v 0 "+folderRootFiles+"/Singletop"+filesuffix
             com += folderRootFiles+"/Singletopschan"+filesuffix
             com += folderRootFiles+"/Singletoptchan"+filesuffix
             com += folderRootFiles+"/SingletopWtprod"+filesuffix
@@ -358,7 +359,7 @@ if mergeSingletop:
             os.system(com)
         if singletopNominalDir:
             printGoodNews("  --> DiagSub "+mc_campaign)
-            com = "hadd "+folderRootFiles+"/SingletopDiagSub"+mc_campaign+".root "  
+            com = "hadd -v 0"+folderRootFiles+"/SingletopDiagSub"+mc_campaign+".root "  
             com += singletopNominalDir+"/Singletopschan"+mc_campaign+".root "
             com += singletopNominalDir+"/Singletoptchan"+mc_campaign+".root "
             com += folderRootFiles+"/SingletopWtprodDiagSub"+mc_campaign+".root "
@@ -392,7 +393,7 @@ if mergeRareBkg:
             else:
                 filesuffix = mc_campaign+"_"+syst+".root "
             printGoodNews("  --> "+mc_campaign+" ; "+syst)
-            com = "hadd "+folderRootFiles+"/rareBkg"+filesuffix
+            com = "hadd -v 0"+folderRootFiles+"/rareBkg"+filesuffix
             com += folderRootFiles+"/tZ"+filesuffix
             com += folderRootFiles+"/SM4tops"+filesuffix
             com += folderRootFiles+"/VH"+filesuffix

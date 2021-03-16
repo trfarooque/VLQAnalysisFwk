@@ -7,14 +7,15 @@ import importlib
 sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/VLQAnalysis/" )
 
 # default params
-indir  = '/nfs/at3/scratch2/tfarooque/VLQAnalysisRun2/FitInputs_RWPARAM/FilesTRexF/JMSRSYST/JMSRECALC/'
+indir  = '/nfs/at3/scratch2/tfarooque/VLQAnalysisRun2/FitInputs_RWPARAM/FilesTRexF/JMSRSYST/JMSDOWN/'
 var = 'meff'
 regDict = "regions_dictionary_sVLQ"
 outdir = 'Extrapolated/'
 
 sVLQ_channels = ['WTHt', 'WTZt', 'ZTHt', 'ZTZt']
-sVLQ_masses = ['1000', '1200', '1400', '1600', '1800', '2000']
-sVLQ_couplings = ['K50']
+#sVLQ_masses = ['1000', '1200', '1400', '1600', '1800', '2000']
+sVLQ_masses = ['1100', '1300', '1500', '1700', '1900', '2100']
+sVLQ_couplings = ['K30', 'K40', 'K50', 'K60', 'K70', 'K80', 'K90', 'K100', 'K110', 'K120', 'K130', 'K140', 'K150', 'K160']
 
 samples = [ ]
 for channel in sVLQ_channels:

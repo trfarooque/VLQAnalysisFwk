@@ -1,8 +1,8 @@
 #!/bin/bash
 
-for mass in "low_mass" #"nom_mass"
+for mass in "low_mass" "nom_mass"
 do
-    for coupling in "K50" #"K30" "K70"
+    for coupling in "K20" "K25" "K30" "K40" "K50" "K60" "K70" "K80" "K90" "K100" "K110" "K120" "K130" "K140" "K150" "K160"
     do
 	RWName="${mass}_${coupling}"
 
@@ -30,7 +30,7 @@ do
 		    producetarball=true \
 		    --inputDir=/nfs/at3/scratch2/tvdaalen/VLQ_FullRun2/Production_tag-21.2.121-htztx-3-syst_Signal_FullGrid/ \
 		    --sampleDat=samples_info.tag-21.2.121-htztx-3-syst_Signal.${campaign}.dat \
-		    --outputDirSuffix=FitInputs_SIGNAL_${mass}_${coupling}_${jmsopt}_${campaign}_NOW \
+		    --outputDirSuffix=FitInputs_FULLGRID_SIGNAL_${mass}_${coupling}_${jmsopt}_${campaign} \
 		    --reweightKinematics=false --kinRWList=JETSN,MEFFRED --doKinRWSmoothing=TRUE \
 		    --vlqRWbranch=${RWName} \
 		    --queue=at3 --NFILESPLIT=200 --NMERGE=1 --removeNull=TRUE \
@@ -58,6 +58,7 @@ do
 		    --jetPtCut=25 --fwdJetPtCut=20 --RCJetPtCut=200 --RCNsubjetsCut=0 \
 		    --leptopOpt=VETO_RCMATCH --maxLeptopDR=1.0 --minMeffCut=600 --RCCollection=VR_rho550 \
 		    --doJMSSys=${jmsval} --doJMRSys=${jmrval}
+		sleep 10
 	    done	
 	done
     done

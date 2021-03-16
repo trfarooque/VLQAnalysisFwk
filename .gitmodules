@@ -13,3 +13,6 @@
 [submodule "src/IFAEPlotter"]
 	path = src/IFAEPlotter
 	url = ssh://git@gitlab.cern.ch:7999/htx/IFAEPlotter.git
+[submodule "src/SignalTools"]
+        path = src/VLQAnalysis/macros/macros_stats/SignalTools
+        url = ssh://git@gitlab.cern.ch:7999/atlas-phys/exot/hqt/vlq_single_run2/signaltools.git
