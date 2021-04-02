@@ -54,7 +54,7 @@ bool VLQ_TruthManager::Initialize() {
     temp -> SetMoment( "pdgId", m_ntupData -> d_mc_pdgId -> at(iTruth) );
     temp -> SetMoment( "absPdgId", TMath::Abs(m_ntupData -> d_mc_pdgId -> at(iTruth)) );
     temp -> SetMoment( "children_n", m_ntupData -> d_mc_children_index -> at(iTruth).size() );
-
+    
     //Children information
     int counter = 0;
     for ( const int index : m_ntupData -> d_mc_children_index -> at(iTruth) ) {
@@ -77,15 +77,16 @@ bool VLQ_TruthManager::Initialize() {
     }
     temp -> SetMoment( "decayType", code );
     m_outData -> o_truth_all_particles -> push_back(temp);
+
   }
 
-    if(m_opt -> SampleName () == SampleName::VLQ){
-     m_doVLQ=true;
-    }
-    if( m_outData -> o_is_ttbar ){
-     m_dottbar=true;
-    }
-    //PrintTruthContent();
+  if(m_opt -> SampleName () == SampleName::VLQ){
+    m_doVLQ=true;
+  }
+  if( m_outData -> o_is_ttbar ){
+    m_dottbar=true;
+  }
+  //PrintTruthContent();
   return true;
 }
 
@@ -1118,12 +1119,13 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
 
      if(m_opt->MsgLevel() == Debug::DEBUG){ std::cout << " Classifying particles pdgIdPart " << pdgIdPart << std::endl; }
 
-     if( (pdgIdPart == 8) || (pdgIdPart == 6000006) ){ //VLQ
+     if( (pdgIdPart == 8) || (pdgIdPart == 6000006) ){ //VLQ // skipto
 
        m_outData -> o_truth_partons.at("VLQ") -> push_back(part);
        m_outData -> o_truth_partons_n.at("VLQ") ++;
        AnalysisObject* vcd1 = 0;
        AnalysisObject* vcd2 = 0;
+       AnalysisObject* vcdtemp = 0;
 
        std::string vlq_decay = "";
        std::string vlq_decay_ext = "";
@@ -1193,7 +1195,14 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
 	 }//H,W or Z child
 
        }// loop over children
+
+
        if(vcd1 && vcd2){
+         if(vcd2->Pt() > vcd1->Pt()){ // Order children by Pt
+           vcdtemp = vcd1;
+           vcd1 = vcd2;
+           vcd2 = vcdtemp; 
+         }
 
 	 double fpt = 0.;
 	 if(vlq_decay == "Wb"){
@@ -1204,9 +1213,12 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
 	 }
 
 	 part -> SetMoment( "fpT12", fpt );
-	 part -> SetMoment( "dR12", vcd1 -> DeltaR(*vcd2) );
-	 part -> SetMoment( "dPhi12", TMath::Abs(vcd1 -> DeltaPhi(*vcd2)) );
-	 part -> SetMoment( "dEta12", TMath::Abs(vcd1 -> Eta() - vcd2 -> Eta()) );
+	 part -> SetMoment( "eta", vcd1 -> Eta() ); 
+	 //part -> SetMoment( "dR12", vcd1 -> DeltaR(*vcd2) );
+	 //part -> SetMoment( "dPhi12", TMath::Abs(TMath::Pi() - vcd1 -> DeltaPhi(*vcd2)) ); // pi-amount
+	 //part -> SetMoment( "dEta12", TMath::Abs(vcd1 -> Eta() - vcd2 -> Eta()) ); // skipto
+	 //part -> SetMoment( "pTRatio12", TMath::Abs(vcd2 -> Pt() / vcd1 -> Pt()) ); // skipto
+         //part -> SetMoment( "dRHt",  )
        }
        /*
        else{
@@ -1216,7 +1228,7 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
 	 part -> SetMoment( "dEta12", -10. );
        }
        */
-       if(vlq_decay != ""){
+       if(vlq_decay != ""){ // skipto
 	 m_outData -> o_truth_partons.at("VLQ_"+vlq_decay) -> push_back(part);
 	 m_outData -> o_truth_partons_n.at("VLQ_"+vlq_decay) ++;
        }
@@ -1669,8 +1681,173 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
 
      }//Z
 
-
    }//loop on ME particles
+
+
+  //------------------------Casey start-----------------------------//
+  if(m_outData -> o_truth_partons_n.at("VLQ") == 2){
+    
+    // Retrieve the two VLQs
+    AnalysisObject* VLQ0 = (m_outData -> o_truth_partons.at("VLQ"))->at(0);
+    AnalysisObject* VLQ1 = (m_outData -> o_truth_partons.at("VLQ"))->at(1);
+    AnalysisObject* VLQtemp;
+
+    // Sorts VLQ0 and VLQ1 by pT. May change other parts of analysis, but is correct for my truth studies
+    if((RetrieveChild(VLQ0, 0)->Pt() + RetrieveChild(VLQ0, 1)->Pt()) < (RetrieveChild(VLQ1, 0)->Pt() + RetrieveChild(VLQ1, 1)->Pt())){
+      VLQtemp = VLQ0;
+      VLQ0 = VLQ1;
+      VLQ1 = VLQtemp;
+    }
+
+    // Retrieve the children of the VLQs
+    // Arranges children by Pt
+    int ch0, ch1, ch2, ch3; //skipto
+    if(RetrieveChild(VLQ0, 0)->Pt() > RetrieveChild(VLQ0, 1)->Pt()){
+      ch0 = 0;
+      ch1 = 1;
+    }
+    else{
+      ch0 = 1;
+      ch1 = 0;
+    }
+    if(RetrieveChild(VLQ1, 0)->Pt() > RetrieveChild(VLQ1, 1)->Pt()){
+      ch2 = 0;
+      ch3 = 1;
+    }
+    else{
+      ch2 = 1;
+      ch3 = 0;
+    }
+    AnalysisObject* cd00 = RetrieveChild(VLQ0, ch0); // VLQ0
+    AnalysisObject* cd01 = RetrieveChild(VLQ0, ch1);
+    AnalysisObject* cd10 = RetrieveChild(VLQ1, ch2); // VLQ1
+    AnalysisObject* cd11 = RetrieveChild(VLQ1, ch3); //cd->GetMoment("absPdgId")
+
+    // Store the dR, dPhi, and dEta between all combinations, internal and external, of VLQ0 and VLQ1
+    //-----------------------dR-----------------------
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dR12", cd00 -> DeltaR(*cd01));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dR13", cd00 -> DeltaR(*cd10));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dR14", cd00 -> DeltaR(*cd11));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dR23", cd01 -> DeltaR(*cd10));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dR24", cd01 -> DeltaR(*cd11));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dR34", cd10 -> DeltaR(*cd11));
+    
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dR12", cd00 -> DeltaR(*cd01)); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dR13", cd00 -> DeltaR(*cd10)); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dR14", cd00 -> DeltaR(*cd11)); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dR23", cd01 -> DeltaR(*cd10)); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dR24", cd01 -> DeltaR(*cd11)); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dR34", cd10 -> DeltaR(*cd11)); // same as above
+
+    //-----------------------dPhi-----------------------
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi12", TMath::Pi() - TMath::Abs(cd00 -> DeltaPhi(*cd01)));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi13", TMath::Pi() - TMath::Abs(cd00 -> DeltaPhi(*cd10)));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi14", TMath::Pi() - TMath::Abs(cd00 -> DeltaPhi(*cd11)));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi23", TMath::Pi() - TMath::Abs(cd01 -> DeltaPhi(*cd10)));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi24", TMath::Pi() - TMath::Abs(cd01 -> DeltaPhi(*cd11)));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi34", TMath::Pi() - TMath::Abs(cd10 -> DeltaPhi(*cd11)));
+    
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi12", TMath::Pi() - TMath::Abs(cd00 -> DeltaPhi(*cd01))); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi13", TMath::Pi() - TMath::Abs(cd00 -> DeltaPhi(*cd10))); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi14", TMath::Pi() - TMath::Abs(cd00 -> DeltaPhi(*cd11))); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi23", TMath::Pi() - TMath::Abs(cd01 -> DeltaPhi(*cd10))); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi24", TMath::Pi() - TMath::Abs(cd01 -> DeltaPhi(*cd11))); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi34", TMath::Pi() - TMath::Abs(cd10 -> DeltaPhi(*cd11))); // same as above
+
+    //-----------------------Eta-----------------------
+    //dEta = TMath::Abs(vcd1 -> Eta() - vcd2 -> Eta())
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("eta1", cd00->Eta());
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("eta2", cd01->Eta());
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("eta3", cd10->Eta());
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("eta4", cd11->Eta());
+    
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("eta1", cd00->Eta()); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("eta2", cd01->Eta()); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("eta3", cd10->Eta()); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("eta4", cd11->Eta()); // same as above
+
+    //-----------------------dEta-----------------------
+    //dEta = TMath::Abs(vcd1 -> Eta() - vcd2 -> Eta())
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta12", TMath::Abs(cd00->Eta() - cd01->Eta()));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta13", TMath::Abs(cd00->Eta() - cd10->Eta()));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta14", TMath::Abs(cd00->Eta() - cd11->Eta()));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta23", TMath::Abs(cd01->Eta() - cd10->Eta()));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta24", TMath::Abs(cd01->Eta() - cd11->Eta()));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta34", TMath::Abs(cd10->Eta() - cd11->Eta()));
+    
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta12", TMath::Abs(cd00->Eta() - cd01->Eta())); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta13", TMath::Abs(cd00->Eta() - cd10->Eta())); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta14", TMath::Abs(cd00->Eta() - cd11->Eta())); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta23", TMath::Abs(cd01->Eta() - cd10->Eta())); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta24", TMath::Abs(cd01->Eta() - cd11->Eta())); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta34", TMath::Abs(cd10->Eta() - cd11->Eta())); // same as above
+
+    //-----------------------pT Ratio-----------------------
+         // 1D histograms too
+         // 
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio12", TMath::Abs(cd01->Pt() / cd00->Pt()));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio13", TMath::Abs(cd10->Pt() / cd00->Pt()));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio14", TMath::Abs(cd11->Pt() / cd00->Pt()));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio23", TMath::Abs(cd10->Pt() / cd01->Pt()));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio24", TMath::Abs(cd11->Pt() / cd01->Pt()));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio34", TMath::Abs(cd11->Pt() / cd10->Pt()));
+
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio12", TMath::Abs(cd01->Pt() / cd00->Pt())); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio13", TMath::Abs(cd10->Pt() / cd00->Pt())); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio14", TMath::Abs(cd11->Pt() / cd00->Pt())); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio23", TMath::Abs(cd10->Pt() / cd01->Pt())); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio24", TMath::Abs(cd11->Pt() / cd01->Pt())); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio34", TMath::Abs(cd11->Pt() / cd10->Pt())); // same as above
+
+    int highestPtcd = -1; 
+    // cases: 0 = Boson from VLQ 0
+    //        1 = Quark from VLQ 0
+    //        3 = Boson from VLQ 1
+    //        4 = Quark from VLQ 1
+    if((cd00->Pt() > cd01->Pt()) and (cd00->Pt() > cd10->Pt()) and (cd00->Pt() > cd11->Pt())){
+      if(cd00->GetMoment("absPdgId") > 20){ // Highest energy VLQ = 0, Boson = 0 -> Case = 0
+        highestPtcd = 0;
+      }
+      else if(cd00->GetMoment("absPdgId") < 10){ // Highest energy VLQ = 0, Quark = 1 -> Case = 1
+        highestPtcd = 1;
+      }
+    }
+    else if((cd01->Pt() > cd00->Pt()) and (cd01->Pt() > cd10->Pt()) and (cd01->Pt() > cd11->Pt())){
+      if(cd01->GetMoment("absPdgId") > 20){ 
+        highestPtcd = 0;
+      }
+      else if(cd01->GetMoment("absPdgId") < 10){ 
+        highestPtcd = 1;
+      }
+    }
+    else if((cd10->Pt() > cd00->Pt()) and (cd10->Pt() > cd01->Pt()) and (cd10->Pt() > cd11->Pt())){
+      if(cd10->GetMoment("absPdgId") > 20){ 
+        highestPtcd = 2;
+      }
+      else if(cd10->GetMoment("absPdgId") < 10){ 
+        highestPtcd = 3;
+      }
+    }
+    else if((cd11->Pt() > cd00->Pt()) and (cd11->Pt() > cd01->Pt()) and (cd11->Pt() > cd10->Pt())){
+      if(cd11->GetMoment("absPdgId") > 20){ 
+        highestPtcd = 2;
+      }
+      else if(cd11->GetMoment("absPdgId") < 10){ 
+        highestPtcd = 3;
+      }
+    }
+    
+    std::cout << "PDG ID 1: "  << cd00->Pt() << "     " << cd00->GetMoment("absPdgId") << std::endl;
+    std::cout << "PDG ID 2: "  << cd01->Pt() << "     " << cd01->GetMoment("absPdgId") << std::endl;
+    std::cout << "PDG ID 3: "  << cd10->Pt() << "     " << cd10->GetMoment("absPdgId") << std::endl;
+    std::cout << "PDG ID 4: "  << cd11->Pt() << "     " << cd11->GetMoment("absPdgId") << std::endl;
+    std::cout << "HighestPt: " << highestPtcd << std::endl << std::endl;
+
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("leadingPtOrigin", highestPtcd);
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("leadingPtOrigin", highestPtcd);
+
+  }
+  //------------------------Casey end-----------------------------//
 
   for(AnalysisObject* inv : list_inv){
     double _dphi   = inv->DeltaPhi( *(m_outData->o_truth_partonMET) );

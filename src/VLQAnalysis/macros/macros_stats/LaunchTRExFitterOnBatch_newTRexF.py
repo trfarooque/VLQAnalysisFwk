@@ -80,7 +80,6 @@ def writeScripts( scriptName, configFile, tRexFitterOutDirectory, instructions ,
     script.write("mv " + tRexFitterOutDirectory + "/Significance/* " + m_outputDir + "/" + tRexFitterOutDirectory + "/Significance/ \n")
     script.write("mv " + tRexFitterOutDirectory + "/Tables/* " + m_outputDir + "/" + tRexFitterOutDirectory + "/Tables/ \n")
     script.write("mv " + tRexFitterOutDirectory + "/Limits/* " + m_outputDir + "/" + tRexFitterOutDirectory + "/Limits/ \n")
-    # script.write("mv " + tRexFitterOutDirectory + "/Histograms/* " + m_outputDir + "/" + tRexFitterOutDirectory + "/Histograms/ \n")
     script.write("mv logFileRunning* " + m_outputDir + "/" + tRexFitterOutDirectory + "/ \n")
 
     script.write("\n\n")

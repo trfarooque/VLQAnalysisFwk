@@ -568,7 +568,8 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
       // Exclusive top-tagging
       bool isTop = obj -> Pt() > 400 && obj->M() > 140;
       if(m_opt -> DoOldBoost()){
-	isTop = isTop && ( obj -> Pt() < 800 ? m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 2 : m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 1);
+	isTop = ( (obj -> Pt() > 300) && (m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 2) );
+	//isTop = isTop && ( obj -> Pt() < 800 ? m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 2 : m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 1);
       }
       else{
 	isTop = isTop && ( obj -> Pt() < 700 ? m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 2 : m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 1);
@@ -577,7 +578,10 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
       // Exclusive Higgs tagging
       bool isHiggs = obj -> Pt() > 350 && obj->M() > 105 && obj->M() < 140;
       if(m_opt->DoOldBoost()){
-	 isHiggs = isHiggs && ( obj -> Pt() < 500 ? m_ntupData -> d_rcjets_nconsts -> at(iRCJet) == 2 : m_ntupData -> d_rcjets_nconsts -> at(iRCJet) <= 2);
+	isHiggs = (obj -> Pt() > 200) && ( m_ntupData -> d_rcjets_nconsts -> at(iRCJet) == 2 ? obj -> Pt() <= 500 :
+			       (m_ntupData -> d_rcjets_nconsts -> at(iRCJet) < 2 && obj -> Pt() >= 500) );
+	
+	//isHiggs = isHiggs && ( obj -> Pt() < 500 ? m_ntupData -> d_rcjets_nconsts -> at(iRCJet) == 2 : m_ntupData -> d_rcjets_nconsts -> at(iRCJet) <= 2);
       }
       else{
 	isHiggs = isHiggs && ( m_ntupData -> d_rcjets_nconsts -> at(iRCJet) == 2 ? obj -> Pt() > 350 :
@@ -924,6 +928,38 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_mujets (" << m_outData -> o_dRmin_mujets << ")"  << std::endl;
     m_outData -> o_dRmin_jetjet = m_varComputer -> GetMindR( *(m_outData->o_jets), *(m_outData->o_jets) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_jetjet (" << m_outData -> o_dRmin_jetjet << ")"  << std::endl;
+    m_outData -> o_dRmin_RCMHiggsRCMHiggs = m_varComputer -> GetMindR( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMHiggs")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_RCMHiggsRCMHiggs (" << m_outData -> o_dRmin_RCMHiggsRCMHiggs << ")" << std::endl;
+    m_outData -> o_dRmin_RCMHiggsRCMTop = m_varComputer -> GetMindR( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMTop")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_RCMHiggsRCMTop ("<< m_outData -> o_dRmin_RCMHiggsRCMTop << ")"<< std::endl;
+    m_outData-> o_dRmin_RCMHiggsRCMV = m_varComputer -> GetMindR( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMV")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_RCMHiggsRCMV ("<< m_outData -> o_dRmin_RCMHiggsRCMV << ")"<< std::endl;
+    m_outData -> o_dRmin_RCMVRCMV = m_varComputer -> GetMindR( *(m_outData->o_taggedjets.at("RCMV")), *(m_outData->o_taggedjets.at("RCMV")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_RCMVRCMV ("<< m_outData -> o_dRmin_RCMVRCMV << ")"<< std::endl;
+    m_outData -> o_dRmin_RCMVRCMTop= m_varComputer -> GetMindR( *(m_outData->o_taggedjets.at("RCMV")), *(m_outData->o_taggedjets.at("RCMTop")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_RCMVRCMTop ("<< m_outData -> o_dRmin_RCMVRCMTop << ")"<< std::endl;
+    m_outData->o_dRmin_RCMTopRCMTop = m_varComputer -> GetMindR( *(m_outData->o_taggedjets.at("RCMTop")), *(m_outData->o_taggedjets.at("RCMTop")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_RCMTopRCMTop ("<< m_outData -> o_dRmin_RCMTopRCMTop << ")"<< std::endl;
+    
+    /*m_outData->o_leadingdR_RCMHiggsRCMHiggs = m_varComputer -> GetLeadingdR( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMHiggs")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_RCMHiggsRCMHiggs (" << m_outData -> o_leadingdR_RCMHiggsRCMHiggs << ")" << std::endl;
+    m_outData->o_leadingdR_RCMHiggsRCMV = m_varComputer -> GetLeadingdR( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMV")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_RCMHiggsRCMV (" << m_outData -> o_leadingdR_RCMHiggsRCMV << ")"<< std::endl;
+    m_outData->o_leadingdR_RCMHiggsRCMTop = m_varComputer -> GetLeadingdR( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMTop")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_RCMHiggsRCMTop (" << m_outData -> o_leadingdR_RCMHiggsRCMTop << ")"<< std::endl;
+    m_outData->o_leadingdR_RCMVRCMV = m_varComputer -> GetLeadingdR( *(m_outData->o_taggedjets.at("RCMV")), *(m_outData->o_taggedjets.at("RCMV")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_RCMVRCMV (" << m_outData -> o_leadingdR_RCMVRCMV << ")"<< std::endl;
+    m_outData->o_leadingdR_RCMVRCMTop = m_varComputer -> GetLeadingdR( *(m_outData->o_taggedjets.at("RCMV")), *(m_outData->o_taggedjets.at("RCMTop")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_RCMVRCMTop (" << m_outData -> o_leadingdR_RCMVRCMTop << ")"<< std::endl;
+    m_outData->o_leadingdR_RCMTopRCMTop = m_varComputer -> GetLeadingdR( *(m_outData->o_taggedjets.at("RCMTop")), *(m_outData->o_taggedjets.at("RCMTop")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_RCMTopRCMTop (" << m_outData -> o_leadingdR_RCMTopRCMTop << ")"<< std::endl;*/
+
+    /*m_outData->o_minRecoVLQMAsymm_HtHt = m_varComputer -> GetMinPairVLQMassAsymm( m_outData->o_recoVLQ, "Ht", "Ht");
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_minRecoVLQMAsymm_HtHt (" << m_outData -> o_minRecoVLQMAsymm_HtHt << ")"<< std::endl;
+    m_outData->o_minRecoVLQMAsymm_HtZt = m_varComputer -> GetMinPairVLQMassAsymm( m_outData->o_recoVLQ, "Ht", "Zt");
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_minRecoVLQMAsymm_HtZt (" << m_outData -> o_minRecoVLQMAsymm_HtZt << ")"<< std::endl;
+    m_outData->o_minRecoVLQMAsymm_HtWb = m_varComputer -> GetMinPairVLQMassAsymm( m_outData->o_recoVLQ, "Ht", "Wb");
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_minRecoVLQMAsymm_HtWb (" << m_outData -> o_minRecoVLQMAsymm_HtWb << ")"<< std::endl;*/
     m_outData -> o_dPhi_lepmet  = m_outData -> o_selLep ? TMath::Abs( m_outData -> o_selLep -> DeltaPhi( *(m_outData->o_AO_met) ) ) : -1;
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhi_lepmet (" << m_outData -> o_dPhi_lepmet << ")"  << std::endl;
     m_outData -> o_dPhi_jetmet  = TMath::Abs(m_varComputer -> GetMindPhi( m_outData->o_AO_met, *(m_outData->o_jets), 4 ));
@@ -1080,6 +1116,14 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
       m_resonance_maker->MakePairVLQ("Ht");
       m_resonance_maker->MakePairVLQ("Zt");
       m_resonance_maker->MakePairVLQ("Wb");
+
+      m_outData->o_minRecoVLQMAsymm_HtHt = m_varComputer -> GetMinPairVLQMassAsymm( m_outData->o_recoVLQ, "Ht", "Ht");
+      if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_minRecoVLQMAsymm_HtHt (" << m_outData -> o_minRecoVLQMAsymm_HtHt << ")"<< std::endl;
+      m_outData->o_minRecoVLQMAsymm_HtZt = m_varComputer -> GetMinPairVLQMassAsymm( m_outData->o_recoVLQ, "Ht", "Zt");
+      if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_minRecoVLQMAsymm_HtZt (" << m_outData -> o_minRecoVLQMAsymm_HtZt << ")"<< std::endl;
+      m_outData->o_minRecoVLQMAsymm_HtWb = m_varComputer -> GetMinPairVLQMassAsymm( m_outData->o_recoVLQ, "Ht", "Wb");
+      if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_minRecoVLQMAsymm_HtWb (" << m_outData -> o_minRecoVLQMAsymm_HtWb << ")"<< std::endl;
+
     }
   }
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

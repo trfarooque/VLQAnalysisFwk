@@ -224,16 +224,9 @@ if(signalType=="PAIR"):
         Signals += [getSampleUncertainties("VLQ_BB_" + mass + "_ZbZb","VLQ_BB_" + mass + "_ZbZb", CommonObjectSystematics , [])]
 
 elif(signalType=="SINGLE"):
+    Signals += GetOldSingleVLQSamples( )
 
-    VLQ_masses = ["low_mass"] #, "nom_mass"]
-
-    VLQ_couplings =["K50"]
-    for vlq_mass in VLQ_masses:
-        for vlq_coupling in VLQ_couplings:
-            Signals +=  GetSingleVLQSamples( RWName=vlq_mass+"_"+vlq_coupling )
-            
-    #Signals += GetOldSingleVLQSamples( )
-
+    
 #for mass in ["1000","1200","1400","1600","1800"]:
 #    Signals += [getSampleUncertainties("UEDRPP_" + mass + ")","UEDRPP_" + mass, CommonObjectSystematics , [])]
 #Signals += [getSampleUncertainties("CI4tops","CI4tops", CommonObjectSystematics , [])]
@@ -417,10 +410,8 @@ for counter,sample in enumerate(Signals):
     f_adapted.write("  SeparateGammas: TRUE\n")
     f_adapted.write("  FillColor: 2\n")
     f_adapted.write("  LineColor: 2\n")
-    #f_adapted.write("  HistoFile: "+cleaned_sampleType+"\n")
-    #f_adapted.write("  LumiScale: "+str(lumiscale)+"\n")
-    f_adapted.write("  HistoFiles: "+cleaned_sampleType+".mc16a,"+cleaned_sampleType+".mc16d,"+cleaned_sampleType+".mc16e\n")
-    f_adapted.write("  LumiScales: 36207.66,44307.4,58450.1\n")
+    f_adapted.write("  HistoFile: "+cleaned_sampleType+"\n")
+    f_adapted.write("  LumiScale: "+str(lumiscale)+"\n")
     f_adapted.write(" \n")
 
     f_adapted.close()

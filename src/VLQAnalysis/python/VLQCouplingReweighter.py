@@ -17,7 +17,7 @@ from glob import glob
 from ROOT import *
 from optparse import OptionParser
 from VLQ_BR import *
-from VLQ_Samples import *
+from VLQ_Samples_mc import *
 
 sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "python/IFAETopFramework/" )
 from BatchTools import *
@@ -28,7 +28,8 @@ from Samples import *
 parser = OptionParser()
 parser.add_option("-i","--inputDir",dest="inputDir",help="repository for the splitted files are located",action="store",default="./")
 parser.add_option("-o","--outputDir",dest="outputDir",help="repository where to put the hadded files",action="store",default="./test/")
-parser.add_option("-s","--statOnly",dest="statOnly",help="repository where to put the hadded files",action="store_true",default=False)
+#parser.add_option("-s","--statOnly",dest="statOnly",help="repository where to put the hadded files",action="store_true",default=False)
+parser.add_option("-s","--statOnly",dest="statOnly",help="Flag to consider systematics",action="store",default="False")
 parser.add_option("-m","--mass",dest="vlqMass",help="value of the VLQ mass",action="store",default="800")
 parser.add_option("-c","--vlqCoupling",dest="vlqCoupling",help="value of the coupling (Wb,Zt,Ht)",action="store",default="HtHt,0.,0.,1.")
 parser.add_option("-r","--regions",dest="regions",help="Regions to consider (coma separated list), can use \"all\" to use all regions",action="store",default="")
@@ -37,7 +38,11 @@ parser.add_option("-v","--variables",dest="variables",help="Variables to conside
 
 outputDir=options.outputDir
 inputDir=options.inputDir
-statOnly=options.statOnly
+if(options.statOnly.upper() == "TRUE"):
+    statOnly = True
+else:
+    statOnly = False
+#statOnly=options.statOnly
 vlqMass=options.vlqMass
 vlqCoupling=options.vlqCoupling
 regions=options.regions
@@ -69,7 +74,7 @@ for reg in regions.split(","):
 
 ##________________________________________________________
 ## Naming convention
-template_fileName = "outVLQAnalysis_SAMPLE_*_OBJSYSTEMATIC__*.root"
+template_fileName = "outVLQAna_SAMPLE_*_OBJSYSTEMATIC__*.root"
 template_histName = "REGION_VLQTYPE_VARIABLE_WGTSYSTEMATIC"
 ##........................................................
 
@@ -238,6 +243,12 @@ for BR in BRs:
             elif(SName.find("_1200")>-1): key = '1200'
             elif(SName.find("_1300")>-1): key = '1300'
             elif(SName.find("_1400")>-1): key = '1400'
+            elif(SName.find("_1500")>-1): key = '1500'
+            elif(SName.find("_1600")>-1): key = '1600'
+            elif(SName.find("_1700")>-1): key = '1700'
+            elif(SName.find("_1800")>-1): key = '1800'
+            elif(SName.find("_1900")>-1): key = '1900'
+            elif(SName.find("_2000")>-1): key = '2000'
 
         myBR = BR['values'][key]
         Systs = []

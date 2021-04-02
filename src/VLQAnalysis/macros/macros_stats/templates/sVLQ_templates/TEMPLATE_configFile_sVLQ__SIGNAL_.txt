@@ -225,7 +225,7 @@ LumiScales: 36207.66,44307.4,58450.1
 %HistoFile: Dibosons
 %Group: Non-t#bar{t}
 Group: Others
-Exclude: HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex,HTX_c1lep6jin4bin1fjin2VLTin1Hin
+Exclude: HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin
 
 Sample: QCD
 Title: QCD
