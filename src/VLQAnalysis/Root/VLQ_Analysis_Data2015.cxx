@@ -1386,6 +1386,8 @@ bool VLQ_Analysis_Data2015::Begin(){
 	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio34",  0.02,0,1,  "; truth"+type+", "+str_id+" pT Ratio_{34}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "pTRatio34"/*, hopt_nouflow*/  );
 
+	    //------------------------ Above vs pT-----------------------------//
+      //m_outMngrHist -> AddStandardTH2( "meff", "jets_n", 50, 0, 7000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} [GeV]", (RWderiv||otherVariables), &(m_outData -> o_meff), &(m_outData -> o_jets_n));
 	    //------------------------Highest pT Origin-----------------------------//
             //
 //            m_outMngrHist -> HistMngr() -> BookTH1D("rejectionMask","Mask",1,0,10,"","","#events");
