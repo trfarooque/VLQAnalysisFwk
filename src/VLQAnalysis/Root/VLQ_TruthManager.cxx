@@ -1216,7 +1216,7 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
 	 part -> SetMoment( "eta", vcd1 -> Eta() ); 
 	 //part -> SetMoment( "dR12", vcd1 -> DeltaR(*vcd2) );
 	 //part -> SetMoment( "dPhi12", TMath::Abs(TMath::Pi() - vcd1 -> DeltaPhi(*vcd2)) ); // pi-amount
-	 //part -> SetMoment( "dEta12", TMath::Abs(vcd1 -> Eta() - vcd2 -> Eta()) ); // skipto
+	 //part -> SetMoment( "dEta12", TMath::Abs(vcd1 -> Eta() - vcd2 -> Eta()) ); 
 	 //part -> SetMoment( "pTRatio12", TMath::Abs(vcd2 -> Pt() / vcd1 -> Pt()) ); // skipto
          //part -> SetMoment( "dRHt",  )
        }
@@ -1837,15 +1837,17 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
       }
     }
     
-    std::cout << "PDG ID 1: "  << cd00->Pt() << "     " << cd00->GetMoment("absPdgId") << std::endl;
-    std::cout << "PDG ID 2: "  << cd01->Pt() << "     " << cd01->GetMoment("absPdgId") << std::endl;
-    std::cout << "PDG ID 3: "  << cd10->Pt() << "     " << cd10->GetMoment("absPdgId") << std::endl;
-    std::cout << "PDG ID 4: "  << cd11->Pt() << "     " << cd11->GetMoment("absPdgId") << std::endl;
-    std::cout << "HighestPt: " << highestPtcd << std::endl << std::endl;
+//    std::cout << "PDG ID 1: "  << cd00->Pt() << "     " << cd00->GetMoment("absPdgId") << std::endl;
+//    std::cout << "PDG ID 2: "  << cd01->Pt() << "     " << cd01->GetMoment("absPdgId") << std::endl;
+//    std::cout << "PDG ID 3: "  << cd10->Pt() << "     " << cd10->GetMoment("absPdgId") << std::endl;
+//    std::cout << "PDG ID 4: "  << cd11->Pt() << "     " << cd11->GetMoment("absPdgId") << std::endl;
+//    std::cout << "HighestPt: " << highestPtcd << std::endl << std::endl;
 
     (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("leadingPtOrigin", highestPtcd);
     (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("leadingPtOrigin", highestPtcd);
 
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("jetPt", VLQ0->Pt());
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("jetPt", VLQ1->Pt());
   }
   //------------------------Casey end-----------------------------//
 
