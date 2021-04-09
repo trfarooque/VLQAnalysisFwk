@@ -213,18 +213,71 @@ public:
     double o_dRmin_mujets;
     double o_dRmin_lepbjet;
     double o_dRmin_jetjet;
+    double o_dRmin_RCjets;
+    double o_dRmin_RCTTMassRCTTMass;
+    double o_dEtamin_lepjet;
+    double o_dEtamin_lepbjet;
+    double o_dEtamin_jetjet;
+    double o_dEtamin_RCjets;
+    double o_dEtamin_RCTTMassRCTTMass;
+    double o_dPhimin_lepjet;
+    double o_dPhimin_lepbjet;
+    double o_dPhimin_jetjet;
+    double o_dPhimin_RCjets;
+    double o_dPhimin_RCTTMassRCTTMass;
     double o_dRmin_RCMHiggsRCMHiggs;
     double o_dRmin_RCMHiggsRCMV;
     double o_dRmin_RCMHiggsRCMTop;
     double o_dRmin_RCMVRCMV;
     double o_dRmin_RCMVRCMTop;
     double o_dRmin_RCMTopRCMTop;
+    double o_dEtamin_RCMHiggsRCMHiggs;
+    double o_dEtamin_RCMHiggsRCMV;
+    double o_dEtamin_RCMHiggsRCMTop;
+    double o_dEtamin_RCMVRCMV;
+    double o_dEtamin_RCMVRCMTop;
+    double o_dEtamin_RCMTopRCMTop;
+    double o_dPhimin_RCMHiggsRCMHiggs;
+    double o_dPhimin_RCMHiggsRCMV;
+    double o_dPhimin_RCMHiggsRCMTop;
+    double o_dPhimin_RCMVRCMV;
+    double o_dPhimin_RCMVRCMTop;
+    double o_dPhimin_RCMTopRCMTop;
+    double o_leadingdR_lepjet;
+    double o_leadingdR_lepbjet;
+    double o_leadingdR_jetjet;
+    double o_leadingdR_RCjets;
+    double o_leadingdEta_RCjets;
+    double o_leadingdEta_lepjet;
+    double o_leadingdEta_lepbjet;
+    double o_leadingdEta_jetjet;
+    double o_leadingdPhi_RCjets;
+    double o_leadingdPhi_lepjet;
+    double o_leadingdPhi_lepbjet;
+    double o_leadingdPhi_jetjet;
     double o_leadingdR_RCMHiggsRCMHiggs;
     double o_leadingdR_RCMHiggsRCMV;
     double o_leadingdR_RCMHiggsRCMTop;
     double o_leadingdR_RCMVRCMV;
     double o_leadingdR_RCMVRCMTop;
     double o_leadingdR_RCMTopRCMTop;
+   
+    double o_leadingdR_RCTTMassRCTTMass;
+    double o_leadingdEta_RCTTMassRCTTMass;
+    double o_leadingdPhi_RCTTMassRCTTMass;
+
+    double o_leadingdEta_RCMHiggsRCMHiggs;
+    double o_leadingdEta_RCMHiggsRCMV;
+    double o_leadingdEta_RCMHiggsRCMTop;
+    double o_leadingdEta_RCMVRCMV;
+    double o_leadingdEta_RCMVRCMTop;
+    double o_leadingdEta_RCMTopRCMTop;
+    double o_leadingdPhi_RCMHiggsRCMHiggs;
+    double o_leadingdPhi_RCMHiggsRCMV;
+    double o_leadingdPhi_RCMHiggsRCMTop;
+    double o_leadingdPhi_RCMVRCMV;
+    double o_leadingdPhi_RCMVRCMTop;
+    double o_leadingdPhi_RCMTopRCMTop;
     double o_minRecoVLQMAsymm_HtHt;
     double o_minRecoVLQMAsymm_HtZt;
     double o_minRecoVLQMAsymm_HtWb;
@@ -259,8 +312,35 @@ public:
     double o_J_lepton_invariant_mass;
     double o_J_leadingb_invariant_mass;
     double o_J_J_invariant_mass;
+
+    double o_invariant_mass_RCTTMassRCTTMass;
+    double o_invariant_mass_RCjets;
+    double o_dRmaxM_RCTTMassRCTTMass;
+    double o_dRmaxM_RCjets;
+    double o_dPhimaxM_RCTTMassRCTTMass;
+    double o_dPhimaxM_RCjets;
+    double o_dEtaminM_RCTTMassRCTTMass;
+    double o_dEtaminM_RCjets;
+
     double o_dRaverage_bjetbjet;
     double o_dRaverage_jetjet;
+    double o_dRaverage_lepjet;
+    double o_dRaverage_lepbjet;
+    double o_dRaverage_RCjets;
+    double o_dRaverage_RCTTMassRCTTMass;
+
+    double o_dEtaaverage_RCjets;
+    double o_dEtaaverage_jetjet;
+    double o_dEtaaverage_lepjet;
+    double o_dEtaaverage_lepbjet;
+    double o_dEtaaverage_RCTTMassRCTTMass;
+
+    double o_dPhiaverage_RCjets;
+    double o_dPhiaverage_jetjet;
+    double o_dPhiaverage_lepjet;
+    double o_dPhiaverage_lepbjet;
+    double o_dPhiaverage_RCTTMassRCTTMass;
+
     //
     //low mass Hplus variables
     double o_mbb_maxdR;

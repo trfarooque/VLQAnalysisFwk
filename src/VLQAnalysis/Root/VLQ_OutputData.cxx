@@ -50,10 +50,21 @@ o_bW_hadtop(0),
 o_fjets_topmatched(0),o_fjets_topmatchboost_TTL(0),o_fjets_topmatchboost_TTT(0),
 o_nhadtops(0),o_nboosthadtops(0),o_matchingeff(0),o_tageff_TTL(0),o_tageff_TTT(0),
 //Kinematic variables
-o_dRmin_lepjet(0),o_dRmin_ejets(0), o_dRmin_mujets(0),o_dRmin_lepbjet(0), o_dRmin_jetjet(0), 
-o_dRmin_RCMHiggsRCMHiggs(0), o_dRmin_RCMHiggsRCMV(0), o_dRmin_RCMHiggsRCMTop(0), o_dRmin_RCMVRCMV(0),
-o_dRmin_RCMVRCMTop(0), o_dRmin_RCMTopRCMTop(0), o_leadingdR_RCMHiggsRCMHiggs(0), o_leadingdR_RCMHiggsRCMV(0),
-o_leadingdR_RCMHiggsRCMTop(0), o_leadingdR_RCMVRCMV(0), o_leadingdR_RCMVRCMTop(0), o_leadingdR_RCMTopRCMTop(0),
+o_dRmin_lepjet(0),o_dRmin_ejets(0), o_dRmin_mujets(0),o_dRmin_lepbjet(0), o_dRmin_jetjet(0),  o_dRmin_RCjets(0),
+  o_dEtamin_lepjet(0),o_dEtamin_lepbjet(0), o_dEtamin_jetjet(0), o_dEtamin_RCjets(0), o_dPhimin_lepjet(0),o_dPhimin_lepbjet(0), o_dPhimin_jetjet(0) , o_dPhimin_RCjets(0),
+o_dRmin_RCMHiggsRCMHiggs(0), o_dRmin_RCMHiggsRCMV(0), o_dRmin_RCMHiggsRCMTop(0), o_dRmin_RCMVRCMV(0), o_dRmin_RCTTMassRCTTMass(0),
+o_dRmin_RCMVRCMTop(0), o_dRmin_RCMTopRCMTop(0),o_dPhimin_RCMHiggsRCMHiggs(0), o_dPhimin_RCMHiggsRCMV(0), o_dPhimin_RCMHiggsRCMTop(0), o_dPhimin_RCMVRCMV(0), o_dPhimin_RCTTMassRCTTMass(0),
+o_dPhimin_RCMVRCMTop(0), o_dPhimin_RCMTopRCMTop(0),o_dEtamin_RCMHiggsRCMHiggs(0), o_dEtamin_RCMHiggsRCMV(0), o_dEtamin_RCMHiggsRCMTop(0), o_dEtamin_RCMVRCMV(0),
+o_dEtamin_RCMVRCMTop(0), o_dEtamin_RCMTopRCMTop(0), o_dEtamin_RCTTMassRCTTMass(0),
+o_leadingdR_lepjet(0), o_leadingdR_lepbjet(0),o_leadingdR_jetjet(0),o_leadingdR_RCjets(0),
+o_leadingdEta_lepjet(0), o_leadingdEta_lepbjet(0),o_leadingdEta_jetjet(0),o_leadingdEta_RCjets(0),
+o_leadingdPhi_lepjet(0), o_leadingdPhi_lepbjet(0),o_leadingdPhi_jetjet(0),o_leadingdPhi_RCjets(0),
+o_leadingdR_RCMHiggsRCMHiggs(0), o_leadingdR_RCMHiggsRCMV(0),
+  o_leadingdR_RCMHiggsRCMTop(0), o_leadingdR_RCMVRCMV(0), o_leadingdR_RCMVRCMTop(0), o_leadingdR_RCMTopRCMTop(0),  o_leadingdR_RCTTMassRCTTMass(0),
+o_leadingdEta_RCMHiggsRCMHiggs(0), o_leadingdEta_RCMHiggsRCMV(0),
+  o_leadingdEta_RCMHiggsRCMTop(0), o_leadingdEta_RCMVRCMV(0), o_leadingdEta_RCMVRCMTop(0), o_leadingdEta_RCMTopRCMTop(0), o_leadingdEta_RCTTMassRCTTMass(0),
+o_leadingdPhi_RCMHiggsRCMHiggs(0), o_leadingdPhi_RCMHiggsRCMV(0),
+  o_leadingdPhi_RCMHiggsRCMTop(0), o_leadingdPhi_RCMVRCMV(0), o_leadingdPhi_RCMVRCMTop(0), o_leadingdPhi_RCMTopRCMTop(0),o_leadingdPhi_RCTTMassRCTTMass(0),
 o_minRecoVLQMAsymm_HtHt(0), o_minRecoVLQMAsymm_HtZt(0), o_minRecoVLQMAsymm_HtWb(0),
 o_dRmin_bjetbjet(0), o_dRmin_bjetbjet_lowb_3b(0), o_dRmin_bjetbjet_lowb_4b(0),
 o_dR_TTL_bjets(0),o_dR_TTT_bjets(0), o_dR_TTLooser_bjets(0), o_mbb_mindR(0), o_mbb_mindR_lowb_3b(0), o_mbb_mindR_lowb_4b(0),
@@ -61,7 +72,10 @@ o_dPhi_lepmet(0), o_dPhi_jetmet(0), o_dPhi_jetmet5(0), o_dPhi_jetmet6(0), o_dPhi
 o_dRmin_ebjets(0), o_dRmin_mubjets(0), o_mTbmin(0), o_mTbmin_lowb_3b(0), o_mTbmin_lowb_4b(0),
 //HBSM variables
 o_jets40_n(0), o_centrality(0), o_mbb_leading_bjets(0), o_mbb_softest_bjets(0), o_J_lepton_invariant_mass(0), o_J_leadingb_invariant_mass(0), o_J_J_invariant_mass(0),
-o_dRaverage_bjetbjet(0),o_dRaverage_jetjet(0),
+o_dRaverage_bjetbjet(0),o_dRaverage_jetjet(0),o_dRaverage_lepjet(0),o_dRaverage_lepbjet(0),o_dRaverage_RCjets(0),o_dRaverage_RCTTMassRCTTMass(0),
+o_dEtaaverage_jetjet(0),o_dEtaaverage_lepjet(0),o_dEtaaverage_lepbjet(0),o_dEtaaverage_RCjets(0),o_dEtaaverage_RCTTMassRCTTMass(0),
+o_dPhiaverage_jetjet(0),o_dPhiaverage_lepjet(0),o_dPhiaverage_lepbjet(0), o_dPhiaverage_RCjets(0),o_dPhiaverage_RCTTMassRCTTMass(0),
+o_invariant_mass_RCTTMassRCTTMass(0), o_invariant_mass_RCjets(0),o_dRmaxM_RCTTMassRCTTMass(0),o_dRmaxM_RCjets(0),o_dPhimaxM_RCTTMassRCTTMass(0),o_dPhimaxM_RCjets(0),o_dEtaminM_RCTTMassRCTTMass(0),o_dEtaminM_RCjets(0),
 //Low mass Hplus Variable
 o_mbb_maxdR(0), o_dPhibb_leading_bjets(0), o_dPhibb_mindR(0), o_dPhibb_maxdR(0), o_dEtabb_leading_bjets(0), o_dEtabb_mindR(0), o_dEtabb_maxdR(0), o_mjj_leading_jets(0), 
 o_mjj_mindR(0), o_mjj_maxdR(0), o_dPhijj_leading_jets(0), o_dPhijj_mindR(0), o_dPhijj_maxdR(0), o_dEtajj_leading_jets(0), o_dEtajj_mindR(0), o_dEtajj_maxdR(0),
@@ -365,23 +379,74 @@ void VLQ_OutputData::ClearOutputData()
   //
   // Flat variables
   //
-  o_dRmin_lepjet = 99.;
-  o_dRmin_ejets = 99.;
-  o_dRmin_mujets = 99.;
-  o_dRmin_lepbjet = 99.;
-  o_dRmin_jetjet = 99.;
+  o_dRmin_lepjet = -99.;
+  o_dRmin_ejets = -99.;
+  o_dRmin_mujets = -99.;
+  o_dRmin_lepbjet = -99.;
+  o_dRmin_jetjet = -99.;
+  o_dEtamin_lepjet = -99.;
+  o_dEtamin_lepbjet = -99.;
+  o_dEtamin_jetjet = -99.;
+  o_dPhimin_lepjet = -99.;
+  o_dPhimin_lepbjet = -99.;
+  o_dPhimin_jetjet = -99.;
+  o_dRmin_RCjets = -99.;
+  o_dEtamin_RCjets = -99.;
+  o_dPhimin_RCjets = -99.;
   o_dRmin_RCMHiggsRCMHiggs = -100.;
   o_dRmin_RCMHiggsRCMV = -100.;
   o_dRmin_RCMHiggsRCMTop = -100.; 
   o_dRmin_RCMVRCMV = -100.;
   o_dRmin_RCMVRCMTop = -100.; 
   o_dRmin_RCMTopRCMTop = -100.;
+  o_leadingdR_lepjet = -100.;
+  o_leadingdR_lepbjet = -100.;
+  o_leadingdR_jetjet = -100.;
+  o_leadingdEta_lepjet = -100.;
+  o_leadingdEta_lepbjet = -100.;
+  o_leadingdEta_jetjet = -100.;
+  o_leadingdPhi_lepjet = -100.;
+  o_leadingdPhi_lepbjet = -100.;
+  o_leadingdPhi_jetjet = -100.;
   o_leadingdR_RCMHiggsRCMHiggs = -100.;
   o_leadingdR_RCMHiggsRCMV = -100.;
   o_leadingdR_RCMHiggsRCMTop = -100.;
   o_leadingdR_RCMVRCMV = -100.;
   o_leadingdR_RCMVRCMTop = -100.;
   o_leadingdR_RCMTopRCMTop = -100.;
+
+  o_leadingdR_RCTTMassRCTTMass = -100.;
+  o_leadingdEta_RCTTMassRCTTMass = -100.;
+  o_leadingdPhi_RCTTMassRCTTMass = -100.;
+
+
+  o_leadingdEta_RCMHiggsRCMHiggs = -100.;
+  o_leadingdEta_RCMHiggsRCMV = -100.;
+  o_leadingdEta_RCMHiggsRCMTop = -100.;
+  o_leadingdEta_RCMVRCMV = -100.;
+  o_leadingdEta_RCMVRCMTop = -100.;
+  o_leadingdEta_RCMTopRCMTop = -100.;
+  o_leadingdPhi_RCMHiggsRCMHiggs = -100.;
+  o_leadingdPhi_RCMHiggsRCMV = -100.;
+  o_leadingdPhi_RCMHiggsRCMTop = -100.;
+  o_leadingdPhi_RCMVRCMV = -100.;
+  o_leadingdPhi_RCMVRCMTop = -100.;
+  o_leadingdPhi_RCMTopRCMTop = -100.;
+  o_dPhimin_RCMHiggsRCMHiggs = -100.;
+  o_dPhimin_RCMHiggsRCMV = -100.;
+  o_dPhimin_RCMHiggsRCMTop = -100.;
+  o_dPhimin_RCMVRCMV = -100.;
+  o_dPhimin_RCMVRCMTop = -100.;
+  o_dPhimin_RCMTopRCMTop = -100.;
+  o_dPhimin_RCTTMassRCTTMass = -100.;
+  o_dEtamin_RCTTMassRCTTMass = -100.;
+  o_dRmin_RCTTMassRCTTMass = -100.;
+  o_dEtamin_RCMHiggsRCMHiggs = -100.;
+  o_dEtamin_RCMHiggsRCMV = -100.;
+  o_dEtamin_RCMHiggsRCMTop = -100.;
+  o_dEtamin_RCMVRCMV = -100.;
+  o_dEtamin_RCMVRCMTop = -100.;
+  o_dEtamin_RCMTopRCMTop = -100.;
   o_minRecoVLQMAsymm_HtHt = -100.;
   o_minRecoVLQMAsymm_HtZt = -100.;
   o_minRecoVLQMAsymm_HtWb = -100.;
@@ -475,8 +540,36 @@ void VLQ_OutputData::ClearOutputData()
   o_J_lepton_invariant_mass = -100.;
   o_J_leadingb_invariant_mass = -100.;
   o_J_J_invariant_mass = -100.;
+
+  o_invariant_mass_RCTTMassRCTTMass = -100.;
+  o_invariant_mass_RCjets= -100.;
+  o_dRmaxM_RCTTMassRCTTMass= -100.;
+  o_dRmaxM_RCjets= -100.;
+  o_dPhimaxM_RCTTMassRCTTMass= -100.;
+  o_dPhimaxM_RCjets= -100.;
+  o_dEtaminM_RCTTMassRCTTMass= -100.;
+  o_dEtaminM_RCjets= -100.;
+
   o_dRaverage_bjetbjet = -100; 
   o_dRaverage_jetjet = -100;
+  o_dRaverage_lepbjet = -100;
+  o_dRaverage_lepjet = -100;
+
+  o_dRaverage_RCjets = -100;
+  o_dEtaaverage_RCjets = -100;
+  o_dPhiaverage_RCjets = -100;
+
+  o_dRaverage_RCTTMassRCTTMass = -100;
+  o_dEtaaverage_RCTTMassRCTTMass = -100;
+  o_dPhiaverage_RCTTMassRCTTMass = -100;
+
+  o_dEtaaverage_jetjet = -100;
+  o_dEtaaverage_lepbjet = -100;
+  o_dEtaaverage_lepjet = -100;
+
+  o_dPhiaverage_jetjet = -100;
+  o_dPhiaverage_lepbjet = -100;
+  o_dPhiaverage_lepjet = -100;
 
   o_fjets_topmatched=-99;
   o_fjets_topmatchboost_TTL=-99;

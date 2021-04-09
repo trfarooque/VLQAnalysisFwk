@@ -408,7 +408,22 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_outMngrTree->AddStandardBranch("centrality", "Centrality", &(m_outData->o_centrality ));
     m_outMngrTree->AddStandardBranch("dRaverage_jetjet", "#DeltaR_{ave.}(jet, jet)", &(m_outData->o_dRaverage_jetjet));
     m_outMngrTree->AddStandardBranch("dRaverage_bb", "#DeltaR_{ave.}(b-jet, b-jet)", &(m_outData->o_dRaverage_bjetbjet));
+    
+    m_outMngrTree->AddStandardBranch("dRaverage_lepjet", "#DeltaR_{ave.}(lep, jet)", &(m_outData->o_dRaverage_lepjet));
+    m_outMngrTree->AddStandardBranch("dRaverage_lepbjet", "#DeltaR_{ave.}(lep, bjet)", &(m_outData->o_dRaverage_lepbjet));
+    m_outMngrTree->AddStandardBranch("dRaverage_jetjet", "#DeltaR_{ave.}(jet, jet)", &(m_outData->o_dRaverage_jetjet));
+   
+    m_outMngrTree->AddStandardBranch("dEtaaverage_lepjet", "#DeltaR_{ave.}(lep, jet)", &(m_outData->o_dEtaaverage_lepjet));
+    m_outMngrTree->AddStandardBranch("dEtaaverage_lepbjet", "#DeltaR_{ave.}(lep, bjet)", &(m_outData->o_dEtaaverage_lepbjet));
+    m_outMngrTree->AddStandardBranch("dEtaaverage_jetjet", "#DeltaR_{ave.}(jet, jet)", &(m_outData->o_dEtaaverage_jetjet));
+   
+    m_outMngrTree->AddStandardBranch("dPhiaverage_lepjet", "#DeltaR_{ave.}(lep, jet)", &(m_outData->o_dPhiaverage_lepjet));
+    m_outMngrTree->AddStandardBranch("dPhiaverage_lepbjet", "#DeltaR_{ave.}(lep, bjet)", &(m_outData->o_dPhiaverage_lepbjet));
+    m_outMngrTree->AddStandardBranch("dPhiaverage_jetjet", "#DeltaR_{ave.}(jet, jet)", &(m_outData->o_dPhiaverage_jetjet));
     */
+
+
+
 
     if(m_opt->DoLowBRegions()){
       m_outMngrTree->AddStandardBranch("mbb_mindr_lowb_3b", "m_{inv}^{min#DeltaR} (lowb, 3b)", &(m_outData->o_mbb_mindR_lowb_3b));
@@ -522,6 +537,11 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "leptop_m",          10, 0, 500,  ";Leptonic top mass [GeV]"       ,  false, &(m_outData -> o_leptop), -1, "M", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_dR_blep",    0.1, 0, 6,   ";Leptonic top #DeltaR(b,lep)"       ,  false, &(m_outData -> o_leptop), -1, "dR_blep", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_dR_bW",      0.1, 0, 6,   ";Leptonic top #DeltaR(b,W)"       ,  false, &(m_outData -> o_leptop), -1, "dR_bW", hopt_nouflow);
+      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match",      1, 0, 2,   ";Leptonic top RCtag"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match", hopt_nouflow);
+
+
+
+      m_outMngrHist -> AddStandardTH1( "leptop_b_dRmin_RCtag",      0.1, 0,6 ,   ";dRmin #DeltaR(RCtag,bjet)"       ,  false, &(m_outData -> o_leptop_b), -1, "dRmin_RCtag_match", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_dPhi_bnu",   0.1, 0, 4,   ";Leptonic top #Delta#phi(b,#nu)"       ,  false, &(m_outData -> o_leptop), -1, "dPhi_bnu", hopt_nouflow);
 
       //Leptonic W
@@ -832,6 +852,8 @@ bool VLQ_Analysis_Data2015::Begin(){
       const bool DrawSyst = (iRCJet == 0) && otherVariables;
 
       if(DrawReco){
+
+	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_rc_reff",         0.1, 0, 1.5, ";RC jet"+str_id+"  R_{eff} [GeV]"      ,  DrawSyst, &(m_outData -> o_rcjets), iRCJet, "reff");
 	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_pt",         50, 0, 1000, ";RC jet"+str_id+"  p_{T} [GeV]"      ,  DrawSyst, &(m_outData -> o_rcjets), iRCJet, "Pt");
 	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_eta",        0.2, -3, 3,  ";RC jet"+str_id+"  #eta"             ,  DrawSyst, &(m_outData -> o_rcjets), iRCJet, "Eta");
 	m_outMngrHist -> AddStandardTH1( "RCjet"+str_id+"_m",          10, 0, 500,  ";RC jet"+str_id+"  mass [GeV]"       ,  DrawSyst, &(m_outData -> o_rcjets), iRCJet, "M");
@@ -1077,6 +1099,8 @@ bool VLQ_Analysis_Data2015::Begin(){
         if(iTT==-1) str_id = "s";
         const bool DrawSyst = (iTT == 0) && otherVariables;
 	if(DrawReco){
+	  m_outMngrHist -> AddStandardTH1( type + "_jet" + str_id + "_reff", 0.1, 0, 1.5, ";"+tagstring+" jet"+str_id+" R_{eff} [GeV]" ,
+					   DrawSyst, &(m_outData -> o_taggedjets.at(type)), iTT, "reff" );
 	  m_outMngrHist -> AddStandardTH1( type + "_jet" + str_id + "_pt", 50, 0, 2000, ";"+tagstring+" jet"+str_id+" p_{T} [GeV]" ,
 					   DrawSyst, &(m_outData -> o_taggedjets.at(type)), iTT, "Pt" );
 	  m_outMngrHist -> AddStandardTH1( type + "_jet" + str_id + "_eta", 0.2, -3, 3, ";"+tagstring+" jet"+str_id+" #eta"        ,
@@ -1116,7 +1140,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 	  m_outMngrHist -> AddStandardTH1( type + "_jet"+str_id + "_fpT_truth", 0.1,0.,2., "; "+tagstring+" jet"+str_id+" p_{T}^{reco} / p_{T}^{truth}"
 					   , false, &(m_outData -> o_taggedjets.at(type)), iTT, "fpT_truth");
 	  m_outMngrHist -> AddStandardTH1( type + "_jet"+str_id + "_dR_truth", 0.1,0.,6., "; "+tagstring+" jet"+str_id+" #DeltaR^{truth}"
-					   , false, &(m_outData -> o_taggedjets.at(type)), iTT, "dR_truth");
+				   , false, &(m_outData -> o_taggedjets.at(type)), iTT, "dR_truth");
 	  m_outMngrHist -> AddStandardTH1( type + "_jet"+str_id + "_nmatch_truth", 1.,0.,3., "; "+tagstring+" jet"+str_id+" N_{match}^{truth}"
 					   , false, &(m_outData -> o_taggedjets.at(type)), iTT, "nmatch_truth");
 	  m_outMngrHist -> AddStandardTH1( type + "_jet"+str_id + "_pdgId_truth", 1.,0.,26., "; "+tagstring+" jet"+str_id+" PDGID^{truth}"
@@ -1134,13 +1158,75 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "dRmin_RCMVRCMV", 0.25,0,5, ";#DeltaR_{min}(W/Z-tagged jet, W/Z-tagged jet)", true, &(m_outData -> o_dRmin_RCMVRCMV) );
       m_outMngrHist -> AddStandardTH1( "dRmin_RCMVRCMTop", 0.25,0,5, ";#DeltaR_{min}(W/Z-tagged jet, Top-tagged jet)", true, &(m_outData -> o_dRmin_RCMVRCMTop) );
       m_outMngrHist -> AddStandardTH1( "dRmin_RCMTopRCMTop", 0.25,0,5, ";#DeltaR_{min}(Top-tagged jet, Top-tagged jet)", true, &(m_outData -> o_dRmin_RCMTopRCMTop) );
-      
+     
+ m_outMngrHist -> AddStandardTH1( "dPhimin_RCMHiggsRCMHiggs", 0.25,-1,5, ";#Delta#phi_{min}(Higgs-tagged jet, Higgs-tagged jet)", true, &(m_outData -> o_dPhimin_RCMHiggsRCMHiggs) );
+      m_outMngrHist -> AddStandardTH1( "dPhimin_RCMHiggsRCMV", 0.25,-1,5, ";#Delta#phi_{min}(Higgs-tagged jet, W/Z-tagged jet)", true, &(m_outData -> o_dPhimin_RCMHiggsRCMV) );
+      m_outMngrHist -> AddStandardTH1( "dPhimin_RCMHiggsRCMTop", 0.25,-1,5, ";#Delta#phi_{min}(Higgs-tagged jet, Top-tagged jet)", true, &(m_outData -> o_dPhimin_RCMHiggsRCMTop) );
+      m_outMngrHist -> AddStandardTH1( "dPhimin_RCMVRCMV", 0.25,-1,5, ";#Delta#phi_{min}(W/Z-tagged jet, W/Z-tagged jet)", true, &(m_outData -> o_dPhimin_RCMVRCMV) );
+      m_outMngrHist -> AddStandardTH1( "dPhimin_RCMVRCMTop", 0.25,-1,5, ";#Delta#phi_{min}(W/Z-tagged jet, Top-tagged jet)", true, &(m_outData -> o_dPhimin_RCMVRCMTop) );
+      m_outMngrHist -> AddStandardTH1( "dPhimin_RCMTopRCMTop", 0.25,-1,5, ";#Delta#phi_{min}(Top-tagged jet, Top-tagged jet)", true, &(m_outData -> o_dPhimin_RCMTopRCMTop) );
+     
+
+ m_outMngrHist -> AddStandardTH1( "dEtamin_RCMHiggsRCMHiggs", 0.25,-1,5, ";#Delta#eta_{min}(Higgs-tagged jet, Higgs-tagged jet)", true, &(m_outData -> o_dEtamin_RCMHiggsRCMHiggs) );
+      m_outMngrHist -> AddStandardTH1( "dEtamin_RCMHiggsRCMV", 0.25,-1,5, ";#Delta#eta_{min}(Higgs-tagged jet, W/Z-tagged jet)", true, &(m_outData -> o_dEtamin_RCMHiggsRCMV) );
+      m_outMngrHist -> AddStandardTH1( "dEtamin_RCMHiggsRCMTop", 0.25,-1,5, ";#Delta#eta_{min}(Higgs-tagged jet, Top-tagged jet)", true, &(m_outData -> o_dEtamin_RCMHiggsRCMTop) );
+      m_outMngrHist -> AddStandardTH1( "dEtamin_RCMVRCMV", 0.25,-1,5, ";#Delta#eta_{min}(W/Z-tagged jet, W/Z-tagged jet)", true, &(m_outData -> o_dEtamin_RCMVRCMV) );
+      m_outMngrHist -> AddStandardTH1( "dEtamin_RCMVRCMTop", 0.25,-1,5, ";#Delta#eta_{min}(W/Z-tagged jet, Top-tagged jet)", true, &(m_outData -> o_dEtamin_RCMVRCMTop) );
+      m_outMngrHist -> AddStandardTH1( "dEtamin_RCMTopRCMTop", 0.25,-1,5, ";#Delta#eta_{min}(Top-tagged jet, Top-tagged jet)", true, &(m_outData -> o_dEtamin_RCMTopRCMTop) );
+     
+ m_outMngrHist -> AddStandardTH1( "dEtamin_RCTTMassRCTTMass", 0.25,-1,5, ";#Delta#eta_{min}(RCTTMass, RCTTMass)", true, &(m_outData -> o_dEtamin_RCTTMassRCTTMass) );
+ m_outMngrHist -> AddStandardTH1( "dRmin_RCTTMassRCTTMass", 0.25,-1,5, ";#DeltaR_{min}(RCTTMass, RCTTMass)", true, &(m_outData -> o_dRmin_RCTTMassRCTTMass) );
+ m_outMngrHist -> AddStandardTH1( "dPhimin_RCTTMassRCTTMass", 0.25,-1,5, ";#Delta#phi_{min}(RCTTMass, RCTTMass)", true, &(m_outData -> o_dPhimin_RCTTMassRCTTMass) );
+     
+
+
+      m_outMngrHist -> AddStandardTH1( "leadingdR_RCTTMassRCTTMass", 0.25,-1,5, ";#DeltaR (leading TTmass jet, subleading TTmass jet)", true, &(m_outData -> o_leadingdR_RCTTMassRCTTMass) );
+  
+    m_outMngrHist -> AddStandardTH1( "leadingdEta_RCTTMassRCTTMass", 0.25,-1,5, ";#DeltaR (leading TTmass jet, subleading TTmass jet)", true, &(m_outData -> o_leadingdEta_RCTTMassRCTTMass) );
+  
+    m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCTTMassRCTTMass", 0.25,-1,5, ";#DeltaR (leading TTmass jet, subleading TTmass jet)", true, &(m_outData -> o_leadingdPhi_RCTTMassRCTTMass) );
+  
+
       m_outMngrHist -> AddStandardTH1( "leadingdR_RCMHiggsRCMHiggs", 0.25,-1,5, ";#DeltaR (leading Higgs-tagged J, subleading Higgs-tagged J)", true, &(m_outData -> o_leadingdR_RCMHiggsRCMHiggs) );
       m_outMngrHist -> AddStandardTH1( "leadingdR_RCMHiggsRCMV", 0.25,-1,5, ";#DeltaR (leading Higgs-tagged J, leading W/Z-tagged J)", true, &(m_outData -> o_leadingdR_RCMHiggsRCMV) );
       m_outMngrHist -> AddStandardTH1( "leadingdR_RCMHiggsRCMTop", 0.25,-1,5, ";#DeltaR (leading Higgs-tagged J, leading Top-tagged J)", true, &(m_outData -> o_leadingdR_RCMHiggsRCMTop) );
       m_outMngrHist -> AddStandardTH1( "leadingdR_RCMVRCMV", 0.25,-1,5, ";#DeltaR (leading W/Z-tagged J, subleading W/Z-tagged J)", true, &(m_outData -> o_leadingdR_RCMVRCMV) );
       m_outMngrHist -> AddStandardTH1( "leadingdR_RCMVRCMTop", 0.25,-1,5, ";#DeltaR (leading W/Z-tagged J, leading Top-tagged J)", true, &(m_outData -> o_leadingdR_RCMVRCMTop) );
       m_outMngrHist -> AddStandardTH1( "leadingdR_RCMTopRCMTop", 0.25,-1,5, ";#DeltaR (leading Top-tagged J, subleading Top-tagged J)", true, &(m_outData -> o_leadingdR_RCMTopRCMTop) );
+
+      m_outMngrHist -> AddStandardTH1( "leadingdEta_RCMHiggsRCMHiggs", 0.25,-1,5, ";leading#Delta#eta (leadingd Higgs-tagged J, subleadingd Higgs-tagged J)", true, &(m_outData -> o_leadingdEta_RCMHiggsRCMHiggs) );
+      m_outMngrHist -> AddStandardTH1( "leadingdEta_RCMHiggsRCMV", 0.25,-1,5, ";leading#Delta#eta (leadingd Higgs-tagged J, leadingd W/Z-tagged J)", true, &(m_outData -> o_leadingdEta_RCMHiggsRCMV) );
+      m_outMngrHist -> AddStandardTH1( "leadingdEta_RCMHiggsRCMTop", 0.25,-1,5, ";leading#Delta#eta (leadingd Higgs-tagged J, leadingd Top-tagged J)", true, &(m_outData -> o_leadingdEta_RCMHiggsRCMTop) );
+      m_outMngrHist -> AddStandardTH1( "leadingdEta_RCMVRCMV", 0.25,-1,5, ";leading#Delta#eta (leadingd W/Z-tagged J, subleadingd W/Z-tagged J)", true, &(m_outData -> o_leadingdEta_RCMVRCMV) );
+      m_outMngrHist -> AddStandardTH1( "leadingdEta_RCMVRCMTop", 0.25,-1,5, ";leading#Delta#eta (leadingd W/Z-tagged J, leadingd Top-tagged J)", true, &(m_outData -> o_leadingdEta_RCMVRCMTop) );
+      m_outMngrHist -> AddStandardTH1( "leadingdEta_RCMTopRCMTop", 0.25,-1,5, ";leading#Delta#eta (leadingd Top-tagged J, subleadingd Top-tagged J)", true, &(m_outData -> o_leadingdEta_RCMTopRCMTop) );
+
+      m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCMHiggsRCMHiggs", 0.25,-1,5, ";leading#Delta#phi (leadingd Higgs-tagged J, subleadingd Higgs-tagged J)", true, &(m_outData -> o_leadingdPhi_RCMHiggsRCMHiggs) );
+      m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCMHiggsRCMV", 0.25,-1,5, ";leading#Delta#phi (leadingd Higgs-tagged J, leadingd W/Z-tagged J)", true, &(m_outData -> o_leadingdPhi_RCMHiggsRCMV) );
+      m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCMHiggsRCMTop", 0.25,-1,5, ";leading#Delta#phi (leadingd Higgs-tagged J, leadingd Top-tagged J)", true, &(m_outData -> o_leadingdPhi_RCMHiggsRCMTop) );
+      m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCMVRCMV", 0.25,-1,5, ";leading#Delta#phi (leadingd W/Z-tagged J, subleadingd W/Z-tagged J)", true, &(m_outData -> o_leadingdPhi_RCMVRCMV) );
+      m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCMVRCMTop", 0.25,-1,5, ";leading#Delta#phi (leadingd W/Z-tagged J, leadingd Top-tagged J)", true, &(m_outData -> o_leadingdPhi_RCMVRCMTop) );
+      m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCMTopRCMTop", 0.25,-1,5, ";leading#Delta#phi (leadingd Top-tagged J, subleadingd Top-tagged J)", true, &(m_outData -> o_leadingdPhi_RCMTopRCMTop) );
+
+
+	m_outMngrHist -> AddStandardTH1( "leadingdPhi_lepjet", 0.25,-1,5, ";leading#Delta#phi (lep,jet)", true, &(m_outData -> o_leadingdPhi_lepjet) );
+	m_outMngrHist -> AddStandardTH1( "leadingdPhi_lepbjet", 0.25,-1,5, ";leading#Delta#phi (lep,bjet)", true, &(m_outData  -> o_leadingdPhi_lepbjet) );
+	m_outMngrHist -> AddStandardTH1( "leadingdPhi_jetjet", 0.25,-1,5, ";leading#Delta#phi (jet,jet)", true, &(m_outData -> o_leadingdPhi_jetjet) );
+
+
+	m_outMngrHist -> AddStandardTH1( "leadingdR_lepjet", 0.25,0,5, ";leading#Delta#R (lep,jet)", true, &(m_outData -> o_leadingdR_lepjet) );
+	m_outMngrHist -> AddStandardTH1( "leadingdR_lepbjet", 0.25,0,5, ";leading#Delta#R (lep,bjet)", true, &(m_outData  -> o_leadingdR_lepbjet) );
+	m_outMngrHist -> AddStandardTH1( "leadingdR_jetjet", 0.25,0,5, ";leading#Delta#R (jet,jet)", true, &(m_outData -> o_leadingdR_jetjet) );
+
+	m_outMngrHist -> AddStandardTH1( "leadingdEta_lepjet", 0.25,0,5, ";leading#Delta#eta (lep,jet)", true, &(m_outData -> o_leadingdEta_lepjet) );
+	m_outMngrHist -> AddStandardTH1( "leadingdEta_lepbjet", 0.25,0,5, ";leading#Delta#eta (lep,bjet)", true, &(m_outData  -> o_leadingdEta_lepbjet) );
+	m_outMngrHist -> AddStandardTH1( "leadingdEta_jetjet", 0.25,0,5, ";leading#Delta#eta (jet,jet)", true, &(m_outData -> o_leadingdEta_jetjet) );
+
+	m_outMngrHist -> AddStandardTH1( "leadingdR_RCjets", 0.25,-1,5, ";leading#Delta#R (rcjet,rcjet)", true, &(m_outData -> o_leadingdR_RCjets) );
+	m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCjets", 0.25,-1,5, ";leading#Delta#phi (rcjet,rcjet)", true, &(m_outData -> o_leadingdPhi_RCjets) );
+	m_outMngrHist -> AddStandardTH1( "leadingdEta_RCjets", 0.25,-1,5, ";leading#Delta#eta (rcjet,rcjet)", true, &(m_outData -> o_leadingdEta_RCjets) );
+
+
 
     }
 
@@ -1195,6 +1281,24 @@ bool VLQ_Analysis_Data2015::Begin(){
       if(m_opt->VerboseOutput()){
 
 	//Kinematic variables
+	m_outMngrHist -> AddStandardTH1( "dRmin_lepjet",         0.25,0,5,  ";#DeltaR_{min}(lep,jet)"                , false, &(m_outData -> o_dRmin_lepjet)     );
+	m_outMngrHist -> AddStandardTH1( "dRmin_lepbjet",         0.25,0,5,  ";#DeltaR_{min}(lep,bjet)"                , false, &(m_outData -> o_dRmin_lepbjet)     );
+	m_outMngrHist -> AddStandardTH1( "dRmin_jetjet",       0.25,0,5,  ";#Delta#eta_{min}(jet,jet)"                , false, &(m_outData -> o_dRmin_jetjet)    );
+
+	m_outMngrHist -> AddStandardTH1( "dEtamin_jetjet",       0.25,0,5,  ";#Delta#eta_{min}(jet,jet)"                , false, &(m_outData -> o_dEtamin_jetjet)    );
+	m_outMngrHist -> AddStandardTH1( "dEtamin_lepjet",         0.25,0,5,  ";#Delta#eta_{min}(lep,jet)"              , false, &(m_outData -> o_dEtamin_lepjet)     );
+        m_outMngrHist -> AddStandardTH1( "dEtamin_lepbjet",         0.25,0,5,  ";#Delta#eta_{min}(lep,bjet)"             , false, &(m_outData -> o_dEtamin_lepbjet)     );
+	m_outMngrHist -> AddStandardTH1( "dPhimin_jetjet",       0.25,-1,5,  ";#Delta#phi_{min}(jet,jet)"                , false, &(m_outData -> o_dPhimin_jetjet)    );
+	m_outMngrHist -> AddStandardTH1( "dPhimin_lepjet",         0.25,-1,5,  ";#Delta#phi_{min}(lep,jet)"               , false, &(m_outData -> o_dPhimin_lepjet)     );
+        m_outMngrHist -> AddStandardTH1( "dPhimin_lepbjet",         0.25,-1,5,  ";#Delta#phi_{min}(lep,bjet)"             , false, &(m_outData -> o_dPhimin_lepbjet)     );
+
+        m_outMngrHist -> AddStandardTH1( "dRmin_RCjets",         0.25,0,5,  ";#DeltaR_{min}(lep,bjet)"             , false, &(m_outData -> o_dPhimin_RCjets)     );
+        m_outMngrHist -> AddStandardTH1( "dEtamin_RCjets",         0.25,0,5,  ";#Delta#eta_{min}(lep,bjet)"             , false, &(m_outData -> o_dEtamin_RCjets)     );
+        m_outMngrHist -> AddStandardTH1( "dPhimin_RCjets",         0.25,-1,5,  ";#Delta#phi_{min}(lep,bjet)"             , false, &(m_outData -> o_dPhimin_RCjets)     );
+
+
+
+
 	m_outMngrHist -> AddStandardTH1( "dR_ejet",         0.25,0,5,  ";#DeltaR_{min}(e,jet)"                  , false, &(m_outData -> o_dRmin_ejets)     );
 	m_outMngrHist -> AddStandardTH1( "dR_mujet",        0.25,0,5,  ";#DeltaR_{min}(#mu,jet)"                , false, &(m_outData -> o_dRmin_mujets)    );
 	m_outMngrHist -> AddStandardTH1( "dR_jetjet",       0.25,0,5,  ";#DeltaR_{min}(jet,jet)"                , false, &(m_outData -> o_dRmin_jetjet)    );
@@ -1226,7 +1330,47 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist->AddStandardTH1("J_leadingb_invariant_mass",2, 0, 2000 ,";m(leading-J,leading-b) [GeV]", false, &(m_outData->o_J_leadingb_invariant_mass));
       m_outMngrHist->AddStandardTH1("J_J_invariant_mass",       2, 0, 2000 ,";m(leading-J,subleading-J) [GeV]", false, &(m_outData->o_J_J_invariant_mass));
       m_outMngrHist->AddStandardTH1("dRaverage_bjetbjet",       0.25,0,5   ,";#DeltaR_{ave.}(b-jet,b-jet)", false, &(m_outData -> o_dRaverage_bjetbjet)  );
+     
+      m_outMngrHist->AddStandardTH1("invariant_mass_RCTTMassRCTTMass", 10, 0, 3500 ,";m(leading-J,subleading-J) [GeV]", false, &(m_outData->o_invariant_mass_RCTTMassRCTTMass));
+      m_outMngrHist->AddStandardTH1("invariant_mass_RCjets", 10, 0, 3500 ,";m(leading-J,subleading-J) [GeV]", false, &(m_outData->o_invariant_mass_RCjets));
+
+
+      m_outMngrHist->AddStandardTH1("dRmaxM_RCTTMassRCTTMass", 10, 0, 3500 ,";m(leading-J,subleading-J) [GeV]", false, &(m_outData->o_dRmaxM_RCTTMassRCTTMass));
+      m_outMngrHist->AddStandardTH1("dRmaxM_RCjets", 10, 0, 3500 ,";m(leading-J,subleading-J) [GeV]", false, &(m_outData->o_dRmaxM_RCjets));
+    
+
+      m_outMngrHist->AddStandardTH1("dPhimaxM_RCTTMassRCTTMass", 10, 0, 3500 ,";m(leading-J,subleading-J) [GeV]", false, &(m_outData->o_dPhimaxM_RCTTMassRCTTMass));
+      m_outMngrHist->AddStandardTH1("dPhimaxM_RCjets", 10, 0, 3500 ,";m(leading-J,subleading-J) [GeV]", false, &(m_outData->o_dPhimaxM_RCjets));
+    
+
+      m_outMngrHist->AddStandardTH1("dEtaminM_RCTTMassRCTTMass", 10, 0, 3500 ,";m(leading-J,subleading-J) [GeV]", false, &(m_outData->o_dEtaminM_RCTTMassRCTTMass));
+      m_outMngrHist->AddStandardTH1("dEtaminM_RCjets", 10, 0, 3500 ,";m(leading-J,subleading-J) [GeV]", false, &(m_outData->o_dEtaminM_RCjets));
+    
+
+
+      m_outMngrHist->AddStandardTH1("dRaverage_lepjet",         0.25,0,5   ,";#DeltaR_{ave.}(lep,jet)", false, &(m_outData -> o_dRaverage_lepjet)  );
+      m_outMngrHist->AddStandardTH1("dRaverage_lepbjet",         0.25,0,5   ,";#DeltaR_{ave.}(lep,b-jet)", false, &(m_outData -> o_dRaverage_lepbjet)  );
       m_outMngrHist->AddStandardTH1("dRaverage_jetjet",         0.25,0,5   ,";#DeltaR_{ave.}(jet,jet)", false, &(m_outData -> o_dRaverage_jetjet)  );
+
+      m_outMngrHist->AddStandardTH1("dEtaaverage_lepjet",         0.25,0,5   ,";#Delta#eta_{ave.}(lep,jet)", false, &(m_outData -> o_dEtaaverage_lepjet)  );
+      m_outMngrHist->AddStandardTH1("dEtaaverage_lepbjet",         0.25,0,5   ,";#Delta#eta_{ave.}(lep,b-jet)", false, &(m_outData -> o_dEtaaverage_lepbjet)  );
+      m_outMngrHist->AddStandardTH1("dEtaaverage_jetjet",         0.25,0,5   ,";#Delta#eta_{ave.}(jet,jet)", false, &(m_outData -> o_dEtaaverage_jetjet)  );
+
+      m_outMngrHist->AddStandardTH1("dPhiaverage_lepjet",         0.25,-1,5   ,";#Delta#phi_{ave.}(lep,jet)", false, &(m_outData -> o_dPhiaverage_lepjet)  );
+      m_outMngrHist->AddStandardTH1("dPhiaverage_lepbjet",         0.25,-1,5   ,";#Delta#phi_{ave.}(lep,b-jet)", false, &(m_outData -> o_dPhiaverage_lepbjet)  );
+      m_outMngrHist->AddStandardTH1("dPhiaverage_jetjet",         0.25,-1,5   ,";#Delta#phi_{ave.}(jet,jet)", false, &(m_outData -> o_dPhiaverage_jetjet)  );
+
+      m_outMngrHist->AddStandardTH1("dRaverage_RCjets",         0.25,0,5   ,";#DeltaR_{ave.}(rcjet,rcjet)", false, &(m_outData -> o_dRaverage_RCjets)  );
+      m_outMngrHist->AddStandardTH1("dEtaaverage_RCjets",         0.25,0,5   ,";#Delta#eta_{ave.}(rcjet,rcjet)", false, &(m_outData -> o_dEtaaverage_RCjets)  );
+      m_outMngrHist->AddStandardTH1("dPhiaverage_RCjets",         0.25,-1,5   ,";#Delta#phi_{ave.}(rcjet,rcjet)", false, &(m_outData -> o_dPhiaverage_RCjets)  );
+ 
+
+      m_outMngrHist->AddStandardTH1("dRaverage_RCTTMassRCTTMass",         0.25,0,5   ,";#DeltaR_{ave.}(RCTTMass,RCTTMass)", false, &(m_outData -> o_dRaverage_RCTTMassRCTTMass)  );
+      m_outMngrHist->AddStandardTH1("dEtaaverage_RCTTMassRCTTMass",         0.25,0,5   ,";#Delta#eta_{ave.}(RCTTMass,RCTTMass)", false, &(m_outData -> o_dEtaaverage_RCTTMassRCTTMass)  );
+      m_outMngrHist->AddStandardTH1("dPhiaverage_RCTTMassRCTTMass",         0.25,-1,5   ,";#Delta#phi_{ave.}(RCTTMass,RCTTMass)", false, &(m_outData -> o_dPhiaverage_RCTTMassRCTTMass)  );
+ 
+
+
 
       if(m_opt->DoLowBRegions()){
 	m_outMngrHist -> AddStandardTH1( "mtbmin_lowb_3b",      50, 0, 500,    ";m_{T}^{min}(b,MET) (LowB_3b)", false, &(m_outData->o_mTbmin_lowb_3b) );

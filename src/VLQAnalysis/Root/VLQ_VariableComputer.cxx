@@ -268,6 +268,50 @@ double VLQ_VariableComputer::GetLeadingdR( AOVector &v_obj1, AOVector &v_obj2 ) 
   return dR;
 }
 
+
+//________________________________________________________________
+//
+double VLQ_VariableComputer::GetLeadingdEta( AOVector &v_obj1, AOVector &v_obj2 ) const
+{
+  
+  double dEta = -100.;
+
+  if(v_obj1.size() >=1 && v_obj2.size() >=1){
+
+    if(v_obj1[0] != v_obj2[0]){
+      dEta =  TMath::Abs(v_obj1[0]->Eta() - v_obj2[0]->Eta());
+
+    }
+    else if(v_obj1.size() > 1){
+      dEta =  TMath::Abs(v_obj1[0]->Eta() - v_obj2[1]->Eta());
+    }
+
+  }
+
+  return dEta;
+}
+
+//________________________________________________________________
+//
+double VLQ_VariableComputer::GetLeadingdPhi( AOVector &v_obj1, AOVector &v_obj2 ) const
+{
+  
+  double dPhi = -100.;
+
+  if(v_obj1.size() >=1 && v_obj2.size() >=1){
+
+    if(v_obj1[0] != v_obj2[0]){
+      dPhi = v_obj1[0] -> DeltaPhi( *v_obj2[0] );
+
+    }
+    else if(v_obj1.size() > 1){
+      dPhi = v_obj1[0] -> DeltaPhi( *v_obj2[1] );
+    }
+  }
+
+  return dPhi;
+}
+
 //________________________________________________________________
 //
 double VLQ_VariableComputer::GetAveragedR(  AOVector &v_obj1, AOVector &v_obj2, const std::string &mom1, const std::string &mom2 ) const
@@ -286,6 +330,46 @@ double VLQ_VariableComputer::GetAveragedR(  AOVector &v_obj1, AOVector &v_obj2, 
     dRaverage=dRaverage/npairs;
     return dRaverage;
 }
+
+
+//________________________________________________________________
+//
+double VLQ_VariableComputer::GetAveragedEta(  AOVector &v_obj1, AOVector &v_obj2, const std::string &mom1, const std::string &mom2 ) const
+{
+    double dEtaaverage = 0.;
+    unsigned int npairs = 0;
+    for ( const AnalysisObject* obj1 : v_obj1 ){
+        if(mom1!="" && !(int)obj1->GetMoment(mom1)) continue;
+        for ( const AnalysisObject* obj2 : v_obj2 ){
+            if(obj1==obj2) continue;
+            if(mom2!="" && !(int)obj2->GetMoment(mom2)) continue;
+	    dEtaaverage += TMath::Abs(obj2->Eta() - obj1->Eta());
+	    npairs ++;
+        }
+    }
+    dEtaaverage=dEtaaverage/npairs;
+    return dEtaaverage;
+}
+
+//________________________________________________________________
+//
+double VLQ_VariableComputer::GetAveragedPhi(  AOVector &v_obj1, AOVector &v_obj2, const std::string &mom1, const std::string &mom2 ) const
+{
+    double dPhiaverage = 0.;
+    unsigned int npairs = 0;
+    for ( const AnalysisObject* obj1 : v_obj1 ){
+        if(mom1!="" && !(int)obj1->GetMoment(mom1)) continue;
+        for ( const AnalysisObject* obj2 : v_obj2 ){
+            if(obj1==obj2) continue;
+            if(mom2!="" && !(int)obj2->GetMoment(mom2)) continue;
+	    dPhiaverage += obj1 -> DeltaPhi( *obj2 );
+	    npairs ++;
+        }
+    }
+    dPhiaverage=dPhiaverage/npairs;
+    return dPhiaverage;
+}
+
 
 //________________________________________________________________ 
 //
@@ -371,6 +455,45 @@ double VLQ_VariableComputer::GetMindPhi(  AOVector &v_obj1, AOVector &v_obj2 ) c
     }
     return dPhi_min;
 }
+
+
+//________________________________________________________________
+//
+double VLQ_VariableComputer::GetMindEta( AnalysisObject *obj1, AOVector &v_obj2, const int maxVec, const std::string &mom ) const
+{
+    if(!obj1){
+        return 0;
+    }
+    
+    double dEta_min = 100;
+    int counter = 0;
+    for ( const AnalysisObject* obj2 : v_obj2 ){
+        if(obj1==obj2) continue;
+        if(mom!="" && !(int)obj2->GetMoment(mom)) continue;
+        if(maxVec>=0 && counter>=maxVec) continue;
+        double dEta = TMath::Abs(obj1->Eta() - obj2->Eta() );
+        if(TMath::Abs(dEta) < TMath::Abs(dEta_min)) dEta_min = dEta;
+        counter++;
+    }
+    return dEta_min;
+}
+
+
+//________________________________________________________________
+//
+double VLQ_VariableComputer::GetMindEta(  AOVector &v_obj1, AOVector &v_obj2 ) const
+{
+    double dEta_min = 100;
+    for ( const AnalysisObject* obj1 : v_obj1 ){
+        for ( const AnalysisObject* obj2 : v_obj2 ){
+            if(obj1==obj2) continue;
+            double dEta = TMath::Abs(obj1->Eta() - obj2->Eta() );                 
+            if(TMath::Abs(dEta) < TMath::Abs(dEta_min)) dEta_min = dEta;
+        }
+    }
+    return dEta_min;
+}
+
 
 //________________________________________________________________
 //
@@ -554,6 +677,25 @@ double VLQ_VariableComputer::GetMjjMaxDr(AOVector &v_jets) const
   }
   return mjj_max_dr;
 }
+
+//_________________________________________________________________
+//
+double VLQ_VariableComputer::GetMjjMaxDphi(AOVector &v_jets) const
+{ 
+  double mjj_max_dphi=0.;
+  double dphimax=0.;
+  for (const AnalysisObject *jet1 : v_jets ){
+    for (const AnalysisObject *jet2 : v_jets ){
+      if (jet1 == jet2) continue;
+      double dphi = TMath::Abs( jet1-> DeltaPhi( *jet2));
+      if( dphi >dphimax){
+	dphimax =dphi;
+	mjj_max_dphi=(*jet1 + *jet2).M();
+      }
+    }
+  }
+  return mjj_max_dphi;
+}
 //_________________________________________________________________
 //
 double VLQ_VariableComputer::GetMjjMinDr(AOVector &v_jets) const
@@ -571,6 +713,26 @@ double VLQ_VariableComputer::GetMjjMinDr(AOVector &v_jets) const
     }
   }
   return mjj_min_dr;
+}
+
+
+//_________________________________________________________________
+//
+double VLQ_VariableComputer::GetMjjMinDeta(AOVector &v_jets) const
+{
+  double mjj_min_deta=0.;
+  double detamin=10.;
+  for (const AnalysisObject *jet1 : v_jets ){
+    for (const AnalysisObject *jet2 : v_jets ){
+      if (jet1 == jet2) continue;
+      double deta = TMath::Abs( jet1->Eta() - jet2->Eta() );
+      if( deta <detamin){
+        detamin =deta;
+        mjj_min_deta=(*jet1 + *jet2).M();
+      }
+    }
+  }
+  return mjj_min_deta;
 }
 //_________________________________________________________________
 //

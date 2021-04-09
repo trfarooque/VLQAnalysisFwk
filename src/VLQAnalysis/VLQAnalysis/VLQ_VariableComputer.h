@@ -60,18 +60,32 @@ public:
                     const std::string &mom1 = "", const std::string &mom2 = "" ) const;
 
     double GetLeadingdR( std::vector< AnalysisObject* > &v_obj1, std::vector< AnalysisObject* > &v_obj2) const;
+    double GetLeadingdEta( std::vector< AnalysisObject* > &v_obj1, std::vector< AnalysisObject* > &v_obj2) const;
+    double GetLeadingdPhi( std::vector< AnalysisObject* > &v_obj1, std::vector< AnalysisObject* > &v_obj2) const;
 
     double GetAveragedR( std::vector< AnalysisObject* > &v_obj1,
 			 std::vector< AnalysisObject* > &v_obj2,
 			 const std::string &mom1 = "", const std::string &mom2 = "" ) const;
+    double GetAveragedEta( std::vector< AnalysisObject* > &v_obj1,
+                         std::vector< AnalysisObject* > &v_obj2,
+                         const std::string &mom1 = "", const std::string &mom2 = "" ) const;
+    double GetAveragedPhi( std::vector< AnalysisObject* > &v_obj1,
+                         std::vector< AnalysisObject* > &v_obj2,
+                         const std::string &mom1 = "", const std::string &mom2 = "" ) const;
+
+
 
     double GetMinPairVLQMassAsymm( std::map< std::string, std::vector< AnalysisObject* >*  > &recoVLQs, const std::string vlqDecay1, const std::string vlqDecay2) const;
     
-    double GetMindPhi( AnalysisObject *v_obj1, std::vector< AnalysisObject* > &v_obj2, const int maxVec = -1, const std::string &mom = "" ) const ;
-    
+    double GetMindPhi( AnalysisObject *v_obj1, std::vector< AnalysisObject* > &v_obj2, const int maxVec = -1, const std::string &mom = "" ) const ;  
     double GetMindPhi( std::vector< AnalysisObject* > &v_obj1,
                       std::vector< AnalysisObject* > &v_obj2 ) const ;
     
+    double GetMindEta( AnalysisObject *v_obj1, std::vector< AnalysisObject* > &v_obj2, const int maxVec = -1, const std::string &mom = "" ) const ;
+    double GetMindEta( std::vector< AnalysisObject* > &v_obj1,
+		       std::vector< AnalysisObject* > &v_obj2 ) const ;
+
+
     double GetMbb( std::vector< AnalysisObject* > &v_jets, const std::string &bjet_moment = "" ) const;
     double GetMbbMaxDr( std::vector< AnalysisObject* > &v_jets, const std::string &bjet_moment = "" ) const; 
     
@@ -84,7 +98,9 @@ public:
 
     double GetMjjLeadingJets( std::vector< AnalysisObject* > &v_jets ) const;
     double GetMjjMinDr ( std::vector< AnalysisObject* > &v_jets ) const;
+    double GetMjjMinDeta ( std::vector< AnalysisObject* > &v_jets ) const;
     double GetMjjMaxDr ( std::vector< AnalysisObject* > &v_jets ) const;
+    double GetMjjMaxDphi ( std::vector< AnalysisObject* > &v_jets ) const;
     double GetDphijjLeadingJets( std::vector < AnalysisObject* > &v_jets ) const;
     double GetDphijjMinDr( std::vector< AnalysisObject* > &v_jets ) const;
     double GetDphijjMaxDr( std::vector< AnalysisObject* > &v_jets ) const;

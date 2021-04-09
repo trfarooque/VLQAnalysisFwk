@@ -350,7 +350,7 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
       obj -> SetMoment("jvt", m_ntupData -> d_jet_jvt -> at(iJet) );
 
       obj -> SetMoment("RCtag_match", 0); //initial default
-
+      obj -> SetMoment("dRmin_RCtag_match", 10); //initial default
       int isB = 0;
 
       if(m_opt->BtagCollection()==VLQ_Options::CALOTOPO || m_opt->BtagCollection()==VLQ_Options::CALOPFLOW){
@@ -502,13 +502,15 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
       obj -> SetPtEtaPhiM( m_ntupData -> d_rcjets_pt -> at(iRCJet), m_ntupData -> d_rcjets_eta -> at(iRCJet),
 			   m_ntupData -> d_rcjets_phi -> at(iRCJet), m_ntupData -> d_rcjets_m -> at(iRCJet) );
 
+        //Effective radius
+        double rc_reff = max(0.4,min(1.5,550./obj->Pt()));
+        obj->SetMoment("reff",rc_reff);
+
+
       //DoJMSSys == 0  --> No JMS                                                                                                                                 //DoJMSSys == +/-1  --> 5% up/down shift of JMS                                                                                                             //DoJMSSys == 2  --> Recalculate RC jet mass without any shift in JMS
 
       if( (m_opt->DoJMSSys()!=0) || (m_opt->DoJMRSys())){
 
-        //Effective radius
-        double reff = max(0.4,min(1.5,550./obj->Pt()));
-        obj->SetMoment("reff",reff);
 
         AnalysisObject obj_jmsr;
         AnalysisObject sj_jmsr;
@@ -521,7 +523,7 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
         //Quick loop over small-R jets to recalculate RC jet 4-mom
         for(auto sj : *(m_outData->o_jets)){
 
-          if(sj->DeltaR(*obj) < reff){
+          if(sj->DeltaR(*obj) < rc_reff){
             nconsts_jmsr++;
             double m_jmsr = sj->M();
             if( m_opt->DoJMSSys() == 1) m_jmsr *= (1 + SC_JMS);
@@ -562,8 +564,8 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
       //
       // Tagging by different algorithms
       //
-      // Simple HOT jets
-      const bool isHOT = obj->M() > 100 && m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= m_opt->RCNsubjetsCut() && obj -> Pt() > 300;
+      // Simple HOT jets            try 70 here check if leadingdRdPhi are still bktobk
+      const bool isHOT = obj->M() > 70 && m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= m_opt->RCNsubjetsCut() && obj -> Pt() > 300;
       obj -> SetMoment("isRCTTMass", isHOT);
       // Exclusive top-tagging
       bool isTop = obj -> Pt() > 400 && obj->M() > 140;
@@ -635,7 +637,8 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
       //===== Loop over small-R jet container and set a flag if it is matched to one of the tagged jets ====
       if( isTop || isHiggs || isV ){
 	for( AnalysisObject* jet : *(m_outData -> o_jets) ){
-	  if(obj -> DeltaR(*jet) < 1.0) jet->UpdateMoment("RCtag_match", 1);
+	  if(obj -> DeltaR(*jet) < 1.0 ) jet->UpdateMoment("RCtag_match", 1);
+	  if(obj -> DeltaR(*jet) < jet->GetMoment("dRmin_RCtag_match") ) jet->UpdateMoment("dRmin_RCtag_match", obj -> DeltaR(*jet)); 
 	}
       }
 
@@ -926,10 +929,52 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_ejets (" << m_outData -> o_dRmin_ejets << ")"  << std::endl;
     m_outData -> o_dRmin_mujets = m_varComputer -> GetMindR( *(m_outData->o_jets), *(m_outData->o_mu) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_mujets (" << m_outData -> o_dRmin_mujets << ")"  << std::endl;
-    m_outData -> o_dRmin_jetjet = m_varComputer -> GetMindR( *(m_outData->o_jets), *(m_outData->o_jets) );
-    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_jetjet (" << m_outData -> o_dRmin_jetjet << ")"  << std::endl;
+    //m_outData -> o_dRmin_jetjet = m_varComputer -> GetMindR( *(m_outData->o_jets), *(m_outData->o_jets) );
+    //if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_jetjet (" << m_outData -> o_dRmin_jetjet << ")"  << std::endl;
     m_outData -> o_dRmin_RCMHiggsRCMHiggs = m_varComputer -> GetMindR( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMHiggs")) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_RCMHiggsRCMHiggs (" << m_outData -> o_dRmin_RCMHiggsRCMHiggs << ")" << std::endl;
+
+    m_outData -> o_dRmin_RCTTMassRCTTMass = m_varComputer -> GetMindR( *(m_outData->o_taggedjets.at("RCTTMass")), *(m_outData->o_taggedjets.at("RCTTMass")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_RCTTMassRCTTMass (" << m_outData -> o_dRmin_RCTTMassRCTTMass << ")" << std::endl;
+    m_outData -> o_dEtamin_RCTTMassRCTTMass = m_varComputer -> GetMindEta( *(m_outData->o_taggedjets.at("RCTTMass")), *(m_outData->o_taggedjets.at("RCTTMass")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dEtamin_RCTTMassRCTTMass (" << m_outData -> o_dEtamin_RCTTMassRCTTMass << ")" << std::endl;
+    m_outData -> o_dPhimin_RCTTMassRCTTMass = TMath::Abs( m_varComputer -> GetMindPhi( *(m_outData->o_taggedjets.at("RCTTMass")), *(m_outData->o_taggedjets.at("RCTTMass")) ));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhimin_RCTTMassRCTTMass (" << m_outData -> o_dPhimin_RCTTMassRCTTMass << ")" << std::endl;
+
+
+
+    m_outData -> o_dRmin_RCjets  = m_varComputer -> GetMindR( *(m_outData->o_rcjets), *(m_outData->o_rcjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_RCjets (" << m_outData -> o_dRmin_RCjets << ")"  << std::endl;
+
+    m_outData -> o_dEtamin_RCjets  = m_varComputer -> GetMindEta( *(m_outData->o_rcjets), *(m_outData->o_rcjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dEtamin_RCjets (" << m_outData -> o_dEtamin_RCjets << ")"  << std::endl;
+
+
+    m_outData -> o_dPhimin_RCjets  = TMath::Abs( m_varComputer -> GetMindPhi( *(m_outData->o_rcjets), *(m_outData->o_rcjets)));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhimin_RCjets (" << m_outData -> o_dPhimin_RCjets << ")"  << std::endl;
+
+
+
+
+
+    m_outData -> o_dRmin_lepbjet  = m_varComputer -> GetMindR( m_outData->o_selLep, *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_lepbjet (" << m_outData -> o_dRmin_lepbjet << ")"  << std::endl;
+    m_outData -> o_dRmin_jetjet  = m_varComputer -> GetMindR( *(m_outData->o_jets), *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_jetjet (" << m_outData -> o_dRmin_jetjet << ")"  << std::endl;  
+    m_outData -> o_dEtamin_lepjet  = m_varComputer -> GetMindEta( m_outData->o_selLep, *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dEtamin_lepjet (" << m_outData -> o_dEtamin_lepjet << ")"  << std::endl;
+    m_outData -> o_dEtamin_lepbjet  = m_varComputer -> GetMindEta( m_outData->o_selLep, *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dEtamin_lepbjet (" << m_outData -> o_dEtamin_lepbjet << ")"  << std::endl;
+    m_outData -> o_dEtamin_jetjet  = m_varComputer -> GetMindEta( *(m_outData->o_jets), *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dEtamin_jetjet (" << m_outData -> o_dEtamin_jetjet << ")"  << std::endl;
+    m_outData -> o_dPhimin_lepjet  = TMath::Abs( m_varComputer -> GetMindPhi( m_outData->o_selLep, *(m_outData->o_jets)) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhimin_lepjet (" << m_outData -> o_dPhimin_lepjet << ")"  << std::endl;
+    m_outData -> o_dPhimin_lepbjet  =  TMath::Abs( m_varComputer -> GetMindPhi( m_outData->o_selLep, *(m_outData->o_jets) ));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhimin_lepbjet (" << m_outData -> o_dPhimin_lepbjet << ")"  << std::endl;
+    m_outData -> o_dPhimin_jetjet  = TMath::Abs( m_varComputer -> GetMindPhi( *(m_outData->o_jets), *(m_outData->o_jets)) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhimin_jetjet (" << m_outData -> o_dPhimin_jetjet << ")"  << std::endl;
+
+
     m_outData -> o_dRmin_RCMHiggsRCMTop = m_varComputer -> GetMindR( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMTop")) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_RCMHiggsRCMTop ("<< m_outData -> o_dRmin_RCMHiggsRCMTop << ")"<< std::endl;
     m_outData-> o_dRmin_RCMHiggsRCMV = m_varComputer -> GetMindR( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMV")) );
@@ -940,8 +985,36 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_RCMVRCMTop ("<< m_outData -> o_dRmin_RCMVRCMTop << ")"<< std::endl;
     m_outData->o_dRmin_RCMTopRCMTop = m_varComputer -> GetMindR( *(m_outData->o_taggedjets.at("RCMTop")), *(m_outData->o_taggedjets.at("RCMTop")) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_RCMTopRCMTop ("<< m_outData -> o_dRmin_RCMTopRCMTop << ")"<< std::endl;
-    
-    /*m_outData->o_leadingdR_RCMHiggsRCMHiggs = m_varComputer -> GetLeadingdR( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMHiggs")) );
+   
+    m_outData -> o_dPhimin_RCMHiggsRCMHiggs = TMath::Abs( m_varComputer -> GetMindPhi( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMHiggs")) ));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhimin_RCMHiggsRCMHiggs (" << m_outData -> o_dPhimin_RCMHiggsRCMHiggs << ")" << std::endl;
+    m_outData -> o_dPhimin_RCMHiggsRCMTop = TMath::Abs( m_varComputer -> GetMindPhi( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMTop")) ));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhimin_RCMHiggsRCMTop ("<< m_outData -> o_dPhimin_RCMHiggsRCMTop << ")"<< std::endl;
+    m_outData-> o_dPhimin_RCMHiggsRCMV = TMath::Abs( m_varComputer -> GetMindPhi( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMV"))));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhimin_RCMHiggsRCMV ("<< m_outData -> o_dPhimin_RCMHiggsRCMV << ")"<< std::endl;
+    m_outData -> o_dPhimin_RCMVRCMV =  TMath::Abs( m_varComputer -> GetMindPhi( *(m_outData->o_taggedjets.at("RCMV")), *(m_outData->o_taggedjets.at("RCMV"))));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhimin_RCMVRCMV ("<< m_outData -> o_dPhimin_RCMVRCMV << ")"<< std::endl;
+    m_outData -> o_dPhimin_RCMVRCMTop=  TMath::Abs(m_varComputer -> GetMindPhi( *(m_outData->o_taggedjets.at("RCMV")), *(m_outData->o_taggedjets.at("RCMTop"))) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhimin_RCMVRCMTop ("<< m_outData -> o_dPhimin_RCMVRCMTop << ")"<< std::endl;
+    m_outData->o_dPhimin_RCMTopRCMTop =  TMath::Abs(m_varComputer -> GetMindPhi( *(m_outData->o_taggedjets.at("RCMTop")), *(m_outData->o_taggedjets.at("RCMTop"))) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhimin_RCMTopRCMTop ("<< m_outData -> o_dPhimin_RCMTopRCMTop << ")"<< std::endl;
+   
+ 
+ m_outData -> o_dEtamin_RCMHiggsRCMHiggs = m_varComputer -> GetMindEta( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMHiggs")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dEtamin_RCMHiggsRCMHiggs (" << m_outData -> o_dEtamin_RCMHiggsRCMHiggs << ")" << std::endl;
+    m_outData -> o_dEtamin_RCMHiggsRCMTop = m_varComputer -> GetMindEta( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMTop")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dEtamin_RCMHiggsRCMTop ("<< m_outData -> o_dEtamin_RCMHiggsRCMTop << ")"<< std::endl;
+    m_outData-> o_dEtamin_RCMHiggsRCMV = m_varComputer -> GetMindEta( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMV")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dEtamin_RCMHiggsRCMV ("<< m_outData -> o_dEtamin_RCMHiggsRCMV << ")"<< std::endl;
+    m_outData -> o_dEtamin_RCMVRCMV = m_varComputer -> GetMindEta( *(m_outData->o_taggedjets.at("RCMV")), *(m_outData->o_taggedjets.at("RCMV")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dEtamin_RCMVRCMV ("<< m_outData -> o_dEtamin_RCMVRCMV << ")"<< std::endl;
+    m_outData -> o_dEtamin_RCMVRCMTop= m_varComputer -> GetMindEta( *(m_outData->o_taggedjets.at("RCMV")), *(m_outData->o_taggedjets.at("RCMTop")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dEtamin_RCMVRCMTop ("<< m_outData -> o_dEtamin_RCMVRCMTop << ")"<< std::endl;
+    m_outData->o_dEtamin_RCMTopRCMTop = m_varComputer -> GetMindEta( *(m_outData->o_taggedjets.at("RCMTop")), *(m_outData->o_taggedjets.at("RCMTop")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dEtamin_RCMTopRCMTop ("<< m_outData -> o_dEtamin_RCMTopRCMTop << ")"<< std::endl;
+   
+ 
+    m_outData->o_leadingdR_RCMHiggsRCMHiggs = m_varComputer -> GetLeadingdR( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMHiggs")) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_RCMHiggsRCMHiggs (" << m_outData -> o_leadingdR_RCMHiggsRCMHiggs << ")" << std::endl;
     m_outData->o_leadingdR_RCMHiggsRCMV = m_varComputer -> GetLeadingdR( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMV")) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_RCMHiggsRCMV (" << m_outData -> o_leadingdR_RCMHiggsRCMV << ")"<< std::endl;
@@ -952,7 +1025,78 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
     m_outData->o_leadingdR_RCMVRCMTop = m_varComputer -> GetLeadingdR( *(m_outData->o_taggedjets.at("RCMV")), *(m_outData->o_taggedjets.at("RCMTop")) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_RCMVRCMTop (" << m_outData -> o_leadingdR_RCMVRCMTop << ")"<< std::endl;
     m_outData->o_leadingdR_RCMTopRCMTop = m_varComputer -> GetLeadingdR( *(m_outData->o_taggedjets.at("RCMTop")), *(m_outData->o_taggedjets.at("RCMTop")) );
-    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_RCMTopRCMTop (" << m_outData -> o_leadingdR_RCMTopRCMTop << ")"<< std::endl;*/
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_RCMTopRCMTop (" << m_outData -> o_leadingdR_RCMTopRCMTop << ")"<< std::endl;
+
+
+    m_outData->o_leadingdR_RCTTMassRCTTMass = m_varComputer -> GetLeadingdR( *(m_outData->o_taggedjets.at("RCTTMass")), *(m_outData->o_taggedjets.at("RCTTMass")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_RCTTMassRCTTMass (" << m_outData -> o_leadingdR_RCTTMassRCTTMass << ")"<< std::endl;
+
+
+    m_outData->o_leadingdEta_RCTTMassRCTTMass = m_varComputer -> GetLeadingdEta( *(m_outData->o_taggedjets.at("RCTTMass")), *(m_outData->o_taggedjets.at("RCTTMass")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdEta_RCTTMassRCTTMass (" << m_outData -> o_leadingdEta_RCTTMassRCTTMass << ")"<< std::endl;
+
+
+    m_outData->o_leadingdPhi_RCTTMassRCTTMass =  TMath::Abs( m_varComputer -> GetLeadingdPhi( *(m_outData->o_taggedjets.at("RCTTMass")), *(m_outData->o_taggedjets.at("RCTTMass")) ));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdPhi_RCTTMassRCTTMass (" << m_outData -> o_leadingdPhi_RCTTMassRCTTMass << ")"<< std::endl;
+
+
+
+    m_outData->o_leadingdEta_RCMHiggsRCMHiggs = m_varComputer -> GetLeadingdEta( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMHiggs")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdEta_RCMHiggsRCMHiggs (" << m_outData -> o_leadingdEta_RCMHiggsRCMHiggs << ")" << std::endl;
+    m_outData->o_leadingdEta_RCMHiggsRCMV = m_varComputer -> GetLeadingdEta( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMV")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdEta_RCMHiggsRCMV (" << m_outData -> o_leadingdEta_RCMHiggsRCMV << ")"<< std::endl;
+    m_outData->o_leadingdEta_RCMHiggsRCMTop = m_varComputer -> GetLeadingdEta( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMTop")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdEta_RCMHiggsRCMTop (" << m_outData -> o_leadingdEta_RCMHiggsRCMTop << ")"<< std::endl;
+    m_outData->o_leadingdEta_RCMVRCMV = m_varComputer -> GetLeadingdEta( *(m_outData->o_taggedjets.at("RCMV")), *(m_outData->o_taggedjets.at("RCMV")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdEta_RCMVRCMV (" << m_outData -> o_leadingdEta_RCMVRCMV << ")"<< std::endl;
+    m_outData->o_leadingdEta_RCMVRCMTop = m_varComputer -> GetLeadingdEta( *(m_outData->o_taggedjets.at("RCMV")), *(m_outData->o_taggedjets.at("RCMTop")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdEta_RCMVRCMTop (" << m_outData -> o_leadingdEta_RCMVRCMTop << ")"<< std::endl;
+    m_outData->o_leadingdEta_RCMTopRCMTop = m_varComputer -> GetLeadingdEta( *(m_outData->o_taggedjets.at("RCMTop")), *(m_outData->o_taggedjets.at("RCMTop")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdEta_RCMTopRCMTop (" << m_outData -> o_leadingdEta_RCMTopRCMTop << ")"<< std::endl;
+
+    m_outData->o_leadingdPhi_RCMHiggsRCMHiggs = TMath::Abs( m_varComputer -> GetLeadingdPhi( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMHiggs")) ));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdPhi_RCMHiggsRCMHiggs (" << m_outData -> o_leadingdPhi_RCMHiggsRCMHiggs << ")" << std::endl;
+    m_outData->o_leadingdPhi_RCMHiggsRCMV = TMath::Abs( m_varComputer -> GetLeadingdPhi( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMV")) ));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdPhi_RCMHiggsRCMV (" << m_outData -> o_leadingdPhi_RCMHiggsRCMV << ")"<< std::endl;
+    m_outData->o_leadingdPhi_RCMHiggsRCMTop = TMath::Abs( m_varComputer -> GetLeadingdPhi( *(m_outData->o_taggedjets.at("RCMHiggs")), *(m_outData->o_taggedjets.at("RCMTop"))) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdPhi_RCMHiggsRCMTop (" << m_outData -> o_leadingdPhi_RCMHiggsRCMTop << ")"<< std::endl;
+    m_outData->o_leadingdPhi_RCMVRCMV = TMath::Abs( m_varComputer -> GetLeadingdPhi( *(m_outData->o_taggedjets.at("RCMV")), *(m_outData->o_taggedjets.at("RCMV"))) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdPhi_RCMVRCMV (" << m_outData -> o_leadingdPhi_RCMVRCMV << ")"<< std::endl;
+    m_outData->o_leadingdPhi_RCMVRCMTop =  TMath::Abs(m_varComputer -> GetLeadingdPhi( *(m_outData->o_taggedjets.at("RCMV")), *(m_outData->o_taggedjets.at("RCMTop")) ));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdPhi_RCMVRCMTop (" << m_outData -> o_leadingdPhi_RCMVRCMTop << ")"<< std::endl;
+    m_outData->o_leadingdPhi_RCMTopRCMTop = TMath::Abs( m_varComputer -> GetLeadingdPhi( *(m_outData->o_taggedjets.at("RCMTop")), *(m_outData->o_taggedjets.at("RCMTop"))));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdPhi_RCMTopRCMTop (" << m_outData -> o_leadingdPhi_RCMTopRCMTop << ")"<< std::endl;
+
+
+    m_outData -> o_leadingdR_lepjet  =  m_varComputer -> GetMindR( m_outData->o_selLep, *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_lepjet (" << m_outData -> o_leadingdR_lepjet << ")"  << std::endl; 
+    m_outData -> o_leadingdR_lepbjet  = m_varComputer -> GetMindR( m_outData->o_selLep, *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_lepbjet (" << m_outData -> o_leadingdR_lepbjet << ")"  << std::endl;
+    m_outData -> o_leadingdR_jetjet  = m_varComputer -> GetMindR(*(m_outData->o_jets), *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_jetjet (" << m_outData -> o_leadingdR_jetjet << ")"  << std::endl;  
+    m_outData -> o_leadingdEta_lepjet  = m_varComputer -> GetMindEta( m_outData->o_selLep, *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdEta_lepjet (" << m_outData -> o_leadingdEta_lepjet << ")"  << std::endl;
+    m_outData -> o_leadingdEta_lepbjet  = m_varComputer -> GetMindEta( m_outData->o_selLep, *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdEta_lepbjet (" << m_outData -> o_leadingdEta_lepbjet << ")"  << std::endl;
+    m_outData -> o_leadingdEta_jetjet  = m_varComputer -> GetMindEta( *(m_outData->o_jets), *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdEta_jetjet (" << m_outData -> o_leadingdEta_jetjet << ")"  << std::endl;
+    m_outData -> o_leadingdPhi_lepjet  = TMath::Abs( m_varComputer -> GetMindPhi( m_outData->o_selLep, *(m_outData->o_jets) ));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdPhi_lepjet (" << m_outData -> o_leadingdPhi_lepjet << ")"  << std::endl;
+    m_outData -> o_leadingdPhi_lepbjet  = TMath::Abs( m_varComputer -> GetMindPhi( m_outData->o_selLep, *(m_outData->o_jets)) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdPhi_lepbjet (" << m_outData -> o_leadingdPhi_lepbjet << ")"  << std::endl;
+    m_outData -> o_leadingdPhi_jetjet  =  TMath::Abs(m_varComputer -> GetMindPhi( *(m_outData->o_jets), *(m_outData->o_jets)) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdPhi_jetjet (" << m_outData -> o_leadingdPhi_jetjet << ")"  << std::endl;
+
+    m_outData -> o_leadingdEta_RCjets  = m_varComputer -> GetMindEta( *(m_outData->o_rcjets), *(m_outData->o_rcjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdEta_RCjets (" << m_outData -> o_leadingdEta_RCjets << ")"  << std::endl;
+
+    m_outData -> o_leadingdR_RCjets  = m_varComputer -> GetMindR( *(m_outData->o_rcjets), *(m_outData->o_rcjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_RCjets (" << m_outData -> o_leadingdR_RCjets << ")"  << std::endl;
+
+    m_outData -> o_leadingdPhi_RCjets  = TMath::Abs( m_varComputer -> GetMindPhi( *(m_outData->o_rcjets), *(m_outData->o_rcjets)) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdPhi_RCjets (" << m_outData -> o_leadingdPhi_RCjets << ")"  << std::endl;
+
+
 
     /*m_outData->o_minRecoVLQMAsymm_HtHt = m_varComputer -> GetMinPairVLQMassAsymm( m_outData->o_recoVLQ, "Ht", "Ht");
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_minRecoVLQMAsymm_HtHt (" << m_outData -> o_minRecoVLQMAsymm_HtHt << ")"<< std::endl;
@@ -960,6 +1104,7 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_minRecoVLQMAsymm_HtZt (" << m_outData -> o_minRecoVLQMAsymm_HtZt << ")"<< std::endl;
     m_outData->o_minRecoVLQMAsymm_HtWb = m_varComputer -> GetMinPairVLQMassAsymm( m_outData->o_recoVLQ, "Ht", "Wb");
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_minRecoVLQMAsymm_HtWb (" << m_outData -> o_minRecoVLQMAsymm_HtWb << ")"<< std::endl;*/
+
     m_outData -> o_dPhi_lepmet  = m_outData -> o_selLep ? TMath::Abs( m_outData -> o_selLep -> DeltaPhi( *(m_outData->o_AO_met) ) ) : -1;
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhi_lepmet (" << m_outData -> o_dPhi_lepmet << ")"  << std::endl;
     m_outData -> o_dPhi_jetmet  = TMath::Abs(m_varComputer -> GetMindPhi( m_outData->o_AO_met, *(m_outData->o_jets), 4 ));
@@ -986,8 +1131,73 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_J_lepton_invariant_mass (" << m_outData -> o_J_lepton_invariant_mass << ")"  << std::endl;
     m_outData -> o_J_J_invariant_mass = m_varComputer -> GetJJInvariantMass(*(m_outData->o_taggedjets.at("RCTTMass")));
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_J_J_invariant_mass  (" << m_outData -> o_J_J_invariant_mass << ")"  << std::endl;
+   
+    m_outData -> o_invariant_mass_RCTTMassRCTTMass = m_varComputer -> GetJJInvariantMass(*(m_outData->o_taggedjets.at("RCTTMass")));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_invariant_mass_RCTTMassRCTTMass  (" << m_outData -> o_invariant_mass_RCTTMassRCTTMass << ")"  << std::endl;
+
+    m_outData -> o_invariant_mass_RCjets = m_varComputer -> GetJJInvariantMass(*(m_outData->o_rcjets));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_invariant_mass_RCjets  (" << m_outData -> o_invariant_mass_RCjets << ")"  << std::endl;
+
+
+    m_outData -> o_dRmaxM_RCTTMassRCTTMass = m_varComputer -> GetMjjMaxDr( *(m_outData->o_taggedjets.at("RCTTMass")) ) ;
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dRmaxM_RCTTMassRCTTMass (" << m_outData -> o_dRmaxM_RCTTMassRCTTMass << ")" << std::endl;
+    m_outData -> o_dRmaxM_RCjets = m_varComputer -> GetMjjMaxDr( *(m_outData->o_rcjets) ) ;
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dRmaxM_RCjets (" << m_outData -> o_dRmaxM_RCjets << ")" << std::endl;
+
+
+    m_outData -> o_dPhimaxM_RCTTMassRCTTMass = m_varComputer -> GetMjjMaxDphi( *(m_outData->o_taggedjets.at("RCTTMass")) ) ;
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dPhimaxM_RCTTMassRCTTMass (" << m_outData -> o_dPhimaxM_RCTTMassRCTTMass << ")" << std::endl;
+    m_outData -> o_dPhimaxM_RCjets = m_varComputer -> GetMjjMaxDphi( *(m_outData->o_rcjets) ) ;
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dPhimaxM_RCjets (" << m_outData -> o_dPhimaxM_RCjets << ")" << std::endl;
+
+
+    m_outData -> o_dEtaminM_RCTTMassRCTTMass = m_varComputer -> GetMjjMinDeta( *(m_outData->o_taggedjets.at("RCTTMass")) ) ;
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtaminM_RCTTMassRCTTMass (" << m_outData -> o_dEtaminM_RCTTMassRCTTMass << ")" << std::endl;
+    m_outData -> o_dEtaminM_RCjets = m_varComputer -> GetMjjMinDeta( *(m_outData->o_rcjets) ) ;
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dEtaminM_RCjets (" << m_outData -> o_dEtaminM_RCjets << ")" << std::endl;
+ 
+ 
+
     m_outData ->  o_dRaverage_jetjet = m_varComputer -> GetAveragedR( *(m_outData->o_jets), *(m_outData->o_jets) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dRaverage_jetjet  (" << m_outData ->  o_dRaverage_jetjet << ")"  << std::endl;
+    m_outData ->  o_dRaverage_lepjet = m_varComputer -> GetAveragedR( *(m_outData->o_jets), *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dRaverage_lepjet  (" << m_outData ->  o_dRaverage_lepjet << ")"  << std::endl;
+    m_outData ->  o_dRaverage_lepbjet = m_varComputer -> GetAveragedR( *(m_outData->o_jets), *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dRaverage_lepbjet  (" << m_outData ->  o_dRaverage_lepbjet << ")"  << std::endl;
+
+    m_outData ->  o_dRaverage_RCjets = m_varComputer -> GetAveragedR( *(m_outData->o_rcjets), *(m_outData->o_rcjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dRaverage_RCjets  (" << m_outData ->  o_dRaverage_RCjets << ")"  << std::endl;
+ 
+   m_outData ->  o_dEtaaverage_RCjets = m_varComputer -> GetAveragedEta( *(m_outData->o_rcjets), *(m_outData->o_rcjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dEtaaverage_RCjets  (" << m_outData ->  o_dEtaaverage_RCjets << ")"  << std::endl;
+ 
+    m_outData ->  o_dPhiaverage_RCjets =  TMath::Abs(m_varComputer -> GetAveragedPhi( *(m_outData->o_rcjets), *(m_outData->o_rcjets)) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dPhiaverage_RCjets  (" << m_outData ->  o_dPhiaverage_RCjets << ")"  << std::endl;
+ 
+    m_outData ->  o_dPhiaverage_RCTTMassRCTTMass = TMath::Abs( m_varComputer -> GetAveragedPhi(*( m_outData->o_taggedjets.at("RCTTMass")),*( m_outData->o_taggedjets.at("RCTTMass")) ));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dPhiaverage_RCTTMassRCTTMass  (" << m_outData ->  o_dPhiaverage_RCTTMassRCTTMass << ")"  << std::endl;
+ 
+   m_outData ->  o_dEtaaverage_RCTTMassRCTTMass = m_varComputer -> GetAveragedEta(*( m_outData->o_taggedjets.at("RCTTMass")),*( m_outData->o_taggedjets.at("RCTTMass")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dEtaaverage_RCTTMassRCTTMass  (" << m_outData ->  o_dEtaaverage_RCTTMassRCTTMass << ")"  << std::endl;
+ 
+   m_outData ->  o_dRaverage_RCTTMassRCTTMass = m_varComputer -> GetAveragedR(*( m_outData->o_taggedjets.at("RCTTMass")),*( m_outData->o_taggedjets.at("RCTTMass")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dRaverage_RCTTMassRCTTMass  (" << m_outData ->  o_dRaverage_RCTTMassRCTTMass << ")"  << std::endl;
+ 
+    m_outData ->  o_dEtaaverage_jetjet = m_varComputer -> GetAveragedEta( *(m_outData->o_jets), *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dEtaaverage_jetjet  (" << m_outData ->  o_dEtaaverage_jetjet << ")"  << std::endl;
+    m_outData ->  o_dEtaaverage_lepjet = m_varComputer -> GetAveragedEta( *(m_outData->o_jets), *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dEtaaverage_lepjet  (" << m_outData ->  o_dEtaaverage_lepjet << ")"  << std::endl;
+    m_outData ->  o_dEtaaverage_lepbjet = m_varComputer -> GetAveragedEta( *(m_outData->o_jets), *(m_outData->o_jets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dEtaaverage_lepbjet  (" << m_outData ->  o_dEtaaverage_lepbjet << ")"  << std::endl;
+ 
+    m_outData ->  o_dPhiaverage_jetjet = TMath::Abs( m_varComputer -> GetAveragedPhi( *(m_outData->o_jets), *(m_outData->o_jets) ));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dPhiaverage_jetjet  (" << m_outData ->  o_dPhiaverage_jetjet << ")"  << std::endl;
+    m_outData ->  o_dPhiaverage_lepjet =  TMath::Abs(m_varComputer -> GetAveragedPhi( *(m_outData->o_jets), *(m_outData->o_jets) ));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dPhiaverage_lepjet  (" << m_outData ->  o_dPhiaverage_lepjet << ")"  << std::endl;
+    m_outData ->  o_dPhiaverage_lepbjet =  TMath::Abs(m_varComputer -> GetAveragedPhi( *(m_outData->o_jets), *(m_outData->o_jets) ));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData ->  o_dPhiaverage_lepbjet  (" << m_outData ->  o_dPhiaverage_lepbjet << ")"  << std::endl;
+ 
+
     m_outData -> o_mjj_leading_jets = m_varComputer -> GetMjjLeadingJets( *(m_outData->o_jets) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_mjj_leading_jets (" << m_outData -> o_mjj_leading_jets << ")" << std::endl;
     m_outData -> o_mjj_maxdR = m_varComputer -> GetMjjMaxDr( *(m_outData->o_jets) ) ;
@@ -1129,7 +1339,7 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Leptop-related variables in RC jets
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  if( m_outData -> o_leptop && m_outData -> o_leptop->Pt() >= 300.){
+  if( m_outData -> o_leptop && m_outData -> o_leptop->Pt() >= 0.){
 
     m_outData->o_leptop_n = 1.;
 
