@@ -376,6 +376,104 @@ double VLQ_VariableComputer::GetAveragedPhi(  AOVector &v_obj1, AOVector &v_obj2
 
 //_________________________________________________________________
 //
+AOVector VLQ_VariableComputer::GetMinMAsymmPair(std::vector< AnalysisObject* > &v_obj) const{
+
+  AOVector ret_objs = GetMinMAsymmPair(v_obj, v_obj);
+
+  return ret_objs;
+
+}  
+
+//_________________________________________________________________
+//
+/*
+  Get the two pairs with minimum mass asymmetry
+  Only unique pairings are allowed - i.e. an object cannot be in two pairs in the sorted list
+  Decorate objects with a tag indicating their pair membership
+  Return mass asymmetry value
+*/
+
+AOVector VLQ_VariableComputer::GetMinMAsymmPair(std::vector< AnalysisObject* > &v_obj1,
+					      std::vector< AnalysisObject* > &v_obj2) const{
+  
+  double masymm = -1.;
+  AOVector ret_objs{};
+
+  std::vector<double> vpair_val{};
+  std::vector<std::pair<AnalysisObject*, AnalysisObject*> > vpair_obj{};
+
+  //Create pairs of AnalysisObjects and calculate their invariant masses
+  for(AnalysisObject* obj1 : v_obj1){
+
+    for(AnalysisObject* obj2 : v_obj2){
+      if( (obj1 == obj2) ||
+	  (std::find(vpair_obj.begin(), vpair_obj.end(), 
+		     std::pair<AnalysisObject*, AnalysisObject*>(obj2,obj1)) != vpair_obj.end()) ){
+	continue;
+      }
+      double minv = ((*obj1)+(*obj2)).M();
+      vpair_obj.push_back(std::pair<AnalysisObject*, AnalysisObject*>(obj1,obj2));
+      vpair_val.push_back(minv);
+    }
+
+  }
+
+  //Need at least two pairs for the computation to be sensible
+  if( vpair_val.size() < 2 ){
+    return ret_objs;
+  }
+
+  //Re-loop over the list of AnalysisObject pairs, and calculate inter-pair mass asymmetries
+  std::pair<AnalysisObject*, AnalysisObject*> pair1;
+  std::pair<AnalysisObject*, AnalysisObject*> pair2;
+
+  for(int i=0; i < vpair_val.size(); i++){
+
+    std::pair<AnalysisObject*, AnalysisObject*> _pair1 = vpair_obj.at(i);
+
+    for(int j=i; j < vpair_val.size(); j++){
+
+      std::pair<AnalysisObject*, AnalysisObject*> _pair2 = vpair_obj.at(j);
+
+      if( (_pair1.first == _pair2.first) || (_pair1.second == _pair2.second)
+	  || (_pair1.first == _pair2.second) || (_pair1.second == _pair2.first) ) continue;
+
+      double masymm_cur = TMath::Abs(vpair_val.at(i) - vpair_val.at(j));
+      if( (masymm < 0.) || (masymm_cur < masymm) ){
+	masymm = masymm_cur;
+	pair1 = _pair1;
+	pair2 = _pair2;
+      }
+
+    }
+
+  }
+
+
+  //======= Tag the objects in the selected pair ======
+  if(pair1.first){
+    pair1.first -> SetMoment("MAsymmIdx", 0);
+    ret_objs.push_back(pair1.first);
+  }
+  if(pair1.second){ 
+    pair1.second -> SetMoment("MAsymmIdx", 1);
+    ret_objs.push_back(pair1.second);
+  }
+  if(pair2.first){
+    pair2.first -> SetMoment("MAsymmIdx", 2);
+    ret_objs.push_back(pair2.first);
+  }
+  if(pair2.second){
+    pair2.second -> SetMoment("MAsymmIdx", 3);
+     ret_objs.push_back(pair2.second);
+   }
+
+  return ret_objs;
+  
+}
+
+//_________________________________________________________________
+//
 std::vector<double> VLQ_VariableComputer::GetInvariantMassSorted(std::vector< AnalysisObject* > &v_obj,
                                                                  const std::string& sort_by, int n_sort, bool b_descending) const{
 

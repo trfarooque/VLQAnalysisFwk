@@ -1138,7 +1138,6 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
     m_outData -> o_invariant_mass_RCjets = m_varComputer -> GetJJInvariantMass(*(m_outData->o_rcjets));
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_invariant_mass_RCjets  (" << m_outData -> o_invariant_mass_RCjets << ")"  << std::endl;
 
-
     m_outData -> o_dRmaxM_RCTTMassRCTTMass = m_varComputer -> GetMjjMaxDr( *(m_outData->o_taggedjets.at("RCTTMass")) ) ;
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    ->After m_outData -> o_dRmaxM_RCTTMassRCTTMass (" << m_outData -> o_dRmaxM_RCTTMassRCTTMass << ")" << std::endl;
     m_outData -> o_dRmaxM_RCjets = m_varComputer -> GetMjjMaxDr( *(m_outData->o_rcjets) ) ;
