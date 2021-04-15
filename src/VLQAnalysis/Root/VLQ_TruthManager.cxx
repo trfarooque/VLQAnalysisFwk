@@ -1740,19 +1740,19 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
     (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dR34", cd10 -> DeltaR(*cd11)); // same as above
 
     //-----------------------dPhi-----------------------
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi12", TMath::Pi() - TMath::Abs(cd00 -> DeltaPhi(*cd01)));
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi13", TMath::Pi() - TMath::Abs(cd00 -> DeltaPhi(*cd10)));
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi14", TMath::Pi() - TMath::Abs(cd00 -> DeltaPhi(*cd11)));
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi23", TMath::Pi() - TMath::Abs(cd01 -> DeltaPhi(*cd10)));
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi24", TMath::Pi() - TMath::Abs(cd01 -> DeltaPhi(*cd11)));
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi34", TMath::Pi() - TMath::Abs(cd10 -> DeltaPhi(*cd11)));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi12", TMath::Pi() - cd00 -> DeltaPhi(*cd01));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi13", TMath::Pi() - cd00 -> DeltaPhi(*cd10));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi14", TMath::Pi() - cd00 -> DeltaPhi(*cd11));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi23", TMath::Pi() - cd01 -> DeltaPhi(*cd10));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi24", TMath::Pi() - cd01 -> DeltaPhi(*cd11));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dPhi34", TMath::Pi() - cd10 -> DeltaPhi(*cd11));
     
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi12", TMath::Pi() - TMath::Abs(cd00 -> DeltaPhi(*cd01))); // same as above
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi13", TMath::Pi() - TMath::Abs(cd00 -> DeltaPhi(*cd10))); // same as above
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi14", TMath::Pi() - TMath::Abs(cd00 -> DeltaPhi(*cd11))); // same as above
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi23", TMath::Pi() - TMath::Abs(cd01 -> DeltaPhi(*cd10))); // same as above
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi24", TMath::Pi() - TMath::Abs(cd01 -> DeltaPhi(*cd11))); // same as above
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi34", TMath::Pi() - TMath::Abs(cd10 -> DeltaPhi(*cd11))); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi12", TMath::Pi() - cd00 -> DeltaPhi(*cd01)); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi13", TMath::Pi() - cd00 -> DeltaPhi(*cd10)); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi14", TMath::Pi() - cd00 -> DeltaPhi(*cd11)); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi23", TMath::Pi() - cd01 -> DeltaPhi(*cd10)); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi24", TMath::Pi() - cd01 -> DeltaPhi(*cd11)); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi34", TMath::Pi() - cd10 -> DeltaPhi(*cd11)); // same as above
 
     //-----------------------Eta-----------------------
     //dEta = TMath::Abs(vcd1 -> Eta() - vcd2 -> Eta())
@@ -1768,36 +1768,36 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
 
     //-----------------------dEta-----------------------
     //dEta = TMath::Abs(vcd1 -> Eta() - vcd2 -> Eta())
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta12", TMath::Abs(cd00->Eta() - cd01->Eta()));
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta13", TMath::Abs(cd00->Eta() - cd10->Eta()));
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta14", TMath::Abs(cd00->Eta() - cd11->Eta()));
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta23", TMath::Abs(cd01->Eta() - cd10->Eta()));
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta24", TMath::Abs(cd01->Eta() - cd11->Eta()));
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta34", TMath::Abs(cd10->Eta() - cd11->Eta()));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta12", cd00->Eta() - cd01->Eta());
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta13", cd00->Eta() - cd10->Eta());
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta14", cd00->Eta() - cd11->Eta());
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta23", cd01->Eta() - cd10->Eta());
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta24", cd01->Eta() - cd11->Eta());
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta34", cd10->Eta() - cd11->Eta());
     
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta12", TMath::Abs(cd00->Eta() - cd01->Eta())); // same as above
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta13", TMath::Abs(cd00->Eta() - cd10->Eta())); // same as above
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta14", TMath::Abs(cd00->Eta() - cd11->Eta())); // same as above
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta23", TMath::Abs(cd01->Eta() - cd10->Eta())); // same as above
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta24", TMath::Abs(cd01->Eta() - cd11->Eta())); // same as above
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta34", TMath::Abs(cd10->Eta() - cd11->Eta())); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta12", cd00->Eta() - cd01->Eta()); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta13", cd00->Eta() - cd10->Eta()); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta14", cd00->Eta() - cd11->Eta()); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta23", cd01->Eta() - cd10->Eta()); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta24", cd01->Eta() - cd11->Eta()); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta34", cd10->Eta() - cd11->Eta()); // same as above
 
     //-----------------------pT Ratio-----------------------
          // 1D histograms too
          // 
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio12", TMath::Abs(cd01->Pt() / cd00->Pt()));
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio13", TMath::Abs(cd10->Pt() / cd00->Pt()));
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio14", TMath::Abs(cd11->Pt() / cd00->Pt()));
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio23", TMath::Abs(cd10->Pt() / cd01->Pt()));
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio24", TMath::Abs(cd11->Pt() / cd01->Pt()));
-    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio34", TMath::Abs(cd11->Pt() / cd10->Pt()));
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio12", cd01->Pt() / cd00->Pt());
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio13", cd10->Pt() / cd00->Pt());
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio14", cd11->Pt() / cd00->Pt());
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio23", cd10->Pt() / cd01->Pt());
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio24", cd11->Pt() / cd01->Pt());
+    (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio34", cd11->Pt() / cd10->Pt());
 
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio12", TMath::Abs(cd01->Pt() / cd00->Pt())); // same as above
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio13", TMath::Abs(cd10->Pt() / cd00->Pt())); // same as above
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio14", TMath::Abs(cd11->Pt() / cd00->Pt())); // same as above
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio23", TMath::Abs(cd10->Pt() / cd01->Pt())); // same as above
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio24", TMath::Abs(cd11->Pt() / cd01->Pt())); // same as above
-    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio34", TMath::Abs(cd11->Pt() / cd10->Pt())); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio12", cd01->Pt() / cd00->Pt()); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio13", cd10->Pt() / cd00->Pt()); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio14", cd11->Pt() / cd00->Pt()); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio23", cd10->Pt() / cd01->Pt()); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio24", cd11->Pt() / cd01->Pt()); // same as above
+    (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio34", cd11->Pt() / cd10->Pt()); // same as above
 
     int highestPtcd = -1; 
     // cases: 0 = Boson from VLQ 0

@@ -1334,17 +1334,17 @@ bool VLQ_Analysis_Data2015::Begin(){
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "dR34"/*, hopt_nouflow*/  );
 
 	    //------------------------dPhi-----------------------------//
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dPhi12",  0.1,0,3.4,  "; truth"+type+", "+str_id+" #pi-#Delta#phi_{12}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dPhi12",  0.1,0,TMath::Pi()*2,  "; truth"+type+", "+str_id+" #pi-#Delta#phi_{12}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "dPhi12"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dPhi13",  0.1,0,3.4,  "; truth"+type+", "+str_id+" #pi-#Delta#phi_{13}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dPhi13",  0.1,0,TMath::Pi()*2,  "; truth"+type+", "+str_id+" #pi-#Delta#phi_{13}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "dPhi13"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dPhi14",  0.1,0,3.4,  "; truth"+type+", "+str_id+" #pi-#Delta#phi_{14}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dPhi14",  0.1,0,TMath::Pi()*2,  "; truth"+type+", "+str_id+" #pi-#Delta#phi_{14}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "dPhi14"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dPhi23",  0.1,0,3.4,  "; truth"+type+", "+str_id+" #pi-#Delta#phi_{23}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dPhi23",  0.1,0,TMath::Pi()*2,  "; truth"+type+", "+str_id+" #pi-#Delta#phi_{23}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "dPhi23"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dPhi24",  0.1,0,3.4,  "; truth"+type+", "+str_id+" #pi-#Delta#phi_{24}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dPhi24",  0.1,0,TMath::Pi()*2,  "; truth"+type+", "+str_id+" #pi-#Delta#phi_{24}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "dPhi24"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dPhi34",  0.1,0,3.4,  "; truth"+type+", "+str_id+" #pi-#Delta#phi_{34}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dPhi34",  0.1,0,TMath::Pi()*2,  "; truth"+type+", "+str_id+" #pi-#Delta#phi_{34}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "dPhi34"/*, hopt_nouflow*/  );
             
 	    //------------------------Eta-----------------------------//
@@ -1358,47 +1358,99 @@ bool VLQ_Analysis_Data2015::Begin(){
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "eta4"/*, hopt_nouflow*/  );
 
 	    //------------------------dEta-----------------------------//
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dEta12",  0.1,0,5,  "; truth"+type+", "+str_id+" #Delta#eta_{12}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dEta12",  0.1,-5,5,  "; truth"+type+", "+str_id+" #Delta#eta_{12}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "dEta12"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dEta13",  0.1,0,5,  "; truth"+type+", "+str_id+" #Delta#eta_{13}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dEta13",  0.1,-5,5,  "; truth"+type+", "+str_id+" #Delta#eta_{13}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "dEta13"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dEta14",  0.1,0,5,  "; truth"+type+", "+str_id+" #Delta#eta_{14}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dEta14",  0.1,-5,5,  "; truth"+type+", "+str_id+" #Delta#eta_{14}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "dEta14"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dEta23",  0.1,0,5,  "; truth"+type+", "+str_id+" #Delta#eta_{23}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dEta23",  0.1,-5,5,  "; truth"+type+", "+str_id+" #Delta#eta_{23}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "dEta23"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dEta24",  0.1,0,5,  "; truth"+type+", "+str_id+" #Delta#eta_{24}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dEta24",  0.1,-5,5,  "; truth"+type+", "+str_id+" #Delta#eta_{24}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "dEta24"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dEta34",  0.1,0,5,  "; truth"+type+", "+str_id+" #Delta#eta_{34}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dEta34",  0.1,-5,5,  "; truth"+type+", "+str_id+" #Delta#eta_{34}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "dEta34"/*, hopt_nouflow*/  );
 
 	    //------------------------pT Ratio-----------------------------//
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio12",  0.02,0,1,  "; truth"+type+", "+str_id+" p_{T} Ratio_{12}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio12",  0.02,0,5,  "; truth"+type+", "+str_id+" p_{T} Ratio_{12}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "pTRatio12"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio13",  0.02,0,1,  "; truth"+type+", "+str_id+" p_{T} Ratio_{13}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio13",  0.02,0,5,  "; truth"+type+", "+str_id+" p_{T} Ratio_{13}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "pTRatio13"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio14",  0.02,0,1,  "; truth"+type+", "+str_id+" p_{T} Ratio_{14}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio14",  0.02,0,5,  "; truth"+type+", "+str_id+" p_{T} Ratio_{14}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "pTRatio14"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio23",  0.02,0,1,  "; truth"+type+", "+str_id+" p_{T} Ratio_{23}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio23",  0.02,0,5,  "; truth"+type+", "+str_id+" p_{T} Ratio_{23}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "pTRatio23"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio24",  0.02,0,1,  "; truth"+type+", "+str_id+" p_{T} Ratio_{24}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio24",  0.02,0,5,  "; truth"+type+", "+str_id+" p_{T} Ratio_{24}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "pTRatio24"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio34",  0.02,0,1,  "; truth"+type+", "+str_id+" p_{T} Ratio_{34}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio34",  0.02,0,5,  "; truth"+type+", "+str_id+" p_{T} Ratio_{34}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "pTRatio34"/*, hopt_nouflow*/  );
 
 	    //------------------------ Above vs pT-----------------------------//
-            m_outMngrHist -> AddStandardTH2( "leadingPtOrigin", "jetPt", .5, 0, 4, 100, 0, 2000, ";Jet p_{T}", ";Leading p_{T} Origin", //skipto
-                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "leadingPtOrigin", "jetPt");
-////////
-//	  m_outMngrHist -> AddStandardTH2( "RCjet"+str_id+"_pt", "RCjet"+str_id+"_m", 50, 0, 1200, 10, 0, 500
-//					   , "RC jet"+str_id+" p_{T} [GeV]; RC jet"+str_id+" p_{T} [GeV]; RC jet"+str_id+" mass [GeV]", "RC jet"+str_id+" mass [GeV]"
-//					   , false, &(m_outData -> o_rcjets), &(m_outData -> o_rcjets), iRCJet, iRCJet, false, "Pt", "M" );
-////////
+//            m_outMngrHist -> AddStandardTH2( "leadingPtOrigin", "jetPt", .5, 0, 4, 100, 0, 2000, ";Jet p_{T}", ";Leading p_{T} Origin", //skipto
+//                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "leadingPtOrigin", "jetPt");
+            m_outMngrHist -> AddStandardTH2( "dR12", "truth_" + type + str_id + "_jetPt", 
+                .1, 0, 6, 100, 0, 2500, ";Jet p_{T}", ";#DeltaR_{12}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dR12", "jetPt");
+            m_outMngrHist -> AddStandardTH2( "dR13", "truth_" + type + str_id + "_jetPt", 
+                .1, 0, 6, 100, 0, 2500, ";Jet p_{T}", ";#DeltaR_{13}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dR13", "jetPt");
+            m_outMngrHist -> AddStandardTH2( "dR14", "truth_" + type + str_id + "_jetPt", 
+                .1, 0, 6, 100, 0, 2500, ";Jet p_{T}", ";#DeltaR_{14}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dR14", "jetPt");
+            m_outMngrHist -> AddStandardTH2( "dR23", "truth_" + type + str_id + "_jetPt", 
+                .1, 0, 6, 100, 0, 2500, ";Jet p_{T}", ";#DeltaR_{23}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dR23", "jetPt");
+            m_outMngrHist -> AddStandardTH2( "dR24", "truth_" + type + str_id + "_jetPt", 
+                .1, 0, 6, 100, 0, 2500, ";Jet p_{T}", ";#DeltaR_{24}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dR24", "jetPt");
+            m_outMngrHist -> AddStandardTH2( "dR34", "truth_" + type + str_id + "_jetPt", 
+                .1, 0, 6, 100, 0, 2500, ";Jet p_{T}", ";#DeltaR_{34}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dR34", "jetPt");
+
+            m_outMngrHist -> AddStandardTH2( "dPhi12", "truth_" + type + str_id + "_jetPt", 
+                .1, 0, TMath::Pi()*2, 100, 0, 2500, ";Jet p_{T}", ";#pi-#Delta#phi_{12}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dPhi12", "jetPt");
+            m_outMngrHist -> AddStandardTH2( "dPhi13", "truth_" + type + str_id + "_jetPt", 
+                .1, 0, TMath::Pi()*2, 100, 0, 2500, ";Jet p_{T}", ";#pi-#Delta#phi_{13}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dPhi13", "jetPt");
+            m_outMngrHist -> AddStandardTH2( "dPhi14", "truth_" + type + str_id + "_jetPt", 
+                .1, 0, TMath::Pi()*2, 100, 0, 2500, ";Jet p_{T}", ";#pi-#Delta#phi_{14}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dPhi14", "jetPt");
+            m_outMngrHist -> AddStandardTH2( "dPhi23", "truth_" + type + str_id + "_jetPt", 
+                .1, 0, TMath::Pi()*2, 100, 0, 2500, ";Jet p_{T}", ";#pi-#Delta#phi_{23}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dPhi23", "jetPt");
+            m_outMngrHist -> AddStandardTH2( "dPhi24", "truth_" + type + str_id + "_jetPt", 
+                .1, 0, TMath::Pi()*2, 100, 0, 2500, ";Jet p_{T}", ";#pi-#Delta#phi_{24}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dPhi24", "jetPt");
+            m_outMngrHist -> AddStandardTH2( "dPhi34", "truth_" + type + str_id + "_jetPt", 
+                .1, 0, TMath::Pi()*2, 100, 0, 2500, ";Jet p_{T}", ";#pi-#Delta#phi_{34}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dPhi34", "jetPt");
+
+            m_outMngrHist -> AddStandardTH2( "dEta12", "truth_" + type + str_id + "_jetPt", 
+                .1, -5, 5, 100, 0, 2500, ";Jet p_{T}", ";#Delta#eta_{12}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dEta12", "jetPt");
+            m_outMngrHist -> AddStandardTH2( "dEta13", "truth_" + type + str_id + "_jetPt", 
+                .1, -5, 5, 100, 0, 2500, ";Jet p_{T}", ";#Delta#eta_{13}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dEta13", "jetPt");
+            m_outMngrHist -> AddStandardTH2( "dEta14", "truth_" + type + str_id + "_jetPt", 
+                .1, -5, 5, 100, 0, 2500, ";Jet p_{T}", ";#Delta#eta_{14}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dEta14", "jetPt");
+            m_outMngrHist -> AddStandardTH2( "dEta23", "truth_" + type + str_id + "_jetPt", 
+                .1, -5, 5, 100, 0, 2500, ";Jet p_{T}", ";#Delta#eta_{23}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dEta23", "jetPt");
+            m_outMngrHist -> AddStandardTH2( "dEta24", "truth_" + type + str_id + "_jetPt", 
+                .1, -5, 5, 100, 0, 2500, ";Jet p_{T}", ";#Delta#eta_{24}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dEta24", "jetPt");
+            m_outMngrHist -> AddStandardTH2( "dEta34", "truth_" + type + str_id + "_jetPt", 
+                .1, -5, 5, 100, 0, 2500, ";Jet p_{T}", ";#Delta#eta_{34}", //skipto
+                true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, iTT, true, "dEta34", "jetPt");
 
 
-                //true, &(m_outData -> o_truth_partons.at(type)), &(m_outData -> o_truth_partons.at(type)), iTT, "leadingPtOrigin");
-          //m_outMngrHist -> AddStandardTH2( "leadingPtOrigin", "jetPt", 50, 0, 7000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} [GeV]", 
-          //    (RWderiv||otherVariables), &(m_outData -> o_meff), &(m_outData -> o_jets_n));
+
+
 	    //------------------------Highest pT Origin-----------------------------//
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_leadingPtOrigin",  .5,0,4,  "; truth"+type+", "+str_id+" Decay Particle Origin"
+                                             , true, &(m_outData -> o_truth_partons.at(type)), iTT, "leadingPtOrigin"/*, hopt_nouflow*/  );
             //
 //            m_outMngrHist -> HistMngr() -> BookTH1D("rejectionMask","Mask",1,0,10,"","","#events");
 //            m_outMngrHist -> HistMngr() -> GetTH1D("rejectionMask") -> GetXaxis() -> SetBinLabel( 1,                                    "Kept" );
@@ -1412,8 +1464,6 @@ bool VLQ_Analysis_Data2015::Begin(){
             //hist -> GetXaxis() -> SetBinLabel( 2,  "Q0" );
             //hist -> GetXaxis() -> SetBinLabel( 3,  "B1" );
             //hist -> GetXaxis() -> SetBinLabel( 4,  "Q1" );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_leadingPtOrigin",  .5,0,4,  "; truth"+type+", "+str_id+" Decay Particle Origin"
-                                             , true, &(m_outData -> o_truth_partons.at(type)), iTT, "leadingPtOrigin"/*, hopt_nouflow*/  );
 //
   //TH1D* hist = m_outMngrHist -> HistMngr() -> BookTH1D("vlqType","vlqType",1,-1.5,7.5,"","","#events");
   //hist -> GetXaxis() -> SetBinLabel( hist -> FindBin(VLQ_Enums::HtHt),  "HtHt" );
