@@ -1692,12 +1692,30 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
     AnalysisObject* VLQ1 = (m_outData -> o_truth_partons.at("VLQ"))->at(1);
     AnalysisObject* VLQtemp;
 
+    AnalysisObject decaySum1 = *RetrieveChild(VLQ0, 0) + *RetrieveChild(VLQ0, 1);
+    AnalysisObject decaySum2 = *RetrieveChild(VLQ1, 0) + *RetrieveChild(VLQ1, 1);
+    std::cout << "Before: " << std::endl;
+    std::cout << "Decaysum1: " << decaySum1.Pt() << std::endl;
+    std::cout << "Decaysum2: " << decaySum2.Pt() << std::endl;
+   
+    //tried
+    //x x &
+    //* & &
+    //* x x 
+    //x * *
+    //AnalysisObject operator+(const AnalysisObject& q) const;
+
     // Sorts VLQ0 and VLQ1 by pT. May change other parts of analysis, but is correct for my truth studies
-    if((RetrieveChild(VLQ0, 0)->Pt() + RetrieveChild(VLQ0, 1)->Pt()) < (RetrieveChild(VLQ1, 0)->Pt() + RetrieveChild(VLQ1, 1)->Pt())){
+    if(decaySum1.Pt() < decaySum2.Pt()){
       VLQtemp = VLQ0;
       VLQ0 = VLQ1;
       VLQ1 = VLQtemp;
     }
+    AnalysisObject decaySum3 = *RetrieveChild(VLQ0, 0) + *RetrieveChild(VLQ0, 1);
+    AnalysisObject decaySum4 = *RetrieveChild(VLQ1, 0) + *RetrieveChild(VLQ1, 1);
+    std::cout << "Before: " << std::endl;
+    std::cout << "Decaysum1: " << decaySum3.Pt() << std::endl;
+    std::cout << "Decaysum2: " << decaySum4.Pt() << std::endl << std::endl;
 
     // Retrieve the children of the VLQs
     // Arranges children by Pt
@@ -1804,6 +1822,7 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
     //        1 = Quark from VLQ 0
     //        3 = Boson from VLQ 1
     //        4 = Quark from VLQ 1
+
     if((cd00->Pt() > cd01->Pt()) and (cd00->Pt() > cd10->Pt()) and (cd00->Pt() > cd11->Pt())){
       if(cd00->GetMoment("absPdgId") > 20){ // Highest energy VLQ = 0, Boson = 0 -> Case = 0
         highestPtcd = 0;

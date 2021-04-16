@@ -1378,9 +1378,9 @@ bool VLQ_Analysis_Data2015::Begin(){
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "pTRatio13"/*, hopt_nouflow*/  );
 	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio14",  0.02,0,5,  "; truth"+type+", "+str_id+" p_{T} Ratio_{14}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "pTRatio14"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio23",  0.02,0,5,  "; truth"+type+", "+str_id+" p_{T} Ratio_{23}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio23",  0.02,0,8,  "; truth"+type+", "+str_id+" p_{T} Ratio_{23}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "pTRatio23"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio24",  0.02,0,5,  "; truth"+type+", "+str_id+" p_{T} Ratio_{24}"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio24",  0.02,0,8,  "; truth"+type+", "+str_id+" p_{T} Ratio_{24}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "pTRatio24"/*, hopt_nouflow*/  );
 	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_pTRatio34",  0.02,0,5,  "; truth"+type+", "+str_id+" p_{T} Ratio_{34}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "pTRatio34"/*, hopt_nouflow*/  );
