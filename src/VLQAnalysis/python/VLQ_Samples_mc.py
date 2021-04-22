@@ -527,7 +527,7 @@ def GetVLQTSamples( useWeightSyst=False, useObjectSyst=False, campaign=""):
     Samples     += [getSampleUncertainties("VLQ_TT_1700","308296."+campaign, ObjectSystematics , WeightSystematics)]#TT 1700                                                   
     Samples     += [getSampleUncertainties("VLQ_TT_1800","308297."+campaign, ObjectSystematics , WeightSystematics)]#TT 1800                                                   
     Samples     += [getSampleUncertainties("VLQ_TT_2000","308299."+campaign, ObjectSystematics , WeightSystematics)]#TT 2000  
-    
+        
     # Not available                                                                                                                                                            
     #Samples     += [getSampleUncertainties("VLQ_TT_700","302470."+campaign,  ObjectSystematics , WeightSystematics)]#TT 700                                                 
     #Samples     += [getSampleUncertainties("VLQ_TT_750","302471."+campaign,  ObjectSystematics , WeightSystematics)]#TT 750                                                   
@@ -537,6 +537,23 @@ def GetVLQTSamples( useWeightSyst=False, useObjectSyst=False, campaign=""):
     #Samples     += [getSampleUncertainties("VLQ_TT_1050","302477."+campaign, ObjectSystematics , WeightSystematics)]#TT 1050                                                  
     #Samples     += [getSampleUncertainties("VLQ_TT_1150","302479."+campaign, ObjectSystematics , WeightSystematics)]#TT 1150 
 
+
+    return Samples
+
+##______________________________________________________________________
+##
+def GetVLQTDoubletSamples( useWeightSyst=False, useObjectSyst=False, campaign=""):
+
+    ObjectSystematics = []
+    WeightSystematics = []
+    if useObjectSyst:
+        ObjectSystematics += CommonObjectSystematics
+    else:
+        ObjectSystematics = [getSystematics(name="nominal",nameUp="",oneSided=True)]
+
+    Samples     =  []
+    Samples     += [getSampleUncertainties("VLQ_TT_700","302483."+campaign,  ObjectSystematics , WeightSystematics)]#TT 700
+    Samples     += [getSampleUncertainties("VLQ_TT_1200","302485."+campaign,  ObjectSystematics , WeightSystematics)]#TT 1200 
 
     return Samples
 

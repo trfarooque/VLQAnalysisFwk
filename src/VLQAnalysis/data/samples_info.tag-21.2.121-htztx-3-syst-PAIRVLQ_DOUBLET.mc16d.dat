@@ -1,0 +1,10 @@
+{
+    "302483.mc16d": {
+        "crossSection": 0.455, 
+        "nWeightedEvents": 80000.0
+    }, 
+    "302485.mc16d": {
+        "crossSection": 0.0117, 
+        "nWeightedEvents": 80000.0
+    }
+}
