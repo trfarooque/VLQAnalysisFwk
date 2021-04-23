@@ -639,6 +639,9 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
 	for( AnalysisObject* jet : *(m_outData -> o_jets) ){
 	  if(obj -> DeltaR(*jet) < 1.0 ) jet->UpdateMoment("RCtag_match", 1);
 	  if(obj -> DeltaR(*jet) < jet->GetMoment("dRmin_RCtag_match") ) jet->UpdateMoment("dRmin_RCtag_match", obj -> DeltaR(*jet)); 
+
+	  //double dR_y = sqrt((obj->DeltaPhi(*jet)*obj->DeltaPhi(*jet)) 
+	  //		     + (obj->Rapidity() - jet->Rapidity())*(obj->Rapidity() - jet->Rapidity()));
 	}
       }
 
@@ -1339,7 +1342,7 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
   // Leptop-related variables in RC jets
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   if( m_outData -> o_leptop && m_outData -> o_leptop->Pt() >= 0.){
-
+    
     m_outData->o_leptop_n = 1.;
 
     for( std::pair<std::string, AOVector*> tagcol : m_outData->o_taggedjets ){
@@ -1368,6 +1371,8 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
 
   AOVector* source_bjets = (m_opt->BtagCollection() == VLQ_Options::TRACK) ? m_outData -> o_trkbjets : m_outData -> o_bjets ;
 
+  double drmin_abs_leptop_b = 99.;
+  AnalysisObject* rctag_drmin_leptop_b = NULL;
   for(AnalysisObject* obj : *(m_outData->o_rcjets)){
     
     int nb_match = 0;
@@ -1385,16 +1390,48 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
       recoVLQ += *(m_outData->o_leptop);
       obj -> SetMoment( "minv_leptop", recoVLQ.M() );
     }
-    /*
-      TO BE REMOVED
-    else{
-      obj -> SetMoment( "dPhi_leptop", -10. );
-      obj -> SetMoment( "dR_leptop", -10. );
-      obj -> SetMoment( "minv_leptop", -1. );
+
+    if( m_outData -> o_leptop_b ){
+      if( (obj -> GetMoment("isRCMTop") > 0) 
+	  || (obj -> GetMoment("isRCMHiggs") > 0)
+	  || (obj -> GetMoment("isRCMV" > 0) ) ){
+	    
+	double drcur = (m_outData -> o_leptop_b)->DeltaR(*obj);
+	if(drcur < drmin_abs_leptop_b){
+	  drmin_abs_leptop_b = drcur;
+	  rctag_drmin_leptop_b = obj;
+	}
+	
+      }
     }
-    */
+
 
   }// RC jet collection
+
+  if( (m_outData -> o_leptop_b) ){
+    if( ((m_outData -> o_leptop_b)->GetMoment("RCtag_match") > 0) && (rctag_drmin_leptop_b) ){
+      (m_outData-> o_leptop_b)->SetMoment("RCtag_match_pT", rctag_drmin_leptop_b->Pt());
+      (m_outData-> o_leptop_b)->SetMoment("RCtag_match_mass", rctag_drmin_leptop_b->M());
+      (m_outData-> o_leptop_b)->SetMoment("RCtag_match_nconsts", rctag_drmin_leptop_b->GetMoment("nconsts"));
+      (m_outData-> o_leptop_b)->SetMoment("RCtag_match_fpT", (m_outData -> o_leptop_b)->Pt()/rctag_drmin_leptop_b->Pt());
+      (m_outData-> o_leptop_b)->SetMoment("RCtag_match_isRCMTop", rctag_drmin_leptop_b->GetMoment("isRCMTop"));
+      (m_outData-> o_leptop_b)->SetMoment("RCtag_match_isRCMHiggs", rctag_drmin_leptop_b->GetMoment("isRCMHiggs"));
+      (m_outData-> o_leptop_b)->SetMoment("RCtag_match_isRCMV", rctag_drmin_leptop_b->GetMoment("isRCMV"));
+
+    }
+    else{
+      (m_outData-> o_leptop_b)->SetMoment("RCtag_match_pT", -1.);
+      (m_outData-> o_leptop_b)->SetMoment("RCtag_match_mass", -1.);
+      (m_outData-> o_leptop_b)->SetMoment("RCtag_match_nconsts", -1.);
+      (m_outData-> o_leptop_b)->SetMoment("RCtag_match_fpT", -1.);
+      (m_outData-> o_leptop_b)->SetMoment("RCtag_match_isRCMTop", -1.);
+      (m_outData-> o_leptop_b)->SetMoment("RCtag_match_isRCMHiggs", -1.);
+      (m_outData-> o_leptop_b)->SetMoment("RCtag_match_isRCMV", -1.);
+
+    }
+
+  }
+
 
   return true;
 

@@ -531,13 +531,17 @@ bool VLQ_Analysis_Data2015::Begin(){
                    &(m_outData -> o_meff),&(m_outData -> o_mTbmin) );
       */
       //Leptonic top
-      m_outMngrHist -> AddStandardTH1( "leptop_n",         1, -0.5, 1.5, ";Number of leptonic tops"      ,  true, &(m_outData -> o_leptop_n) );
-      m_outMngrHist -> AddStandardTH1( "leptop_pt",         50, 0, 2000, ";Leptonic top p_{T} [GeV]"      ,  true, &(m_outData -> o_leptop), -1, "Pt", hopt_nouflow);
-      m_outMngrHist -> AddStandardTH1( "leptop_eta",        0.2, -3, 3,  ";Leptonic top #eta"             ,  false, &(m_outData -> o_leptop), -1, "Eta", hopt_nouflow);
+      m_outMngrHist -> AddStandardTH1( "leptop_n",         1, -0.5, 1.5, ";Number of leptonic tops"  ,  true, &(m_outData -> o_leptop_n) );
+      m_outMngrHist -> AddStandardTH1( "leptop_pt",         50, 0, 2000, ";Leptonic top p_{T} [GeV]" ,  true, &(m_outData -> o_leptop), -1, "Pt", hopt_nouflow);
+      m_outMngrHist -> AddStandardTH1( "leptop_eta",        0.2, -3, 3,  ";Leptonic top #eta" ,  false, &(m_outData -> o_leptop), -1, "Eta", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_m",          10, 0, 500,  ";Leptonic top mass [GeV]"       ,  false, &(m_outData -> o_leptop), -1, "M", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_dR_blep",    0.1, 0, 6,   ";Leptonic top #DeltaR(b,lep)"       ,  false, &(m_outData -> o_leptop), -1, "dR_blep", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_dR_bW",      0.1, 0, 6,   ";Leptonic top #DeltaR(b,W)"       ,  false, &(m_outData -> o_leptop), -1, "dR_bW", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match",      1, 0, 2,   ";Leptonic top RCtag"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match", hopt_nouflow);
+      m_outMngrHist -> AddStandardTH1( "leptop_b_truthLabel", 1, 0, 10,   ";Leptonic top truth flavour",  false, &(m_outData -> o_leptop_b),
+				       -1, "truthLabel", hopt_nouflow);
+      m_outMngrHist -> AddStandardTH1( "leptop_b_isbtagged", 1, 0, 2,   ";Leptonic top b isB-tagged",  false, &(m_outData -> o_leptop_b),-1,
+				       "bjet", hopt_nouflow);
 
 
 
@@ -2138,6 +2142,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
   //                                                          #
   //###########################################################
   m_anaTools -> ComputeAllVariables();
+
 
   //###########################################################
   //                                                          #
