@@ -74,6 +74,14 @@ public:
                          const std::string &mom1 = "", const std::string &mom2 = "" ) const;
 
 
+    std::vector<AnalysisObject*> GetMinMAsymmPair(std::vector< AnalysisObject* > &v_obj) const;
+    std::vector<AnalysisObject*> GetMinMAsymmPair(std::vector< AnalysisObject* > &v_obj1, std::vector< AnalysisObject* > &v_obj2) const;
+
+    std::vector<double> GetInvariantMassSorted(std::vector< AnalysisObject* > &v_obj,
+                                               const std::string& sort_by="", int n_sort=-1, bool b_descending=true) const;
+    std::vector<double> GetInvariantMassSorted(std::vector< AnalysisObject* > &v_obj1,
+                                               std::vector< AnalysisObject* > &v_obj2,
+                                               const std::string& sort_by="", int n_sort=-1, bool b_descending=true) const;
 
     double GetMinPairVLQMassAsymm( std::map< std::string, std::vector< AnalysisObject* >*  > &recoVLQs, const std::string vlqDecay1, const std::string vlqDecay2) const;
     
