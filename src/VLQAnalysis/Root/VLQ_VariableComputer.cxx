@@ -365,7 +365,7 @@ double VLQ_VariableComputer::GetAveragedPhi(  AOVector &v_obj1, AOVector &v_obj2
         for ( const AnalysisObject* obj2 : v_obj2 ){
             if(obj1==obj2) continue;
             if(mom2!="" && !(int)obj2->GetMoment(mom2)) continue;
-	    dPhiaverage += obj1 -> DeltaPhi( *obj2 );
+	    dPhiaverage += TMath::Abs( obj1 -> DeltaPhi( *obj2 ));
 	    npairs ++;
         }
     }

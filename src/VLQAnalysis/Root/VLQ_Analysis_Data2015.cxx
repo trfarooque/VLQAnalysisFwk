@@ -538,12 +538,10 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "leptop_dR_blep",    0.1, 0, 6,   ";Leptonic top #DeltaR(b,lep)"       ,  false, &(m_outData -> o_leptop), -1, "dR_blep", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_dR_bW",      0.1, 0, 6,   ";Leptonic top #DeltaR(b,W)"       ,  false, &(m_outData -> o_leptop), -1, "dR_bW", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match",      1, 0, 2,   ";Leptonic top RCtag"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match", hopt_nouflow);
+
       m_outMngrHist -> AddStandardTH1( "leptop_b_truthLabel", 1, 0, 10,   ";Leptonic top truth flavour",  false, &(m_outData -> o_leptop_b),
 				       -1, "truthLabel", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_b_isbtagged", 1, 0, 2,   ";Leptonic top b isB-tagged",  false, &(m_outData -> o_leptop_b),-1,
-				       "bjet", hopt_nouflow);
-
-
 
       m_outMngrHist -> AddStandardTH1( "leptop_b_dRmin_RCtag",      0.1, 0,6 ,   ";dRmin #DeltaR(RCtag,bjet)"       ,  false, &(m_outData -> o_leptop_b), -1, "dRmin_RCtag_match", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_dPhi_bnu",   0.1, 0, 4,   ";Leptonic top #Delta#phi(b,#nu)"       ,  false, &(m_outData -> o_leptop), -1, "dPhi_bnu", hopt_nouflow);
@@ -2143,12 +2141,12 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
   //###########################################################
   m_anaTools -> ComputeAllVariables();
 
-
   //###########################################################
   //                                                          #
   // Truth information recovery                               #
   //                                                          #
   //###########################################################
+
   if( !(m_opt -> IsData() || (m_opt -> StrSampleName().find("QCD") != std::string::npos)) && m_truthMngr ){
 
     m_outData -> o_VLQtype = m_truthMngr -> GetVLQDecayType();
@@ -2164,6 +2162,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     //else if( (m_outData -> o_truth_partons_n.at("VLQ_Ht") == 1) && (m_outData -> o_truth_partons_n.at("VLQ_Zt") == 1) ) m_outData -> o_VLQtype = VLQ_Enums::HtZt;
     //else if( (m_outData -> o_truth_partons_n.at("VLQ_Wb") == 1) && (m_outData -> o_truth_partons_n.at("VLQ_Zt") == 1) ) m_outData -> o_VLQtype = VLQ_Enums::WbZt;
     //else if( m_outData -> o_truth_partons_n.at("VLQ_Zt") == 2 ) m_outData -> o_VLQtype = VLQ_Enums::ZtZt;
+
     
     m_outMngrHist -> HistMngr() -> FillTH1D( "vlqType", m_outData->o_VLQtype, m_outData -> o_eventWeight_Nom );
     //&& m_truthMngr -> Initialize()

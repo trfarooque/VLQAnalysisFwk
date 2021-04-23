@@ -637,7 +637,7 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
       //===== Loop over small-R jet container and set a flag if it is matched to one of the tagged jets ====
       if( isTop || isHiggs || isV ){
 	for( AnalysisObject* jet : *(m_outData -> o_jets) ){
-	  if(obj -> DeltaR(*jet) < 1.0 ) jet->UpdateMoment("RCtag_match", 1);
+	  if(obj -> DeltaR(*jet) < 1.0 )  jet->UpdateMoment("RCtag_match", 1);
 	  if(obj -> DeltaR(*jet) < jet->GetMoment("dRmin_RCtag_match") ) jet->UpdateMoment("dRmin_RCtag_match", obj -> DeltaR(*jet)); 
 
 	  //double dR_y = sqrt((obj->DeltaPhi(*jet)*obj->DeltaPhi(*jet)) 
