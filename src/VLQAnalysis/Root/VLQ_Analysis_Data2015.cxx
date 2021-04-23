@@ -2139,7 +2139,6 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
   //                                                          #
   //###########################################################
   m_anaTools -> ComputeAllVariables();
-  if( (m_outData -> o_leptop_b) && ((m_outData -> o_leptop_b)->GetMoment("RCtag_match") <= 0) ) return true; 
   //###########################################################
   //                                                          #
   // Truth information recovery                               #
