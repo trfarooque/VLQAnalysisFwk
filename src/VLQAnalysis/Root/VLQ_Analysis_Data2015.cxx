@@ -542,10 +542,10 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "leptop_b_truthLabel", 1, 0, 10,   ";Leptonic top truth flavour",  false, &(m_outData -> o_leptop_b),
 				       -1, "truthLabel", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_b_isbtagged", 1, 0, 2,   ";Leptonic top b isB-tagged",  false, &(m_outData -> o_leptop_b),-1,
-
+				       "bjet", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_b_dRmin_RCtag",      0.1, 0,6 ,   ";dRmin #DeltaR(RCtag,bjet)"       ,  false, &(m_outData -> o_leptop_b), -1, "dRmin_RCtag_match", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_dPhi_bnu",   0.1, 0, 4,   ";Leptonic top #Delta#phi(b,#nu)"       ,  false, &(m_outData -> o_leptop), -1, "dPhi_bnu", hopt_nouflow);
-
+      
       //Leptonic W
       m_outMngrHist -> AddStandardTH1( "lepW_pt",         50, 0, 1000, ";Leptonic W p_{T} [GeV]"      ,  false, &(m_outData -> o_lepW), -1, "Pt", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "lepW_eta",        0.2, -3, 3,  ";Leptonic W #eta"             ,  false, &(m_outData -> o_lepW), -1, "Eta", hopt_nouflow);
@@ -2342,7 +2342,30 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
       m_truthMngr -> MatchJetsToBQuarks( *(m_outData -> o_jets) );
 
 
+      //
+      // Store information about RCtag jet matched to leptop_b
+      //
+      if(m_outData-> o_leptop_b){
 
+	int ind_rc = (m_outData-> o_leptop_b)->GetMoment("RCtag_match_index");
+	if((m_outData-> o_leptop_b)->GetMoment("RCtag_match") > 0){
+	
+	  AnalysisObject* rc_match = (m_outData->o_rcjets)->at(ind_rc);
+
+	  (m_outData-> o_leptop_b)->SetMoment("RCtag_match_nmatch_truth", rc_match->GetMoment("nmatch_truth"));
+	  if(rc_match->GetMoment("nmatch_truth")>0){
+	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_fpT_truth", rc_match->GetMoment("fpT_truth"));
+	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_dR_truth", rc_match->GetMoment("dR_truth"));
+	  }
+	  else{
+	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_fpT_truth", -1);
+	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_dR_truth", -1);
+	  }
+
+	}
+	
+      }
+	  
     }// if doing truth analysis
 
   }//if MC

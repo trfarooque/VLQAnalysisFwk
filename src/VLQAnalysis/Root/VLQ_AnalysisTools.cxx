@@ -1373,8 +1373,11 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
 
   double drmin_abs_leptop_b = 99.;
   AnalysisObject* rctag_drmin_leptop_b = NULL;
+  int ind_rctag_drmin = -1;
+
+  int index = -1;
   for(AnalysisObject* obj : *(m_outData->o_rcjets)){
-    
+    index++;
     int nb_match = 0;
     //Find number of b-tagged jets matched to this jet (//do this inside BTagVariables)
     for(AnalysisObject* sbjet : *(source_bjets )){
@@ -1394,12 +1397,13 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
     if( m_outData -> o_leptop_b ){
       if( (obj -> GetMoment("isRCMTop") > 0) 
 	  || (obj -> GetMoment("isRCMHiggs") > 0)
-	  || (obj -> GetMoment("isRCMV" > 0) ) ){
+	  || (obj -> GetMoment("isRCMV") > 0 ) ){
 	    
 	double drcur = (m_outData -> o_leptop_b)->DeltaR(*obj);
 	if(drcur < drmin_abs_leptop_b){
 	  drmin_abs_leptop_b = drcur;
 	  rctag_drmin_leptop_b = obj;
+	  ind_rctag_drmin = index;
 	}
 	
       }
@@ -1417,6 +1421,7 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
       (m_outData-> o_leptop_b)->SetMoment("RCtag_match_isRCMTop", rctag_drmin_leptop_b->GetMoment("isRCMTop"));
       (m_outData-> o_leptop_b)->SetMoment("RCtag_match_isRCMHiggs", rctag_drmin_leptop_b->GetMoment("isRCMHiggs"));
       (m_outData-> o_leptop_b)->SetMoment("RCtag_match_isRCMV", rctag_drmin_leptop_b->GetMoment("isRCMV"));
+      (m_outData-> o_leptop_b)->SetMoment("RCtag_match_dR_leptop", rctag_drmin_leptop_b->GetMoment("dR_leptop"));
 
     }
     else{
@@ -1429,8 +1434,10 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
       (m_outData-> o_leptop_b)->SetMoment("RCtag_match_isRCMV", -1.);
 
     }
-
+    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_index", ind_rctag_drmin);
   }
+
+
 
 
   return true;
