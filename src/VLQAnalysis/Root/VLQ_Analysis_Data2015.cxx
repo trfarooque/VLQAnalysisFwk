@@ -545,7 +545,40 @@ bool VLQ_Analysis_Data2015::Begin(){
 				       "bjet", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_b_dRmin_RCtag",      0.1, 0,6 ,   ";dRmin #DeltaR(RCtag,bjet)"       ,  false, &(m_outData -> o_leptop_b), -1, "dRmin_RCtag_match", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_dPhi_bnu",   0.1, 0, 4,   ";Leptonic top #Delta#phi(b,#nu)"       ,  false, &(m_outData -> o_leptop), -1, "dPhi_bnu", hopt_nouflow);
+
+      m_outMngrHist -> AddStandardTH1( "RCtag_match_pT",   50, 0, 2000,   ";pT of RCtag_match p_{T} [GeV]"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_pT", hopt_nouflow);
+
+      m_outMngrHist -> AddStandardTH1( "RCtag_match_mass",   10, 0, 600,   ";mass of RCtag_match  [GeV]"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_mass", hopt_nouflow);
+
+      m_outMngrHist -> AddStandardTH1( "RCtag_match_nconsts",   1, -0.5, 7.5,   ";number of consts of RCtag_match"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_nconsts", hopt_nouflow);
+
+      m_outMngrHist -> AddStandardTH1( "RCtag_match_fpT",   0.25, 0., 5.,   ";RCtag_match forward p_{T} [GeV]"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_fpT", hopt_nouflow);
+
+      m_outMngrHist -> AddStandardTH1( "RCtag_match_pT",   0.2, 0., 5.,   ";pT of RCtag_match p_{T} [GeV]"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_pT", hopt_nouflow);
+
+      m_outMngrHist -> AddStandardTH1( "RCtag_match_isRCMTop",   1, 0, 2,   ";RCtag_match is RCMTop"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_isRCMTop", hopt_nouflow);
+
+      m_outMngrHist -> AddStandardTH1( "RCtag_match_isRCMHiggs",   1, 0, 2,   ";RCtag_match is RCMHiggs"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_isRCMHiggs", hopt_nouflow);
+
+      m_outMngrHist -> AddStandardTH1( "RCtag_match_isRCMV",   1, 0, 2,   ";RCtag_match is RCMV"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_isRCMV", hopt_nouflow);
+
+      m_outMngrHist -> AddStandardTH1( "RCtag_match_dR_leptop",   0.1, 0, 6,   ";#DeltaR(RCtag_match, leptop)"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_dR_leptop", hopt_nouflow);
+
+
+      m_outMngrHist -> AddStandardTH1( "RCtag_match_nmatch_truth",   1, -0.5, 7.5,   ";nmatch truth RCtag_match"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_nmatch_truth", hopt_nouflow);
       
+
+      m_outMngrHist -> AddStandardTH1( "RCtag_match_fpT_truth",   0.2,0.,5.,   "; RCtag_match truth forward p_{T} [GeV]"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_fpT_truth", hopt_nouflow);
+
+      m_outMngrHist -> AddStandardTH1( "RCtag_match_dR_truth",   0.1,0.,6.,   "; truth #DeltaR(RCtag_match, leptop)"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_dR_truth", hopt_nouflow);
+
+      m_outMngrHist -> AddStandardTH1( "RCtag_match_pdgId_truth",   1,0,30,   "; RCtag_match truth forward p_{T} [GeV]"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_pdgId_truth", hopt_nouflow);
+
+      m_outMngrHist -> AddStandardTH1( "leptop_nmatch_truth",   1,0,4,   "; leptop_nmatch_truth "       ,  false, &(m_outData -> o_leptop_b), -1, "leptop_nmatch_truth", hopt_nouflow);
+
+
+
+
       //Leptonic W
       m_outMngrHist -> AddStandardTH1( "lepW_pt",         50, 0, 1000, ";Leptonic W p_{T} [GeV]"      ,  false, &(m_outData -> o_lepW), -1, "Pt", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "lepW_eta",        0.2, -3, 3,  ";Leptonic W #eta"             ,  false, &(m_outData -> o_lepW), -1, "Eta", hopt_nouflow);
@@ -2356,10 +2389,14 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 	  if(rc_match->GetMoment("nmatch_truth")>0){
 	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_fpT_truth", rc_match->GetMoment("fpT_truth"));
 	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_dR_truth", rc_match->GetMoment("dR_truth"));
+	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_pdgId_truth", rc_match->GetMoment("pdgId_truth"));
+
 	  }
 	  else{
 	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_fpT_truth", -1);
 	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_dR_truth", -1);
+	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_pdgId_truth", -1);
+
 	  }
 
 	}
