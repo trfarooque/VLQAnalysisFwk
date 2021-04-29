@@ -530,6 +530,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH2( "meff", "mtbmin", 25, 0, 3000, 25, 0., 500,"m_{eff} [GeV]", "m_{T}^{min}(b,MET)", false,
                    &(m_outData -> o_meff),&(m_outData -> o_mTbmin) );
       */
+
       //Leptonic top
       m_outMngrHist -> AddStandardTH1( "leptop_n",         1, -0.5, 1.5, ";Number of leptonic tops"  ,  true, &(m_outData -> o_leptop_n) );
       m_outMngrHist -> AddStandardTH1( "leptop_pt",         50, 0, 2000, ";Leptonic top p_{T} [GeV]" ,  true, &(m_outData -> o_leptop), -1, "Pt", hopt_nouflow);
@@ -2356,10 +2357,12 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 	  if(rc_match->GetMoment("nmatch_truth")>0){
 	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_fpT_truth", rc_match->GetMoment("fpT_truth"));
 	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_dR_truth", rc_match->GetMoment("dR_truth"));
+	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_pdgId_truth", rc_match->GetMoment("pdgId_truth"));
 	  }
 	  else{
 	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_fpT_truth", -1);
 	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_dR_truth", -1);
+	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_pdgId_truth", -1);
 	  }
 
 	}
@@ -2367,6 +2370,40 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
       }
 	  
     }// if doing truth analysis
+
+    //Categorise leptonic tops
+    if( (m_outData -> o_leptop) && (m_outData -> o_leptop_b) ){ 
+
+      //"highM", "winM", "BoutRCtag", "BinRCtag",
+      //"BinRCMTop","BinRCMHiggs","BinRCMV",
+      //"BinRCtagNconst1","BinRCMTopNconst1","BinRCMHiggsNconst1","BinRCMHiggsNconst1"
+
+      if( (m_outData -> o_leptop)->M() > 300. ){
+	m_outData -> o_catLeptop["highM"] = m_outData -> o_leptop;
+	m_outData -> o_catLeptop_b["highM"] = m_outData -> o_leptop_b;
+      }
+      else if( ((m_outData -> o_leptop)->M() > 140.) && ((m_outData -> o_leptop)->M() < 210.) ){
+	m_outData -> o_catLeptop["winM"] = m_outData -> o_leptop;
+	m_outData -> o_catLeptop_b["winM"] = m_outData -> o_leptop_b;
+      }
+
+      if( (m_outData -> o_leptop)->GetMoment("RCtag_match") > 0 ){ 
+	m_outData -> o_catLeptop["BinRCtag"] = m_outData -> o_leptop;
+	m_outData -> o_catLeptop_b["BinRCtag"] = m_outData -> o_leptop_b;
+
+	if( (m_outData -> o_leptop)->GetMoment("RCtag_match_isRCMTop") > 0 ){ 
+	  m_outData -> o_catLeptop["BinRCMTop"] = m_outData -> o_leptop;
+	  m_outData -> o_catLeptop_b["BinRCMTop"] = m_outData -> o_leptop_b;
+	}
+
+
+      }
+      else{
+	m_outData -> o_catLeptop["BoutRCtag"] = m_outData -> o_leptop;
+	m_outData -> o_catLeptop_b["BoutRCtag"] = m_outData -> o_leptop_b;
+      }
+
+    }//if leptop exists
 
   }//if MC
 

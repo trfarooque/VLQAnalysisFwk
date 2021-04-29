@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include "IFAETopFramework/AnalysisObject.h"
 #include "IFAETopFramework/AnalysisUtils.h"
 #include "IFAETopFramework/TriggerInfo.h"
@@ -43,7 +42,7 @@ o_el(0),o_mu(0),o_lep(0),o_selLep(0),
 //MET
 o_AO_met(0),
 //Leptonic top and leptonic W
-o_leptop_n(0), o_leptop(0), o_lepW(0), o_nu(0),
+o_leptop_n(0), o_leptop(0), o_leptop_b(0), o_lepW(0), o_nu(0),
 //Semi-boosted hadronic top
 o_bW_hadtop(0),
 //Top-tagging truth studies variables
@@ -709,6 +708,18 @@ void VLQ_OutputData::ClearOutputData()
   o_leptop_b = nullptr;
   o_leptop_n = 0;
 
+  //Reset all leptop and leptop-b categories
+  std::vector<std::string> leptopTypes = {"highM", "winM", "BoutRCtag", "BinRCtag",
+					 "BinRCMTop","BinRCMHiggs","BinRCMV",
+					 "BinRCtagNconst1","BinRCMTopNconst1","BinRCMHiggsNconst1","BinRCMHiggsNconst1"};
+
+  for(const std::string& lptype : leptopTypes){
+    o_catLeptop.insert(std::pair<std::string, AnalysisObject*>(lptype, nullptr));
+    o_catLeptop_b.insert(std::pair<std::string, AnalysisObject*>(lptype, nullptr));
+  }
+  leptopTypes.clear();
+
+
   //delete semi-boosted hadtops
   for ( const AnalysisObject* hadtop : *(o_bW_hadtop) ) {
     delete hadtop;
@@ -743,6 +754,9 @@ void VLQ_OutputData::ClearOutputData()
   for(std::pair<std::string, AOVector*> obj_pair : o_recoVLQ){
     AnalysisUtils::CleanContainer(*(obj_pair.second));
   }
+
+  o_catLeptop.clear();
+  o_catLeptop_b.clear();
 
   //
   // Event variable for selection

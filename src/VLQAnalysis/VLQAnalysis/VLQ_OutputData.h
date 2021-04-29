@@ -182,6 +182,13 @@ public:
     AnalysisObject *o_nu;
 
     //
+    // Different categories of leptop, for optimisation studies
+    //
+
+    std::map<std::string, AnalysisObject*> o_catLeptop;
+    std::map<std::string, AnalysisObject*> o_catLeptop_b;
+
+    //
     // Semi-boosted hadronic top quark
     //
     std::vector< AnalysisObject* >* o_bW_hadtop;
