@@ -310,7 +310,7 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_outMngrTree->AddStandardBranch("ttjets_n", "Number of top-tagged jets",  &(m_outData->o_taggedjets_n.at("RCMTop")));
     m_outMngrTree->AddStandardBranch("htjets_n", "Number of higgs-tagged jets",  &(m_outData->o_taggedjets_n.at("RCMHiggs")));
     m_outMngrTree->AddStandardBranch("vjets_n", "Number of V-tagged jets",  &(m_outData->o_taggedjets_n.at("RCMV")));
-
+    /*
     m_outMngrTree->AddStandardBranch("jets_pt", "Jets  p_{T} [GeV]",  &(m_outData->o_jets), -1, "Pt");
     m_outMngrTree->AddStandardBranch("jets_m", "Jets Mass [GeV]",  &(m_outData->o_jets), -1, "M");
     m_outMngrTree->AddStandardBranch("jets_eta", "Jets #eta",  &(m_outData->o_jets), -1, "Eta");
@@ -355,7 +355,7 @@ bool VLQ_Analysis_Data2015::Begin(){
     //m_outMngrTree->AddStandardBranch("rcjets_eta", "RC jets #eta",  &(m_outData->o_rcjets), -1, "Eta");
     //m_outMngrTree->AddStandardBranch("rcjets_phi", "RC jets #phi",  &(m_outData->o_rcjets), -1, "Phi");
     //m_outMngrTree->AddStandardBranch("rcjets_nconsts", "RC jets N_{sj}",  &(m_outData->o_rcjets), -1, "nconsts");
-
+    */
     //-----------------------------------------------------------------------------------------------------------------
     m_outMngrTree->AddStandardBranch("el_n", "Number of electrons",  &(m_outData->o_el_n));
     m_outMngrTree->AddStandardBranch("mu_n", "Number of muons",  &(m_outData->o_mu_n));
@@ -378,6 +378,9 @@ bool VLQ_Analysis_Data2015::Begin(){
     //m_outMngrTree->AddStandardBranch("mu1_phi", "Muon 1 #phi",  &(m_outData->o_mu), 0, "Phi");
     //m_outMngrTree->AddStandardBranch("mu1_isSignal", "Muon 1 isSignal",  &(m_outData->o_mu), 0, "isSignal");
 
+    //------------------------------------------------------------------------------------------------------------------
+    m_outMngrTree->AddStandardBranch("jet1_pt", "Jet 1 p_{T} [GeV]",  &(m_outData->o_jets), 0, "Pt");
+
     //-------------------------------------------------------------------------------------------------------------------
     m_outMngrTree->AddStandardBranch("meff", "Effective mass", &(m_outData->o_meff));
     m_outMngrTree->AddStandardBranch("meffred", "Effective mass reduced", &(m_outData->o_meffred));
@@ -386,6 +389,9 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_outMngrTree->AddStandardBranch("mtw", "Transverse W mass", &(m_outData->o_mtwl));
     m_outMngrTree->AddStandardBranch("ptw", "Transverse W p_{T}", &(m_outData->o_ptwl));
     m_outMngrTree->AddStandardBranch("hthad", "H_{T}^{had}", &(m_outData->o_hthad));
+
+    m_outMngrTree->AddStandardBranch("dPhimaxM_RCjets",";m(leading-J,subleading-J) [GeV]", &(m_outData->o_dPhimaxM_RCjets));
+
     /*
     m_outMngrTree->AddStandardBranch("dRmin_ejets", "#DeltaR_{min}(e, jets)", &(m_outData->o_dRmin_ejets));
     m_outMngrTree->AddStandardBranch("dRmin_mujets", "#DeltaR_{min}(#mu, jets)", &(m_outData->o_dRmin_mujets));
@@ -441,7 +447,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       "VLQ_Hbdect", "VLQ_Wlepb", "VLQ_Whadb", "VLQ_Zhadt",
       "H", "Hbb", "hadtop", "leptop",
       "hadZ", "lepZ", "invZ", "hadW", "lepW"} ){
-  m_outMngrTree->AddStandardBranch("truth_"+truthType+"_n", "Number of truth " + truthType,  &(m_outData->o_truth_partons_n.at(truthType)));
+	//m_outMngrTree->AddStandardBranch("truth_"+truthType+"_n", "Number of truth " + truthType,  &(m_outData->o_truth_partons_n.at(truthType)));
       }
     }
 
@@ -486,14 +492,19 @@ bool VLQ_Analysis_Data2015::Begin(){
   m_truthRCTypes.push_back("truthW_inMassWindow");
   m_truthRCTypes.push_back("truthHiggs_inMassWindow");
 
+  std::vector<std::string> leptopTypes = {"highM", "winM", "BoutRCtag", "BinRCtag",
+					  "BinRCMTop","BinRCMHiggs","BinRCMV",
+					  "BinRCtagNconst1","BinRCMTopNconst1","BinRCMHiggsNconst1","BinRCMHiggsNconst1"};
+  
+  
   if(m_opt->DumpHistos()){
-
+    
     if(!m_opt->DoOneLeptonAna() && !m_opt->DoZeroLeptonAna() && !m_opt->DoTwoLeptonAna()) {
       throw std::invalid_argument("Must choose a lepton channel");
     }
-
+    
     const int hopt_nouflow = HistManager::FCHECK | HistManager::OFLOW;
-
+    
     if( DrawReco ){
       //Event variables
       m_outMngrHist -> AddStandardTH1( "mu",          1, 0, 80,       ";<#mu>",         false, &(m_outData -> o_pileup_mu) );
@@ -518,7 +529,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 
       m_outMngrHist -> AddStandardTH2( "meff", "jets_n", 50, 0, 7000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} [GeV]", (RWderiv||otherVariables), &(m_outData -> o_meff), &(m_outData -> o_jets_n));
       m_outMngrHist -> AddStandardTH2( "meffred", "jets_n", 50, 0, 7000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} reduced [GeV]", (RWderiv||otherVariables), &(m_outData -> o_meffred), &(m_outData -> o_jets_n));
-
+      
       /*
       m_outMngrHist -> AddStandardTH2( "mu", "fwdjets_n", 10, 0, 80, 1, -0.5, 8.5,"<#mu>", "Number of fwd-jets", false,
                &(m_outData -> o_pileup_mu),&(m_outData -> o_fwdjets_n) );
@@ -563,71 +574,78 @@ bool VLQ_Analysis_Data2015::Begin(){
 
       m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_dR_leptop",   0.1, 0, 6,   ";#DeltaR(RCtag_match, leptop)"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_dR_leptop", hopt_nouflow);
 
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_nmatch_truth",   1, -0.5, 7.5,   ";nmatch truth RCtag_match"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_nmatch_truth", hopt_nouflow);      
+      if(DrawTruth){
+	m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_nmatch_truth",   1, -0.5, 7.5,   ";nmatch truth RCtag_match"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_nmatch_truth", hopt_nouflow);      
 
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_fpT_truth",   0.2,0.,5.,   "; leptop RCtag_match truth forward p_{T} [GeV]"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_fpT_truth", hopt_nouflow);
+	m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_fpT_truth",   0.2,0.,5.,   "; leptop RCtag_match truth forward p_{T} [GeV]"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_fpT_truth", hopt_nouflow);
 
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_dR_truth",   0.1,0.,6.,   "; truth #DeltaR(RCtag_match, leptop)"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_dR_truth", hopt_nouflow);
+	m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_dR_truth",   0.1,0.,6.,   "; truth #DeltaR(RCtag_match, leptop)"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_dR_truth", hopt_nouflow);
 
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_pdgId_truth",   1,0,30,   "; leptop RCtag_match truth forward p_{T} [GeV]"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_pdgId_truth", hopt_nouflow);
+	m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_pdgId_truth",   1,0,30,   "; leptop RCtag_match truth forward p_{T} [GeV]"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_pdgId_truth", hopt_nouflow);
 
-      m_outMngrHist -> AddStandardTH1( "leptop_nmatch_truth",   1,0,4,   "; leptop_nmatch_truth "       ,  false, &(m_outData -> o_leptop_b), -1, "leptop_nmatch_truth", hopt_nouflow);
-
+      }
       //=============================== Leptonic top =====================================
 
 
-      //===================== Leptonic top categories ==== INSERT HERE ==========
-      std::vector<std::string> leptopTypes = {"highM", "winM", "BoutRCtag", "BinRCtag",
-					      "BinRCMTop","BinRCMHiggs","BinRCMV",
-					      "BinRCtagNconst1","BinRCMTopNconst1","BinRCMHiggsNconst1","BinRCMHiggsNconst1"};
-
+      //===================== Leptonic top categories  ==========
       for(const std::string& lptype : leptopTypes){
 	//Add all the histograms from above
-
-      m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + " _pt",         50, 0, 2000, ";Leptonic top" + lptype + " p_{T} [GeV]" ,  true, &(m_outData -> o_catLeptop.at(lptype)), -1, "Pt", hopt_nouflow);
-      m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + " _eta",        0.2, -3, 3,  ";Leptonic top" + lptype + " #eta" ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "Eta", hopt_nouflow);
-      m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + " _m",          10, 0, 500,  ";Leptonic top" + lptype + " mass [GeV]" ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "M", hopt_nouflow);
-      m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + " _dR_blep",    0.1, 0, 6,   ";Leptonic top" + lptype + " #DeltaR(b,lep)",  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "dR_blep", hopt_nouflow);
-      m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + " _dR_bW",      0.1, 0, 6,   ";Leptonic top" + lptype + " #DeltaR(b,W)" ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "dR_bW", hopt_nouflow);
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match",      1, 0, 2,   ";Leptonic top b" + lptype + " RCtag" , false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match", hopt_nouflow);
-      m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + " _b_truthLabel", 1, 0, 10,   ";Leptonic top" + lptype + " truth flavour",  false, &(m_outData -> o_catLeptop_b.at(lptype)),  -1, "truthLabel", hopt_nouflow);
-      m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + " _b_isbtagged", 1, 0, 2,   ";Leptonic top" + lptype + " b isB-tagged",  false, &(m_outData -> o_catLeptop_b.at(lptype)),-1,   "bjet", hopt_nouflow);
-      m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + " _b_dRmin_RCtag",      0.1, 0,6 ,   ";dRmin #DeltaR(RCtag,bjet)" ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "dRmin_RCtag_match", hopt_nouflow);
-      m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + " _dPhi_bnu",   0.1, 0, 4,   ";Leptonic top " + lptype + " #Delta#phi(b,#nu)" ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "dPhi_bnu", hopt_nouflow);
+	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_pt",         50, 0, 2000, ";Leptonic top" + lptype + " p_{T} [GeV]" ,  true, &(m_outData -> o_catLeptop.at(lptype)), -1, "Pt", hopt_nouflow);
+	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_eta",        0.2, -3, 3,  ";Leptonic top" + lptype + " #eta" ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "Eta", hopt_nouflow);
+	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_m",          10, 0, 500,  ";Leptonic top" + lptype + " mass [GeV]" ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "M", hopt_nouflow);
+	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_dR_blep",    0.1, 0, 6,   ";Leptonic top" + lptype + " #DeltaR(b,lep)",  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "dR_blep", hopt_nouflow);
+	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_dR_bW",      0.1, 0, 6,   ";Leptonic top" + lptype + " #DeltaR(b,W)" ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "dR_bW", hopt_nouflow);
 
 
+	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match",      1, 0, 2,   ";Leptonic top b" + lptype + " RCtag" , false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match", hopt_nouflow);
+	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_truthLabel", 1, 0, 10,   ";Leptonic top" + lptype + " truth flavour",  false, &(m_outData -> o_catLeptop_b.at(lptype)),  -1, "truthLabel", hopt_nouflow);
+	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_isbtagged", 1, 0, 2,   ";Leptonic top" + lptype + " b isB-tagged",  false, &(m_outData -> o_catLeptop_b.at(lptype)),-1,   "bjet", hopt_nouflow);
+	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_dRmin_RCtag",      0.1, 0,6 ,   ";dRmin #DeltaR(RCtag,bjet)" ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "dRmin_RCtag_match", hopt_nouflow);
 
-  m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_" + lptype + "_pT",   50, 0, 2000,   ";" +lptype + "leptop_b RCtag_match p_{T} [GeV]"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_pT", hopt_nouflow);
+	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_dPhi_bnu",   0.1, 0, 4,   ";Leptonic top " + lptype + " #Delta#phi(b,#nu)" ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "dPhi_bnu", hopt_nouflow);
 
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_" + lptype + "_mass",   10, 0, 600,   ";" +lptype + "mass of RCtag_match  [GeV]"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_mass", hopt_nouflow);
+	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_pT",   50, 0, 2000,   ";" +lptype + "leptop_b RCtag_match p_{T} [GeV]"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_pT", hopt_nouflow);
 
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_" + lptype + "_nconsts",   1, -0.5, 7.5,   ";" +lptype + "number of consts of RCtag_match"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_nconsts", hopt_nouflow);
+	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_mass",   10, 0, 600,   ";" +lptype + "mass of RCtag_match  [GeV]"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_mass", hopt_nouflow);
 
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_" + lptype + "_fpT",   0.25, 0., 5.,   ";" +lptype + "RCtag_match forward p_{T} [GeV]"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_fpT", hopt_nouflow);     
+	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_nconsts",   1, -0.5, 7.5,   ";" +lptype + "number of consts of RCtag_match"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_nconsts", hopt_nouflow);
 
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_" + lptype + "_isRCMTop",   1, 0, 2,   ";" +lptype + "RCtag_match is RCMTop"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_isRCMTop", hopt_nouflow);
+	if(DrawTruth){
+	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_fpT",   0.25, 0., 5.,   ";" +lptype + "RCtag_match forward p_{T} [GeV]"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_fpT", hopt_nouflow);     
 
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_" + lptype + "_isRCMHiggs",   1, 0, 2,   ";" +lptype + "RCtag_match is RCMHiggs"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_isRCMHiggs", hopt_nouflow);
+	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_isRCMTop",   1, 0, 2,   ";" +lptype + "RCtag_match is RCMTop"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_isRCMTop", hopt_nouflow);
 
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_" + lptype + "_isRCMV",   1, 0, 2,   ";" +lptype + "RCtag_match is RCMV"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_isRCMV", hopt_nouflow);
+	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_isRCMHiggs",   1, 0, 2,   ";" +lptype + "RCtag_match is RCMHiggs"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_isRCMHiggs", hopt_nouflow);
 
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_" + lptype + "_dR_leptop",   0.1, 0, 6,   ";" +lptype + "#DeltaR(RCtag_match, leptop)"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_dR_leptop", hopt_nouflow);
+	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_isRCMV",   1, 0, 2,   ";" +lptype + "RCtag_match is RCMV"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_isRCMV", hopt_nouflow);
 
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_" + lptype + "_nmatch_truth",   1, -0.5, 7.5,   ";" +lptype + "nmatch truth RCtag_match"  ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_nmatch_truth", hopt_nouflow);      
+	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_dR_leptop",   0.1, 0, 6,   ";" +lptype + "#DeltaR(RCtag_match, leptop)"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_dR_leptop", hopt_nouflow);
 
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_" + lptype + "_fpT_truth",   0.2,0.,5.,   ";" +lptype + " leptop RCtag_match truth forward p_{T} [GeV]"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_fpT_truth", hopt_nouflow);
+	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_nmatch_truth",   1, -0.5, 7.5,   ";" +lptype + "nmatch truth RCtag_match"  ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_nmatch_truth", hopt_nouflow);      
 
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_" + lptype + "_dR_truth",   0.1,0.,6.,   ";" +lptype + " truth #DeltaR(RCtag_match, leptop)" ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_dR_truth", hopt_nouflow);
+	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_fpT_truth",   0.2,0.,5.,   ";" +lptype + " leptop RCtag_match truth forward p_{T} [GeV]"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_fpT_truth", hopt_nouflow);
 
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_" + lptype + "_pdgId_truth",   1,0,30,   ";" +lptype + " leptop RCtag_match truth forward p_{T} [GeV]"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_pdgId_truth", hopt_nouflow);
+	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_dR_truth",   0.1,0.,6.,   ";" +lptype + " truth #DeltaR(RCtag_match, leptop)" ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_dR_truth", hopt_nouflow);
 
-      m_outMngrHist -> AddStandardTH1( "leptop_nmatch_" + lptype + "_truth",   1,0,4,   ";" +lptype + " leptop_nmatch_truth " ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "leptop_nmatch_truth", hopt_nouflow);
+	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_pdgId_truth",   1,0,30,   ";" +lptype + " leptop RCtag_match truth forward p_{T} [GeV]"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_pdgId_truth", hopt_nouflow);
+	}
 
-      }
-      leptopTypes.clear();
+       if(m_opt->DoTruthAnalysis()){
+	 //Add all the histograms from above
+	 m_outMngrHist -> AddStandardTH1( "leptop_"+lptype+"_pT_truth",   50, 0, 2500, ";Leptonic top "+lptype+" p_{T}^{truth} [GeV]"
+					  ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "pT_truth");
+	 m_outMngrHist -> AddStandardTH1( "leptop_"+lptype+"_fpT_truth",   0.1, 0., 2., ";Leptonic top "+lptype+" p_{T}^{reco}/p_{T}^{truth}"
+					  ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "fpT_truth");
+	 m_outMngrHist -> AddStandardTH1( "leptop_"+lptype+"_dR_truth",   0.1, 0., 6., ";Leptonic top "+lptype+" #DeltaR^{truth}"
+					  ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "dR_truth");
 
+	 m_outMngrHist -> AddStandardTH1( "leptop_"+lptype+"_nmatch_truth",   1, 0, 2, ";Leptonic top "+lptype+" isTruthMatched"
+	 ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "nmatch_truth");
+       }
 
-
+       
+      }//leptop categories
+      //============== Leptop categories ==============================
 
       //Leptonic W
       m_outMngrHist -> AddStandardTH1( "lepW_pt",         50, 0, 1000, ";Leptonic W p_{T} [GeV]"      ,  false, &(m_outData -> o_lepW), -1, "Pt", hopt_nouflow);
@@ -1130,6 +1148,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 				       ,50, 0, 2500, 0.1, 0., 6.
 				       ,"Leptonic top p_{T}^{truth} [GeV]", ";Leptonic top #DeltaR^{truth}"
 				       ,  false, &(m_outData -> o_leptop), &(m_outData -> o_leptop), -1, -1, true, "pT_truth", "dR_truth");
+
       //======= Leptonic W ======
       m_outMngrHist -> AddStandardTH1( "lepW_pT_truth",   50, 0, 2500, ";Leptonic W p_{T}^{truth} [GeV]"
 				       ,  false, &(m_outData -> o_lepW), -1, "pT_truth");
@@ -2326,7 +2345,6 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 
       }//each collection of heavy resonance
 
-
       if( m_opt -> SampleName() == SampleName::VLQ ){
 	for ( const std::string decayType : {"Ht", "Zt", "Wb"} ){
 
@@ -2338,7 +2356,6 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 
 	}
       }// VLQ samples
-
 
       //
       // Match leptonic W parton to reconstructed leptonic W
@@ -2418,7 +2435,6 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 	}
       }
 
-
       //
       // Match small-R jets to b-quarks
       //
@@ -2429,12 +2445,11 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
       // Store information about RCtag jet matched to leptop_b
       //
       if(m_outData-> o_leptop_b){
-
 	int ind_rc = (m_outData-> o_leptop_b)->GetMoment("RCtag_match_index");
 	if((m_outData-> o_leptop_b)->GetMoment("RCtag_match") > 0){
-	
+	  
 	  AnalysisObject* rc_match = (m_outData->o_rcjets)->at(ind_rc);
-
+	  
 	  (m_outData-> o_leptop_b)->SetMoment("RCtag_match_nmatch_truth", rc_match->GetMoment("nmatch_truth"));
 	  if(rc_match->GetMoment("nmatch_truth")>0){
 	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_fpT_truth", rc_match->GetMoment("fpT_truth"));
@@ -2446,10 +2461,9 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_dR_truth", -1);
 	    (m_outData-> o_leptop_b)->SetMoment("RCtag_match_pdgId_truth", -1);
 	  }
-
 	}
 	
-      }
+      }//if leptop_b exists
 	  
     }// if doing truth analysis
 
@@ -2458,58 +2472,57 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 
       //"highM", "winM", "BoutRCtag", "BinRCtag",
       //"BinRCMTop","BinRCMHiggs","BinRCMV",
-      //"BinRCtagNconst1","BinRCMTopNconst1","BinRCMHiggsNconst1","BinRCMHiggsNconst1"
-
+      //"BinRCtagNconst1","BinRCMTopNconst1","BinRCMHiggsNconst1","BinRCMVNconst1"
+      
       if( (m_outData -> o_leptop)->M() > 300. ){
-	m_outData -> o_catLeptop["highM"] = m_outData -> o_leptop;
-	m_outData -> o_catLeptop_b["highM"] = m_outData -> o_leptop_b;
+	m_outData -> o_catLeptop.at("highM")  = m_outData -> o_leptop;
+	m_outData -> o_catLeptop_b.at("highM")  = m_outData -> o_leptop_b;
       }
       else if( ((m_outData -> o_leptop)->M() > 140.) && ((m_outData -> o_leptop)->M() < 210.) ){
-	m_outData -> o_catLeptop["winM"] = m_outData -> o_leptop;
-	m_outData -> o_catLeptop_b["winM"] = m_outData -> o_leptop_b;
+	m_outData -> o_catLeptop.at("winM")  = m_outData -> o_leptop;
+	m_outData -> o_catLeptop_b.at("winM")  = m_outData -> o_leptop_b;
       }
 
-      if( (m_outData -> o_leptop)->GetMoment("RCtag_match") > 0 ){ 
-	m_outData -> o_catLeptop["BinRCtag"] = m_outData -> o_leptop;
-	m_outData -> o_catLeptop_b["BinRCtag"] = m_outData -> o_leptop_b;
+      if( (m_outData -> o_leptop_b)->GetMoment("RCtag_match") > 0 ){ 
+	m_outData -> o_catLeptop.at("BinRCtag")  = m_outData -> o_leptop;
+	m_outData -> o_catLeptop_b.at("BinRCtag")  = m_outData -> o_leptop_b;
 
 	if((m_outData -> o_leptop_b)->GetMoment("RCtag_match_nconsts") ==1){
-	  m_outData -> o_catLeptop["BinRCtagNconst1"] = m_outData -> o_leptop;
-	  m_outData -> o_catLeptop_b["BinRCtagNconst1"] = m_outData -> o_leptop_b;
+	  m_outData -> o_catLeptop.at("BinRCtagNconst1")  = m_outData -> o_leptop;
+	  m_outData -> o_catLeptop_b.at("BinRCtagNconst1")  = m_outData -> o_leptop_b;
 	}
 
-	if( (m_outData -> o_leptop)->GetMoment("RCtag_match_isRCMTop") > 0 ){ 
-	  m_outData -> o_catLeptop["BinRCMTop"] = m_outData -> o_leptop;
-	  m_outData -> o_catLeptop_b["BinRCMTop"] = m_outData -> o_leptop_b;
+	if( (m_outData -> o_leptop_b)->GetMoment("RCtag_match_isRCMTop") > 0 ){ 
+	  m_outData -> o_catLeptop.at("BinRCMTop")  = m_outData -> o_leptop;
+	  m_outData -> o_catLeptop_b.at("BinRCMTop")  = m_outData -> o_leptop_b;
 
 	  if((m_outData -> o_leptop_b)->GetMoment("RCtag_match_nconsts") ==1){ 
-	    m_outData -> o_catLeptop["BinRCMTopNconst1"] = m_outData -> o_leptop;
-	    m_outData -> o_catLeptop_b["BinRCMTopNconst1"] = m_outData -> o_leptop_b;
+	    m_outData -> o_catLeptop.at("BinRCMTopNconst1")  = m_outData -> o_leptop;
+	    m_outData -> o_catLeptop_b.at("BinRCMTopNconst1")  = m_outData -> o_leptop_b;
           }
 	}
-	if( (m_outData -> o_leptop)->GetMoment("RCtag_match_isRCMHiggs") > 0 ){
-          m_outData -> o_catLeptop["BinRCMHiggs"] = m_outData -> o_leptop;
-          m_outData -> o_catLeptop_b["BinRCMHiggs"] = m_outData -> o_leptop_b;
+	if( (m_outData -> o_leptop_b)->GetMoment("RCtag_match_isRCMHiggs") > 0 ){
+          m_outData -> o_catLeptop.at("BinRCMHiggs")  = m_outData -> o_leptop;
+          m_outData -> o_catLeptop_b.at("BinRCMHiggs")  = m_outData -> o_leptop_b;
 
 	  if((m_outData -> o_leptop_b)->GetMoment("RCtag_match_nconsts") ==1){
-            m_outData -> o_catLeptop["BinRCMHiggsNconst1"] = m_outData -> o_leptop;
-            m_outData -> o_catLeptop_b["BinRCMHiggsNconst1"] = m_outData -> o_leptop_b;
+            m_outData -> o_catLeptop.at("BinRCMHiggsNconst1")  = m_outData -> o_leptop;
+            m_outData -> o_catLeptop_b.at("BinRCMHiggsNconst1")  = m_outData -> o_leptop_b;
 	  }
         }
-	if( (m_outData -> o_leptop)->GetMoment("RCtag_match_isRCMV") > 0 ){
-          m_outData -> o_catLeptop["BinRCMV"] = m_outData -> o_leptop;
-          m_outData -> o_catLeptop_b["BinRCMV"] = m_outData -> o_leptop_b;
+	if( (m_outData -> o_leptop_b)->GetMoment("RCtag_match_isRCMV") > 0 ){
+          m_outData -> o_catLeptop.at("BinRCMV")  = m_outData -> o_leptop;
+          m_outData -> o_catLeptop_b.at("BinRCMV")  = m_outData -> o_leptop_b;
 
 	  if((m_outData -> o_leptop_b)->GetMoment("RCtag_match_nconsts") ==1){
-            m_outData -> o_catLeptop["BinRCMVNconst1"] = m_outData -> o_leptop;
-            m_outData -> o_catLeptop_b["BinRCMVNconst1"] = m_outData -> o_leptop_b;
+            m_outData -> o_catLeptop.at("BinRCMVNconst1")  = m_outData -> o_leptop;
+            m_outData -> o_catLeptop_b.at("BinRCMVNconst1")  = m_outData -> o_leptop_b;
 	  }
         }
       }//closes RCjets
       else{
-	m_outData -> o_catLeptop["BoutRCtag"] = m_outData -> o_leptop;
-	m_outData -> o_catLeptop_b["BoutRCtag"] = m_outData -> o_leptop_b;
-
+	m_outData -> o_catLeptop.at("BoutRCtag")  = m_outData -> o_leptop;
+	m_outData -> o_catLeptop_b.at("BoutRCtag")  = m_outData -> o_leptop_b;
       }
 
     }//if leptop exists
