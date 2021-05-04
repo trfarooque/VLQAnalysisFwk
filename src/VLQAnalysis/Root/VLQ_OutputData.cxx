@@ -191,6 +191,23 @@ o_is_ttbar(false)
   }
   rcjetTruthType.clear();
 
+
+  //All leptop and leptop-b categories
+  o_catLeptop.clear();
+  o_catLeptop_b.clear();
+
+  std::vector<std::string> leptopTypes = {"highM", "winM", "BoutRCtag", "BinRCtag",
+					 "BinRCMTop","BinRCMHiggs","BinRCMV",
+					 "BinRCtagNconst1","BinRCMTopNconst1","BinRCMHiggsNconst1","BinRCMVNconst1"};
+
+  for(const std::string& lptype : leptopTypes){
+    o_catLeptop.insert(std::pair<std::string, AnalysisObject*>(lptype, nullptr));
+    o_catLeptop_b.insert(std::pair<std::string, AnalysisObject*>(lptype, nullptr));
+  }
+  leptopTypes.clear();
+
+
+
   o_el = new AOVector();
   o_mu = new AOVector();
   o_lep = new AOVector();
@@ -708,18 +725,6 @@ void VLQ_OutputData::ClearOutputData()
   o_leptop_b = nullptr;
   o_leptop_n = 0;
 
-  //Reset all leptop and leptop-b categories
-  std::vector<std::string> leptopTypes = {"highM", "winM", "BoutRCtag", "BinRCtag",
-					 "BinRCMTop","BinRCMHiggs","BinRCMV",
-					 "BinRCtagNconst1","BinRCMTopNconst1","BinRCMHiggsNconst1","BinRCMHiggsNconst1"};
-
-  for(const std::string& lptype : leptopTypes){
-    o_catLeptop.insert(std::pair<std::string, AnalysisObject*>(lptype, nullptr));
-    o_catLeptop_b.insert(std::pair<std::string, AnalysisObject*>(lptype, nullptr));
-  }
-  leptopTypes.clear();
-
-
   //delete semi-boosted hadtops
   for ( const AnalysisObject* hadtop : *(o_bW_hadtop) ) {
     delete hadtop;
@@ -755,8 +760,15 @@ void VLQ_OutputData::ClearOutputData()
     AnalysisUtils::CleanContainer(*(obj_pair.second));
   }
 
-  o_catLeptop.clear();
-  o_catLeptop_b.clear();
+  //
+  // Leptop categories
+  //
+  for(std::pair<std::string, AnalysisObject*> lp_pair : o_catLeptop ){
+    o_catLeptop.at(lp_pair.first) = nullptr;
+  }
+  for(std::pair<std::string, AnalysisObject*> lpb_pair : o_catLeptop_b ){
+    o_catLeptop_b.at(lpb_pair.first) = nullptr;
+  }
 
   //
   // Event variable for selection
