@@ -311,7 +311,7 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_outMngrTree->AddStandardBranch("htjets_n", "Number of higgs-tagged jets",  &(m_outData->o_taggedjets_n.at("RCMHiggs")));
     m_outMngrTree->AddStandardBranch("vjets_n", "Number of V-tagged jets",  &(m_outData->o_taggedjets_n.at("RCMV")));
 
-    m_outMngrTree->AddStandardBranch("jets_pt", "Jets  p_{T} [GeV]",  &(m_outData->o_jets), -1, "Pt");
+    /*  m_outMngrTree->AddStandardBranch("jets_pt", "Jets  p_{T} [GeV]",  &(m_outData->o_jets), -1, "Pt");
     m_outMngrTree->AddStandardBranch("jets_m", "Jets Mass [GeV]",  &(m_outData->o_jets), -1, "M");
     m_outMngrTree->AddStandardBranch("jets_eta", "Jets #eta",  &(m_outData->o_jets), -1, "Eta");
     m_outMngrTree->AddStandardBranch("jets_phi", "Jets #phi",  &(m_outData->o_jets), -1, "Phi");
@@ -354,7 +354,7 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_outMngrTree->AddStandardBranch("rcjets_m", "RC jets Mass [GeV]",  &(m_outData->o_rcjets), -1, "M");
     //m_outMngrTree->AddStandardBranch("rcjets_eta", "RC jets #eta",  &(m_outData->o_rcjets), -1, "Eta");
     //m_outMngrTree->AddStandardBranch("rcjets_phi", "RC jets #phi",  &(m_outData->o_rcjets), -1, "Phi");
-    //m_outMngrTree->AddStandardBranch("rcjets_nconsts", "RC jets N_{sj}",  &(m_outData->o_rcjets), -1, "nconsts");
+    //m_outMngrTree->AddStandardBranch("rcjets_nconsts", "RC jets N_{sj}",  &(m_outData->o_rcjets), -1, "nconsts");*/
 
     //-----------------------------------------------------------------------------------------------------------------
     m_outMngrTree->AddStandardBranch("el_n", "Number of electrons",  &(m_outData->o_el_n));
@@ -386,6 +386,83 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_outMngrTree->AddStandardBranch("mtw", "Transverse W mass", &(m_outData->o_mtwl));
     m_outMngrTree->AddStandardBranch("ptw", "Transverse W p_{T}", &(m_outData->o_ptwl));
     m_outMngrTree->AddStandardBranch("hthad", "H_{T}^{had}", &(m_outData->o_hthad));
+
+
+    m_outMngrTree -> AddStandardBranch( "dRmin_RCMHiggsRCMHiggs", ";#DeltaR_{min}(Higgs-tagged jet, Higgs-tagged jet)", &(m_outData -> o_dRmin_RCMHiggsRCMHiggs) );
+    m_outMngrTree->AddStandardBranch( "dRmin_RCMHiggsRCMV", ";#DeltaR_{min}(Higgs-tagged jet, W/Z-tagged jet)", &(m_outData -> o_dRmin_RCMHiggsRCMV) );
+    m_outMngrTree->AddStandardBranch( "dRmin_RCMHiggsRCMTop", ";#DeltaR_{min}(Higgs-tagged jet, Top-tagged jet)", &(m_outData -> o_dRmin_RCMHiggsRCMTop) );
+    m_outMngrTree->AddStandardBranch( "dRmin_RCMVRCMV", ";#DeltaR_{min}(W/Z-tagged jet, W/Z-tagged jet)", &(m_outData -> o_dRmin_RCMVRCMV) );
+    m_outMngrTree->AddStandardBranch( "dRmin_RCMVRCMTop", ";#DeltaR_{min}(W/Z-tagged jet, Top-tagged jet)", &(m_outData -> o_dRmin_RCMVRCMTop) );
+    m_outMngrTree->AddStandardBranch( "dRmin_RCMTopRCMTop", ";#DeltaR_{min}(Top-tagged jet, Top-tagged jet)", &(m_outData -> o_dRmin_RCMTopRCMTop) );
+      
+    m_outMngrTree->AddStandardBranch( "dPhimin_RCMHiggsRCMHiggs", ";#Delta#phi_{min}(Higgs-tagged jet, Higgs-tagged jet)", &(m_outData -> o_dPhimin_RCMHiggsRCMHiggs) );
+    m_outMngrTree->AddStandardBranch( "dPhimin_RCMHiggsRCMV", ";#Delta#phi_{min}(Higgs-tagged jet, W/Z-tagged jet)", &(m_outData -> o_dPhimin_RCMHiggsRCMV) );
+    m_outMngrTree->AddStandardBranch( "dPhimin_RCMHiggsRCMTop", ";#Delta#phi_{min}(Higgs-tagged jet, Top-tagged jet)", &(m_outData -> o_dPhimin_RCMHiggsRCMTop) );
+    m_outMngrTree->AddStandardBranch( "dPhimin_RCMVRCMV", ";#Delta#phi_{min}(W/Z-tagged jet, W/Z-tagged jet)", &(m_outData -> o_dPhimin_RCMVRCMV) );
+    m_outMngrTree->AddStandardBranch( "dPhimin_RCMVRCMTop", ";#Delta#phi_{min}(W/Z-tagged jet, Top-tagged jet)", &(m_outData -> o_dPhimin_RCMVRCMTop) );
+    m_outMngrTree->AddStandardBranch( "dPhimin_RCMTopRCMTop", ";#Delta#phi_{min}(Top-tagged jet, Top-tagged jet)", &(m_outData -> o_dPhimin_RCMTopRCMTop) );
+     
+
+    m_outMngrTree->AddStandardBranch( "dEtamin_RCMHiggsRCMHiggs", ";#Delta#eta_{min}(Higgs-tagged jet, Higgs-tagged jet)", &(m_outData -> o_dEtamin_RCMHiggsRCMHiggs) );
+    m_outMngrTree->AddStandardBranch( "dEtamin_RCMHiggsRCMV", ";#Delta#eta_{min}(Higgs-tagged jet, W/Z-tagged jet)", &(m_outData -> o_dEtamin_RCMHiggsRCMV) );
+    m_outMngrTree->AddStandardBranch( "dEtamin_RCMHiggsRCMTop", ";#Delta#eta_{min}(Higgs-tagged jet, Top-tagged jet)", &(m_outData -> o_dEtamin_RCMHiggsRCMTop) );
+    m_outMngrTree->AddStandardBranch( "dEtamin_RCMVRCMV", ";#Delta#eta_{min}(W/Z-tagged jet, W/Z-tagged jet)", &(m_outData -> o_dEtamin_RCMVRCMV) );
+    m_outMngrTree->AddStandardBranch( "dEtamin_RCMVRCMTop", ";#Delta#eta_{min}(W/Z-tagged jet, Top-tagged jet)", &(m_outData -> o_dEtamin_RCMVRCMTop) );
+    m_outMngrTree->AddStandardBranch( "dEtamin_RCMTopRCMTop", ";#Delta#eta_{min}(Top-tagged jet, Top-tagged jet)", &(m_outData -> o_dEtamin_RCMTopRCMTop) );
+     
+    m_outMngrTree->AddStandardBranch( "dEtamin_RCTTMassRCTTMass", ";#Delta#eta_{min}(RCTTMass, RCTTMass)", &(m_outData -> o_dEtamin_RCTTMassRCTTMass) );
+    m_outMngrTree->AddStandardBranch( "dRmin_RCTTMassRCTTMass", ";#DeltaR_{min}(RCTTMass, RCTTMass)", &(m_outData -> o_dRmin_RCTTMassRCTTMass) );
+    m_outMngrTree->AddStandardBranch( "dPhimin_RCTTMassRCTTMass", ";#Delta#phi_{min}(RCTTMass, RCTTMass)", &(m_outData -> o_dPhimin_RCTTMassRCTTMass) );
+     
+
+    m_outMngrTree->AddStandardBranch( "leadingdR_RCTTMassRCTTMass", ";#DeltaR (leading TTmass jet, subleading TTmass jet)", &(m_outData -> o_leadingdR_RCTTMassRCTTMass) );
+  
+    m_outMngrTree->AddStandardBranch( "leadingdEta_RCTTMassRCTTMass", ";#DeltaR (leading TTmass jet, subleading TTmass jet)", &(m_outData -> o_leadingdEta_RCTTMassRCTTMass) );
+  
+    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCTTMassRCTTMass", ";#DeltaR (leading TTmass jet, subleading TTmass jet)", &(m_outData -> o_leadingdPhi_RCTTMassRCTTMass) );
+  
+
+    m_outMngrTree->AddStandardBranch( "leadingdR_RCMHiggsRCMHiggs", ";#DeltaR (leading Higgs-tagged J, subleading Higgs-tagged J)", &(m_outData -> o_leadingdR_RCMHiggsRCMHiggs) );
+    m_outMngrTree->AddStandardBranch( "leadingdR_RCMHiggsRCMV", ";#DeltaR (leading Higgs-tagged J, leading W/Z-tagged J)", &(m_outData -> o_leadingdR_RCMHiggsRCMV) );
+    m_outMngrTree->AddStandardBranch( "leadingdR_RCMHiggsRCMTop", ";#DeltaR (leading Higgs-tagged J, leading Top-tagged J)", &(m_outData -> o_leadingdR_RCMHiggsRCMTop) );
+    m_outMngrTree->AddStandardBranch( "leadingdR_RCMVRCMV", ";#DeltaR (leading W/Z-tagged J, subleading W/Z-tagged J)", &(m_outData -> o_leadingdR_RCMVRCMV) );
+    m_outMngrTree->AddStandardBranch( "leadingdR_RCMVRCMTop", ";#DeltaR (leading W/Z-tagged J, leading Top-tagged J)", &(m_outData -> o_leadingdR_RCMVRCMTop) );
+    m_outMngrTree->AddStandardBranch( "leadingdR_RCMTopRCMTop", ";#DeltaR (leading Top-tagged J, subleading Top-tagged J)", &(m_outData -> o_leadingdR_RCMTopRCMTop) );
+
+    m_outMngrTree->AddStandardBranch( "leadingdEta_RCMHiggsRCMHiggs", ";leading#Delta#eta (leadingd Higgs-tagged J, subleadingd Higgs-tagged J)", &(m_outData -> o_leadingdEta_RCMHiggsRCMHiggs) );
+    m_outMngrTree->AddStandardBranch( "leadingdEta_RCMHiggsRCMV", ";leading#Delta#eta (leadingd Higgs-tagged J, leadingd W/Z-tagged J)", &(m_outData -> o_leadingdEta_RCMHiggsRCMV) );
+    m_outMngrTree->AddStandardBranch( "leadingdEta_RCMHiggsRCMTop", ";leading#Delta#eta (leadingd Higgs-tagged J, leadingd Top-tagged J)", &(m_outData -> o_leadingdEta_RCMHiggsRCMTop) );
+    m_outMngrTree->AddStandardBranch( "leadingdEta_RCMVRCMV", ";leading#Delta#eta (leadingd W/Z-tagged J, subleadingd W/Z-tagged J)", &(m_outData -> o_leadingdEta_RCMVRCMV) );
+    m_outMngrTree->AddStandardBranch( "leadingdEta_RCMVRCMTop", ";leading#Delta#eta (leadingd W/Z-tagged J, leadingd Top-tagged J)", &(m_outData -> o_leadingdEta_RCMVRCMTop) );
+    m_outMngrTree->AddStandardBranch( "leadingdEta_RCMTopRCMTop", ";leading#Delta#eta (leadingd Top-tagged J, subleadingd Top-tagged J)", &(m_outData -> o_leadingdEta_RCMTopRCMTop) );
+    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMHiggsRCMHiggs", ";leading#Delta#phi (leadingd Higgs-tagged J, subleadingd Higgs-tagged J)", &(m_outData -> o_leadingdPhi_RCMHiggsRCMHiggs) );
+    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMHiggsRCMV", ";leading#Delta#phi (leadingd Higgs-tagged J, leadingd W/Z-tagged J)",  &(m_outData -> o_leadingdPhi_RCMHiggsRCMV) );
+    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMHiggsRCMTop", ";leading#Delta#phi (leadingd Higgs-tagged J, leadingd Top-tagged J)",  &(m_outData -> o_leadingdPhi_RCMHiggsRCMTop) );
+    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMVRCMV", ";leading#Delta#phi (leadingd W/Z-tagged J, subleadingd W/Z-tagged J)" , &(m_outData -> o_leadingdPhi_RCMVRCMV) );
+    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMVRCMTop", ";leading#Delta#phi (leadingd W/Z-tagged J, leadingd Top-tagged J)",  &(m_outData -> o_leadingdPhi_RCMVRCMTop) );
+    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMTopRCMTop", ";leading#Delta#phi (leadingd Top-tagged J, subleadingd Top-tagged J)",  &(m_outData -> o_leadingdPhi_RCMTopRCMTop) );
+
+
+    m_outMngrTree->AddStandardBranch( "leadingdPhi_lepjet", ";leading#Delta#phi (lep,jet)",  &(m_outData -> o_leadingdPhi_lepjet) );
+    m_outMngrTree->AddStandardBranch( "leadingdPhi_lepbjet", ";leading#Delta#phi (lep,bjet)",  &(m_outData  -> o_leadingdPhi_lepbjet) );
+    m_outMngrTree->AddStandardBranch( "leadingdPhi_jetjet", ";leading#Delta#phi (jet,jet)",  &(m_outData -> o_leadingdPhi_jetjet) );
+
+
+    m_outMngrTree->AddStandardBranch( "leadingdR_lepjet", ";leading#Delta#R (lep,jet)",  &(m_outData -> o_leadingdR_lepjet) );
+    m_outMngrTree->AddStandardBranch( "leadingdR_lepbjet", ";leading#Delta#R (lep,bjet)",  &(m_outData  -> o_leadingdR_lepbjet) );
+    m_outMngrTree->AddStandardBranch( "leadingdR_jetjet", ";leading#Delta#R (jet,jet)",  &(m_outData -> o_leadingdR_jetjet) );
+
+    m_outMngrTree->AddStandardBranch( "leadingdEta_lepjet", ";leading#Delta#eta (lep,jet)",  &(m_outData -> o_leadingdEta_lepjet) );
+    m_outMngrTree->AddStandardBranch( "leadingdEta_lepbjet", ";leading#Delta#eta (lep,bjet)",  &(m_outData  -> o_leadingdEta_lepbjet) );
+    m_outMngrTree->AddStandardBranch( "leadingdEta_jetjet", ";leading#Delta#eta (jet,jet)", &(m_outData -> o_leadingdEta_jetjet) );
+
+    m_outMngrTree->AddStandardBranch( "leadingdR_RCjets",  ";leading#Delta#R (rcjet,rcjet)",  &(m_outData -> o_leadingdR_RCjets) );
+    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCjets",  ";leading#Delta#phi (rcjet,rcjet)",  &(m_outData -> o_leadingdPhi_RCjets) );
+    m_outMngrTree->AddStandardBranch( "leadingdEta_RCjets",  ";leading#Delta#eta (rcjet,rcjet)",  &(m_outData -> o_leadingdEta_RCjets) );
+
+
+
+
     /*
     m_outMngrTree->AddStandardBranch("dRmin_ejets", "#DeltaR_{min}(e, jets)", &(m_outData->o_dRmin_ejets));
     m_outMngrTree->AddStandardBranch("dRmin_mujets", "#DeltaR_{min}(#mu, jets)", &(m_outData->o_dRmin_mujets));
@@ -577,7 +654,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 
 
       //===================== Leptonic top categories ==== INSERT HERE ==========
-      std::vector<std::string> leptopTypes = {"highM", "winM", "BoutRCtag", "BinRCtag",
+         std::vector<std::string> leptopTypes = {"highM", "winM", "BoutRCtag", "BinRCtag",
 					      "BinRCMTop","BinRCMHiggs","BinRCMV",
 					      "BinRCtagNconst1","BinRCMTopNconst1","BinRCMHiggsNconst1","BinRCMHiggsNconst1"};
 
@@ -2460,7 +2537,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
       //"BinRCMTop","BinRCMHiggs","BinRCMV",
       //"BinRCtagNconst1","BinRCMTopNconst1","BinRCMHiggsNconst1","BinRCMHiggsNconst1"
 
-      if( (m_outData -> o_leptop)->M() > 300. ){
+            if( (m_outData -> o_leptop)->M() > 300. ){
 	m_outData -> o_catLeptop["highM"] = m_outData -> o_leptop;
 	m_outData -> o_catLeptop_b["highM"] = m_outData -> o_leptop_b;
       }
@@ -2512,9 +2589,9 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 
       }
 
-    }//if leptop exists
+      }//if leptop exists
 
-  }//if MC
+  }//if MC 
 
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "==> After truth handling" << std::endl;
 
