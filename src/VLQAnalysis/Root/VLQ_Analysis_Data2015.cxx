@@ -577,7 +577,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 
   std::vector<std::string> leptopTypes = {"highM", "winM", "BoutRCtag", "BinRCtag",
 					  "BinRCMTop","BinRCMHiggs","BinRCMV",
-					  "BinRCtagNconst1","BinRCMTopNconst1","BinRCMHiggsNconst1","BinRCMHiggsNconst1"};
+					  "BinRCtagNconst1","BinRCMTopNconst1","BinRCMHiggsNconst1","BinRCMVNconst1"};
   
   
   if(m_opt->DumpHistos()){
