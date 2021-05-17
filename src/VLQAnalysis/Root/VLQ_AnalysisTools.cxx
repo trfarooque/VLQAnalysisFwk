@@ -568,7 +568,7 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
       // Exclusive top-tagging
       bool isTop = obj -> Pt() > 400 && obj->M() > 140;
       if(m_opt -> DoOldBoost()){
-	isTop = ( (obj -> Pt() > 300) && (m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 2) );
+	isTop = ( (obj->M() > 140) && (obj -> Pt() > 300) && (m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 2) );
 	//isTop = isTop && ( obj -> Pt() < 800 ? m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 2 : m_ntupData -> d_rcjets_nconsts -> at(iRCJet) >= 1);
       }
       else{
@@ -578,8 +578,13 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
       // Exclusive Higgs tagging
       bool isHiggs = obj -> Pt() > 350 && obj->M() > 105 && obj->M() < 140;
       if(m_opt->DoOldBoost()){
-	isHiggs = (obj -> Pt() > 200) && ( m_ntupData -> d_rcjets_nconsts -> at(iRCJet) == 2 ? obj -> Pt() <= 500 :
-			       (m_ntupData -> d_rcjets_nconsts -> at(iRCJet) < 2 && obj -> Pt() >= 500) );
+	
+	isHiggs = (obj -> Pt() > 200) && (obj->M() > 105 && obj->M() < 140);
+
+	bool subjetReq = ( (m_ntupData -> d_rcjets_nconsts -> at(iRCJet) == 2) && (obj -> Pt() < 500) ) ||
+	  ( (m_ntupData -> d_rcjets_nconsts -> at(iRCJet) <= 2) && (obj -> Pt() > 500) );
+
+	isHiggs = isHiggs && subjetReq;
 	
 	//isHiggs = isHiggs && ( obj -> Pt() < 500 ? m_ntupData -> d_rcjets_nconsts -> at(iRCJet) == 2 : m_ntupData -> d_rcjets_nconsts -> at(iRCJet) <= 2);
       }
