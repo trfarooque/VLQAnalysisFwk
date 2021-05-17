@@ -169,8 +169,9 @@ def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campai
 ##_____________________________________________________________________
 ##
 
-def GetSignalSamples(useWeightSyst=False, useObjectSyst=False, campaign=""
-                                 , includeSingleVLQ=True, includePairVLQ=False, include4tops=False):
+def GetSignalSamples(useWeightSyst=False, useObjectSyst=False, campaign="",
+                     includeSingleVLQ=True, includePairVLQ=False, include4tops=False,
+                     includeDoubletPairVLQ = False):
 
     Samples =  []
     if include4tops:
@@ -180,6 +181,8 @@ def GetSignalSamples(useWeightSyst=False, useObjectSyst=False, campaign=""
         Samples += GetOldSingleVLQSamples( useWeightSyst, useObjectSyst, campaign )
     if includePairVLQ:
         Samples += GetVLQTSamples( useWeightSyst, useObjectSyst, campaign )
+    if includeDoubletPairVLQ:
+        Samples += GetVLQTDoubletSamples( useWeightSyst, useObjectSyst, campaign)
 
     return Samples
 
