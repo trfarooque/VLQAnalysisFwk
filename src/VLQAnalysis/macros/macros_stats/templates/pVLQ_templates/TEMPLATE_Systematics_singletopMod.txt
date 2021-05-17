@@ -8,6 +8,7 @@ Systematic: "HTX_BKGNP_SINGLETOP_GEN"
   Category: "Single-top uncertainties"
   Symmetrisation: ONESIDED
   Smoothing: 40
+  %HistoFilesUp: TtStAlt/SingletopaMCPy.mc16a
   HistoFilesUp: TtStAlt/SingletopaMCPy.mc16a,TtStAlt/SingletopaMCPy.mc16d,TtStAlt/SingletopaMCPy.mc16e
   Samples: Singletop
   ReferenceSample: Singletop_AFII
@@ -18,15 +19,51 @@ Systematic: "HTX_BKGNP_SINGLETOP_PS"
   Category: "Single-top uncertainties"
   Symmetrisation: ONESIDED
   Smoothing: 40
+  %HistoFilesUp: TtStAlt/SingletopPowHer.mc16a
   HistoFilesUp: TtStAlt/SingletopPowHer.mc16a,TtStAlt/SingletopPowHer.mc16d,TtStAlt/SingletopPowHer.mc16e
   Samples: Singletop
   ReferenceSample: Singletop_AFII
 
-%Systematic: "HTX_BKGNP_SINGLETOP_DRDS"
-%  Title: "Single-top DR/DS"
-%  Type: HISTO
-%  Category: "Single-top uncertainties"
-%  Symmetrisation: ONESIDED
-%  Smoothing: 40
-%  HistoFilesUp: SingletopAlt/SingletopDiagSub.mc16a,SingletopAlt/SingletopDiagSub.mc16d,SingletopAlt/SingletopDiagSub.mc16e
-%  Samples: Singletop
+Systematic: "HTX_BKGNP_SINGLETOP_DRDS_ST"
+NuisanceParameter: "HTX_BKGNP_SINGLETOP_DRDS"
+  Title: "Single-top DR/DS"
+  Type: HISTO
+  Category: "Single-top uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  %HistoFilesUp: RWDS/SingletopDiagSub.mc16a
+  HistoFilesUp: RWDS/SingletopDiagSub.mc16a,RWDS/SingletopDiagSub.mc16d,RWDS/SingletopDiagSub.mc16e
+  Samples: Singletop
+
+Systematic: "HTX_BKGNP_SINGLETOP_DRDS_TTLIGHT"
+NuisanceParameter: "HTX_BKGNP_SINGLETOP_DRDS"
+  Title: "Single-top DR/DS"
+  Type: HISTO
+  Category: "Single-top uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  %HistoFilesUp: RWDS/ttbarlight.mc16a
+  HistoFilesUp: RWDS/ttbarlight.mc16a,RWDS/ttbarlight.mc16d,RWDS/ttbarlight.mc16e
+  Samples: ttbarlight
+
+Systematic: "HTX_BKGNP_SINGLETOP_DRDS_TTCC"
+NuisanceParameter: "HTX_BKGNP_SINGLETOP_DRDS"
+  Title: "Single-top DR/DS"
+  Type: HISTO
+  Category: "Single-top uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  %HistoFilesUp: RWDS/ttbarcc.mc16a
+  HistoFilesUp: RWDS/ttbarcc.mc16a,RWDS/ttbarcc.mc16d,RWDS/ttbarcc.mc16e
+  Samples: ttbarcc
+
+Systematic: "HTX_BKGNP_SINGLETOP_DRDS_TTBB"
+NuisanceParameter: "HTX_BKGNP_SINGLETOP_DRDS"
+  Title: "Single-top DR/DS"
+  Type: HISTO
+  Category: "Single-top uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  %HistoFilesUp: RWDS/ttbarbb.mc16a
+  HistoFilesUp: RWDS/ttbarbb.mc16a,RWDS/ttbarbb.mc16d,RWDS/ttbarbb.mc16e
+  Samples: ttbarbb

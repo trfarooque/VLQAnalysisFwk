@@ -388,45 +388,45 @@ Systematic: "JET_SingleParticle_HighPt"
   Smoothing: 40
   %Exclude: QCD
 
-#Systematic: "JET_Rtrk_Baseline_mass"
-#  Title: "JMS baseline"
-#  Type: HISTO
-#  Category: "Jet uncertainties"
-#  HistoFileSufUp: _JET_Rtrk_Baseline_mass__1up
-#  HistoFileSufDown: _JET_Rtrk_Baseline_mass__1down
-#  Symmetrisation: TwoSided
-#  Smoothing: 40
-#  Exclude: QCD
-#
-#Systematic: "JET_Rtrk_Modelling_mass"
-#  Title: "JMS modelling"
-#  Type: HISTO
-#  Category: "Jet uncertainties"
-#  HistoFileSufUp: _JET_Rtrk_Modelling_mass__1up
-#  HistoFileSufDown: _JET_Rtrk_Modelling_mass__1down
-#  Symmetrisation: TwoSided
-#  Smoothing: 40
-#  Exclude: QCD
-#
-#Systematic: "JET_Rtrk_TotalStat_mass"
-#  Title: "JMS stat."
-#  Type: HISTO
-#  Category: "Jet uncertainties"
-#  HistoFileSufUp: _JET_Rtrk_TotalStat_mass__1up
-#  HistoFileSufDown: _JET_Rtrk_TotalStat_mass__1down
-#  Symmetrisation: TwoSided
-#  Smoothing: 40
-#  Exclude: QCD
-#
-#Systematic: "JET_Rrk_Tracking_mass"
-#  Title: "JMS tracking"
-#  Type: HISTO
-#  Category: "Jet uncertainties"
-#  HistoFileSufUp: _JET_Rrk_Tracking_mass__1up
-#  HistoFileSufDown: _JET_Rrk_Tracking_mass__1down
-#  Symmetrisation: TwoSided
-#  Smoothing: 40
-#  Exclude: QCD
+%Systematic: "JET_Rtrk_Baseline_mass"
+%  Title: "JMS baseline"
+%  Type: HISTO
+%  Category: "Jet uncertainties"
+%  HistoFileSufUp: _JET_Rtrk_Baseline_mass__1up
+%  HistoFileSufDown: _JET_Rtrk_Baseline_mass__1down
+%  Symmetrisation: TwoSided
+%  Smoothing: 40
+%  Exclude: QCD
+
+%Systematic: "JET_Rtrk_Modelling_mass"
+%  Title: "JMS modelling"
+%  Type: HISTO
+%  Category: "Jet uncertainties"
+%  HistoFileSufUp: _JET_Rtrk_Modelling_mass__1up
+%  HistoFileSufDown: _JET_Rtrk_Modelling_mass__1down
+%  Symmetrisation: TwoSided
+%  Smoothing: 40
+%  Exclude: QCD
+
+%Systematic: "JET_Rtrk_TotalStat_mass"
+%  Title: "JMS stat."
+%  Type: HISTO
+%  Category: "Jet uncertainties"
+%  HistoFileSufUp: _JET_Rtrk_TotalStat_mass__1up
+%  HistoFileSufDown: _JET_Rtrk_TotalStat_mass__1down
+%  Symmetrisation: TwoSided
+%  Smoothing: 40
+%  Exclude: QCD
+
+%Systematic: "JET_Rrk_Tracking_mass"
+%  Title: "JMS tracking"
+%  Type: HISTO
+%  Category: "Jet uncertainties"
+%  HistoFileSufUp: _JET_Rrk_Tracking_mass__1up
+%  HistoFileSufDown: _JET_Rrk_Tracking_mass__1down
+%  Symmetrisation: TwoSided
+%  Smoothing: 40
+%  Exclude: QCD
 
 Systematic: "JET_JER_DataVsMC_MC16"
   Title: "JER Data/MC"
@@ -505,24 +505,24 @@ Systematic: "JET_JER_EffectiveNP_7restTerm"
 % ---  JMS/R OBJECT SYSTEMATICS  --- %
 % -------------------------------- %
 
-%Systematic: "JET_JMS"
-  %Title: "JMS"
-  %Type: HISTO
-  %Category: "Jet uncertainties"
-  %HistoPathUp: "__HISTOPATH__/JMSRSYST/JMSUP/"
-  %HistoPathDown: "__HISTOPATH__/JMSRSYST/JMSDOWN/"
-  %HistoPathUpRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
-  %HistoPathDownRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
-  %Symmetrisation: TwoSided
+Systematic: "JET_JMS"
+  Title: "JMS"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoPathUp: "__HISTOPATH__/JMSRSYST/JMSUP/"
+  HistoPathDown: "__HISTOPATH__/JMSRSYST/JMSDOWN/"
+  HistoPathUpRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
+  HistoPathDownRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
+  Symmetrisation: TwoSided
   %Exclude: QCD
 
-%Systematic: "JET_JMR"
-  %Title: "JMR"
-  %Type: HISTO
-  %Category: "Jet uncertainties"
-  %HistoPathUp: "__HISTOPATH__/JMSRSYST/JMR/"
-  %HistoPathUpRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
-  %Symmetrisation: OneSided
+Systematic: "JET_JMR"
+  Title: "JMR"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoPathUp: "__HISTOPATH__/JMSRSYST/JMR/"
+  HistoPathUpRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
+  Symmetrisation: OneSided
   %Exclude: QCD
 
 % ------------------------------ %
