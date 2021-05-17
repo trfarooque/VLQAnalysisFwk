@@ -58,7 +58,7 @@ atlas_add_executable( MakeKinRwHists
 				     ${ROOT_LIBRARIES}			  
 				     VLQAnalysis)
 
-atlas_add_executable( MakeSByBPlot_VLQ
-		      macros/macros_carlos/MakeSByBPlot_VLQ.cxx
+atlas_add_executable( MakeSByBPlot
+		      macros/macros_carlos/SoverB_Plotter/MakeSByBPlot.cxx
 		      LINK_LIBRARIES IFAETopFramework
 		      		     ${ROOT_LIBRARIES})
