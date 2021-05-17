@@ -648,6 +648,16 @@ bool VLQ_Selector::Init(){
             AddVLQSelection(lep_prefix+"6jin-4bin-2Hin-0Vin-1Lin-0Tex"+lepsuf, do_runop, do_syst, FIT);
             AddVLQSelection(lep_prefix+"6jin-4bin-2Hin-0Vin-0LTex"+lepsuf, do_runop, do_syst, FIT);
 	    
+	    // merged 2Hin regions
+	    AddVLQSelection(lep_prefix+"6jin-3bex-2Hin-0Vin-1LTin"+lepsuf, do_runop, do_syst, FIT);
+	    AddVLQSelection(lep_prefix+"6jin-3bex-2Hin-0Vin-0Lin-0Tin"+lepsuf, do_runop, do_syst, FIT);
+	    AddVLQSelection(lep_prefix+"6jin-4bin-2Hin-0Vin-1LTin"+lepsuf, do_runop, do_syst, FIT);
+	    AddVLQSelection(lep_prefix+"6jin-4bin-2Hin-0Vin-0Lin-0Tin"+lepsuf, do_runop, do_syst, FIT);
+	    
+	    // merged 1Hex1Vin regions
+	    AddVLQSelection(lep_prefix+"6jin-3bin-1Hex-1Vin-0Lin-0Tex"+lepsuf, do_runop, do_syst, FIT);
+	    AddVLQSelection(lep_prefix+"6jin-3bex-1Hex-1Vin-0Lin-0Tex"+lepsuf, do_runop, do_syst, FIT);
+	    AddVLQSelection(lep_prefix+"6jin-4bin-1Hex-1Vin-0Lin-0Tex"+lepsuf, do_runop, do_syst, FIT);
 
 	  }
 
