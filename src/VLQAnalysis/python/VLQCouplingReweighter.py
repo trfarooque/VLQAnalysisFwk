@@ -28,12 +28,13 @@ from Samples import *
 parser = OptionParser()
 parser.add_option("-i","--inputDir",dest="inputDir",help="repository for the splitted files are located",action="store",default="./")
 parser.add_option("-o","--outputDir",dest="outputDir",help="repository where to put the hadded files",action="store",default="./test/")
-#parser.add_option("-s","--statOnly",dest="statOnly",help="repository where to put the hadded files",action="store_true",default=False)
 parser.add_option("-s","--statOnly",dest="statOnly",help="Flag to consider systematics",action="store",default="False")
 parser.add_option("-m","--mass",dest="vlqMass",help="value of the VLQ mass",action="store",default="800")
 parser.add_option("-c","--vlqCoupling",dest="vlqCoupling",help="value of the coupling (Wb,Zt,Ht)",action="store",default="HtHt,0.,0.,1.")
 parser.add_option("-r","--regions",dest="regions",help="Regions to consider (coma separated list), can use \"all\" to use all regions",action="store",default="")
+parser.add_option("-f","--outputFile",dest="outputFile",help="Dummy option", action="store",default="test.root")
 parser.add_option("-v","--variables",dest="variables",help="Variables to consider (coma separated list)",action="store",default="meff")
+parser.add_option("-p","--mcCampaign",dest="mcCampaign",help="MC campaign",action="store",default="mc16a")
 (options, args) = parser.parse_args()
 
 outputDir=options.outputDir
@@ -47,6 +48,8 @@ vlqMass=options.vlqMass
 vlqCoupling=options.vlqCoupling
 regions=options.regions
 variables=options.variables
+outputFile=options.outputFile
+mcCampaign=options.mcCampaign
 
 os.system("mkdir -p " + outputDir)
 ##........................................................
@@ -109,6 +112,7 @@ def getRWValues(values):
     rw += [values[0]*values[0]/(1./9)] #0
     rw += [2.*values[0]*values[1]/(2./9)] #1
     rw += [values[1]*values[1]/(1./9)] #2
+
     return rw
 ##........................................................
 
@@ -198,10 +202,18 @@ def CreateAllHistograms(inputFileName, outputFileName, br):
                     continue
 
                 finalHisto = histos[0].Clone()
+                #print "Integral before scaling = " + str(finalHisto.Integral())
                 finalHisto.Scale(rw[0])
+                #print "Integral after scaling = " + str(finalHisto.Integral())
+                #print "Scaling histogram by " + str(rw[0])
                 for iRw in range(1,len(rw)):
+                    #print "Integral before scaling = " + str(histos[iRw].Integral())
+                    #histos[iRw].Scale(rw[iRw])
+                    #print "Integral after scaling = " + str(histos[iRw].Integral())
+                    #finalHisto.Add(histos[iRw])
                     finalHisto.Add(histos[iRw],rw[iRw])
-
+                    #print "Scaling histogram by " + str(rw[iRw])
+                    
                 outF.cd()
                 finalHisto.SetName(outputHistoName)
                 finalHisto.SetTitle(outputHistoName)
@@ -276,7 +288,8 @@ for BR in BRs:
             for iFile in filelist:
                 #Computing the name of the output file
                 outputFileName = outputDir + "/"
-                outputFileName += template_fileName.replace("SAMPLE",SName+"_"+BR['name']).replace("_OBJSYSTEMATIC",space+syst).replace("*.root",find_between_r( iFile, space+syst, ".root" )).replace("*","")+".root"
+                outputFileName += template_fileName.replace("SAMPLE",SName+"_"+BR['name']+"."+mcCampaign).replace("_OBJSYSTEMATIC",space+syst).replace("*.root",find_between_r( iFile, space+syst, ".root" )).replace("*","")+".root"
+                print(outputFileName)
                 if(os.path.exists(outputFileName)):
                     continue
                 CreateAllHistograms(filelist[0],outputFileName,myBR)
