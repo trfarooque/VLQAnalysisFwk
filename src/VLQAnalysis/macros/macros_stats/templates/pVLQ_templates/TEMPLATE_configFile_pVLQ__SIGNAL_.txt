@@ -92,14 +92,14 @@ Sample: "Wjets_Ref"
 Type: GHOST
 FillColor: 0
 LineColor: 1
-HistoFiles: TheorySys/Wjets.mc16a,TheorySys/Wjets.mc16d,TheorySys/Wjets.mc16e
+HistoFiles: TheorySys/NewVJets/Wjets.mc16a,TheorySys/NewVJets/Wjets.mc16d,TheorySys/NewVJets/Wjets.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 
 Sample: "Zjets_Ref"
 Type: GHOST
 FillColor: 0
 LineColor: 1
-HistoFiles: TheorySys/Zjets.mc16a,TheorySys/Zjets.mc16d,TheorySys/Zjets.mc16e
+HistoFiles: TheorySys/NewVJets/Zjets.mc16a,TheorySys/NewVJets/Zjets.mc16d,TheorySys/NewVJets/Zjets.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 
 
@@ -159,8 +159,8 @@ Title: "ttH"
 Type: background
 FillColor: 806
 LineColor: 1
-HistoFiles: ttH.mc16a,ttH.mc16d
-LumiScales: 36207.66,44307.4
+HistoFiles: ttH.mc16a,ttH.mc16d,ttH.mc16e
+LumiScales: 36207.66,44307.4,58450.1
 %HistoFile: ttH
 %Group: Non-t#bar{t}
 Group: Others
@@ -203,4 +203,13 @@ Group: Others
 %LineColor: 1
 %HistoFiles: QCDFiles/Dijet.mc16a,QCDFiles/Dijet.mc16d,QCDFiles/Dijet.mc16e
 %LumiScales: 36207.66,44307.4,58450.1
+
+Sample: "SM4tops"
+Title: "t#bar{t}t#bar{t}"
+Type: background
+FillColor: 806
+LineColor: 1
+HistoFiles: SM4tops.mc16a,SM4tops.mc16d,SM4tops.mc16e
+LumiScales: 36207.66,44307.4,58450.1
+%%Group: Non-t#bar{t}
 %Group: Others
