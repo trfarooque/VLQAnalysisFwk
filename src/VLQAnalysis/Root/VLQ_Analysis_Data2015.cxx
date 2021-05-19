@@ -1310,10 +1310,11 @@ bool VLQ_Analysis_Data2015::Begin(){
 
 	    //------------------------Casey start-----------------------------//
 	    //------------------------Eta-----------------------------//
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_eta",  0.1,-3,3,  "; truth"+type+", "+str_id+" #eta_{1}"
-                                             , true, &(m_outData -> o_truth_partons.at(type)), iTT, "eta"/*, hopt_nouflow*/  );
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_eta",  0.1,-3,3,  "; truth"+type+", "+str_id+" #eta_{2}"
-                                             , true, &(m_outData -> o_truth_partons.at(type)), iTT, "eta"/*, hopt_nouflow*/  );
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_VLQ0eta",  0.1,-3,3,  "; truth"+type+", "+str_id+" #eta_{VLQ1}"
+                                             , true, &(m_outData -> o_truth_partons.at(type)), iTT, "VLQ0eta"/*, hopt_nouflow*/  );
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_VLQ1eta",  0.1,-3,3,  "; truth"+type+", "+str_id+" #eta_{VLQ2}"
+                                             , true, &(m_outData -> o_truth_partons.at(type)), iTT, "VLQ1eta"/*, hopt_nouflow*/  );
+    //(m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("VLQ0eta", VLQ0->Eta());
 //	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_eta",  0.1,0,3,  "; truth"+type+", "+str_id+" #eta_{3}"
 //                                             , true, &(m_outData -> o_truth_partons.at(type)), iTT, "eta"/*, hopt_nouflow*/  );
 //	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_eta",  0.1,0,3,  "; truth"+type+", "+str_id+" #eta_{4}"
@@ -1322,6 +1323,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 	    //------------------------dR-----------------------------//
 	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dR12",  0.1,0,6,  "; truth"+type+", "+str_id+" #DeltaR_{12}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "dR12"/*, hopt_nouflow*/  );
+    //(m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dR12", cd00 -> DeltaR(*cd01));
 	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dR13",  0.1,0,6,  "; truth"+type+", "+str_id+" #DeltaR_{13}"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "dR13"/*, hopt_nouflow*/  );
 	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dR14",  0.1,0,6,  "; truth"+type+", "+str_id+" #DeltaR_{14}"
@@ -1452,11 +1454,11 @@ bool VLQ_Analysis_Data2015::Begin(){
 
 
 	    //------------------------Highest pT Origin-----------------------------//
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_leadingPtOrigin",  .5,0,4,  "; truth"+type+", "+str_id+" Decay Particle Origin"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_leadingPtOrigin",  .5,0,4,  "; truth"+type+", "+str_id+" Leading Decay Origin"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "leadingPtOrigin"/*, hopt_nouflow*/  );
 
 	    //------------------------Second highest pT Origin, if same VLQ-----------------------------//
-	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_subLeadingPtOrigin",  .5,0,4,  "; truth"+type+", "+str_id+" Decay Particle Origin"
+	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_subLeadingPtOrigin",  .5,0,4,  "; truth"+type+", "+str_id+" Subleading Decay Origin"
                                              , true, &(m_outData -> o_truth_partons.at(type)), iTT, "subLeadingPtOrigin"/*, hopt_nouflow*/  );
             //
 	    //------------------------2D pT Origin-----------------------------//
