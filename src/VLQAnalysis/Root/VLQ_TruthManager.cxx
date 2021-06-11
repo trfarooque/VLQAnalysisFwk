@@ -1725,9 +1725,9 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
     }
     AnalysisObject decaySum3 = *RetrieveChild(VLQ0, 0) + *RetrieveChild(VLQ0, 1);
     AnalysisObject decaySum4 = *RetrieveChild(VLQ1, 0) + *RetrieveChild(VLQ1, 1);
-    //std::cout << "Before: " << std::endl;
-    //std::cout << "Decaysum1: " << decaySum3.Pt() << std::endl;
-    //std::cout << "Decaysum2: " << decaySum4.Pt() << std::endl << std::endl;
+    std::cout << "Before: " << std::endl;
+    std::cout << "Decaysum1: " << decaySum3.Pt() << std::endl;
+    std::cout << "Decaysum2: " << decaySum4.Pt() << std::endl << std::endl;
 
     ///////////////// Alternate way to sort. Highest pT decay = 1, sister=2
     int alt = 0;
@@ -2029,6 +2029,7 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
 
     (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("jetPt", VLQ0->Pt());
     (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("jetPt", VLQ1->Pt());
+    std::cout << "VLQ0->Pt(): " << VLQ0->Pt() << ", VLQ1->Pt(): " << VLQ1->Pt() << std::endl;
   }
   //------------------------Casey end-----------------------------//
 
