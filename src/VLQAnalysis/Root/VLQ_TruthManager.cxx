@@ -11,17 +11,6 @@
 #include "VLQAnalysis/VLQ_TruthManager.h"
 
 
-// Casey Analysis variables
-float count1 = 0;
-float count2 = 0;
-float count3 = 0;
-float count4 = 0;
-float count21 = 0;
-float count22 = 0;
-float count23 = 0;
-float count24 = 0;
-float total = 0;
-
 //________________________________________________________
 //
 VLQ_TruthManager::VLQ_TruthManager( VLQ_Options *opt, const VLQ_NtupleData *ntup, VLQ_OutputData* outData, VLQ_VariableComputer* varComputer ):
@@ -1696,50 +1685,32 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
    }//loop on ME particles
 
 
-  //------------------------Casey start-----------------------------//
+  //------------------------Casey's Truth Studies Begin-----------------------------//
   if(m_outData -> o_truth_partons_n.at("VLQ") == 2){
     
     // Retrieve the two VLQs
     AnalysisObject* VLQ0 = (m_outData -> o_truth_partons.at("VLQ"))->at(0);
     AnalysisObject* VLQ1 = (m_outData -> o_truth_partons.at("VLQ"))->at(1);
-    AnalysisObject* VLQtemp;
+    AnalysisObject* VLQtemp; // For re-ordering based on pT
 
     AnalysisObject decaySum1 = *RetrieveChild(VLQ0, 0) + *RetrieveChild(VLQ0, 1);
     AnalysisObject decaySum2 = *RetrieveChild(VLQ1, 0) + *RetrieveChild(VLQ1, 1);
-    //std::cout << "Before: " << std::endl;
-    //std::cout << "Decaysum1: " << decaySum1.Pt() << std::endl;
-    //std::cout << "Decaysum2: " << decaySum2.Pt() << std::endl;
-   
-    //tried
-    //x x &
-    //* & &
-    //* x x 
-    //x * *
-    //AnalysisObject operator+(const AnalysisObject& q) const;
 
-    // Sorts VLQ0 and VLQ1 by pT. May change other parts of analysis, but is correct for my truth studies
+    // Sorts VLQ0 and VLQ1 by pT after 4-vector addition. 
+    // ****May change other parts of analysis, but is correct for my truth studies****
     if(decaySum1.Pt() < decaySum2.Pt()){
       VLQtemp = VLQ0;
       VLQ0 = VLQ1;
       VLQ1 = VLQtemp;
     }
-    AnalysisObject decaySum3 = *RetrieveChild(VLQ0, 0) + *RetrieveChild(VLQ0, 1);
-    AnalysisObject decaySum4 = *RetrieveChild(VLQ1, 0) + *RetrieveChild(VLQ1, 1);
-    std::cout << "Before: " << std::endl;
-    std::cout << "Decaysum1: " << decaySum3.Pt() << std::endl;
-    std::cout << "Decaysum2: " << decaySum4.Pt() << std::endl << std::endl;
 
-    ///////////////// Alternate way to sort. Highest pT decay = 1, sister=2
+    ///////////////// ****Alternate way to sort VLQ's if alt = 0****
+    // Alternate sorting: VLQ with highest pT decay becomes VLQ0, the decay and it's sister become decays 1 and 2 respectively
+    // VLQ1 is the other VLQ, with decays ordered by pT
     int alt = 0;
-    if(alt == 1){ // If either decay form VLQ1 is leading pT decay, switch VLQ order
-      //std::cout << "Before: " << std::endl;
-      //std::cout << "ch1 pt: " << RetrieveChild(VLQ0, 0)->Pt() << std::endl;
-      //std::cout << "ch2 pt: " << RetrieveChild(VLQ0, 1)->Pt() << std::endl;
-      //std::cout << "ch3 pt: " << RetrieveChild(VLQ1, 0)->Pt() << std::endl;
-      //std::cout << "ch4 pt: " << RetrieveChild(VLQ1, 1)->Pt() << std::endl;
-
+    if(alt == 1){ // If either decay from VLQ1 is leading pT decay, switch VLQ order
       if(RetrieveChild(VLQ1, 0)->Pt() > RetrieveChild(VLQ0, 0)->Pt() and 
-          RetrieveChild(VLQ1, 0)->Pt() > RetrieveChild(VLQ0, 1)->Pt()){
+         RetrieveChild(VLQ1, 0)->Pt() > RetrieveChild(VLQ0, 1)->Pt()){
         VLQtemp = VLQ0;
         VLQ0 = VLQ1;
         VLQ1 = VLQtemp;
@@ -1750,17 +1721,11 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
         VLQ0 = VLQ1;
         VLQ1 = VLQtemp;
       }
-      //std::cout << "After: " << std::endl;
-      //std::cout << "ch1 pt: " << RetrieveChild(VLQ0, 0)->Pt() << std::endl;
-      //std::cout << "ch2 pt: " << RetrieveChild(VLQ0, 1)->Pt() << std::endl;
-      //std::cout << "ch3 pt: " << RetrieveChild(VLQ1, 0)->Pt() << std::endl;
-      //std::cout << "ch4 pt: " << RetrieveChild(VLQ1, 1)->Pt() << std::endl;
     } 
-    /////////////////
 
     // Retrieve the children of the VLQs
-    // Arranges children by Pt
-    int ch0, ch1, ch2, ch3; //skipto
+    // Arranges children by highest pT in respective VLQ
+    int ch0, ch1, ch2, ch3; 
     if(RetrieveChild(VLQ0, 0)->Pt() > RetrieveChild(VLQ0, 1)->Pt()){
       ch0 = 0;
       ch1 = 1;
@@ -1781,12 +1746,12 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
     AnalysisObject* cd00 = RetrieveChild(VLQ0, ch0); // VLQ0
     AnalysisObject* cd01 = RetrieveChild(VLQ0, ch1);
     AnalysisObject* cd10 = RetrieveChild(VLQ1, ch2); // VLQ1
-    AnalysisObject* cd11 = RetrieveChild(VLQ1, ch3); //cd->GetMoment("absPdgId")
-
-         //std::cout << "VLQ0 eta: " << VLQ0->Eta() << std::endl;
-	 //part -> SetMoment( "etaVLQ0_upper", vcd1 -> Eta() ); 
-	 //part -> SetMoment( "etaVLQ1_upper", vcd2 -> Eta() ); 
-    // Store the dR, dPhi, and dEta between all combinations, internal and external, of VLQ0 and VLQ1
+    AnalysisObject* cd11 = RetrieveChild(VLQ1, ch3); 
+    
+    // Store the dR, dPhi, and dEta between all decay combinations, internal and external, of VLQ0 and VLQ1
+    // SetMoment is used for both VLQ's to ensure you can search from either VLQ. A bit redundant however
+    //
+    //-----------------------Eta of each VLQ-----------------------
     (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("VLQ0eta", VLQ0->Eta());
     (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("VLQ1eta", VLQ1->Eta());
     //-----------------------dR-----------------------
@@ -1804,6 +1769,7 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
     (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dR24", cd01 -> DeltaR(*cd11)); // same as above
     (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dR34", cd10 -> DeltaR(*cd11)); // same as above
 
+    //-----------------------dR12-dR13-----------------------
     (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dR12diffdR13", cd00->DeltaR(*cd01) - cd00->DeltaR(*cd10));
     (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dR12diffdR13", cd00->DeltaR(*cd01) - cd00->DeltaR(*cd10));
 
@@ -1823,7 +1789,6 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
     (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dPhi34", cd10 -> DeltaPhi(*cd11)); // same as above
 
     //-----------------------Eta-----------------------
-    //dEta = TMath::Abs(vcd1 -> Eta() - vcd2 -> Eta())
     (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("eta1", cd00->Eta());
     (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("eta2", cd01->Eta());
     (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("eta3", cd10->Eta());
@@ -1835,7 +1800,6 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
     (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("eta4", cd11->Eta()); // same as above
 
     //-----------------------dEta-----------------------
-    //dEta = TMath::Abs(vcd1 -> Eta() - vcd2 -> Eta())
     (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta12", cd00->Eta() - cd01->Eta());
     (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta13", cd00->Eta() - cd10->Eta());
     (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("dEta14", cd00->Eta() - cd11->Eta());
@@ -1851,8 +1815,6 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
     (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("dEta34", cd10->Eta() - cd11->Eta()); // same as above
 
     //-----------------------pT Ratio-----------------------
-         // 1D histograms too
-         // 
     (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio12", cd01->Pt() / cd00->Pt());
     (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio13", cd10->Pt() / cd00->Pt());
     (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("pTRatio14", cd11->Pt() / cd00->Pt());
@@ -1867,58 +1829,41 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
     (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio24", cd11->Pt() / cd01->Pt()); // same as above
     (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("pTRatio34", cd11->Pt() / cd10->Pt()); // same as above
 
+    // Determine leading and subleading pT of all 4 VLQ children
     int highestPtcd = -1; 
     int secondHighestPtcd = -1; 
-    total++;
-    // skipto 
-    // make new variables to print? Fill with yes or no. Get %'s
-    // cases: 0 = Boson from VLQ 0
+
+    // Cases: 0 = Boson from VLQ 0
     //        1 = Quark from VLQ 0
     //        3 = Boson from VLQ 1
     //        4 = Quark from VLQ 1
 
     if((cd00->Pt() > cd01->Pt()) and (cd00->Pt() > cd10->Pt()) and (cd00->Pt() > cd11->Pt())){
-      if(cd00->GetMoment("absPdgId") > 20){ // Highest energy VLQ = 0, Boson = 0 -> Case = 0
-        highestPtcd = 0;
-      }
-      else if(cd00->GetMoment("absPdgId") < 10){ // Highest energy VLQ = 0, Quark = 1 -> Case = 1
-        highestPtcd = 1;
-      }
+      // Highest energy VLQ = 0, Boson = 0 -> Case = 0
+      // Highest energy VLQ = 0, Quark = 1 -> Case = 1
+      if(cd00->GetMoment("absPdgId") > 20){ highestPtcd = 0;}
+      else if(cd00->GetMoment("absPdgId") < 10){ highestPtcd = 1;}
     }
     else if((cd01->Pt() > cd00->Pt()) and (cd01->Pt() > cd10->Pt()) and (cd01->Pt() > cd11->Pt())){
-      if(cd01->GetMoment("absPdgId") > 20){ 
-        highestPtcd = 0;
-      }
-      else if(cd01->GetMoment("absPdgId") < 10){ 
-        highestPtcd = 1;
-      }
+      if(cd01->GetMoment("absPdgId") > 20){ highestPtcd = 0;}
+      else if(cd01->GetMoment("absPdgId") < 10){ highestPtcd = 1;}
     }
     else if((cd10->Pt() > cd00->Pt()) and (cd10->Pt() > cd01->Pt()) and (cd10->Pt() > cd11->Pt())){
-      if(cd10->GetMoment("absPdgId") > 20){ 
-        highestPtcd = 2;
-      }
-      else if(cd10->GetMoment("absPdgId") < 10){ 
-        highestPtcd = 3;
-      }
+      if(cd10->GetMoment("absPdgId") > 20){ highestPtcd = 2;}
+      else if(cd10->GetMoment("absPdgId") < 10){ highestPtcd = 3;}
     }
     else if((cd11->Pt() > cd00->Pt()) and (cd11->Pt() > cd01->Pt()) and (cd11->Pt() > cd10->Pt())){
-      if(cd11->GetMoment("absPdgId") > 20){ 
-        highestPtcd = 2;
-      }
-      else if(cd11->GetMoment("absPdgId") < 10){ 
-        highestPtcd = 3;
-      }
+      if(cd11->GetMoment("absPdgId") > 20){ highestPtcd = 2;}
+      else if(cd11->GetMoment("absPdgId") < 10){ highestPtcd = 3;}
     }
-//    std::cout << "Start--------------------------------------------------------------------" << std::endl;
-//    std::cout << "Pts: " << cd00->Pt() << ", " << cd01->Pt() << ", " << 
-//                            cd10->Pt() << ", " << cd11->Pt() << ", " << std::endl << std::endl;
-    std::vector<AnalysisObject*> decayPts{cd00, cd01, cd10, cd11};
+  
+    // skipto    Make sure this matches the above! If it does, get rid of above 
+    // Vector and temporary variables for easy looping/comparing, could possibly be done above as well
+    std::vector<AnalysisObject*> decayPts{cd00, cd01, cd10, cd11}; 
     AnalysisObject* temp  = decayPts[0];
     AnalysisObject* temp2 = decayPts[0];
-    int tempi  = 0;
-    int tempi2 = 0;
-    float tempPt  = 0;
-    float tempPt2 = 0;
+    int tempi  = 0, tempi2 = 0;
+    float tempPt  = 0, tempPt2 = 0;
 
     for(int i=0; i<4; i++){
       if(decayPts[i]->Pt() >= tempPt){
@@ -1937,101 +1882,37 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
         }
       }
     }
-//    std::cout << "Second highest Pt (i, Pt): " << tempi2 << ", " << tempPt2 << std::endl;
-//    std::cout << "PDG ID: " << temp2->GetMoment("absPdgId") << std::endl;
-//    std::cout << "   i = 0,1 and ID > 20 -> 0" << std::endl;
-//    std::cout << "   i = 0,1 and ID < 20 -> 1" << std::endl;
-//    std::cout << "   i = 2,3 and ID > 20 -> 2" << std::endl;
-//    std::cout << "   i = 2,3 and ID < 20 -> 3" << std::endl;
-
 
     if(tempi <= 1){
-      if(temp->GetMoment("absPdgId") > 20){
-        highestPtcd = 0;
-      }
-      else if(temp->GetMoment("absPdgId") < 20){
-        highestPtcd = 1;
-      }
+      if(temp->GetMoment("absPdgId") > 20){ highestPtcd = 0;}
+      else if(temp->GetMoment("absPdgId") < 20){ highestPtcd = 1;}
     }
     else{
-      if(temp->GetMoment("absPdgId") > 20){
-        highestPtcd = 2;
-      }
-      else if(temp->GetMoment("absPdgId") < 20){
-        highestPtcd = 3;
-      }
+      if(temp->GetMoment("absPdgId") > 20){ highestPtcd = 2;}
+      else if(temp->GetMoment("absPdgId") < 20){ highestPtcd = 3;}
     }
 
     if(tempi2 <= 1){
-      if(temp2->GetMoment("absPdgId") > 20){
-        secondHighestPtcd = 0;
-      }
-      else if(temp2->GetMoment("absPdgId") < 20){
-        secondHighestPtcd = 1;
-      }
+      if(temp2->GetMoment("absPdgId") > 20){ secondHighestPtcd = 0;}
+      else if(temp2->GetMoment("absPdgId") < 20){ secondHighestPtcd = 1;}
     }
     else{
-      if(temp2->GetMoment("absPdgId") > 20){
-        secondHighestPtcd = 2;
-      }
-      else if(temp2->GetMoment("absPdgId") < 20){
-        secondHighestPtcd = 3;
-      }
-    }
-    if(tempi2==0){
-      count1++;
-    }
-    else if(tempi2==1){
-      count2++;
-    }
-    else if(tempi2==2){
-      count3++;
-    }
-    else if(tempi2==3){
-      count4++;
+      if(temp2->GetMoment("absPdgId") > 20){ secondHighestPtcd = 2;}
+      else if(temp2->GetMoment("absPdgId") < 20){ secondHighestPtcd = 3;}
     }
 
-    if(secondHighestPtcd==0){
-      count21++;
-    }
-    else if(secondHighestPtcd==1){
-      count22++;
-    }
-    else if(secondHighestPtcd==2){
-      count23++;
-    }
-    else if(secondHighestPtcd==3){
-      count24++;
-    }
-
-//    std::cout << "Highest Pt (i, Pt):        " << tempi << ", " << tempPt << std::endl;
-//    std::cout << "Second highest Pt (i, Pt): " << tempi2 << ", " << tempPt2 << std::endl;
-//    std::cout << "PDG ID:                    " << temp2->GetMoment("absPdgId") << std::endl;
-//    std::cout << "   i = 0,1 and ID > 20 -> 0" << std::endl;
-//    std::cout << "   i = 0,1 and ID < 20 -> 1" << std::endl;
-//    std::cout << "   i = 2,3 and ID > 20 -> 2" << std::endl;
-//    std::cout << "   i = 2,3 and ID < 20 -> 3" << std::endl;
-//    std::cout << "Leading Pt Decay:          " << highestPtcd << std::endl;
-//    std::cout << "Subleading Pt Decay:       " << secondHighestPtcd << std::endl;
-//    
-//    std::cout << "End--------------------------------------------------------------------" << std::endl;
-//    std::cout << "PDG ID 1: "  << cd00->Pt() << "     " << cd00->GetMoment("absPdgId") << std::endl;
-//    std::cout << "PDG ID 2: "  << cd01->Pt() << "     " << cd01->GetMoment("absPdgId") << std::endl;
-//    std::cout << "PDG ID 3: "  << cd10->Pt() << "     " << cd10->GetMoment("absPdgId") << std::endl;
-//    std::cout << "PDG ID 4: "  << cd11->Pt() << "     " << cd11->GetMoment("absPdgId") << std::endl;
-//    std::cout << "HighestPt: " << highestPtcd << std::endl << std::endl;
-
+    //-----------------------Leading and subleading pT decay origins-----------------------
     (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("leadingPtOrigin", highestPtcd);
     (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("leadingPtOrigin", highestPtcd);
     
     (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("subLeadingPtOrigin", secondHighestPtcd);
     (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("subLeadingPtOrigin", secondHighestPtcd);
 
+    //-----------------------Jet pT-----------------------
     (m_outData -> o_truth_partons.at("VLQ"))->at(0)->SetMoment("jetPt", VLQ0->Pt());
     (m_outData -> o_truth_partons.at("VLQ"))->at(1)->SetMoment("jetPt", VLQ1->Pt());
-    std::cout << "VLQ0->Pt(): " << VLQ0->Pt() << ", VLQ1->Pt(): " << VLQ1->Pt() << std::endl;
   }
-  //------------------------Casey end-----------------------------//
+  //------------------------Casey Truth Studies End-----------------------------//
 
   for(AnalysisObject* inv : list_inv){
     double _dphi   = inv->DeltaPhi( *(m_outData->o_truth_partonMET) );
@@ -2223,27 +2104,6 @@ int VLQ_TruthManager::CalculateTruthVariables(){
     m_outData -> o_truth_mtw             = -1.;
     m_outData -> o_truth_ptw             = -1.;
   }
-
-//  std::cout << "Total: " << total << std::endl;
-//  std::cout << "count: " << count << std::endl;
-//
-//  std::cout << "Number1: " << count1 << std::endl;
-//  std::cout << "Number2: " << count2 << std::endl;
-//  std::cout << "Number3: " << count3 << std::endl;
-//  std::cout << "Number4: " << count4 << std::endl;
-//  
-//  std::cout << "PDG ID1: " << count21 << std::endl;
-//  std::cout << "PDG ID2: " << count22 << std::endl;
-//  std::cout << "PDG ID3: " << count23 << std::endl;
-//  std::cout << "PDG ID4: " << count24 << std::endl;
-// ///////////////////////// 
-  //std::cout << "Percent same VLQ overall: " << count/total << std::endl;
-//
-//  std::cout << "Percent same VLQ 1: " << count1/total << std::endl;
-//  std::cout << "Percent same VLQ 2: " << count2/total << std::endl;
-//  std::cout << "Percent same VLQ 3: " << count3/total << std::endl;
-//  std::cout << "Percent same VLQ 4: " << count4/total << std::endl << std::endl;
-
 
   return 0;
 
