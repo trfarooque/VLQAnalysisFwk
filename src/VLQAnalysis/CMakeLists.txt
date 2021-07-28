@@ -8,7 +8,7 @@ atlas_depends_on_subdirs( PUBLIC
 			  FakeLeptonEstimation
 )
 
-find_package( ROOT REQUIRED COMPONENTS Core RIO Hist Graf Gpad)
+find_package( ROOT REQUIRED COMPONENTS Core RIO Hist Graf Gpad TMVA)
 
 atlas_add_root_dictionary( VLQAnalysis _cintDictSource
    ROOT_HEADERS VLQAnalysis/*.h Root/LinkDef.h

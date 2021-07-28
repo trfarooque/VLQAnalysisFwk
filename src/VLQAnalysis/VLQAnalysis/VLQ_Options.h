@@ -99,6 +99,7 @@ public:
   inline bool DoTheorySys() const { return m_doTheorySys; }
   inline bool DoPDFSys() const { return m_doPDFSys; }
   inline bool DoJMRSys() const { return m_doJMRSys; }
+  inline bool ApplyMVA() const { return m_applyMVA; }
 
   // strings
   inline std::string DoRecoVLQ() const { return m_doRecoVLQ; }
@@ -198,6 +199,8 @@ private:
   bool m_doTheorySys;
   bool m_doPDFSys;
   bool m_doJMRSys;
+
+  bool m_applyMVA;
 
   int m_doJMSSys;
   int m_maxb;

@@ -207,6 +207,9 @@ bool VLQ_Analysis_Data2015::Begin(){
   //
   //############################################################################
   m_varComputer = new VLQ_VariableComputer(m_opt);
+  if(m_opt->ApplyMVA() && m_opt->DoOneLeptonAna()) m_varComputer->InitMVA(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/TMVAClassification_MLP.weights.xml"));
+
+  
 
   //############################################################################
   //
@@ -393,18 +396,18 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_outMngrTree->AddStandardBranch("dRmin_bb", "#DeltaR_{min}(b-jet, b-jet)", &(m_outData->o_dRmin_bjetbjet));
 
     m_outMngrTree->AddStandardBranch("mbb_mindr", "m_{inv}^{min#DeltaR}", &(m_outData->o_mbb_mindR));
-    m_outMngrTree->AddStandardBranch("dPhi_lepmet", "#Delta#phi(lep, MET)", &(m_outData->o_dPhi_lepmet));
+    m_outMngrTree->AddStandardBranch("dPhi_lepmet", "#Delta#phi(lep, MET)", &(m_outData->o_dPhi_lepmet));*/
     m_outMngrTree->AddStandardBranch("dPhi_jetmet", "#Delta#phi_{min}(jet, MET)", &(m_outData->o_dPhi_jetmet));
-    m_outMngrTree->AddStandardBranch("dPhi_lepjet", "#Delta#phi_{min}(lep, jet)", &(m_outData->o_dPhi_lepjet));
+    /*m_outMngrTree->AddStandardBranch("dPhi_lepjet", "#Delta#phi_{min}(lep, jet)", &(m_outData->o_dPhi_lepjet));
     m_outMngrTree->AddStandardBranch("dPhi_lepbjet", "#Delta#phi_{min}(lep, b-jet)", &(m_outData->o_dPhi_lepbjet));
 
     m_outMngrTree->AddStandardBranch("dRmin_lepbjet", "#DeltaR_{min}(lep, b-jet)", &(m_outData->o_dRmin_lepbjet));
     m_outMngrTree->AddStandardBranch("dRmin_lepjet", "#DeltaR_{min}(lep, b-jet)", &(m_outData->o_dRmin_lepjet));
     //m_outMngrTree->AddStandardBranch("dRmin_ebjets", "#DeltaR_{min}(e, b-jets)", &(m_outData->o_dRmin_ebjets));
-    //m_outMngrTree->AddStandardBranch("dRmin_mubjets", "#DeltaR_{min}(#mu, b-jets)", &(m_outData->o_dRmin_mubjets));
+    //m_outMngrTree->AddStandardBranch("dRmin_mubjets", "#DeltaR_{min}(#mu, b-jets)", &(m_outData->o_dRmin_mubjets));*/
     m_outMngrTree->AddStandardBranch("mT_bmin", "m_{T}^{min}(b-jets, MET)", &(m_outData->o_mTbmin));
-
-    m_outMngrTree->AddStandardBranch("jets40_n", "Number of jets with p_{T}>40 GeV", &(m_outData->o_jets40_n ));
+    m_outMngrTree->AddStandardBranch("metsig_ev", "E_{T}^{miss}/#sqrt{H_{T}^{had}} [#sqrt{GeV}", &(m_outData -> o_metsig_ev));
+    /*m_outMngrTree->AddStandardBranch("jets40_n", "Number of jets with p_{T}>40 GeV", &(m_outData->o_jets40_n ));
     m_outMngrTree->AddStandardBranch("centrality", "Centrality", &(m_outData->o_centrality ));
     m_outMngrTree->AddStandardBranch("dRaverage_jetjet", "#DeltaR_{ave.}(jet, jet)", &(m_outData->o_dRaverage_jetjet));
     m_outMngrTree->AddStandardBranch("dRaverage_bb", "#DeltaR_{ave.}(b-jet, b-jet)", &(m_outData->o_dRaverage_bjetbjet));
@@ -498,11 +501,17 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "truth_ht_filter",    25, 0, 3000,    ";Truth H_{T} [GeV]", false, &(m_outData -> o_truth_ht_filter ) );
       m_outMngrHist -> AddStandardTH1( "truth_met_filter",   25, 0, 1000,    ";Truth MET [GeV]", false, &(m_outData -> o_truth_met_filter ) );
       m_outMngrHist -> AddStandardTH1( "mtbmin",      25, 0, 500,    ";m_{T}^{min}(b,MET)", otherVariables, &(m_outData->o_mTbmin) );
-      m_outMngrHist -> AddStandardTH1( "metsig_ev",     0.5, 0, 50,    ";E_{T}^{miss}/#sqrt{H_{T}^{had}} [#sqrt{GeV}]", false, &(m_outData -> o_metsig_ev) );
-      m_outMngrHist -> AddStandardTH1( "metsig_obj",    0.5, 0, 50,    "; #sigma(E_{T}^{miss}) [#sqrt{GeV}]", false, &(m_outData -> o_metsig_obj) );
+      m_outMngrHist -> AddStandardTH1( "metsig_ev",     0.5, 0, 50,    ";E_{T}^{miss}/#sqrt{H_{T}^{had}} [#sqrt{GeV}]", otherVariables, &(m_outData -> o_metsig_ev) );
+      m_outMngrHist -> AddStandardTH1( "metsig_obj",    0.5, 0, 50,    "; #sigma(E_{T}^{miss}) [#sqrt{GeV}]", otherVariables, &(m_outData -> o_metsig_obj) );
 
       m_outMngrHist -> AddStandardTH2( "meff", "jets_n", 50, 0, 7000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} [GeV]", (RWderiv||otherVariables), &(m_outData -> o_meff), &(m_outData -> o_jets_n));
       m_outMngrHist -> AddStandardTH2( "meffred", "jets_n", 50, 0, 7000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} reduced [GeV]", (RWderiv||otherVariables), &(m_outData -> o_meffred), &(m_outData -> o_jets_n));
+
+      m_outMngrHist ->AddStandardTH2("mtbmin", "metsig_ev", 25, 0, 500, 0.5, 0, 50, ";m_{T}^{min}(b,MET)", ";E_{T}^{miss}/#sqrt{H_{T}^{had}} [#sqrt{GeV}]", otherVariables, &(m_outData->o_mTbmin), &(m_outData -> o_metsig_ev));
+      m_outMngrHist ->AddStandardTH2("mtbmin", "dPhi_jetmet", 25, 0, 500, 0.1, 0, 4, ";m_{T}^{min}(b,MET)", ";#Delta#Phi^{min}(MET,jet)", otherVariables, &(m_outData->o_mTbmin), &(m_outData -> o_dPhi_jetmet));
+      m_outMngrHist ->AddStandardTH2("metsig_ev", "dPhi_jetmet", 0.5, 0, 50, 0.1, 0, 4, ";E_{T}^{miss}/#sqrt{H_{T}^{had}} [#sqrt{GeV}]", ";#Delta#Phi^{min}(MET,jet)", 
+				     otherVariables, &(m_outData->o_metsig_ev), &(m_outData -> o_dPhi_jetmet));
+
 
       /*
       m_outMngrHist -> AddStandardTH2( "mu", "fwdjets_n", 10, 0, 80, 1, -0.5, 8.5,"<#mu>", "Number of fwd-jets", false,
@@ -1206,7 +1215,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 	m_outMngrHist -> AddStandardTH1( "dRmin_TTLooser_bjets", 0.25,0,5,  ";#DeltaR^{min}(top tagged,b-jets)" , false, &(m_outData -> o_dR_TTLooser_bjets));
 
 	m_outMngrHist -> AddStandardTH1( "dPhi_lepmet",     0.1,0.,4,  ";#Delta#Phi(MET,lep)" ,      false, &(m_outData -> o_dPhi_lepmet));
-	m_outMngrHist -> AddStandardTH1( "dPhi_jetmet",     0.1,0.,4,  ";#Delta#Phi^{min}(MET,jet)" ,      false, &(m_outData -> o_dPhi_jetmet));
+	m_outMngrHist -> AddStandardTH1( "dPhi_jetmet",     0.1,0.,4,  ";#Delta#Phi^{min}(MET,jet)" ,      otherVariables, &(m_outData -> o_dPhi_jetmet));
 	m_outMngrHist -> AddStandardTH1( "dPhi_jetmet5",     0.1,0,4,  ";#Delta#Phi^{min}(MET,jet)" ,      false, &(m_outData -> o_dPhi_jetmet5));
 	m_outMngrHist -> AddStandardTH1( "dPhi_jetmet6",     0.1,0,4,  ";#Delta#Phi^{min}(MET,jet)" ,      false, &(m_outData -> o_dPhi_jetmet6));
 	m_outMngrHist -> AddStandardTH1( "dPhi_jetmet7",     0.1,0,4,  ";#Delta#Phi^{min}(MET,jet)" ,      false, &(m_outData -> o_dPhi_jetmet7));
@@ -1893,10 +1902,16 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 
     double dPhiMin = TMath::Abs( m_varComputer -> GetMindPhi( m_outData->o_AO_met, *(m_outData->o_jets), 4 ) );
 
-    if ( !( (dPhiMin > m_opt->MinDeltaPhiCut()) && (  (m_opt->MaxDeltaPhiCut() < 0.) || (dPhiMin <= m_opt->MaxDeltaPhiCut()) ) ) ){
-      m_outData -> o_rejectEvent |= 1 << VLQ_Enums::DPHI_REJECTED;
+    if(!m_opt->InvertDeltaPhiCut()){
+      if ( !( (dPhiMin > m_opt->MinDeltaPhiCut()) && (  (m_opt->MaxDeltaPhiCut() < 0.) || (dPhiMin <= m_opt->MaxDeltaPhiCut()) ) ) ){
+	m_outData -> o_rejectEvent |= 1 << VLQ_Enums::DPHI_REJECTED;
+      }
     }
-
+    else{ // Currently doing a one-sided inversion
+      if( !(dPhiMin <= m_opt->MinDeltaPhiCut()) ){
+	m_outData -> o_rejectEvent |= 1 << VLQ_Enums::DPHI_REJECTED;
+      }
+    }
   }
 
   //###########################################################
@@ -2005,7 +2020,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     m_outData -> o_VLQtype = m_truthMngr -> GetVLQDecayType();
 
     //TEMPORARY HACK
-    
+    //-------------------------------------------------
     //m_truthMngr -> Initialize();
     //m_truthMngr -> FillParticlesPartonsVectors();
 
@@ -2015,6 +2030,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     //else if( (m_outData -> o_truth_partons_n.at("VLQ_Ht") == 1) && (m_outData -> o_truth_partons_n.at("VLQ_Zt") == 1) ) m_outData -> o_VLQtype = VLQ_Enums::HtZt;
     //else if( (m_outData -> o_truth_partons_n.at("VLQ_Wb") == 1) && (m_outData -> o_truth_partons_n.at("VLQ_Zt") == 1) ) m_outData -> o_VLQtype = VLQ_Enums::WbZt;
     //else if( m_outData -> o_truth_partons_n.at("VLQ_Zt") == 2 ) m_outData -> o_VLQtype = VLQ_Enums::ZtZt;
+    //-------------------------------------------------
     
     m_outMngrHist -> HistMngr() -> FillTH1D( "vlqType", m_outData->o_VLQtype, m_outData -> o_eventWeight_Nom );
     //&& m_truthMngr -> Initialize()
@@ -2024,6 +2040,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
       m_truthMngr -> Initialize();
       m_truthMngr -> FillParticlesPartonsVectors();
       m_truthMngr -> CalculateTruthVariables();
+
 
       //
       // Truth-matched fat jet studies

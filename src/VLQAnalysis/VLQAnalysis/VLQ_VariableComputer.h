@@ -1,7 +1,11 @@
 #ifndef VLQ_VARIABLECOMPUTER_H
 #define VLQ_VARIABLECOMPUTER_H
 
+#include <sstream>
+#include <map>
 #include <vector>
+
+#include "TMVA/Reader.h"
 
 class AnalysisObject;
 class OptionsBase;
@@ -104,10 +108,19 @@ public:
 
     double GetMTbmin( std::vector< AnalysisObject* > &v_jets, AnalysisObject *met, const std::string &mom = "" ) const;
     int GetJetClass(AnalysisObject* jet) const;
+
+    void InitMVA(const std::string &weightFileName);
+    float GetMVAScore(std::map< std::string, float> &inputVarsMVA);
     
 private:
     OptionsBase* m_opt;
-    
+
+    TMVA::Reader* m_modelMVA;
+  
+    std::map< std::string, float>* m_inputVarsMVA;
+
+    std::map< std::string, float >* m_spectatorVarsMVA;
+  
 };
 
 #endif// VLQ_VARIABLECOMPUTER_H

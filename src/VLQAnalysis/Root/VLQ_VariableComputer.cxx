@@ -9,7 +9,14 @@
 //
 VLQ_VariableComputer::VLQ_VariableComputer( OptionsBase *opt ):
 m_opt(opt)
-{}
+{
+  m_modelMVA = new TMVA::Reader("!Color:Silent");
+  
+  m_inputVarsMVA = new std::map< std::string, float>;
+  
+  m_spectatorVarsMVA = new std::map< std::string, float>;
+
+}
 
 //________________________________________________________________
 //
@@ -21,7 +28,11 @@ VLQ_VariableComputer::VLQ_VariableComputer( const VLQ_VariableComputer &q )
 //________________________________________________________________
 //
 VLQ_VariableComputer::~VLQ_VariableComputer()
-{}
+{
+  if(m_modelMVA) delete m_modelMVA;
+  if(m_inputVarsMVA) delete m_inputVarsMVA;
+  if(m_spectatorVarsMVA) delete m_spectatorVarsMVA;
+}
 
 //________________________________________________________________
 //
@@ -982,4 +993,83 @@ int VLQ_VariableComputer::GetJetClass(AnalysisObject* jet) const
     else{
         return 30;
     }
+}
+
+//_________________________________________________________________
+//
+void VLQ_VariableComputer::InitMVA(const std::string &weightFileName){
+
+  std::cout << "==================================================================================" << std::endl;
+  std::cout << "VLQ_VariableComputer::InitMVA(): Reading MVA weight file from " << weightFileName << std::endl;
+
+  std::ifstream file(weightFileName);
+
+  if(!file.is_open()){
+    std::cerr << " <!> Error in VLQ_VariableComputer::InitMVA() : File " << weightFileName << " not found." << std::endl;
+  }
+
+  std::string line;
+
+  while(getline(file, line)){
+
+    if(line.find("Variable VarIndex") != std::string::npos){
+
+      size_t varNamePos = line.find("Expression");
+
+      std::string lineTrimmed = line.substr(line.find("=", varNamePos)+1);
+
+      std::string varName = lineTrimmed.substr(1, lineTrimmed.find(" ")-2);
+
+      std::cout << "Found MVA input variable = " << varName << std::endl;
+
+      m_modelMVA->AddVariable(varName, &(*m_inputVarsMVA)[varName]);
+
+    }
+
+    if(line.find("Spectator SpecIndex") != std::string::npos){
+
+      size_t varNamePos = line.find("Expression");
+
+      std::string lineTrimmed = line.substr(line.find("=", varNamePos)+1);
+
+      std::string varName = lineTrimmed.substr(1, lineTrimmed.find(" ")-2);
+
+      std::cout << "Found MVA spectator variable = " << varName << std::endl;
+
+      m_modelMVA->AddSpectator(varName, &(*m_spectatorVarsMVA)[varName]);
+
+    }
+
+  }
+
+  file.close();
+
+  std::cout << "Booking MVA" << std::endl;
+  m_modelMVA->BookMVA("MLP", weightFileName);
+  std::cout << "==================================================================================" << std::endl;
+
+}
+
+//_________________________________________________________________
+//
+float VLQ_VariableComputer::GetMVAScore(std::map< std::string, float> &inputVarsMVA){
+
+  std::map< std::string, float >::iterator it = m_inputVarsMVA->begin();
+
+  while(it != m_inputVarsMVA->end()){
+
+    if(inputVarsMVA.find(it->first) != inputVarsMVA.end()){
+    
+      (*m_inputVarsMVA)[it->first] = inputVarsMVA[it->first];
+
+      ++it;
+    }
+    else{
+      std::cerr << " <!> Error in VLQ_VariableComputer::GetMVAScore() : Variable " << it->first << " expected but not found." << std::endl;
+    }
+      
+  }
+
+  return m_modelMVA->EvaluateMVA("MLP");
+
 }
