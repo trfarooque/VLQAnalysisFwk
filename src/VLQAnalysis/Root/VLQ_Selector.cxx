@@ -222,6 +222,9 @@ bool VLQ_Selector::Init(){
     if(m_opt->DoSplitEMu()) ch_lep["c-2lep-"] = {"", "_ee", "_mumu", "_emu", "_sf"};
     else ch_lep["c-2lep-"] = {"_sf"};
   }
+  if(m_opt->DoZeroLeptonAna()){
+    ch_lep["c-0lep-"] = {""};
+  }
   std::string nolep_prefix = "c-0lep-";
 
   std::map<std::string, std::vector<std::string> > ch_mll;
@@ -234,6 +237,10 @@ bool VLQ_Selector::Init(){
 
     else ch_mll["c-2lep-"] = {"-ZwinMLL"};
 
+  }
+
+  if(m_opt->DoZeroLeptonAna()){
+    ch_mll["c-0lep-"] = {""};
   }
 
   std::vector<std::string> ch_metsig; ch_metsig.clear();
@@ -255,6 +262,8 @@ bool VLQ_Selector::Init(){
 
     std::vector<std::string> v_jet_presel = {};
 
+    std::vector<std::string> ch_mtb_presel = {""};
+
     if(m_opt->DoSingleVLQRegions()){
       v_jet_presel = {"3_5jwin","3jin","4jin","5jin","6jin"};
 
@@ -271,7 +280,7 @@ bool VLQ_Selector::Init(){
     }//sVLQ
     if(m_opt->DoPairVLQRegions()){
       if(m_opt->DoZeroLeptonAna()){
-	//v_jet_presel.push_back("6jin");
+	v_jet_presel.push_back("6jin");
 	if(m_opt->DoLowJRegions()){
 	  v_jet_presel.push_back("5jex");
 	  v_jet_presel.push_back("5jin");
@@ -297,6 +306,10 @@ bool VLQ_Selector::Init(){
 	}
 
       }
+      if(m_opt->DoSplitMtb()){
+	ch_mtb_presel.push_back("-LowMtbmin");
+	ch_mtb_presel.push_back("-HighMtbmin");
+      }
     }//pVLQ
 
     std::vector<std::string> ch_fjet = {"",/*"-0fjex","-1fjin"*/};
@@ -307,15 +320,17 @@ bool VLQ_Selector::Init(){
       const std::string& lep_prefix = lep_ch_pair.first;
       for(const std::string& jet : set_jet_presel){
 	for(const std::string& bjet : v_bjet_presel){
-	  for(const std::string& lepsuf : lep_ch_pair.second){
-	    for(const std::string& mllsuf : ch_mll[lep_prefix]){
-	      for(const std::string& metsuf : ch_metsig){
-		for(const std::string& fjet : ch_fjet){
-		  AddVLQSelection(lep_prefix+jet+"-"+bjet+fjet+metsuf+mllsuf+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
-		}
-	      }//metsig channels
-	    }//mll channels
-	  }//lepflav channels
+	  for(const std::string& mtbsuf : ch_mtb_presel){
+	    for(const std::string& lepsuf : lep_ch_pair.second){
+	      for(const std::string& mllsuf : ch_mll[lep_prefix]){
+		for(const std::string& metsuf : ch_metsig){
+		  for(const std::string& fjet : ch_fjet){
+		    AddVLQSelection(lep_prefix+jet+"-"+bjet+mtbsuf+fjet+metsuf+mllsuf+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
+		  }
+		}//metsig channels
+	      }//mll channels
+	    }//lepflav channels
+	  } //mtb channels
 	}//bjet
       }//jet
 
@@ -517,7 +532,9 @@ bool VLQ_Selector::Init(){
 
       bool do_syst = true;
 
-      std::vector<std::string> bjet_analist = { "2bex", "3bex", "3bin","4bin"};
+      std::vector<std::string> bjet_analist = { "2bex", "3bex" ,"4bin"};
+      if(!(m_opt->DoZeroLeptonAna())) bjet_analist.push_back("3bin"); 
+      
 
       std::vector<std::string> boostlist_1L_default{};
       std::vector<std::string> boostlist_1L_valid_4b{};
@@ -587,10 +604,15 @@ bool VLQ_Selector::Init(){
 
 	    for( const std::string& boost : *boostset_0L ){
 	      for(const std::string& mtb : ch_mtb ){
+	
 		AddVLQSelection(nolep_prefix+boost+"-"+jet+"-"+bjet+mtb, do_runop, do_syst, reg_type);
-		if(m_opt->ApplyMetSignificanceCut() && (bjet=="2bex") ){
+		if(m_opt->ApplyMetSignificanceCut()){
 		  AddVLQSelection(nolep_prefix+boost+"-"+jet+"-"+bjet+mtb+"-HighMetSig", do_runop, do_syst, reg_type);
-		}//metsig
+		  AddVLQSelection(nolep_prefix+boost+"-"+jet+"-"+bjet+mtb+"-LowMetSig", do_runop, do_syst, reg_type);
+		}
+		/*if(m_opt->ApplyMetSignificanceCut() && (bjet=="2bex") ){
+		  AddVLQSelection(nolep_prefix+boost+"-"+jet+"-"+bjet+mtb+"-HighMetSig", do_runop, do_syst, reg_type);
+		  }*///metsig
 
 	      }//mtb split
 	    }//boost list
@@ -1202,10 +1224,10 @@ bool VLQ_Selector::PassSelection(const int index){
 
   //=== Metsig ====
   else if(index == c_LowMetSig){
-    pass = m_opt->ApplyMetSigObjCut() ? (m_outData->o_metsig_obj < 5.) : (m_outData->o_metsig_ev < 10.);
+    pass = m_opt->ApplyMetSigObjCut() ? (m_outData->o_metsig_obj < 5.) : (m_outData->o_metsig_ev < 7.);
   }
   else if(index == c_HighMetSig){
-    pass = m_opt->ApplyMetSigObjCut() ? (m_outData->o_metsig_obj > 5.) : (m_outData->o_metsig_ev > 10.);
+    pass = m_opt->ApplyMetSigObjCut() ? (m_outData->o_metsig_obj > 5.) : (m_outData->o_metsig_ev > 7.);
   }
 
   //==== MLL ======
