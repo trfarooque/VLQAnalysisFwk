@@ -1006,6 +1006,7 @@ void VLQ_VariableComputer::InitMVA(const std::string &weightFileName){
 
   if(!file.is_open()){
     std::cerr << " <!> Error in VLQ_VariableComputer::InitMVA() : File " << weightFileName << " not found." << std::endl;
+    abort();
   }
 
   std::string line;
@@ -1066,6 +1067,7 @@ float VLQ_VariableComputer::GetMVAScore(std::map< std::string, float> &inputVars
     }
     else{
       std::cerr << " <!> Error in VLQ_VariableComputer::GetMVAScore() : Variable " << it->first << " expected but not found." << std::endl;
+      abort();
     }
       
   }
