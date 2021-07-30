@@ -16,6 +16,7 @@ from VLQ_BR import *
 from VLQ_Samples_mc import *
 
 #from regions_dictionary_pVLQ import *
+#from regions_dictionary_sVLQ import *
 #from regions_dictionary_pVLQ_oldAna import *
 from regions_dictionary_pVLQ_newAna_merged_regions import *
 
@@ -74,7 +75,7 @@ os.system("mkdir -p " + outputDir + "/Scripts")
 ## Getting all signal samples and their associated weight/object systematics
 
 VLQMass=[600,800,1000,1100,1200,1300,1400,1500,1600,1700,1800,2000]
-VLQMass=[1200]
+#VLQMass=[1400]
 #VLQMass = [600,700,750,800,850,900,950,1000,1050,1100,1150,1200,1300,1400]
 
 if doAllBR:#just some mass points (not sensitive otherwise)

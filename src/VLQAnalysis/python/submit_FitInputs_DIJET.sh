@@ -8,8 +8,8 @@ do
 	producetarball=true \
 	--inputDir=/nfs/at3/scratch2/farooque/MBJOutputs/tag-21.2.87-htztx-3-syst/nominal/ \
 	--sampleDat=samples_info.tag-21.2.87-htztx-3-syst.${campaign}.dat \
-	--outputDirSuffix=FitInputs_QCDREG_DIJET_${campaign}_NOW \
-	--reweightKinematics=true --kinRWList=JETSN,MEFFRED --doKinRWSmoothing=TRUE \
+	--outputDirSuffix=FitInputs_PAIRVLQ_DIJET_${campaign}_NOW \
+	--reweightKinematics=false \
 	--queue=at3 --NFILESPLIT=200 --NMERGE=1 --removeNull=TRUE \
 	--runData=false --runQCD=false --runSignals=false --runTtbar=false --runOtherBkgd=true \
 	--runSingleTop=false --runWjets=false --runZjets=false --runTopEW=false --runDibosons=false --runDijet=true \
@@ -20,8 +20,8 @@ do
 	--doExpSys=true --doTheorySys=true \
 	--doOneLeptonAna=true --doTwoLeptonAna=false --doZeroLeptonAna=false \
 	--doExclusiveJetRegions=false --doLowBRegions=false --doLowJRegions=false --doSplitEMu=false --doSplitMtb=false \
-	--doFitRegions=false --doValidnRegions=false --doPreselection=true --doPreselSys=true --doExtendedPreselection=false --doLooseSystRegions=true \
-	--doSingleVLQRegions=true --doPairVLQRegions=false \
+	--doFitRegions=true --doValidnRegions=true --doPreselection=true --doPreselSys=true --doExtendedPreselection=false --doLooseSystRegions=false \
+	--doSingleVLQRegions=false --doPairVLQRegions=true --DoOldPairProdRegions=false \
 	--doOldBoost=false \
 	--useLeptonTrigger=true --useMETTriggerOneLep=true --useMETTrigger=true \
 	--applyMetMtwCuts=true --invertMetMtwCuts=false \

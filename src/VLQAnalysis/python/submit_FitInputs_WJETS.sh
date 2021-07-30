@@ -1,25 +1,26 @@
 #!/bin/bash
 
-for campaign in "mc16d" #"mc16e" #"mc16a"
+for campaign in "mc16a" "mc16d" "mc16e"
 do
     python Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 \
 	producetarball=true \
 	--inputDir=/nfs/at3/scratch2/farooque/MBJOutputs/tag-21.2.87-htztx-3-syst/nominal/ \
 	--sampleDat=samples_info.tag-21.2.87-htztx-3-syst.${campaign}.dat \
-	--outputDirSuffix=FitInputs_RWPARAM_WJETS_${campaign}_NOW \
-	--reweightKinematics=true --kinRWList=JETSN,MEFFRED --doKinRWSmoothing=TRUE \
+	--outputDirSuffix=FitInputs_PAIRVLQ_WJETS_${campaign}_NOW \
+	--reweightKinematics=true --kinRWList=JETSN,MEFFRED --doKinRWSmoothing=TRUE --DOKINRWSYST=FALSE \
 	--queue=at3 --NFILESPLIT=200 --NMERGE=1 --removeNull=TRUE \
 	--runData=false --runQCD=false --runSignals=false --runTtbar=false --runOtherBkgd=true \
+	--RUNDIJET=false \
 	--runSingleTop=false --runWjets=true --runZjets=false --runTopEW=false --runDibosons=false \
 	--runTtSyst=false --runStSyst=false --splitSTChannels=true \
 	--dumpHistos=true --dumpOverlapTree=false --dumpTree=false --doTruthAnalysis=false --splitVLQDecays=false \
 	--otherVariables=false --doBlind=false \
 	--useObjectSyst=true --useWeightSyst=true --onlyDumpSystHistograms=true \
-	--doExpSys=true --doTheorySys=false \
+	--doExpSys=true --doTheorySys=false --DOPDFSYS=false \
 	--doOneLeptonAna=true --doTwoLeptonAna=false --doZeroLeptonAna=false \
 	--doExclusiveJetRegions=false --doLowBRegions=false --doLowJRegions=false --doSplitEMu=false --doSplitMtb=false \
-	--doFitRegions=true --doValidnRegions=true --doPreselection=true --doPreselSys=true --doExtendedPreselection=false --doLooseSystRegions=true \
-	--doSingleVLQRegions=true --doPairVLQRegions=false \
+	--doFitRegions=true --doValidnRegions=true --doPreselection=true --doPreselSys=true --doExtendedPreselection=false --doLooseSystRegions=false \
+	--doSingleVLQRegions=false --doPairVLQRegions=true --DoOldPairProdRegions=false \
 	--doOldBoost=false \
 	--useLeptonTrigger=true --useMETTriggerOneLep=true --useMETTrigger=true \
 	--applyMetMtwCuts=true --invertMetMtwCuts=false \

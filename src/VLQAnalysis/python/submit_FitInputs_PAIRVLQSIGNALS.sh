@@ -4,16 +4,17 @@ for campaign in "mc16a" "mc16d" "mc16e"
 do
     python Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 \
 	producetarball=true \
-	--inputDir=/nfs/at3/scratch2/farooque/MBJOutputs/tag-21.2.87-htztx-3-syst/nominal/ \
-	--sampleDat=samples_info.tag-21.2.87-htztx-3-syst.${campaign}.dat \
-	--outputDirSuffix=FitInputs_PAIRVLQ_OTHERS_${campaign}_NOW \
+	--inputDir=/nfs/at3/scratch2/cbuxovaz/VLQAnalysisPairProdRun2_ntuples/ \
+	--sampleDat=samples_info.tag-21.2.121-htztx-3-syst-PAIRVLQ.${campaign}.dat \
+	--outputDirSuffix=FitInputs_PAIRVLQ_SIGNAL_${campaign}_NOW \
 	--reweightKinematics=false \
 	--queue=at3 --NFILESPLIT=200 --NMERGE=1 --removeNull=TRUE \
-	--runData=false --runQCD=false --runSignals=false --runTtbar=false --runOtherBkgd=true \
+	--runData=false --runQCD=false --runSignals=true --runTtbar=false --runOtherBkgd=false \
 	--RUNDIJET=false \
-	--runSingleTop=false --runWjets=false --runZjets=false --runTopEW=true --runDibosons=true \
+	--runSingleTop=false --runWjets=false --runZjets=false --runTopEW=false --runDibosons=false \
+	--RUNPAIRVLQ=true --RUNSINGLEVLQ=false \
 	--runTtSyst=false --runStSyst=false --splitSTChannels=true \
-	--dumpHistos=true --dumpOverlapTree=false --dumpTree=false --doTruthAnalysis=false --splitVLQDecays=false \
+	--dumpHistos=true --dumpOverlapTree=false --dumpTree=false --doTruthAnalysis=false --splitVLQDecays=true \
 	--otherVariables=false --doBlind=false \
 	--useObjectSyst=true --useWeightSyst=true --onlyDumpSystHistograms=true \
 	--doExpSys=true --doTheorySys=true --DOPDFSYS=false \
