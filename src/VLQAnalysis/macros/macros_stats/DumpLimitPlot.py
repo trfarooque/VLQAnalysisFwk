@@ -125,6 +125,7 @@ doMulti = False
 if inDir.startswith('[') and inDir.endswith(']'):
     inDir = map(str, inDir.strip('[]').split(','))
     doMulti = True
+
     if len(labels) != len(inDir):
         print "<!> ERROR !! Give labels of equal length when giving multiple input directories !!"
         sys.exit(-1)
@@ -145,23 +146,31 @@ if(energy=="13"):
         if signal.upper()=="TTS":
             type="TSinglet"
         if signal.upper()=="TTHTHT":
-            type="BR_0.00_0.00_1.00"
+            type="HtHt"
         if signal.upper()=="TTZTZT":
             type="ZtZt"
+            
+        # xsec and total uncertainty values taken from table 17 in https://cds.cern.ch/record/1662536/files/ATL-COM-PHYS-2014-112.pdf?
+
         masses += [{'name':"VLQ_TT_600_"+type,'mass':600,'xsec':1.16,'err':0.10}]
-        masses += [{'name':"VLQ_TT_700_"+type,'mass':700,'xsec':0.455,'err':0.043}]
-        masses += [{'name':"VLQ_TT_750_"+type,'mass':750,'xsec':0.295,'err':0.029}]
+        #masses += [{'name':"VLQ_TT_700_"+type,'mass':700,'xsec':0.455,'err':0.043}]
+        #masses += [{'name':"VLQ_TT_750_"+type,'mass':750,'xsec':0.295,'err':0.029}]
         masses += [{'name':"VLQ_TT_800_"+type,'mass':800,'xsec':0.195,'err':0.020}]
-        masses += [{'name':"VLQ_TT_850_"+type,'mass':850,'xsec':0.132,'err':0.014}]
-        masses += [{'name':"VLQ_TT_900_"+type,'mass':900,'xsec':0.0900,'err':0.0096}]
-        masses += [{'name':"VLQ_TT_950_"+type,'mass':950,'xsec':0.0624,'err':0.0068}]
+        #masses += [{'name':"VLQ_TT_850_"+type,'mass':850,'xsec':0.132,'err':0.014}]
+        #masses += [{'name':"VLQ_TT_900_"+type,'mass':900,'xsec':0.0900,'err':0.0096}]
+        #masses += [{'name':"VLQ_TT_950_"+type,'mass':950,'xsec':0.0624,'err':0.0068}]
         masses += [{'name':"VLQ_TT_1000_"+type,'mass':1000,'xsec':0.0438,'err':0.0048}]
-        masses += [{'name':"VLQ_TT_1050_"+type,'mass':1050,'xsec':0.0311,'err':0.0035}]
+        #masses += [{'name':"VLQ_TT_1050_"+type,'mass':1050,'xsec':0.0311,'err':0.0035}]
         masses += [{'name':"VLQ_TT_1100_"+type,'mass':1100,'xsec':0.0223,'err':0.0025}]
-        masses += [{'name':"VLQ_TT_1150_"+type,'mass':1150,'xsec':0.0161,'err':0.0018}]
+        #masses += [{'name':"VLQ_TT_1150_"+type,'mass':1150,'xsec':0.0161,'err':0.0018}]
         masses += [{'name':"VLQ_TT_1200_"+type,'mass':1200,'xsec':0.0117,'err':0.0013}]
         masses += [{'name':"VLQ_TT_1300_"+type,'mass':1300,'xsec':0.00634,'err':0.00075}]
         masses += [{'name':"VLQ_TT_1400_"+type,'mass':1400,'xsec':0.00350,'err':0.00043}]
+        masses += [{'name':"VLQ_TT_1500_"+type,'mass':1500,'xsec':0.00197,'err':0.00026}]
+        masses += [{'name':"VLQ_TT_1600_"+type,'mass':1600,'xsec':0.00112,'err':0.00015}]
+        masses += [{'name':"VLQ_TT_1700_"+type,'mass':1700,'xsec':0.00065,'err':0.00009}]
+        masses += [{'name':"VLQ_TT_1800_"+type,'mass':1800,'xsec':0.00038,'err':0.00006}]
+        masses += [{'name':"VLQ_TT_2000_"+type,'mass':2000,'xsec':0.000132,'err':0.000024}]
 
     elif(signal.upper().find("UEDRPP")>-1):
         masses += [{'name':"UEDRPP_1000",'mass':1000,'xsec':0.3429}]
@@ -252,6 +261,7 @@ if doMulti:
         counter += 1
         for n,indir in enumerate(inDir):
             files = glob.glob(indir + "/*"+mass['name']+suffix+"*/Limits/asymptotics/*.root")
+
             if len(files)==0 or len(files)>1:
                 print "<!> ERROR for mass " + `mass['mass']` + " !!"
             else:
@@ -352,8 +362,10 @@ leg.SetLineColor(0)
 if forceRanges:
     ylim_min = 0.
     ylim_max = 0.27
-    ylim_min_log = 0.001
-    ylim_max_log = 3.
+    #ylim_min_log = 0.001
+    #ylim_max_log = 3.
+    ylim_min_log = 0.0002
+    ylim_max_log = 17.
 
 else:
     if drawTheory:
@@ -412,7 +424,8 @@ if doMulti:
             tg_exp2s[n].GetXaxis().SetLimits(masses[0]['mass'],masses[len(masses)-1]['mass'])
             tg_exp2s[n].SetMinimum(ylim_min)
             tg_exp2s[n].SetMaximum(ylim_max)
-            tg_exp2s[n].GetXaxis().SetNdivisions(406)
+            #tg_exp2s[n].GetXaxis().SetNdivisions(406)
+            tg_exp2s[n].GetXaxis().SetNdivisions(512)
             tg_exp2s[n].SetTitle("")
             tg_exp2s[n].GetXaxis().SetTitle("m_{T} [GeV]")
             tg_exp2s[n].GetYaxis().SetTitle("#sigma(%s) [pb]"%signal_label)
@@ -449,7 +462,8 @@ else:
         tg_exp2s.GetXaxis().SetLimits(masses[0]['mass'],masses[len(masses)-1]['mass'])
         tg_exp2s.SetMinimum(ylim_min)
         tg_exp2s.SetMaximum(ylim_max)
-        tg_exp2s.GetXaxis().SetNdivisions(406)
+        #tg_exp2s.GetXaxis().SetNdivisions(406)
+        tg_exp2s.GetXaxis().SetNdivisions(512)
         tg_exp2s.SetTitle("")
         tg_exp2s.GetXaxis().SetTitle("m_{T} [GeV]")
         tg_exp2s.GetYaxis().SetTitle("#sigma(%s) [pb]"%signal_label)
@@ -559,7 +573,8 @@ if ratio:
     can.cd()
     pad2.cd()
 
-    leg_r = TLegend(0.7,0.72,0.96,0.95)
+    #leg_r = TLegend(0.7,0.72,0.96,0.95)
+    leg_r = TLegend(0.7, 0.42, 0.96, 0.65)
     leg_r.SetFillColor(0)
     leg_r.SetLineColor(0)
     leg_r.SetTextSize(0.045)
@@ -571,7 +586,8 @@ if ratio:
         
         if n==0:            
             tg_ratio[n].GetXaxis().SetLimits(masses[0]['mass'],masses[len(masses)-1]['mass'])
-            tg_ratio[n].SetMinimum(0.95)
+            #tg_ratio[n].SetMinimum(0.80)
+            tg_ratio[n].SetMinimum(0.40)
             tg_ratio[n].SetMaximum(1.2)
             tg_ratio[n].GetXaxis().SetNdivisions(406)
             tg_ratio[n].SetTitle("")
