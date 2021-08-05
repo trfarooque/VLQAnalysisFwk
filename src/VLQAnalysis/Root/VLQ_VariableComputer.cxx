@@ -11,15 +11,11 @@
 //________________________________________________________________
 //
 VLQ_VariableComputer::VLQ_VariableComputer( OptionsBase *opt ):
-m_opt(opt)
-{
-  m_modelMVA = new TMVA::Reader("!Color:Silent");
-  
-  m_inputVarsMVA = new std::map< std::string, float>;
-  
-  m_spectatorVarsMVA = new std::map< std::string, float>;
-
-}
+  m_opt(opt),
+  m_modelMVA(0),
+  m_inputVarsMVA(0),
+  m_spectatorVarsMVA(0)
+{}
 
 //________________________________________________________________
 //
@@ -1384,6 +1380,13 @@ void VLQ_VariableComputer::InitMVA(const std::string &weightFileName){
 
   std::cout << "==================================================================================" << std::endl;
   std::cout << "VLQ_VariableComputer::InitMVA(): Reading MVA weight file from " << weightFileName << std::endl;
+
+  m_modelMVA = new TMVA::Reader("!Color:Silent");
+  
+  m_inputVarsMVA = new std::map< std::string, float>;
+  
+  m_spectatorVarsMVA = new std::map< std::string, float>;
+
 
   std::ifstream file(weightFileName);
 

@@ -1243,10 +1243,10 @@ bool VLQ_AnalysisTools::ComputeMVAVariables() {
 
   std::map< std::string, float> inputVarsMVA;
   inputVarsMVA["meff"] = m_outData -> o_meff;
-  inputVarsMVA["leadingdEta_RCjets"] = 1.0;
-  inputVarsMVA["leadingdEta_RCTTMassRCTTMass"] = 1.0;
-  inputVarsMVA["leadingdPhi_RCjets"] = 1.0;
-  inputVarsMVA["dPhimin_RCTTMassRCTTMass"] = 1.0;
+  inputVarsMVA["leadingdEta_RCjets"] = m_outData -> o_leadingdEta_RCjets;
+  inputVarsMVA["leadingdEta_RCTTMassRCTTMass"] = m_outData -> o_leadingdEta_RCTTMassRCTTMass;
+  inputVarsMVA["leadingdPhi_RCjets"] = m_outData -> o_leadingdPhi_RCjets;
+  inputVarsMVA["dPhimin_RCTTMassRCTTMass"] = m_outData -> o_dPhimin_RCTTMassRCTTMass;
   inputVarsMVA["leptop_pt"] = (m_outData -> o_leptop) ? m_outData -> o_leptop->Pt() : -100.;
   inputVarsMVA["Alt$(RCjets_pt[0],0)"] = (m_outData -> o_rcjets_n > 0) ? m_outData->o_rcjets->at(0)->Pt() : -100.;
   inputVarsMVA["Alt$(RCjets_pt[1],0)"] = (m_outData -> o_rcjets_n > 1) ? m_outData->o_rcjets->at(1)->Pt() : -100.;
@@ -1257,13 +1257,17 @@ bool VLQ_AnalysisTools::ComputeMVAVariables() {
   inputVarsMVA["RCMHiggs_jets_n"] = m_outData->o_taggedjets_n.at("RCMHiggs");
   inputVarsMVA["RCMV_jets_n"] = m_outData->o_taggedjets_n.at("RCMV");
   inputVarsMVA["ptw"] =  m_outData -> o_ptwl;
-  inputVarsMVA["residualMET_Pt"] = 500.;
+  inputVarsMVA["residualMET_Pt"] = m_outData -> o_residualMET->Pt();
   inputVarsMVA["met"] = m_outData -> o_met;
-  inputVarsMVA["Alt$(m_vlq_rcttmass_drmax[0],0)"] = 500.;
-  inputVarsMVA["Alt$(m_vlq_rcttmass_drmax[1],0)"] = 500.;
-  inputVarsMVA["Alt$(m_vlq_rcjets_drmax[0],0)"] = 500.;
-  inputVarsMVA["Alt$(m_vlq_rcjets_drmax[1],0)"] = 500.;
-    
+  inputVarsMVA["Alt$(m_vlq_rcttmass_drmax[0],0)"] = (m_outData -> o_m_vlq_rcttmass_drmax).size() > 0 
+    ? m_outData -> o_m_vlq_rcttmass_drmax.at(0) : -100.;
+  inputVarsMVA["Alt$(m_vlq_rcttmass_drmax[1],0)"] = (m_outData -> o_m_vlq_rcttmass_drmax).size() > 1 
+    ? m_outData -> o_m_vlq_rcttmass_drmax.at(1) : -100.;
+  inputVarsMVA["Alt$(m_vlq_rcjets_drmax[0],0)"] = (m_outData -> o_m_vlq_rcjets_drmax).size() > 0 
+    ? m_outData -> o_m_vlq_rcjets_drmax.at(0) : -100.;
+  inputVarsMVA["Alt$(m_vlq_rcjets_drmax[1],0)"] = (m_outData -> o_m_vlq_rcjets_drmax).size() > 1 
+    ? m_outData -> o_m_vlq_rcjets_drmax.at(1) : -100.;
+
   m_outData -> o_MVAScore = m_varComputer -> GetMVAScore(inputVarsMVA);
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_MVAScore (" << m_outData -> o_MVAScore << ")"  << std::endl;
 
