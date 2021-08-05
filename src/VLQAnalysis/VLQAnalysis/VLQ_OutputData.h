@@ -59,6 +59,7 @@ public:
     double o_mJsum;
     double o_metsig_ev;
     double o_metsig_obj;
+    float o_MVAScore;
     unsigned long long int o_event_number;
     std::vector < int > *o_region;
 

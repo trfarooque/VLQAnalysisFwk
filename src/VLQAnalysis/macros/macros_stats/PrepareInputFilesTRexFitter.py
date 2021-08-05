@@ -158,6 +158,7 @@ Samples = []
 
 campaigns = []
 if splitCampaigns:
+    #campaigns = ["mc16a"]
     campaigns = ["mc16a", "mc16d", "mc16e"]
 else:
     campaigns = [""]
@@ -201,7 +202,7 @@ else:
     VLQ_masses = []
     if(signal=="PAIR"):
         # -- VLQ samples
-        VLQ_masses = ["600","700","750","800","850","900","950","1000","1050","1100","1150","1200","1300","1400"]
+        VLQ_masses = ["600","800","1000","1100","1200","1300","1400","1500","1600","1700","1800","2000"]
 
         for mass in VLQ_masses:
             for mc_campaign in campaigns:
@@ -211,7 +212,7 @@ else:
                 Samples += [getSampleUncertainties( "VLQ_TT_" + mass + "_TDoublet"+mc_campaign, "", ObjectSystematics , [])]
                 Samples += [getSampleUncertainties( "VLQ_TT_" + mass + "_HtHt"+mc_campaign,     "", ObjectSystematics , [])]
                 Samples += [getSampleUncertainties( "VLQ_TT_" + mass + "_ZtZt"+mc_campaign,     "", ObjectSystematics , [])]
-                Samples += [getSampleUncertainties( "VLQ_TT_" + mass + "_HtZt"+mc_campaign,     "", ObjectSystematics , [])]
+                #Samples += [getSampleUncertainties( "VLQ_TT_" + mass + "_HtZt"+mc_campaign,     "", ObjectSystematics , [])]
             if doAllBR:
                 step_width = 0.05
                 steps_n = int((1 + step_width)/step_width)
@@ -222,12 +223,12 @@ else:
                             coupling_Zt = iZt * step_width
                             coupling_Wb = iWb * step_width
                             if abs(coupling_Ht+coupling_Wb+coupling_Zt-1.)<0.001:
-                                for mc_campaign in campaigns:
-                                    if mc_campaign:
-                                        mc_campaign = "."+mc_campaign
-                                    Samples += [getSampleUncertainties("VLQ_TT_" + mass + 
-                                                                       "_BR_%.2f_%.2f_%.2f" %(coupling_Wb,coupling_Zt,coupling_Ht)+campaign
-                                                                       ,"", ObjectSystematics , [])]
+                                #for mc_campaign in campaigns:
+                                    #if mc_campaign:
+                                        #mc_campaign = "."+mc_campaign
+                                Samples += [getSampleUncertainties("VLQ_TT_" + mass + 
+                                                                   "_BR_%.2f_%.2f_%.2f" %(coupling_Wb,coupling_Zt,coupling_Ht)#+campaign
+                                                                   ,"", ObjectSystematics , [])]
     elif(signal=="SINGLE"):
         Samples +=  GetOldSingleVLQSamples( useObjectSyst=useSystematics )
 

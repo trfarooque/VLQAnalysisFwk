@@ -53,6 +53,7 @@ param_runSingleVLQ = True
 param_runPairVLQ = False
 param_run4tops = False
 param_runUEDRPP = False
+param_runDoubletPairVLQ = False
 
 param_useSlices = True
 param_useObjectSyst = False
@@ -132,6 +133,8 @@ if(len(sys.argv))>1:
             param_run4tops = (value.upper()=="TRUE")
         elif(argument=="RUNUEDRPP"):
             param_runUEDRPP = (value.upper()=="TRUE")
+        elif(argument=="RUNDOUBLETPAIRVLQ"):
+            param_runDoubletPairVLQ = (value.upper()=="TRUE")
 
         elif(argument=="USESLICES"):
             param_useSlices = (value.upper()=="TRUE")
@@ -196,6 +199,7 @@ print "param_runSingleVLQ = ", param_runSingleVLQ
 print "param_runPairVLQ = ", param_runPairVLQ
 print "param_run4tops = ", param_run4tops
 print "param_runUEDRPP = ", param_runUEDRPP
+print "param_runDoubletPairVLQ = ", param_runDoubletPairVLQ
 
 print "param_useSlices = ", param_useSlices
 print "param_useObjectSyst = ", param_useObjectSyst
@@ -268,7 +272,7 @@ if param_runOtherBkgd:
 if param_runSignal:
     Samples += GetSignalSamples( useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, campaign = param_campaign
                                  , includeSingleVLQ = param_runSingleVLQ, includePairVLQ = param_runPairVLQ
-                                 , include4tops = param_run4tops)
+                                 , include4tops = param_run4tops, includeDoubletPairVLQ = param_runDoubletPairVLQ)
 
 printGoodNews("--> All samples recovered")
 ##..............................................................................

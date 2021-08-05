@@ -8,7 +8,7 @@ atlas_depends_on_subdirs( PUBLIC
 			  FakeLeptonEstimation
 )
 
-find_package( ROOT REQUIRED COMPONENTS Core RIO Hist Graf Gpad)
+find_package( ROOT REQUIRED COMPONENTS Core RIO Hist Graf Gpad TMVA)
 
 atlas_add_root_dictionary( VLQAnalysis _cintDictSource
    ROOT_HEADERS VLQAnalysis/*.h Root/LinkDef.h
@@ -58,7 +58,7 @@ atlas_add_executable( MakeKinRwHists
 				     ${ROOT_LIBRARIES}			  
 				     VLQAnalysis)
 
-atlas_add_executable( MakeSByBPlot_VLQ
-		      macros/macros_carlos/MakeSByBPlot_VLQ.cxx
+atlas_add_executable( MakeSByBPlot
+		      macros/macros_carlos/SoverB_Plotter/MakeSByBPlot.cxx
 		      LINK_LIBRARIES IFAETopFramework
 		      		     ${ROOT_LIBRARIES})

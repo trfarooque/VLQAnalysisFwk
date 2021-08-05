@@ -42,41 +42,44 @@ Systematic: "HTX_BKGNP_TTBARBB_XS"
 % --------  V+jets (1-lep)  -------- %
 % ---------------------------------- %
 
-%Systematic: "HTX_BKGNP_VJETS_XS_1B" ; "HTX_BKGNP_VJETS_XS_2B" ; "HTX_BKGNP_VJETS_XS_3B" ; "HTX_BKGNP_VJETS_XS_4B"
-%  Title: "V+jets norm. (1b)"; "V+jets norm. (2b)"; "V+jets norm. (3b)" ; "V+jets norm. (#geq 4b)"
-%  Type: OVERALL
-%  Category: "Background uncertainties"
-%  OverallUp: 0.30
-%  OverallDown: -0.30
-%  Samples: Wjets,Zjets
-%  Regions: HTX_c1lep3_5jwin1bex*,HTX_c1lep6jin1bex*;HTX_c1lep3_5jwin2bex*,HTX_c1lep6jin2bex*;HTX_c1lep3_5jwin3bex*,HTX_c1lep6jin3bex*;HTX_c1lep3_5jwin4bin*,HTX_c1lep6jin4bin*  
+Systematic: "HTX_BKGNP_VJETS_XS_3B" ; "HTX_BKGNP_VJETS_XS_4B"
+  Title: "V+jets norm. (3b)" ; "V+jets norm. (#geq 4b)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.30
+  OverallDown: -0.30
+  Samples: Wjets,Zjets
+  Regions: HTX_c1l*6jin3bex;HTX_c1l*6jin4bin
+  %Regions: HTX_c1lep6jin3bex*;HTX_c1lep6jin4bin*  
 
 
 % -------------------------------------- %
 % --------  Dibosons (1-lep)  ---------- %
 % -------------------------------------- %
 
-%Systematic: "HTX_BKGNP_OTHERS_Dibosons_XS_LJ1b" ; "HTX_BKGNP_OTHERS_Dibosons_XS_LJ2b" ; "HTX_BKGNP_OTHERS_Dibosons_XS_LJ3b" ; "HTX_BKGNP_OTHERS_Dibosons_XS_LJ4b" ; "HTX_BKGNP_OTHERS_Dibosons_XS_HJ1b" ; "HTX_BKGNP_OTHERS_Dibosons_XS_HJ%2b" ; "HTX_BKGNP_OTHERS_Dibosons_XS_HJ3b" ; "HTX_BKGNP_OTHERS_Dibosons_XS_HJ4b"
-%  Title: "Dibosons norm. (3-5j,1b)" ; "Dibosons norm. (3-5j,2b)" ; "Dibosons norm. (3-5j,3b)" ; "Dibosons norm. (3-5j,4b)" ; "Dibosons norm. (6j,1b)" ; "Dibosons norm. (6j,2b)" ; "Dibosons norm. (6j,3b)" ; "Dibosons norm. (6j,4b)" 
-%  Type: OVERALL
-%  Category: "Background uncertainties"
-%  OverallUp: 0.48
-%  OverallDown: -0.48
-%  Samples: Dibosons
-%  Regions: HTX_c1lep3_5jwin1bex*;HTX_c1lep3_5jwin2bex*;HTX_c1lep3_5jwin3bex*;HTX_c1lep3_5jwin4bin*;HTX_c1lep6jin1bex*;HTX_c1lep6jin2bex*;HTX_c1lep6jin3bex*;HTX_c1lep6jin4bin*
+Systematic: "HTX_BKGNP_OTHERS_Dibosons_XS_HJ3b" ; "HTX_BKGNP_OTHERS_Dibosons_XS_HJ4b"
+  Title: "Dibosons norm. (6j,3b)" ; "Dibosons norm. (6j,4b)" 
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.56
+  OverallDown: -0.56
+  Samples: Dibosons
+  Regions: HTX_c1l*6jin3bex;HTX_c1l*6jin4bin
+  %Regions: HTX_c1lep6jin3bex*;HTX_c1lep6jin4bin*
 
 % ---------------------------- %
 % --------  Top EW  ---------- %
 % ---------------------------- %
 
-%Systematic: "HTX_BKGNP_OTHERS_TopEW_XS_LJ" ; "HTX_BKGNP_OTHERS_TopEW_XS_HJ"
-%  Title: "topEW norm. (3-5j)" ; "topEW norm. (6j)"
-%  Type: OVERALL
-%  Category: "Background uncertainties"
-%  OverallUp: 0.15
-%  OverallDown: -0.15
-%  Samples: topEW
-%  Regions: HTX_c1lep3_5jwin*;HTX_c1lep6jin*
+Systematic: "HTX_BKGNP_OTHERS_TopEW_XS_HJ"
+  Title: "topEW norm. (6j)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.15
+  OverallDown: -0.15
+  Samples: topEW
+  Regions: HTX_c1l*6jin*
+  %Regions: HTX_c1lep6jin*
 
 % ---------------------------- %
 % --------    ttH   ---------- %
@@ -95,14 +98,14 @@ Systematic: "HTX_BKGNP_OTHERS_ttH_XS"
 % --------  SM4tops  ---------- %
 % ----------------------------- %
 
-%Systematic: "HTX_BKGNP_OTHERS_SM4tops_XS"
-%  Title: "SM 4tops norm. (1l)"
-%  Type: OVERALL
-%  Category: "Background uncertainties"
-%  OverallUp: 0.3
-%  OverallDown: -0.3
-%  Samples: BackSM4tops
-%  Regions: HTX_c1lep*
+Systematic: "HTX_BKGNP_OTHERS_SM4tops_XS"
+  Title: "SM 4tops norm. (1l)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.3
+  OverallDown: -0.3
+  Samples: SM4tops
+  Regions: HTX_c1lep*
 
 % ----------------------------- %
 % -------  Single-top  -------- %

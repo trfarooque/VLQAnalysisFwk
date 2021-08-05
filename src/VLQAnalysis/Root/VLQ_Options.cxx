@@ -77,6 +77,7 @@ m_doExpSys(true),
 m_doTheorySys(true),
 m_doPDFSys(true),
 m_doJMRSys(false),
+m_applyMVA(false),
 m_doJMSSys(0),
 m_maxb(4),
 m_RCNsubjetsCut(2),
@@ -179,6 +180,7 @@ OptionsBase(q)
     m_doPDFSys          = q.m_doPDFSys;
     m_doJMRSys          = q.m_doJMRSys;
     m_doJMSSys          = q.m_doJMSSys;
+    m_applyMVA          = q.m_applyMVA;
     m_RecTtBbRw         = q.m_RecTtBbRw;
     m_RwTtFractions     = q.m_RwTtFractions;
     m_RCNsubjetsCut     = q.m_RCNsubjetsCut;
@@ -359,7 +361,9 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_doPDFSys = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOJMRSYS") != std::string::npos ){
             m_doJMRSys = AnalysisUtils::BoolValue(temp_val, temp_arg);
-        }
+        } else if( temp_arg.find("--APPLYMVA") != std::string::npos){
+	    m_applyMVA = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	}
 
         //
         // Float arguments
@@ -571,6 +575,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_doPDFSys                = " << m_doPDFSys          << std::endl;
     std::cout << " m_doJMRSys                = " << m_doJMRSys          << std::endl;
     std::cout << " m_doJMSSys                = " << m_doJMSSys          << std::endl;
+    std::cout << " m_applyMVA                = " << m_applyMVA          << std::endl;
     std::cout << " m_applyVjetsSherpa22RW    = " << m_applyVjetsSherpa22RW   << std::endl;
     std::cout << " m_filterType              = " << m_filterType        << std::endl;
     std::cout << " m_RecTtBbRw               = " << m_RecTtBbRw         << std::endl;

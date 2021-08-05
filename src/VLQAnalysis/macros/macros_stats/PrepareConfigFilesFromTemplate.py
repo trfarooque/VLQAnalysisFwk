@@ -191,10 +191,15 @@ os.system( "mkdir -p " + outputFolder )
 Signals = []
 
 if(signalType=="PAIR"):
-    VLQ_masses = ["600","700","750","800","850","900","950","1000","1050","1100","1150","1200","1300","1400"]
+    VLQ_masses = ["600","800","1000","1100","1200","1300","1400","1500","1600","1700","1800","2000"]
+    #VLQ_masses = ["2000"]
     VLQB_masses = ["600","700","750","800","850","900","950","1000","1050","1100","1150","1200","1300","1400","1500","1600"]
+    
+    #Signals += GetVLQTSamples( )
+    
+
     if doAllBR:
-        VLQ_masses = ["700","750","800","850","900","950","1000","1050","1100","1150","1200","1300","1400","1500"]
+        VLQ_masses = ["600","800","1000","1100","1200","1300","1400","1500","1600","1700","1800","2000"]
         #VLQ_masses = ["700","750","800","850","900","950","1000"]
 
     for mass in VLQ_masses:
@@ -214,14 +219,16 @@ if(signalType=="PAIR"):
         else:
             Signals += [getSampleUncertainties("VLQ_TT_" + mass + "_TDoublet","VLQ_TT_" + mass + "_TDoublet", CommonObjectSystematics , [])]
             Signals += [getSampleUncertainties("VLQ_TT_" + mass + "_TSinglet","VLQ_TT_" + mass + "_TSinglet", CommonObjectSystematics , [])]
-            Signals += [getSampleUncertainties("VLQ_TT_" + mass + "_HtHt","VLQ_TT_" + mass + "_BR_0.00_0.00_1.00", CommonObjectSystematics , [])]
+            Signals += [getSampleUncertainties("VLQ_TT_" + mass + "_HtHt","VLQ_TT_" + mass + "_HtHt", CommonObjectSystematics , [])]
             Signals += [getSampleUncertainties("VLQ_TT_" + mass + "_ZtZt","VLQ_TT_" + mass + "_ZtZt", CommonObjectSystematics , [])]
+
+
             
-    for mass in VLQB_masses:
+    '''for mass in VLQB_masses:
         Signals += [getSampleUncertainties("VLQ_BB_" + mass + "_BDoublet","VLQ_BB_" + mass + "_BDoublet", CommonObjectSystematics , [])]
         Signals += [getSampleUncertainties("VLQ_BB_" + mass + "_BSinglet","VLQ_BB_" + mass + "_BSinglet", CommonObjectSystematics , [])]
         Signals += [getSampleUncertainties("VLQ_BB_" + mass + "_HbHb","VLQ_BB_" + mass + "_HbHb", CommonObjectSystematics , [])]
-        Signals += [getSampleUncertainties("VLQ_BB_" + mass + "_ZbZb","VLQ_BB_" + mass + "_ZbZb", CommonObjectSystematics , [])]
+        Signals += [getSampleUncertainties("VLQ_BB_" + mass + "_ZbZb","VLQ_BB_" + mass + "_ZbZb", CommonObjectSystematics , [])]'''
 
 elif(signalType=="SINGLE"):
 

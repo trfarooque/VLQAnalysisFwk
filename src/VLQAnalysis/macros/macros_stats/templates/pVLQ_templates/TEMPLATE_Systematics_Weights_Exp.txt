@@ -66,15 +66,15 @@ Systematic: "EL_EFF_TriggerEff_TOTAL_1NPCOR_PLUS_UNCOR"
 %  %Exclude: QCD
 %  Regions: HTX_c1lep*
 
-Systematic: "MUON_BADMUON_SYS"
-  Title: "Muon BADMUON (syst.)"
-  Type: HISTO
-  Category: "Lepton uncertainties"
-  HistoNameSufUp: _weight_muon_BADMUON_SYS_UP
-  HistoNameSufDown: _weight_muon_BADMUON_SYS_DOWN
-  Symmetrisation: TwoSided
-  %Exclude: QCD
-  Regions: HTX_c1lep*
+%Systematic: "MUON_BADMUON_SYS"
+%  Title: "Muon BADMUON (syst.)"
+%  Type: HISTO
+%  Category: "Lepton uncertainties"
+%  HistoNameSufUp: _weight_muon_BADMUON_SYS_UP
+%  HistoNameSufDown: _weight_muon_BADMUON_SYS_DOWN
+%  Symmetrisation: TwoSided
+%  %Exclude: QCD
+%  Regions: HTX_c1lep*
 
 Systematic: "MUON_EFF_RECO_STAT_LOWPT"
   Title: "Muon ID low-p_{T} (stat.)"
@@ -411,5 +411,5 @@ Systematic: "FT_EFF_extrapolation_from_charm"
 %  HistoNameSufUp: _weight_jvt_UP
 %  HistoNameSufDown: _weight_jvt_DOWN
 %  Symmetrisation: TwoSided
-  %Exclude: QCD
+%  %Exclude: QCD
 
