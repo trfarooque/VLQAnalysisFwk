@@ -187,15 +187,18 @@ if(energy=="13"):
         if(signal.upper()=="ZTZT"):
            type="ZTZt"
 
-        if(signal.upper()=="WTHT" or signal.upper()=="WTZT"):
-            masses += [{'name': "sVLQ_"+type+"11K03", 'mass':1100, 'xsec':0.1 }]
-        else:
-            masses += [{'name': "sVLQ_"+type+"11K05", 'mass':1100, 'xsec':0.1 }]
+        for m in xrange(1000,2200,200):
+            masses += [{'name': type+str(m)+"K50", 'mass':m, 'xsec':0.1 }]
 
-        masses += [{'name': "sVLQ_"+type+"16K05", 'mass':1600, 'xsec':0.1 }]
+        # if(signal.upper()=="WTHT" or signal.upper()=="WTZT"):
+        #     masses += [{'name': "sVLQ_"+type+"11K03", 'mass':1100, 'xsec':0.1 }]
+        # else:
+        #     masses += [{'name': "sVLQ_"+type+"11K05", 'mass':1100, 'xsec':0.1 }]
 
-        if(not(signal.upper()=="ZTZT")):
-            masses += [{'name': "sVLQ_"+type+"20K05", 'mass':2000, 'xsec':0.1 }]
+        # masses += [{'name': "sVLQ_"+type+"16K05", 'mass':1600, 'xsec':0.1 }]
+
+        # if(not(signal.upper()=="ZTZT")):
+        #     masses += [{'name': "sVLQ_"+type+"20K05", 'mass':2000, 'xsec':0.1 }]
 
 if len(masses)==1:
     mass = masses[0]
