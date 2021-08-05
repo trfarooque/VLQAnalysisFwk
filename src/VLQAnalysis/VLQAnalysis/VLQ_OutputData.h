@@ -171,10 +171,13 @@ public:
     // Missing ET
     //
     AnalysisObject *o_AO_met;
+    AnalysisObject *o_residualMET;
+    //    double o_residualMET;
 
     //
     // Leptonic top and W
     //
+    int o_lepW_n;
     int o_leptop_n;
     AnalysisObject *o_leptop;
     AnalysisObject *o_leptop_b;
@@ -187,6 +190,8 @@ public:
 
     std::map<std::string, AnalysisObject*> o_catLeptop;
     std::map<std::string, AnalysisObject*> o_catLeptop_b;
+    std::map<std::string,  int > o_catLeptop_n;
+
 
     //
     // Semi-boosted hadronic top quark
@@ -382,6 +387,55 @@ public:
     double o_truth_ht_filter;
     double o_truth_met_filter;
 
+    //Invariant VLQ masses reconstruction 
+ 
+    std::vector < double > o_m_vlq_rcjets_pt;
+    double o_m_vlq_rcjets_pt_n;
+    double o_averagem_vlq_rcjets_pt;
+    double o_masymm_vlq_rcjets_pt;
+    double o_fmasymm_vlq_rcjets_pt; 
+
+    std::vector < double > o_m_vlq_rcjets_detamin;
+    double o_m_vlq_rcjets_detamin_n;
+    double o_averagem_vlq_rcjets_detamin;
+    double o_masymm_vlq_rcjets_detamin;
+    double o_fmasymm_vlq_rcjets_detamin; 
+
+    std::vector < double > o_m_vlq_rcjets_drmax;
+    double o_m_vlq_rcjets_drmax_n;
+    double o_averagem_vlq_rcjets_drmax;
+    double o_masymm_vlq_rcjets_drmax;
+    double o_fmasymm_vlq_rcjets_drmax; 
+
+    std::vector < double > o_m_vlq_rcjets_dphimax;
+    double o_m_vlq_rcjets_dphimax_n;
+    double o_averagem_vlq_rcjets_dphimax;
+    double o_masymm_vlq_rcjets_dphimax;
+    double o_fmasymm_vlq_rcjets_dphimax; 
+
+    std::vector < double > o_m_vlq_rcttmass_pt;
+    double o_m_vlq_rcttmass_pt_n;
+    double o_averagem_vlq_rcttmass_pt;
+    double o_masymm_vlq_rcttmass_pt;
+    double o_fmasymm_vlq_rcttmass_pt; 
+
+    std::vector < double > o_m_vlq_rcttmass_detamin;
+    double o_m_vlq_rcttmass_detamin_n;
+    double o_averagem_vlq_rcttmass_detamin;
+    double o_masymm_vlq_rcttmass_detamin;
+    double o_fmasymm_vlq_rcttmass_detamin; 
+
+    std::vector < double > o_m_vlq_rcttmass_drmax;
+    double o_m_vlq_rcttmass_drmax_n;
+    double o_averagem_vlq_rcttmass_drmax;
+    double o_masymm_vlq_rcttmass_drmax;
+    double o_fmasymm_vlq_rcttmass_drmax; 
+
+    std::vector < double > o_m_vlq_rcttmass_dphimax;
+    double o_m_vlq_rcttmass_dphimax_n;
+    double o_averagem_vlq_rcttmass_dphimax;
+    double o_masymm_vlq_rcttmass_dphimax;
+    double o_fmasymm_vlq_rcttmass_dphimax; 
 
     //VLQ sample
     int o_truth_dRmin_isHiggs_b;

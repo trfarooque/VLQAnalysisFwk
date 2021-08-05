@@ -285,7 +285,7 @@ double VLQ_VariableComputer::GetLeadingdEta( AOVector &v_obj1, AOVector &v_obj2 
       dEta =  TMath::Abs(v_obj1[0]->Eta() - v_obj2[0]->Eta());
 
     }
-    else if(v_obj1.size() > 1){
+    else if(v_obj2.size() > 1){ //shoudnt this be obj2 ?--> I changed it.  
       dEta =  TMath::Abs(v_obj1[0]->Eta() - v_obj2[1]->Eta());
     }
 
@@ -330,7 +330,7 @@ double VLQ_VariableComputer::GetAveragedR(  AOVector &v_obj1, AOVector &v_obj2, 
 	    npairs ++;
         }
     }
-    dRaverage=dRaverage/npairs;
+    dRaverage = (npairs > 0) ? dRaverage/npairs : 10.;
     return dRaverage;
 }
 
@@ -350,7 +350,7 @@ double VLQ_VariableComputer::GetAveragedEta(  AOVector &v_obj1, AOVector &v_obj2
 	    npairs ++;
         }
     }
-    dEtaaverage=dEtaaverage/npairs;
+    dEtaaverage = (npairs > 0) ? dEtaaverage/npairs : 10.;
     return dEtaaverage;
 }
 
@@ -369,7 +369,7 @@ double VLQ_VariableComputer::GetAveragedPhi(  AOVector &v_obj1, AOVector &v_obj2
 	    npairs ++;
         }
     }
-    dPhiaverage=dPhiaverage/npairs;
+    dPhiaverage = (npairs > 0) ? dPhiaverage/npairs : 10.;
     return dPhiaverage;
 }
 
@@ -505,8 +505,8 @@ std::vector<double> VLQ_VariableComputer::GetInvariantMassSorted(std::vector< An
   //Sort individual jets by their pT
   if( (sort_by=="") || (sort_by=="Pt") ){
 
-    AOVector v_obj1_ptsort = AnalysisUtils::SortObjectValues(v_obj1, sort_by, -1, b_descending);
-    AOVector v_obj2_ptsort = AnalysisUtils::SortObjectValues(v_obj2, sort_by, -1, b_descending);
+    AOVector v_obj1_ptsort = AnalysisUtils::SortObjectValues(v_obj1, "Pt", -1, b_descending);
+    AOVector v_obj2_ptsort = AnalysisUtils::SortObjectValues(v_obj2, "Pt", -1, b_descending);
 
     index = 0;
     for(AnalysisObject* obj1 : v_obj1_ptsort){
@@ -711,6 +711,7 @@ double VLQ_VariableComputer::GetMindEta(  AOVector &v_obj1, AOVector &v_obj2 ) c
             if(TMath::Abs(dEta) < TMath::Abs(dEta_min)) dEta_min = dEta;
         }
     }
+
     return dEta_min;
 }
 

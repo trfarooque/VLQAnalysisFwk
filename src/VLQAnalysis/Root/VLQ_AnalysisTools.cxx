@@ -1,4 +1,3 @@
-
 #include "VLQAnalysis/VLQ_AnalysisTools.h"
 
 #include "IFAETopFramework/OutputHistManager.h"
@@ -482,7 +481,8 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%
   m_outData -> o_AO_met = new AnalysisObject();
   m_outData -> o_AO_met -> SetPtEtaPhiM( m_ntupData -> d_met_met, 0, m_ntupData -> d_met_phi, 0. );
-
+  m_outData -> o_residualMET = new AnalysisObject();
+ 
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Reclustered jets
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1341,6 +1341,12 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // Leptop-related variables in RC jets
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  if( m_outData -> o_lepW && m_outData -> o_lepW->Pt() >= 0.){
+
+    m_outData->o_lepW_n = 1.;
+
+  }
+
   if( m_outData -> o_leptop && m_outData -> o_leptop->Pt() >= 0.){
     
     m_outData->o_leptop_n = 1.;
@@ -1368,12 +1374,13 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
   } //only if there is a leptonic top
 
   //b-tagged contituents
-
   AOVector* source_bjets = (m_opt->BtagCollection() == VLQ_Options::TRACK) ? m_outData -> o_trkbjets : m_outData -> o_bjets ;
 
   double drmin_abs_leptop_b = 99.;
   AnalysisObject* rctag_drmin_leptop_b = NULL;
+  AnalysisObject* rcjet_drmin_leptop_b = NULL;
   int ind_rctag_drmin = -1;
+  int ind_rcjet_drmin = -1;
 
   int index = -1;
   for(AnalysisObject* obj : *(m_outData->o_rcjets)){
@@ -1383,8 +1390,8 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
     for(AnalysisObject* sbjet : *(source_bjets )){
       if( obj->DeltaR(*sbjet) < 1.0 ) nb_match++;
     }
-    obj -> UpdateMoment("nbconsts",   nb_match);
 
+    obj -> UpdateMoment("nbconsts",   nb_match);
 
     if( m_outData -> o_leptop ){
       obj -> SetMoment( "dPhi_leptop", (m_outData->o_leptop)->DeltaPhi(*obj) );
@@ -1395,20 +1402,21 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
     }
 
     if( m_outData -> o_leptop_b ){
-      if( (obj -> GetMoment("isRCMTop") > 0) 
-	  || (obj -> GetMoment("isRCMHiggs") > 0)
-	  || (obj -> GetMoment("isRCMV") > 0 ) ){
-	    
-	double drcur = (m_outData -> o_leptop_b)->DeltaR(*obj);
-	if(drcur < drmin_abs_leptop_b){
-	  drmin_abs_leptop_b = drcur;
-	  rctag_drmin_leptop_b = obj;
-	  ind_rctag_drmin = index;
-	}
-	
-      }
-    }
 
+      double drcur = (m_outData -> o_leptop_b)->DeltaR(*obj);
+      if(drcur < drmin_abs_leptop_b){
+        drmin_abs_leptop_b = drcur;
+        rcjet_drmin_leptop_b = obj;
+        ind_rcjet_drmin = index;
+      }
+      if( (obj -> GetMoment("isRCMTop") > 0)
+          || (obj -> GetMoment("isRCMHiggs") > 0)
+          || (obj -> GetMoment("isRCMV") > 0 ) ){
+        rctag_drmin_leptop_b = obj;
+        ind_rctag_drmin = index;
+      }
+
+    }
 
   }// RC jet collection
 
@@ -1439,6 +1447,137 @@ bool VLQ_AnalysisTools::UpdateBTagMoments(){
 
 
 
+  if(m_outData -> o_AO_met && m_outData -> o_nu &&  m_outData -> o_nu->Pt()>0. && m_outData -> o_AO_met->Pt()> 0.){ 
+    *(m_outData -> o_residualMET) = *(m_outData ->o_AO_met)- *( m_outData ->o_nu)  ;
+  //   m_outData -> o_residualMET =  (m_outData ->o_AO_met->Pt()) - ( m_outData ->o_nu->Pt());
+  }
+
+
+
+  ///============== Make VLQ ========================
+
+  AOVector vlq_inputs_rcjets = {};
+  AOVector vlq_inputs_rcttmass = {};
+
+  if( m_outData -> o_leptop ) {
+    AnalysisObject* leptop_copy = new AnalysisObject( *(m_outData->o_leptop) );
+    vlq_inputs_rcjets.push_back( leptop_copy );
+    vlq_inputs_rcttmass.push_back( leptop_copy );
+  } 
+  else if( m_outData -> o_lepW){   //maybe I should put an else if(lepW exists) if o_rcjets with mass less than 80/90 GeV ? then lepW ? 
+    AnalysisObject* lepW_copy = new AnalysisObject( *(m_outData->o_lepW) );
+    vlq_inputs_rcjets.push_back( lepW_copy );
+    vlq_inputs_rcttmass.push_back( lepW_copy );
+
+  }
+  for(AnalysisObject* obj : *(m_outData->o_rcjets)){
+    AnalysisObject* obj_copy = new AnalysisObject(*obj);
+    if( obj == rcjet_drmin_leptop_b ){
+      *(obj_copy) -= *(m_outData -> o_leptop_b);
+    }
+    vlq_inputs_rcjets.push_back(obj_copy);
+    if(obj_copy->GetMoment("isRCTTMass") > 0){
+      vlq_inputs_rcttmass.push_back(obj_copy);
+    }
+  }
+ 
+  //if( m_opt->DoTruthAnalysis()  &&  truthType == "invZ" ){//  m_opt -> SampleName() == SampleName::VLQ
+  //  vlq_inputs_rcjets.pop_back(     )  // pop_back removes last element in the list 
+  //	}
+ 
+
+
+  // ============== Use the vlq_inputs_rcjets collection to make VLQs with different criteria =====
+
+    //Pt reconstruction 
+  m_outData -> o_m_vlq_rcjets_pt = m_varComputer -> GetInvariantMassSorted( vlq_inputs_rcjets, "");
+  m_outData -> o_m_vlq_rcjets_pt_n = (m_outData -> o_m_vlq_rcjets_pt).size();
+  if( (m_outData -> o_m_vlq_rcjets_pt).size() > 1 ){
+    m_outData -> o_averagem_vlq_rcjets_pt = ( m_outData -> o_m_vlq_rcjets_pt.at(0) + m_outData -> o_m_vlq_rcjets_pt.at(1) )/2; //create o_variables in outputdata.h, and initialize 
+    m_outData -> o_masymm_vlq_rcjets_pt = m_outData -> o_m_vlq_rcjets_pt.at(0) - m_outData -> o_m_vlq_rcjets_pt.at(1);   // their values
+    m_outData -> o_fmasymm_vlq_rcjets_pt = (m_outData -> o_masymm_vlq_rcjets_pt)/( m_outData -> o_averagem_vlq_rcjets_pt);
+  }
+
+  m_outData -> o_m_vlq_rcttmass_pt = m_varComputer -> GetInvariantMassSorted( vlq_inputs_rcttmass, "");
+  m_outData -> o_m_vlq_rcttmass_pt_n = (m_outData -> o_m_vlq_rcttmass_pt).size();
+  if( (m_outData -> o_m_vlq_rcttmass_pt).size() > 1 ){
+    m_outData -> o_averagem_vlq_rcttmass_pt = ( m_outData -> o_m_vlq_rcttmass_pt.at(0) + m_outData -> o_m_vlq_rcttmass_pt.at(1) )/2; //create o_variables in outputdata.h, and initialize 
+    m_outData -> o_masymm_vlq_rcttmass_pt = m_outData -> o_m_vlq_rcttmass_pt.at(0) - m_outData -> o_m_vlq_rcttmass_pt.at(1);   // heir values
+    m_outData -> o_fmasymm_vlq_rcttmass_pt = (m_outData -> o_masymm_vlq_rcttmass_pt)/( m_outData -> o_averagem_vlq_rcttmass_pt);
+  }
+
+
+
+  //DeltaEta_min reconstruction
+  m_outData -> o_m_vlq_rcjets_detamin = m_varComputer -> GetInvariantMassSorted( vlq_inputs_rcjets, "DeltaEta", -1,false );
+  m_outData -> o_m_vlq_rcjets_detamin_n = (m_outData -> o_m_vlq_rcjets_detamin).size();
+  if( (m_outData -> o_m_vlq_rcjets_detamin).size() > 1 ){
+    m_outData -> o_averagem_vlq_rcjets_detamin = ( m_outData -> o_m_vlq_rcjets_detamin.at(0) + m_outData -> o_m_vlq_rcjets_detamin.at(1) )/2;
+    m_outData -> o_masymm_vlq_rcjets_detamin = m_outData -> o_m_vlq_rcjets_detamin.at(0) - m_outData -> o_m_vlq_rcjets_detamin.at(1);
+    m_outData -> o_fmasymm_vlq_rcjets_detamin = (m_outData -> o_masymm_vlq_rcjets_detamin)/( m_outData -> o_averagem_vlq_rcjets_detamin);
+  } 
+ 
+  m_outData -> o_m_vlq_rcttmass_detamin = m_varComputer -> GetInvariantMassSorted( vlq_inputs_rcttmass, "DeltaEta", -1,false );
+  m_outData -> o_m_vlq_rcttmass_detamin_n = (m_outData -> o_m_vlq_rcttmass_detamin).size();
+  if( (m_outData -> o_m_vlq_rcttmass_detamin).size() > 1 ){
+    m_outData -> o_averagem_vlq_rcttmass_detamin = ( m_outData -> o_m_vlq_rcttmass_detamin.at(0) + m_outData -> o_m_vlq_rcttmass_detamin.at(1) )/2;
+    m_outData -> o_masymm_vlq_rcttmass_detamin = m_outData -> o_m_vlq_rcttmass_detamin.at(0) - m_outData -> o_m_vlq_rcttmass_detamin.at(1);
+    m_outData -> o_fmasymm_vlq_rcttmass_detamin = (m_outData -> o_masymm_vlq_rcttmass_detamin)/( m_outData -> o_averagem_vlq_rcttmass_detamin);
+  } 
+   //DeltaEta_max reconstruction 
+    /*m_outData -> o_m_vlq_detamax = m_varComputer -> GetInvariantMassSorted( vlq_inputs_rcjets, "DeltaEta" );
+    if( (m_outData -> o_m_vlq_detamax).size() > 1 ){
+      m_outData -> o_averagem_vlq_detamax = ( m_outData -> o_m_vlq_detamax.at(0) + m_outData -> o_m_vlq_detamax.at(1) )/2;
+      m_outData -> o_masymm_vlq_detamax = m_outData -> o_m_vlq_detamax.at(0) - m_outData -> o_m_vlq_detamax.at(1);
+      m_outData -> o_fmasymm_vlq_detamax = (m_outData -> o_masymm_vlq_detamax)/( m_outData -> o_averagem_vlq_detamax);
+    } */
+
+    //DeltaR_min reconsruction 
+    /*m_outData -> o_m_vlq_drmin = m_varComputer -> GetInvariantMassSorted( vlq_inputs_rcjets, "DeltaR" , false);
+    if( (m_outData -> o_m_vlq_drmin).size() > 1 ){
+      m_outData -> o_averagem_vlq_drmin = ( m_outData -> o_m_vlq_drmin.at(0) + m_outData -> o_m_vlq_drmin.at(1) )/2;
+      m_outData -> o_masymm_vlq_drmin = m_outData -> o_m_vlq_drmin.at(0) - m_outData -> o_m_vlq_drmin.at(1);
+      m_outData -> o_fmasymm_vlq_drmin = (m_outData -> o_masymm_vlq_drmin)/( m_outData -> o_averagem_vlq_drmin);
+      }*/
+
+    //DeltaR_max reconsruction 
+  m_outData -> o_m_vlq_rcjets_drmax = m_varComputer -> GetInvariantMassSorted( vlq_inputs_rcjets, "DeltaR");
+  m_outData -> o_m_vlq_rcjets_drmax_n = (m_outData -> o_m_vlq_rcjets_drmax).size();
+  if( (m_outData -> o_m_vlq_rcjets_drmax).size() > 1 ){
+    m_outData -> o_averagem_vlq_rcjets_drmax = ( m_outData -> o_m_vlq_rcjets_drmax.at(0) + m_outData -> o_m_vlq_rcjets_drmax.at(1) )/2;
+    m_outData -> o_masymm_vlq_rcjets_drmax = m_outData -> o_m_vlq_rcjets_drmax.at(0) - m_outData -> o_m_vlq_rcjets_drmax.at(1);
+    m_outData -> o_fmasymm_vlq_rcjets_drmax = (m_outData -> o_masymm_vlq_rcjets_drmax)/( m_outData -> o_averagem_vlq_rcjets_drmax);
+  }
+
+  m_outData -> o_m_vlq_rcttmass_drmax = m_varComputer -> GetInvariantMassSorted( vlq_inputs_rcttmass, "DeltaR");
+  m_outData -> o_m_vlq_rcttmass_drmax_n = (m_outData -> o_m_vlq_rcttmass_drmax).size();
+  if( (m_outData -> o_m_vlq_rcttmass_drmax).size() > 1 ){
+    m_outData -> o_averagem_vlq_rcttmass_drmax = ( m_outData -> o_m_vlq_rcttmass_drmax.at(0) + m_outData -> o_m_vlq_rcttmass_drmax.at(1) )/2;
+    m_outData -> o_masymm_vlq_rcttmass_drmax = m_outData -> o_m_vlq_rcttmass_drmax.at(0) - m_outData -> o_m_vlq_rcttmass_drmax.at(1);
+    m_outData -> o_fmasymm_vlq_rcttmass_drmax = (m_outData -> o_masymm_vlq_rcttmass_drmax)/( m_outData -> o_averagem_vlq_rcttmass_drmax);
+  }
+
+  //DeltaPhi_max reconstruction 
+  m_outData -> o_m_vlq_rcjets_dphimax = m_varComputer -> GetInvariantMassSorted( vlq_inputs_rcjets, "DeltaPhi" );
+  m_outData -> o_m_vlq_rcjets_dphimax_n = (m_outData -> o_m_vlq_rcjets_dphimax).size();
+  if( (m_outData -> o_m_vlq_rcjets_dphimax).size() > 1 ){
+    m_outData -> o_averagem_vlq_rcjets_dphimax = ( m_outData -> o_m_vlq_rcjets_dphimax.at(0) + m_outData -> o_m_vlq_rcjets_dphimax.at(1) )/2;
+    m_outData -> o_masymm_vlq_rcjets_dphimax = m_outData -> o_m_vlq_rcjets_dphimax.at(0) - m_outData -> o_m_vlq_rcjets_dphimax.at(1);
+    m_outData -> o_fmasymm_vlq_rcjets_dphimax = (m_outData -> o_masymm_vlq_rcjets_dphimax)/( m_outData -> o_averagem_vlq_rcjets_dphimax);
+  }
+
+  m_outData -> o_m_vlq_rcttmass_dphimax = m_varComputer -> GetInvariantMassSorted( vlq_inputs_rcttmass, "DeltaPhi" );
+  m_outData -> o_m_vlq_rcttmass_dphimax_n = (m_outData -> o_m_vlq_rcttmass_dphimax).size();
+  if( (m_outData -> o_m_vlq_rcttmass_dphimax).size() > 1 ){
+    m_outData -> o_averagem_vlq_rcttmass_dphimax = ( m_outData -> o_m_vlq_rcttmass_dphimax.at(0) + m_outData -> o_m_vlq_rcttmass_dphimax.at(1) )/2;
+    m_outData -> o_masymm_vlq_rcttmass_dphimax = m_outData -> o_m_vlq_rcttmass_dphimax.at(0) - m_outData -> o_m_vlq_rcttmass_dphimax.at(1);
+    m_outData -> o_fmasymm_vlq_rcttmass_dphimax = (m_outData -> o_masymm_vlq_rcttmass_dphimax)/( m_outData -> o_averagem_vlq_rcttmass_dphimax);
+  }
+
+  // ======== Clear vlq_inputs_rcjets ==========
+  AnalysisUtils::CleanContainer(vlq_inputs_rcjets);
+  vlq_inputs_rcttmass.clear();
+  vlq_inputs_rcjets.clear();
 
   return true;
 
