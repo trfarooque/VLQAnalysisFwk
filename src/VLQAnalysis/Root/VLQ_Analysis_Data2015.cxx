@@ -214,7 +214,7 @@ bool VLQ_Analysis_Data2015::Begin(){
   //
   //############################################################################
   m_varComputer = new VLQ_VariableComputer(m_opt);
-  if(m_opt->ApplyMVA() && m_opt->DoOneLeptonAna()) m_varComputer->InitMVA(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/TMVAClassification_MLP.weights.xml"));
+  if(m_opt->ApplyMVA() && m_opt->DoOneLeptonAna()) m_varComputer->InitMVA(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/")+m_opt->MVAWeightFile());
 
   
 
@@ -720,7 +720,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "mtbmin",      25, 0, 500,    ";m_{T}^{min}(b,MET)", otherVariables, &(m_outData->o_mTbmin) );
       m_outMngrHist -> AddStandardTH1( "metsig_ev",     0.5, 0, 50,    ";E_{T}^{miss}/#sqrt{H_{T}^{had}} [#sqrt{GeV}]", otherVariables, &(m_outData -> o_metsig_ev) );
       m_outMngrHist -> AddStandardTH1( "metsig_obj",    0.5, 0, 50,    "; #sigma(E_{T}^{miss}) [#sqrt{GeV}]", otherVariables, &(m_outData -> o_metsig_obj) );
-      m_outMngrHist -> AddStandardTH1( "MVAScore", 0.050,-0.1, 1.05, "; MVA Score", otherVariables, &(m_outData -> o_MVAScore) );
+      m_outMngrHist -> AddStandardTH1( "MVAScore", 0.050,-0.1, 1.05, "; MVA Score", true, &(m_outData -> o_MVAScore) );
 
       m_outMngrHist -> AddStandardTH2( "meff", "jets_n", 50, 0, 7000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} [GeV]", (RWderiv||otherVariables), &(m_outData -> o_meff), &(m_outData -> o_jets_n));
       m_outMngrHist -> AddStandardTH2( "meffred", "jets_n", 50, 0, 7000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} reduced [GeV]", (RWderiv||otherVariables), &(m_outData -> o_meffred), &(m_outData -> o_jets_n));
@@ -1538,7 +1538,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCMVRCMTop", 0.25,-1,5, ";leading#Delta#phi (leadingd W/Z-tagged J, leadingd Top-tagged J)", true, &(m_outData -> o_leadingdPhi_RCMVRCMTop) );
       m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCMTopRCMTop", 0.25,-1,5, ";leading#Delta#phi (leadingd Top-tagged J, subleadingd Top-tagged J)", true, &(m_outData -> o_leadingdPhi_RCMTopRCMTop) );
 
-	m_outMngrHist -> AddStandardTH1( "leadingdPhi_lepjet", 0.25,-1,5, ";leading#Delta#phi (lep,jet)", true, &(m_outData -> o_leadingdPhi_lepjet) );
+      m_outMngrHist -> AddStandardTH1( "leadingdPhi_lepjet", 0.25,-1,5, ";leading#Delta#phi (lep,jet)", true, &(m_outData -> o_leadingdPhi_lepjet) );
 	m_outMngrHist -> AddStandardTH1( "leadingdPhi_lepbjet", 0.25,-1,5, ";leading#Delta#phi (lep,bjet)", true, &(m_outData  -> o_leadingdPhi_lepbjet) );
 	m_outMngrHist -> AddStandardTH1( "leadingdPhi_jetjet", 0.25,-1,5, ";leading#Delta#phi (jet,jet)", true, &(m_outData -> o_leadingdPhi_jetjet) );
 

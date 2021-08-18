@@ -108,6 +108,7 @@ m_sampleDat("samples_info_MBJ-2.4.24-1-0.dat"),
 m_lepWOpt("VANILLA"),
 m_leptopOpt("VETO_RCMATCH"),
 m_RCCollection("VR_rho550"),
+m_MVAWeightFile(""),
 m_filterType(NOFILTER),
 m_btagCollection(CALOPFLOW)
 {}
@@ -206,6 +207,7 @@ OptionsBase(q)
     m_btagOP            = q.m_btagOP;
     m_btagAlg           = q.m_btagAlg;
     m_TRFCDIPath        = q.m_TRFCDIPath;
+    m_MVAWeightFile     = q.m_MVAWeightFile;
     m_maxb              = q.m_maxb;
     m_sampleDat         = q.m_sampleDat;
     m_lepWOpt           = q.m_lepWOpt;
@@ -444,7 +446,10 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_RCCollection = temp_val;
         } else if( temp_arg.find("--KINRWLIST") != std::string::npos ){
 	    m_kinRWList = temp_val;
-        }
+        } else if( temp_arg.find("--MVAWEIGHTFILE") != std::string::npos){
+	  m_MVAWeightFile = temp_val;
+	}
+	
         //
         // Int arguments
         //
@@ -576,6 +581,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_doJMRSys                = " << m_doJMRSys          << std::endl;
     std::cout << " m_doJMSSys                = " << m_doJMSSys          << std::endl;
     std::cout << " m_applyMVA                = " << m_applyMVA          << std::endl;
+    std::cout << " m_MVAWeightFile           = " << m_MVAWeightFile     << std::endl;
     std::cout << " m_applyVjetsSherpa22RW    = " << m_applyVjetsSherpa22RW   << std::endl;
     std::cout << " m_filterType              = " << m_filterType        << std::endl;
     std::cout << " m_RecTtBbRw               = " << m_RecTtBbRw         << std::endl;

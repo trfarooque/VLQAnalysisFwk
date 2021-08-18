@@ -111,6 +111,7 @@ public:
   inline std::string LeptopOpt() const { return m_leptopOpt; }
   inline std::string RCCollection() const { return m_RCCollection; }
   inline std::string KinRWList() const { return m_kinRWList; }
+  inline std::string MVAWeightFile() const {return m_MVAWeightFile; }
 
   // doubles
   inline double RCJetsPtCut() const { return m_RCJetsPtCut; }
@@ -233,6 +234,7 @@ private:
   std::string m_leptopOpt;
   std::string m_RCCollection;
   std::string m_kinRWList;
+  std::string m_MVAWeightFile;
 
   FilteringType m_filterType;
   BtagColl m_btagCollection;
