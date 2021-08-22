@@ -50,14 +50,13 @@ atlas_add_executable( compareJetCollections
                       macros/macros_trisha/compareJetCollections.cxx
                       LINK_LIBRARIES ${ROOT_LIBRARIES} VLQAnalysis)
 atlas_add_executable( MakeKinRwHists
-		      macros/macros_carlos/MakeKinRwHists.cxx
+		      macros/macros_carlos/Kinematic_Reweighter/MakeKinRwHists.cxx
 		      LINK_LIBRARIES IFAETopFramework
 		      		     IFAEReweightingTools
 				     BtaggingTRFandRW
 				     FakeLeptonEstimation 
 				     ${ROOT_LIBRARIES}			  
 				     VLQAnalysis)
-
 atlas_add_executable( MakeSByBPlot
 		      macros/macros_carlos/SoverB_Plotter/MakeSByBPlot.cxx
 		      LINK_LIBRARIES IFAETopFramework

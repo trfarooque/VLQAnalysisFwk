@@ -1,0 +1,35 @@
+NEW
+NAME:Doublet_1200GeV
+LABEL:Doublet (1.2 TeV)
+MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16a_0L/outVLQAna_VLQ_TT_1200_TDoublet.root
+MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16d_0L/outVLQAna_VLQ_TT_1200_TDoublet.root
+MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16e_0L/outVLQAna_VLQ_TT_1200_TDoublet.root
+BKG_MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16a_0L/allBackground.root
+BKG_MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16d_0L/allBackground.root
+BKG_MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16e_0L/allBackground.root
+COLOR:Red
+END
+
+NEW
+NAME:Doublet_1400GeV
+LABEL:Doublet (1.4 TeV)
+MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16a_0L/outVLQAna_VLQ_TT_1400_TDoublet.root
+MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16d_0L/outVLQAna_VLQ_TT_1400_TDoublet.root
+MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16e_0L/outVLQAna_VLQ_TT_1400_TDoublet.root
+BKG_MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16a_0L/allBackground.root
+BKG_MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16d_0L/allBackground.root
+BKG_MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16e_0L/allBackground.root
+COLOR:Blue
+END
+
+NEW
+NAME:Doublet_1600GeV
+LABEL:Doublet (1.6 TeV)
+MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16a_0L/outVLQAna_VLQ_TT_1600_TDoublet.root
+MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16d_0L/outVLQAna_VLQ_TT_1600_TDoublet.root
+MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16e_0L/outVLQAna_VLQ_TT_1600_TDoublet.root
+BKG_MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16a_0L/allBackground.root
+BKG_MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16d_0L/allBackground.root
+BKG_MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16e_0L/allBackground.root
+COLOR:Green
+END
