@@ -1,0 +1,162 @@
+from ROOT import TFile
+import re
+
+def GenerateRegionLabel(region):
+    
+    extraLabel = "EXTRALABEL : #splitline{#splitline{#scale[1.2]{#bf{#it{ATLAS}} Internal}}{#sqrt{s}=13 TeV, 140.1 fb^{-1}}}"
+
+    # Jet and Boosted Object Multiplicity Regex
+    #BOM = re.compile(r"[\d_\d]{1,3}[HVTL]+[a-z]{2,3}")
+    JBOMR = re.compile(r"(?P<Multiplicity>[\d_\d]{1,3})(?P<Object>[jfbHVTL]+)(?P<Type>[a-z]{2,3})")
+
+    JBOMs = JBOMR.finditer(region)
+
+    labelDict = {
+        "lep"  : region[region.find("lep")-1]+"l",
+        "jets" : [],
+        "BOs"  : [],
+        "other": []
+    }
+
+    if(region.find("HighMtbmin") != -1):
+        labelDict["other"].append("HM")
+    elif(region.find("LowMtbmin") != -1):
+        labelDict["other"].append("LM")
+
+    for JBO in JBOMs:
+
+        labelComponents = JBO.groupdict()
+
+        tmp_label = ""
+
+        if(labelComponents["Type"] == "in"):
+            tmp_label += "#geq"
+        
+        tmp_label += (labelComponents["Multiplicity"][0]+"-"+labelComponents["Multiplicity"][2]) if (len(labelComponents["Multiplicity"]) == 3) else (labelComponents["Multiplicity"])
+            
+        if(labelComponents["Object"] == "T"):
+            tmp_label += "t_{h}"
+        elif(labelComponents["Object"] == "L"):
+            tmp_label += "t_{l}"
+        elif(labelComponents["Object"] == "VT"):
+            tmp_label += ("(V+t_{h})")
+        elif(labelComponents["Object"] == "LT"):
+            tmp_label += ("(t_{l}+t_{h})")
+        elif(labelComponents["Object"] == "VLT"):
+            tmp_label += ("(V+t_{l}+t_{h})")
+        else:
+            tmp_label += labelComponents["Object"]
+        
+        if(labelComponents["Object"] in ["j", "b", "fj"]):
+            labelDict["jets"].append(tmp_label)
+        else:
+            labelDict["BOs"].append(tmp_label)
+
+        #print(JBO.groupdict(), JBO.group(), labelDict["lep"])
+
+    
+    label = labelDict["lep"] + ", "
+
+    for jets in labelDict["jets"]:
+        label += jets + ", "
+
+    for BOs in labelDict["BOs"]:
+        label += BOs + ", "
+
+    for other in labelDict["other"]:
+        label += other + ", " 
+    
+    if(label[-2:] == ", "):
+        label = label[:-2]
+
+
+    print(label)
+
+    extraLabel += ("{"+label+"}\n")
+
+    return extraLabel
+
+
+f = TFile("/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_16_2021/mc16a_0L/allBackground.root")
+
+varList = {"meff"}
+
+rebinDict = {"RCMHiggs_jets_m" : "0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,180,190,200,240,280,320,400,500",
+             "RCMTop_jets_m" : "0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,180,190,200,240,280,320,400,500",
+             "meff" : "0,100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,3000,3100,3200,3300,3400,3500,3600,3700,3800,3900,4000,4100,4200,4300,4400,4500,4600,4700,4800,4900,5000,5100,5200,5300,5400,5500,5600,5700,5800,5900,6000,6100,6200,6300,6400,6500,6600,6700,6800,6900,7000",
+             #"meff" : "0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000",
+             #"meff" :"0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,4000,5000,6000,7000",
+             #"meffred" : "0,100,400,500,600,700,800,900,1000,1200,1400,1600,2000,5000",
+             #"meffred" : "0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500,5000",
+             "met" : "0,100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700",
+             "hthad" : "0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500",
+             "htall" : "0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500",
+             "htred" : "0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,3500",
+             "jets_pt" : "0,20,40,60,80,100,120,160,200,240,280,320,360,400,500,600,700,800,1000",
+             "jet0_pt" : "0,20,40,60,80,100,120,160,200,240,280,320,360,400,500,600,700,800,1000",
+             "trkbjets_pt" : "0,20,40,60,80,100,120,160,200,240,280,320,360,400,500,600,700,800,1000",
+             "trkbjet0_pt" : "0,20,40,60,80,100,120,160,200,240,280,320,360,400,500,600,700,800,1000",
+             "RCjets_m" : "0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,180,190,200,240,280,320,400,500",
+             "jets_n" : "-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,15.5"}
+             #"jets_n" : "-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,15.5"}
+
+#pVLQ
+regList={"c0lep7jin2bex0Hex1VTexHighMtbmin", "c0lep7jin2bex0Hex1Vex1TinHighMtbmin", "c0lep7jin2bex0Hex0Vex2TexHighMtbmin", 
+         "c0lep7jin2bex0Hex2Vin0TinHighMtbmin", "c0lep7jin3bin0Hex1VTex", "c0lep7jin3bin0Hex1Vex1Tin", "c0lep7jin3bin0Hex0Vex2Tex", 
+         "c0lep7jin3bin0Hex2Vin0Tin", "c0lep7jin2bex1Hex0VTex", "c0lep7jin2bex1Hex1Vex0Tex", "c0lep7jin2bex1Hex2Vin0Tex", 
+         "c0lep7jin2bex1Hex1Vin1Tex", "c0lep7jin2bex1Hex0Vin2Tin", "c0lep7jin3bex1Hex0VTex", "c0lep7jin3bex1Hex1Vex0Tex", 
+         "c0lep7jin3bex1Hex2Vin0Tex", "c0lep7jin3bex1Hex1Vin1Tex", "c0lep7jin3bex1Hex0Vin2Tin",
+         "c0lep7jin4bin1Hex0VTex", "c0lep7jin4bin1Hex1Vex0Tex", "c0lep7jin4bin1Hex2Vin0Tex", "c0lep7jin4bin1Hex1Vin1Tex", 
+         "c0lep7jin4bin1Hex0Vin2Tin", "c0lep7jin2bex2Hin0Vin0Tin", "c0lep7jin3bin2Hin0Vin0Tin"}
+
+varConfig = open("variableConfig.txt", "w+")
+
+varConfig.write("BEGIN\n")
+
+for var in varList:
+
+    for reg in regList:
+        
+        fullName = reg+"_"+var
+        fullNameWildcard = reg+"_*"+var
+
+        if(f.GetListOfKeys().Contains(fullName)):
+            varConfig.write("NEW\n")
+            varConfig.write("NAME : "+fullNameWildcard+"\n")
+            varConfig.write("DRAWSTACK : TRUE\n")
+            varConfig.write("DRAWRES : RATIO\n")
+            varConfig.write("DRAWRESSTACK : TRUE\n")
+            varConfig.write("DOSCALE : SHAPE\n")
+            varConfig.write("RESMIN : 0.\n")
+            varConfig.write("RESMAX : 1.5\n")
+            varConfig.write("YMIN   : 0.\n")
+            if(var == "meff"):
+                varConfig.write("XMIN   : 1000\n")
+                varConfig.write("XMAX   : 4000\n")
+            #varConfig.write("ISLOGY : TRUE\n")
+            varConfig.write("DOWIDTH : FALSE\n")
+            if(var in rebinDict):
+                varConfig.write("REBINVAR : "+rebinDict[var]+"\n")
+            
+            if(var == "leadingdR_RCMHiggsRCMHiggs" or var == "leadingdR_RCMHiggsRCMV" or var == "leadingdR_RCMHiggsRCMTop" or var == "leadingdR_RCMVRCMV"
+               or var == "leadingdR_RCMVRCMTop" or var == "leadingdR_RCMTopRCMTop"):
+                varConfig.write("XMIN   : 0.\n")
+
+            if(var == "dRmin_RCMHiggsRCMHiggs" or var == "dRmin_RCMHiggsRCMV" or var == "dRmin_RCMHiggsRCMTop" or var == "dRmin_RCMVRCMV"
+               or var == "dRmin_RCMVRCMTop" or var == "dRmin_RCMTopRCMTop"):
+                varConfig.write("XMAX   : 4.5\n")
+
+            if(var == "recoHtHt_minMAsymm" or var == "recoHtZt_minMAsymm" or var == "recoHtWb_minMAsymm"):
+                varConfig.write("XMIN   : 0.\n")
+                varConfig.write("XMAX   : 1000.\n")
+
+            #pVLQ_regions
+            varConfig.write(GenerateRegionLabel(reg))
+            varConfig.write("\n")
+
+        else:
+            print("WARNING! Variable "+fullName+" not found in input file!")
+
+f.Close()
+varConfig.write("END")
+varConfig.close()
