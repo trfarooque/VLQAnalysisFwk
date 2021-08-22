@@ -313,6 +313,22 @@ def GetZSamplesSherpa221( useWeightSyst=False, useObjectSyst=False, campaign="",
     Samples     += [getSampleUncertainties(name,"364139."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364140."+campaign, ObjectSystematics , WeightSystematics)]
     Samples     += [getSampleUncertainties(name,"364141."+campaign, ObjectSystematics , WeightSystematics)]
+    #0l nunu
+    if(campaign=="mc16a" or campaign=="mc16d"):
+        Samples += [getSampleUncertainties(name, "364142."+campaign, ObjectSystematics, WeightSystematics)]
+        Samples += [getSampleUncertainties(name, "364143."+campaign, ObjectSystematics, WeightSystematics)]
+        Samples += [getSampleUncertainties(name, "364144."+campaign, ObjectSystematics, WeightSystematics)]
+        Samples += [getSampleUncertainties(name, "364145."+campaign, ObjectSystematics, WeightSystematics)]
+        Samples += [getSampleUncertainties(name, "364146."+campaign, ObjectSystematics, WeightSystematics)]
+        Samples += [getSampleUncertainties(name, "364147."+campaign, ObjectSystematics, WeightSystematics)]
+        Samples += [getSampleUncertainties(name, "364148."+campaign, ObjectSystematics, WeightSystematics)]
+        Samples += [getSampleUncertainties(name, "364149."+campaign, ObjectSystematics, WeightSystematics)]
+        Samples += [getSampleUncertainties(name, "364150."+campaign, ObjectSystematics, WeightSystematics)]
+        Samples += [getSampleUncertainties(name, "364151."+campaign, ObjectSystematics, WeightSystematics)]
+        Samples += [getSampleUncertainties(name, "364152."+campaign, ObjectSystematics, WeightSystematics)]
+        Samples += [getSampleUncertainties(name, "364153."+campaign, ObjectSystematics, WeightSystematics)]
+        Samples += [getSampleUncertainties(name, "364154."+campaign, ObjectSystematics, WeightSystematics)]
+        Samples += [getSampleUncertainties(name, "364155."+campaign, ObjectSystematics, WeightSystematics)]
 
     return Samples
 
