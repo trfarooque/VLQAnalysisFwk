@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include "IFAETopFramework/AnalysisObject.h"
 #include "IFAETopFramework/AnalysisUtils.h"
 #include "IFAETopFramework/TriggerInfo.h"
@@ -15,7 +14,7 @@ OutputData(),
 m_opt(opt),
 //Event variables
 o_channel_type(0),o_period(0),o_run_number(0),o_pileup_mu(0),o_npv(0), o_meff(0), o_meffred(0), o_met(0), o_mtwl(0), o_ptwl(0), o_mll(0), 
-o_hthad(0), o_hthadRC(0), o_hthadRCtag(0), o_hthadRCM(0), o_mJsum(0), o_metsig_ev(0), o_metsig_obj(0),
+o_hthad(0), o_hthadRC(0), o_hthadRCtag(0), o_hthadRCM(0), o_mJsum(0), o_metsig_ev(0), o_metsig_obj(0),o_residualMET(0),
 o_MVAScore(-1),
 //Jet type numbers
 o_jets_n(0),o_bjets_n(0),o_ljets_n(0),
@@ -44,17 +43,28 @@ o_el(0),o_mu(0),o_lep(0),o_selLep(0),
 //MET
 o_AO_met(0),
 //Leptonic top and leptonic W
-o_leptop_n(0), o_leptop(0), o_lepW(0), o_nu(0),
+o_leptop_n(0), o_leptop(0), o_leptop_b(0), o_lepW(0), o_lepW_n(0), o_nu(0),
 //Semi-boosted hadronic top
 o_bW_hadtop(0),
 //Top-tagging truth studies variables
 o_fjets_topmatched(0),o_fjets_topmatchboost_TTL(0),o_fjets_topmatchboost_TTT(0),
 o_nhadtops(0),o_nboosthadtops(0),o_matchingeff(0),o_tageff_TTL(0),o_tageff_TTT(0),
 //Kinematic variables
-o_dRmin_lepjet(0),o_dRmin_ejets(0), o_dRmin_mujets(0),o_dRmin_lepbjet(0), o_dRmin_jetjet(0), 
-o_dRmin_RCMHiggsRCMHiggs(0), o_dRmin_RCMHiggsRCMV(0), o_dRmin_RCMHiggsRCMTop(0), o_dRmin_RCMVRCMV(0),
-o_dRmin_RCMVRCMTop(0), o_dRmin_RCMTopRCMTop(0), o_leadingdR_RCMHiggsRCMHiggs(0), o_leadingdR_RCMHiggsRCMV(0),
-o_leadingdR_RCMHiggsRCMTop(0), o_leadingdR_RCMVRCMV(0), o_leadingdR_RCMVRCMTop(0), o_leadingdR_RCMTopRCMTop(0),
+o_dRmin_lepjet(0),o_dRmin_ejets(0), o_dRmin_mujets(0),o_dRmin_lepbjet(0), o_dRmin_jetjet(0),  o_dRmin_RCjets(0),
+  o_dEtamin_lepjet(0),o_dEtamin_lepbjet(0), o_dEtamin_jetjet(0), o_dEtamin_RCjets(0), o_dPhimin_lepjet(0),o_dPhimin_lepbjet(0), o_dPhimin_jetjet(0) , o_dPhimin_RCjets(0),
+o_dRmin_RCMHiggsRCMHiggs(0), o_dRmin_RCMHiggsRCMV(0), o_dRmin_RCMHiggsRCMTop(0), o_dRmin_RCMVRCMV(0), o_dRmin_RCTTMassRCTTMass(0),
+o_dRmin_RCMVRCMTop(0), o_dRmin_RCMTopRCMTop(0),o_dPhimin_RCMHiggsRCMHiggs(0), o_dPhimin_RCMHiggsRCMV(0), o_dPhimin_RCMHiggsRCMTop(0), o_dPhimin_RCMVRCMV(0), o_dPhimin_RCTTMassRCTTMass(0),
+o_dPhimin_RCMVRCMTop(0), o_dPhimin_RCMTopRCMTop(0),o_dEtamin_RCMHiggsRCMHiggs(0), o_dEtamin_RCMHiggsRCMV(0), o_dEtamin_RCMHiggsRCMTop(0), o_dEtamin_RCMVRCMV(0),
+o_dEtamin_RCMVRCMTop(0), o_dEtamin_RCMTopRCMTop(0), o_dEtamin_RCTTMassRCTTMass(0),
+o_leadingdR_lepjet(0), o_leadingdR_lepbjet(0),o_leadingdR_jetjet(0),o_leadingdR_RCjets(0),
+o_leadingdEta_lepjet(0), o_leadingdEta_lepbjet(0),o_leadingdEta_jetjet(0),o_leadingdEta_RCjets(0),
+o_leadingdPhi_lepjet(0), o_leadingdPhi_lepbjet(0),o_leadingdPhi_jetjet(0),o_leadingdPhi_RCjets(0),
+o_leadingdR_RCMHiggsRCMHiggs(0), o_leadingdR_RCMHiggsRCMV(0),
+  o_leadingdR_RCMHiggsRCMTop(0), o_leadingdR_RCMVRCMV(0), o_leadingdR_RCMVRCMTop(0), o_leadingdR_RCMTopRCMTop(0),  o_leadingdR_RCTTMassRCTTMass(0),
+o_leadingdEta_RCMHiggsRCMHiggs(0), o_leadingdEta_RCMHiggsRCMV(0),
+  o_leadingdEta_RCMHiggsRCMTop(0), o_leadingdEta_RCMVRCMV(0), o_leadingdEta_RCMVRCMTop(0), o_leadingdEta_RCMTopRCMTop(0), o_leadingdEta_RCTTMassRCTTMass(0),
+o_leadingdPhi_RCMHiggsRCMHiggs(0), o_leadingdPhi_RCMHiggsRCMV(0),
+  o_leadingdPhi_RCMHiggsRCMTop(0), o_leadingdPhi_RCMVRCMV(0), o_leadingdPhi_RCMVRCMTop(0), o_leadingdPhi_RCMTopRCMTop(0),o_leadingdPhi_RCTTMassRCTTMass(0),
 o_minRecoVLQMAsymm_HtHt(0), o_minRecoVLQMAsymm_HtZt(0), o_minRecoVLQMAsymm_HtWb(0),
 o_dRmin_bjetbjet(0), o_dRmin_bjetbjet_lowb_3b(0), o_dRmin_bjetbjet_lowb_4b(0),
 o_dR_TTL_bjets(0),o_dR_TTT_bjets(0), o_dR_TTLooser_bjets(0), o_mbb_mindR(0), o_mbb_mindR_lowb_3b(0), o_mbb_mindR_lowb_4b(0),
@@ -62,7 +72,10 @@ o_dPhi_lepmet(0), o_dPhi_jetmet(0), o_dPhi_jetmet5(0), o_dPhi_jetmet6(0), o_dPhi
 o_dRmin_ebjets(0), o_dRmin_mubjets(0), o_mTbmin(0), o_mTbmin_lowb_3b(0), o_mTbmin_lowb_4b(0),
 //HBSM variables
 o_jets40_n(0), o_centrality(0), o_mbb_leading_bjets(0), o_mbb_softest_bjets(0), o_J_lepton_invariant_mass(0), o_J_leadingb_invariant_mass(0), o_J_J_invariant_mass(0),
-o_dRaverage_bjetbjet(0),o_dRaverage_jetjet(0),
+o_dRaverage_bjetbjet(0),o_dRaverage_jetjet(0),o_dRaverage_lepjet(0),o_dRaverage_lepbjet(0),o_dRaverage_RCjets(0),o_dRaverage_RCTTMassRCTTMass(0),
+o_dEtaaverage_jetjet(0),o_dEtaaverage_lepjet(0),o_dEtaaverage_lepbjet(0),o_dEtaaverage_RCjets(0),o_dEtaaverage_RCTTMassRCTTMass(0),
+o_dPhiaverage_jetjet(0),o_dPhiaverage_lepjet(0),o_dPhiaverage_lepbjet(0), o_dPhiaverage_RCjets(0),o_dPhiaverage_RCTTMassRCTTMass(0),
+o_invariant_mass_RCTTMassRCTTMass(0), o_invariant_mass_RCjets(0),o_dRmaxM_RCTTMassRCTTMass(0),o_dRmaxM_RCjets(0),o_dPhimaxM_RCTTMassRCTTMass(0),o_dPhimaxM_RCjets(0),o_dEtaminM_RCTTMassRCTTMass(0),o_dEtaminM_RCjets(0),
 //Low mass Hplus Variable
 o_mbb_maxdR(0), o_dPhibb_leading_bjets(0), o_dPhibb_mindR(0), o_dPhibb_maxdR(0), o_dEtabb_leading_bjets(0), o_dEtabb_mindR(0), o_dEtabb_maxdR(0), o_mjj_leading_jets(0), 
 o_mjj_mindR(0), o_mjj_maxdR(0), o_dPhijj_leading_jets(0), o_dPhijj_mindR(0), o_dPhijj_maxdR(0), o_dEtajj_leading_jets(0), o_dEtajj_mindR(0), o_dEtajj_maxdR(0),
@@ -70,6 +83,18 @@ o_mjj_mindR(0), o_mjj_maxdR(0), o_dPhijj_leading_jets(0), o_dPhijj_mindR(0), o_d
 o_rejectEvent(0),
 //VLQ type
 o_VLQtype(-1),
+//VLQ_invariant_masses reconstruction
+o_m_vlq_rcjets_pt_n(0),o_m_vlq_rcjets_detamin_n(0), o_m_vlq_rcjets_drmax_n(0), o_m_vlq_rcjets_dphimax_n(0),  
+o_averagem_vlq_rcjets_pt(0),o_masymm_vlq_rcjets_pt(0),o_fmasymm_vlq_rcjets_pt(0),
+o_averagem_vlq_rcjets_detamin(0),o_masymm_vlq_rcjets_detamin(0),o_fmasymm_vlq_rcjets_detamin(0),
+o_averagem_vlq_rcjets_drmax(0),o_masymm_vlq_rcjets_drmax(0),o_fmasymm_vlq_rcjets_drmax(0),
+o_averagem_vlq_rcjets_dphimax(0),o_masymm_vlq_rcjets_dphimax(0),o_fmasymm_vlq_rcjets_dphimax(0),
+
+o_m_vlq_rcttmass_pt_n(0),o_m_vlq_rcttmass_detamin_n(0), o_m_vlq_rcttmass_drmax_n(0), o_m_vlq_rcttmass_dphimax_n(0),  
+o_averagem_vlq_rcttmass_pt(0),o_masymm_vlq_rcttmass_pt(0),o_fmasymm_vlq_rcttmass_pt(0),
+o_averagem_vlq_rcttmass_detamin(0),o_masymm_vlq_rcttmass_detamin(0),o_fmasymm_vlq_rcttmass_detamin(0),
+o_averagem_vlq_rcttmass_drmax(0),o_masymm_vlq_rcttmass_drmax(0),o_fmasymm_vlq_rcttmass_drmax(0),
+o_averagem_vlq_rcttmass_dphimax(0),o_masymm_vlq_rcttmass_dphimax(0),o_fmasymm_vlq_rcttmass_dphimax(0),
 //Truth variables
 o_truth_dR_Wb(0), o_truth_top_pt(0),o_truth_ht_filter(0),o_truth_met_filter(0),
 //Truth VLQ variables
@@ -179,6 +204,26 @@ o_is_ttbar(false)
   }
   rcjetTruthType.clear();
 
+
+  //All leptop and leptop-b categories
+  o_catLeptop.clear();
+  o_catLeptop_b.clear();
+  o_catLeptop_n.clear();
+
+  std::vector<std::string> leptopTypes = {"highM", "winM", "BoutRCtag", "BinRCtag",
+					 "BinRCMTop","BinRCMHiggs","BinRCMV",
+					  "BinRCtagNconst1","BinRCMTopNconst1","BinRCMHiggsNconst1","BinRCMVNconst1",
+					  "truthMatch", "nontruthMatch", "lowdRbW", "highdRbW"};
+
+  for(const std::string& lptype : leptopTypes){
+    o_catLeptop.insert(std::pair<std::string, AnalysisObject*>(lptype, nullptr));
+    o_catLeptop_b.insert(std::pair<std::string, AnalysisObject*>(lptype, nullptr));
+    o_catLeptop_n.insert(std::pair<std::string, int>(lptype, 0));
+  }
+  leptopTypes.clear();
+
+
+
   o_el = new AOVector();
   o_mu = new AOVector();
   o_lep = new AOVector();
@@ -201,8 +246,10 @@ o_is_ttbar(false)
     o_recoVLQ_n.insert( std::pair<std::string, int>( type, 0 ) );
   }
   decayType.clear();
-
-
+  //VLq mass invariant reconstruction 
+  // moved to line 412
+  
+ 
   //Truth
   o_truth_all_particles = new AOVector();
   o_truth_all_partons = new AOVector();
@@ -228,7 +275,7 @@ o_is_ttbar(false)
     "lepZ", "lepZ_lep1", "lepZ_lep2",
     "invZ",
     "hadW", "hadW_q1", "hadW_q2",
-    "lepW", "lepW_lep", "lepW_nu"
+    "lepW", "lepW_lep", "lepW_nu",
   };
 
   for( const std::string& type : truthType ){
@@ -362,27 +409,89 @@ void VLQ_OutputData::ClearOutputData()
   for(TriggerInfo* trig : o_trigger_list){
     trig->SetPass(false);
   }
+  //VLQ invariant mass reconstruction
 
+  o_m_vlq_rcjets_pt.clear();
+  o_m_vlq_rcjets_detamin.clear();
+  o_m_vlq_rcjets_drmax.clear();
+  o_m_vlq_rcjets_dphimax.clear();
+
+  o_m_vlq_rcttmass_pt.clear();
+  o_m_vlq_rcttmass_detamin.clear();
+  o_m_vlq_rcttmass_drmax.clear();
+  o_m_vlq_rcttmass_dphimax.clear();
+
+  
   //
   // Flat variables
   //
-  o_dRmin_lepjet = 99.;
-  o_dRmin_ejets = 99.;
-  o_dRmin_mujets = 99.;
-  o_dRmin_lepbjet = 99.;
-  o_dRmin_jetjet = 99.;
+  o_dRmin_lepjet = -99.;
+  o_dRmin_ejets = -99.;
+  o_dRmin_mujets = -99.;
+  o_dRmin_lepbjet = -99.;
+  o_dRmin_jetjet = -99.;
+  o_dEtamin_lepjet = -99.;
+  o_dEtamin_lepbjet = -99.;
+  o_dEtamin_jetjet = -99.;
+  o_dPhimin_lepjet = -99.;
+  o_dPhimin_lepbjet = -99.;
+  o_dPhimin_jetjet = -99.;
+  o_dRmin_RCjets = -99.;
+  o_dEtamin_RCjets = -99.;
+  o_dPhimin_RCjets = -99.;
   o_dRmin_RCMHiggsRCMHiggs = -100.;
   o_dRmin_RCMHiggsRCMV = -100.;
   o_dRmin_RCMHiggsRCMTop = -100.; 
   o_dRmin_RCMVRCMV = -100.;
   o_dRmin_RCMVRCMTop = -100.; 
   o_dRmin_RCMTopRCMTop = -100.;
+  o_leadingdR_lepjet = -100.;
+  o_leadingdR_lepbjet = -100.;
+  o_leadingdR_jetjet = -100.;
+  o_leadingdEta_lepjet = -100.;
+  o_leadingdEta_lepbjet = -100.;
+  o_leadingdEta_jetjet = -100.;
+  o_leadingdPhi_lepjet = -100.;
+  o_leadingdPhi_lepbjet = -100.;
+  o_leadingdPhi_jetjet = -100.;
   o_leadingdR_RCMHiggsRCMHiggs = -100.;
   o_leadingdR_RCMHiggsRCMV = -100.;
   o_leadingdR_RCMHiggsRCMTop = -100.;
   o_leadingdR_RCMVRCMV = -100.;
   o_leadingdR_RCMVRCMTop = -100.;
   o_leadingdR_RCMTopRCMTop = -100.;
+
+  o_leadingdR_RCTTMassRCTTMass = -100.;
+  o_leadingdEta_RCTTMassRCTTMass = -100.;
+  o_leadingdPhi_RCTTMassRCTTMass = -100.;
+
+  o_leadingdEta_RCMHiggsRCMHiggs = -100.;
+  o_leadingdEta_RCMHiggsRCMV = -100.;
+  o_leadingdEta_RCMHiggsRCMTop = -100.;
+  o_leadingdEta_RCMVRCMV = -100.;
+  o_leadingdEta_RCMVRCMTop = -100.;
+  o_leadingdEta_RCMTopRCMTop = -100.;
+  o_leadingdPhi_RCMHiggsRCMHiggs = -100.;
+  o_leadingdPhi_RCMHiggsRCMV = -100.;
+  o_leadingdPhi_RCMHiggsRCMTop = -100.;
+  o_leadingdPhi_RCMVRCMV = -100.;
+  o_leadingdPhi_RCMVRCMTop = -100.;
+  o_leadingdPhi_RCMTopRCMTop = -100.;
+  o_dPhimin_RCMHiggsRCMHiggs = -100.;
+  o_dPhimin_RCMHiggsRCMV = -100.;
+  o_dPhimin_RCMHiggsRCMTop = -100.;
+  o_dPhimin_RCMVRCMV = -100.;
+  o_dPhimin_RCMVRCMTop = -100.;
+  o_dPhimin_RCMTopRCMTop = -100.;
+  o_dPhimin_RCTTMassRCTTMass = -100.;
+  o_dEtamin_RCTTMassRCTTMass = -100.;
+  o_dRmin_RCTTMassRCTTMass = -100.;
+  o_dEtamin_RCMHiggsRCMHiggs = -100.;
+  o_dEtamin_RCMHiggsRCMV = -100.;
+  o_dEtamin_RCMHiggsRCMTop = -100.;
+  o_dEtamin_RCMVRCMV = -100.;
+  o_dEtamin_RCMVRCMTop = -100.;
+  o_dEtamin_RCMTopRCMTop = -100.;
   o_minRecoVLQMAsymm_HtHt = -100.;
   o_minRecoVLQMAsymm_HtZt = -100.;
   o_minRecoVLQMAsymm_HtWb = -100.;
@@ -462,6 +571,7 @@ void VLQ_OutputData::ClearOutputData()
   o_meff = 0;
   o_meffred = 0;
   o_met = 0;
+  // o_residualMET = 0; corresponds when this is a double instead of an analysis object
   o_mtwl = 0;
   o_ptwl = 0;
   o_mll = 0;
@@ -477,8 +587,79 @@ void VLQ_OutputData::ClearOutputData()
   o_J_lepton_invariant_mass = -100.;
   o_J_leadingb_invariant_mass = -100.;
   o_J_J_invariant_mass = -100.;
+
+  //VLQ Invariant mass recosntruction
+  o_m_vlq_rcjets_pt_n = 0;
+  o_m_vlq_rcjets_detamin_n = 0;
+  o_m_vlq_rcjets_drmax_n = 0;
+  o_m_vlq_rcjets_dphimax_n = 0;
+  
+  o_averagem_vlq_rcjets_pt= -1. ;
+  o_masymm_vlq_rcjets_pt= -10000. ;
+  o_fmasymm_vlq_rcjets_pt= -100. ;
+
+  o_averagem_vlq_rcjets_detamin= -1. ;
+  o_masymm_vlq_rcjets_detamin= -10000. ;
+  o_fmasymm_vlq_rcjets_detamin= -100. ;
+ 
+  o_averagem_vlq_rcjets_drmax= -1. ;
+  o_masymm_vlq_rcjets_drmax= -10000. ;
+  o_fmasymm_vlq_rcjets_drmax= -100. ;
+ 
+  o_averagem_vlq_rcjets_dphimax= -1. ;
+  o_masymm_vlq_rcjets_dphimax= -10000. ;
+  o_fmasymm_vlq_rcjets_dphimax= -100. ;
+
+  o_m_vlq_rcttmass_pt_n = 0;
+  o_m_vlq_rcttmass_detamin_n = 0;
+  o_m_vlq_rcttmass_drmax_n = 0;
+  o_m_vlq_rcttmass_dphimax_n = 0;
+  
+  o_averagem_vlq_rcttmass_pt= -1. ;
+  o_masymm_vlq_rcttmass_pt= -10000. ;
+  o_fmasymm_vlq_rcttmass_pt= -100. ;
+
+  o_averagem_vlq_rcttmass_detamin= -1. ;
+  o_masymm_vlq_rcttmass_detamin= -10000. ;
+  o_fmasymm_vlq_rcttmass_detamin= -100. ;
+ 
+  o_averagem_vlq_rcttmass_drmax= -1. ;
+  o_masymm_vlq_rcttmass_drmax= -10000. ;
+  o_fmasymm_vlq_rcttmass_drmax= -100. ;
+
+  o_averagem_vlq_rcttmass_dphimax= -1. ;
+  o_masymm_vlq_rcttmass_dphimax= -10000. ;
+  o_fmasymm_vlq_rcttmass_dphimax= -100. ;
+  //
+  o_invariant_mass_RCTTMassRCTTMass = -100.;
+  o_invariant_mass_RCjets= -100.;
+  o_dRmaxM_RCTTMassRCTTMass= -100.;
+  o_dRmaxM_RCjets= -100.;
+  o_dPhimaxM_RCTTMassRCTTMass= -100.;
+  o_dPhimaxM_RCjets= -100.;
+  o_dEtaminM_RCTTMassRCTTMass= -100.;
+  o_dEtaminM_RCjets= -100.;
+
   o_dRaverage_bjetbjet = -100; 
   o_dRaverage_jetjet = -100;
+  o_dRaverage_lepbjet = -100;
+  o_dRaverage_lepjet = -100;
+
+  o_dRaverage_RCjets = -100;
+  o_dEtaaverage_RCjets = -100;
+  o_dPhiaverage_RCjets = -100;
+
+  o_dRaverage_RCTTMassRCTTMass = -100;
+  o_dEtaaverage_RCTTMassRCTTMass = -100;
+  o_dPhiaverage_RCTTMassRCTTMass = -100;
+
+  o_dEtaaverage_jetjet = -100;
+  o_dEtaaverage_lepbjet = -100;
+  o_dEtaaverage_lepjet = -100;
+
+  o_dPhiaverage_jetjet = -100;
+  o_dPhiaverage_lepbjet = -100;
+  o_dPhiaverage_lepjet = -100;
 
   o_fjets_topmatched=-99;
   o_fjets_topmatchboost_TTL=-99;
@@ -512,7 +693,6 @@ void VLQ_OutputData::ClearOutputData()
   // Selected lepton
   //
   o_selLep = 0;
-
   //
   // Vectors
   //
@@ -595,7 +775,8 @@ void VLQ_OutputData::ClearOutputData()
   //delete met
   delete o_AO_met;
   o_AO_met = nullptr;
-
+  delete o_residualMET;
+  o_residualMET = nullptr;
   //Reset neutrino 
   if(o_nu){
     delete o_nu;
@@ -617,7 +798,7 @@ void VLQ_OutputData::ClearOutputData()
   //Reset b-jet from leptop
   o_leptop_b = nullptr;
   o_leptop_n = 0;
-
+  o_lepW_n = 0;//not sure if it should go inside the if 
   //delete semi-boosted hadtops
   for ( const AnalysisObject* hadtop : *(o_bW_hadtop) ) {
     delete hadtop;
@@ -652,6 +833,20 @@ void VLQ_OutputData::ClearOutputData()
   for(std::pair<std::string, AOVector*> obj_pair : o_recoVLQ){
     AnalysisUtils::CleanContainer(*(obj_pair.second));
   }
+
+  //
+  // Leptop categories
+  //
+  for(std::pair<std::string, AnalysisObject*> lp_pair : o_catLeptop ){
+    o_catLeptop.at(lp_pair.first) = nullptr;
+  }
+  for(std::pair<std::string, AnalysisObject*> lpb_pair : o_catLeptop_b ){
+    o_catLeptop_b.at(lpb_pair.first) = nullptr;
+  }
+  for(std::pair<std::string, int> lpb_pair : o_catLeptop_n ){    //probably this line is not correct
+    o_catLeptop_n.at(lpb_pair.first) = 0;
+  }
+
 
   //
   // Event variable for selection

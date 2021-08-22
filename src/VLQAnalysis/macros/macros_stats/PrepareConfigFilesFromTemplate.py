@@ -231,9 +231,16 @@ if(signalType=="PAIR"):
         Signals += [getSampleUncertainties("VLQ_BB_" + mass + "_ZbZb","VLQ_BB_" + mass + "_ZbZb", CommonObjectSystematics , [])]'''
 
 elif(signalType=="SINGLE"):
-    Signals += GetOldSingleVLQSamples( )
 
-    
+    VLQ_masses = ["low_mass"] #, "nom_mass"]
+
+    VLQ_couplings =["K50"]
+    for vlq_mass in VLQ_masses:
+        for vlq_coupling in VLQ_couplings:
+            Signals +=  GetSingleVLQSamples( RWName=vlq_mass+"_"+vlq_coupling )
+            
+    #Signals += GetOldSingleVLQSamples( )
+
 #for mass in ["1000","1200","1400","1600","1800"]:
 #    Signals += [getSampleUncertainties("UEDRPP_" + mass + ")","UEDRPP_" + mass, CommonObjectSystematics , [])]
 #Signals += [getSampleUncertainties("CI4tops","CI4tops", CommonObjectSystematics , [])]

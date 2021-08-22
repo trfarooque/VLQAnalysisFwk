@@ -1,22 +1,21 @@
 #include <iostream>
+#include <iostream>
+#include <set>
 
 #include "IFAETopFramework/OptionsBase.h"
 #include "IFAETopFramework/AnalysisObject.h"
+#include "IFAETopFramework/AnalysisUtils.h"
 
 #include "VLQAnalysis/VLQ_VariableComputer.h"
 
 //________________________________________________________________
 //
 VLQ_VariableComputer::VLQ_VariableComputer( OptionsBase *opt ):
-m_opt(opt)
-{
-  m_modelMVA = new TMVA::Reader("!Color:Silent");
-  
-  m_inputVarsMVA = new std::map< std::string, float>;
-  
-  m_spectatorVarsMVA = new std::map< std::string, float>;
-
-}
+  m_opt(opt),
+  m_modelMVA(0),
+  m_inputVarsMVA(0),
+  m_spectatorVarsMVA(0)
+{}
 
 //________________________________________________________________
 //
@@ -279,6 +278,50 @@ double VLQ_VariableComputer::GetLeadingdR( AOVector &v_obj1, AOVector &v_obj2 ) 
   return dR;
 }
 
+
+//________________________________________________________________
+//
+double VLQ_VariableComputer::GetLeadingdEta( AOVector &v_obj1, AOVector &v_obj2 ) const
+{
+  
+  double dEta = -100.;
+
+  if(v_obj1.size() >=1 && v_obj2.size() >=1){
+
+    if(v_obj1[0] != v_obj2[0]){
+      dEta =  TMath::Abs(v_obj1[0]->Eta() - v_obj2[0]->Eta());
+
+    }
+    else if(v_obj2.size() > 1){ //shoudnt this be obj2 ?--> I changed it.  
+      dEta =  TMath::Abs(v_obj1[0]->Eta() - v_obj2[1]->Eta());
+    }
+
+  }
+
+  return dEta;
+}
+
+//________________________________________________________________
+//
+double VLQ_VariableComputer::GetLeadingdPhi( AOVector &v_obj1, AOVector &v_obj2 ) const
+{
+  
+  double dPhi = -100.;
+
+  if(v_obj1.size() >=1 && v_obj2.size() >=1){
+
+    if(v_obj1[0] != v_obj2[0]){
+      dPhi = v_obj1[0] -> DeltaPhi( *v_obj2[0] );
+
+    }
+    else if(v_obj1.size() > 1){
+      dPhi = v_obj1[0] -> DeltaPhi( *v_obj2[1] );
+    }
+  }
+
+  return dPhi;
+}
+
 //________________________________________________________________
 //
 double VLQ_VariableComputer::GetAveragedR(  AOVector &v_obj1, AOVector &v_obj2, const std::string &mom1, const std::string &mom2 ) const
@@ -294,9 +337,266 @@ double VLQ_VariableComputer::GetAveragedR(  AOVector &v_obj1, AOVector &v_obj2, 
 	    npairs ++;
         }
     }
-    dRaverage=dRaverage/npairs;
+    dRaverage = (npairs > 0) ? dRaverage/npairs : 10.;
     return dRaverage;
 }
+
+
+//________________________________________________________________
+//
+double VLQ_VariableComputer::GetAveragedEta(  AOVector &v_obj1, AOVector &v_obj2, const std::string &mom1, const std::string &mom2 ) const
+{
+    double dEtaaverage = 0.;
+    unsigned int npairs = 0;
+    for ( const AnalysisObject* obj1 : v_obj1 ){
+        if(mom1!="" && !(int)obj1->GetMoment(mom1)) continue;
+        for ( const AnalysisObject* obj2 : v_obj2 ){
+            if(obj1==obj2) continue;
+            if(mom2!="" && !(int)obj2->GetMoment(mom2)) continue;
+	    dEtaaverage += TMath::Abs(obj2->Eta() - obj1->Eta());
+	    npairs ++;
+        }
+    }
+    dEtaaverage = (npairs > 0) ? dEtaaverage/npairs : 10.;
+    return dEtaaverage;
+}
+
+//________________________________________________________________
+//
+double VLQ_VariableComputer::GetAveragedPhi(  AOVector &v_obj1, AOVector &v_obj2, const std::string &mom1, const std::string &mom2 ) const
+{
+    double dPhiaverage = 0.;
+    unsigned int npairs = 0;
+    for ( const AnalysisObject* obj1 : v_obj1 ){
+        if(mom1!="" && !(int)obj1->GetMoment(mom1)) continue;
+        for ( const AnalysisObject* obj2 : v_obj2 ){
+            if(obj1==obj2) continue;
+            if(mom2!="" && !(int)obj2->GetMoment(mom2)) continue;
+	    dPhiaverage += TMath::Abs( obj1 -> DeltaPhi( *obj2 ));
+	    npairs ++;
+        }
+    }
+    dPhiaverage = (npairs > 0) ? dPhiaverage/npairs : 10.;
+    return dPhiaverage;
+}
+
+
+//_________________________________________________________________
+//
+AOVector VLQ_VariableComputer::GetMinMAsymmPair(std::vector< AnalysisObject* > &v_obj) const{
+
+  AOVector ret_objs = GetMinMAsymmPair(v_obj, v_obj);
+
+  return ret_objs;
+
+}  
+
+//_________________________________________________________________
+//
+/*
+  Get the two pairs with minimum mass asymmetry
+  Only unique pairings are allowed - i.e. an object cannot be in two pairs in the sorted list
+  Decorate objects with a tag indicating their pair membership
+  Return mass asymmetry value
+*/
+
+AOVector VLQ_VariableComputer::GetMinMAsymmPair(std::vector< AnalysisObject* > &v_obj1,
+					      std::vector< AnalysisObject* > &v_obj2) const{
+  
+  double masymm = -1.;
+  AOVector ret_objs{};
+
+  std::vector<double> vpair_val{};
+  std::vector<std::pair<AnalysisObject*, AnalysisObject*> > vpair_obj{};
+
+  //Create pairs of AnalysisObjects and calculate their invariant masses
+  for(AnalysisObject* obj1 : v_obj1){
+
+    for(AnalysisObject* obj2 : v_obj2){
+      if( (obj1 == obj2) ||
+	  (std::find(vpair_obj.begin(), vpair_obj.end(), 
+		     std::pair<AnalysisObject*, AnalysisObject*>(obj2,obj1)) != vpair_obj.end()) ){
+	continue;
+      }
+      double minv = ((*obj1)+(*obj2)).M();
+      vpair_obj.push_back(std::pair<AnalysisObject*, AnalysisObject*>(obj1,obj2));
+      vpair_val.push_back(minv);
+    }
+
+  }
+
+  //Need at least two pairs for the computation to be sensible
+  if( vpair_val.size() < 2 ){
+    return ret_objs;
+  }
+
+  //Re-loop over the list of AnalysisObject pairs, and calculate inter-pair mass asymmetries
+  std::pair<AnalysisObject*, AnalysisObject*> pair1;
+  std::pair<AnalysisObject*, AnalysisObject*> pair2;
+
+  for(int i=0; i < vpair_val.size(); i++){
+
+    std::pair<AnalysisObject*, AnalysisObject*> _pair1 = vpair_obj.at(i);
+
+    for(int j=i; j < vpair_val.size(); j++){
+
+      std::pair<AnalysisObject*, AnalysisObject*> _pair2 = vpair_obj.at(j);
+
+      if( (_pair1.first == _pair2.first) || (_pair1.second == _pair2.second)
+	  || (_pair1.first == _pair2.second) || (_pair1.second == _pair2.first) ) continue;
+
+      double masymm_cur = TMath::Abs(vpair_val.at(i) - vpair_val.at(j));
+      if( (masymm < 0.) || (masymm_cur < masymm) ){
+	masymm = masymm_cur;
+	pair1 = _pair1;
+	pair2 = _pair2;
+      }
+
+    }
+
+  }
+
+
+  //======= Tag the objects in the selected pair ======
+  if(pair1.first){
+    pair1.first -> SetMoment("MAsymmIdx", 0);
+    ret_objs.push_back(pair1.first);
+  }
+  if(pair1.second){ 
+    pair1.second -> SetMoment("MAsymmIdx", 1);
+    ret_objs.push_back(pair1.second);
+  }
+  if(pair2.first){
+    pair2.first -> SetMoment("MAsymmIdx", 2);
+    ret_objs.push_back(pair2.first);
+  }
+  if(pair2.second){
+    pair2.second -> SetMoment("MAsymmIdx", 3);
+     ret_objs.push_back(pair2.second);
+   }
+
+  return ret_objs;
+  
+}
+
+//_________________________________________________________________
+//
+std::vector<double> VLQ_VariableComputer::GetInvariantMassSorted(std::vector< AnalysisObject* > &v_obj,
+                                                                 const std::string& sort_by, int n_sort, bool b_descending) const{
+
+  std::vector<double> ret_vals{};
+  ret_vals = GetInvariantMassSorted(v_obj, v_obj, sort_by, n_sort, b_descending);
+
+  return ret_vals;
+
+}
+
+//_________________________________________________________________
+//
+/*
+  Get invariant masses from a sorted list of object pairs
+  Only unique pairings are allowed - i.e. an object cannot be in two pairs in the sorted list
+  Sorting can be done according to individual object pT, or by pairwise metrics (DeltaR, DeltaEta, DeltaPhi, fpT)
+*/
+
+std::vector<double> VLQ_VariableComputer::GetInvariantMassSorted(std::vector< AnalysisObject* > &v_obj1,
+                                                                 std::vector< AnalysisObject* > &v_obj2,
+                                                                 const std::string& sort_by, int n_sort, bool b_descending) const{
+
+  std::vector<double> ret_vals{};
+  int index=0;
+
+  std::set<std::pair<AnalysisObject*, AnalysisObject*> > used_pairs;
+  std::set<AnalysisObject*> used_objs;
+
+  //Sort individual jets by their pT
+  if( (sort_by=="") || (sort_by=="Pt") ){
+
+    AOVector v_obj1_ptsort = AnalysisUtils::SortObjectValues(v_obj1, "Pt", -1, b_descending);
+    AOVector v_obj2_ptsort = AnalysisUtils::SortObjectValues(v_obj2, "Pt", -1, b_descending);
+
+    index = 0;
+    for(AnalysisObject* obj1 : v_obj1_ptsort){
+
+      for(AnalysisObject* obj2 : v_obj2_ptsort){
+        if((n_sort>=0) && (index >= n_sort)) break;
+        index++;
+
+        if( (obj1 == obj2) || (used_objs.find(obj1) != used_objs.end()) || (used_objs.find(obj2) != used_objs.end()) ) continue;
+        double minv = (*(obj1) + *(obj2)).M();
+        ret_vals.push_back(minv);
+        used_objs.insert(obj1);
+        used_objs.insert(obj2);
+      }
+
+    }
+    used_objs.clear();
+    v_obj1_ptsort.clear();
+    v_obj2_ptsort.clear();
+
+  }//pt-sorting
+
+  else if( (sort_by=="DeltaR") || (sort_by=="DeltaPhi") || (sort_by=="DeltaEta") || (sort_by=="fpT") ){
+
+    std::vector<std::pair<int, double> > vpair_val{};
+    std::vector<std::pair<AnalysisObject*, AnalysisObject*> > vpair_obj{};
+
+    index = 0;
+    for(AnalysisObject* obj1 : v_obj1){
+      for(AnalysisObject* obj2 : v_obj2){
+
+        if( (obj1 == obj2) ||
+            (used_pairs.find(std::pair<AnalysisObject*, AnalysisObject*>(obj2,obj1)) != used_pairs.end()) ){
+          continue;
+        }
+
+        double pair_val = 0.;
+        if(sort_by=="DeltaR")         pair_val = obj1->DeltaR(*obj2);
+        else if(sort_by=="DeltaPhi")  pair_val = TMath::Abs(obj1->DeltaR(*obj2));
+        else if(sort_by=="DeltaEta")  pair_val = TMath::Abs(obj1->Eta() - obj2->Eta());
+        else if(sort_by=="fpT")       pair_val = (obj1->Pt() < obj2->Pt()) ? obj1->Pt()/obj2->Pt() : obj2->Pt()/obj1->Pt();
+
+        vpair_val.push_back(std::pair<int, double>(index, pair_val));
+        vpair_obj.push_back(std::pair<AnalysisObject*, AnalysisObject*>(obj1, obj2));
+
+        index++;
+        used_pairs.insert(std::pair<AnalysisObject*, AnalysisObject*>(obj1,obj2));
+
+      }
+    }
+    used_pairs.clear();
+
+    AnalysisUtils::SortVectorPairs(vpair_val, -1, b_descending);
+
+
+    index = 0;
+    for(std::pair<int, double> ipair : vpair_val){
+
+      if( (n_sort>=0) && (index >=n_sort) ) break;
+      index++;
+
+      std::pair<AnalysisObject*, AnalysisObject*> obj_pair = vpair_obj.at(ipair.first);
+      if( used_objs.find(obj_pair.first) != used_objs.end() ) continue;
+      if( used_objs.find(obj_pair.second) != used_objs.end() ) continue;
+
+      double minv = (*(obj_pair.first) + *(obj_pair.second)).M();
+      ret_vals.push_back(minv);
+      used_objs.insert(obj_pair.first);
+      used_objs.insert(obj_pair.second);
+
+    }
+    vpair_val.clear();
+    vpair_obj.clear();
+    used_objs.clear();
+
+
+  }//pair-wise metrics
+
+
+  return ret_vals;
+
+}
+
 
 //________________________________________________________________ 
 //
@@ -382,6 +682,46 @@ double VLQ_VariableComputer::GetMindPhi(  AOVector &v_obj1, AOVector &v_obj2 ) c
     }
     return dPhi_min;
 }
+
+
+//________________________________________________________________
+//
+double VLQ_VariableComputer::GetMindEta( AnalysisObject *obj1, AOVector &v_obj2, const int maxVec, const std::string &mom ) const
+{
+    if(!obj1){
+        return 0;
+    }
+    
+    double dEta_min = 100;
+    int counter = 0;
+    for ( const AnalysisObject* obj2 : v_obj2 ){
+        if(obj1==obj2) continue;
+        if(mom!="" && !(int)obj2->GetMoment(mom)) continue;
+        if(maxVec>=0 && counter>=maxVec) continue;
+        double dEta = TMath::Abs(obj1->Eta() - obj2->Eta() );
+        if(TMath::Abs(dEta) < TMath::Abs(dEta_min)) dEta_min = dEta;
+        counter++;
+    }
+    return dEta_min;
+}
+
+
+//________________________________________________________________
+//
+double VLQ_VariableComputer::GetMindEta(  AOVector &v_obj1, AOVector &v_obj2 ) const
+{
+    double dEta_min = 100;
+    for ( const AnalysisObject* obj1 : v_obj1 ){
+        for ( const AnalysisObject* obj2 : v_obj2 ){
+            if(obj1==obj2) continue;
+            double dEta = TMath::Abs(obj1->Eta() - obj2->Eta() );                 
+            if(TMath::Abs(dEta) < TMath::Abs(dEta_min)) dEta_min = dEta;
+        }
+    }
+
+    return dEta_min;
+}
+
 
 //________________________________________________________________
 //
@@ -565,6 +905,25 @@ double VLQ_VariableComputer::GetMjjMaxDr(AOVector &v_jets) const
   }
   return mjj_max_dr;
 }
+
+//_________________________________________________________________
+//
+double VLQ_VariableComputer::GetMjjMaxDphi(AOVector &v_jets) const
+{ 
+  double mjj_max_dphi=0.;
+  double dphimax=0.;
+  for (const AnalysisObject *jet1 : v_jets ){
+    for (const AnalysisObject *jet2 : v_jets ){
+      if (jet1 == jet2) continue;
+      double dphi = TMath::Abs( jet1-> DeltaPhi( *jet2));
+      if( dphi >dphimax){
+	dphimax =dphi;
+	mjj_max_dphi=(*jet1 + *jet2).M();
+      }
+    }
+  }
+  return mjj_max_dphi;
+}
 //_________________________________________________________________
 //
 double VLQ_VariableComputer::GetMjjMinDr(AOVector &v_jets) const
@@ -582,6 +941,26 @@ double VLQ_VariableComputer::GetMjjMinDr(AOVector &v_jets) const
     }
   }
   return mjj_min_dr;
+}
+
+
+//_________________________________________________________________
+//
+double VLQ_VariableComputer::GetMjjMinDeta(AOVector &v_jets) const
+{
+  double mjj_min_deta=0.;
+  double detamin=10.;
+  for (const AnalysisObject *jet1 : v_jets ){
+    for (const AnalysisObject *jet2 : v_jets ){
+      if (jet1 == jet2) continue;
+      double deta = TMath::Abs( jet1->Eta() - jet2->Eta() );
+      if( deta <detamin){
+        detamin =deta;
+        mjj_min_deta=(*jet1 + *jet2).M();
+      }
+    }
+  }
+  return mjj_min_deta;
 }
 //_________________________________________________________________
 //
@@ -999,8 +1378,15 @@ int VLQ_VariableComputer::GetJetClass(AnalysisObject* jet) const
 //
 void VLQ_VariableComputer::InitMVA(const std::string &weightFileName){
 
-  std::cout << "==================================================================================" << std::endl;
+  std::cout << "==================================================================================" << std::endl;  
   std::cout << "VLQ_VariableComputer::InitMVA(): Reading MVA weight file from " << weightFileName << std::endl;
+
+  m_modelMVA = new TMVA::Reader("!Color:Silent");
+  
+  m_inputVarsMVA = new std::map< std::string, float>;
+  
+  m_spectatorVarsMVA = new std::map< std::string, float>;
+
 
   std::ifstream file(weightFileName);
 
