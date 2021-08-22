@@ -46,7 +46,7 @@ public:
 		   /*Mass-tagged jet multiplicities*/
 		   c_0Mex, c_1Mex, c_1Min, c_2Min,
 		   /*Hadtop-tagged jet multiplicities*/
-		   c_0Tex, c_0Tin, c_1Tex, c_1Tin, c_2Tin,
+		   c_0Tex, c_0Tin, c_1Tex, c_0_1Twin, c_1Tin, c_2Tin,
 		   /*Leptop multiplicities*/
 		   c_0Lex, c_0Lin, c_1Lex, c_1Lin, c_2Lin,
 		   /*Higgs-tagged jet multiplicities*/
