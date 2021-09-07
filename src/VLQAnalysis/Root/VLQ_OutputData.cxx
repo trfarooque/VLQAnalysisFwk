@@ -271,6 +271,7 @@ o_is_ttbar(false)
     "H", "Hbb", "Hnonbb", "H_b1", "H_b2",
     "hadtop", "hadtop_b", "hadtop_W", "hadtop_q1", "hadtop_q2",
     "leptop", "leptop_b", "leptop_W", "leptop_lep", "leptop_nu",
+    "tautop", "tautop_b", "tautop_W", "tautop_lep","tautop_nu",
     "hadZ", "hadZ_q1", "hadZ_q2",
     "lepZ", "lepZ_lep1", "lepZ_lep2",
     "invZ",
