@@ -275,7 +275,7 @@ o_is_ttbar(false)
     "lepZ", "lepZ_lep1", "lepZ_lep2",
     "invZ",
     "hadW", "hadW_q1", "hadW_q2",
-    "lepW", "lepW_lep", "lepW_nu",
+    "lepW", "lepW_lep", "lepW_nu"
   };
 
   for( const std::string& type : truthType ){

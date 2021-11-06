@@ -269,7 +269,7 @@ double VLQ_VariableComputer::GetLeadingdR( AOVector &v_obj1, AOVector &v_obj2 ) 
     if(v_obj1[0] != v_obj2[0]){
       dR = v_obj1[0] -> DeltaR( *v_obj2[0] );
     }
-    else if(v_obj1.size() > 1){
+    else if(v_obj2.size() > 1){
       dR = v_obj1[0] -> DeltaR( *v_obj2[1] );
     }
 
@@ -314,7 +314,7 @@ double VLQ_VariableComputer::GetLeadingdPhi( AOVector &v_obj1, AOVector &v_obj2 
       dPhi = v_obj1[0] -> DeltaPhi( *v_obj2[0] );
 
     }
-    else if(v_obj1.size() > 1){
+    else if(v_obj2.size() > 1){
       dPhi = v_obj1[0] -> DeltaPhi( *v_obj2[1] );
     }
   }
