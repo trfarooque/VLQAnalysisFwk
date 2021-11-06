@@ -1,0 +1,26 @@
+NEW
+NAME:TTDoublet_1200GeV
+LABEL:TT Doublet (1.2 TeV)
+MC16A_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16a/outVLQAna_VLQ_TT_1200_TDoublet.root
+MC16D_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16d/outVLQAna_VLQ_TT_1200_TDoublet.root
+MC16E_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16e/outVLQAna_VLQ_TT_1200_TDoublet.root
+COLOR:Red
+END
+
+NEW
+NAME:TTDoublet_1400GeV
+LABEL:TT Doublet (1.4 TeV)
+MC16A_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16a/outVLQAna_VLQ_TT_1400_TDoublet.root
+MC16D_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16d/outVLQAna_VLQ_TT_1400_TDoublet.root
+MC16E_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16e/outVLQAna_VLQ_TT_1400_TDoublet.root
+COLOR:Blue
+END
+
+NEW
+NAME:TTDoublet_1600GeV
+LABEL:TT Doublet (1.6 TeV)
+MC16A_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16a/outVLQAna_VLQ_TT_1600_TDoublet.root
+MC16D_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16d/outVLQAna_VLQ_TT_1600_TDoublet.root
+MC16E_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16e/outVLQAna_VLQ_TT_1600_TDoublet.root
+COLOR:Green
+END

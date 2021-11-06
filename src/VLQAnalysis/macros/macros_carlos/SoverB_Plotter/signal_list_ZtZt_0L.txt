@@ -1,35 +1,26 @@
 NEW
 NAME:ZtZt_1200GeV
 LABEL:ZtZt (1.2 TeV)
-MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16a_0L/outVLQAna_VLQ_TT_1200_ZtZt.root
-MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16d_0L/outVLQAna_VLQ_TT_1200_ZtZt.root
-MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16e_0L/outVLQAna_VLQ_TT_1200_ZtZt.root
-BKG_MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16a_0L/allBackground.root
-BKG_MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16d_0L/allBackground.root
-BKG_MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16e_0L/allBackground.root
+MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16a_0L/outVLQAna_VLQ_TT_1200_ZtZt.root
+MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16d_0L/outVLQAna_VLQ_TT_1200_ZtZt.root
+MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16e_0L/outVLQAna_VLQ_TT_1200_ZtZt.root
 COLOR:Red
 END
 
 NEW
 NAME:ZtZt_1400GeV
 LABEL:ZtZt (1.4 TeV)
-MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16a_0L/outVLQAna_VLQ_TT_1400_ZtZt.root
-MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16d_0L/outVLQAna_VLQ_TT_1400_ZtZt.root
-MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16e_0L/outVLQAna_VLQ_TT_1400_ZtZt.root
-BKG_MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16a_0L/allBackground.root
-BKG_MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16d_0L/allBackground.root
-BKG_MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16e_0L/allBackground.root
+MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16a_0L/outVLQAna_VLQ_TT_1400_ZtZt.root
+MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16d_0L/outVLQAna_VLQ_TT_1400_ZtZt.root
+MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16e_0L/outVLQAna_VLQ_TT_1400_ZtZt.root
 COLOR:Blue
 END
 
 NEW
 NAME:ZtZt_1600GeV
 LABEL:ZtZt (1.6 TeV)
-MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16a_0L/outVLQAna_VLQ_TT_1600_ZtZt.root
-MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16d_0L/outVLQAna_VLQ_TT_1600_ZtZt.root
-MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16e_0L/outVLQAna_VLQ_TT_1600_ZtZt.root
-BKG_MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16a_0L/allBackground.root
-BKG_MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16d_0L/allBackground.root
-BKG_MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_6_2021/mc16e_0L/allBackground.root
+MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16a_0L/outVLQAna_VLQ_TT_1600_ZtZt.root
+MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16d_0L/outVLQAna_VLQ_TT_1600_ZtZt.root
+MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16e_0L/outVLQAna_VLQ_TT_1600_ZtZt.root
 COLOR:Green
 END

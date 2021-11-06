@@ -1,0 +1,38 @@
+NEW
+NAME:HtZt_1200GeV
+LABEL:HtZt (1.2 TeV)
+MC16A_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16a/outVLQAna_VLQ_TT_1200.root
+MC16D_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16d/outVLQAna_VLQ_TT_1200.root
+MC16E_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16e/outVLQAna_VLQ_TT_1200.root
+MC16A_SCALE:162934.47
+MC16D_SCALE:198168.3
+MC16E_SCALE:263025.45
+SUFFIX:vlq3
+COLOR:Red
+END
+
+NEW
+NAME:HtZt_1400GeV
+LABEL:HtZt (1.4 TeV)
+MC16A_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16a/outVLQAna_VLQ_TT_1400.root
+MC16D_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16d/outVLQAna_VLQ_TT_1400.root
+MC16E_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16e/outVLQAna_VLQ_TT_1400.root
+MC16A_SCALE:162934.47
+MC16D_SCALE:198168.3
+MC16E_SCALE:263025.45
+SUFFIX:vlq3
+COLOR:Blue
+END
+
+NEW
+NAME:HtZt_1600GeV
+LABEL:HtZt (1.6 TeV)
+MC16A_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16a/outVLQAna_VLQ_TT_1600.root
+MC16D_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16d/outVLQAna_VLQ_TT_1600.root
+MC16E_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16e/outVLQAna_VLQ_TT_1600.root
+MC16A_SCALE:162934.47
+MC16D_SCALE:198168.3
+MC16E_SCALE:263025.45
+SUFFIX:vlq3
+COLOR:Green
+END

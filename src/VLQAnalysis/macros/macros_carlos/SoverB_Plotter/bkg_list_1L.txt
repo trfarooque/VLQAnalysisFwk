@@ -1,0 +1,8 @@
+NEW
+NAME:background
+LABEL:SM total
+MC16A_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16a/allBackground.root
+MC16D_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16d/allBackground.root
+MC16E_FILE:/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_21.2.121-htztx-3_1lepton_November_5_2021/mc16e/allBackground.root
+COLOR:Black
+END

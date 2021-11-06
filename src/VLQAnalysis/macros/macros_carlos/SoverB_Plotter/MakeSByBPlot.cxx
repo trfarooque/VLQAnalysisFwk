@@ -191,7 +191,7 @@ std::string getRegionLabel(const std::string &region){
 
   std::smatch match;
   
-  std::regex JBOMR("[[:d:]_[:d:]]{1,3}[jfbHVLT]+[a-z]{2,3}");
+  std::regex JBOMR("[[:d:]_[:d:]]{1,3}[jfbMJHVLT]+[a-z]{2,3}");
 
   while(std::regex_search(tmp_region, match, JBOMR)){
 
@@ -201,15 +201,19 @@ std::string getRegionLabel(const std::string &region){
 
       if(comp.find("win") != std::string::npos){
 	tmp_label += std::string(1,comp[0]) + "-" + std::string(1,comp[2]);
-	comp = comp.substr(3, comp.find("win")-1);
+	comp = comp.substr(3, comp.find("win")-3);
       }
       else if(comp.find("in") != std::string::npos){
 	tmp_label += "#geq" + std::string(1,comp[0]);
 	comp = comp.substr(1, comp.find("in")-1);
       }
-      else{
+      else if(comp.find("ex") != std::string::npos){
 	tmp_label += comp[0];
 	comp = comp.substr(1, comp.find("ex")-1);
+      }
+      else{
+	tmp_label += "#oplus" + std::string(1,comp[0]);
+	comp = comp.substr(1, comp.find("or")-1);
       }
       
       // LT, VT, HT, VLT
@@ -251,6 +255,9 @@ std::string getRegionLabel(const std::string &region){
 
   if(region.find("HighMtbmin") != std::string::npos) labelComponents.push_back("HM");
   else if(region.find("LowMtbmin") != std::string::npos) labelComponents.push_back("LM");
+  else if(region.find("HighMVAScore") != std::string::npos) labelComponents.push_back("HMVA");
+  else if(region.find("MidMVAScore") != std::string::npos) labelComponents.push_back("MMVA");
+  else if(region.find("LowMVAScore") != std::string::npos) labelComponents.push_back("LMVA");
 
   std::string label = "";
 
@@ -367,7 +374,7 @@ void MakeLaTeXTable(std::vector< RegInfo* >& reglist, const std::string &fName){
   file << "\\begin{document}\n";
   file << "\\begin{table}[h!]\n";
   file << "\\centering\n";
-
+  file << "\\hspace*{-3cm}\n";
   file << "\\begin{tabular}{| c || c | c | c | c | c | c |}\n";
   file << "\\hline\\hline\n";
   file << "\\hline\n";
@@ -395,6 +402,7 @@ void MakeLaTeXTable(std::vector< RegInfo* >& reglist, const std::string &fName){
     }
     
     std::string bin_label_latex = boost::replace_all_copy(reglist[i]->binlabel, "#geq", "$\\geq$");
+    bin_label_latex = boost::replace_all_copy(bin_label_latex, "#oplus", "$\\oplus$");
     std::string sig_name_latex = boost::replace_all_copy(key_max_sbyb, "_", " ");
     
     file << bin_label_latex << " & ";
@@ -745,36 +753,108 @@ int main(int argc, char** argv){
     };
 
   // New Pair VLQ Analysis 0-lepton Regions Ordered by Higgs Tag Multiplicity
-  std::vector<std::string> new_pvlq_ana_0l_0Hex =
+
+  std::vector< std::string > new_pvlq_ana_0l_0Hex = 
+    {
+      "c0lep7jin2bex0Hex1VTexHighMtbmin", "c0lep7jin2bex0Hex1Vex1TinHighMtbmin", "c0lep7jin2bex0Hex0Vex2TinHighMtbmin", "c0lep7jin2bex0Hex2Vin0TinHighMtbmin",
+      "c0lep7jin3bin0Hex1VTexHighMtbmin", "c0lep7jin3bex0Hex1VTexLowMtbmin", "c0lep7jin4bin0Hex1VTexLowMtbmin",
+      "c0lep7jin3bin0Hex1Vex1TinHighMtbmin", "c0lep7jin3bin0Hex1Vex1TinLowMtbmin",
+      "c0lep7jin3bin0Hex0Vex2TinHighMtbmin", "c0lep7jin3bex0Hex0Vex2TinLowMtbmin", "c0lep7jin4bin0Hex0Vex2TinLowMtbmin",
+      "c0lep7jin3bin0Hex2Vin0Tin"
+   };
+
+  std::vector< std::string > new_pvlq_ana_0l_1Hex =
+    {
+      "c0lep7jin2bex1Hin0VTexHighMtbmin", "c0lep7jin2bex1Hin1VTexHighMtbmin", "c0lep7jin2bex1Hin2VTinHighMtbmin",
+      "c0lep7jin3bex1Hex0VTex", "c0lep7jin3bex1Hex1VTex", "c0lep7jin3bex1Hex2VTin", 
+      "c0lep7jin4bin1Hex0VTex", "c0lep7jin4bin1Hex1VTex", "c0lep7jin4bin1Hex2VTin"
+    };
+
+  std::vector< std::string > new_pvlq_ana_0l_1Hex_mtbmin_split =
+    {
+      "c0lep7jin3bex1Hex0VTexHighMtbmin", "c0lep7jin3bex1Hex0VTexLowMtbmin",
+      "c0lep7jin3bex1Hex1VTexHighMtbmin", "c0lep7jin3bex1Hex1VTexLowMtbmin",
+      "c0lep7jin3bex1Hex2VTinHighMtbmin", "c0lep7jin3bex1Hex2VTinLowMtbmin",
+      "c0lep7jin4bin1Hex0VTexHighMtbmin", "c0lep7jin4bin1Hex0VTexLowMtbmin",
+      "c0lep7jin4bin1Hex1VTexHighMtbmin", "c0lep7jin4bin1Hex1VTexLowMtbmin",
+      "c0lep7jin4bin1Hex2VTinHighMtbmin", "c0lep7jin4bin1Hex2VTinLowMtbmin"
+    };
+
+  std::vector< std::string > new_pvlq_ana_0l_1Hex_2VTin_split =
+    {
+      "c0lep7jin2bex1Hin0_1Vwin2TinHighMtbmin", "c0lep7jin2bex1Hin2Vin0_1TwinHighMtbmin", "c0lep7jin2bex1Hin1Vex1TexHighMtbmin",
+      "c0lep7jin3bex1Hex0_1Vwin2Tin", "c0lep7jin3bex1Hex2Vin0_1Twin", "c0lep7jin3bex1Hex1Vex1Tex",
+      "c0lep7jin4bin1Hex0_1Vwin2Tin", "c0lep7jin4bin1Hex2Vin0_1Twin", "c0lep7jin4bin1Hex1Vex1Tex",
+    };
+
+  std::vector< std::string > new_pvlq_ana_0l_1Hex_opt2 = 
+    {
+      "c0lep7jin2bex1Hin0_1VTwinHighMtbmin", "c0lep7jin2bex1Hin2VTinHighMtbmin",
+      "c0lep7jin3bex1Hex0_1VTwin", "c0lep7jin3bex1Hex2VTin",
+      "c0lep7jin4bin1Hex0VTex", "c0lep7jin4bin1Hex1VTex", "c0lep7jin4bin1Hex2VTin"
+    };
+
+  std::vector< std::string > new_pvlq_ana_0l_1Hex_opt3 =
+    {
+      "c0lep7jin2bex1Hin0_1VTwinHighMtbmin", "c0lep7jin2bex1Hin1Vex1TexHighMtbmin", "c0lep7jin2bex1Hin2VTorHighMtbmin",
+      "c0lep7jin3bex1Hex0_1VTwin", "c0lep7jin3bex1Hex1Vex1Tex", "c0lep7jin3bex1Hex2VTor",
+      "c0lep7jin4bin1Hex0VTex", "c0lep7jin4bin1Hex1VTex", "c0lep7jin4bin1Hex1Vex1Tex", "c0lep7jin4bin1Hex2VTor"
+    };
+
+  std::vector< std::string > new_pvlq_ana_0l_2Hin = 
+    {
+    "c0lep7jin3bin2Hin0Vin0Tin"
+    };
+  
+  //v----------------------Second Iteration-----------------------v
+  /*std::vector<std::string> new_pvlq_ana_0l_0Hex =
     {
       "c0lep7jin2bex0Hex1VTexHighMtbmin", "c0lep7jin2bex0Hex1Vex1TinHighMtbmin", "c0lep7jin2bex0Hex0Vex2TexHighMtbmin", "c0lep7jin2bex0Hex2Vin0TinHighMtbmin",
-      "c0lep7jin3bin0Hex1VTex", "c0lep7jin3bin0Hex1Vex1Tin", "c0lep7jin3bin0Hex0Vex2Tex", "c0lep7jin3bin0Hex2Vin0Tin"
+      "c0lep7jin3bin0Hex1VTexHighMtbmin", "c0lep7jin3bin0Hex1VTexLowMtbmin", "c0lep7jin3bin0Hex1Vex1TinHighMtbmin", "c0lep7jin3bin0Hex1Vex1TinLowMtbmin", 
+      "c0lep7jin3bin0Hex0Vex2TexHighMtbmin", "c0lep7jin3bin0Hex0Vex2TexLowMtbmin", "c0lep7jin3bin0Hex2Vin0Tin"
     };
   
   std::vector<std::string> new_pvlq_ana_0l_1Hex =
     {
-      "c0lep7jin2bex1Hex0VTex", "c0lep7jin2bex1Hex1Vex0Tex", "c0lep7jin2bex1Hex2Vin0Tex", "c0lep7jin2bex1Hex1Vin1Tex", "c0lep7jin2bex1Hex0Vin2Tin",
-      "c0lep7jin3bex1Hex0VTex", "c0lep7jin3bex1Hex1Vex0Tex", "c0lep7jin3bex1Hex2Vin0Tex", "c0lep7jin3bex1Hex1Vin1Tex", "c0lep7jin3bex1Hex0Vin2Tin",
-      "c0lep7jin4bin1Hex0VTex", "c0lep7jin4bin1Hex1Vex0Tex", "c0lep7jin4bin1Hex2Vin0Tex", "c0lep7jin4bin1Hex1Vin1Tex", "c0lep7jin4bin1Hex0Vin2Tin"
+      "c0lep7jin2bex1Hex0VTexHighMtbmin", "c0lep7jin2bex1Hex0VTexLowMtbmin", "c0lep7jin2bex1Hex1Vex0Tex", "c0lep7jin2bex1Hex2Vin0Tex", 
+      "c0lep7jin2bex1Hex1Vin1TexHighMtbmin", "c0lep7jin2bex1Hex1Vin1TexLowMtbmin", "c0lep7jin2bex1Hex0Vin2TinHighMtbmin", "c0lep7jin2bex1Hex0Vin2TinLowMtbmin",
+      "c0lep7jin3bex1Hex0VTexHighMtbmin", "c0lep7jin3bex1Hex0VTexLowMtbmin", "c0lep7jin3bex1Hex1Vin0Tex", "c0lep7jin3bin1Hex1Vin1Tex", "c0lep7jin3bex1Hex0Vin2Tin",
+      "c0lep7jin4bin1Hex0VTex", "c0lep7jin4bin1Hex1Vin0Tex", "c0lep7jin4bin1Hex0Vin2Tin"
     };
 
   std::vector<std::string> new_pvlq_ana_0l_2Hin =
     {
-      "c0lep7jin2bex2Hin0Vin0Tin", "c0lep7jin3bin2Hin0Vin0Tin"
-    };
+      "c0lep7jin2bex2Hin0Vin0TinHighMtbmin", "c0lep7jin2bex2Hin0Vin0TinLowMtbmin", "c0lep7jin3bin2Hin0Vin0TinHighMtbmin", "c0lep7jin3bin2Hin0Vin0TinLowMtbmin"
+    };*/
+  //^----------------------Second Iteration-----------------------^
 
 
   // New Pair VLQ Analysis 1-lepton Regions
   std::vector< std::string > new_pvlq_ana_1l_3bex = 
     {
       "c1lep6jin3bex0Hex0Vin0LTex", "c1lep6jin3bex0Hex0Vin1LTin", "c1lep6jin3bex1Hex0Vex0LTex", "c1lep6jin3bex1Hex0Vex1Lin0Tex", 
-      "c1lep6jin3bex1Hex1Vin0Lin0Tex", "c1lep6jin3bex1Hex0Vin0Lex1Tin", "c1lep6jin3bex1Hex0Vin1Lin1Tin", "c1lep6jin3bex2Hin0Vin0Lin0Tin"
+      "c1lep6jin3bex1Hex1Vin0Lin0Tex", "c1lep6jin3bex1Hex0Vin0Lex1Tin", "c1lep6jin3bex1Hex0Vin1Lin1Tin", 
+      "c1lep6jin3bex2Hin0Vin1LTin", "c1lep6jin3bex2Hin0Vin0LTex"
     };
 
   std::vector< std::string > new_pvlq_ana_1l_4bin =
     {
       "c1lep6jin4bin0Hex0Vin0LTex", "c1lep6jin4bin0Hex0Vin1LTin", "c1lep6jin4bin1Hex0Vex0LTex", "c1lep6jin4bin1Hex0Vex1Lin0Tex",
       "c1lep6jin4bin1Hex1Vin0Lin0Tex", "c1lep6jin4bin1Hex0Vin0Lex1Tin", "c1lep6jin4bin1Hex0Vin1Lin1Tin", "c1lep6jin4bin2Hin0Vin0Lin0Tin"
+    };
+
+  std::vector< std::string > new_pvlq_ana_1l_MVA_3bex = 
+    {
+      "c1lep6jin3bex2Min3JinHighMVAScore", "c1lep6jin3bex2Min3Jin0HexHighMVAScore", "c1lep6jin3bex2Min3Jin1HinHighMVAScore",
+      "c1lep6jin3bex2Min3JinMidMVAScore",  "c1lep6jin3bex2Min3Jin0HexMidMVAScore",  "c1lep6jin3bex2Min3Jin1HinMidMVAScore",
+      "c1lep6jin3bex2Min3JinLowMVAScore",  "c1lep6jin3bex2Min3Jin0HexLowMVAScore",  "c1lep6jin3bex2Min3Jin1HinLowMVAScore"
+    };
+  
+  std::vector< std::string > new_pvlq_ana_1l_MVA_4bin =
+    {
+      "c1lep6jin4bin2Min3JinHighMVAScore", "c1lep6jin4bin2Min3Jin0HexHighMVAScore", "c1lep6jin4bin2Min3Jin1HinHighMVAScore",
+      "c1lep6jin4bin2Min3JinMidMVAScore",  "c1lep6jin4bin2Min3Jin0HexMidMVAScore",  "c1lep6jin4bin2Min3Jin1HinMidMVAScore",
+      "c1lep6jin4bin2Min3JinLowMVAScore",  "c1lep6jin4bin2Min3Jin0HexLowMVAScore",  "c1lep6jin4bin2Min3Jin1HinLowMVAScore"
     };
 
   /*std::vector<std::string> new_pvlq_ana_1l_unmerged =
@@ -900,29 +980,53 @@ int main(int argc, char** argv){
     }
     else{
       if(m_do0Lepton){
-	regions_2bex.insert( std::pair<std::string, std::vector<std::string > >("2bex",  new_pvlq_ana_0l_0Hex));
-	regions_3bex.insert( std::pair<std::string, std::vector<std::string > >("3bex",  new_pvlq_ana_0l_1Hex));
-	regions_4bin.insert( std::pair<std::string, std::vector<std::string > >("4bin",  new_pvlq_ana_0l_2Hin));
+	regions_2bex.insert( std::pair<std::string, std::vector<std::string > >("0Hex",  new_pvlq_ana_0l_0Hex));
+	regions_3bex.insert( std::pair<std::string, std::vector<std::string > >("1Hex",  new_pvlq_ana_0l_1Hex));
+	regions_3bex.insert( std::pair<std::string, std::vector<std::string > >("1Hex_mtbmin_split", new_pvlq_ana_0l_1Hex_mtbmin_split));
+	regions_3bex.insert( std::pair<std::string, std::vector<std::string > >("1Hex_2VTin_split", new_pvlq_ana_0l_1Hex_2VTin_split));
+	regions_3bex.insert( std::pair<std::string, std::vector<std::string > >("1Hex_opt2", new_pvlq_ana_0l_1Hex_opt2));
+	regions_3bex.insert( std::pair<std::string, std::vector<std::string > >("1Hex_opt3", new_pvlq_ana_0l_1Hex_opt3));
+	regions_4bin.insert( std::pair<std::string, std::vector<std::string > >("2Hin",  new_pvlq_ana_0l_2Hin));
 
-	std::vector<RegInfo*> list_reg_2bex{};
-	std::vector<RegInfo*> list_reg_3bex{};
-	std::vector<RegInfo*> list_reg_4bin{};
+	std::vector<RegInfo*> list_reg_0Hex{};
+	std::vector<RegInfo*> list_reg_1Hex{};
+	std::vector<RegInfo*> list_reg_1Hex_mtbmin_split{};
+	std::vector<RegInfo*> list_reg_1Hex_2VTin_split{};
+	std::vector<RegInfo*> list_reg_1Hex_opt2{};
+	std::vector<RegInfo*> list_reg_1Hex_opt3{};
+	std::vector<RegInfo*> list_reg_2Hin{};
 
-	fillRegInfo(list_reg_2bex, m_siglist, m_bkglist[0], regions_2bex.at("2bex"), m_variable, m_bin);
-	fillRegInfo(list_reg_3bex, m_siglist, m_bkglist[0], regions_3bex.at("3bex"), m_variable, m_bin);
-	fillRegInfo(list_reg_4bin, m_siglist, m_bkglist[0], regions_4bin.at("4bin"), m_variable, m_bin);
-
-	MakePlot(list_reg_2bex, m_siglist, m_outName+"_yield_2bex", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
+	fillRegInfo(list_reg_0Hex, m_siglist, m_bkglist[0], regions_2bex.at("0Hex"), m_variable, m_bin);
+	fillRegInfo(list_reg_1Hex, m_siglist, m_bkglist[0], regions_3bex.at("1Hex"), m_variable, m_bin);
+	fillRegInfo(list_reg_1Hex_mtbmin_split, m_siglist, m_bkglist[0], regions_3bex.at("1Hex_mtbmin_split"), m_variable, m_bin);
+	fillRegInfo(list_reg_1Hex_2VTin_split, m_siglist, m_bkglist[0], regions_3bex.at("1Hex_2VTin_split"), m_variable, m_bin);
+	fillRegInfo(list_reg_1Hex_opt2, m_siglist, m_bkglist[0], regions_3bex.at("1Hex_opt2"), m_variable, m_bin);
+	fillRegInfo(list_reg_1Hex_opt3, m_siglist, m_bkglist[0], regions_3bex.at("1Hex_opt3"), m_variable, m_bin);
+	fillRegInfo(list_reg_2Hin, m_siglist, m_bkglist[0], regions_4bin.at("2Hin"), m_variable, m_bin);
+	
+	MakePlot(list_reg_0Hex, m_siglist, m_outName+"_yield_0Hex", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
                  "SByB", "S/B", true, false, true, false);
-        MakePlot(list_reg_3bex, m_siglist, m_outName+"_yield_3bex", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
+        MakePlot(list_reg_1Hex, m_siglist, m_outName+"_yield_1Hex", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
                  "SByB", "S/B", true, false, true, false);
-        MakePlot(list_reg_4bin, m_siglist, m_outName+"_yield_4bin", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
+	MakePlot(list_reg_1Hex_mtbmin_split, m_siglist, m_outName+"_yield_1Hex_mtbmin_split", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
+                 "SByB", "S/B", true, false, true, false);
+	MakePlot(list_reg_1Hex_2VTin_split, m_siglist, m_outName+"_yield_1Hex_2VTin_split", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
+                 "SByB", "S/B", true, false, true, false);
+	MakePlot(list_reg_1Hex_opt2, m_siglist, m_outName+"_yield_1Hex_opt2", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
+                 "SByB", "S/B", true, false, true, false);
+	MakePlot(list_reg_1Hex_opt3, m_siglist, m_outName+"_yield_1Hex_opt3", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
+                 "SByB", "S/B", true, false, true, false);
+        MakePlot(list_reg_2Hin, m_siglist, m_outName+"_yield_2Hin", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
                  "SByB", "S/B", true, false, true, false);
 
 	if(m_doLatexTable){
-	  MakeLaTeXTable(list_reg_2bex, "table_0Hex.tex");
-	  MakeLaTeXTable(list_reg_3bex, "table_1Hex.tex");
-	  MakeLaTeXTable(list_reg_4bin, "table_2Hin.tex");
+	  MakeLaTeXTable(list_reg_0Hex, m_outName+"_table_0Hex.tex");
+	  MakeLaTeXTable(list_reg_1Hex, m_outName+"_table_1Hex.tex");
+	  MakeLaTeXTable(list_reg_1Hex_mtbmin_split, m_outName+"_table_1Hex_mtbmin_split.tex");
+	  MakeLaTeXTable(list_reg_1Hex_2VTin_split, m_outName+"_table_1Hex_2VTin_split.tex");
+	  MakeLaTeXTable(list_reg_1Hex_opt2, m_outName+"_table_1Hex_opt2.tex");
+	  MakeLaTeXTable(list_reg_1Hex_opt3, m_outName+"_table_1Hex_opt3.tex");
+	  MakeLaTeXTable(list_reg_2Hin, m_outName+"_table_2Hin.tex");
 	}
 
       }
@@ -930,18 +1034,40 @@ int main(int argc, char** argv){
 	regions_3bex.insert( std::pair<std::string, std::vector<std::string> >("3bex", new_pvlq_ana_1l_3bex));
 	regions_4bin.insert( std::pair<std::string, std::vector<std::string> >("4bin", new_pvlq_ana_1l_4bin));
 	//regions_3bex.insert( std::pair<std::string, std::vector<std::string> >("3bex",fullboost_merged_v1)); 
-	//regions_4bin.insert( std::pair<std::string, std::vector<std::string> >("4bin",fullboost_merged_v1));                                                               
+	//regions_4bin.insert( std::pair<std::string, std::vector<std::string> >("4bin",fullboost_merged_v1));
+	regions_3bex.insert( std::pair<std::string, std::vector<std::string> >("MVA_3bex", new_pvlq_ana_1l_MVA_3bex));
+	regions_4bin.insert( std::pair<std::string, std::vector<std::string> >("MVA_4bin", new_pvlq_ana_1l_MVA_4bin));
+	
 	
 	std::vector<RegInfo*> list_reg_3bex{};
 	std::vector<RegInfo*> list_reg_4bin{};
+
+	std::vector<RegInfo*> list_reg_MVA_3bex{};
+	std::vector<RegInfo*> list_reg_MVA_4bin{};
 	
 	fillRegInfo(list_reg_3bex, m_siglist, m_bkglist[0], regions_3bex.at("3bex"), m_variable, m_bin);
 	fillRegInfo(list_reg_4bin, m_siglist, m_bkglist[0], regions_4bin.at("4bin"), m_variable, m_bin);
+
+	fillRegInfo(list_reg_MVA_3bex, m_siglist, m_bkglist[0], regions_3bex.at("MVA_3bex"), m_variable, m_bin);
+        fillRegInfo(list_reg_MVA_4bin, m_siglist, m_bkglist[0], regions_4bin.at("MVA_4bin"), m_variable, m_bin);
 
 	MakePlot(list_reg_3bex, m_siglist, m_outName+"_yield_pvlq_1L_3bex", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
                  "SByB", "S/B", true, false, true, false);
 	MakePlot(list_reg_4bin, m_siglist, m_outName+"_yield_pvlq_1L_4bin", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
                  "SByB", "S/B", true, false, true, false);
+
+	MakePlot(list_reg_MVA_3bex, m_siglist, m_outName+"_yield_pvlq_1L_MVA_3bex", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
+                 "SByB", "S/B", true, false, true, false);
+        MakePlot(list_reg_MVA_4bin, m_siglist, m_outName+"_yield_pvlq_1L_MVA_4bin", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
+                 "SByB", "S/B", true, false, true, false);
+
+	if(m_doLatexTable){
+          MakeLaTeXTable(list_reg_3bex, m_outName+"_table_3bex.tex");
+          MakeLaTeXTable(list_reg_4bin, m_outName+"_table_4bin.tex");
+	  
+	  MakeLaTeXTable(list_reg_MVA_3bex, m_outName+"_table_MVA_3bex.tex");
+          MakeLaTeXTable(list_reg_MVA_4bin, m_outName+"_table_MVA_4bin.tex");
+        }
 
       }
 
