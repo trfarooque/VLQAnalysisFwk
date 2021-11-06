@@ -65,7 +65,7 @@ param_dryRun = False
 param_batch = "condor"
 param_queue = "at3_short"
 param_inputDir="/nfs/at3/scratch2/farooque/MBJOutputs/tag-21.2.67-htztx-0-MV2/" #place where to find the input files
-param_outputDir = "/nfs/at3/scratch2/"+os.getenv("USER")+"/VLQAnalysisRun2/VLQAnalysisOutputs_" #output repository
+param_outputDir = "/data/at3/scratch2/"+os.getenv("USER")+"/VLQAnalysisRun2/VLQAnalysisOutputs_" #output repository
 param_outputDirSuffix = "NOW"
 userParams = []
 if(len(sys.argv))>1:

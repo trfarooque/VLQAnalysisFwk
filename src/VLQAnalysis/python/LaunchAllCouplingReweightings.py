@@ -87,11 +87,20 @@ if doAllBR:#just some mass points (not sensitive otherwise)
 ## Defining the list of variables to look at
 Variables = []
 if not tthfitter:
-
-    Variables +=  ["meff", "met", "jets_n", "trkbjets_n", "RCMHiggs_jets_n", "RCMTop_jets_n", "RCMV_jets_n"]
-
+    if(doZeroLepton):
+        Variables +=  ["meff", "met", "jets_n", "trkbjets_n", "RCMHiggs_jets_n", "RCMTop_jets_n", "RCMV_jets_n"]
+    if(doLepton):
+        Variables +=  ["MVAScore", "RCMHiggs_jets_n", "RCMTop_jets_n", "RCMV_jets_n", "RCjets_n", "RCjet0_pt", "dPhimin_RCTTMassRCTTMass",
+                       "jets_n", "leadingdEta_RCTTMassRCTTMass", "leadingdEta_RCjets", "leadingdPhi_RCjets", "leptop_pt",
+                       "m_vlq_rcjets_drmax1", "m_vlq_rcjets_drmax2", "m_vlq_rcttmass_drmax1", "m_vlq_rcttmass_drmax2",
+                       "meff", "met", "ptw", "residualMET_Pt", "trkbjets_n", "mtbmin", 
+                       "RCMV_jet0_m", "RCMV_jet0_pt", "RCMV_jet0_eta", "RCMHiggs_jet0_m", "RCMHiggs_jet0_pt", "RCMHiggs_jet0_eta",
+                       "RCMTop_jet0_m", "RCMTop_jet0_pt", "RCMTop_jet0_eta"]
+        
 else: #the TRExFitter inputs
-    Variables += ["meff"]    
+    Variables += ["meff"]
+    if(doZeroLepton):
+        Variables += ["mtbmin"]
 ##........................................................
 
 ##________________________________________________________
