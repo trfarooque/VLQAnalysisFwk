@@ -44,7 +44,7 @@ public:
 		   /*RC jet multiplicities*/
 		   c_0Jex, c_1Jex, c_1Jin, c_2Jex, c_2Jin, c_3Jin,
 		   /*Mass-tagged jet multiplicities*/
-		   c_0Mex, c_1Mex, c_1Min, c_2Min,
+		   c_0Mex, c_1Mex, c_1Min, c_2Min, c_2Min3Jin, c_2Min3Jin0Hex, c_2Min3Jin1Hin,
 		   /*Hadtop-tagged jet multiplicities*/
 		   c_0Tex, c_0Tin, c_1Tex, c_0_1Twin, c_1Tin, c_2Tin,
 		   /*Leptop multiplicities*/
@@ -52,21 +52,23 @@ public:
 		   /*Higgs-tagged jet multiplicities*/
 		   c_0Hex, c_0Hin, c_1Hex, c_1Hin, c_2Hin, c_0_1Hwin,
 		   /*V-tagged jet multiplicities*/
-		   c_0Vex, c_0Vin, c_1Vex, c_1Vin, c_2Vin, c_3Vin,
+		   c_0Vex, c_0Vin, c_1Vex, c_0_1Vwin, c_1Vin, c_2Vin, c_3Vin,
 		   /*Forward jet multiplicities*/
 		   c_0fjex, c_0fjin, c_1fjex, c_1fjin, c_2fjin,
 		   /*T+H multiplicities*/
 		   c_0THex, c_1THex, c_1THin, c_2THex, c_2THin, c_3THin,
 		   /*L+T multiplicities*/
 		   c_0LTex, c_1LTex, c_1LTin, c_2LTin,
-           /*V+T multiplicities*/
-           c_0VTex, c_1VTex, c_1VTin, c_2VTin, 
-           /*V+L+T multiplicities*/
-           c_0VLTex, c_1VLTex, c_1VLTin, c_2VLTin,
-            /*V+L+T+H multiplicities*/
-           c_0VLTHex, c_1VLTHin,
+		   /*V+T multiplicities*/
+		   c_0VTex, c_1VTex, c_0_1VTwin, c_1VTin, c_2VTin, c_2VTor, 
+		   /*V+L+T multiplicities*/
+		   c_0VLTex, c_1VLTex, c_1VLTin, c_2VLTin,
+		   /*V+L+T+H multiplicities*/
+		   c_0VLTHex, c_1VLTHin,
 		   /*Kinematic cuts*/
-		   c_LowMtbmin, c_HighMtbmin, c_LowMbb, c_HighMbb, c_HighMetSig, c_LowMetSig, c_HighMLL, c_ZwinMLL, TOPSEL_MAX
+		   c_LowMtbmin, c_HighMtbmin, c_LowMbb, c_HighMbb, c_HighMetSig, c_LowMetSig, c_HighMLL, c_ZwinMLL, 
+		   /*MVAScore cuts*/
+		   c_LowMVAScore, c_MidMVAScore, c_HighMVAScore, TOPSEL_MAX
   };
 
 
@@ -130,6 +132,7 @@ public:
     std::vector<SelProp>* m_sel_Mtb_prop;
     std::vector<SelProp>* m_sel_MetSig_prop;
     std::vector<SelProp>* m_sel_MLL_prop;
+    std::vector<SelProp>* m_sel_MVAScore_prop;
     std::ifstream m_blinding_config;
 
     //int m_nsel;
