@@ -930,6 +930,25 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_metsig_ev (" << m_outData -> o_metsig_ev << ")"  << std::endl;
   m_outData -> o_metsig_obj      = m_ntupData -> d_met_sig;
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_metsig_obj (" << m_outData -> o_metsig_obj << ")"  << std::endl;
+
+  if( (m_opt->ApplyMVA() && m_opt->DoOneLeptonAna()) || m_opt->VerboseOutput() ){
+    m_outData -> o_leadingdEta_RCjets  = m_varComputer -> GetLeadingdEta( *(m_outData->o_rcjets), *(m_outData->o_rcjets) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdEta_RCjets (" 
+						      << m_outData -> o_leadingdEta_RCjets << ")"  << std::endl;
+
+    m_outData->o_leadingdEta_RCTTMassRCTTMass = m_varComputer -> GetLeadingdEta( *(m_outData->o_taggedjets.at("RCTTMass")), *(m_outData->o_taggedjets.at("RCTTMass")) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdEta_RCTTMassRCTTMass (" 
+						      << m_outData -> o_leadingdEta_RCTTMassRCTTMass << ")" << std::endl;
+
+    m_outData -> o_leadingdPhi_RCjets  = TMath::Abs( m_varComputer -> GetLeadingdPhi( *(m_outData->o_rcjets), *(m_outData->o_rcjets)) );
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdPhi_RCjets (" 
+						      << m_outData -> o_leadingdPhi_RCjets << ")"  << std::endl;
+
+    m_outData -> o_dPhimin_RCTTMassRCTTMass = TMath::Abs( m_varComputer -> GetMindPhi( *(m_outData->o_taggedjets.at("RCTTMass")), *(m_outData->o_taggedjets.at("RCTTMass"))));
+    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhimin_RCTTMassRCTTMass (" 
+						      << m_outData -> o_dPhimin_RCTTMassRCTTMass << ")" << std::endl;
+    
+  }
   if(m_opt->VerboseOutput()){
     m_outData -> o_dRmin_lepjet  = m_varComputer -> GetMindR( m_outData->o_selLep, *(m_outData->o_jets) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_lepjet (" << m_outData -> o_dRmin_lepjet << ")"  << std::endl;
@@ -946,10 +965,6 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_RCTTMassRCTTMass (" << m_outData -> o_dRmin_RCTTMassRCTTMass << ")" << std::endl;
     m_outData -> o_dEtamin_RCTTMassRCTTMass = m_varComputer -> GetMindEta( *(m_outData->o_taggedjets.at("RCTTMass")), *(m_outData->o_taggedjets.at("RCTTMass")) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dEtamin_RCTTMassRCTTMass (" << m_outData -> o_dEtamin_RCTTMassRCTTMass << ")" << std::endl;
-    m_outData -> o_dPhimin_RCTTMassRCTTMass = TMath::Abs( m_varComputer -> GetMindPhi( *(m_outData->o_taggedjets.at("RCTTMass")), *(m_outData->o_taggedjets.at("RCTTMass")) ));
-    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dPhimin_RCTTMassRCTTMass (" << m_outData -> o_dPhimin_RCTTMassRCTTMass << ")" << std::endl;
-
-
 
     m_outData -> o_dRmin_RCjets  = m_varComputer -> GetMindR( *(m_outData->o_rcjets), *(m_outData->o_rcjets) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_dRmin_RCjets (" << m_outData -> o_dRmin_RCjets << ")"  << std::endl;
@@ -1039,11 +1054,6 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
     m_outData->o_leadingdR_RCTTMassRCTTMass = m_varComputer -> GetLeadingdR( *(m_outData->o_taggedjets.at("RCTTMass")), *(m_outData->o_taggedjets.at("RCTTMass")) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_RCTTMassRCTTMass (" << m_outData -> o_leadingdR_RCTTMassRCTTMass << ")"<< std::endl;
 
-
-    m_outData->o_leadingdEta_RCTTMassRCTTMass = m_varComputer -> GetLeadingdEta( *(m_outData->o_taggedjets.at("RCTTMass")), *(m_outData->o_taggedjets.at("RCTTMass")) );
-    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdEta_RCTTMassRCTTMass (" << m_outData -> o_leadingdEta_RCTTMassRCTTMass << ")"<< std::endl;
-
-
     m_outData->o_leadingdPhi_RCTTMassRCTTMass =  TMath::Abs( m_varComputer -> GetLeadingdPhi( *(m_outData->o_taggedjets.at("RCTTMass")), *(m_outData->o_taggedjets.at("RCTTMass")) ));
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdPhi_RCTTMassRCTTMass (" << m_outData -> o_leadingdPhi_RCTTMassRCTTMass << ")"<< std::endl;
 
@@ -1095,16 +1105,8 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
     m_outData -> o_leadingdPhi_jetjet  =  TMath::Abs(m_varComputer -> GetMindPhi( *(m_outData->o_jets), *(m_outData->o_jets)) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdPhi_jetjet (" << m_outData -> o_leadingdPhi_jetjet << ")"  << std::endl;
 
-    m_outData -> o_leadingdEta_RCjets  = m_varComputer -> GetLeadingdEta( *(m_outData->o_rcjets), *(m_outData->o_rcjets) );
-    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdEta_RCjets (" << m_outData -> o_leadingdEta_RCjets << ")"  << std::endl;
-
     m_outData -> o_leadingdR_RCjets  = m_varComputer -> GetLeadingdR( *(m_outData->o_rcjets), *(m_outData->o_rcjets) );
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdR_RCjets (" << m_outData -> o_leadingdR_RCjets << ")"  << std::endl;
-
-    m_outData -> o_leadingdPhi_RCjets  = TMath::Abs( m_varComputer -> GetLeadingdPhi( *(m_outData->o_rcjets), *(m_outData->o_rcjets)) );
-    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_leadingdPhi_RCjets (" << m_outData -> o_leadingdPhi_RCjets << ")"  << std::endl;
-
-
 
     /*m_outData->o_minRecoVLQMAsymm_HtHt = m_varComputer -> GetMinPairVLQMassAsymm( m_outData->o_recoVLQ, "Ht", "Ht");
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_minRecoVLQMAsymm_HtHt (" << m_outData -> o_minRecoVLQMAsymm_HtHt << ")"<< std::endl;
@@ -1256,17 +1258,17 @@ bool VLQ_AnalysisTools::ComputeMVAVariables() {
   inputVarsMVA["RCMTop_jets_n"] = m_outData->o_taggedjets_n.at("RCMTop");
   inputVarsMVA["RCMHiggs_jets_n"] = m_outData->o_taggedjets_n.at("RCMHiggs");
   inputVarsMVA["RCMV_jets_n"] = m_outData->o_taggedjets_n.at("RCMV");
-  inputVarsMVA["ptw"] =  m_outData -> o_ptwl;
-  inputVarsMVA["residualMET_Pt"] = m_outData -> o_residualMET->Pt();
+  inputVarsMVA["ptw"] =  m_outData -> o_ptwl; // Defined in UpdateBTagMoments()
+  inputVarsMVA["residualMET_Pt"] = m_outData -> o_residualMET->Pt(); // Defined in UpdateBTagMoments()
   inputVarsMVA["met"] = m_outData -> o_met;
   inputVarsMVA["Alt$(m_vlq_rcttmass_drmax[0],0)"] = (m_outData -> o_m_vlq_rcttmass_drmax).size() > 0 
-    ? m_outData -> o_m_vlq_rcttmass_drmax.at(0) : -100.;
+    ? m_outData -> o_m_vlq_rcttmass_drmax.at(0) : -100.; // Defined in UpdateBTagMoments()
   inputVarsMVA["Alt$(m_vlq_rcttmass_drmax[1],0)"] = (m_outData -> o_m_vlq_rcttmass_drmax).size() > 1 
-    ? m_outData -> o_m_vlq_rcttmass_drmax.at(1) : -100.;
+    ? m_outData -> o_m_vlq_rcttmass_drmax.at(1) : -100.; // Defined in UpdateBTagMoments()
   inputVarsMVA["Alt$(m_vlq_rcjets_drmax[0],0)"] = (m_outData -> o_m_vlq_rcjets_drmax).size() > 0 
-    ? m_outData -> o_m_vlq_rcjets_drmax.at(0) : -100.;
+    ? m_outData -> o_m_vlq_rcjets_drmax.at(0) : -100.; // Defined in UpdateBTagMoments()
   inputVarsMVA["Alt$(m_vlq_rcjets_drmax[1],0)"] = (m_outData -> o_m_vlq_rcjets_drmax).size() > 1 
-    ? m_outData -> o_m_vlq_rcjets_drmax.at(1) : -100.;
+    ? m_outData -> o_m_vlq_rcjets_drmax.at(1) : -100.; // Defined in UpdateBTagMoments()
 
   m_outData -> o_MVAScore = m_varComputer -> GetMVAScore(inputVarsMVA);
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_MVAScore (" << m_outData -> o_MVAScore << ")"  << std::endl;

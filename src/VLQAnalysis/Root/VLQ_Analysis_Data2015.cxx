@@ -1480,7 +1480,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       }//index loop
     }
     
-    if(m_opt->VerboseOutput() && DrawReco){
+    if((m_opt->VerboseOutput() && DrawReco) || m_opt->ApplyMVA()){
 
       m_outMngrHist -> AddStandardTH1( "dRmin_RCMHiggsRCMHiggs", 0.25,0,5, ";#DeltaR_{min}(Higgs-tagged jet, Higgs-tagged jet)", otherVariables, &(m_outData -> o_dRmin_RCMHiggsRCMHiggs) );
       m_outMngrHist -> AddStandardTH1( "dRmin_RCMHiggsRCMV", 0.25,0,5, ";#DeltaR_{min}(Higgs-tagged jet, W/Z-tagged jet)", otherVariables, &(m_outData -> o_dRmin_RCMHiggsRCMV) );
