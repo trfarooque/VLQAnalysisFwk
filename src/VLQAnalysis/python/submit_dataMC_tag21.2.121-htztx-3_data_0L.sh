@@ -1,17 +1,18 @@
 #!/bin/bash
 
-for campaign in "mc16a" "mc16d" "mc16e"
+for campaign in "mc16a"
 do
     python Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 \
 	producetarball=true \
 	--inputDir=/data/at3/scratch2/cbuxovaz/VLQAnalysisPairProdRun2_ntuples/21.1.121-htztx-3-syst_0_lepton_links/ \
 	--sampleDat=samples_info.tag-21.2.121-htztx-3-syst-0L.${campaign}.dat \
-	--outputDirSuffix=dataMC_TRACK_DL1_FixedCutBEff_77_background_${campaign}_NOW \
+	--outputDirSuffix=dataMC_TRACK_DL1_FixedCutBEff_77_data_NOW \
 	--reweightKinematics=false --kinRWList=JETSN,MEFFRED --doKinRWSmoothing=FALSE --DOKINRWSYST=FALSE \
 	--queue=at3 --NFILESPLIT=200 --NMERGE=1 --removeNull=FALSE \
-	--runData=false --runQCD=false --runSignals=false --runTtbar=true --runOtherBkgd=true \
-	--RUNDIJET=true \
-	--runSingleTop=true --runWjets=true --runZjets=true --runTopEW=true --runDibosons=true \
+	--runData=true --RUNTOPQ4DATA=true --RUNTOPQ1DATA=false \
+	--runQCD=false --runSignals=false --runTtbar=false --runOtherBkgd=false \
+	--RUNDIJET=false \
+	--runSingleTop=false --runWjets=false --runZjets=false --runTopEW=false --runDibosons=false \
 	--runTtSyst=false --runStSyst=false --splitSTChannels=true \
 	--dumpHistos=true --dumpOverlapTree=false --dumpTree=false --doTruthAnalysis=true --verboseOutput=false --splitVLQDecays=false \
 	--otherVariables=true --doBlind=false \

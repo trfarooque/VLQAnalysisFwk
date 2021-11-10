@@ -4,7 +4,7 @@ for campaign in "mc16a" "mc16d" "mc16e"
 do
     python Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 \
 	producetarball=true \
-	--inputDir=/nfs/at3/scratch2/cbuxovaz/VLQAnalysisPairProdRun2_ntuples/21.1.121-htztx-3-syst_0_lepton/ \
+	--inputDir=/data/at3/scratch2/cbuxovaz/VLQAnalysisPairProdRun2_ntuples/21.1.121-htztx-3-syst_0_lepton_links/ \
 	--sampleDat=samples_info.tag-21.2.121-htztx-3-syst-PAIRVLQ_0L.${campaign}.dat \
 	--outputDirSuffix=dataMC_TRACK_DL1_FixedCutBEff_77_signal_${campaign}_NOW \
 	--reweightKinematics=false \
