@@ -22,6 +22,8 @@ def GenerateRegionLabel(region):
         labelDict["other"].append("HM")
     elif(region.find("LowMtbmin") != -1):
         labelDict["other"].append("LM")
+    elif(region.find("ZwinMLL") != -1):
+        labelDict["other"].append("|m_{ll}-M_{Z}| #leq 10GeV")
 
     for JBO in JBOMs:
 
@@ -77,9 +79,9 @@ def GenerateRegionLabel(region):
     return extraLabel
 
 
-f = TFile("/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_August_16_2021/mc16a_0L/allBackground.root")
+f = TFile("/data/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_DataMC_BKG_RW_studies_21.2.121-htztx-3_1lepton_November_7_2021/mc16a/outVLQAna_ttbarlight_nominal_HIST.root")
 
-varList = {"meff"}
+varList = {"meff", "jets_n"}
 
 rebinDict = {"RCMHiggs_jets_m" : "0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,180,190,200,240,280,320,400,500",
              "RCMTop_jets_m" : "0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,180,190,200,240,280,320,400,500",
@@ -100,7 +102,7 @@ rebinDict = {"RCMHiggs_jets_m" : "0,10,20,30,40,50,60,70,80,90,100,110,120,130,1
              "jets_n" : "-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,10.5,11.5,12.5,15.5"}
              #"jets_n" : "-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,15.5"}
 
-#pVLQ
+#pVLQ 0L SRs
 regList={"c0lep7jin2bex0Hex1VTexHighMtbmin", "c0lep7jin2bex0Hex1Vex1TinHighMtbmin", "c0lep7jin2bex0Hex0Vex2TexHighMtbmin", 
          "c0lep7jin2bex0Hex2Vin0TinHighMtbmin", "c0lep7jin3bin0Hex1VTex", "c0lep7jin3bin0Hex1Vex1Tin", "c0lep7jin3bin0Hex0Vex2Tex", 
          "c0lep7jin3bin0Hex2Vin0Tin", "c0lep7jin2bex1Hex0VTex", "c0lep7jin2bex1Hex1Vex0Tex", "c0lep7jin2bex1Hex2Vin0Tex", 
@@ -126,7 +128,7 @@ for var in varList:
             varConfig.write("DRAWSTACK : TRUE\n")
             varConfig.write("DRAWRES : RATIO\n")
             varConfig.write("DRAWRESSTACK : TRUE\n")
-            varConfig.write("DOSCALE : SHAPE\n")
+            varConfig.write("DOSCALE : NORM\n")
             varConfig.write("RESMIN : 0.\n")
             varConfig.write("RESMAX : 1.5\n")
             varConfig.write("YMIN   : 0.\n")
@@ -134,7 +136,7 @@ for var in varList:
                 varConfig.write("XMIN   : 1000\n")
                 varConfig.write("XMAX   : 4000\n")
             #varConfig.write("ISLOGY : TRUE\n")
-            varConfig.write("DOWIDTH : FALSE\n")
+            varConfig.write("DOWIDTH : TRUE\n")
             if(var in rebinDict):
                 varConfig.write("REBINVAR : "+rebinDict[var]+"\n")
             
