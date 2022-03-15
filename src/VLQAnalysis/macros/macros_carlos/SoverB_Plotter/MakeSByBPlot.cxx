@@ -843,14 +843,28 @@ int main(int argc, char** argv){
       "c1lep6jin4bin1Hex1Vin0Lin0Tex", "c1lep6jin4bin1Hex0Vin0Lex1Tin", "c1lep6jin4bin1Hex0Vin1Lin1Tin", "c1lep6jin4bin2Hin0Vin0Lin0Tin"
     };
 
-  std::vector< std::string > new_pvlq_ana_1l_MVA_3bex = 
+  std::vector< std::string > new_pvlq_ana_1l_MVA_5jex_3bex =
+    {
+      "c1lep5jex3bex2Min3JinHighMVAScore", "c1lep5jex3bex2Min3Jin0HexHighMVAScore", "c1lep5jex3bex2Min3Jin1HinHighMVAScore",
+      "c1lep5jex3bex2Min3JinMidMVAScore",  "c1lep5jex3bex2Min3Jin0HexMidMVAScore",  "c1lep5jex3bex2Min3Jin1HinMidMVAScore",
+      "c1lep5jex3bex2Min3JinLowMVAScore",  "c1lep5jex3bex2Min3Jin0HexLowMVAScore",  "c1lep5jex3bex2Min3Jin1HinLowMVAScore"
+    };
+
+  std::vector< std::string > new_pvlq_ana_1l_MVA_6jin_3bex = 
     {
       "c1lep6jin3bex2Min3JinHighMVAScore", "c1lep6jin3bex2Min3Jin0HexHighMVAScore", "c1lep6jin3bex2Min3Jin1HinHighMVAScore",
       "c1lep6jin3bex2Min3JinMidMVAScore",  "c1lep6jin3bex2Min3Jin0HexMidMVAScore",  "c1lep6jin3bex2Min3Jin1HinMidMVAScore",
       "c1lep6jin3bex2Min3JinLowMVAScore",  "c1lep6jin3bex2Min3Jin0HexLowMVAScore",  "c1lep6jin3bex2Min3Jin1HinLowMVAScore"
     };
+
+  std::vector< std::string > new_pvlq_ana_1l_MVA_5jex_4bin =
+    {
+      "c1lep5jex4bin2Min3JinHighMVAScore", "c1lep5jex4bin2Min3Jin0HexHighMVAScore", "c1lep5jex4bin2Min3Jin1HinHighMVAScore",
+      "c1lep5jex4bin2Min3JinMidMVAScore",  "c1lep5jex4bin2Min3Jin0HexMidMVAScore",  "c1lep5jex4bin2Min3Jin1HinMidMVAScore",
+      "c1lep5jex4bin2Min3JinLowMVAScore",  "c1lep5jex4bin2Min3Jin0HexLowMVAScore",  "c1lep5jex4bin2Min3Jin1HinLowMVAScore"
+    };
   
-  std::vector< std::string > new_pvlq_ana_1l_MVA_4bin =
+  std::vector< std::string > new_pvlq_ana_1l_MVA_6jin_4bin =
     {
       "c1lep6jin4bin2Min3JinHighMVAScore", "c1lep6jin4bin2Min3Jin0HexHighMVAScore", "c1lep6jin4bin2Min3Jin1HinHighMVAScore",
       "c1lep6jin4bin2Min3JinMidMVAScore",  "c1lep6jin4bin2Min3Jin0HexMidMVAScore",  "c1lep6jin4bin2Min3Jin1HinMidMVAScore",
@@ -1035,38 +1049,50 @@ int main(int argc, char** argv){
 	regions_4bin.insert( std::pair<std::string, std::vector<std::string> >("4bin", new_pvlq_ana_1l_4bin));
 	//regions_3bex.insert( std::pair<std::string, std::vector<std::string> >("3bex",fullboost_merged_v1)); 
 	//regions_4bin.insert( std::pair<std::string, std::vector<std::string> >("4bin",fullboost_merged_v1));
-	regions_3bex.insert( std::pair<std::string, std::vector<std::string> >("MVA_3bex", new_pvlq_ana_1l_MVA_3bex));
-	regions_4bin.insert( std::pair<std::string, std::vector<std::string> >("MVA_4bin", new_pvlq_ana_1l_MVA_4bin));
+	regions_3bex.insert( std::pair<std::string, std::vector<std::string> >("MVA_5jex_3bex", new_pvlq_ana_1l_MVA_5jex_3bex));
+        regions_4bin.insert( std::pair<std::string, std::vector<std::string> >("MVA_5jex_4bin", new_pvlq_ana_1l_MVA_5jex_4bin));
+	regions_3bex.insert( std::pair<std::string, std::vector<std::string> >("MVA_6jin_3bex", new_pvlq_ana_1l_MVA_6jin_3bex));
+	regions_4bin.insert( std::pair<std::string, std::vector<std::string> >("MVA_6jin_4bin", new_pvlq_ana_1l_MVA_6jin_4bin));
 	
 	
 	std::vector<RegInfo*> list_reg_3bex{};
 	std::vector<RegInfo*> list_reg_4bin{};
 
-	std::vector<RegInfo*> list_reg_MVA_3bex{};
-	std::vector<RegInfo*> list_reg_MVA_4bin{};
+	std::vector<RegInfo*> list_reg_MVA_5jex_3bex{};
+	std::vector<RegInfo*> list_reg_MVA_5jex_4bin{};
+	std::vector<RegInfo*> list_reg_MVA_6jin_3bex{};
+	std::vector<RegInfo*> list_reg_MVA_6jin_4bin{};
 	
 	fillRegInfo(list_reg_3bex, m_siglist, m_bkglist[0], regions_3bex.at("3bex"), m_variable, m_bin);
 	fillRegInfo(list_reg_4bin, m_siglist, m_bkglist[0], regions_4bin.at("4bin"), m_variable, m_bin);
 
-	fillRegInfo(list_reg_MVA_3bex, m_siglist, m_bkglist[0], regions_3bex.at("MVA_3bex"), m_variable, m_bin);
-        fillRegInfo(list_reg_MVA_4bin, m_siglist, m_bkglist[0], regions_4bin.at("MVA_4bin"), m_variable, m_bin);
+	fillRegInfo(list_reg_MVA_5jex_3bex, m_siglist, m_bkglist[0], regions_3bex.at("MVA_5jex_3bex"), m_variable, m_bin);
+        fillRegInfo(list_reg_MVA_5jex_4bin, m_siglist, m_bkglist[0], regions_4bin.at("MVA_5jex_4bin"), m_variable, m_bin);
+	fillRegInfo(list_reg_MVA_6jin_3bex, m_siglist, m_bkglist[0], regions_3bex.at("MVA_6jin_3bex"), m_variable, m_bin);
+        fillRegInfo(list_reg_MVA_6jin_4bin, m_siglist, m_bkglist[0], regions_4bin.at("MVA_6jin_4bin"), m_variable, m_bin);
 
 	MakePlot(list_reg_3bex, m_siglist, m_outName+"_yield_pvlq_1L_3bex", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
                  "SByB", "S/B", true, false, true, false);
 	MakePlot(list_reg_4bin, m_siglist, m_outName+"_yield_pvlq_1L_4bin", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
                  "SByB", "S/B", true, false, true, false);
 
-	MakePlot(list_reg_MVA_3bex, m_siglist, m_outName+"_yield_pvlq_1L_MVA_3bex", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
+	MakePlot(list_reg_MVA_5jex_3bex, m_siglist, m_outName+"_yield_pvlq_1L_MVA_5jex_3bex", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
                  "SByB", "S/B", true, false, true, false);
-        MakePlot(list_reg_MVA_4bin, m_siglist, m_outName+"_yield_pvlq_1L_MVA_4bin", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
+        MakePlot(list_reg_MVA_5jex_4bin, m_siglist, m_outName+"_yield_pvlq_1L_MVA_5jex_4bin", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
+                 "SByB", "S/B", true, false, true, false);
+	MakePlot(list_reg_MVA_6jin_3bex, m_siglist, m_outName+"_yield_pvlq_1L_MVA_6jin_3bex", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
+                 "SByB", "S/B", true, false, true, false);
+        MakePlot(list_reg_MVA_6jin_4bin, m_siglist, m_outName+"_yield_pvlq_1L_MVA_6jin_4bin", "SBySqrtB", "S/#sqrt{B}", false, true, false, true,
                  "SByB", "S/B", true, false, true, false);
 
 	if(m_doLatexTable){
           MakeLaTeXTable(list_reg_3bex, m_outName+"_table_3bex.tex");
           MakeLaTeXTable(list_reg_4bin, m_outName+"_table_4bin.tex");
 	  
-	  MakeLaTeXTable(list_reg_MVA_3bex, m_outName+"_table_MVA_3bex.tex");
-          MakeLaTeXTable(list_reg_MVA_4bin, m_outName+"_table_MVA_4bin.tex");
+	  MakeLaTeXTable(list_reg_MVA_5jex_3bex, m_outName+"_table_MVA_5jex_3bex.tex");
+          MakeLaTeXTable(list_reg_MVA_5jex_4bin, m_outName+"_table_MVA_5jex_4bin.tex");
+	  MakeLaTeXTable(list_reg_MVA_6jin_3bex, m_outName+"_table_MVA_6jin_3bex.tex");
+          MakeLaTeXTable(list_reg_MVA_6jin_4bin, m_outName+"_table_MVA_6jin_4bin.tex");
         }
 
       }

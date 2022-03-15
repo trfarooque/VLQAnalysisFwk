@@ -43,12 +43,14 @@ public:
 		   c_0bin, c_1bin, c_2bin, c_3bin, c_4bin, c_1_2bwin,
 		   /*RC jet multiplicities*/
 		   c_0Jex, c_1Jex, c_1Jin, c_2Jex, c_2Jin, c_3Jin,
+		   c_0_2Jwin0Hex1Tex,
 		   /*Mass-tagged jet multiplicities*/
 		   c_0Mex, c_1Mex, c_1Min, c_2Min, c_2Min3Jin, c_2Min3Jin0Hex, c_2Min3Jin1Hin,
+		   c_1Mex0Hex1Tex,
 		   /*Hadtop-tagged jet multiplicities*/
 		   c_0Tex, c_0Tin, c_1Tex, c_0_1Twin, c_1Tin, c_2Tin,
 		   /*Leptop multiplicities*/
-		   c_0Lex, c_0Lin, c_1Lex, c_1Lin, c_2Lin,
+		   c_0Lex, c_0Lin, c_1Lex, c_0_1Lwin, c_1Lin, c_2Lin,
 		   /*Higgs-tagged jet multiplicities*/
 		   c_0Hex, c_0Hin, c_1Hex, c_1Hin, c_2Hin, c_0_1Hwin,
 		   /*V-tagged jet multiplicities*/

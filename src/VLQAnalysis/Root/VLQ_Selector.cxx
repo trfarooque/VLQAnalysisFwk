@@ -145,17 +145,20 @@ bool VLQ_Selector::Init(){
 
   m_sel_J_prop = new std::vector<SelProp>({
       MakeSelProp("0Jex",c_0Jex), MakeSelProp("1Jex", c_1Jex), MakeSelProp("1Jin", c_1Jin),
-	MakeSelProp("2Jex", c_2Jex), MakeSelProp("2Jin", c_2Jin), MakeSelProp("3Jin", c_3Jin) });
+	MakeSelProp("2Jex", c_2Jex), MakeSelProp("2Jin", c_2Jin), MakeSelProp("3Jin", c_3Jin),
+	MakeSelProp("0_2Jwin0Hex1Tex",c_0_2Jwin0Hex1Tex)});
 
   m_sel_M_prop = new std::vector<SelProp>({
       MakeSelProp("0Mex",c_0Mex), MakeSelProp("1Mex", c_1Mex), MakeSelProp("1Min", c_1Min), MakeSelProp("2Min", c_2Min), 
-	MakeSelProp("2Min3Jin", c_2Min3Jin), MakeSelProp("2Min3Jin0Hex", c_2Min3Jin0Hex), MakeSelProp("2Min3Jin1Hin", c_2Min3Jin1Hin) });
+	MakeSelProp("2Min3Jin", c_2Min3Jin), MakeSelProp("2Min3Jin0Hex", c_2Min3Jin0Hex), MakeSelProp("2Min3Jin1Hin", c_2Min3Jin1Hin),
+	MakeSelProp("1Mex0Hex1Tex", c_1Mex0Hex1Tex)});
 
   m_sel_T_prop = new std::vector<SelProp>({
       MakeSelProp("0Tin",c_0Tin), MakeSelProp("0Tex",c_0Tex), MakeSelProp("0_1Twin",c_0_1Twin), MakeSelProp("1Tin",c_1Tin), MakeSelProp("1Tex", c_1Tex), MakeSelProp("2Tin", c_2Tin) });
 
   m_sel_L_prop = new std::vector<SelProp>({
-      MakeSelProp("0Lin",c_0Lin), MakeSelProp("0Lex",c_0Lex), MakeSelProp("1Lin",c_1Lin), MakeSelProp("1Lex", c_1Lex), MakeSelProp("2Lin", c_2Lin) });
+      MakeSelProp("0Lin",c_0Lin), MakeSelProp("0Lex",c_0Lex), MakeSelProp("1Lin",c_1Lin), MakeSelProp("1Lex", c_1Lex), MakeSelProp("0_1Lwin",  c_0_1Lwin),
+	MakeSelProp("2Lin", c_2Lin) });
 
   m_sel_H_prop = new std::vector<SelProp>({
       MakeSelProp("0Hex",c_0Hex), MakeSelProp("1Hex", c_1Hex), MakeSelProp("1Hin", c_1Hin), MakeSelProp("2Hin", c_2Hin), MakeSelProp("0_1Hwin", c_0_1Hwin) });
@@ -278,7 +281,7 @@ bool VLQ_Selector::Init(){
 	v_jet_presel.insert(v_jet_presel.end(),v_jet_presel_ex.begin(),v_jet_presel_ex.end());
 
 	if(m_opt->DeriveReweighting()){
-	  std::vector<std::string> v_jet_presel_in = {"7jin","8jin"};
+	  std::vector<std::string> v_jet_presel_in = {"7jin","8jin","9jin"};
 	  v_jet_presel.insert(v_jet_presel.end(),v_jet_presel_in.begin(),v_jet_presel_in.end());
 	}
       }
@@ -358,6 +361,32 @@ bool VLQ_Selector::Init(){
       std::vector<std::string> v_mva_bjet_presel  = {"3bin", "3bex", "4bin"};
       std::vector<std::string> v_mva_boost_presel = {"2Min3Jin", "2Min3Jin0Hex", "2Min3Jin1Hin"};
       std::vector<std::string> v_mva_score_presel = {"", "-HighMVAScore", "-MidMVAScore", "-LowMVAScore"};
+
+      // ttbar CRs
+      AddVLQSelection("c-1lep-5jin-2bex-0Hex-1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+      AddVLQSelection("c-1lep-5jin-3bex-0Hex-1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+      AddVLQSelection("c-1lep-5jin-4bin-0Hex-1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+      
+      AddVLQSelection("c-1lep-5jin-2bex-1Mex0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+      AddVLQSelection("c-1lep-5jin-3bex-1Mex0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+      AddVLQSelection("c-1lep-5jin-4bin-1Mex0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+
+      AddVLQSelection("c-1lep-5jin-2bex-0_2Jwin0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+      AddVLQSelection("c-1lep-5jin-3bex-0_2Jwin0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+      AddVLQSelection("c-1lep-5jin-4bin-0_2Jwin0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+
+      // background CRs
+      AddVLQSelection("c-1lep-5jin-2bex-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
+      AddVLQSelection("c-1lep-5jin-3bex-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
+      AddVLQSelection("c-1lep-5jin-4bin-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
+
+      AddVLQSelection("c-1lep-5jin-2bex-0Hex-1VTex-0Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+      AddVLQSelection("c-1lep-5jin-3bex-0Hex-1VTex-0Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+      AddVLQSelection("c-1lep-5jin-4bin-0Hex-1VTex-0Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+
+      AddVLQSelection("c-1lep-5jin-2bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+      AddVLQSelection("c-1lep-5jin-3bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+      AddVLQSelection("c-1lep-5jin-4bin-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
 
       for(const std::string &mva_jet_sel : v_mva_jet_presel){
 	for(const std::string &mva_bjet_sel : v_mva_bjet_presel){
@@ -683,11 +712,11 @@ bool VLQ_Selector::Init(){
         AddVLQSelection("c-0lep-7jin-4bin-1Hex-0VTex", do_runop, do_syst, FIT);
         AddVLQSelection("c-0lep-7jin-4bin-1Hex-1VTex", do_runop, do_syst, FIT);
         AddVLQSelection("c-0lep-7jin-4bin-1Hex-2VTin", do_runop, do_syst, FIT);
-	// HtZt option 2 from Trisha
+	// HtZt option 2
 	AddVLQSelection("c-0lep-7jin-2bex-1Hin-0_1VTwin-HighMtbmin", do_runop, do_syst, FIT);
         AddVLQSelection("c-0lep-7jin-3bex-1Hex-0_1VTwin", do_runop, do_syst, FIT);
         AddVLQSelection("c-0lep-7jin-4bin-1Hex-0_1VTwin", do_runop, do_syst, FIT);
-	// HtZt option 3 from Trisha
+	// HtZt option 3
 	AddVLQSelection("c-0lep-7jin-2bex-1Hin-2VTor-HighMtbmin", do_runop, do_syst, FIT);
         AddVLQSelection("c-0lep-7jin-3bex-1Hex-2VTor", do_runop, do_syst, FIT);
         AddVLQSelection("c-0lep-7jin-4bin-1Hex-2VTor", do_runop, do_syst, FIT);
@@ -1445,9 +1474,15 @@ bool VLQ_Selector::PassSelection(const int index){
   //==== MVAScore ====
   else if(index == c_LowMVAScore){
     pass = (m_outData->o_MVAScore < 0.50);
+    //pass = (m_outData->o_MVAScore < 0.25);
+    //pass = (m_outData->o_MVAScore < 0.35);
+    //pass = (m_outData->o_MVAScore < 0.15);
   }
   else if(index == c_MidMVAScore){
     pass = (m_outData->o_MVAScore >= 0.50) && (m_outData->o_MVAScore < 0.90);
+    //pass = (m_outData->o_MVAScore >= 0.25) && (m_outData->o_MVAScore < 0.90);
+    //pass = (m_outData->o_MVAScore >= 0.35) && (m_outData->o_MVAScore < 0.90);
+    //pass = (m_outData->o_MVAScore >= 0.15) && (m_outData->o_MVAScore < 0.90);
   }
   else if(index == c_HighMVAScore){
     pass = (m_outData->o_MVAScore >= 0.90);
@@ -1492,6 +1527,8 @@ bool VLQ_Selector::PassSelection(const int index){
   else if(index == c_2Jex){ pass = (m_outData->o_rcjets_n == 2); }
   else if(index == c_2Jin){ pass = (m_outData->o_rcjets_n >= 2); }
   else if(index == c_3Jin){ pass = (m_outData->o_rcjets_n >= 3); }
+  else if(index == c_0_2Jwin0Hex1Tex){ pass = (m_outData->o_rcjets_n < 3) && (m_outData->o_taggedjets_n.at("RCMHiggs") == 0) &&
+                                              (m_outData->o_taggedjets_n.at("RCMTop") == 1);}
 
   else if(index == c_0Mex){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") == 0); }
   else if(index == c_1Mex){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") == 1); }
@@ -1502,7 +1539,8 @@ bool VLQ_Selector::PassSelection(const int index){
                                            (m_outData->o_taggedjets_n.at("RCMHiggs") == 0); }
   else if(index == c_2Min3Jin1Hin){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") >= 2) && (m_outData->o_rcjets_n >= 3) &&
                                            (m_outData->o_taggedjets_n.at("RCMHiggs") >= 1); }
-
+  else if(index == c_1Mex0Hex1Tex){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") == 1) && (m_outData->o_taggedjets_n.at("RCMHiggs") == 0) &&
+                                           (m_outData->o_taggedjets_n.at("RCMTop") == 1);}
   else if(index == c_0Tex){ pass = (m_outData->o_taggedjets_n.at("RCMTop") == 0); }
   else if(index == c_0Tin){ pass = (m_outData->o_taggedjets_n.at("RCMTop") >= 0); }
   else if(index == c_1Tex){ pass = (m_outData->o_taggedjets_n.at("RCMTop") == 1); }
@@ -1513,6 +1551,7 @@ bool VLQ_Selector::PassSelection(const int index){
   else if(index == c_0Lex){ pass = (m_outData->o_leptop_n == 0); }
   else if(index == c_0Lin){ pass = (m_outData->o_leptop_n >= 0); }
   else if(index == c_1Lex){ pass = (m_outData->o_leptop_n == 1); }
+  else if(index == c_0_1Lwin){ pass = (m_outData->o_leptop_n == 0 || m_outData->o_leptop_n == 1); }
   else if(index == c_1Lin){ pass = (m_outData->o_leptop_n >= 1); }
   else if(index == c_2Lin){ pass = (m_outData->o_leptop_n >= 2); }
   else if(index == c_1LTin){ pass = (m_outData->o_leptop_n+m_outData->o_taggedjets_n.at("RCMTop") >= 1); }
