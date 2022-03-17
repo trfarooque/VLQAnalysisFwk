@@ -36,7 +36,7 @@ here = os.getcwd()
 
 ##________________________________________________________
 ## Defining the paths and the tarball
-inputDir="/nfs/at3/scratch2/tvdaalen/VLQ_FullRun2/Production_tag-21.2.87-htztx-3-syst/" 
+inputDir="/data/at3/scratch2/tvdaalen/VLQ_FullRun2/Production_tag-21.2.87-htztx-3-syst/" 
 # "nfs/at3/scratch2/farooque/MBJOutputs/tag-21.2.67-htztx-0-fJvt-DL1.PFlow/"
 listFolder=here+"/Lists_Analysis_" + now
 histogramName="cut_flow"
@@ -138,7 +138,7 @@ else:
 ##________________________________________________________
 ## Looking into the XSe DB file
 with open(xsecFile,'r') as f:
-#with open("/nfs/atlas-data07/tvdaalen/SingleVLQWorkArea/br_R21_master_Oct2019/VLQAnalysis/python/xsec_ttbar_dummy.json",'r') as f:
+#with open("/data/atlas-data07/tvdaalen/SingleVLQWorkArea/br_R21_master_Oct2019/VLQAnalysis/python/xsec_ttbar_dummy.json",'r') as f:
     weights = json.load(f)
 
 ##________________________________________________________
