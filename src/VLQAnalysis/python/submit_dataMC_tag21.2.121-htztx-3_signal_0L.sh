@@ -5,8 +5,8 @@ do
     python Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 \
 	producetarball=true \
 	--inputDir=/data/at3/scratch2/cbuxovaz/VLQAnalysisPairProdRun2_ntuples/21.1.121-htztx-3-syst_0_lepton_links/ \
-	--sampleDat=samples_info.tag-21.2.121-htztx-3-syst-PAIRVLQ_0L.${campaign}.dat \
-	--outputDirSuffix=dataMC_TRACK_DL1_FixedCutBEff_77_signal_${campaign}_NOW \
+	--sampleDat=samples_info.tag-21.2.121-htztx-3-syst-0L.${campaign}.dat \
+	--outputDirSuffix=dataMC_TRACK_DL1_FixedCutBEff_77_DataMC_signal_TestTree_${campaign} \
 	--reweightKinematics=false \
 	--queue=at3 --NFILESPLIT=200 --NMERGE=1 --removeNull=TRUE \
 	--runData=false --runQCD=false --runSignals=true --runTtbar=false --runOtherBkgd=false \

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for campaign in "mc16a"
+for campaign in "mc16a" "mc16d" "mc16e"
 do
     python Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 \
 	producetarball=true \
