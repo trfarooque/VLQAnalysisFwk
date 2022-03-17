@@ -63,7 +63,7 @@ bool VLQ_TruthManager::Initialize() {
       temp -> SetMoment( str_ind, index );
       counter++;
     }
-
+ 
     //Decay type (always useful)
     int code = 0;
     if(m_ntupData -> d_mc_children_index -> at(iTruth).size() >= 2){
@@ -1281,11 +1281,12 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
 	       m_outData -> o_truth_partons.at("leptop_lep") -> push_back(gc);
 	       m_outData -> o_truth_partons_n.at("leptop_lep") ++;
 	       m_outData -> o_truth_all_lep -> push_back(gc);
-	       if(gc->GetMoment("abspdgId")==15)
+	       if(gc->GetMoment("absPdgId")==15)
 		 {
 		   m_outData -> o_truth_partons.at("tautop_lep") -> push_back(gc);
 		   m_outData -> o_truth_partons_n.at("tautop_lep") ++;
 		   m_outData -> o_truth_all_lep -> push_back(gc);
+		 
 		 }
 	     }
 	     else if( (gc -> GetMoment("absPdgId") == 12) || (gc -> GetMoment("absPdgId") == 14) || (gc -> GetMoment("absPdgId") == 16)) {
@@ -1385,7 +1386,7 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
 	 if(taudecay)
 	   {
 	     m_outData -> o_truth_partons.at("tautop") -> push_back(part);
-	     m_outData -> o_truth_partons_n.at("tautop") ++;
+	     m_outData -> o_truth_partons_n.at("tautop") ++;	    
 	   }
        } //leptonic
 	   

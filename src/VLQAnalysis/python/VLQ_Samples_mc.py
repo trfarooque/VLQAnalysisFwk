@@ -569,7 +569,7 @@ def GetVLQTDoubletSamples( useWeightSyst=False, useObjectSyst=False, campaign=""
         ObjectSystematics = [getSystematics(name="nominal",nameUp="",oneSided=True)]
 
     Samples     =  []
-    Samples     += [getSampleUncertainties("VLQ_TT_700","302483."+campaign,  ObjectSystematics , WeightSystematics)]#TT 700
+   # Samples     += [getSampleUncertainties("VLQ_TTD_700","302483."+campaign,  ObjectSystematics , WeightSystematics)]#TT 700
     Samples     += [getSampleUncertainties("VLQ_TT_1200","302485."+campaign,  ObjectSystematics , WeightSystematics)]#TT 1200 
 
     return Samples
