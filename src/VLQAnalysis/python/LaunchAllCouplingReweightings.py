@@ -15,10 +15,11 @@ sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "python/VLQAnalysis/" )
 from VLQ_BR import *
 from VLQ_Samples_mc import *
 
-#from regions_dictionary_pVLQ import *
+
+#from regions_dictionary_pVLQ_newAna_merged_regions import *
+from regions_dictionary_pVLQ_newAna_MVA_regions import *
+
 #from regions_dictionary_sVLQ import *
-#from regions_dictionary_pVLQ_oldAna import *
-from regions_dictionary_pVLQ_newAna_merged_regions import *
 
 #from regions_dictionary import *
 
@@ -98,9 +99,9 @@ if not tthfitter:
                        "RCMTop_jet0_m", "RCMTop_jet0_pt", "RCMTop_jet0_eta"]
         
 else: #the TRExFitter inputs
-    Variables += ["meff"]
+    Variables += ["meff", "MVAScore"]
     if(doZeroLepton):
-        Variables += ["mtbmin"]
+        Variables += ["MVAScore"]
 ##........................................................
 
 ##________________________________________________________
