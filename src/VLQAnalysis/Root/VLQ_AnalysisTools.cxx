@@ -1250,8 +1250,8 @@ bool VLQ_AnalysisTools::ComputeMVAVariables() {
   inputVarsMVA["leadingdPhi_RCjets"] = m_outData -> o_leadingdPhi_RCjets;
   inputVarsMVA["dPhimin_RCTTMassRCTTMass"] = m_outData -> o_dPhimin_RCTTMassRCTTMass;
   inputVarsMVA["leptop_pt"] = (m_outData -> o_leptop_n > 0) ? m_outData -> o_leptop->Pt() : -100.;
-  inputVarsMVA["Alt$(RCjets_pt[0],0)"] = (m_outData -> o_rcjets_n > 0) ? m_outData->o_rcjets->at(0)->Pt() : -100.;
-  inputVarsMVA["Alt$(RCjets_pt[1],0)"] = (m_outData -> o_rcjets_n > 1) ? m_outData->o_rcjets->at(1)->Pt() : -100.;
+  inputVarsMVA["Alt$(RCjets_pt[0],0)"] = (m_outData -> o_rcjets_n > 0) ? m_outData->o_rcjets->at(0)->Pt() : 0.;
+  inputVarsMVA["Alt$(RCjets_pt[1],0)"] = (m_outData -> o_rcjets_n > 1) ? m_outData->o_rcjets->at(1)->Pt() : 0.;
   inputVarsMVA["jets_n"] = m_outData -> o_jets_n;
   inputVarsMVA["trkbjets_n"] = m_outData->o_trkbjets_n;
   inputVarsMVA["RCjets_n"] = m_outData -> o_rcjets_n;
@@ -1262,13 +1262,13 @@ bool VLQ_AnalysisTools::ComputeMVAVariables() {
   inputVarsMVA["residualMET_Pt"] = m_outData -> o_residualMET->Pt(); // Defined in UpdateBTagMoments()
   inputVarsMVA["met"] = m_outData -> o_met;
   inputVarsMVA["Alt$(m_vlq_rcttmass_drmax[0],0)"] = (m_outData -> o_m_vlq_rcttmass_drmax).size() > 0 
-    ? m_outData -> o_m_vlq_rcttmass_drmax.at(0) : -100.; // Defined in UpdateBTagMoments()
+    ? m_outData -> o_m_vlq_rcttmass_drmax.at(0) : 0.; // Defined in UpdateBTagMoments()
   inputVarsMVA["Alt$(m_vlq_rcttmass_drmax[1],0)"] = (m_outData -> o_m_vlq_rcttmass_drmax).size() > 1 
-    ? m_outData -> o_m_vlq_rcttmass_drmax.at(1) : -100.; // Defined in UpdateBTagMoments()
+    ? m_outData -> o_m_vlq_rcttmass_drmax.at(1) : 0.; // Defined in UpdateBTagMoments()
   inputVarsMVA["Alt$(m_vlq_rcjets_drmax[0],0)"] = (m_outData -> o_m_vlq_rcjets_drmax).size() > 0 
-    ? m_outData -> o_m_vlq_rcjets_drmax.at(0) : -100.; // Defined in UpdateBTagMoments()
+    ? m_outData -> o_m_vlq_rcjets_drmax.at(0) : 0.; // Defined in UpdateBTagMoments()
   inputVarsMVA["Alt$(m_vlq_rcjets_drmax[1],0)"] = (m_outData -> o_m_vlq_rcjets_drmax).size() > 1 
-    ? m_outData -> o_m_vlq_rcjets_drmax.at(1) : -100.; // Defined in UpdateBTagMoments()
+    ? m_outData -> o_m_vlq_rcjets_drmax.at(1) : 0.; // Defined in UpdateBTagMoments()
 
   m_outData -> o_MVAScore = m_varComputer -> GetMVAScore(inputVarsMVA);
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_MVAScore (" << m_outData -> o_MVAScore << ")"  << std::endl;

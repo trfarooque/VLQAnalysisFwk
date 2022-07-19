@@ -395,6 +395,10 @@ bool VLQ_Analysis_Data2015::Begin(){
     //-------------------------------------------------------------------------------------------------------------------
     m_outMngrTree->AddStandardBranch( "meff", "Effective mass", &(m_outData->o_meff));
     m_outMngrTree->AddStandardBranch( "meffred", "Effective mass reduced", &(m_outData->o_meffred));
+    if(m_opt->ApplyMVA()) m_outMngrTree->AddStandardBranch("MVAScore", "MVA Score", &(m_outData -> o_MVAScore));
+    //m_outMngrTree->AddStandardBranch( "weight_pmg_isr_muRfac10__fsr_muRfac20", "fsr muR/F up",   &(m_outData->o_weight_pmg_isr_muRfac10__fsr_muRfac20));
+    //m_outMngrTree->AddStandardBranch( "weight_pmg_isr_muRfac10__fsr_muRfac05", "fsr muR/F down", &(m_outData->o_weight_pmg_isr_muRfac10__fsr_muRfac05));
+
     m_outMngrTree->AddStandardBranch( "met", "Missing E_{T}",  &(m_outData->o_AO_met), -1, "Pt");
     //m_outMngrTree->AddStandardBranch("met_phi", "#phi_{MET}",  &(m_outData->o_AO_met), -1, "Phi");
     m_outMngrTree->AddStandardBranch( "mtw", "Transverse W mass", &(m_outData->o_mtwl));
@@ -427,7 +431,7 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_outMngrTree->AddStandardBranch( "dPhimin_RCTTMassRCTTMass", ";#Delta#phi_{min}(RCTTMass, RCTTMass)", &(m_outData -> o_dPhimin_RCTTMassRCTTMass) ); 
     m_outMngrTree->AddStandardBranch( "leadingdR_RCTTMassRCTTMass", ";#DeltaR (leading TTmass jet, subleading TTmass jet)", &(m_outData -> o_leadingdR_RCTTMassRCTTMass) );
     m_outMngrTree->AddStandardBranch( "leadingdEta_RCTTMassRCTTMass", ";#DeltaR (leading TTmass jet, subleading TTmass jet)", &(m_outData -> o_leadingdEta_RCTTMassRCTTMass) );
-     m_outMngrTree->AddStandardBranch( "leadingdPhi_RCTTMassRCTTMass", ";#DeltaR (leading TTmass jet, subleading TTmass jet)", &(m_outData -> o_leadingdPhi_RCTTMassRCTTMass) );
+    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCTTMassRCTTMass", ";#DeltaR (leading TTmass jet, subleading TTmass jet)", &(m_outData -> o_leadingdPhi_RCTTMassRCTTMass) );
      /*    m_outMngrTree->AddStandardBranch( "leadingdR_RCMHiggsRCMHiggs", ";#DeltaR (leading Higgs-tagged J, subleading Higgs-tagged J)", &(m_outData -> o_leadingdR_RCMHiggsRCMHiggs) );
     m_outMngrTree->AddStandardBranch( "leadingdR_RCMHiggsRCMV", ";#DeltaR (leading Higgs-tagged J, leading W/Z-tagged J)", &(m_outData -> o_leadingdR_RCMHiggsRCMV) );
     m_outMngrTree->AddStandardBranch( "leadingdR_RCMHiggsRCMTop", ";#DeltaR (leading Higgs-tagged J, leading Top-tagged J)", &(m_outData -> o_leadingdR_RCMHiggsRCMTop) );
@@ -696,6 +700,17 @@ bool VLQ_Analysis_Data2015::Begin(){
     
     if( DrawReco ){
       //Event variables
+
+      /*m_outMngrHist -> AddStandardTH1("isr_muRfac10__fsr_muRfac20", 1, -2000, 50000, 
+				      "FSR muR/F Up", true, &(m_outData->o_weight_pmg_isr_muRfac10__fsr_muRfac20));
+      m_outMngrHist -> AddStandardTH1("isr_muRfac10__fsr_muRfac05", 1, -2000, 50000, 
+				      "FSR muR/F Down", true, &(m_outData->o_weight_pmg_isr_muRfac10__fsr_muRfac05));
+
+      m_outMngrHist -> AddStandardTH2( "meff", "isr_muRfac10__fsr_muRfac20", 50, 0, 7000, 1, -2000, 50000, 
+				       ";FSR muR/F Up", ";m_{eff} [GeV]", true, &(m_outData -> o_meff), &(m_outData -> o_weight_pmg_isr_muRfac10__fsr_muRfac20));
+      
+      m_outMngrHist -> AddStandardTH2( "meff", "isr_muRfac10__fsr_muRfac05", 50, 0, 7000, 1, -2000, 50000,
+      ";FSR muR/F Down", ";m_{eff} [GeV]", true, &(m_outData -> o_meff), &(m_outData -> o_weight_pmg_isr_muRfac10__fsr_muRfac05));*/
 
       m_outMngrHist -> AddStandardTH1( "residualMET_M",  20, 0, 1600,   "Residual MET (met-#nu_met) M [GeV]", false, &(m_outData -> o_residualMET),-1,"M" );
       m_outMngrHist -> AddStandardTH1( "residualMET_Phi",  20, 0, 1600,   "Residual MET dphi(met-#nu_met)  [GeV]", false, &(m_outData -> o_residualMET),-1,"Phi" );
@@ -2895,7 +2910,9 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     }
     if( m_outData -> o_is_ttbar || (m_opt -> StrSampleName().find("SINGLETOP") != std::string::npos)
 	|| (m_opt -> StrSampleName().find("WJETS") != std::string::npos) || (m_opt -> StrSampleName().find("ZJETS") != std::string::npos) ){
-      m_weightMngr -> SetPMGSystWeights();
+
+      m_weightMngr -> SetPMGSystNorm();
+      
       if((m_opt -> ReweightKinematics()) && (m_opt -> ComputeWeightSys())){
 	m_weightMngr -> UpdateSysReweighting();
       }
@@ -2904,6 +2921,25 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     m_weightMngr -> SetQCDWeight();
   }
 
+  if(m_outData -> o_is_ttbar && m_opt->ComputeWeightSys()){
+    for(auto& systweight : *(m_weightMngr->SystMap())){
+      if(systweight.first.find("pmg") != std::string::npos){
+	if(m_outData -> o_pmg_weight_threshold.at(systweight.second->BranchName()) != -1){
+
+	  if((systweight.second)->GetComponentValue() > m_outData -> o_pmg_weight_threshold.at((systweight.second)->BranchName())){
+	    /*std::cout << "Skipping event with " << (systweight.second)->BranchName() << " = " << (systweight.second)->GetComponentValue() << " > "
+		      << m_outData -> o_pmg_weight_threshold.at((systweight.second)->BranchName()) << std::endl;*/
+	    return false;
+	  }
+	  /*else{
+	    std::cout << "Event passed with " << (systweight.second)->BranchName() << " = " << (systweight.second)->GetComponentValue() << " <= "
+		      << m_outData -> o_pmg_weight_threshold.at((systweight.second)->BranchName()) << std::endl;
+	  }*/
+	}
+      }
+    }
+  }
+  
   //###########################################################
   //                                                          #
   // TRF                                                      #

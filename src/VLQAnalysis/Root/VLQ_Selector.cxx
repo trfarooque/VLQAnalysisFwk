@@ -151,6 +151,7 @@ bool VLQ_Selector::Init(){
   m_sel_M_prop = new std::vector<SelProp>({
       MakeSelProp("0Mex",c_0Mex), MakeSelProp("1Mex", c_1Mex), MakeSelProp("1Min", c_1Min), MakeSelProp("2Min", c_2Min), 
 	MakeSelProp("2Min3Jin", c_2Min3Jin), MakeSelProp("2Min3Jin0Hex", c_2Min3Jin0Hex), MakeSelProp("2Min3Jin1Hin", c_2Min3Jin1Hin),
+	MakeSelProp("1Mex3Jin", c_1Mex3Jin), MakeSelProp("1Mex3Jin0Hex", c_1Mex3Jin0Hex), MakeSelProp("1Mex3Jin1Hin", c_1Mex3Jin1Hin),
 	MakeSelProp("1Mex0Hex1Tex", c_1Mex0Hex1Tex)});
 
   m_sel_T_prop = new std::vector<SelProp>({
@@ -359,7 +360,8 @@ bool VLQ_Selector::Init(){
     if(m_opt->ApplyMVA() && m_opt->DoOneLeptonAna() && m_opt->DoPairVLQRegions()){
       std::vector<std::string> v_mva_jet_presel   = {"5jin", "5jex", "6jin"};
       std::vector<std::string> v_mva_bjet_presel  = {"3bin", "3bex", "4bin"};
-      std::vector<std::string> v_mva_boost_presel = {"2Min3Jin", "2Min3Jin0Hex", "2Min3Jin1Hin"};
+      std::vector<std::string> v_mva_boost_presel = {"1Mex3Jin", "1Mex3Jin0Hex", "1Mex3Jin1Hin", // For ttbar gen and ps decorrelation
+						     "2Min3Jin", "2Min3Jin0Hex", "2Min3Jin1Hin"};
       std::vector<std::string> v_mva_score_presel = {"", "-HighMVAScore", "-MidMVAScore", "-LowMVAScore"};
 
       // ttbar CRs
@@ -387,6 +389,15 @@ bool VLQ_Selector::Init(){
       AddVLQSelection("c-1lep-5jin-2bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
       AddVLQSelection("c-1lep-5jin-3bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
       AddVLQSelection("c-1lep-5jin-4bin-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+
+      // background CRs uncorrelated
+      AddVLQSelection("c-1lep-5jex-2bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+      AddVLQSelection("c-1lep-5jex-3bex-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
+      AddVLQSelection("c-1lep-5jex-4bin-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
+      AddVLQSelection("c-1lep-6jin-2bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+      AddVLQSelection("c-1lep-6jin-3bex-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
+      AddVLQSelection("c-1lep-6jin-4bin-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
+
 
       for(const std::string &mva_jet_sel : v_mva_jet_presel){
 	for(const std::string &mva_bjet_sel : v_mva_bjet_presel){
@@ -1534,6 +1545,11 @@ bool VLQ_Selector::PassSelection(const int index){
   else if(index == c_1Mex){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") == 1); }
   else if(index == c_1Min){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") >= 1); }
   else if(index == c_2Min){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") >= 2); }
+  else if(index == c_1Mex3Jin){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") == 1) && (m_outData->o_rcjets_n >= 3); }
+  else if(index == c_1Mex3Jin0Hex){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") == 1) && (m_outData->o_rcjets_n >= 3) &&
+                                           (m_outData->o_taggedjets_n.at("RCMHiggs") == 0); }
+  else if(index == c_1Mex3Jin1Hin){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") == 1) && (m_outData->o_rcjets_n >= 3) &&
+                                           (m_outData->o_taggedjets_n.at("RCMHiggs") >= 1); }
   else if(index == c_2Min3Jin){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") >= 2) && (m_outData->o_rcjets_n >= 3); }
   else if(index == c_2Min3Jin0Hex){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") >= 2) && (m_outData->o_rcjets_n >= 3) && 
                                            (m_outData->o_taggedjets_n.at("RCMHiggs") == 0); }

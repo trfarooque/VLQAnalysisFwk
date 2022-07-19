@@ -45,7 +45,9 @@ public:
 		   c_0Jex, c_1Jex, c_1Jin, c_2Jex, c_2Jin, c_3Jin,
 		   c_0_2Jwin0Hex1Tex,
 		   /*Mass-tagged jet multiplicities*/
-		   c_0Mex, c_1Mex, c_1Min, c_2Min, c_2Min3Jin, c_2Min3Jin0Hex, c_2Min3Jin1Hin,
+		   c_0Mex, c_1Mex, c_1Min, c_2Min, 
+		   c_1Mex3Jin, c_1Mex3Jin0Hex, c_1Mex3Jin1Hin,
+		   c_2Min3Jin, c_2Min3Jin0Hex, c_2Min3Jin1Hin,
 		   c_1Mex0Hex1Tex,
 		   /*Hadtop-tagged jet multiplicities*/
 		   c_0Tex, c_0Tin, c_1Tex, c_0_1Twin, c_1Tin, c_2Tin,
