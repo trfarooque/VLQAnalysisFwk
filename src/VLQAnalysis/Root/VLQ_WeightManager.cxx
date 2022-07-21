@@ -696,7 +696,7 @@ bool VLQ_WeightManager::SetPMGSystNorm(){
   if(!m_vlq_opt->ComputeWeightSys()){
     return true;
   }
-  double nev_nom = m_sampleInfo->NWeightedEvents("sumOfWeights_nominal");
+  double nev_nom = m_sampleInfo->NWeightedEvents("nominal");
   for( auto& sysweight :  *m_systMap ){
 
     if(sysweight.first.find("pmg") == std::string::npos) continue;
@@ -706,13 +706,20 @@ bool VLQ_WeightManager::SetPMGSystNorm(){
 
     double sys_factor = (nev_sys > 0.) ? nev_nom/nev_sys : 1.;
 
-    UpdateSystematicComponent(sysweight.first, (sysweight.second)->GetComponentValue()*sys_factor);
-
-    m_vlq_outData -> o_pmg_weight_threshold[branchName] = m_sampleInfo->WeightThreshold(branchName, false); 
-
+    if((sysweight.second)->GetComponentValue() > m_sampleInfo->WeightThreshold(branchName, false)){
+      if(m_vlq_opt -> MsgLevel() == Debug::DEBUG){
+	std::cout << "Systematic component " << sysweight.first << " = " << (sysweight.second)->GetComponentValue() 
+		  << " > " << m_sampleInfo->WeightThreshold(branchName, false) << ". Setting to 0." << std::endl;
+      }
+      UpdateSystematicComponent(sysweight.first, 0);
+    }
+    else{
+      UpdateSystematicComponent(sysweight.first, (sysweight.second)->GetComponentValue()*sys_factor);
+    }
+    
   }
 
-  if(m_vlq_opt -> MsgLevel() == Debug::DEBUG) std::cout << "==> After SetPMGSystWeights weights" << std::endl;
+  if(m_vlq_opt -> MsgLevel() == Debug::DEBUG) std::cout << "==> After SetPMGSystNorm weights" << std::endl;
 
   return true;
 

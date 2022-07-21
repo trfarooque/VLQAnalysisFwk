@@ -396,8 +396,6 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_outMngrTree->AddStandardBranch( "meff", "Effective mass", &(m_outData->o_meff));
     m_outMngrTree->AddStandardBranch( "meffred", "Effective mass reduced", &(m_outData->o_meffred));
     if(m_opt->ApplyMVA()) m_outMngrTree->AddStandardBranch("MVAScore", "MVA Score", &(m_outData -> o_MVAScore));
-    //m_outMngrTree->AddStandardBranch( "weight_pmg_isr_muRfac10__fsr_muRfac20", "fsr muR/F up",   &(m_outData->o_weight_pmg_isr_muRfac10__fsr_muRfac20));
-    //m_outMngrTree->AddStandardBranch( "weight_pmg_isr_muRfac10__fsr_muRfac05", "fsr muR/F down", &(m_outData->o_weight_pmg_isr_muRfac10__fsr_muRfac05));
 
     m_outMngrTree->AddStandardBranch( "met", "Missing E_{T}",  &(m_outData->o_AO_met), -1, "Pt");
     //m_outMngrTree->AddStandardBranch("met_phi", "#phi_{MET}",  &(m_outData->o_AO_met), -1, "Phi");
@@ -700,17 +698,6 @@ bool VLQ_Analysis_Data2015::Begin(){
     
     if( DrawReco ){
       //Event variables
-
-      /*m_outMngrHist -> AddStandardTH1("isr_muRfac10__fsr_muRfac20", 1, -2000, 50000, 
-				      "FSR muR/F Up", true, &(m_outData->o_weight_pmg_isr_muRfac10__fsr_muRfac20));
-      m_outMngrHist -> AddStandardTH1("isr_muRfac10__fsr_muRfac05", 1, -2000, 50000, 
-				      "FSR muR/F Down", true, &(m_outData->o_weight_pmg_isr_muRfac10__fsr_muRfac05));
-
-      m_outMngrHist -> AddStandardTH2( "meff", "isr_muRfac10__fsr_muRfac20", 50, 0, 7000, 1, -2000, 50000, 
-				       ";FSR muR/F Up", ";m_{eff} [GeV]", true, &(m_outData -> o_meff), &(m_outData -> o_weight_pmg_isr_muRfac10__fsr_muRfac20));
-      
-      m_outMngrHist -> AddStandardTH2( "meff", "isr_muRfac10__fsr_muRfac05", 50, 0, 7000, 1, -2000, 50000,
-      ";FSR muR/F Down", ";m_{eff} [GeV]", true, &(m_outData -> o_meff), &(m_outData -> o_weight_pmg_isr_muRfac10__fsr_muRfac05));*/
 
       m_outMngrHist -> AddStandardTH1( "residualMET_M",  20, 0, 1600,   "Residual MET (met-#nu_met) M [GeV]", false, &(m_outData -> o_residualMET),-1,"M" );
       m_outMngrHist -> AddStandardTH1( "residualMET_Phi",  20, 0, 1600,   "Residual MET dphi(met-#nu_met)  [GeV]", false, &(m_outData -> o_residualMET),-1,"Phi" );
@@ -2920,26 +2907,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
   } else if (m_opt -> StrSampleName().find("QCD") != std::string::npos){
     m_weightMngr -> SetQCDWeight();
   }
-
-  if(m_outData -> o_is_ttbar && m_opt->ComputeWeightSys()){
-    for(auto& systweight : *(m_weightMngr->SystMap())){
-      if(systweight.first.find("pmg") != std::string::npos){
-	if(m_outData -> o_pmg_weight_threshold.at(systweight.second->BranchName()) != -1){
-
-	  if((systweight.second)->GetComponentValue() > m_outData -> o_pmg_weight_threshold.at((systweight.second)->BranchName())){
-	    /*std::cout << "Skipping event with " << (systweight.second)->BranchName() << " = " << (systweight.second)->GetComponentValue() << " > "
-		      << m_outData -> o_pmg_weight_threshold.at((systweight.second)->BranchName()) << std::endl;*/
-	    return false;
-	  }
-	  /*else{
-	    std::cout << "Event passed with " << (systweight.second)->BranchName() << " = " << (systweight.second)->GetComponentValue() << " <= "
-		      << m_outData -> o_pmg_weight_threshold.at((systweight.second)->BranchName()) << std::endl;
-	  }*/
-	}
-      }
-    }
-  }
-  
+ 
   //###########################################################
   //                                                          #
   // TRF                                                      #

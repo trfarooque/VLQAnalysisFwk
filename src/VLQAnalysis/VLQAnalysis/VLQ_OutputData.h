@@ -63,10 +63,6 @@ public:
     unsigned long long int o_event_number;
     std::vector < int > *o_region;
 
-    double o_weight_pmg_isr_muRfac10__fsr_muRfac20;
-    double o_weight_pmg_isr_muRfac10__fsr_muRfac05;
-    std::map< std::string, double > o_pmg_weight_threshold;
-
     //
     // Jet-related quantities
     //
