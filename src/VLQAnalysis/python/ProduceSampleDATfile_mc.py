@@ -183,14 +183,6 @@ for sample in Samples:
     ############################################
 
     #### Only needed for PMG weight pruning ####
-
-    lumi = 1.0
-
-    event_weight_names = ["weight_elec", "weight_elec_trigger", "weight_jvt", "weight_mc", 
-                          "weight_muon", "weight_muon_trigger", "weight_pu", "weight_trkbtag"]
-
-    nominal_weights_sum = 0
- 
     pmg_weight_names = []
     pmg_weights = {}
     pmg_weight_sum = {}
@@ -218,6 +210,7 @@ for sample in Samples:
             prunePMGWeights_temp = False
 
     file_counter = 0
+    files = [f for f in files if f.find("migrated") == -1]
 
     for f in files:
         print("Processed %d files out of %d for sample %s."%(file_counter, len(files), SName))
@@ -284,13 +277,6 @@ for sample in Samples:
                 N = nominalTree.GetEntries()
                 for entry in range(N):
                     nominalTree.GetEntry(entry)
-
-                    event_weight = 1.0
-
-                    for event_weight_name in event_weight_names:
-                        event_weight *= getattr(nominalTree, event_weight_name)
-
-                    nominal_weights_sum += event_weight
                         
                     for pmg_weight_name in pmg_weight_names:
                         current_weight = getattr(nominalTree, pmg_weight_name)
@@ -403,9 +389,6 @@ for sample in Samples:
  
     if prunePMGWeights_temp:
 
-        nominal_weights_sum *= (crossSection*lumi)/nEventsWeighted
-        weightDict["sumOfWeights_nominal"] = nominal_weights_sum
-
         for pmg_weight_name in pmg_weight_names:
             pmg_weight_sum_trimmed[pmg_weight_name] = np.copy(pmg_weights[pmg_weight_name])
 
@@ -413,7 +396,7 @@ for sample in Samples:
             pruning_mask = pmg_weight_sum_trimmed[pmg_weight_name] > pmg_weight_thr
             pmg_weight_sum_trimmed[pmg_weight_name][pruning_mask] = 0.
             
-            weightDict["sumOfWeights_"+pmg_weight_name] = nominal_weights_sum*pmg_weight_sum_trimmed[pmg_weight_name].sum()/pmg_weight_sum[pmg_weight_name]
+            weightDict["sumOfWeights_"+pmg_weight_name] = nEventsWeighted*pmg_weight_sum_trimmed[pmg_weight_name].sum()/pmg_weight_sum[pmg_weight_name]
             weightDict["threshold_"+pmg_weight_name] = pmg_weight_thr 
 
 
