@@ -30,6 +30,7 @@ m_invertMetMtwCuts(false),
 m_applyDeltaPhiCut(true),
 m_invertDeltaPhiCut(false),
 m_applyMetSigObjCut(false),
+m_applyMetRegionsCut(false),
 m_applyMetSignificanceCut(false),
 m_applyTtbbCorrection(false),
 m_multipleVariablesWithUncertainties(false),
@@ -89,6 +90,7 @@ m_fwdJetsEtaCut(4.5),
 m_trkJetsPtCut(10.),
 m_lepPtCut(28.),
 m_mtbminCut(160.),
+m_metregionsCut(400.),
 m_minDeltaPhiCut(0.4),
 m_maxDeltaPhiCut(-1.),
 m_minMeffCut(0.),
@@ -134,6 +136,7 @@ OptionsBase(q)
     m_applyDeltaPhiCut   = q.m_applyDeltaPhiCut;
     m_invertDeltaPhiCut  = q.m_invertDeltaPhiCut;
     m_applyMetSigObjCut  = q.m_applyMetSigObjCut;
+    m_applyMetRegionsCut = q.m_applyMetRegionsCut;
     m_applyMetSignificanceCut            = q.m_applyMetSignificanceCut;
     m_applyTtbbCorrection                = q.m_applyTtbbCorrection;
     m_multipleVariablesWithUncertainties = q.m_multipleVariablesWithUncertainties;
@@ -193,6 +196,7 @@ OptionsBase(q)
     m_trkJetsPtCut      = q.m_trkJetsPtCut;
     m_lepPtCut          = q.m_lepPtCut;
     m_mtbminCut         = q.m_mtbminCut;
+    m_metregionsCut   = q.m_metregionsCut;
     m_minDeltaPhiCut    = q.m_minDeltaPhiCut;
     m_maxDeltaPhiCut    = q.m_maxDeltaPhiCut;
     m_minMeffCut        = q.m_minMeffCut;
@@ -267,7 +271,9 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_invertDeltaPhiCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
 	} else if( temp_arg.find("--APPLYMETSIGOBJCUT") != std::string::npos ){
 	    m_applyMetSigObjCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
-        } else if( temp_arg.find("--APPLYMETSIGCUT") != std::string::npos ){
+	} else if( temp_arg.find("--APPLYMETREGIONSCUT") != std::string::npos ){
+	    m_applyMetRegionsCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if( temp_arg.find("--APPLYMETSIGCUT") != std::string::npos ){
             m_applyMetSignificanceCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--APPLYTTBBCORRECTION") != std::string::npos ){
             m_applyTtbbCorrection = AnalysisUtils::BoolValue(temp_val, temp_arg);
@@ -394,6 +400,9 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
         else if( temp_arg.find("--MTBMINCUT") != std::string::npos ){
             m_mtbminCut = atof(temp_val.c_str());
         }
+	else if( temp_arg.find("--METREGIONSCUT") != std::string::npos ){
+            m_metregionsCut = atof(temp_val.c_str());
+        }
         else if( temp_arg.find("--MINDELTAPHICUT") != std::string::npos ){
 	  m_minDeltaPhiCut = atof(temp_val.c_str());
         }
@@ -500,6 +509,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_trkJetsPtCut            = " << m_trkJetsPtCut      << std::endl;
     std::cout << " m_lepPtCut                = " << m_lepPtCut          << std::endl;
     std::cout << " m_mtbminCut               = " << m_mtbminCut         << std::endl;
+    std::cout << " m_metregionsCut           = " << m_metregionsCut     << std::endl;
     std::cout << " m_minDeltaPhiCut          = " << m_minDeltaPhiCut    << std::endl;
     std::cout << " m_maxDeltaPhiCut          = " << m_maxDeltaPhiCut    << std::endl;
     std::cout << " m_minMeffCut              = " << m_minMeffCut        << std::endl;
@@ -531,6 +541,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_applyDeltaPhiCut        = " << m_applyDeltaPhiCut  << std::endl;
     std::cout << " m_invertDeltaPhiCut       = " << m_invertDeltaPhiCut  << std::endl;
     std::cout << " m_applyMetSigObjCut       = " << m_applyMetSigObjCut << std::endl;
+    std::cout << " m_applyMetRegionsCut       = " << m_applyMetRegionsCut << std::endl;
     std::cout << " m_applyMetSignificanceCut = " << m_applyMetSignificanceCut  << std::endl;
     std::cout << " m_dumpHistos              = " << m_dumpHistos        << std::endl;
     std::cout << " m_dumpTree                = " << m_dumpTree          << std::endl;

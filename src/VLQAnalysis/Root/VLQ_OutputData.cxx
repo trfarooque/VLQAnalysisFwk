@@ -29,7 +29,7 @@ o_trkjets_truth_b_n(0),o_trkjets_truth_c_n(0),o_trkjets_truth_tau_n(0),o_trkjets
 o_trkbjets_truth_b_n(0),o_trkbjets_truth_c_n(0),o_trkbjets_truth_tau_n(0),o_trkbjets_truth_lqg_n(0),
 o_fwdjets_n(0),o_fwdjets_eta25_30_n(0),o_fwdjets_eta30_35_n(0),o_fwdjets_eta35_40_n(0),o_fwdjets_eta40_45_n(0),
 o_fwdjets30_n(0),o_fwdjets40_n(0),
-o_fjets_n(0),o_rcjets_n(0),
+  o_fjets_n(0),o_rcjets_n(0),
 //Jet type containers
 o_jets(0),o_bjets(0),o_ljets(0),
 o_jets_truth_b(0),o_jets_truth_c(0),o_jets_truth_tau(0),o_jets_truth_lqg(0),

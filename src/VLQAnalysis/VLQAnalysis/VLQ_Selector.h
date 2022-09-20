@@ -68,7 +68,7 @@ public:
 		   /*V+L+T+H multiplicities*/
 		   c_0VLTHex, c_1VLTHin,
 		   /*Kinematic cuts*/
-		   c_LowMtbmin, c_HighMtbmin, c_LowMbb, c_HighMbb, c_HighMetSig, c_LowMetSig, c_HighMLL, c_ZwinMLL, 
+		   c_LowMtbmin, c_HighMtbmin, c_LowMbb, c_HighMbb, c_HighMetSig, c_LowMetSig, c_HighMetCut, c_LowMetCut, c_HighMLL, c_ZwinMLL, 
 		   /*MVAScore cuts*/
 		   c_LowMVAScore, c_MidMVAScore, c_HighMVAScore, TOPSEL_MAX
   };
@@ -133,6 +133,7 @@ public:
     std::vector<SelProp>* m_sel_Mbb_prop;
     std::vector<SelProp>* m_sel_Mtb_prop;
     std::vector<SelProp>* m_sel_MetSig_prop;
+    std::vector<SelProp>* m_sel_MetCut_prop;
     std::vector<SelProp>* m_sel_MLL_prop;
     std::vector<SelProp>* m_sel_MVAScore_prop;
     std::ifstream m_blinding_config;
