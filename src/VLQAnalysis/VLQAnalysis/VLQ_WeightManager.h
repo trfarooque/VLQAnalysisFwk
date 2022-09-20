@@ -59,7 +59,7 @@ public:
     bool SetCrossSectionWeight();
     bool SetQCDWeight();
     bool SetFJvtSFWeights();
-    bool SetPMGSystWeights();
+    bool SetPMGSystNorm();
     bool SetTtccWeights();
     bool SetTtbarGeneratorSystematics( const std::string &region );
     bool SetNNLOSystematic();

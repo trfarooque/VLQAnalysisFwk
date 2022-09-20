@@ -399,6 +399,8 @@ bool VLQ_Analysis_Data2015::Begin(){
     //-------------------------------------------------------------------------------------------------------------------
     m_outMngrTree->AddStandardBranch( "meff", "Effective mass", &(m_outData->o_meff));
     m_outMngrTree->AddStandardBranch( "meffred", "Effective mass reduced", &(m_outData->o_meffred));
+    if(m_opt->ApplyMVA()) m_outMngrTree->AddStandardBranch("MVAScore", "MVA Score", &(m_outData -> o_MVAScore));
+
     m_outMngrTree->AddStandardBranch( "met", "Missing E_{T}",  &(m_outData->o_AO_met), -1, "Pt");
     //m_outMngrTree->AddStandardBranch("met_phi", "#phi_{MET}",  &(m_outData->o_AO_met), -1, "Phi");
     m_outMngrTree->AddStandardBranch( "mtw", "Transverse W mass", &(m_outData->o_mtwl));
@@ -434,15 +436,13 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_outMngrTree->AddStandardBranch( "dPhimin_RCMTopMET", ";#Delta#phi_{min}(RCMTop, MET)", &(m_outData -> o_dPhimin_RCMTopMET) );
     m_outMngrTree->AddStandardBranch( "dPhimin_RCMHiggsMET", ";#Delta#phi_{min}(RCMHiggs, MET)", &(m_outData -> o_dPhimin_RCMHiggsMET) );
 
-
-
     m_outMngrTree->AddStandardBranch( "leadingdR_RCTTMassRCTTMass", ";#DeltaR (leading TTmass jet, subleading TTmass jet)", &(m_outData -> o_leadingdR_RCTTMassRCTTMass) );
-    m_outMngrTree->AddStandardBranch( "leadingdEta_RCTTMassRCTTMass", ";#Delta#Eta (leading TTmass jet, subleading TTmass jet)", &(m_outData -> o_leadingdEta_RCTTMassRCTTMass) );
-     m_outMngrTree->AddStandardBranch( "leadingdPhi_RCTTMassRCTTMass", ";#Delta#phi (leading TTmass jet, subleading TTmass jet)", &(m_outData -> o_leadingdPhi_RCTTMassRCTTMass) );
-     m_outMngrTree->AddStandardBranch( "leadingdPhi_RCTTMassMET", ";#Delta#phi (leading TTmass jet, MET)", &(m_outData -> o_leadingdPhi_RCTTMassMET));
-     m_outMngrTree->AddStandardBranch( "leadingdPhi_RCjetsMET", ";#Delta#phi (leading RC jet, MET)", &(m_outData -> o_leadingdPhi_RCjetsMET));
-     m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMTopMET", ";#Delta#phi (leading Top jet, MET)", &(m_outData -> o_leadingdPhi_RCMTopMET));
-     m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMHiggsMET", ";#Delta#phi (leading Higgs jet, MET)", &(m_outData -> o_leadingdPhi_RCMHiggsMET));
+    m_outMngrTree->AddStandardBranch( "leadingdEta_RCTTMassRCTTMass", ";#Delta#eta (leading TTmass jet, subleading TTmass jet)", &(m_outData -> o_leadingdEta_RCTTMassRCTTMass) );
+    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCTTMassRCTTMass", ";#Delta#phi (leading TTmass jet, subleading TTmass jet)", &(m_outData -> o_leadingdPhi_RCTTMassRCTTMass) );
+    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCTTMassMET", ";#Delta#phi (leading TTmass jet, MET)", &(m_outData -> o_leadingdPhi_RCTTMassMET));
+    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCjetsMET", ";#Delta#phi (leading RC jet, MET)", &(m_outData -> o_leadingdPhi_RCjetsMET));
+    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMTopMET", ";#Delta#phi (leading Top jet, MET)", &(m_outData -> o_leadingdPhi_RCMTopMET));
+    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMHiggsMET", ";#Delta#phi (leading Higgs jet, MET)", &(m_outData -> o_leadingdPhi_RCMHiggsMET));
      /*    m_outMngrTree->AddStandardBranch( "leadingdR_RCMHiggsRCMHiggs", ";#DeltaR (leading Higgs-tagged J, subleading Higgs-tagged J)", &(m_outData -> o_leadingdR_RCMHiggsRCMHiggs) );
     m_outMngrTree->AddStandardBranch( "leadingdR_RCMHiggsRCMV", ";#DeltaR (leading Higgs-tagged J, leading W/Z-tagged J)", &(m_outData -> o_leadingdR_RCMHiggsRCMV) );
     m_outMngrTree->AddStandardBranch( "leadingdR_RCMHiggsRCMTop", ";#DeltaR (leading Higgs-tagged J, leading Top-tagged J)", &(m_outData -> o_leadingdR_RCMHiggsRCMTop) );
@@ -664,9 +664,9 @@ bool VLQ_Analysis_Data2015::Begin(){
         m_outMngrTree->AddStandardBranch("truth_"+truthType+"_n", "Number of truth " + truthType,  &(m_outData->o_truth_partons_n.at(truthType)));
       }
     }
-
-
-
+    
+    
+    
     m_outMngrTree->BookStandardTree("tree", "small tree");
 
   }//DumpTree
@@ -675,7 +675,7 @@ bool VLQ_Analysis_Data2015::Begin(){
   const bool RWderiv = m_opt -> DeriveReweighting();
   const bool DrawTruth = (m_opt -> DoTruthAnalysis());
   const bool DrawReco = true; //!DrawTruth;
- 
+
   //
   // Filling the top-tagging type vector
   //
@@ -722,7 +722,7 @@ bool VLQ_Analysis_Data2015::Begin(){
     
     const int hopt_nouflow = HistManager::FCHECK | HistManager::OFLOW;
     const int hopt_nouoflow = HistManager::FCHECK;
-    
+
     if( DrawReco ){
       //Event variables
 
@@ -1543,31 +1543,28 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "dEtamin_RCMVRCMTop", 0.25,-1,5, ";#Delta#eta_{min}(W/Z-tagged jet, Top-tagged jet)", otherVariables, &(m_outData -> o_dEtamin_RCMVRCMTop) );
       m_outMngrHist -> AddStandardTH1( "dEtamin_RCMTopRCMTop", 0.25,-1,5, ";#Delta#eta_{min}(Top-tagged jet, Top-tagged jet)", otherVariables, &(m_outData -> o_dEtamin_RCMTopRCMTop) );
      
-
- m_outMngrHist -> AddStandardTH1( "dEtamin_RCTTMassRCTTMass", 0.25,-1,5, ";#Delta#eta_{min}(RCTTMass, RCTTMass)", otherVariables, &(m_outData -> o_dEtamin_RCTTMassRCTTMass) );
- m_outMngrHist -> AddStandardTH1( "dRmin_RCTTMassRCTTMass", 0.25,-1,5, ";#DeltaR_{min}(RCTTMass, RCTTMass)", otherVariables, &(m_outData -> o_dRmin_RCTTMassRCTTMass) );
- m_outMngrHist -> AddStandardTH1( "dPhimin_RCTTMassRCTTMass", 0.25,-1,5, ";#Delta#phi_{min}(RCTTMass, RCTTMass)", otherVariables, &(m_outData -> o_dPhimin_RCTTMassRCTTMass) );
-
- m_outMngrHist -> AddStandardTH1( "dPhimin_RCTTMassMET", 0.25,-1,5,  ";#Delta#phi_{min}(RCTTMass, MET)", otherVariables,  &(m_outData -> o_dPhimin_RCTTMassMET), hopt_nouoflow );
- m_outMngrHist -> AddStandardTH1( "dPhimin_RCjetsMET", 0.25,-1,5,  ";#Delta#phi_{min}(RCJets, MET)", otherVariables,  &(m_outData -> o_dPhimin_RCjetsMET), hopt_nouoflow );
- m_outMngrHist -> AddStandardTH1( "dPhimin_RCMTopMET", 0.25,-1,5, ";#Delta#phi_{min}(RCMTop, MET)", otherVariables,  &(m_outData -> o_dPhimin_RCMTopMET), hopt_nouoflow );
- m_outMngrHist -> AddStandardTH1( "dPhimin_RCMHiggsMET", 0.25,-1,5,  ";#Delta#phi_{min}(RCMHiggs, MET)", otherVariables, &(m_outData -> o_dPhimin_RCMHiggsMET), hopt_nouoflow );
-
+      m_outMngrHist -> AddStandardTH1( "dEtamin_RCTTMassRCTTMass", 0.25,-1,5, ";#Delta#eta_{min}(RCTTMass, RCTTMass)", otherVariables, &(m_outData -> o_dEtamin_RCTTMassRCTTMass) );
+      m_outMngrHist -> AddStandardTH1( "dRmin_RCTTMassRCTTMass", 0.25,-1,5, ";#DeltaR_{min}(RCTTMass, RCTTMass)", otherVariables, &(m_outData -> o_dRmin_RCTTMassRCTTMass) );
+      m_outMngrHist -> AddStandardTH1( "dPhimin_RCTTMassRCTTMass", 0.25,-1,5, ";#Delta#phi_{min}(RCTTMass, RCTTMass)", otherVariables, &(m_outData -> o_dPhimin_RCTTMassRCTTMass) );
      
+      m_outMngrHist -> AddStandardTH1( "dPhimin_RCTTMassMET", 0.25,-1,5,  ";#Delta#phi_{min}(RCTTMass, MET)", otherVariables,  &(m_outData -> o_dPhimin_RCTTMassMET), hopt_nouoflow );
+      m_outMngrHist -> AddStandardTH1( "dPhimin_RCjetsMET", 0.25,-1,5,  ";#Delta#phi_{min}(RCJets, MET)", otherVariables,  &(m_outData -> o_dPhimin_RCjetsMET), hopt_nouoflow );
+      m_outMngrHist -> AddStandardTH1( "dPhimin_RCMTopMET", 0.25,-1,5, ";#Delta#phi_{min}(RCMTop, MET)", otherVariables,  &(m_outData -> o_dPhimin_RCMTopMET), hopt_nouoflow );
+      m_outMngrHist -> AddStandardTH1( "dPhimin_RCMHiggsMET", 0.25,-1,5,  ";#Delta#phi_{min}(RCMHiggs, MET)", otherVariables, &(m_outData -> o_dPhimin_RCMHiggsMET), hopt_nouoflow );
+
+
 
 
       m_outMngrHist -> AddStandardTH1( "leadingdR_RCTTMassRCTTMass", 0.25,-1,5, ";#DeltaR (leading TTmass jet, subleading TTmass jet)", otherVariables, &(m_outData -> o_leadingdR_RCTTMassRCTTMass) );
+      m_outMngrHist -> AddStandardTH1( "leadingdEta_RCTTMassRCTTMass", 0.25,-1,5, ";#DeltaR (leading TTmass jet, subleading TTmass jet)", otherVariables, &(m_outData -> o_leadingdEta_RCTTMassRCTTMass) );
+      m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCTTMassRCTTMass", 0.25,-1,5, ";#DeltaR (leading TTmass jet, subleading TTmass jet)", otherVariables, &(m_outData -> o_leadingdPhi_RCTTMassRCTTMass) );
   
-    m_outMngrHist -> AddStandardTH1( "leadingdEta_RCTTMassRCTTMass", 0.25,-1,5, ";#DeltaR (leading TTmass jet, subleading TTmass jet)", otherVariables, &(m_outData -> o_leadingdEta_RCTTMassRCTTMass) );
-  
-    m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCTTMassRCTTMass", 0.25,-1,5, ";#DeltaR (leading TTmass jet, subleading TTmass jet)", otherVariables, &(m_outData -> o_leadingdPhi_RCTTMassRCTTMass) );
+      
+      m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCTTMassMET", 0.25,-1,5, ";#Delta#phi (leading TTmass jet, MET)", otherVariables, &(m_outData -> o_leadingdPhi_RCTTMassMET), hopt_nouoflow );
+      m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCjetsMET", 0.25,-1,5, ";#Delta#phi (leading RC jet, MET)", otherVariables,  &(m_outData -> o_leadingdPhi_RCjetsMET), hopt_nouoflow );
+      m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCMTopMET", 0.25,-1,5, ";#Delta#phi (leading Top jet, MET)", otherVariables, &(m_outData -> o_leadingdPhi_RCMTopMET), hopt_nouoflow );
+      m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCMHiggsMET", 0.25,-1,5, ";#Delta#phi (leading Higgs jet, MET)", otherVariables, &(m_outData -> o_leadingdPhi_RCMHiggsMET), hopt_nouoflow );
 
-
-    m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCTTMassMET", 0.25,-1,5, ";#Delta#phi (leading TTmass jet, MET)", otherVariables, &(m_outData -> o_leadingdPhi_RCTTMassMET), hopt_nouoflow );
-    m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCjetsMET", 0.25,-1,5, ";#Delta#phi (leading RC jet, MET)", otherVariables,  &(m_outData -> o_leadingdPhi_RCjetsMET), hopt_nouoflow );
-    m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCMTopMET", 0.25,-1,5, ";#Delta#phi (leading Top jet, MET)", otherVariables, &(m_outData -> o_leadingdPhi_RCMTopMET), hopt_nouoflow );
-    m_outMngrHist -> AddStandardTH1( "leadingdPhi_RCMHiggsMET", 0.25,-1,5, ";#Delta#phi (leading Higgs jet, MET)", otherVariables, &(m_outData -> o_leadingdPhi_RCMHiggsMET), hopt_nouoflow );
-  
 
       m_outMngrHist -> AddStandardTH1( "leadingdR_RCMHiggsRCMHiggs", 0.25,-1,5, ";#DeltaR (leading Higgs-tagged J, subleading Higgs-tagged J)", otherVariables, &(m_outData -> o_leadingdR_RCMHiggsRCMHiggs) );
       m_outMngrHist -> AddStandardTH1( "leadingdR_RCMHiggsRCMV", 0.25,-1,5, ";#DeltaR (leading Higgs-tagged J, leading W/Z-tagged J)", otherVariables, &(m_outData -> o_leadingdR_RCMHiggsRCMV) );
@@ -1813,15 +1810,11 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist->AddStandardTH1("dEtaaverage_RCTTMassRCTTMass",         0.25,0,5   ,";#Delta#eta_{ave.}(RCTTMass,RCTTMass)", false, &(m_outData -> o_dEtaaverage_RCTTMassRCTTMass)  );
       m_outMngrHist->AddStandardTH1("dPhiaverage_RCTTMassRCTTMass",         0.25,-1,5   ,";#Delta#phi_{ave.}(RCTTMass,RCTTMass)", false, &(m_outData -> o_dPhiaverage_RCTTMassRCTTMass)  );
  
-
+      
       m_outMngrHist->AddStandardTH1("dPhiaverage_RCjetsMET",  0.25,0,5, ";#Delta#phi_{ave.}(rcjet,MET)", false, &(m_outData -> o_dPhiaverage_RCjetsMET), hopt_nouoflow  );
       m_outMngrHist->AddStandardTH1("dPhiaverage_RCTTMassMET",  0.25,0,5, ";#Delta#phi_{ave.}(RCTTMass,MET)", false, &(m_outData -> o_dPhiaverage_RCTTMassMET), hopt_nouoflow  );
       m_outMngrHist->AddStandardTH1("dPhiaverage_RCMTopMET",  0.25,0,5, ";#Delta#phi_{ave.}(RCMTop,MET)", false, &(m_outData -> o_dPhiaverage_RCMTopMET), hopt_nouoflow  );
       m_outMngrHist->AddStandardTH1("dPhiaverage_RCMHiggsMET",  0.25,0,5, ";#Delta#phi_{ave.}(RCMHiggs,MET)", false, &(m_outData -> o_dPhiaverage_RCMHiggsMET), hopt_nouoflow  );
-
-
-
-
 
       if(m_opt->DoLowBRegions()){
 	m_outMngrHist -> AddStandardTH1( "mtbmin_lowb_3b",      50, 0, 500,    ";m_{T}^{min}(b,MET) (LowB_3b)", false, &(m_outData->o_mTbmin_lowb_3b) );
@@ -1899,7 +1892,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dEta12",  0.1,0.,6,  "; truth"+type+", "+str_id+" #Delta#eta_{12}"
 					     , false, &(m_outData -> o_truth_partons.at(type)), iTT, "dEta12"/*, hopt_nouflow*/  );
 	  }
-	  if(type=="hadtop" || type=="leptop"){
+	  if(type=="hadtop" || type=="leptop" || type=="tautop"){
 	    m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dR_bW",  0.25,0,5,  "; truth"+type+", "+str_id+" #DeltaR(b,W)"
 					     , false, &(m_outData -> o_truth_partons.at(type)), iTT, "dR_bW"/*, hopt_nouflow*/  );
 	    if(type=="leptop"){
@@ -1912,19 +1905,15 @@ bool VLQ_Analysis_Data2015::Begin(){
 	      m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_mT_bnu", 25, 0, 3000, "; truth "+type+", "+str_id+" m_{T}(b,#nu) [GeV]"    ,
 					       false, &(m_outData -> o_truth_partons.at(type)), iTT, "mT_bnu"/*, hopt_nouflow*/ );
 	    }//leptop
-
+	    
 	    if(type=="tautop"){
-              m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dR_blep",  0.25,0,5,  "; truth"+type+", "+str_id+" #DeltaR(b,tau)\
-"
-                                               , false, &(m_outData -> o_truth_partons.at(type)), iTT, "dR_blep"/*, hopt_nouflow*/  );
-              m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dPhi_blep",  0.1,0.,4,  "; truth"+type+", "+str_id+" #Delta#phi(b\
-,tau)"
-                                               , false, &(m_outData -> o_truth_partons.at(type)), iTT, "dPhi_blep"/*, hopt_nouflow*/  );
-              m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dPhi_bnu",  0.1,0.,4,  "; truth"+type+", "+str_id+" #Delta#phi(b,\
-#nu)"
-                                               , false, &(m_outData -> o_truth_partons.at(type)), iTT, "dPhi_bnu"/*, hopt_nouflow*/  );
-              m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_mT_bnu", 25, 0, 3000, "; truth "+type+", "+str_id+" m_{T}(b,#nu) \
-[GeV]"    ,
+              m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dR_blep",  0.25,0,5,  "; truth"+type+", "+str_id+" #DeltaR(b,tau)",
+                                               false, &(m_outData -> o_truth_partons.at(type)), iTT, "dR_blep"/*, hopt_nouflow*/  );
+              m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dPhi_blep",  0.1,0.,4,  "; truth"+type+", "+str_id+" #Delta#phi(b,tau)",
+                                               false, &(m_outData -> o_truth_partons.at(type)), iTT, "dPhi_blep"/*, hopt_nouflow*/  );
+              m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_dPhi_bnu",  0.1,0.,4,  "; truth"+type+", "+str_id+" #Delta#phi(b,#nu)",
+                                               false, &(m_outData -> o_truth_partons.at(type)), iTT, "dPhi_bnu"/*, hopt_nouflow*/  );
+              m_outMngrHist -> AddStandardTH1( "truth_" + type + str_id + "_mT_bnu", 25, 0, 3000, "; truth "+type+", "+str_id+" m_{T}(b,#nu) [GeV]",
                                                false, &(m_outData -> o_truth_partons.at(type)), iTT, "mT_bnu"/*, hopt_nouflow*/ );
             }//tautop
 
@@ -2655,8 +2644,8 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
       // Match required partons to fat jets
       //
       std::vector<std::string> heavy_list = {};
-      if( m_opt -> SampleName() == SampleName::VLQ ){ heavy_list = { "leptop","tautop", "hadtop", "hadtop_W", "Hbb", "Hnonbb", "hadW", "hadZ" }; }
-      if( m_outData -> o_is_ttbar ){ heavy_list = {"leptop","tautop", "hadtop", "hadtop_W"}; }
+      if( m_opt -> SampleName() == SampleName::VLQ ){ heavy_list = { "leptop", "tautop", "hadtop", "hadtop_W", "Hbb", "Hnonbb", "hadW", "hadZ" }; }
+      if( m_outData -> o_is_ttbar ){ heavy_list = {"leptop", "tautop", "hadtop", "hadtop_W"}; }
 
       for( const std::string & restype : heavy_list ){
 	AOVector* rescol = (m_outData -> o_truth_partons).at(restype);
@@ -2966,7 +2955,9 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     }
     if( m_outData -> o_is_ttbar || (m_opt -> StrSampleName().find("SINGLETOP") != std::string::npos)
 	|| (m_opt -> StrSampleName().find("WJETS") != std::string::npos) || (m_opt -> StrSampleName().find("ZJETS") != std::string::npos) ){
-      m_weightMngr -> SetPMGSystWeights();
+
+      m_weightMngr -> SetPMGSystNorm();
+      
       if((m_opt -> ReweightKinematics()) && (m_opt -> ComputeWeightSys())){
 	m_weightMngr -> UpdateSysReweighting();
       }
@@ -2974,7 +2965,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
   } else if (m_opt -> StrSampleName().find("QCD") != std::string::npos){
     m_weightMngr -> SetQCDWeight();
   }
-
+ 
   //###########################################################
   //                                                          #
   // TRF                                                      #
