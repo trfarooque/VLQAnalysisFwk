@@ -51,6 +51,7 @@ public:
   inline bool ApplyDeltaPhiCut() const { return m_applyDeltaPhiCut; }
   inline bool InvertDeltaPhiCut() const { return m_invertDeltaPhiCut; }
   inline bool ApplyMetSigObjCut() const { return m_applyMetSigObjCut; }
+  inline bool ApplyMetRegionsCut() const { return m_applyMetRegionsCut; }
   inline bool ApplyMetSignificanceCut() const { return m_applyMetSignificanceCut; }
   inline bool ApplyTtbbCorrection() const { return m_applyTtbbCorrection; }
   inline bool RecomputeTtBbRw() const { return m_RecTtBbRw; }
@@ -122,6 +123,7 @@ public:
   inline double TrkJetsPtCut() const { return m_trkJetsPtCut; }
   inline double LepPtCut() const { return m_lepPtCut; }
   inline double MtbminCut() const { return m_mtbminCut; }
+  inline double MetRegionsCut() const { return m_metregionsCut; }
   inline double MinDeltaPhiCut() const { return m_minDeltaPhiCut; }
   inline double MaxDeltaPhiCut() const { return m_maxDeltaPhiCut; }
   inline double MinMeffCut() const { return m_minMeffCut; }
@@ -160,6 +162,7 @@ private:
   bool m_applyDeltaPhiCut;
   bool m_invertDeltaPhiCut;
   bool m_applyMetSigObjCut;
+  bool m_applyMetRegionsCut;
   bool m_applyMetSignificanceCut;
   bool m_applyTtbbCorrection;
   bool m_multipleVariablesWithUncertainties;
@@ -214,6 +217,7 @@ private:
   double m_trkJetsPtCut;
   double m_lepPtCut;
   double m_mtbminCut; 
+  double m_metregionsCut;
   double m_minDeltaPhiCut;
   double m_maxDeltaPhiCut;
   double m_minMeffCut;

@@ -214,7 +214,7 @@ bool VLQ_Analysis_Data2015::Begin(){
   //
   //############################################################################
   m_varComputer = new VLQ_VariableComputer(m_opt);
-  if(m_opt->ApplyMVA() && m_opt->DoOneLeptonAna()) m_varComputer->InitMVA(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/")+m_opt->MVAWeightFile());
+  if(m_opt->ApplyMVA() && (m_opt->DoOneLeptonAna() || m_opt->DoZeroLeptonAna())) m_varComputer->InitMVA(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/")+m_opt->MVAWeightFile());
 
   
 

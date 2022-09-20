@@ -66,7 +66,8 @@ public:
     // Variable computation
     //
     bool ComputeAllVariables();
-    bool ComputeMVAVariables();
+    bool ComputeZeroLepMVAVariables();
+    bool ComputeOneLepMVAVariables();
     bool ComputeBTagVariables();
     bool UpdateBTagMoments();
 
