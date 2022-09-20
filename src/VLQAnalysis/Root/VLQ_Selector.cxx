@@ -261,11 +261,10 @@ bool VLQ_Selector::Init(){
   std::vector<std::string> ch_metsig; ch_metsig.clear();
   if(m_opt->ApplyMetSignificanceCut()) ch_metsig = {"", "-LowMetSig", "-HighMetSig"};
   else ch_metsig = {""};
-  
+
   std::vector<std::string> ch_metcut; ch_metcut.clear();
   if(m_opt->ApplyMetRegionsCut()) ch_metcut = {"", "-LowMetCut", "-HighMetCut"};
   else ch_metcut = {""};
-  
 
   //======== PRESELECTION=========
   if(m_opt->DoPreselection()){
@@ -344,17 +343,17 @@ bool VLQ_Selector::Init(){
 	    for(const std::string& lepsuf : lep_ch_pair.second){
 	      for(const std::string& mllsuf : ch_mll[lep_prefix]){
 		for(const std::string& metcut : ch_metcut){
-		 for(const std::string& metsuf : ch_metsig){
-		  for(const std::string& fjet : ch_fjet){
-	 	    AddVLQSelection(lep_prefix+jet+"-"+bjet+mtbsuf+fjet+metsuf+metcut+mllsuf+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
-		   }
-	 	 }//metsig channels
-	       }//mll channels
-	     }//lepflav channels
-	   } //mtb channels
-	 }//met cut
-       }//bjet
-     }//jet
+		  for(const std::string& metsuf : ch_metsig){
+		    for(const std::string& fjet : ch_fjet){
+		      AddVLQSelection(lep_prefix+jet+"-"+bjet+mtbsuf+fjet+metsuf+metcut+mllsuf+lepsuf, do_runop, m_opt->DoPreselSys(), PRESEL);
+		    }
+		  }//metsig channels
+		}//mll channels
+	      }//lepflav channels
+	    } //mtb channels
+	  }//met cut
+	}//bjet
+      }//jet
 
       if(m_opt->DoSingleVLQRegions() && m_opt->DoExtendedPreselection()){
 	std::vector<std::string> v_supr_svlq = {"0fjex", "1fjin"}; //, "1fjin-0Hex-0Vex"};
@@ -368,53 +367,54 @@ bool VLQ_Selector::Init(){
     }//Lepton channels
 
     // MVA Training region                                                                                                                                                
-    if(m_opt->ApplyMVA() && m_opt->DoOneLeptonAna() && m_opt->DoPairVLQRegions()){
-      std::vector<std::string> v_mva_jet_presel   = {"5jin", "5jex", "6jin"};
-      std::vector<std::string> v_mva_bjet_presel  = {"3bin", "3bex", "4bin"};
-      std::vector<std::string> v_mva_boost_presel = {"1Mex3Jin", "1Mex3Jin0Hex", "1Mex3Jin1Hin", // For ttbar gen and ps decorrelation
-						     "2Min3Jin", "2Min3Jin0Hex", "2Min3Jin1Hin"};
-      std::vector<std::string> v_mva_score_presel = {"", "-HighMVAScore", "-MidMVAScore", "-LowMVAScore"};
+    if(m_opt->ApplyMVA() && m_opt->DoPairVLQRegions()){
+      if(m_opt->DoOneLeptonAna()){
+	std::vector<std::string> v_mva_jet_presel   = {"5jin", "5jex", "6jin"};
+	std::vector<std::string> v_mva_bjet_presel  = {"3bin", "3bex", "4bin"};
+	std::vector<std::string> v_mva_boost_presel = {"1Mex3Jin", "1Mex3Jin0Hex", "1Mex3Jin1Hin", // For ttbar gen and ps decorrelation
+						       "2Min3Jin", "2Min3Jin0Hex", "2Min3Jin1Hin"};
+	std::vector<std::string> v_mva_score_presel = {"", "-HighMVAScore", "-MidMVAScore", "-LowMVAScore"};
+	
+	// ttbar CRs
+	AddVLQSelection("c-1lep-5jin-2bex-0Hex-1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+	AddVLQSelection("c-1lep-5jin-3bex-0Hex-1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+	AddVLQSelection("c-1lep-5jin-4bin-0Hex-1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+	
+	AddVLQSelection("c-1lep-5jin-2bex-1Mex0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+	AddVLQSelection("c-1lep-5jin-3bex-1Mex0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+	AddVLQSelection("c-1lep-5jin-4bin-1Mex0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+	
+	AddVLQSelection("c-1lep-5jin-2bex-0_2Jwin0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+	AddVLQSelection("c-1lep-5jin-3bex-0_2Jwin0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+	AddVLQSelection("c-1lep-5jin-4bin-0_2Jwin0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+	
+	// background CRs
+	AddVLQSelection("c-1lep-5jin-2bex-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
+	AddVLQSelection("c-1lep-5jin-3bex-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
+	AddVLQSelection("c-1lep-5jin-4bin-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
+	
+	AddVLQSelection("c-1lep-5jin-2bex-0Hex-1VTex-0Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+	AddVLQSelection("c-1lep-5jin-3bex-0Hex-1VTex-0Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+	AddVLQSelection("c-1lep-5jin-4bin-0Hex-1VTex-0Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+	
+	AddVLQSelection("c-1lep-5jin-2bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+	AddVLQSelection("c-1lep-5jin-3bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+	AddVLQSelection("c-1lep-5jin-4bin-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+	
+	// background CRs uncorrelated
+	AddVLQSelection("c-1lep-5jex-2bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+	AddVLQSelection("c-1lep-5jex-3bex-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
+	AddVLQSelection("c-1lep-5jex-4bin-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
+	AddVLQSelection("c-1lep-6jin-2bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
+	AddVLQSelection("c-1lep-6jin-3bex-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
+	AddVLQSelection("c-1lep-6jin-4bin-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
 
-      // ttbar CRs
-      AddVLQSelection("c-1lep-5jin-2bex-0Hex-1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection("c-1lep-5jin-3bex-0Hex-1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection("c-1lep-5jin-4bin-0Hex-1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-      
-      AddVLQSelection("c-1lep-5jin-2bex-1Mex0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection("c-1lep-5jin-3bex-1Mex0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection("c-1lep-5jin-4bin-1Mex0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-
-      AddVLQSelection("c-1lep-5jin-2bex-0_2Jwin0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection("c-1lep-5jin-3bex-0_2Jwin0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection("c-1lep-5jin-4bin-0_2Jwin0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-
-      // background CRs
-      AddVLQSelection("c-1lep-5jin-2bex-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection("c-1lep-5jin-3bex-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection("c-1lep-5jin-4bin-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
-
-      AddVLQSelection("c-1lep-5jin-2bex-0Hex-1VTex-0Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection("c-1lep-5jin-3bex-0Hex-1VTex-0Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection("c-1lep-5jin-4bin-0Hex-1VTex-0Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-
-      AddVLQSelection("c-1lep-5jin-2bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection("c-1lep-5jin-3bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection("c-1lep-5jin-4bin-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-
-      // background CRs uncorrelated
-      AddVLQSelection("c-1lep-5jex-2bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection("c-1lep-5jex-3bex-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection("c-1lep-5jex-4bin-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection("c-1lep-6jin-2bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection("c-1lep-6jin-3bex-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
-      AddVLQSelection("c-1lep-6jin-4bin-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
-
-
-      for(const std::string &mva_jet_sel : v_mva_jet_presel){
-	for(const std::string &mva_bjet_sel : v_mva_bjet_presel){
-	  for(const std::string &mva_boost_presel : v_mva_boost_presel){
-	    for(const std::string &mva_score_presel : v_mva_score_presel){
-	      AddVLQSelection("c-1lep-"+mva_jet_sel+"-"+mva_bjet_sel+"-"+mva_boost_presel+mva_score_presel, do_runop, m_opt->DoPreselSys(), PRESEL);
+	for(const std::string &mva_jet_sel : v_mva_jet_presel){
+	  for(const std::string &mva_bjet_sel : v_mva_bjet_presel){
+	    for(const std::string &mva_boost_presel : v_mva_boost_presel){
+	      for(const std::string &mva_score_presel : v_mva_score_presel){
+		AddVLQSelection("c-1lep-"+mva_jet_sel+"-"+mva_bjet_sel+"-"+mva_boost_presel+mva_score_presel, do_runop, m_opt->DoPreselSys(), PRESEL);
+	      }
 	    }
 	  }
 	}
@@ -425,22 +425,22 @@ bool VLQ_Selector::Init(){
 	std::vector<std::string> v_mva_boost_presel = {"2Min"};
 	std::vector<std::string> v_mva_score_presel = {"", "-HighMVAScore", "-MidMVAScore", "-LowMVAScore"};
 	std::vector<std::string> v_mva_mtbmin_presel = {"","-HighMtbmin","-LowMtbmin"};
-
+	
 	for(const std::string &mva_jet_sel : v_mva_jet_presel){
-	  for(const std::string &mva_bjet_sel : v_mva_bjet_presel){
-	    for(const std::string &mva_boost_presel : v_mva_boost_presel){
-	     for(const std::string &mva_mtbmin_presel : v_mva_mtbmin_presel){ 
-	      for(const std::string &mva_score_presel : v_mva_score_presel){
-		AddVLQSelection("c-0lep-"+mva_jet_sel+"-"+mva_bjet_sel+"-"+mva_boost_presel+mva_score_presel, do_runop, m_opt->DoPreselSys(), PRESEL);
-	       }
-	     }
-	   }
-	 }
-       }
-     }//ZeroLepAna
+          for(const std::string &mva_bjet_sel : v_mva_bjet_presel){
+            for(const std::string &mva_boost_presel : v_mva_boost_presel){
+              for(const std::string &mva_mtbmin_presel : v_mva_mtbmin_presel){
+                for(const std::string &mva_score_presel : v_mva_score_presel){
+                  AddVLQSelection("c-0lep-"+mva_jet_sel+"-"+mva_bjet_sel+"-"+mva_boost_presel+mva_score_presel, do_runop, m_opt->DoPreselSys(), PRESEL);
+                }
+              }
+            }
+          }
+        }
+      }//ZeroLepAna
     }
- }//Do Preselection
-
+  }//Do Preselection
+  
   //================================ FIT, VALIDATION, AND LOOSE SYST REGIONS ===================================
   if(m_opt->DoFitRegions() || m_opt->DoValidnRegions() || m_opt->DoLooseSystRegions()){
     bool do_syst = true;
@@ -703,10 +703,10 @@ bool VLQ_Selector::Init(){
 		  AddVLQSelection(nolep_prefix+boost+"-"+jet+"-"+bjet+mtb+"-HighMetSig", do_runop, do_syst, reg_type);
 		  AddVLQSelection(nolep_prefix+boost+"-"+jet+"-"+bjet+mtb+"-LowMetSig", do_runop, do_syst, reg_type);
 		}
-		if(m_opt->ApplyMetRegionsCut()){
-		  AddVLQSelection(nolep_prefix+boost+"-"+jet+"-"+bjet+mtb+"-HighMetCut", do_runop, do_syst, reg_type);
-		  AddVLQSelection(nolep_prefix+boost+"-"+jet+"-"+bjet+mtb+"-LowMetCut", do_runop, do_syst, reg_type);
-		}
+		if(m_opt->ApplyMetRegionsCut()){ // CARLOS : Why is this called inside the 0 lepton old analysis regions?
+                  AddVLQSelection(nolep_prefix+boost+"-"+jet+"-"+bjet+mtb+"-HighMetCut", do_runop, do_syst, reg_type);
+                  AddVLQSelection(nolep_prefix+boost+"-"+jet+"-"+bjet+mtb+"-LowMetCut", do_runop, do_syst, reg_type);
+                }
 		/*if(m_opt->ApplyMetSignificanceCut() && (bjet=="2bex") ){
 		  AddVLQSelection(nolep_prefix+boost+"-"+jet+"-"+bjet+mtb+"-HighMetSig", do_runop, do_syst, reg_type);
 		  }*///metsig
@@ -1242,8 +1242,8 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
     //=============== MetCut-split part ========================
     for(SelProp& MetCutprop : *m_sel_MetCut_prop){
       if(MetCutprop.name == _parts_){
-	sprop_MetCut = &MetCutprop;
-	found = true; n_nodes++; break;
+        sprop_MetCut = &MetCutprop;
+        found = true; n_nodes++; break;
       }
     }
     //=============== MLL selection part ========================
@@ -1435,7 +1435,7 @@ Selection* VLQ_Selector::MakeSelection(const int index, const std::string& name)
 	}
 	if(sprop_MetCut){
 	  SelectorBase::AddAncestor(*sel, sprop_MetCut->index);
-	}
+        }
 	if(sprop_MLL){
 	  SelectorBase::AddAncestor(*sel, sprop_MLL->index);
 	}

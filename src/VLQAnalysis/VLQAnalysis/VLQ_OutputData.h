@@ -38,9 +38,9 @@ public:
     //List of triggers to use. Remains constant for all events
     std::vector<TriggerInfo*> o_trigger_list;
 
-    //                                                                                                                                        
-    // Metadata                                                                                                                               
-    //                                                                                                                                        
+    //
+    // Metadata
+    //
     int o_sampleID;
     int o_sampleName;
     int o_mc_campaign;

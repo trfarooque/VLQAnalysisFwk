@@ -273,7 +273,7 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
 	    m_applyMetSigObjCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
 	} else if( temp_arg.find("--APPLYMETREGIONSCUT") != std::string::npos ){
 	    m_applyMetRegionsCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
-	} else if( temp_arg.find("--APPLYMETSIGCUT") != std::string::npos ){
+        } else if( temp_arg.find("--APPLYMETSIGCUT") != std::string::npos ){
             m_applyMetSignificanceCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--APPLYTTBBCORRECTION") != std::string::npos ){
             m_applyTtbbCorrection = AnalysisUtils::BoolValue(temp_val, temp_arg);
@@ -401,7 +401,7 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_mtbminCut = atof(temp_val.c_str());
         }
 	else if( temp_arg.find("--METREGIONSCUT") != std::string::npos ){
-            m_metregionsCut = atof(temp_val.c_str());
+	  m_metregionsCut = atof(temp_val.c_str());
         }
         else if( temp_arg.find("--MINDELTAPHICUT") != std::string::npos ){
 	  m_minDeltaPhiCut = atof(temp_val.c_str());

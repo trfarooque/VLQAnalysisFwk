@@ -67,7 +67,7 @@ public:
     double GetLeadingdEta( std::vector< AnalysisObject* > &v_obj1, std::vector< AnalysisObject* > &v_obj2) const;
     double GetLeadingdPhi( AnalysisObject *v_obj1, std::vector< AnalysisObject* > &v_obj2, const int maxVec = -1, const std::string &mom = "" ) const ;
     double GetLeadingdPhi( std::vector< AnalysisObject* > &v_obj1, std::vector< AnalysisObject* > &v_obj2) const;
-    
+
     double GetAveragedR( std::vector< AnalysisObject* > &v_obj1,
 			 std::vector< AnalysisObject* > &v_obj2,
 			 const std::string &mom1 = "", const std::string &mom2 = "" ) const;
