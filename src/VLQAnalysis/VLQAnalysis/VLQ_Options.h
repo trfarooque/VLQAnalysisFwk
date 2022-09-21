@@ -101,6 +101,7 @@ public:
   inline bool DoPDFSys() const { return m_doPDFSys; }
   inline bool DoJMRSys() const { return m_doJMRSys; }
   inline bool ApplyMVA() const { return m_applyMVA; }
+  inline bool DoBaselineFitRegions() const { return m_doBaselineFitRegions; }
 
   // strings
   inline std::string DoRecoVLQ() const { return m_doRecoVLQ; }
@@ -205,6 +206,7 @@ private:
   bool m_doJMRSys;
 
   bool m_applyMVA;
+  bool m_doBaselineFitRegions;
 
   int m_doJMSSys;
   int m_maxb;
