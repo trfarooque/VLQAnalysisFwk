@@ -369,74 +369,10 @@ bool VLQ_Selector::Init(){
     // MVA Training region                                                                                                                                                
     if(m_opt->ApplyMVA() && m_opt->DoPairVLQRegions()){
       if(m_opt->DoOneLeptonAna()){
-	std::vector<std::string> v_mva_jet_presel   = {"5jin", "5jex", "6jin"};
-	std::vector<std::string> v_mva_bjet_presel  = {"3bin", "3bex", "4bin"};
-	std::vector<std::string> v_mva_boost_presel = {"1Mex3Jin", "1Mex3Jin0Hex", "1Mex3Jin1Hin", // For ttbar gen and ps decorrelation
-						       "2Min3Jin", "2Min3Jin0Hex", "2Min3Jin1Hin"};
-	std::vector<std::string> v_mva_score_presel = {"", "-HighMVAScore", "-MidMVAScore", "-LowMVAScore"};
-	
-	// ttbar CRs
-	AddVLQSelection("c-1lep-5jin-2bex-0Hex-1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-	AddVLQSelection("c-1lep-5jin-3bex-0Hex-1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-	AddVLQSelection("c-1lep-5jin-4bin-0Hex-1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-	
-	AddVLQSelection("c-1lep-5jin-2bex-1Mex0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-	AddVLQSelection("c-1lep-5jin-3bex-1Mex0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-	AddVLQSelection("c-1lep-5jin-4bin-1Mex0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-	
-	AddVLQSelection("c-1lep-5jin-2bex-0_2Jwin0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-	AddVLQSelection("c-1lep-5jin-3bex-0_2Jwin0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-	AddVLQSelection("c-1lep-5jin-4bin-0_2Jwin0Hex1Tex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-	
-	// background CRs
-	AddVLQSelection("c-1lep-5jin-2bex-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
-	AddVLQSelection("c-1lep-5jin-3bex-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
-	AddVLQSelection("c-1lep-5jin-4bin-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
-	
-	AddVLQSelection("c-1lep-5jin-2bex-0Hex-1VTex-0Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-	AddVLQSelection("c-1lep-5jin-3bex-0Hex-1VTex-0Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-	AddVLQSelection("c-1lep-5jin-4bin-0Hex-1VTex-0Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-	
-	AddVLQSelection("c-1lep-5jin-2bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-	AddVLQSelection("c-1lep-5jin-3bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-	AddVLQSelection("c-1lep-5jin-4bin-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-	
-	// background CRs uncorrelated
-	AddVLQSelection("c-1lep-5jex-2bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-	AddVLQSelection("c-1lep-5jex-3bex-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
-	AddVLQSelection("c-1lep-5jex-4bin-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
-	AddVLQSelection("c-1lep-6jin-2bex-0Hex-1VTex-1Lex", do_runop, m_opt->DoPreselSys(), PRESEL);
-	AddVLQSelection("c-1lep-6jin-3bex-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
-	AddVLQSelection("c-1lep-6jin-4bin-0Hex-1VTex-0_1Lwin", do_runop, m_opt->DoPreselSys(), PRESEL);
-
-	for(const std::string &mva_jet_sel : v_mva_jet_presel){
-	  for(const std::string &mva_bjet_sel : v_mva_bjet_presel){
-	    for(const std::string &mva_boost_presel : v_mva_boost_presel){
-	      for(const std::string &mva_score_presel : v_mva_score_presel){
-		AddVLQSelection("c-1lep-"+mva_jet_sel+"-"+mva_bjet_sel+"-"+mva_boost_presel+mva_score_presel, do_runop, m_opt->DoPreselSys(), PRESEL);
-	      }
-	    }
-	  }
-	}
+	AddVLQSelection("c-1lep-6jin-3bin-2Min3Jin", do_runop, m_opt->DoPreselSys(), PRESEL);
       }//OneLepAna
       if(m_opt->DoZeroLeptonAna()){
-	std::vector<std::string> v_mva_jet_presel   = {"6jin", "6jex", "7jin"};
-	std::vector<std::string> v_mva_bjet_presel  = {"2bin", "2bex", "3bin","3bex","4bin"};
-	std::vector<std::string> v_mva_boost_presel = {"2Min"};
-	std::vector<std::string> v_mva_score_presel = {"", "-HighMVAScore", "-MidMVAScore", "-LowMVAScore"};
-	std::vector<std::string> v_mva_mtbmin_presel = {"","-HighMtbmin","-LowMtbmin"};
-	
-	for(const std::string &mva_jet_sel : v_mva_jet_presel){
-          for(const std::string &mva_bjet_sel : v_mva_bjet_presel){
-            for(const std::string &mva_boost_presel : v_mva_boost_presel){
-              for(const std::string &mva_mtbmin_presel : v_mva_mtbmin_presel){
-                for(const std::string &mva_score_presel : v_mva_score_presel){
-                  AddVLQSelection("c-0lep-"+mva_jet_sel+"-"+mva_bjet_sel+"-"+mva_boost_presel+mva_score_presel, do_runop, m_opt->DoPreselSys(), PRESEL);
-                }
-              }
-            }
-          }
-        }
+	AddVLQSelection("c-0lep-6jin-2bin-2Min", do_runop, m_opt->DoPreselSys(), PRESEL);
       }//ZeroLepAna
     }
   }//Do Preselection
@@ -751,24 +687,52 @@ bool VLQ_Selector::Init(){
 	  AddVLQSelection("c-1lep-5jin-3bex-0Hex-1VTex-0_1Lwin", do_runop, do_syst, FIT);         //1lep5jin3bex0Hex1VTex0_1Lwin
 	  AddVLQSelection("c-1lep-5jin-4bin-0Hex-1VTex-0_1Lwin", do_runop, do_syst, FIT);         //1lep5jin4bin0Hex1VTex0_1Lwin
 	  // 3bex-0Hex regions
-	  AddVLQSelection("c-1lep-5jin-3bex-2Min3Jin-0Hex-HighMVAScore", do_runop, do_syst, FIT); //1lep5jin3bex2Min3Jin0HexHighMVAScore
-	  AddVLQSelection("c-1lep-5jin-3bex-2Min3Jin-0Hex-MidMVAScore", do_runop, do_syst, FIT);  //1lep5jin3bex2Min3Jin0HexMidMVAScore
-	  AddVLQSelection("c-1lep-5jin-3bex-2Min3Jin-0Hex-LowMVAScore", do_runop, do_syst, FIT);  //1lep5jin3bex2Min3Jin0HexLowMVAScore
+	  AddVLQSelection("c-1lep-5jin-3bex-2Min3Jin0Hex-HighMVAScore", do_runop, do_syst, FIT); //1lep5jin3bex2Min3Jin0HexHighMVAScore
+	  AddVLQSelection("c-1lep-5jin-3bex-2Min3Jin0Hex-MidMVAScore", do_runop, do_syst, FIT);  //1lep5jin3bex2Min3Jin0HexMidMVAScore
+	  AddVLQSelection("c-1lep-5jin-3bex-2Min3Jin0Hex-LowMVAScore", do_runop, do_syst, FIT);  //1lep5jin3bex2Min3Jin0HexLowMVAScore
 	  // 3bex-1Hin regions
-	  AddVLQSelection("c-1lep-5jin-3bex-2Min3Jin-1Hin-HighMVAScore", do_runop, do_syst, FIT); //1lep5jin3bex2Min3Jin1HinHighMVAScore
-	  AddVLQSelection("c-1lep-5jin-3bex-2Min3Jin-1Hin-MidMVAScore", do_runop, do_syst, FIT);  //1lep5jin3bex2Min3Jin1HinMidMVAScore
-	  AddVLQSelection("c-1lep-5jin-3bex-2Min3Jin-1Hin-LowMVAScore", do_runop, do_syst, FIT);  //1lep5jin3bex2Min3Jin1HinLowMVAScore   
+	  AddVLQSelection("c-1lep-5jin-3bex-2Min3Jin1Hin-HighMVAScore", do_runop, do_syst, FIT); //1lep5jin3bex2Min3Jin1HinHighMVAScore
+	  AddVLQSelection("c-1lep-5jin-3bex-2Min3Jin1Hin-MidMVAScore", do_runop, do_syst, FIT);  //1lep5jin3bex2Min3Jin1HinMidMVAScore
+	  AddVLQSelection("c-1lep-5jin-3bex-2Min3Jin1Hin-LowMVAScore", do_runop, do_syst, FIT);  //1lep5jin3bex2Min3Jin1HinLowMVAScore   
 	  // 4bin-0Hex regions
-	  AddVLQSelection("c-1lep-5jin-4bin-2Min3Jin-0Hex-HighMVAScore", do_runop, do_syst, FIT); //1lep5jin4bin2Min3Jin0HexHighMVAScore
-	  AddVLQSelection("c-1lep-5jin-4bin-2Min3Jin-0Hex-MidMVAScore", do_runop, do_syst, FIT);  //1lep5jin4bin2Min3Jin0HexMidMVAScore
-	  AddVLQSelection("c-1lep-5jin-4bin-2Min3Jin-0Hex-LowMVAScore", do_runop, do_syst, FIT);  //1lep5jin4bin2Min3Jin0HexLowMVAScore
+	  AddVLQSelection("c-1lep-5jin-4bin-2Min3Jin0Hex-HighMVAScore", do_runop, do_syst, FIT); //1lep5jin4bin2Min3Jin0HexHighMVAScore
+	  AddVLQSelection("c-1lep-5jin-4bin-2Min3Jin0Hex-MidMVAScore", do_runop, do_syst, FIT);  //1lep5jin4bin2Min3Jin0HexMidMVAScore
+	  AddVLQSelection("c-1lep-5jin-4bin-2Min3Jin0Hex-LowMVAScore", do_runop, do_syst, FIT);  //1lep5jin4bin2Min3Jin0HexLowMVAScore
 	  // 4bin-1Hin regions
-	  AddVLQSelection("c-1lep-5jin-4bin-2Min3Jin-1Hin-HighMVAScore", do_runop, do_syst, FIT); //1lep5jin4bin2Min3Jin1HinHighMVAScore 
-	  AddVLQSelection("c-1lep-5jin-4bin-2Min3Jin-1Hin-MidMVAScore", do_runop, do_syst, FIT);  //1lep5jin4bin2Min3Jin1HinMidMVAScore
-	  AddVLQSelection("c-1lep-5jin-4bin-2Min3Jin-1Hin-LowMVAScore", do_runop, do_syst, FIT);  //1lep5jin4bin2Min3Jin1HinLowMVAScore  
+	  AddVLQSelection("c-1lep-5jin-4bin-2Min3Jin1Hin-HighMVAScore", do_runop, do_syst, FIT); //1lep5jin4bin2Min3Jin1HinHighMVAScore 
+	  AddVLQSelection("c-1lep-5jin-4bin-2Min3Jin1Hin-MidMVAScore", do_runop, do_syst, FIT);  //1lep5jin4bin2Min3Jin1HinMidMVAScore
+	  AddVLQSelection("c-1lep-5jin-4bin-2Min3Jin1Hin-LowMVAScore", do_runop, do_syst, FIT);  //1lep5jin4bin2Min3Jin1HinLowMVAScore  
+
+	  // Uncorrelation schemes for ttbar modeling/pmg weight systematics
+	  // Njets only : split 5jin regions into 5jex and 6jin for ttbar modeling and pmg weight systematics only
+	  // MTag only  : split between background control (1Mex) and MVA search regions (2Min) for ttbar modeling and pmg weight systematics only
+	  // Full decorrelation : split into 5jex-1Mex, 6jin-1Mex, 5jex-2Min, 6jin-2Min for ttbar modeling and pmg weight systematics
+	  if(m_opt->DoUncorrelatedMVARegions()){
+	    // background control regions
+	    AddVLQSelection("c-1lep-5jex-2bex-0Hex-1VTex-1Lex", do_runop, do_syst, FIT);
+	    AddVLQSelection("c-1lep-5jex-3bex-0Hex-1VTex-0_1Lwin", do_runop, do_syst, FIT);
+	    AddVLQSelection("c-1lep-5jex-4bin-0Hex-1VTex-0_1Lwin", do_runop, do_syst, FIT);
+	    AddVLQSelection("c-1lep-6jin-2bex-0Hex-1VTex-1Lex", do_runop, do_syst, FIT);
+	    AddVLQSelection("c-1lep-6jin-3bex-0Hex-1VTex-0_1Lwin", do_runop, do_syst, FIT);
+	    AddVLQSelection("c-1lep-6jin-4bin-0Hex-1VTex-0_1Lwin", do_runop, do_syst, FIT);
+	    // MVA fit regions
+	    std::vector<std::string> v_mva_uncor_jet_presel   = {"-5jex", "-6jin"};
+	    std::vector<std::string> v_mva_uncor_bjet_presel  = {"-3bex", "-4bin"};
+	    std::vector<std::string> v_mva_uncor_boost_presel = {"-2Min3Jin0Hex", "-2Min3Jin1Hin"};
+	    std::vector<std::string> v_mva_uncor_score_presel = {"-HighMVAScore", "-MidMVAScore", "-LowMVAScore"};
+	    for(const std::string &mva_jet_sel : v_mva_uncor_jet_presel){
+	      for(const std::string &mva_bjet_sel : v_mva_uncor_bjet_presel){
+		for(const std::string &mva_boost_presel : v_mva_uncor_boost_presel){
+		  for(const std::string &mva_score_presel : v_mva_uncor_score_presel){
+		    AddVLQSelection("c-1lep"+mva_jet_sel+mva_bjet_sel+mva_boost_presel+mva_score_presel, do_runop, do_syst, FIT);
+		  }
+		}
+	      }
+	    }
+	  }
 
 	}
-
+	
       }
 
       //One/Two-lepton analysis regions

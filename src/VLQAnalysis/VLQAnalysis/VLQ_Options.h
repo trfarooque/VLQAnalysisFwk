@@ -102,6 +102,7 @@ public:
   inline bool DoJMRSys() const { return m_doJMRSys; }
   inline bool ApplyMVA() const { return m_applyMVA; }
   inline bool DoBaselineFitRegions() const { return m_doBaselineFitRegions; }
+  inline bool DoUncorrelatedMVARegions() const { return m_doUncorrelatedMVARegions; }
 
   // strings
   inline std::string DoRecoVLQ() const { return m_doRecoVLQ; }
@@ -207,6 +208,7 @@ private:
 
   bool m_applyMVA;
   bool m_doBaselineFitRegions;
+  bool m_doUncorrelatedMVARegions;
 
   int m_doJMSSys;
   int m_maxb;

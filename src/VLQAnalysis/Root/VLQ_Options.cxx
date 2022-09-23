@@ -80,6 +80,7 @@ m_doPDFSys(true),
 m_doJMRSys(false),
 m_applyMVA(false),
 m_doBaselineFitRegions(true),
+m_doUncorrelatedMVARegions(false),
 m_doJMSSys(0),
 m_maxb(4),
 m_RCNsubjetsCut(2),
@@ -187,6 +188,7 @@ OptionsBase(q)
     m_doJMSSys          = q.m_doJMSSys;
     m_applyMVA          = q.m_applyMVA;
     m_doBaselineFitRegions = q.m_doBaselineFitRegions;
+    m_doUncorrelatedMVARegions = q.m_doUncorrelatedMVARegions;
     m_RecTtBbRw         = q.m_RecTtBbRw;
     m_RwTtFractions     = q.m_RwTtFractions;
     m_RCNsubjetsCut     = q.m_RCNsubjetsCut;
@@ -375,6 +377,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
 	    m_applyMVA = AnalysisUtils::BoolValue(temp_val, temp_arg);
 	} else if( temp_arg.find("--DOBASELINEFITREGIONS") != std::string::npos){
 	    m_doBaselineFitRegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if( temp_arg.find("--DOUNCORRELATEDMVAREGIONS") != std::string::npos){
+	    m_doUncorrelatedMVARegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
 	}
 
         //
@@ -597,6 +601,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_doJMSSys                = " << m_doJMSSys          << std::endl;
     std::cout << " m_applyMVA                = " << m_applyMVA          << std::endl;
     std::cout << " m_doBaselineFfitRegions   = " << m_doBaselineFitRegions << std::endl; 
+    std::cout << " m_doUncorrelatedMVARegions= " << m_doUncorrelatedMVARegions << std::endl;
     std::cout << " m_MVAWeightFile           = " << m_MVAWeightFile     << std::endl;
     std::cout << " m_applyVjetsSherpa22RW    = " << m_applyVjetsSherpa22RW   << std::endl;
     std::cout << " m_filterType              = " << m_filterType        << std::endl;
