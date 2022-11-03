@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<MethodSetup Method="CrossValidation::MLP">
+  <GeneralInfo>
+    <Info name="TMVA Release" value="4.2.1 [262657]"/>
+    <Info name="ROOT Release" value="6.16/00 [397312]"/>
+    <Info name="Creator" value="tfarooque"/>
+    <Info name="Date" value="Wed Apr 27 18:58:39 2022"/>
+    <Info name="Host" value="Linux aibuild16-005.cern.ch 3.10.0-957.el7.x86_64 #1 SMP Thu Nov 8 23:39:32 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux"/>
+    <Info name="Dir" value="/data/at3/scratch2/farooque/FerMerge/VLQAnalysisFramework/run/CrossValidation"/>
+    <Info name="Training events" value="100691"/>
+    <Info name="TrainingTime" value="4.05311584e-06"/>
+    <Info name="AnalysisType" value="Classification"/>
+  </GeneralInfo>
+  <Options>
+    <Option name="V" modified="No">False</Option>
+    <Option name="VerbosityLevel" modified="No">Default</Option>
+    <Option name="VarTransform" modified="No">None</Option>
+    <Option name="H" modified="No">False</Option>
+    <Option name="CreateMVAPdfs" modified="No">False</Option>
+    <Option name="IgnoreNegWeightsInTraining" modified="No">False</Option>
+    <Option name="EncapsulatedMethodName" modified="Yes">MLP</Option>
+    <Option name="EncapsulatedMethodTypeName" modified="Yes">MLP</Option>
+    <Option name="NumFolds" modified="Yes">5</Option>
+    <Option name="OutputEnsembling" modified="Yes">None</Option>
+    <Option name="SplitExpr" modified="Yes">int([event_number])%int([numFolds])</Option>
+  </Options>
+  <Variables NVar="26">
+    <Variable VarIndex="0" Expression="meff" Label="meff" Title="meff" Unit="GeV" Internal="meff" Type="D" Min="1.00017389e+03" Max="7.03298682e+03"/>
+    <Variable VarIndex="1" Expression="leadingdEta_RCjets" Label="leadingdEta_RC" Title="leadingdEta_RC" Unit="" Internal="leadingdEta_RC" Type="D" Min="8.69482756e-06" Max="1.94405603e+00"/>
+    <Variable VarIndex="2" Expression="leadingdR_RCjets" Label="leadingdR_RC" Title="leadingdR_RC" Unit="" Internal="leadingdR_RC" Type="D" Min="3.45592722e-02" Max="3.59982872e+00"/>
+    <Variable VarIndex="3" Expression="leadingdR_RCTTMassRCTTMass" Label="leadingdR_RCTTM" Title="leadingdR_RCTTM" Unit="" Internal="leadingdR_RCTTM" Type="D" Min="6.29397556e-02" Max="4.95888948e+00"/>
+    <Variable VarIndex="4" Expression="dEtamin_RCTTMassRCTTMass" Label="dEtamin_RCTTM" Title="dEtamin_RCTTM" Unit="" Internal="dEtamin_RCTTM" Type="F" Min="1.26957893e-05" Max="3.89710259e+00"/>
+    <Variable VarIndex="5" Expression="dRmin_RCTTMassRCTTMass" Label="dRmin_RCTTM" Title="dRmin_RCTTM" Unit="" Internal="dRmin_RCTTM" Type="F" Min="3.45592722e-02" Max="4.95888948e+00"/>
+    <Variable VarIndex="6" Expression="dPhiaverage_RCjets" Label="dPhiaverage_RC" Title="dPhiaverage_RC" Unit="" Internal="dPhiaverage_RC" Type="D" Min="1.51427194e-01" Max="2.09439516e+00"/>
+    <Variable VarIndex="7" Expression="dRaverage_RCjets" Label="dRaverage_RC" Title="dRaverage_RC" Unit="" Internal="dRaverage_RC" Type="D" Min="1.32892823e+00" Max="3.84989715e+00"/>
+    <Variable VarIndex="8" Expression="Alt$(RCjets_pt[1],0)" Label="RCjet1_pt" Title="RCjet1_pt" Unit="" Internal="RCjet1_pt" Type="D" Min="3.00016632e+02" Max="2.49131592e+03"/>
+    <Variable VarIndex="9" Expression="Alt$(RCjets_pt[2],0)" Label="RCjet2_pt" Title="RCjet2_pt" Unit="" Internal="RCjet2_pt" Type="D" Min="2.00001038e+02" Max="1.59757642e+03"/>
+    <Variable VarIndex="10" Expression="Alt$(RCMTop_jets_pt[0],0)" Label="RCMTop_jet0_pt" Title="RCMTop_jet0_pt" Unit="" Internal="RCMTop_jet0_pt" Type="D" Min="0.00000000e+00" Max="2.78140601e+03"/>
+    <Variable VarIndex="11" Expression="Alt$(RCMHiggs_jets_pt[0],0)" Label="RCMHiggs_jet0_pt" Title="RCMHiggs_jet0_pt" Unit="" Internal="RCMHiggs_jet0_pt" Type="D" Min="0.00000000e+00" Max="2.56989868e+03"/>
+    <Variable VarIndex="12" Expression="Alt$(RCMHiggs_jets_pt[1],0)" Label="RCMHiggs_jet1_pt" Title="RCMHiggs_jet1_pt" Unit="" Internal="RCMHiggs_jet1_pt" Type="D" Min="0.00000000e+00" Max="1.82308801e+03"/>
+    <Variable VarIndex="13" Expression="Alt$(RCMV_jets_eta[0],-10)" Label="RCMV_jet0_eta" Title="RCMV_jet0_eta" Unit="" Internal="RCMV_jet0_eta" Type="D" Min="-1.00000000e+01" Max="1.99997079e+00"/>
+    <Variable VarIndex="14" Expression="Alt$(RCMHiggs_jets_consts_n[0],0)" Label="RCMHiggs_jet0_nconsts" Title="RCMHiggs_jet0_nconsts" Unit="" Internal="RCMHiggs_jet0_nconsts" Type="I" Min="0.00000000e+00" Max="2.00000000e+00"/>
+    <Variable VarIndex="15" Expression="Alt$(RCMHiggs_jets_bconsts_n[0],0)" Label="RCMHiggs_jet0_nbconsts" Title="RCMHiggs_jet0_nbconsts" Unit="" Internal="RCMHiggs_jet0_nbconsts" Type="I" Min="0.00000000e+00" Max="4.00000000e+00"/>
+    <Variable VarIndex="16" Expression="Alt$(RCMV_jets_bconsts_n[0],0)" Label="RCMV_jet0_nbconsts" Title="RCMV_jet0_nbconsts" Unit="" Internal="RCMV_jet0_nbconsts" Type="I" Min="0.00000000e+00" Max="5.00000000e+00"/>
+    <Variable VarIndex="17" Expression="leptop_pt" Label="leptop_pt" Title="leptop_pt" Unit="" Internal="leptop_pt" Type="D" Min="0.00000000e+00" Max="2.67448291e+03"/>
+    <Variable VarIndex="18" Expression="mtw" Label="mtw" Title="mtw" Unit="" Internal="mtw" Type="D" Min="3.21702473e-03" Max="1.45386035e+03"/>
+    <Variable VarIndex="19" Expression="residualMET_Pt" Label="residualMET_Pt" Title="residualMET_Pt" Unit="" Internal="residualMET_Pt" Type="D" Min="0.00000000e+00" Max="1.71064429e+03"/>
+    <Variable VarIndex="20" Expression="met" Label="met" Title="met" Unit="" Internal="met" Type="D" Min="2.00051308e+01" Max="1.79310071e+03"/>
+    <Variable VarIndex="21" Expression="mT_bmin" Label="mT_bmin" Title="mT_bmin" Unit="" Internal="mT_bmin" Type="D" Min="3.45200009e-04" Max="1.01198236e+03"/>
+    <Variable VarIndex="22" Expression="trkbjets_n" Label="trkbjets_n" Title="trkbjets_n" Unit="" Internal="trkbjets_n" Type="I" Min="3.00000000e+00" Max="9.00000000e+00"/>
+    <Variable VarIndex="23" Expression="Alt$(m_vlq_rcttmass_drmax[0],0)" Label="mvlq_rcttm1" Title="mvlq_rcttm1" Unit="" Internal="mvlq_rcttm1" Type="D" Min="-1.00148853e+03" Max="5.96877686e+03"/>
+    <Variable VarIndex="24" Expression="Alt$(m_vlq_rcttmass_drmax[1],0)" Label="mvlq_rcttm2" Title="mvlq_rcttm2" Unit="" Internal="mvlq_rcttm2" Type="D" Min="-2.55339478e+03" Max="4.77585205e+03"/>
+    <Variable VarIndex="25" Expression="Alt$(m_vlq_rcjets_drmax[1],0)" Label="mvlq_rc2" Title="mvlq_rc2" Unit="" Internal="mvlq_rc2" Type="D" Min="-2.55339478e+03" Max="5.76180469e+03"/>
+  </Variables>
+  <Spectators NSpec="53">
+    <Spectator SpecIndex="0" Expression="event_number" Label="event_number" Title="event_number" Unit="" Internal="event_number" Type="F" Min="1.00000000e+00" Max="3.89568520e+07"/>
+    <Spectator SpecIndex="1" Expression="leadingdEta_RCTTMassRCTTMass" Label="leadingdEta_RCTTM" Title="leadingdEta_RCTTM" Unit="" Internal="leadingdEta_RCTTM" Type="F" Min="1.26957893e-05" Max="3.89710259e+00"/>
+    <Spectator SpecIndex="2" Expression="leadingdPhi_RCjets" Label="leadingdPhi_RC" Title="leadingdPhi_RC" Unit="" Internal="leadingdPhi_RC" Type="F" Min="1.54972076e-05" Max="2.09145021e+00"/>
+    <Spectator SpecIndex="3" Expression="leadingdPhi_RCTTMassRCTTMass" Label="leadingdPhi_RCTTM" Title="leadingdPhi_RCTTM" Unit="" Internal="leadingdPhi_RCTTM" Type="F" Min="6.81877136e-04" Max="3.14157844e+00"/>
+    <Spectator SpecIndex="4" Expression="dEtamin_RCjets" Label="dEtamin_RC" Title="dEtamin_RC" Unit="" Internal="dEtamin_RC" Type="F" Min="8.69482756e-06" Max="1.94405603e+00"/>
+    <Spectator SpecIndex="5" Expression="dPhimin_RCjets" Label="dPhimin_RC" Title="dPhimin_RC" Unit="" Internal="dPhimin_RC" Type="F" Min="1.54972076e-05" Max="2.09145021e+00"/>
+    <Spectator SpecIndex="6" Expression="dPhimin_RCTTMassRCTTMass" Label="dPhimin_RCTTM" Title="dPhimin_RCTTM" Unit="" Internal="dPhimin_RCTTM" Type="F" Min="7.97510147e-05" Max="3.14157844e+00"/>
+    <Spectator SpecIndex="7" Expression="dRmin_RCjets" Label="dRmin_RC" Title="dRmin_RC" Unit="" Internal="dRmin_RC" Type="F" Min="3.45592722e-02" Max="3.59982872e+00"/>
+    <Spectator SpecIndex="8" Expression="dEtaaverage_RCjets" Label="dEtaaverage_RC" Title="dEtaaverage_RC" Unit="" Internal="dEtaaverage_RC" Type="F" Min="2.36537051e-03" Max="2.65048647e+00"/>
+    <Spectator SpecIndex="9" Expression="dEtaaverage_RCTTMassRCTTMass" Label="dEtaaverage_RCTTM" Title="dEtaaverage_RCTTM" Unit="" Internal="dEtaaverage_RCTTM" Type="F" Min="1.26957893e-05" Max="3.89710259e+00"/>
+    <Spectator SpecIndex="10" Expression="dPhiaverage_RCTTMassRCTTMass" Label="dPhiaverage_RCTTM" Title="dPhiaverage_RCTTM" Unit="" Internal="dPhiaverage_RCTTM" Type="F" Min="6.81877136e-04" Max="3.14157844e+00"/>
+    <Spectator SpecIndex="11" Expression="dRaverage_RCTTMassRCTTMass" Label="dRaverage_RCTTM" Title="dRaverage_RCTTM" Unit="" Internal="dRaverage_RCTTM" Type="F" Min="2.34225065e-01" Max="4.95888948e+00"/>
+    <Spectator SpecIndex="12" Expression="Alt$(RCjets_pt[0],0)" Label="RCjet0_pt" Title="RCjet0_pt" Unit="" Internal="RCjet0_pt" Type="F" Min="3.01034882e+02" Max="2.78140601e+03"/>
+    <Spectator SpecIndex="13" Expression="Alt$(RCMTop_jets_pt[1],0)" Label="RCMTop_jet1_pt" Title="RCMTop_jet1_pt" Unit="" Internal="RCMTop_jet1_pt" Type="F" Min="0.00000000e+00" Max="2.49131592e+03"/>
+    <Spectator SpecIndex="14" Expression="Alt$(RCMTop_jets_pt[2],0)" Label="RCMTop_jet2_pt" Title="RCMTop_jet2_pt" Unit="" Internal="RCMTop_jet2_pt" Type="F" Min="0.00000000e+00" Max="9.93495361e+02"/>
+    <Spectator SpecIndex="15" Expression="Alt$(RCMHiggs_jets_pt[2],0)" Label="RCMHiggs_jet2_pt" Title="RCMHiggs_jet2_pt" Unit="" Internal="RCMHiggs_jet2_pt" Type="F" Min="0.00000000e+00" Max="1.04700220e+03"/>
+    <Spectator SpecIndex="16" Expression="Alt$(RCMV_jets_pt[0],0)" Label="RCMV_jet0_pt" Title="RCMV_jet0_pt" Unit="" Internal="RCMV_jet0_pt" Type="F" Min="0.00000000e+00" Max="2.65016699e+03"/>
+    <Spectator SpecIndex="17" Expression="Alt$(RCMV_jets_pt[1],0)" Label="RCMV_jet1_pt" Title="RCMV_jet1_pt" Unit="" Internal="RCMV_jet1_pt" Type="F" Min="0.00000000e+00" Max="1.44852954e+03"/>
+    <Spectator SpecIndex="18" Expression="Alt$(RCMV_jets_pt[2],0)" Label="RCMV_jet2_pt" Title="RCMV_jet2_pt" Unit="" Internal="RCMV_jet2_pt" Type="F" Min="0.00000000e+00" Max="9.52958618e+02"/>
+    <Spectator SpecIndex="19" Expression="Alt$(RCMTop_jets_eta[0],-10)" Label="RCMTop_jet0_eta" Title="RCMTop_jet0_eta" Unit="" Internal="RCMTop_jet0_eta" Type="F" Min="-1.00000000e+01" Max="1.99877059e+00"/>
+    <Spectator SpecIndex="20" Expression="Alt$(RCMTop_jets_eta[1],-10)" Label="RCMTop_jet1_eta" Title="RCMTop_jet1_eta" Unit="" Internal="RCMTop_jet1_eta" Type="F" Min="-1.00000000e+01" Max="1.99992537e+00"/>
+    <Spectator SpecIndex="21" Expression="Alt$(RCMTop_jets_eta[2],-10)" Label="RCMTop_jet2_eta" Title="RCMTop_jet2_eta" Unit="" Internal="RCMTop_jet2_eta" Type="F" Min="-1.00000000e+01" Max="1.99736762e+00"/>
+    <Spectator SpecIndex="22" Expression="Alt$(RCMHiggs_jets_eta[0],-10)" Label="RCMHiggs_jet0_eta" Title="RCMHiggs_jet0_eta" Unit="" Internal="RCMHiggs_jet0_eta" Type="F" Min="-1.00000000e+01" Max="1.99995565e+00"/>
+    <Spectator SpecIndex="23" Expression="Alt$(RCMHiggs_jets_eta[1],-10)" Label="RCMHiggs_jet1_eta" Title="RCMHiggs_jet1_eta" Unit="" Internal="RCMHiggs_jet1_eta" Type="F" Min="-1.00000000e+01" Max="1.99989057e+00"/>
+    <Spectator SpecIndex="24" Expression="Alt$(RCMHiggs_jets_eta[2],-10)" Label="RCMHiggs_jet2_eta" Title="RCMHiggs_jet2_eta" Unit="" Internal="RCMHiggs_jet2_eta" Type="F" Min="-1.00000000e+01" Max="1.97164786e+00"/>
+    <Spectator SpecIndex="25" Expression="Alt$(RCMV_jets_eta[1],-10)" Label="RCMV_jet1_eta" Title="RCMV_jet1_eta" Unit="" Internal="RCMV_jet1_eta" Type="F" Min="-1.00000000e+01" Max="1.99237645e+00"/>
+    <Spectator SpecIndex="26" Expression="Alt$(RCMV_jets_eta[2],-10)" Label="RCMV_jet2_eta" Title="RCMV_jet2_eta" Unit="" Internal="RCMV_jet2_eta" Type="F" Min="-1.00000000e+01" Max="1.81877053e+00"/>
+    <Spectator SpecIndex="27" Expression="Alt$(RCMTop_jets_consts_n[0],0)" Label="RCMTop_jet0_nconsts" Title="RCMTop_jet0_nconsts" Unit="" Internal="RCMTop_jet0_nconsts" Type="F" Min="0.00000000e+00" Max="8.00000000e+00"/>
+    <Spectator SpecIndex="28" Expression="Alt$(RCMTop_jets_consts_n[1],0)" Label="RCMTop_jet1_nconsts" Title="RCMTop_jet1_nconsts" Unit="" Internal="RCMTop_jet1_nconsts" Type="F" Min="0.00000000e+00" Max="7.00000000e+00"/>
+    <Spectator SpecIndex="29" Expression="Alt$(RCMTop_jets_consts_n[2],0)" Label="RCMTop_jet2_nconsts" Title="RCMTop_jet2_nconsts" Unit="" Internal="RCMTop_jet2_nconsts" Type="F" Min="0.00000000e+00" Max="6.00000000e+00"/>
+    <Spectator SpecIndex="30" Expression="Alt$(RCMHiggs_jets_consts_n[1],0)" Label="RCMHiggs_jet1_nconsts" Title="RCMHiggs_jet1_nconsts" Unit="" Internal="RCMHiggs_jet1_nconsts" Type="F" Min="0.00000000e+00" Max="2.00000000e+00"/>
+    <Spectator SpecIndex="31" Expression="Alt$(RCMHiggs_jets_consts_n[2],0)" Label="RCMHiggs_jet2_nconsts" Title="RCMHiggs_jet2_nconsts" Unit="" Internal="RCMHiggs_jet2_nconsts" Type="F" Min="0.00000000e+00" Max="2.00000000e+00"/>
+    <Spectator SpecIndex="32" Expression="Alt$(RCMV_jets_consts_n[0],0)" Label="RCMV_jet0_nconsts" Title="RCMV_jet0_nconsts" Unit="" Internal="RCMV_jet0_nconsts" Type="F" Min="0.00000000e+00" Max="2.00000000e+00"/>
+    <Spectator SpecIndex="33" Expression="Alt$(RCMV_jets_consts_n[1],0)" Label="RCMV_jet1_nconsts" Title="RCMV_jet1_nconsts" Unit="" Internal="RCMV_jet1_nconsts" Type="F" Min="0.00000000e+00" Max="2.00000000e+00"/>
+    <Spectator SpecIndex="34" Expression="Alt$(RCMV_jets_consts_n[2],0)" Label="RCMV_jet2_nconsts" Title="RCMV_jet2_nconsts" Unit="" Internal="RCMV_jet2_nconsts" Type="F" Min="0.00000000e+00" Max="2.00000000e+00"/>
+    <Spectator SpecIndex="35" Expression="Alt$(RCMTop_jets_bconsts_n[0],0)" Label="RCMTop_jet0_nbconsts" Title="RCMTop_jet0_nbconsts" Unit="" Internal="RCMTop_jet0_nbconsts" Type="F" Min="0.00000000e+00" Max="4.00000000e+00"/>
+    <Spectator SpecIndex="36" Expression="Alt$(RCMTop_jets_bconsts_n[1],0)" Label="RCMTop_jet1_nbconsts" Title="RCMTop_jet1_nbconsts" Unit="" Internal="RCMTop_jet1_nbconsts" Type="F" Min="0.00000000e+00" Max="4.00000000e+00"/>
+    <Spectator SpecIndex="37" Expression="Alt$(RCMTop_jets_bconsts_n[2],0)" Label="RCMTop_jet2_nbconsts" Title="RCMTop_jet2_nbconsts" Unit="" Internal="RCMTop_jet2_nbconsts" Type="F" Min="0.00000000e+00" Max="4.00000000e+00"/>
+    <Spectator SpecIndex="38" Expression="Alt$(RCMHiggs_jets_bconsts_n[1],0)" Label="RCMHiggs_jet1_nbconsts" Title="RCMHiggs_jet1_nbconsts" Unit="" Internal="RCMHiggs_jet1_nbconsts" Type="F" Min="0.00000000e+00" Max="4.00000000e+00"/>
+    <Spectator SpecIndex="39" Expression="Alt$(RCMHiggs_jets_bconsts_n[2],0)" Label="RCMHiggs_jet2_nbconsts" Title="RCMHiggs_jet2_nbconsts" Unit="" Internal="RCMHiggs_jet2_nbconsts" Type="F" Min="0.00000000e+00" Max="3.00000000e+00"/>
+    <Spectator SpecIndex="40" Expression="Alt$(RCMV_jets_bconsts_n[1],0)" Label="RCMV_jet1_nbconsts" Title="RCMV_jet1_nbconsts" Unit="" Internal="RCMV_jet1_nbconsts" Type="F" Min="0.00000000e+00" Max="4.00000000e+00"/>
+    <Spectator SpecIndex="41" Expression="Alt$(RCMV_jets_bconsts_n[2],0)" Label="RCMV_jet2_nbconsts" Title="RCMV_jet2_nbconsts" Unit="" Internal="RCMV_jet2_nbconsts" Type="F" Min="0.00000000e+00" Max="3.00000000e+00"/>
+    <Spectator SpecIndex="42" Expression="el1_pt+mu1_pt" Label="lep_pt" Title="lep_pt" Unit="" Internal="lep_pt" Type="F" Min="3.00034389e+01" Max="1.41032544e+03"/>
+    <Spectator SpecIndex="43" Expression="ptw" Label="ptw" Title="ptw" Unit="" Internal="ptw" Type="F" Min="8.15694749e-01" Max="1.87980225e+03"/>
+    <Spectator SpecIndex="44" Expression="jets_n" Label="jets_n" Title="jets_n" Unit="" Internal="jets_n" Type="F" Min="6.00000000e+00" Max="1.70000000e+01"/>
+    <Spectator SpecIndex="45" Expression="RCTTMass_jets_n" Label="RCTTMass_jets_n" Title="RCTTMass_jets_n" Unit="" Internal="RCTTMass_jets_n" Type="F" Min="2.00000000e+00" Max="6.00000000e+00"/>
+    <Spectator SpecIndex="46" Expression="RCMTop_jets_n" Label="RCMTop_jets_n" Title="RCMTop_jets_n" Unit="" Internal="RCMTop_jets_n" Type="F" Min="0.00000000e+00" Max="5.00000000e+00"/>
+    <Spectator SpecIndex="47" Expression="RCMHiggs_jets_n" Label="RCMHiggs_jets_n" Title="RCMHiggs_jets_n" Unit="" Internal="RCMHiggs_jets_n" Type="F" Min="0.00000000e+00" Max="4.00000000e+00"/>
+    <Spectator SpecIndex="48" Expression="RCMV_jets_n" Label="RCMV_jets_n" Title="RCMV_jets_n" Unit="" Internal="RCMV_jets_n" Type="F" Min="0.00000000e+00" Max="4.00000000e+00"/>
+    <Spectator SpecIndex="49" Expression="Alt$(m_vlq_rcjets_drmax[0],0)" Label="mvlq_rc1" Title="mvlq_rc1" Unit="" Internal="mvlq_rc1" Type="F" Min="-8.65787781e+02" Max="6.60337012e+03"/>
+    <Spectator SpecIndex="50" Expression="VLQtype" Label="VLQtype" Title="VLQtype" Unit="" Internal="VLQtype" Type="F" Min="1.00000000e+00" Max="3.00000000e+00"/>
+    <Spectator SpecIndex="51" Expression="sampleID" Label="sampleID" Title="sampleID" Unit="" Internal="sampleID" Type="F" Min="3.02480000e+05" Max="4.07344000e+05"/>
+    <Spectator SpecIndex="52" Expression="sampleName" Label="sampleName" Title="sampleName" Unit="" Internal="sampleName" Type="F" Min="3.00000000e+00" Max="1.70000000e+01"/>
+  </Spectators>
+  <Classes NClass="2">
+    <Class Name="Signal" Index="0"/>
+    <Class Name="Background" Index="1"/>
+  </Classes>
+  <Transformations NTransformations="0"/>
+  <MVAPdfs/>
+  <Weights JobName="TMVAClassificationCV" SplitExpr="int([event_number])%int([numFolds])" NumFolds="5" EncapsulatedMethodName="MLP" EncapsulatedMethodTypeName="MLP" OutputEnsembling="None"/>
+</MethodSetup>

@@ -1484,7 +1484,7 @@ void VLQ_VariableComputer::InitMVA(const std::string &weightFileName){
 
 //_________________________________________________________________
 //
-float VLQ_VariableComputer::GetMVAScore(std::map< std::string, float> &inputVarsMVA){
+float VLQ_VariableComputer::GetMVAScore(const std::map< std::string, float> &inputVarsMVA, const std::map< std::string, float> &spectatorVarsMVA){
 
   std::map< std::string, float >::iterator it = m_inputVarsMVA->begin();
 
@@ -1492,7 +1492,7 @@ float VLQ_VariableComputer::GetMVAScore(std::map< std::string, float> &inputVars
 
     if(inputVarsMVA.find(it->first) != inputVarsMVA.end()){
     
-      (*m_inputVarsMVA)[it->first] = inputVarsMVA[it->first];
+      (*m_inputVarsMVA)[it->first] = inputVarsMVA.at(it->first);
 
       ++it;
     }
@@ -1503,6 +1503,27 @@ float VLQ_VariableComputer::GetMVAScore(std::map< std::string, float> &inputVars
       
   }
 
-  return m_modelMVA->EvaluateMVA("MLP");
+  if(spectatorVarsMVA.size() > 0){
+    it = m_spectatorVarsMVA->begin();
+    while(it != m_spectatorVarsMVA->end()){
+
+      if(spectatorVarsMVA.find(it->first) != spectatorVarsMVA.end()){
+    
+	(*m_spectatorVarsMVA)[it->first] = spectatorVarsMVA.at(it->first);
+
+      }
+      ++it;
+
+      //else{
+      //std::cerr << " <!> Error in VLQ_VariableComputer::GetMVAScore() : Spectator variable " << it->first << " expected but not found." << std::endl;
+      //abort();
+      //}
+      
+    }
+  }
+
+  float score =  m_modelMVA->EvaluateMVA("MLP");
+
+  return score;
 
 }

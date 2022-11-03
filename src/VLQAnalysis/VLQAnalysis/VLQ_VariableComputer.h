@@ -136,7 +136,7 @@ public:
     int GetJetClass(AnalysisObject* jet) const;
 
     void InitMVA(const std::string &weightFileName);
-    float GetMVAScore(std::map< std::string, float> &inputVarsMVA);
+    float GetMVAScore(const std::map< std::string, float> &inputVarsMVA, const std::map< std::string, float> &spectatorVarsMVA = {});
     
 private:
     OptionsBase* m_opt;
