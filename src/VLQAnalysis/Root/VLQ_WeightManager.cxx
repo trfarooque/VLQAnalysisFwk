@@ -59,10 +59,10 @@ VLQ_WeightManager::VLQ_WeightManager( VLQ_Options *opt, const VLQ_NtupleData* nt
     m_kinRw = new VLQ_KinReweighter(m_vlq_opt, m_vlq_outData /*, m_vlq_ntupData*/);
 
     if((m_vlq_opt -> SampleName() == SampleName::ZJETS) || (m_vlq_opt -> SampleName() == SampleName::WJETS)){
-      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyZjets.root"));
+      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinRW/kinReweightings_OnlyZjets.root"));
     }
     else{
-      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar.root"));
+      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinRW/kinReweightings_OnlyWtTtbar.root"));
     }
 
   }

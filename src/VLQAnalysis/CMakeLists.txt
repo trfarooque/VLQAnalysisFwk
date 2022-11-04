@@ -61,3 +61,7 @@ atlas_add_executable( MakeSByBPlot
 		      macros/macros_carlos/SoverB_Plotter/MakeSByBPlot.cxx
 		      LINK_LIBRARIES IFAETopFramework
 		      		     ${ROOT_LIBRARIES})
+
+atlas_add_executable(MetricTabulatorAndPlotter
+		     macros/macros_carlos/Metric_Tabulator_And_Plotter/MetricTabulatorAndPlotter.cxx
+		     LINK_LIBRARIES ${ROOT_LIBRARIES} VLQAnalysis)
