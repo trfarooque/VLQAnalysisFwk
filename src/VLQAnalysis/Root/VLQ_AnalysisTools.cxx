@@ -696,8 +696,6 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
       if(m_opt -> MsgLevel() == Debug::DEBUG){
         std::cout << "==> In fat jet builder:    pt " << m_ntupData -> d_ljet_pt -> at(iFJet);
         std::cout << "    eta " <<  TMath::Abs(m_ntupData -> d_ljet_eta -> at(iFJet));
-        std::cout << "    TTL " << m_ntupData -> d_ljet_topTag -> at(iFJet);
-        std::cout << "    TTT " << m_ntupData -> d_ljet_topTag_loose -> at(iFJet)  << std::endl;
       }
 
       if(m_ntupData -> d_ljet_pt -> at(iFJet) >= 300 && TMath::Abs(m_ntupData -> d_ljet_eta -> at(iFJet)) < 2.0){
@@ -708,13 +706,87 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
         obj -> SetMoment("d23",     m_ntupData -> d_ljet_sd23 -> at(iFJet));
         obj -> SetMoment("tau21",   m_ntupData -> d_ljet_tau21_wta -> at(iFJet));
         obj -> SetMoment("tau32",   m_ntupData -> d_ljet_tau32_wta -> at(iFJet));
-        obj -> SetMoment("isTTL",   m_ntupData -> d_ljet_topTag_loose -> at(iFJet));
-        obj -> SetMoment("isTTT",   m_ntupData -> d_ljet_topTag -> at(iFJet));
         obj -> SetMoment("isTTMass",  obj->M() > 100 ? 1 : 0);
-        m_outData -> o_fjets -> push_back(obj);
+	if(m_opt->DoLargeRJetsBOT()){
+	  obj -> SetMoment("LRJDNNC50_SF", m_ntupData -> d_ljet_DNNC50_SF -> at(iFJet));
+	  obj -> SetMoment("LRJDNNC80_SF", m_ntupData -> d_ljet_DNNC80_SF -> at(iFJet));
+	  obj -> SetMoment("LRJDNNI50_SF", m_ntupData -> d_ljet_DNNI50_SF -> at(iFJet));
+	  obj -> SetMoment("LRJDNNI80_SF", m_ntupData -> d_ljet_DNNI80_SF -> at(iFJet));
+	  obj -> SetMoment("LRJSW50_SF", m_ntupData -> d_ljet_SW50_SF -> at(iFJet));
+	  obj -> SetMoment("LRJSW80_SF", m_ntupData -> d_ljet_SW80_SF -> at(iFJet));
+	  obj -> SetMoment("LRJSZ50_SF", m_ntupData -> d_ljet_SZ50_SF -> at(iFJet));
+	  obj -> SetMoment("LRJSZ80_SF", m_ntupData -> d_ljet_SZ80_SF -> at(iFJet));
+	  obj -> SetMoment("XbbH_score", m_ntupData -> d_ljet_XbbHiggs_score -> at(iFJet));
+	  obj -> SetMoment("XbbQ_score", m_ntupData -> d_ljet_XbbQCD_score -> at(iFJet));
+	  obj -> SetMoment("XbbT_score", m_ntupData -> d_ljet_XbbTop_score -> at(iFJet));
+
+	  // This is the discriminant used to decide if a jet should be classified as a Higgs using the X->bb tagger:
+	  // https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BoostedHiggsToBBTagging#Working_points
+	  // The value 0.25 represents the top fraction.
+	  // The three WPs available are XbbH_discriminant = (3.09, 2.44, 1.76) for (50%, 60%, 70%) respectively.
+	  double XbbH_discriminant = log(obj->GetMoment("XbbH_score")/(((1-0.25)*obj->GetMoment("XbbQ_score")) + (0.25*obj->GetMoment("XbbT_score"))));
+	  
+	  obj -> SetMoment("XbbH_discriminant", XbbH_discriminant);
+
+	  // Higgs Tagger 
+	  if(XbbH_discriminant > 1.76){
+	    m_outData -> o_taggedjets.at("LRJXbbH70")->push_back(obj);
+	    if(XbbH_discriminant > 2.44){
+	      m_outData -> o_taggedjets.at("LRJXbbH60")->push_back(obj);
+	      if(XbbH_discriminant > 3.09){
+		m_outData -> o_taggedjets.at("LRJXbbH50")->push_back(obj);
+	      }
+	    }
+	  }
+	  
+	  // Contained Top DNN Tagger 
+	  if(m_ntupData -> d_ljet_DNNC80_pass -> at(iFJet) == 1){
+	    m_outData -> o_taggedjets.at("LRJDNNC80")->push_back(obj);
+	    if(m_ntupData -> d_ljet_DNNC50_pass -> at(iFJet) == 1){
+	      m_outData -> o_taggedjets.at("LRJDNNC50")->push_back(obj);
+	    }
+	  }
+	  
+	  // Inclusive Top DNN Tagger 
+	  if(m_ntupData -> d_ljet_DNNI80_pass -> at(iFJet) == 1){
+	    m_outData -> o_taggedjets.at("LRJDNNI80")->push_back(obj);
+	    if(m_ntupData -> d_ljet_DNNI50_pass -> at(iFJet) == 1){
+	      m_outData -> o_taggedjets.at("LRJDNNI50")->push_back(obj);
+	    }
+	  }
+	
+	  // Smoothed W/Z Tagger 
+	  if((m_ntupData -> d_ljet_SW80_pass -> at(iFJet) == 1) || (m_ntupData -> d_ljet_SZ80_pass -> at(iFJet) == 1)){
+	    m_outData -> o_taggedjets.at("LRJSV80")->push_back(obj);
+	    if(m_ntupData -> d_ljet_SW80_pass -> at(iFJet) == 1) m_outData -> o_taggedjets.at("LRJSW80")->push_back(obj);
+	    if(m_ntupData -> d_ljet_SZ80_pass -> at(iFJet) == 1) m_outData -> o_taggedjets.at("LRJSZ80")->push_back(obj);
+	    
+	    if((m_ntupData -> d_ljet_SW50_pass -> at(iFJet) == 1) || (m_ntupData -> d_ljet_SZ50_pass -> at(iFJet) == 1)){
+	      m_outData -> o_taggedjets.at("LRJSV50")->push_back(obj);
+	      if(m_ntupData -> d_ljet_SW50_pass -> at(iFJet) == 1) m_outData -> o_taggedjets.at("LRJSW50")->push_back(obj);
+	      if(m_ntupData -> d_ljet_SZ50_pass -> at(iFJet) == 1) m_outData -> o_taggedjets.at("LRJSZ50")->push_back(obj);
+	    }
+	  }
+
+	}
+      
+	m_outData -> o_fjets -> push_back(obj);
+
       }
     }
     m_outData -> o_fjets_n = m_outData -> o_fjets -> size();
+    
+    if(m_opt->DoLargeRJetsBOT()){
+      std::vector< std::string > LRJTaggers = {"LRJDNNC50", "LRJDNNC80", "LRJDNNI50", "LRJDNNI80",
+					       "LRJSV50", "LRJSV80",
+					       "LRJSW50", "LRJSW80",
+					       "LRJSZ50", "LRJSZ80",
+					       "LRJXbbH50", "LRJXbbH60", "LRJXbbH70"};
+      for(std::string LRJTagger : LRJTaggers) m_outData->o_taggedjets_n.at(LRJTagger) = m_outData->o_taggedjets.at(LRJTagger)->size();
+      
+      LRJTaggers.clear();
+    }
+
     if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "==> After filling large-R jets" << std::endl;
   }
 

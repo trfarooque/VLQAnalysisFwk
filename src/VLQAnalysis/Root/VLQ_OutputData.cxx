@@ -182,6 +182,22 @@ o_is_ttbar(false)
   jetTaggedType.push_back("RCMV0b");
   jetTaggedType.push_back("RCMV1bin");
   jetTaggedType.push_back("LooseRCTTMass");
+  if(m_opt->UseLargeRJets() && m_opt->DoLargeRJetsBOT()){
+    jetTaggedType.push_back("LRJDNNC50");
+    jetTaggedType.push_back("LRJDNNC80");
+    jetTaggedType.push_back("LRJDNNI50");
+    jetTaggedType.push_back("LRJDNNI80");
+    jetTaggedType.push_back("LRJSW50");
+    jetTaggedType.push_back("LRJSW80");
+    jetTaggedType.push_back("LRJSZ50");
+    jetTaggedType.push_back("LRJSZ80");
+    jetTaggedType.push_back("LRJSV50");
+    jetTaggedType.push_back("LRJSV80");
+    jetTaggedType.push_back("LRJXbbH50");
+    jetTaggedType.push_back("LRJXbbH60");
+    jetTaggedType.push_back("LRJXbbH70");
+  }
+
   for ( const std::string type : jetTaggedType ){
     o_taggedjets.insert( std::pair<std::string, AOVector*>( type, new AOVector() ) );
     o_taggedjets_n.insert( std::pair<std::string, int>( type, 0 ) );

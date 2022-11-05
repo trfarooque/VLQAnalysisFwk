@@ -186,6 +186,9 @@ bool VLQ_Analysis_Data2015::Begin(){
     }
 
   }
+  if(m_opt ->  UseLargeRJets() && m_opt -> DoLargeRJetsBOT()){
+    m_weightMngr -> AddLargeRJetTaggerSFs();
+  }
   if(m_opt->DoFJvtSFWeights()){
     m_weightMngr -> AddFJvtSFWeights();
   }
@@ -749,7 +752,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "mtbmin",      25, 0, 500,    ";m_{T}^{min}(b,MET)", otherVariables, &(m_outData->o_mTbmin) );
       m_outMngrHist -> AddStandardTH1( "metsig_ev",     0.5, 0, 50,    ";E_{T}^{miss}/#sqrt{H_{T}^{had}} [#sqrt{GeV}]", otherVariables, &(m_outData -> o_metsig_ev) );
       m_outMngrHist -> AddStandardTH1( "metsig_obj",    0.5, 0, 50,    "; #sigma(E_{T}^{miss}) [#sqrt{GeV}]", otherVariables, &(m_outData -> o_metsig_obj) );
-      m_outMngrHist -> AddStandardTH1( "MVAScore", 0.050,-0.1, 1.05, "; MVA Score", true, &(m_outData -> o_MVAScore) );
+      m_outMngrHist -> AddStandardTH1( "MVAScore", /*0.050*/0.005, -0.1, 1.05, "; MVA Score", true, &(m_outData -> o_MVAScore) );
 
       m_outMngrHist -> AddStandardTH2( "meff", "jets_n", 50, 0, 7000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} [GeV]", (RWderiv||otherVariables), &(m_outData -> o_meff), &(m_outData -> o_jets_n));
       m_outMngrHist -> AddStandardTH2( "meffred", "jets_n", 50, 0, 7000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} reduced [GeV]", (RWderiv||otherVariables), &(m_outData -> o_meffred), &(m_outData -> o_jets_n));
@@ -1180,15 +1183,65 @@ bool VLQ_Analysis_Data2015::Begin(){
 
       //Large-R jets
       if( m_opt -> UseLargeRJets() ){
-	m_outMngrHist -> AddStandardTH1( "FatJets_n", 1, -0.5, 5.5,     ";Number of large-R jets",  false, &(m_outData -> o_fjets_n) );
+	m_outMngrHist -> AddStandardTH1( "FatJets_n", 1, -0.5, 5.5,     ";Number of large-R jets",  true, &(m_outData -> o_fjets_n) );
 	for ( int iLRJet=-1; iLRJet<=0; ++iLRJet ) {
 	  std::string str_id = "";
 	  str_id += std::to_string(iLRJet);
 	  if(iLRJet==-1) str_id = "s";
-	  m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_pt",  50, 0, 1000, ";Fat jet"+str_id+"  p_{T} [GeV]"      ,  false, &(m_outData -> o_fjets), iLRJet, "Pt");
+	  m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_pt",  50, 0, 1000, ";Fat jet"+str_id+"  p_{T} [GeV]"      ,  true, &(m_outData -> o_fjets), iLRJet, "Pt");
 	  m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_eta", 0.2, -3, 3,  ";Fat jet"+str_id+"  #eta"             ,  false, &(m_outData -> o_fjets), iLRJet, "Eta");
-	  m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_m",   10, 0, 400,  ";Fat jet"+str_id+"  mass [GeV]"       ,  false, &(m_outData -> o_fjets), iLRJet, "M");
+	  m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_m",   10, 0, 400,  ";Fat jet"+str_id+"  mass [GeV]"       ,  true, &(m_outData -> o_fjets), iLRJet, "M");
+
+	  if(m_opt -> DoLargeRJetsBOT()){
+	    m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_XbbH_score", 0.050, -0.1, 1.05, ";Fat jet"+str_id+"Xbb Higgs score",
+					     true, &(m_outData -> o_fjets), iLRJet, "XbbH_score");
+	    m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_XbbQ_score", 0.050, -0.1, 1.05, ";Fat jet"+str_id+"Xbb QCD score",
+					     true, &(m_outData -> o_fjets), iLRJet, "XbbQ_score");
+	    m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_XbbT_score", 0.050, -0.1, 1.05, ";Fat jet"+str_id+"Xbb Top score",
+					     true, &(m_outData -> o_fjets), iLRJet, "XbbT_score");
+
+	    m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_XbbH_discriminant", 0.050, -5, 5, ";Fat jet"+str_id+"XbbH discriminant",
+					     true, &(m_outData -> o_fjets), iLRJet, "XbbH_discriminant");
+	  }
+	  
 	}
+
+	if(m_opt -> DoLargeRJetsBOT()){
+	  std::map< std::string, std::string > LargeRJetTaggers = {
+	    {"LRJDNNC50","DNN_{50%} Contained Top-tagged"}, {"LRJDNNC80","DNN_{80%} Contained Top-tagged"},
+	    {"LRJDNNI50","DNN_{50%} Inclusive Top-tagged"}, {"LRJDNNI80","DNN_{80%} Inclusive Top-tagged"},
+	    {"LRJSW50","Smoothed_{50%} Contained W-tagged"}, {"LRJSW80","Smoothed_{80%} Contained W-tagged"},
+	    {"LRJSZ50","Smoothed_{50%} Contained Z-tagged"}, {"LRJSZ80","Smoothed_{80%} Contained Z-tagged"},
+	    {"LRJSV50","Smoothed_{50%} Contained W/Z-tagged"}, {"LRJSV80","Smoothed_{80%} Contained V-tagged"},
+	    {"LRJXbbH50","Xbb_{50%} Higgs-tagged"}, {"LRJXbbH60","Xbb_{60%} Higgs-tagged"}, {"LRJXbbH70","Xbb_{70%} Higgs-tagged"}
+	  };
+
+	  for(std::map<std::string, std::string>::iterator LRJTagger = LargeRJetTaggers.begin(); LRJTagger != LargeRJetTaggers.end(); ++LRJTagger){
+	    m_outMngrHist -> AddStandardTH1( LRJTagger->first + "_jets_n", 1, -0.5, 5.5, ";Number of " + LRJTagger->second + " jets", true,
+					     &(m_outData -> o_taggedjets_n.at(LRJTagger->first)));
+
+	    if((LRJTagger->first).find("DNN") != std::string::npos){
+	      m_outMngrHist->AddStandardTH2(LRJTagger->first + "_jets_n", "RCMTop_jets_n", 1, -0.5, 5.5, 1, -0.5, 5.5,
+					    ";Number of " + LRJTagger->second + " jets", ";Number of Top-tagged jets", true,
+					    &(m_outData -> o_taggedjets_n.at(LRJTagger->first)),  &(m_outData->o_taggedjets_n.at("RCMTop")));
+	    }
+	    else if((LRJTagger->first).find("JSV") != std::string::npos){
+	      m_outMngrHist->AddStandardTH2(LRJTagger->first + "_jets_n", "RCMV_jets_n", 1, -0.5, 5.5, 1, -0.5, 5.5,
+					    ";Number of " + LRJTagger->second + " jets", ";Number of W/Z-tagged jets", true,
+					    &(m_outData -> o_taggedjets_n.at(LRJTagger->first)),  &(m_outData->o_taggedjets_n.at("RCMV")));
+	    }
+	    else if((LRJTagger->first).find("XbbH") != std::string::npos){
+	      m_outMngrHist->AddStandardTH2(LRJTagger->first + "_jets_n", "RCMHiggs_jets_n", 1, -0.5, 5.5, 1, -0.5, 5.5,
+					    ";Number of " + LRJTagger->second + " jets", ";Number of Higgs-tagged jets", true,
+					    &(m_outData -> o_taggedjets_n.at(LRJTagger->first)),  &(m_outData->o_taggedjets_n.at("RCMHiggs")));
+	    }
+
+	  }
+	  
+	  LargeRJetTaggers.clear();
+	  
+	}
+	
       }
 
     }// DrawReco
@@ -2940,6 +2993,9 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
       if(m_opt->DoKinRwSyst() && m_opt->DoKinRwSmoothing()){
 	m_weightMngr -> SetKinRwSyst();
       }      
+    }
+    if( m_opt -> UseLargeRJets() && m_opt -> DoLargeRJetsBOT() ){
+      m_weightMngr -> SetLargeRJetTaggerSFs();
     }
     if( m_outData -> o_is_ttbar ){
       if(m_opt->RecomputeTtbarNNLOCorrection() && m_truthMngr){

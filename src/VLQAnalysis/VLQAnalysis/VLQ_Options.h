@@ -62,6 +62,7 @@ public:
   inline bool UseMETTriggerOneLep() const { return m_useMETTriggerOneLep; }
   inline bool UseLeptonTrigger() const { return m_useLeptonTrigger; }
   inline bool UseLargeRJets() const { return m_useLargeRJets; }
+  inline bool DoLargeRJetsBOT() const { return m_doLargeRJetsBOT; }
   inline bool DoCutFlow() const { return m_doCutFlow; }
   inline bool DoOneLeptonAna() const { return m_doOneLeptonAna; }
   inline bool DoTwoLeptonAna() const { return m_doTwoLeptonAna; }
@@ -175,6 +176,7 @@ private:
   bool m_useMETTriggerOneLep;
   bool m_useLeptonTrigger;
   bool m_useLargeRJets;
+  bool m_doLargeRJetsBOT;
   bool m_doCutFlow;
   bool m_doOneLeptonAna;
   bool m_doTwoLeptonAna;

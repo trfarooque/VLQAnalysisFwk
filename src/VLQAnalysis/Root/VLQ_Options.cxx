@@ -41,6 +41,7 @@ m_useMETTrigger(false),
 m_useMETTriggerOneLep(false),
 m_useLeptonTrigger(false),
 m_useLargeRJets(false),
+m_doLargeRJetsBOT(false),
 m_doCutFlow(true),
 m_doOneLeptonAna(false),
 m_doTwoLeptonAna(false),
@@ -147,6 +148,7 @@ OptionsBase(q)
     m_useMETTriggerOneLep = q.m_useMETTriggerOneLep;
     m_useLeptonTrigger    = q.m_useLeptonTrigger;
     m_useLargeRJets       = q.m_useLargeRJets;
+    m_doLargeRJetsBOT     = q.m_doLargeRJetsBOT;
     m_doCutFlow           = q.m_doCutFlow;
     m_doOneLeptonAna      = q.m_doOneLeptonAna;
     m_doTwoLeptonAna      = q.m_doTwoLeptonAna;
@@ -297,6 +299,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_useLeptonTrigger = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--USELARGERJETS") != std::string::npos ){
             m_useLargeRJets = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if( temp_arg.find("--DOLARGERJETSBOT") != std::string::npos ){
+	    m_doLargeRJetsBOT = AnalysisUtils::BoolValue(temp_val, temp_arg);	    
         } else if( temp_arg.find("--DOCUTFLOW") != std::string::npos ){
             m_doCutFlow     = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOONELEPTONANA") != std::string::npos ){
@@ -559,6 +563,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_verboseOutout           = " << m_verboseOutput << std::endl;
     std::cout << " m_useLeptonTrigger        = " << m_useLeptonTrigger  << std::endl;
     std::cout << " m_useLargeRJets           = " << m_useLargeRJets     << std::endl;
+    std::cout << " m_doLargeRJetsBOT         = " << m_doLargeRJetsBOT  << std::endl;
     std::cout << " m_useMETTrigger           = " << m_useMETTrigger     << std::endl;
     std::cout << " m_useMETTriggerOneLep     = " << m_useMETTriggerOneLep<< std::endl;
     std::cout << " m_doCutFlow               = " << m_doCutFlow         << std::endl;

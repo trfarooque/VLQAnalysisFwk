@@ -104,6 +104,26 @@ public:
     std::vector<bool>  *d_ljet_bosonTag;
     std::vector<bool>  *d_ljet_topTag_loose;
     std::vector<bool>  *d_ljet_bosonTag_loose;
+    std::vector<int>   *d_ljet_DNNC50_pass;
+    std::vector<int>   *d_ljet_DNNC80_pass;
+    std::vector<int>   *d_ljet_DNNI50_pass;
+    std::vector<int>   *d_ljet_DNNI80_pass;
+    std::vector<int>   *d_ljet_SW50_pass;
+    std::vector<int>   *d_ljet_SW80_pass;
+    std::vector<int>   *d_ljet_SZ50_pass;
+    std::vector<int>   *d_ljet_SZ80_pass;
+    std::vector<float> *d_ljet_XbbHiggs_score;
+    std::vector<float> *d_ljet_XbbQCD_score;
+    std::vector<float> *d_ljet_XbbTop_score;
+
+    std::vector<float> *d_ljet_DNNC50_SF;
+    std::vector<float> *d_ljet_DNNC80_SF;
+    std::vector<float> *d_ljet_DNNI50_SF;
+    std::vector<float> *d_ljet_DNNI80_SF;
+    std::vector<float> *d_ljet_SW50_SF;
+    std::vector<float> *d_ljet_SW80_SF;
+    std::vector<float> *d_ljet_SZ50_SF;
+    std::vector<float> *d_ljet_SZ80_SF;
 
     // reclustered jets
     std::vector<float> *d_rcjets_pt;

@@ -267,6 +267,19 @@ bool VLQ_WeightManager::AddFJvtSFWeights(  ){
 
 //______________________________________________________________________________
 //
+bool VLQ_WeightManager::AddLargeRJetTaggerSFs(){
+
+  if(!(m_vlq_opt -> UseLargeRJets() && m_vlq_opt -> DoLargeRJetsBOT())) return true;
+
+  std::vector< std::string > LRJTaggers= {"LRJDNNC50", "LRJDNNC80", "LRJDNNI50", "LRJDNNI80", "LRJSW50", "LRJSW80", "LRJSZ50", "LRJSZ80"};
+
+  for(std::string LRJTagger : LRJTaggers) AddAndInitWeight("weight_SF_"+LRJTagger, "", true /*isNominal*/, false /*isInput*/);
+
+  return true;
+}
+
+//______________________________________________________________________________
+//
 bool VLQ_WeightManager::AddKinReweightings(  ){
 
   if(!m_kinRw) return true;
@@ -808,6 +821,27 @@ bool VLQ_WeightManager::SetNNLOWeight( const double topPt ){
 
     SetNominalComponent("weight_ttbar_NNLO_1L", result) ;
   }
+  return true;
+}
+
+//______________________________________________________________________________
+//
+bool VLQ_WeightManager::SetLargeRJetTaggerSFs(){
+
+  if(!(m_vlq_opt -> UseLargeRJets() && m_vlq_opt -> DoLargeRJetsBOT())) return true;
+
+  std::vector< std::string > LRJTaggers= {"LRJDNNC50", "LRJDNNC80", "LRJDNNI50", "LRJDNNI80", "LRJSW50", "LRJSW80", "LRJSZ50", "LRJSZ80"};
+
+  for(std::string LRJTagger : LRJTaggers){
+    double weight_SF = 1.;
+
+    for(const AnalysisObject* jet : *(m_vlq_outData -> o_taggedjets.at(LRJTagger))){
+      weight_SF *= jet->GetMoment(LRJTagger+"_SF");
+    }
+
+    SetNominalComponent("weight_SF_"+LRJTagger, weight_SF);
+  }
+
   return true;
 }
 
