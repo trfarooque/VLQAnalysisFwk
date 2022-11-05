@@ -153,6 +153,7 @@ bool VLQ_Selector::Init(){
   m_sel_M_prop = new std::vector<SelProp>({
       MakeSelProp("0Mex",c_0Mex), MakeSelProp("1Mex", c_1Mex), MakeSelProp("1Min", c_1Min), MakeSelProp("2Min", c_2Min), 
 	MakeSelProp("2Min3Jin", c_2Min3Jin), MakeSelProp("2Min3Jin0Hex", c_2Min3Jin0Hex), MakeSelProp("2Min3Jin1Hin", c_2Min3Jin1Hin),
+	MakeSelProp("2Min0Hex", c_2Min0Hex), MakeSelProp("2Min1Hin",c_2Min1Hin),
 	MakeSelProp("1Mex3Jin", c_1Mex3Jin), MakeSelProp("1Mex3Jin0Hex", c_1Mex3Jin0Hex), MakeSelProp("1Mex3Jin1Hin", c_1Mex3Jin1Hin),
 	MakeSelProp("1Mex0Hex1Tex", c_1Mex0Hex1Tex)});
 
@@ -643,6 +644,48 @@ bool VLQ_Selector::Init(){
 	  AddVLQSelection("c-0lep-7jin-4bin-1Hex-0VTex", do_runop, do_syst, FIT);                //0lep7jin4bin1Hex0VTex
 	  AddVLQSelection("c-0lep-7jin-4bin-1Hex-1VTex", do_runop, do_syst, FIT);                //0lep7jin4bin1Hex1VTex
 	  AddVLQSelection("c-0lep-7jin-4bin-1Hex-2VTin", do_runop, do_syst, FIT);                //0lep7jin4bin1Hex2VTin
+	}
+	if(m_opt->ApplyMVA()){
+	  // Optimized regions
+	  // High MVA score regions, 400 GeV MET cut
+	  AddVLQSelection("c-0lep-6jin-2bex-2Min-HighMetCut-HighMVAScore",    do_runop, do_syst, FIT); //0lep6jin2bex2MinHighMetCutHighMVAScore 
+	  AddVLQSelection("c-0lep-6jin-3bex-2Min-HighMetCut-HighMVAScore",    do_runop, do_syst, FIT); //0lep6jin3bex2MinHighMetCutHighMVAScore
+	  AddVLQSelection("c-0lep-6jin-3bex-2Min-LowMetCut-HighMVAScore",     do_runop, do_syst, FIT); //0lep6jin3bex2MinLowMetCutHighMVAScore 
+	  AddVLQSelection("c-0lep-6jin-4bin-2Min0Hex-HighMVAScore",           do_runop, do_syst, FIT); //0lep6jin4bin2Min0HexHighMVAScore 
+	  AddVLQSelection("c-0lep-6jin-4bin-2Min1Hin-HighMVAScore",           do_runop, do_syst, FIT); //0lep6jin4bin2Min1HinHighMVAScore
+	  // Mid MVA score regions, 400 GeV MET cut
+	  AddVLQSelection("c-0lep-6jin-2bex-2Min-HighMetCut-MidMVAScore",     do_runop, do_syst, FIT); //0lep6jin2bex2MinHighMetCutMidMVAScore
+	  AddVLQSelection("c-0lep-6jin-3bin-2Min-MidMVAScore",                do_runop, do_syst, FIT); //0lep6jin3bin2MinMidMVAScore // reconsider 3bin merge
+	  // Low MVA score regions, 400 GeV MET cut
+	  AddVLQSelection("c-0lep-6jin-2bex-2Min-HighMetCut-LowMVAScore",     do_runop, do_syst, FIT); //0lep6jin2bex2MinHighMetCutLowMVAScore
+	  AddVLQSelection("c-0lep-6jin-3bex-2Min-LowMVAScore",                do_runop, do_syst, FIT); //0lep6jin3bex2MinLowMVAScore
+	  AddVLQSelection("c-0lep-6jin-4bin-2Min-LowMVAScore",                do_runop, do_syst, FIT); //0lep6jin4bin2MinLowMVAScore
+	  
+	  // Regions that were either dropped or merged to obtained the optimized regions. Will keep in case of reoptimization
+	  // High MVA score regions, 400 GeV MET cut
+	  AddVLQSelection("c-0lep-6jin-2bex-2Min-LowMetCut-HighMVAScore",     do_runop, do_syst, FIT); //0lep6jin2bex2MinLowMetCutHighMVAScore	  
+	  // Mid MVA score regions, 400 GeV MET cut	  
+	  AddVLQSelection("c-0lep-6jin-2bin-2Min-LowMetCut-MidMVAScore",      do_runop, do_syst, FIT); //0lep6jin2bin2MinLowMetCutMidMVAScore
+	  // Low MVA score regions, 400 GeV MET cut
+	  AddVLQSelection("c-0lep-6jin-2bin-2Min-HighMetCut-LowMVAScore",     do_runop, do_syst, FIT); //0lep6jin2bin2MinHighMetCutLowMVAScore
+	  AddVLQSelection("c-0lep-6jin-2bin-2Min-LowMetCut-LowMVAScore",      do_runop, do_syst, FIT); //0lep6jin2bin2MinLowMetCutLowMVAScore
+	  // Mid MVA score regions, 400 GeV MET cut with bjet split
+	  AddVLQSelection("c-0lep-6jin-2bin-2Min-HighMetCut-MidMVAScore",     do_runop, do_syst, FIT);
+          AddVLQSelection("c-0lep-6jin-2bex-2Min-LowMetCut-MidMVAScore",      do_runop, do_syst, FIT);
+          AddVLQSelection("c-0lep-6jin-3bex-2Min-HighMetCut-MidMVAScore",     do_runop, do_syst, FIT);
+          AddVLQSelection("c-0lep-6jin-3bex-2Min-LowMetCut-MidMVAScore",      do_runop, do_syst, FIT);
+          AddVLQSelection("c-0lep-6jin-4bin-2Min-HighMetCut-MidMVAScore",     do_runop, do_syst, FIT);
+          AddVLQSelection("c-0lep-6jin-4bin-2Min-LowMetCut-MidMVAScore",      do_runop, do_syst, FIT);
+          // Low MVA score regions, 400 GeV MET cut with bjet split
+          AddVLQSelection("c-0lep-6jin-2bex-2Min-LowMetCut-LowMVAScore",      do_runop, do_syst, FIT);
+          AddVLQSelection("c-0lep-6jin-3bex-2Min-HighMetCut-LowMVAScore",     do_runop, do_syst, FIT);
+          AddVLQSelection("c-0lep-6jin-3bex-2Min-LowMetCut-LowMVAScore",      do_runop, do_syst, FIT);
+          AddVLQSelection("c-0lep-6jin-4bin-2Min-HighMetCut-LowMVAScore",     do_runop, do_syst, FIT);
+          AddVLQSelection("c-0lep-6jin-4bin-2Min-LowMetCut-LowMVAScore",      do_runop, do_syst, FIT);
+	  // Merge proposals
+	  // Mid MVA score regions, MET merge with bjet split
+	  AddVLQSelection("c-0lep-6jin-3bex-2Min-MidMVAScore",     do_runop, do_syst, FIT);
+          AddVLQSelection("c-0lep-6jin-4bin-2Min-MidMVAScore",     do_runop, do_syst, FIT);
 	}
 
       }
@@ -1322,19 +1365,40 @@ bool VLQ_Selector::PassSelection(const int index){
 
   //==== MVAScore ====
   else if(index == c_LowMVAScore){
-    pass = (m_outData->o_MVAScore < 0.50);
-    //pass = (m_outData->o_MVAScore < 0.25);
-    //pass = (m_outData->o_MVAScore < 0.35);
-    //pass = (m_outData->o_MVAScore < 0.15);
+    if(m_opt->DoOneLeptonAna()){
+      pass = (m_outData->o_MVAScore < 0.50);
+    }
+    else if(m_opt->DoZeroLeptonAna()){
+      pass = (m_outData->o_MVAScore < 0.90);
+    }
+    else{
+      std::cout << "< WARNING! > : Trying to use an MVA region for a channel that is not the 0 lepton or 1 lepton channel." << std::endl;
+      pass = false;
+    }
   }
   else if(index == c_MidMVAScore){
-    pass = (m_outData->o_MVAScore >= 0.50) && (m_outData->o_MVAScore < 0.90);
-    //pass = (m_outData->o_MVAScore >= 0.25) && (m_outData->o_MVAScore < 0.90);
-    //pass = (m_outData->o_MVAScore >= 0.35) && (m_outData->o_MVAScore < 0.90);
-    //pass = (m_outData->o_MVAScore >= 0.15) && (m_outData->o_MVAScore < 0.90);
+    if(m_opt->DoOneLeptonAna()){
+      pass = (m_outData->o_MVAScore >= 0.50) && (m_outData->o_MVAScore < 0.90);
+    }
+    else if(m_opt->DoZeroLeptonAna()){
+      pass = (m_outData->o_MVAScore >= 0.90) && (m_outData->o_MVAScore < 0.95);
+    }
+    else{
+      std::cout << "< WARNING! > : Trying to use an MVA region for a channel that is not the 0 lepton or 1 lepton channel." << std::endl;
+      pass = false;
+    }
   }
   else if(index == c_HighMVAScore){
-    pass = (m_outData->o_MVAScore >= 0.90);
+    if(m_opt->DoOneLeptonAna()){
+      pass = (m_outData->o_MVAScore >= 0.90);
+    }
+    else if(m_opt->DoZeroLeptonAna()){
+      pass = (m_outData->o_MVAScore >= 0.95);
+    }
+    else{
+      std::cout << "< WARNING! > : Trying to use an MVA region for a channel that is not the 0 lepton or 1 lepton channel." << std::endl;
+      pass = false;
+    }
   }
 
   //=========== Jet multiplicities ====================
@@ -1389,6 +1453,8 @@ bool VLQ_Selector::PassSelection(const int index){
   else if(index == c_1Mex3Jin1Hin){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") == 1) && (m_outData->o_rcjets_n >= 3) &&
                                            (m_outData->o_taggedjets_n.at("RCMHiggs") >= 1); }
   else if(index == c_2Min3Jin){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") >= 2) && (m_outData->o_rcjets_n >= 3); }
+  else if(index == c_2Min0Hex){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") >= 2) && (m_outData->o_taggedjets_n.at("RCMHiggs") == 0); }
+  else if(index == c_2Min1Hin){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") >= 2) && (m_outData->o_taggedjets_n.at("RCMHiggs") >= 1); }
   else if(index == c_2Min3Jin0Hex){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") >= 2) && (m_outData->o_rcjets_n >= 3) && 
                                            (m_outData->o_taggedjets_n.at("RCMHiggs") == 0); }
   else if(index == c_2Min3Jin1Hin){ pass = (m_outData->o_taggedjets_n.at("RCTTMass") >= 2) && (m_outData->o_rcjets_n >= 3) &&
