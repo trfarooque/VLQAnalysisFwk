@@ -137,6 +137,8 @@ public:
   inline double MaxMetCutZeroLep() const { return m_maxMetCutZeroLep; }
   inline double MaxMetCutTwoLep() const {return m_maxMetCutTwoLep; }
   inline double MaxLeptopDR() const { return m_maxLeptopDR; }
+  inline double HighMVACut1Lep() const { return m_highMVACut1Lep; }
+  inline double LowMVACut1Lep() const { return m_lowMVACut1Lep; }
   // ints
   inline int DoJMSSys() const { return m_doJMSSys; }
   inline int MaxTRFB() const { return m_maxb; }
@@ -234,6 +236,8 @@ private:
   double m_maxMetCutZeroLep;
   double m_maxMetCutTwoLep;
   double m_maxLeptopDR;
+  double m_highMVACut1Lep;
+  double m_lowMVACut1Lep;
 
   std::string m_doRecoVLQ;
   std::string m_btagOP;

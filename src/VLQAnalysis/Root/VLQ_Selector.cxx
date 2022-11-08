@@ -1366,7 +1366,8 @@ bool VLQ_Selector::PassSelection(const int index){
   //==== MVAScore ====
   else if(index == c_LowMVAScore){
     if(m_opt->DoOneLeptonAna()){
-      pass = (m_outData->o_MVAScore < 0.50);
+      pass = (m_outData->o_MVAScore < m_opt->LowMVACut1Lep());
+      //pass = (m_outData->o_MVAScore < 0.50);
     }
     else if(m_opt->DoZeroLeptonAna()){
       pass = (m_outData->o_MVAScore < 0.90);
@@ -1378,7 +1379,8 @@ bool VLQ_Selector::PassSelection(const int index){
   }
   else if(index == c_MidMVAScore){
     if(m_opt->DoOneLeptonAna()){
-      pass = (m_outData->o_MVAScore >= 0.50) && (m_outData->o_MVAScore < 0.90);
+      pass = (m_outData->o_MVAScore >= m_opt->LowMVACut1Lep()) && (m_outData->o_MVAScore < m_opt->HighMVACut1Lep());
+      //pass = (m_outData->o_MVAScore >= 0.50) && (m_outData->o_MVAScore < 0.90);
     }
     else if(m_opt->DoZeroLeptonAna()){
       pass = (m_outData->o_MVAScore >= 0.90) && (m_outData->o_MVAScore < 0.95);
@@ -1390,7 +1392,8 @@ bool VLQ_Selector::PassSelection(const int index){
   }
   else if(index == c_HighMVAScore){
     if(m_opt->DoOneLeptonAna()){
-      pass = (m_outData->o_MVAScore >= 0.90);
+      pass = (m_outData->o_MVAScore >= m_opt->HighMVACut1Lep());
+      //pass = (m_outData->o_MVAScore >= 0.90);
     }
     else if(m_opt->DoZeroLeptonAna()){
       pass = (m_outData->o_MVAScore >= 0.95);

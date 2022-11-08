@@ -104,6 +104,8 @@ m_minMetCutZeroLep(200.),
 m_maxMetCutZeroLep(-1.),
 m_maxMetCutTwoLep(-1.),
 m_maxLeptopDR(100.),
+m_highMVACut1Lep(0.90),
+m_lowMVACut1Lep(0.50),
 m_doRecoVLQ("pair"),
 // m_btagOP("77"),
 m_btagOP(""), // temp
@@ -212,7 +214,9 @@ OptionsBase(q)
     m_minMetCutZeroLep  = q.m_minMetCutZeroLep;
     m_maxMetCutZeroLep  = q.m_maxMetCutZeroLep;
     m_maxMetCutTwoLep   = q.m_maxMetCutTwoLep;
-    m_maxLeptopDR        = q.m_maxLeptopDR;
+    m_maxLeptopDR       = q.m_maxLeptopDR;
+    m_highMVACut1Lep    = q.m_highMVACut1Lep,
+    m_lowMVACut1Lep     = q.m_lowMVACut1Lep,
     m_doRecoVLQ         = q.m_doRecoVLQ;
     m_btagOP            = q.m_btagOP;
     m_btagAlg           = q.m_btagAlg;
@@ -445,6 +449,12 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
 	else if( temp_arg.find("--MAXLEPTOPDR") != std::string::npos ){
 	  m_maxLeptopDR = atof(temp_val.c_str());
         }
+	else if( temp_arg.find("--HIGHMVACUTONELEP") != std::string::npos ){
+	  m_highMVACut1Lep = atof(temp_val.c_str());
+	}
+	else if( temp_arg.find("--LOWMVACUTONELEP") != std::string::npos ){
+	  m_lowMVACut1Lep = atof(temp_val.c_str());
+	}
         //
         // String arguments
         //
@@ -532,6 +542,8 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_maxMetCutZeroLep        = " << m_maxMetCutZeroLep  << std::endl;
     std::cout << " m_maxMetCutTwoLep         = " << m_maxMetCutTwoLep   << std::endl;
     std::cout << " m_maxLeptopDR             = " << m_maxLeptopDR       << std::endl;
+    std::cout << " m_highMVACut1Lep          = " << m_highMVACut1Lep    << std::endl;
+    std::cout << " m_lowMVACut1Lep           = " << m_lowMVACut1Lep     << std::endl;
     std::cout << " m_doRecoVLQ               = " << m_doRecoVLQ         << std::endl;
     std::cout << " m_btagOP                  = " << m_btagOP            << std::endl;
     std::cout << " m_btagAlg                 = " << m_btagAlg           << std::endl;
