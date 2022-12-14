@@ -3,13 +3,14 @@
 % -------------------------- %
 
 Job: "__FITTYPE_____SIGNAL_____ADDITION__"
-Label: "Ht+X analysis"
+Label: "#it{Ht/Zt+X Analysis}" %"#scale[0.8]{3-5 jets #geq6 jets CR}"
+AtlasLabel: "#kern[-0.15]{Work in Progress}"
 CmeLabel: "13 TeV"
-LumiLabel: "139.02 fb^{-1}"
+LumiLabel: "139 fb^{-1}"
 Lumi: 1.
 POI: "mu_signal"
 ReadFrom: HIST
-HistoPath: "__HISTOPATH__"
+HistoPath: "/nfs/at3/scratch2/tfarooque/VLQAnalysisRun2/FitInputs_RWPARAM/FilesTRexF/"
 DebugLevel: 0
 SystControlPlots: FALSE
 SystPruningShape: 0.01
@@ -18,12 +19,32 @@ CorrelationThreshold: 0.20
 HistoChecks: NOCRASH
 SplitHistoFiles: TRUE
 MCstatThreshold: 0.05
-StatOnly: __STATONLY__
+StatOnly: FALSE
 SystLarge: 10.
 GetChi2: TRUE
-PlotOptions: YIELDS,CHI2
+%PlotOptions: NOSIG %YIELDS,CHI2
+%PlotOptionsSummary: NOSIG NOXERR
 RankingMaxNP: 20
 RankingPlot: all
+ImageFormat: png,pdf
+RatioYmin: 0.0
+RatioYmax: 2.0
+%SignalRegionsPlot: HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,ENDL,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin,HTX_c1lep6jin3bex1fjin2VLTin1Hin,HTX_c1lep6jin4bin1fjin1Lex0VTex1Hin,HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep6jin4bin1fjin2VLTin1Hin,HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex,ENDL,HTX_c1lep3_5jwin1bex0fjex0Tex0Lex0Hex1Vin_VR,HTX_c1lep3_5jwin1bex0fjex0Tex1Lin0Hex1Vin_VR,HTX_c1lep3_5jwin1bex1fjin1LTin0Hex0Vex_VR,HTX_c1lep3_5jwin1bex1fjin1Tin0Lex0Hex1Vin_VR,HTX_c1lep3_5jwin2bex0fjex0Tex0Lex0Hex1Vin_VR,HTX_c1lep3_5jwin2bex0fjex0Tex1Lin0Hex1Vin_VR,HTX_c1lep3_5jwin2bex1fjin1LTin0Hex0Vex_VR,HTX_c1lep3_5jwin2bex1fjin1Tin0Lex0Hex1Vin_VR,HTX_c1lep3_5jwin3bin0fjex0Tex1Hin0Vex_VR,HTX_c1lep3_5jwin3bin1fjin1VLTin0Hex_VR,ENDL,HTX_c1lep6jin1bex0fjex1LTex0Hex1Vin_VR,HTX_c1lep6jin1bex0fjex2LTin0Hex1Vin_VR,HTX_c1lep6jin1bex1fjin0Tex0Lex1Hin1Vin_VR,HTX_c1lep6jin1bex1fjin2LTin1Hin0Vex_VR,HTX_c1lep6jin2bex0fjex1LTex0Hex1Vin_VR,HTX_c1lep6jin2bex0fjex2LTin0Hex1Vin_VR,HTX_c1lep6jin2bex1fjin0Tex0Lex1Hin1Vin_VR,HTX_c1lep6jin2bex1fjin2LTin1Hin0Vex_VR,HTX_c1lep6jin3bin1fjin1VLTin0Hex_VR,HTX_c1lep6jin3bin0fjex1VLTin1Hin_VR
+%SummaryPlotRegions: HTX_c1lep3_5jwin1bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin1bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0LTex0Hex1Vin,HTX_c1lep3_5jwin2bex1fjin0Tex1Lin0Hex1Vin,HTX_c1lep3_5jwin3bex1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin3bex1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0LTex1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin0Tex1Lin1Hin0Vex,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex,HTX_c1lep3_5jwin4bin0fjex1Lin0VTex0Hex,ENDL,HTX_c1lep6jin1bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin1bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin2bex1fjin1Lex0Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin0Lex1Tex0Hex1Vin,HTX_c1lep6jin2bex1fjin2LTin0Hex1Vin,HTX_c1lep6jin3bex1fjin1Lex0VTex1Hin,HTX_c1lep6jin3bex1fjin0Lex1VTex1Hin,HTX_c1lep6jin3bex1fjin2VLTin1Hin,HTX_c1lep6jin4bin1fjin1Lex0VTex1Hin,HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep6jin4bin1fjin2VLTin1Hin,HTX_c1lep6jin4bin0fjex1Lin0VTex0Hex,ENDL,HTX_c1lep3_5jwin1bex0fjex0Tex0Lex0Hex1Vin_VR,HTX_c1lep3_5jwin1bex0fjex0Tex1Lin0Hex1Vin_VR,HTX_c1lep3_5jwin1bex1fjin1LTin0Hex0Vex_VR,HTX_c1lep3_5jwin1bex1fjin1Tin0Lex0Hex1Vin_VR,HTX_c1lep3_5jwin2bex0fjex0Tex0Lex0Hex1Vin_VR,HTX_c1lep3_5jwin2bex0fjex0Tex1Lin0Hex1Vin_VR,HTX_c1lep3_5jwin2bex1fjin1LTin0Hex0Vex_VR,HTX_c1lep3_5jwin2bex1fjin1Tin0Lex0Hex1Vin_VR,HTX_c1lep3_5jwin3bin0fjex0Tex1Hin0Vex_VR,HTX_c1lep3_5jwin3bin1fjin1VLTin0Hex_VR,ENDL,HTX_c1lep6jin1bex0fjex1LTex0Hex1Vin_VR,HTX_c1lep6jin1bex0fjex2LTin0Hex1Vin_VR,HTX_c1lep6jin1bex1fjin0Tex0Lex1Hin1Vin_VR,HTX_c1lep6jin1bex1fjin2LTin1Hin0Vex_VR,HTX_c1lep6jin2bex0fjex1LTex0Hex1Vin_VR,HTX_c1lep6jin2bex0fjex2LTin0Hex1Vin_VR,HTX_c1lep6jin2bex1fjin0Tex0Lex1Hin1Vin_VR,HTX_c1lep6jin2bex1fjin2LTin1Hin0Vex_VR,HTX_c1lep6jin3bin1fjin1VLTin0Hex_VR,HTX_c1lep6jin3bin0fjex1VLTin1Hin_VR
+RegionGroups: LJ,HJ,LJ_VR,HJ_VR
+%SummaryPlotLabels: "3-5 jets";"#geq6 jets"
+%SummaryPlotLabelsValidationRegions: "3-5 jets";"#geq6 jets";"3-5 jets";"#geq6 jets"
+LegendNColumns: 1
+LegendNColumnsSummary: 2
+LegendX1: 0.61 %0.65 IF NO SIGNAL IN MEFF PLOTS
+LegendX1Summary: 0.48
+LegendX2Summary: 0.98
+%LabelX: 0.25
+LabelXSummary: 0.113
+LabelYSummary: 0.91
+SummaryCanvasSize: 900,605
+BlindSRs: FALSE
+DoTables: TRUE
 
 % -------------------------- %
 % -------    FIT     ------- %
@@ -225,7 +246,7 @@ LumiScales: 36207.66,44307.4,58450.1
 %HistoFile: Dibosons
 %Group: Non-t#bar{t}
 Group: Others
-Exclude: HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin
+Exclude: HTX_c1lep6jin4bin1fjin0Lex1VTex1Hin,HTX_c1lep3_5jwin4bin1fjin1Tin0Lex1Hin0Vex,HTX_c1lep6jin4bin1fjin2VLTin1Hin
 
 Sample: QCD
 Title: QCD

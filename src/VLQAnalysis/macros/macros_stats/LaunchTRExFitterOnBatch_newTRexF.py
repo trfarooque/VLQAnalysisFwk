@@ -3,6 +3,7 @@ import os
 import glob
 import sys
 import socket
+import time
 
 sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/IFAETopFramework/" )
 from BatchTools import *
@@ -80,6 +81,7 @@ def writeScripts( scriptName, configFile, tRexFitterOutDirectory, instructions ,
     script.write("mv " + tRexFitterOutDirectory + "/Significance/* " + m_outputDir + "/" + tRexFitterOutDirectory + "/Significance/ \n")
     script.write("mv " + tRexFitterOutDirectory + "/Tables/* " + m_outputDir + "/" + tRexFitterOutDirectory + "/Tables/ \n")
     script.write("mv " + tRexFitterOutDirectory + "/Limits/* " + m_outputDir + "/" + tRexFitterOutDirectory + "/Limits/ \n")
+    # script.write("mv " + tRexFitterOutDirectory + "/Histograms/* " + m_outputDir + "/" + tRexFitterOutDirectory + "/Histograms/ \n")
     script.write("mv logFileRunning* " + m_outputDir + "/" + tRexFitterOutDirectory + "/ \n")
 
     script.write("\n\n")
@@ -346,6 +348,9 @@ for config in configFileList:
             com += "d"
         writeScriptsAndLaunchJobs( m_outputDir + "/scripts_", config, [com + " _CONFIGFILE_",] , jobParams )
 #        writeScriptsAndLaunchJobs( m_outputDir + "/scripts_", config, [com + " _CONFIGFILE_",], m_mergeJobs==False , jobParams )
+    
+    time.sleep(1)
+
 
 if m_mergeJobs:
     list_scripts = glob.glob(m_outputDir + "/scripts_*")

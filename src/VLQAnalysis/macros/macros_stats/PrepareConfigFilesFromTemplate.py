@@ -3,6 +3,7 @@ import os
 import sys
 import importlib
 import json
+import re
 
 sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/VLQAnalysis/" )
 from VLQ_Samples_mc import *
@@ -228,8 +229,8 @@ if(signalType=="PAIR"):
                         coupling_Zt = iZt * step_width
                         coupling_Wb = iWb * step_width
                         if abs(coupling_Ht+coupling_Wb+coupling_Zt-1.)<0.001:
-                            Signals += [getSampleUncertainties("VLQ_TT_" + mass + "_BR_%.2f_%.2f_%.2f" %(coupling_Wb,coupling_Zt,coupling_Ht)
-                                                            ,"VLQ_TT_" + mass + "_BR_%.2f_%.2f_%.2f" %(coupling_Wb,coupling_Zt,coupling_Ht)
+                            Signals += [getSampleUncertainties("VLQ_TT_" + mass + "_BR_%.2f_%.3f_%.3f" %(coupling_Wb,coupling_Zt,coupling_Ht)
+                                                            ,"VLQ_TT_" + mass + "_BR_%.3f_%.3f_%.3f" %(coupling_Wb,coupling_Zt,coupling_Ht)
                                                                , CommonObjectSystematics , [])]
         else:
             Signals += [getSampleUncertainties("VLQ_TT_" + mass + "_TDoublet","VLQ_TT_" + mass + "_TDoublet", CommonObjectSystematics , [])]
@@ -256,8 +257,8 @@ if(signalType=="PAIR"):
 elif(signalType=="SINGLE"):
 
     VLQ_masses = [1100, 1300, 1500, 1700, 1900, 2100, 2300]
-    VLQ_massRW = ["low_mass"]#, "nom_mass"]
-    VLQ_couplings =["K30","K50","K70"]
+    VLQ_massRW = ["nom_mass","low_mass"]
+    VLQ_couplings = ["K30","K40","K50","K60","K70","K80","K90","K100","K110","K120","K130","K140","K150","K160"] #"K20","K25"
 
     if signalHandling=="ALL":
         SignalSets["sVLQ"] = []
@@ -269,6 +270,7 @@ elif(signalType=="SINGLE"):
             for vlqMass in VLQ_masses:
 
                 sVLQ_samples =  GetSingleVLQSamples( RWName=massRW+"_"+vlq_coupling, mode="", mass=vlqMass )
+
                 if signalHandling=="ONE":
                     for sample in sVLQ_samples:
                         SType = sample['sampleType']
@@ -285,7 +287,16 @@ elif(signalType=="SINGLE"):
                 SignalSets["sVLQ_TD"+strParam] = []
                 SignalSets["sVLQ_TD"+strParam] += GetSingleVLQSamples( RWName=massRW+"_"+vlq_coupling, mode="ZTHt", mass=vlqMass )
                 SignalSets["sVLQ_TD"+strParam] += GetSingleVLQSamples( RWName=massRW+"_"+vlq_coupling, mode="ZTZt", mass=vlqMass )
-                
+
+                # Scan xi_W between 0.0 and 0.5, keeping xi_Z=xi_H
+                # for xi_W in [0.05,0.15]:#[0.6,0.7,0.8,0.9,1.0]: #[0.0,0.1,0.2,0.3,0.4,0.5]:#[0.1*i for i in range(6)]:
+                #     xi_ZH = (1. - xi_W)/2.
+                #     if xi_W == 0.:
+                #         SignalSets["sVLQ_SCAN_"+strParam+"_xi_%.2f_%.3f_%.3f"%(xi_W,xi_ZH,xi_ZH)] = []
+                #         SignalSets["sVLQ_SCAN_"+strParam+"_xi_%.2f_%.3f_%.3f"%(xi_W,xi_ZH,xi_ZH)] += GetSingleVLQSamples( RWName=massRW+"_"+vlq_coupling, mode="ZTHt", mass=vlqMass )
+                #         SignalSets["sVLQ_SCAN_"+strParam+"_xi_%.2f_%.3f_%.3f"%(xi_W,xi_ZH,xi_ZH)] += GetSingleVLQSamples( RWName=massRW+"_"+vlq_coupling, mode="ZTZt", mass=vlqMass )
+                #     else:
+                #         SignalSets["sVLQ_SCAN_"+strParam+"_xi_%.2f_%.3f_%.3f"%(xi_W,xi_ZH,xi_ZH)] = sVLQ_samples
             
     #Signals += GetOldSingleVLQSamples( )
 
@@ -357,6 +368,10 @@ def GetSVLQSampleXSec( vlqMultiplet, samples ):
         elif vlqMultiplet.upper()=="TDOUBLET":
             xiW=0.
             xiZ=0.5
+        elif vlqMultiplet.upper().startswith("XI"):
+            ind = [m.start() for m in re.finditer('_', vlqMultiplet)]
+            xiW = float(vlqMultiplet[ind[0]+1:ind[1]])
+            xiZ = float(vlqMultiplet[ind[1]+1:ind[2]])
         else: #dummy singlet values for now
             xiW=0.5
             xiZ=0.25
@@ -440,8 +455,10 @@ for setName,Signals in SignalSets.items():
             multiplet="TSINGLET"
         elif 'sVLQ_TD' in setName:
             multiplet="TDOUBLET"
+        elif 'SCAN' in setName:
+            multiplet=setName[setName.index("xi"):]
         theoryXSec = GetSVLQSampleXSec(multiplet, SType )
-        setTheoryXSec += theoryXSec    
+        setTheoryXSec += theoryXSec
 
 
         ###############################################
@@ -452,7 +469,6 @@ for setName,Signals in SignalSets.items():
             continue
         else:
             SignalInfos[SType] = { 'name':SType, 'title':TypeTemp, 'fileName':cleaned_sampleType, 'inputXSec':inputXSec, 'theoryXSec': theoryXSec }
-
 
 ################################################################
 
@@ -568,11 +584,11 @@ for setName,Signals in SignalSets.items():
             scaleFactor = (sample['theoryXSec']/sample['inputXSec'])
             
         if signalScaling=="BENCHMARK":
-
+            print sample['inputXSec']
             scaleFactor = signalBenchmark / sample['inputXSec']
 
             #if we are scaling a combination of signals, need to preserve the relative theoretical cross section between them
-            if ('sVLQ_TS' in setName) or ('sVLQ_TD' in setName):
+            if ('sVLQ_TS' in setName) or ('sVLQ_TD' in setName) or ('SCAN' in setName):
                 scaleFactor *= (sample['theoryXSec']/setTheoryXSec)
 
         lumiscale_mc16a *= scaleFactor
@@ -597,4 +613,3 @@ for setName,Signals in SignalSets.items():
     f_adapted.close()
     f_template.close()
     
-  
