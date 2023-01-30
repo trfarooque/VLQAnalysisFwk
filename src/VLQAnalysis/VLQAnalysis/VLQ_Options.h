@@ -104,6 +104,7 @@ public:
   inline bool ApplyMVA() const { return m_applyMVA; }
   inline bool DoBaselineFitRegions() const { return m_doBaselineFitRegions; }
   inline bool DoUncorrelatedMVARegions() const { return m_doUncorrelatedMVARegions; }
+  inline bool PrunePMGWeights() const { return m_prunePMGWeights; }
 
   // strings
   inline std::string DoRecoVLQ() const { return m_doRecoVLQ; }
@@ -139,6 +140,8 @@ public:
   inline double MaxLeptopDR() const { return m_maxLeptopDR; }
   inline double HighMVACut1Lep() const { return m_highMVACut1Lep; }
   inline double LowMVACut1Lep() const { return m_lowMVACut1Lep; }
+  inline double HighMVACut0Lep() const { return m_highMVACut0Lep; }
+  inline double LowMVACut0Lep() const { return m_lowMVACut0Lep; }
   // ints
   inline int DoJMSSys() const { return m_doJMSSys; }
   inline int MaxTRFB() const { return m_maxb; }
@@ -213,6 +216,7 @@ private:
   bool m_applyMVA;
   bool m_doBaselineFitRegions;
   bool m_doUncorrelatedMVARegions;
+  bool m_prunePMGWeights;
 
   int m_doJMSSys;
   int m_maxb;
@@ -238,6 +242,8 @@ private:
   double m_maxLeptopDR;
   double m_highMVACut1Lep;
   double m_lowMVACut1Lep;
+  double m_highMVACut0Lep;
+  double m_lowMVACut0Lep;
 
   std::string m_doRecoVLQ;
   std::string m_btagOP;

@@ -737,8 +737,8 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "meff",        50, 0, 7000,    ";m_{eff} [GeV]", true, &(m_outData -> o_meff) );
       m_outMngrHist -> AddStandardTH1( "meffred",     50, 0, 7000,    ";m_{eff} reduced [GeV]", otherVariables, &(m_outData -> o_meffred) );
       m_outMngrHist -> AddStandardTH1( "mJsum",       25, 0, 2000,    ";m_{J}^{#Sigma} [GeV]", otherVariables, &(m_outData -> o_mJsum) );
-      m_outMngrHist -> AddStandardTH1( "met",         20, 0, 1600,    ";E_{T}^{miss} [GeV]", true, &(m_outData -> o_met) );
-      m_outMngrHist -> AddStandardTH1( "met_phi",     0.2, -3.5, 3.5, ";#phi_{MET}", false, &(m_outData->o_AO_met), -1, "Phi");
+      m_outMngrHist -> AddStandardTH1( "met",         20, 0, 1600,    ";E_{T}^{miss} [GeV]", otherVariables, &(m_outData -> o_met) );
+      m_outMngrHist -> AddStandardTH1( "met_phi",     0.2, -3.5, 3.5, ";#phi_{MET}", otherVariables, &(m_outData->o_AO_met), -1, "Phi");
       m_outMngrHist -> AddStandardTH1( "mtw",         25, 0, 1000,    ";m_{T}(W) [GeV]", otherVariables, &(m_outData -> o_mtwl) );
       m_outMngrHist -> AddStandardTH1( "ptw",         25, 0, 1000,    ";p_{T}(W) [GeV]", otherVariables, &(m_outData -> o_ptwl) );
       m_outMngrHist -> AddStandardTH1( "mll",         5, 0, 500,    ";m_{ll} [GeV]", false, &(m_outData -> o_mll) );
@@ -1530,11 +1530,9 @@ bool VLQ_Analysis_Data2015::Begin(){
 	  m_outMngrHist -> AddStandardTH1( type + "_jet" + str_id + "_m", 10, 0, 500, ";"+tagstring+" jet"+str_id+" mass [GeV]"    ,
 					   otherVariables, &(m_outData -> o_taggedjets.at(type)), iTT, "M" );
 	  m_outMngrHist -> AddStandardTH1( type + "_jet" +str_id+ "_bconsts_n", 1, -0.5, 5.5, ";"+tagstring+" jet"+str_id+" N_{subjets}^{b-tagged}",
-					   DrawSyst, &(m_outData -> o_taggedjets.at(type)), iTT, "nbconsts" );
-	  if(type=="RCTTMass" || type=="LooseRCTTMass"){
-	    m_outMngrHist -> AddStandardTH1( type + "_jet" +str_id+ "_consts_n", 1, -0.5, 5.5, ";"+tagstring+" jet"+str_id+" N_{subjets}",
-					     DrawSyst, &(m_outData -> o_taggedjets.at(type)), iTT, "nconsts" );
-	  }
+					   otherVariables, &(m_outData -> o_taggedjets.at(type)), iTT, "nbconsts" );
+	  m_outMngrHist -> AddStandardTH1( type + "_jet" +str_id+ "_consts_n", 1, -0.5, 5.5, ";"+tagstring+" jet"+str_id+" N_{subjets}",
+					   otherVariables, &(m_outData -> o_taggedjets.at(type)), iTT, "nconsts" );
 
 	  if(m_opt->VerboseOutput()){
 	    // 2D variables for boosted object tagging optimization studies
@@ -1774,7 +1772,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 	//m_outMngrHist -> AddStandardTH1( "lep"+str_id+"_z0",  0.025, -0.5, 0.5,      ";Lepton z_{0} [mm]"      ,  false,           &(m_outData -> o_lep), iLep, "z0" );
       }
 
-      if(m_opt->VerboseOutput()){
+      if(m_opt->VerboseOutput() || m_opt->ApplyMVA()){
 
 	//Kinematic variables
 	m_outMngrHist -> AddStandardTH1( "dRmin_lepjet",         0.25,0,5,  ";#DeltaR_{min}(lep,jet)"              , false, &(m_outData -> o_dRmin_lepjet)     );
@@ -1788,9 +1786,9 @@ bool VLQ_Analysis_Data2015::Begin(){
 	m_outMngrHist -> AddStandardTH1( "dPhimin_lepjet",         0.25,-1,5,  ";#Delta#phi_{min}(lep,jet)"        , false, &(m_outData -> o_dPhimin_lepjet)     );
         m_outMngrHist -> AddStandardTH1( "dPhimin_lepbjet",         0.25,-1,5,  ";#Delta#phi_{min}(lep,bjet)"      , false, &(m_outData -> o_dPhimin_lepbjet)     );
 
-        m_outMngrHist -> AddStandardTH1( "dRmin_RCjets",         0.25,0,5,  ";#DeltaR_{min}(lep,bjet)"        , false, &(m_outData -> o_dPhimin_RCjets)     );
-        m_outMngrHist -> AddStandardTH1( "dEtamin_RCjets",         0.25,0,5,  ";#Delta#eta_{min}(lep,bjet)"      , false, &(m_outData -> o_dEtamin_RCjets)     );
-        m_outMngrHist -> AddStandardTH1( "dPhimin_RCjets",         0.25,-1,5,  ";#Delta#phi_{min}(lep,bjet)"    , false, &(m_outData -> o_dPhimin_RCjets)     );
+        m_outMngrHist -> AddStandardTH1( "dRmin_RCjets",         0.25,0,5,  ";#DeltaR_{min}(rcjet,rcjet)"        ,  false, &(m_outData -> o_dRmin_RCjets)     );
+        m_outMngrHist -> AddStandardTH1( "dEtamin_RCjets",         0.25,0,5,  ";#Delta#eta_{min}(rcjet,rcjet)"      , false, &(m_outData -> o_dEtamin_RCjets)     );
+        m_outMngrHist -> AddStandardTH1( "dPhimin_RCjets",         0.25,-1,5,  ";#Delta#phi_{min}(rcjet,rcjet)"    , false, &(m_outData -> o_dPhimin_RCjets)     );
 
 
 	m_outMngrHist -> AddStandardTH1( "dR_ejet",         0.25,0,5,  ";#DeltaR_{min}(e,jet)"                  , false, &(m_outData -> o_dRmin_ejets)     );
@@ -1854,18 +1852,18 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist->AddStandardTH1("dPhiaverage_lepbjet",         0.25,-1,5   ,";#Delta#phi_{ave.}(lep,b-jet)", false, &(m_outData -> o_dPhiaverage_lepbjet)  );
       m_outMngrHist->AddStandardTH1("dPhiaverage_jetjet",         0.25,-1,5   ,";#Delta#phi_{ave.}(jet,jet)", false, &(m_outData -> o_dPhiaverage_jetjet)  );
 
-      m_outMngrHist->AddStandardTH1("dRaverage_RCjets",         0.25,0,5   ,";#DeltaR_{ave.}(rcjet,rcjet)", false, &(m_outData -> o_dRaverage_RCjets)  );
+      m_outMngrHist->AddStandardTH1("dRaverage_RCjets",         0.25,0,5   ,";#DeltaR_{ave.}(rcjet,rcjet)", otherVariables, &(m_outData -> o_dRaverage_RCjets)  );
       m_outMngrHist->AddStandardTH1("dEtaaverage_RCjets",         0.25,0,5   ,";#Delta#eta_{ave.}(rcjet,rcjet)", false, &(m_outData -> o_dEtaaverage_RCjets)  );
-      m_outMngrHist->AddStandardTH1("dPhiaverage_RCjets",         0.25,-1,5   ,";#Delta#phi_{ave.}(rcjet,rcjet)", false, &(m_outData -> o_dPhiaverage_RCjets)  );
+      m_outMngrHist->AddStandardTH1("dPhiaverage_RCjets",         0.25,-1,5   ,";#Delta#phi_{ave.}(rcjet,rcjet)", otherVariables, &(m_outData -> o_dPhiaverage_RCjets)  );
  
 
       m_outMngrHist->AddStandardTH1("dRaverage_RCTTMassRCTTMass",         0.25,0,5   ,";#DeltaR_{ave.}(RCTTMass,RCTTMass)", false, &(m_outData -> o_dRaverage_RCTTMassRCTTMass)  );
       m_outMngrHist->AddStandardTH1("dEtaaverage_RCTTMassRCTTMass",         0.25,0,5   ,";#Delta#eta_{ave.}(RCTTMass,RCTTMass)", false, &(m_outData -> o_dEtaaverage_RCTTMassRCTTMass)  );
-      m_outMngrHist->AddStandardTH1("dPhiaverage_RCTTMassRCTTMass",         0.25,-1,5   ,";#Delta#phi_{ave.}(RCTTMass,RCTTMass)", false, &(m_outData -> o_dPhiaverage_RCTTMassRCTTMass)  );
+      m_outMngrHist->AddStandardTH1("dPhiaverage_RCTTMassRCTTMass",         0.25,-1,5   ,";#Delta#phi_{ave.}(RCTTMass,RCTTMass)", otherVariables, &(m_outData -> o_dPhiaverage_RCTTMassRCTTMass)  );
  
       
       m_outMngrHist->AddStandardTH1("dPhiaverage_RCjetsMET",  0.25,0,5, ";#Delta#phi_{ave.}(rcjet,MET)", false, &(m_outData -> o_dPhiaverage_RCjetsMET), hopt_nouoflow  );
-      m_outMngrHist->AddStandardTH1("dPhiaverage_RCTTMassMET",  0.25,0,5, ";#Delta#phi_{ave.}(RCTTMass,MET)", false, &(m_outData -> o_dPhiaverage_RCTTMassMET), hopt_nouoflow  );
+      m_outMngrHist->AddStandardTH1("dPhiaverage_RCTTMassMET",  0.25,0,5, ";#Delta#phi_{ave.}(RCTTMass,MET)", otherVariables, &(m_outData -> o_dPhiaverage_RCTTMassMET), hopt_nouoflow  );
       m_outMngrHist->AddStandardTH1("dPhiaverage_RCMTopMET",  0.25,0,5, ";#Delta#phi_{ave.}(RCMTop,MET)", false, &(m_outData -> o_dPhiaverage_RCMTopMET), hopt_nouoflow  );
       m_outMngrHist->AddStandardTH1("dPhiaverage_RCMHiggsMET",  0.25,0,5, ";#Delta#phi_{ave.}(RCMHiggs,MET)", false, &(m_outData -> o_dPhiaverage_RCMHiggsMET), hopt_nouoflow  );
 

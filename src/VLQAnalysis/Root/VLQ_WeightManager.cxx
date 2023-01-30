@@ -718,8 +718,8 @@ bool VLQ_WeightManager::SetPMGSystNorm(){
     double nev_sys = m_sampleInfo->NWeightedEvents("sumOfWeights_"+branchName, true /*ignore branch if missing*/ );
 
     double sys_factor = (nev_sys > 0.) ? nev_nom/nev_sys : 1.;
-
-    if((sysweight.second)->GetComponentValue() > m_sampleInfo->WeightThreshold(branchName, false)){
+    
+    if(m_vlq_opt->PrunePMGWeights() && ((sysweight.second)->GetComponentValue() > m_sampleInfo->WeightThreshold(branchName, false))){
       if(m_vlq_opt -> MsgLevel() == Debug::DEBUG){
 	std::cout << "Systematic component " << sysweight.first << " = " << (sysweight.second)->GetComponentValue() 
 		  << " > " << m_sampleInfo->WeightThreshold(branchName, false) << ". Setting to 0." << std::endl;

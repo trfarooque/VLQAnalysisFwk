@@ -1381,7 +1381,7 @@ bool VLQ_AnalysisTools::ComputeOneLepMVAVariables() {
 
 
   inputVarsOneLepMVA["jets_n"] = m_outData -> o_jets_n;
-  inputVarsOneLepMVA["trkbjets_n"] = m_outData->o_trkbjets_n;
+  inputVarsOneLepMVA["trkbjets_n"] = (m_opt->BtagCollection()==VLQ_Options::TRACK) ? m_outData->o_trkbjets_n : m_outData->o_bjets_n;
   inputVarsOneLepMVA["RCjets_n"] = m_outData -> o_rcjets_n;
   inputVarsOneLepMVA["RCMTop_jets_n"] = m_outData->o_taggedjets_n.at("RCMTop");
   inputVarsOneLepMVA["RCMHiggs_jets_n"] = m_outData->o_taggedjets_n.at("RCMHiggs");

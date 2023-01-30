@@ -82,6 +82,7 @@ m_doJMRSys(false),
 m_applyMVA(false),
 m_doBaselineFitRegions(true),
 m_doUncorrelatedMVARegions(false),
+m_prunePMGWeights(false),
 m_doJMSSys(0),
 m_maxb(4),
 m_RCNsubjetsCut(2),
@@ -106,6 +107,8 @@ m_maxMetCutTwoLep(-1.),
 m_maxLeptopDR(100.),
 m_highMVACut1Lep(0.90),
 m_lowMVACut1Lep(0.50),
+m_highMVACut0Lep(0.95),
+m_lowMVACut0Lep(0.90),
 m_doRecoVLQ("pair"),
 // m_btagOP("77"),
 m_btagOP(""), // temp
@@ -193,6 +196,7 @@ OptionsBase(q)
     m_applyMVA          = q.m_applyMVA;
     m_doBaselineFitRegions = q.m_doBaselineFitRegions;
     m_doUncorrelatedMVARegions = q.m_doUncorrelatedMVARegions;
+    m_prunePMGWeights   = q.m_prunePMGWeights;
     m_RecTtBbRw         = q.m_RecTtBbRw;
     m_RwTtFractions     = q.m_RwTtFractions;
     m_RCNsubjetsCut     = q.m_RCNsubjetsCut;
@@ -217,6 +221,8 @@ OptionsBase(q)
     m_maxLeptopDR       = q.m_maxLeptopDR;
     m_highMVACut1Lep    = q.m_highMVACut1Lep,
     m_lowMVACut1Lep     = q.m_lowMVACut1Lep,
+    m_highMVACut0Lep    = q.m_highMVACut0Lep,
+    m_lowMVACut0Lep     = q.m_lowMVACut0Lep,
     m_doRecoVLQ         = q.m_doRecoVLQ;
     m_btagOP            = q.m_btagOP;
     m_btagAlg           = q.m_btagAlg;
@@ -251,8 +257,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
         //
         if( temp_arg.find("--USELEPTONSSF") != std::string::npos ){
             m_useLeptonsSF = AnalysisUtils::BoolValue(temp_val, temp_arg);
-        } else if( temp_arg.find("--USEBTAGGINGSF") != std::string::npos ){
-	         m_useBtagSF = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if( temp_arg.find("--USEBTAGGINGSF") != std::string::npos ){
+	    m_useBtagSF = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--RECOMPUTEBTAGSF") != std::string::npos ){
             m_recomputeBtagSF = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--USEPUWEIGHT") != std::string::npos ){
@@ -387,6 +393,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
 	    m_doBaselineFitRegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
 	} else if( temp_arg.find("--DOUNCORRELATEDMVAREGIONS") != std::string::npos){
 	    m_doUncorrelatedMVARegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if( temp_arg.find("--PRUNEPMGWEIGHTS") != std::string::npos){
+	    m_prunePMGWeights = AnalysisUtils::BoolValue(temp_val, temp_arg);
 	}
 
         //
@@ -455,6 +463,12 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
 	else if( temp_arg.find("--LOWMVACUTONELEP") != std::string::npos ){
 	  m_lowMVACut1Lep = atof(temp_val.c_str());
 	}
+	else if( temp_arg.find("--HIGHMVACUTZEROLEP") != std::string::npos ){
+          m_highMVACut0Lep = atof(temp_val.c_str());
+        }
+        else if( temp_arg.find("--LOWMVACUTZEROLEP") != std::string::npos ){
+          m_lowMVACut0Lep = atof(temp_val.c_str());
+        }
         //
         // String arguments
         //
@@ -544,6 +558,8 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_maxLeptopDR             = " << m_maxLeptopDR       << std::endl;
     std::cout << " m_highMVACut1Lep          = " << m_highMVACut1Lep    << std::endl;
     std::cout << " m_lowMVACut1Lep           = " << m_lowMVACut1Lep     << std::endl;
+    std::cout << " m_highMVACut0Lep          = " << m_highMVACut0Lep    << std::endl;
+    std::cout << " m_lowMVACut0Lep           = " << m_lowMVACut0Lep     << std::endl;
     std::cout << " m_doRecoVLQ               = " << m_doRecoVLQ         << std::endl;
     std::cout << " m_btagOP                  = " << m_btagOP            << std::endl;
     std::cout << " m_btagAlg                 = " << m_btagAlg           << std::endl;
@@ -617,8 +633,9 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_doJMRSys                = " << m_doJMRSys          << std::endl;
     std::cout << " m_doJMSSys                = " << m_doJMSSys          << std::endl;
     std::cout << " m_applyMVA                = " << m_applyMVA          << std::endl;
-    std::cout << " m_doBaselineFfitRegions   = " << m_doBaselineFitRegions << std::endl; 
+    std::cout << " m_doBaselineFitRegions   = " << m_doBaselineFitRegions << std::endl; 
     std::cout << " m_doUncorrelatedMVARegions= " << m_doUncorrelatedMVARegions << std::endl;
+    std::cout << " m_prunePMGWeights         = " << m_prunePMGWeights   << std::endl;
     std::cout << " m_MVAWeightFile           = " << m_MVAWeightFile     << std::endl;
     std::cout << " m_applyVjetsSherpa22RW    = " << m_applyVjetsSherpa22RW   << std::endl;
     std::cout << " m_filterType              = " << m_filterType        << std::endl;

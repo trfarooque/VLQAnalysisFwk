@@ -105,6 +105,12 @@ public:
     int AddSelectionIndex( const std::string& sel_name, int index=-1, bool newentry=false);
     SelProp MakeSelProp(const std::string& _name, int _type, const std::string& _primanc_name="");
 
+    bool GetVLQChannels();
+    bool AddPreselectionRegions();
+    bool AddMVATrainingRegions();
+    bool AddFitRegions();
+    bool AddValidationRegions();
+
  private:
     VLQ_Options *m_opt;
     const VLQ_NtupleData *m_ntupData;
@@ -140,6 +146,15 @@ public:
     std::vector<SelProp>* m_sel_MLL_prop;
     std::vector<SelProp>* m_sel_MVAScore_prop;
     std::ifstream m_blinding_config;
+
+    std::vector<std::string> m_ch_metsig;
+    std::vector<std::string> m_ch_metcut;
+    std::map<std::string, std::vector< std::string> > m_ch_mtb_presel;
+    std::map<std::string, std::vector< std::string> > m_ch_fjet;
+    std::vector<std::string>m_v_bjet_presel;
+    std::map<std::string, std::vector< std::string> > m_ch_lep;
+    std::map<std::string, std::vector< std::string> > m_ch_mll;
+    std::map<std::string, std::vector< std::string> > m_v_jet_presel;
 
     //int m_nsel;
 
