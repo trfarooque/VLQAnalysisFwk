@@ -105,11 +105,15 @@ public:
     int AddSelectionIndex( const std::string& sel_name, int index=-1, bool newentry=false);
     SelProp MakeSelProp(const std::string& _name, int _type, const std::string& _primanc_name="");
 
-    bool GetVLQChannels();
-    bool AddPreselectionRegions();
-    bool AddMVATrainingRegions();
-    bool AddFitRegions();
-    bool AddValidationRegions();
+    bool GetPreselectionCuts();
+    bool AddPreselectionRegions(bool do_syst = true, bool do_runop = true);
+    bool AddMVATrainingRegions(bool do_syst = true, bool do_runop = true);
+    bool AddSingleVLQFitRegions(bool do_syst = true, bool do_runop = true);
+    bool AddSingleVLQValidationRegions(bool do_syst = true, bool do_runop = true);
+    bool AddPairVLQ0LepFitRegions(bool do_syst = true, bool do_runop = true);
+    bool AddPairVLQ0LepValidationRegions(bool do_syst = true, bool do_runop = true);
+    bool AddPairVLQ1LepFitRegions(bool do_syst = true, bool do_runop = true);
+    bool AddPairVLQ1LepValidationRegions(bool do_syst = true, bool do_runop = true);
 
  private:
     VLQ_Options *m_opt;
@@ -149,12 +153,16 @@ public:
 
     std::vector<std::string> m_ch_metsig;
     std::vector<std::string> m_ch_metcut;
-    std::map<std::string, std::vector< std::string> > m_ch_mtb_presel;
-    std::map<std::string, std::vector< std::string> > m_ch_fjet;
-    std::vector<std::string>m_v_bjet_presel;
+    std::vector<std::string> m_ch_mtb_presel;
+    std::vector<std::string> m_ch_fjet;
+    std::vector<std::string> m_v_bjet_presel;
+    std::vector<std::string> m_v_jet_presel;
+    std::vector<std::string> m_mva_cut_presel;
+    std::vector<std::string> m_mva_jet_presel;
+    std::vector<std::string> m_mva_bjet_presel;
+    std::vector<std::string> m_mva_boost_presel;
     std::map<std::string, std::vector< std::string> > m_ch_lep;
     std::map<std::string, std::vector< std::string> > m_ch_mll;
-    std::map<std::string, std::vector< std::string> > m_v_jet_presel;
 
     //int m_nsel;
 

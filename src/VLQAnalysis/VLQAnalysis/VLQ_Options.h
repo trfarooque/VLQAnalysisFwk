@@ -82,6 +82,7 @@ public:
   inline bool DoOldBoost() const { return m_doOldBoost; }
   inline bool DoSplitMtb() const { return m_doSplitMtb; }
   inline bool DoSplitMbb() const { return m_doSplitMbb; }
+  inline bool DoSplitFjet() const { return m_doSplitFjet; }
   inline bool DoSumRegions() const { return m_doSumRegions; }
   inline bool ISAFII() const { return m_isAFII; }
   inline bool ISDIAGSUB() const { return m_isDiagSub; }
@@ -191,7 +192,7 @@ private:
 
   bool m_doPreselection, m_doExclusiveJetRegions, m_doExtendedPreselection, m_doSingleVLQRegions, m_doPairVLQRegions,
     m_doOldPairProdRegions,m_doValidnRegions, m_doFitRegions, m_doLooseSystRegions, m_doLowBRegions, m_doLowJRegions,
-    m_doSplitEMu, m_doOldBoost, m_doSplitMtb, m_doSplitMbb;
+    m_doSplitEMu, m_doOldBoost, m_doSplitMtb, m_doSplitMbb, m_doSplitFjet;
   bool m_doSumRegions;
 
   bool m_scaleTtbarHtSlices;
