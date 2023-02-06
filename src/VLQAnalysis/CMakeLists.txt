@@ -27,7 +27,7 @@ atlas_add_library( VLQAnalysis Root/*.cxx Root/*.h
 atlas_install_data( data/* )
 atlas_install_scripts( scripts/*py )
 # Install the Python modules of the package:
-atlas_install_python_modules( python/*.py )
+atlas_install_python_modules( python/*.py python/region_dictionaries/pVLQ/*.py python/region_dictionaries/sVLQ/*.py )
 
 atlas_add_executable( VLQAna
 		      util/VLQAnalysis.cxx
@@ -49,14 +49,7 @@ atlas_add_executable( MakeQCDFile
 atlas_add_executable( compareJetCollections
                       macros/macros_trisha/compareJetCollections.cxx
                       LINK_LIBRARIES ${ROOT_LIBRARIES} VLQAnalysis)
-atlas_add_executable( MakeKinRwHists
-		      macros/macros_carlos/Kinematic_Reweighter/MakeKinRwHists.cxx
-		      LINK_LIBRARIES IFAETopFramework
-		      		     IFAEReweightingTools
-				     BtaggingTRFandRW
-				     FakeLeptonEstimation 
-				     ${ROOT_LIBRARIES}			  
-				     VLQAnalysis)
+
 atlas_add_executable( MakeSByBPlot
 		      macros/macros_carlos/SoverB_Plotter/MakeSByBPlot.cxx
 		      LINK_LIBRARIES IFAETopFramework
