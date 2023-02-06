@@ -1,0 +1,33 @@
+% -------------------------------------------------- %
+% --------   TTBAR PMG WEIGHTS SYSTEMATICS  -------- %
+% -------------------------------------------------- %
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_ISR_MUF_CR";"HTX_BKGNP_TTBARLIGHT_ISR_MUF_LMVA";"HTX_BKGNP_TTBARLIGHT_ISR_MUF_MMVA";"HTX_BKGNP_TTBARLIGHT_ISR_MUF_HMVA"
+  Title: "t#bar{t}+light-jets #mu_{F} CR";"t#bar{t}+light-jets #mu_{F} low MVA";"t#bar{t}+light-jets #mu_{F} mid MVA";"t#bar{t}+light-jets #mu_{F} high MVA"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: _weight_pmg_muR10__muF20
+  HistoNameSufDown: _weight_pmg_muR10__muF05
+  Symmetrisation: TwoSided
+  Regions: HTX_c1lep5jin2bex0Hex1VTex1Lex,HTX_c1lep5jin3bex0Hex1VTex0_1Lwin,HTX_c1lep5jin4bin0Hex1VTex0_1Lwin;HTX_c1lep5jin3bex2Min3Jin0HexLowMVAScore,HTX_c1lep5jex3bex2Min3Jin1HinLowMVAScore,HTX_c1lep5jex4bin2Min3Jin0HexLowMVAScore,HTX_c1lep5jex4bin2Min3Jin1HinLowMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexMidMVAScore,HTX_c1lep5jex3bex2Min3Jin1HinMidMVAScore,HTX_c1lep5jex4bin2Min3Jin0HexMidMVAScore,HTX_c1lep5jex4bin2Min3Jin1HinMidMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexHighMVAScore,HTX_c1lep5jex3bex2Min3Jin1HinHighMVAScore,HTX_c1lep5jex4bin2Min3Jin0HexHighMVAScore,HTX_c1lep5jex4bin2Min3Jin1HinHighMVAScore
+  Samples: ttbarlight
+
+Systematic: "HTX_BKGNP_TTBARCC_ISR_MUF_CR";"HTX_BKGNP_TTBARCC_ISR_MUF_LMVA";"HTX_BKGNP_TTBARCC_ISR_MUF_MMVA";"HTX_BKGNP_TTBARCC_ISR_MUF_HMVA"
+  Title: "t#bar{t}+#geq1c-jets #mu_{F} CR";"t#bar{t}+#geq1c-jets #mu_{F} low MVA";"t#bar{t}+#geq1c-jets #mu_{F} mid MVA";"t#bar{t}+#geq1c-jets #mu_{F} high MVA"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: _weight_pmg_muR10__muF20
+  HistoNameSufDown: _weight_pmg_muR10__muF05
+  Symmetrisation: TwoSided
+  Regions: HTX_c1lep5jin2bex0Hex1VTex1Lex,HTX_c1lep5jin3bex0Hex1VTex0_1Lwin,HTX_c1lep5jin4bin0Hex1VTex0_1Lwin;HTX_c1lep5jin3bex2Min3Jin0HexLowMVAScore,HTX_c1lep5jex3bex2Min3Jin1HinLowMVAScore,HTX_c1lep5jex4bin2Min3Jin0HexLowMVAScore,HTX_c1lep5jex4bin2Min3Jin1HinLowMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexMidMVAScore,HTX_c1lep5jex3bex2Min3Jin1HinMidMVAScore,HTX_c1lep5jex4bin2Min3Jin0HexMidMVAScore,HTX_c1lep5jex4bin2Min3Jin1HinMidMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexHighMVAScore,HTX_c1lep5jex3bex2Min3Jin1HinHighMVAScore,HTX_c1lep5jex4bin2Min3Jin0HexHighMVAScore,HTX_c1lep5jex4bin2Min3Jin1HinHighMVAScore
+  Samples: ttbarcc
+
+Systematic: "HTX_BKGNP_TTBARBB_ISR_MUF_CR";"HTX_BKGNP_TTBARBB_ISR_MUF_LMVA";"HTX_BKGNP_TTBARBB_ISR_MUF_MMVA";"HTX_BKGNP_TTBARBB_ISR_MUF_HMVA"
+  Title: "t#bar{t}+#geq1b-jets #mu_{F} CR";"t#bar{t}+#geq1b-jets #mu_{F} low MVA";"t#bar{t}+#geq1b-jets #mu_{F} mid MVA";"t#bar{t}+#geq1b-jets #mu_{F} high MVA"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  HistoNameSufUp: _weight_pmg_muR10__muF20
+  HistoNameSufDown: _weight_pmg_muR10__muF05
+  Symmetrisation: TwoSided
+  Regions: HTX_c1lep5jin2bex0Hex1VTex1Lex,HTX_c1lep5jin3bex0Hex1VTex0_1Lwin,HTX_c1lep5jin4bin0Hex1VTex0_1Lwin;HTX_c1lep5jin3bex2Min3Jin0HexLowMVAScore,HTX_c1lep5jex3bex2Min3Jin1HinLowMVAScore,HTX_c1lep5jex4bin2Min3Jin0HexLowMVAScore,HTX_c1lep5jex4bin2Min3Jin1HinLowMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexMidMVAScore,HTX_c1lep5jex3bex2Min3Jin1HinMidMVAScore,HTX_c1lep5jex4bin2Min3Jin0HexMidMVAScore,HTX_c1lep5jex4bin2Min3Jin1HinMidMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexHighMVAScore,HTX_c1lep5jex3bex2Min3Jin1HinHighMVAScore,HTX_c1lep5jex4bin2Min3Jin0HexHighMVAScore,HTX_c1lep5jex4bin2Min3Jin1HinHighMVAScore
+  Samples: ttbarbb

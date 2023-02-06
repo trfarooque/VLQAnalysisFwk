@@ -1,0 +1,69 @@
+% --------------------------- %
+% ---  TTBAR SYSTEMATICS  --- %
+% --------------------------- %
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_GEN_CR";"HTX_BKGNP_TTBARLIGHT_GEN_LMVA";"HTX_BKGNP_TTBARLIGHT_GEN_MMVA";"HTX_BKGNP_TTBARLIGHT_GEN_HMVA"
+  Title: "t#bar{t}+light-jets generator CR";"t#bar{t}+light-jets generator low MVA";"t#bar{t}+light-jets generator mid MVA";"t#bar{t}+light-jets generator high MVA"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  Samples: ttbarlight
+  HistoFilesUp: TtStAlt/ttbarlightaMCPy.mc16a,TtStAlt/ttbarlightaMCPy.mc16d,TtStAlt/ttbarlightaMCPy.mc16e
+  Regions: HTX_c1lep5jin2bex0Hex1VTex1Lex,HTX_c1lep5jin3bex0Hex1VTex0_1Lwin,HTX_c1lep5jin4bin0Hex1VTex0_1Lwin;HTX_c1lep5jin3bex2Min3Jin0HexLowMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinLowMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexLowMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinLowMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexMidMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinMidMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexMidMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinMidMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexHighMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinHighMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexHighMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinHighMVAScore
+  ReferenceSample: ttbarlight_AFII
+
+Systematic: "HTX_BKGNP_TTBARCC_GEN_CR";"HTX_BKGNP_TTBARCC_GEN_LMVA";"HTX_BKGNP_TTBARCC_GEN_MMVA";"HTX_BKGNP_TTBARCC_GEN_HMVA"
+  Title: "t#bar{t}+#geq1c-jets generator CR";"t#bar{t}+#geq1c-jets generator low MVA";"t#bar{t}+#geq1c-jets generator mid MVA";"t#bar{t}+#geq1c-jets generator high MVA"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  Samples: ttbarcc
+  HistoFilesUp: TtStAlt/ttbarccaMCPy.mc16a,TtStAlt/ttbarccaMCPy.mc16d,TtStAlt/ttbarccaMCPy.mc16e
+  Regions: HTX_c1lep5jin2bex0Hex1VTex1Lex,HTX_c1lep5jin3bex0Hex1VTex0_1Lwin,HTX_c1lep5jin4bin0Hex1VTex0_1Lwin;HTX_c1lep5jin3bex2Min3Jin0HexLowMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinLowMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexLowMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinLowMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexMidMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinMidMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexMidMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinMidMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexHighMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinHighMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexHighMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinHighMVAScore
+  ReferenceSample: ttbarcc_AFII
+
+Systematic: "HTX_BKGNP_TTBARBB_GEN_CR";"HTX_BKGNP_TTBARBB_GEN_LMVA";"HTX_BKGNP_TTBARBB_GEN_MMVA";"HTX_BKGNP_TTBARBB_GEN_HMVA"
+  Title: "t#bar{t}+#geq1b-jets generator CR";"t#bar{t}+#geq1b-jets generator low MVA";"t#bar{t}+#geq1b-jets generator mid MVA";"t#bar{t}+#geq1b-jets generator high MVA"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  Samples: ttbarbb
+  HistoFilesUp: TtStAlt/ttbarbbaMCPy.mc16a,TtStAlt/ttbarbbaMCPy.mc16d,TtStAlt/ttbarbbaMCPy.mc16e
+  Regions: HTX_c1lep5jin2bex0Hex1VTex1Lex,HTX_c1lep5jin3bex0Hex1VTex0_1Lwin,HTX_c1lep5jin4bin0Hex1VTex0_1Lwin;HTX_c1lep5jin3bex2Min3Jin0HexLowMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinLowMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexLowMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinLowMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexMidMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinMidMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexMidMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinMidMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexHighMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinHighMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexHighMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinHighMVAScore
+  ReferenceSample: ttbarbb_AFII
+
+Systematic: "HTX_BKGNP_TTBARLIGHT_PS_CR";"HTX_BKGNP_TTBARLIGHT_PS_LMVA";"HTX_BKGNP_TTBARLIGHT_PS_MMVA";"HTX_BKGNP_TTBARLIGHT_PS_HMVA"
+  Title: "t#bar{t}+light-jets parton shower CR";"t#bar{t}+light-jets parton shower low MVA";"t#bar{t}+light-jets parton shower mid MVA";"t#bar{t}+light-jets parton shower high MVA"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  Samples: ttbarlight
+  HistoFilesUp: TtStAlt/ttbarlightPowHer.mc16a,TtStAlt/ttbarlightPowHer.mc16d,TtStAlt/ttbarlightPowHer.mc16e
+  Regions: HTX_c1lep5jin2bex0Hex1VTex1Lex,HTX_c1lep5jin3bex0Hex1VTex0_1Lwin,HTX_c1lep5jin4bin0Hex1VTex0_1Lwin;HTX_c1lep5jin3bex2Min3Jin0HexLowMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinLowMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexLowMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinLowMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexMidMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinMidMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexMidMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinMidMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexHighMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinHighMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexHighMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinHighMVAScore
+  ReferenceSample: ttbarlight_AFII
+
+Systematic: "HTX_BKGNP_TTBARCC_PS_CR";"HTX_BKGNP_TTBARCC_PS_LMVA";"HTX_BKGNP_TTBARCC_PS_MMVA";"HTX_BKGNP_TTBARCC_PS_HMVA"
+  Title: "t#bar{t}+#geq1c-jets parton shower CR";"t#bar{t}+#geq1c-jets parton shower low MVA";"t#bar{t}+#geq1c-jets parton shower mid MVA";"t#bar{t}+#geq1c-jets parton shower high MVA"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  Samples: ttbarcc
+  HistoFilesUp: TtStAlt/ttbarccPowHer.mc16a,TtStAlt/ttbarccPowHer.mc16d,TtStAlt/ttbarccPowHer.mc16e
+  Regions: HTX_c1lep5jin2bex0Hex1VTex1Lex,HTX_c1lep5jin3bex0Hex1VTex0_1Lwin,HTX_c1lep5jin4bin0Hex1VTex0_1Lwin;HTX_c1lep5jin3bex2Min3Jin0HexLowMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinLowMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexLowMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinLowMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexMidMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinMidMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexMidMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinMidMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexHighMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinHighMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexHighMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinHighMVAScore
+  ReferenceSample: ttbarcc_AFII
+
+Systematic: "HTX_BKGNP_TTBARBB_PS_CR";"HTX_BKGNP_TTBARBB_PS_LMVA";"HTX_BKGNP_TTBARBB_PS_MMVA";"HTX_BKGNP_TTBARBB_PS_HMVA"
+  Title: "t#bar{t}+#geq1b-jets parton shower CR";"t#bar{t}+#geq1b-jets parton shower low MVA";"t#bar{t}+#geq1b-jets parton shower mid MVA";"t#bar{t}+#geq1b-jets parton shower high MVA"
+  Type: HISTO
+  Category: "t#bar{t} uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  Samples: ttbarbb
+  HistoFilesUp: TtStAlt/ttbarbbPowHer.mc16a,TtStAlt/ttbarbbPowHer.mc16d,TtStAlt/ttbarbbPowHer.mc16e
+  Regions: HTX_c1lep5jin2bex0Hex1VTex1Lex,HTX_c1lep5jin3bex0Hex1VTex0_1Lwin,HTX_c1lep5jin4bin0Hex1VTex0_1Lwin;HTX_c1lep5jin3bex2Min3Jin0HexLowMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinLowMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexLowMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinLowMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexMidMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinMidMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexMidMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinMidMVAScore;HTX_c1lep5jin3bex2Min3Jin0HexHighMVAScore,HTX_c1lep5jin3bex2Min3Jin1HinHighMVAScore,HTX_c1lep5jin4bin2Min3Jin0HexHighMVAScore,HTX_c1lep5jin4bin2Min3Jin1HinHighMVAScore
+  ReferenceSample: ttbarbb_AFII
