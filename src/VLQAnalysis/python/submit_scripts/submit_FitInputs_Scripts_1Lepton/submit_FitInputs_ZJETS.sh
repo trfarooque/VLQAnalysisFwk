@@ -2,10 +2,10 @@
 
 for campaign in "mc16a" "mc16d" "mc16e"
 do
-    python Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 \
+    python ../../Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 \
 	producetarball=true \
-	--inputDir=/nfs/at3/scratch2/farooque/MBJOutputs/tag-21.2.87-htztx-3-syst/nominal/ \
-	--sampleDat=samples_info.tag-21.2.87-htztx-3-syst.${campaign}.dat \
+	--inputDir=/data/at3/scratch2/farooque/MBJOutputs/tag-21.2.87-htztx-3-syst/nominal/ \
+	--sampleDat=samples_info/samples_info.tag-21.2.87-htztx-3-syst.${campaign}.dat \
 	--outputDirSuffix=FitInputs_PAIRVLQ_ZJETS_${campaign}_NOW \
 	--reweightKinematics=true --kinRWList=JETSN,MEFFRED --doKinRWSmoothing=TRUE --DOKINRWSYST=FALSE \
 	--queue=at3 --NFILESPLIT=200 --NMERGE=1 --removeNull=TRUE \
@@ -19,8 +19,8 @@ do
 	--doExpSys=true --doTheorySys=false --DOPDFSYS=false \
 	--doOneLeptonAna=true --doTwoLeptonAna=false --doZeroLeptonAna=false \
 	--doExclusiveJetRegions=false --doLowBRegions=false --doLowJRegions=false --doSplitEMu=false --doSplitMtb=false \
-	--doFitRegions=true --doValidnRegions=true --doPreselection=true --doPreselSys=true --doExtendedPreselection=false --doLooseSystRegions=false \
-	--doSingleVLQRegions=false --doPairVLQRegions=true --DoOldPairProdRegions=false \
+	--doFitRegions=true --doValidnRegions=false --doPreselection=true --doPreselSys=true --doExtendedPreselection=false --doLooseSystRegions=false \
+	--doSingleVLQRegions=false --doPairVLQRegions=true --DoOldPairProdRegions=true --doUncorrelatedMVARegions=true \
 	--doOldBoost=false \
 	--useLeptonTrigger=true --useMETTriggerOneLep=true --useMETTrigger=true \
 	--applyMetMtwCuts=true --invertMetMtwCuts=false \
@@ -31,7 +31,8 @@ do
 	--applyTtbarNNLOCorrection=false --applyVJetsSherpa22RW=false --applyTtbbCorrection=false \
 	--filterType=APPLYFILTER --useSlices=true --scaleTtbarHtSlices=true \
 	--jetPtCut=25 --fwdJetPtCut=20 --RCJetPtCut=200 --RCNsubjetsCut=0 \
-	--leptopOpt=VETO_RCMATCH --maxLeptopDR=1.0 --minMeffCut=600 --RCCollection=VR_rho550
+	--leptopOpt=VETO_RCMATCH --maxLeptopDR=1.0 --minMeffCut=1000 --RCCollection=VR_rho550 \
+	--APPLYMVA=true --MVAWEIGHTFILE=TMVA/weightsCV_1L/TMVAClassificationCV_MLP.weights.xml --lowMVACutOneLep=0.27 --highMVACutOneLep=0.7
 
     
 done

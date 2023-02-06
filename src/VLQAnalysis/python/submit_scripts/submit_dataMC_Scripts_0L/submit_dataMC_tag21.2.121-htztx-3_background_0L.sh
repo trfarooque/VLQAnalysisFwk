@@ -2,25 +2,25 @@
 
 for campaign in "mc16a" "mc16d" "mc16e"
 do
-    python Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 \
+    python ../../Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 \
 	producetarball=true \
 	--inputDir=/data/at3/scratch2/cbuxovaz/VLQAnalysisPairProdRun2_ntuples/21.1.121-htztx-3-syst_0_lepton_links/ \
 	--sampleDat=samples_info.tag-21.2.121-htztx-3-syst-0L.${campaign}.dat \
 	--outputDirSuffix=dataMC_TRACK_DL1_FixedCutBEff_77_background_${campaign}_NOW \
 	--reweightKinematics=false --kinRWList=JETSN,MEFFRED --doKinRWSmoothing=FALSE --DOKINRWSYST=FALSE \
 	--queue=at3 --NFILESPLIT=200 --NMERGE=1 --removeNull=FALSE \
-	--runData=false --runQCD=false --runSignals=false --runTtbar=true --runOtherBkgd=true \
-	--RUNDIJET=true \
-	--runSingleTop=true --runWjets=true --runZjets=true --runTopEW=true --runDibosons=true \
+	--runData=false --runQCD=false --runSignals=false --runTtbar=false --runOtherBkgd=true \
+	--RUNDIJET=false \
+	--runSingleTop=false --runWjets=false --runZjets=false --runTopEW=false --runDibosons=true \
 	--runTtSyst=false --runStSyst=false --splitSTChannels=true \
 	--dumpHistos=true --dumpOverlapTree=false --dumpTree=false --doTruthAnalysis=true --verboseOutput=false --splitVLQDecays=false \
-	--otherVariables=true --doBlind=false \
+	--otherVariables=false --doBlind=false \
 	--useObjectSyst=false --useWeightSyst=false --onlyDumpSystHistograms=true \
 	--doExpSys=false --doTheorySys=false --DOPDFSYS=false \
 	--doOneLeptonAna=false --doTwoLeptonAna=false --doZeroLeptonAna=true \
 	--doExclusiveJetRegions=false --doLowBRegions=false --doLowJRegions=true --doSplitEMu=false --doSplitMtb=false \
-	--doFitRegions=true --doValidnRegions=false --doPreselection=true --doPreselSys=true --doExtendedPreselection=false --doLooseSystRegions=false \
-	--doSingleVLQRegions=false --doPairVLQRegions=true --doRecoVLQ=pair --DoOldPairProdRegions=true \
+	--doFitRegions=false --doValidnRegions=false --doPreselection=true --doPreselSys=true --doExtendedPreselection=false --doLooseSystRegions=false \
+	--doSingleVLQRegions=false --doPairVLQRegions=true --doRecoVLQ=pair --DoOldPairProdRegions=false \
 	--doOldBoost=false \
 	--useLeptonTrigger=true --useMETTriggerOneLep=true --useMETTrigger=true \
 	--applyMetMtwCuts=true --invertMetMtwCuts=false \

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-python Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 \
+python ../../Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 \
     producetarball=true \
     --inputDir=/nfs/at3/scratch2/farooque/MBJOutputs/tag-21.2.87-htztx-3-syst/nominal/ \
     --sampleDat=samples_info.tag-21.2.87-htztx-3-syst.${campaign}.dat \

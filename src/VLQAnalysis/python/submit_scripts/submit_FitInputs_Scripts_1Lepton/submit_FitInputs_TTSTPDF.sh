@@ -2,7 +2,7 @@
 
 for campaign in "mc16a" "mc16d" "mc16e"
 do
-    python Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 \
+    python ../../Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 \
 	producetarball=true \
         --inputDir=/nfs/at3/scratch2/farooque/MBJOutputs/tag-21.2.121-htztx-3-syst-TTPDF/ \
         --sampleDat=samples_info.tag-21.2.121-htztx-3-syst-TTPDF.${campaign}.dat \
