@@ -15,7 +15,6 @@ from Samples import *
 ## Defines some useful variables
 platform = socket.gethostname()
 now = datetime.datetime.now().strftime("%Y_%m_%d_%H%M")
-here = os.getcwd()
 ##..............................................................................
 
 ##______________________________________________________________________________
@@ -32,6 +31,8 @@ param_runQCD = True
 param_runData = True
 param_runTOPQ1Data = True
 param_runTOPQ4Data = True
+param_runWZSherpa2211 = False
+param_runDibosonSherpa2211 = False
 
 param_runSignal = True
 param_runTtbar = True
@@ -112,10 +113,14 @@ if(len(sys.argv))>1:
             param_runWjets = (value.upper()=="TRUE")
         elif(argument=="RUNZJETS"):
             param_runZjets = (value.upper()=="TRUE")
+        elif(argument=="RUNWZSHERPA2211"):
+            param_runWZSherpa2211 = (value.upper()=="TRUE")
         elif(argument=="RUNTOPEW"):
             param_runTopEW = (value.upper()=="TRUE")
         elif(argument=="RUNDIBOSONS"):
             param_runDibosons = (value.upper()=="TRUE")
+        elif(argument=="RUNDIBOSONSSHERPA2211"):
+            param_runDibosonSherpa2211 = (value.upper()=="TRUE")
         elif(argument=="RUNDIJET"):
             param_runDijet = (value.upper()=="TRUE")
         elif(argument=="RUNTTSYST"):
@@ -181,6 +186,8 @@ print "param_removeNull = ", param_removeNull
 print "param_runData = ", param_runData
 print "param_runTOPQ1Data = ", param_runTOPQ1Data
 print "param_runTOPQ4Data = ", param_runTOPQ4Data
+print "param_runWZSherpa2211 = ", param_runWZSherpa2211
+print "param_runDibosonSherpa2211 = ", param_runDibosonSherpa2211
 
 print "param_runSignal = ", param_runSignal
 print "param_runTtbar = ", param_runTtbar
@@ -233,7 +240,6 @@ tarballPath=""
 if param_produceTarBall:
     tarballPath = param_outputDir + "/AnaCode_forBatch.tgz"
     if not (os.path.exists(tarballPath) or param_dryRun):
-        prepareTarBall(here+"/../../",tarballPath)
         prepareTarBall(os.getenv("VLQAnalysisFramework_DIR")+"/../../",tarballPath)
 else:
     tarballPath = param_tarballPath
@@ -267,7 +273,7 @@ if param_runOtherBkgd:
                                             , includeSingletopSystSamples = param_runSTSyst
                                             , splitSTChannels = param_splitSTChannels
                                             , includeTchan=param_runTchanSingleTop, includeWtprod=param_runWtSingleTop, includeSchan=param_runSchanSingleTop
-                                            , removeNull = param_removeNull )
+                                            , removeNull = param_removeNull, useWZSherpa2211 = param_runWZSherpa2211, useDibosonSherpa2211 = param_runDibosonSherpa2211 )
 
 if param_runSignal:
     Samples += GetSignalSamples( useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, campaign = param_campaign

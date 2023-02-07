@@ -15,18 +15,6 @@ sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "python/VLQAnalysis/" )
 from VLQ_BR import *
 from VLQ_Samples_mc import *
 
-
-#from regions_dictionary_pVLQ_newAna_merged_regions import *
-#from regions_dictionary_pVLQ_newAna_MVA_regions import *
-
-import regions_dictionary_pVLQ_newAna_MVA_regions as pVLQ_newAna_MVA_regions
-import regions_dictionary_pVLQ_newAna_boosted_object_cut_regions as pVLQ_newAna_BOT_regions
-import regions_dictionary_pVLQ as pVLQ_oldAna_BOT_regions
-
-#from regions_dictionary_sVLQ import *
-
-#from regions_dictionary import *
-
 from BatchTools import *
 from Job import *
 
@@ -60,7 +48,7 @@ parser.add_option("-m","--mcCampaign",dest="mcCampaign",help="MC campaign",actio
 parser.add_option("-S","--doSR", dest="doSR", help="Use fit regions", action="store_true", default=False)
 parser.add_option("-V","--doVR", dest="doVR", help="Use validation regions", action="store_true", default=False)
 parser.add_option("-P","--doPR", dest="doPR", help="Use preselection regions", action="store_true", default=False)
-parser.add_option("-D","--regionDictionary", dest="regionDictionary", help="Which region dictionary to use", action="store", default="all")
+parser.add_option("-M","--moduleKeys", dest="moduleKeys", help="Comma separated list of keys of region dictionary modules", action="store", default="MVA")
 (options, args) = parser.parse_args()
 
 outputDir=options.outputDir
@@ -79,11 +67,26 @@ mcCampaign=options.mcCampaign
 doSR=options.doSR
 doVR=options.doVR
 doPR=options.doPR
-regionDictionary=options.regionDictionary
+moduleKeys = options.moduleKeys.split(",")
 
 os.system("mkdir -p " + outputDir)
 os.system("mkdir -p " + outputDir + "/Scripts")
 ##........................................................
+
+##________________________________________________________
+## Getting list of region modules
+module_list = []
+
+if "MVA" in moduleKeys:
+    import regions_dictionary_pVLQ_newAna_MVA_regions as pVLQ_newAna_MVA_regions
+    module_list += [pVLQ_newAna_MVA_regions]
+if "BOT" in moduleKeys:
+    import regions_dictionary_pVLQ_newAna_boosted_object_cut_regions as pVLQ_newAna_BOT_regions
+    module_list += [pVLQ_newAna_BOT_regions]
+if "OLD" in moduleKeys:
+    import regions_dictionary_pVLQ as pVLQ_oldAna_BOT_regions
+    module_list += [pVLQ_oldAna_BOT_regions]
+##.........................................................
 
 ##________________________________________________________
 ## Getting all signal samples and their associated weight/object systematics
@@ -120,76 +123,21 @@ if allRegions:
     Regions = [{'name':"all"}]
 else:
     if( doLepton ):
-        if(doSR):
-            if(regionDictionary == "all"):
-                Regions += pVLQ_newAna_MVA_regions.fit_regions_1l
-                Regions += pVLQ_newAna_MVA_regions.fit_regions_1l_decorrelation
-                Regions += pVLQ_newAna_BOT_regions.fit_regions_1l
-                Regions += pVLQ_oldAna_BOT_regions.fit_regions_1l
-            elif(regionDictionary == "MVA"):
-                Regions += pVLQ_newAna_MVA_regions.fit_regions_1l
-                Regions += pVLQ_newAna_MVA_regions.fit_regions_1l_decorrelation
-            elif(regionDictionary == "BOT"):
-                Regions += pVLQ_newAna_BOT_regions.fit_regions_1l
-            elif(regionDictionary == "OLD"):
-                Regions += pVLQ_oldAna_BOT_regions.fit_regions_1l
-        if(doVR):
-            if(regionDictionary == "all"):
-                Regions += pVLQ_newAna_MVA_regions.validation_regions_1l
-                Regions += pVLQ_newABA_BOT_regions.validation_regions_1l
-                Regions += pVLQ_oldAna_BOT_regions.validation_regions_1l
-            elif(regionDictionary == "MVA"):
-                Regions += pVLQ_newAna_MVA_regions.validation_regions_1l
-            elif(regionDictionary == "BOT"):
-                Regions += pVLQ_newAna_BOT_regions.validation_regions_1l
-            elif(regionDictionary == "OLD"):
-                Regions += pVLQ_oldAna_BOT_regions.validation_regions_1l
-        if(doPR):
-            if(regionDictionary == "all"):
-                Regions += pVLQ_newAna_MVA_regions.preselection_regions_1l
-                Regions += pVLQ_newAna_BOT_regions.preselection_regions_1l
-                Regions += pVLQ_oldAna_BOT_regions.preselection_regions_1l
-            elif(regionDictionary == "MVA"):
-                Regions += pVLQ_newAna_MVA_regions.preselection_regions_1l
-            elif(regionDictionary == "BOT"):
-                Regions += pVLQ_newAna_BOT_regions.preselection_regions_1l
-            elif(regionDictionary == "OLD"):
-                Regions += pVLQ_oldAna_BOT_regions.preselection_regions_1l
- 
+        for module in module_list:
+            if(doSR):
+                Regions += module.fit_regions_1l
+            if(doVR):
+                Regions += module.validation_regions_1l
+            if(doPR):
+                Regions += module.preselection_regions_1l
     if( doZeroLepton ):
-        if(doSR):
-            if(regionDictionary == "all"):
-                Regions += pVLQ_newAna_MVA_regions.fit_regions_0l
-                Regions += pVLQ_newAna_BOT_regions.fit_regions_0l
-                Regions += pVLQ_oldAna_BOT_regions.fit_regions_0l
-            elif(regionDictionary == "MVA"):
-                Regions += pVLQ_newAna_MVA_regions.fit_regions_0l
-            elif(regionDictionary == "BOT"):
-                Regions += pVLQ_newAna_BOT_regions.fit_regions_0l
-            elif(regionDictionary == "OLD"):
-                Regions += pVLQ_oldAna_BOT_regions.fit_regions_0l
-        if(doVR):
-            if(regionDictionary == "all"):
-                Regions += pVLQ_newAna_MVA_regions.validation_regions_0l
-                Regions += pVLQ_newABA_BOT_regions.validation_regions_0l
-                Regions += pVLQ_oldAna_BOT_regions.validation_regions_0l
-            elif(regionDictionary == "MVA"):
-                Regions += pVLQ_newAna_MVA_regions.validation_regions_0l
-            elif(regionDictionary == "BOT"):
-                Regions += pVLQ_newAna_BOT_regions.validation_regions_0l
-            elif(regionDictionary == "OLD"):
-                Regions += pVLQ_oldAna_BOT_regions.validation_regions_0l
-        if(doPR):
-            if(regionDictionary == "all"):
-                Regions += pVLQ_newAna_MVA_regions.preselection_regions_0l
-                Regions += pVLQ_newAna_BOT_regions.preselection_regions_0l
-                Regions += pVLQ_oldAna_BOT_regions.preselection_regions_0l
-            elif(regionDictionary == "MVA"):
-                Regions += pVLQ_newAna_MVA_regions.preselection_regions_0l
-            elif(regionDictionary == "BOT"):
-                Regions += pVLQ_newAna_BOT_regions.preselection_regions_0l
-            elif(regionDictionary == "OLD"):
-                Regions += pVLQ_oldAna_BOT_regions.preselection_regions_0l
+        for module in module_list:
+            if(doSR):
+                Regions += module.fit_regions_0l
+            if(doVR):
+                Regions += module.validation_regions_0l
+            if(doPR):
+                Regions += module.preselection_regions_0l
 ##........................................................
 
 ##________________________________________________________
