@@ -37,7 +37,7 @@ doVR=options.doVR
 doPresel=options.doPresel
 otherVariables=options.otherVariables
 sample=options.sample
-moduleKeys=.options.moduleKeys.split(",")
+moduleKeys=options.moduleKeys.split(",")
 
 
 root.gROOT.SetBatch(1)
