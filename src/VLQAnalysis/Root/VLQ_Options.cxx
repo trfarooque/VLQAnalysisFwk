@@ -62,7 +62,7 @@ m_doLowJRegions(false),
 m_doSplitEMu(false),
 m_doOldBoost(false),
 m_doSplitMbb(false),
-m_doSplitFjet(false),
+m_doSplitFwdJet(false),
 m_doSumRegions(false),
 m_scaleTtbarHtSlices(false),
 m_applyTtbarNNLOCorrection(false),
@@ -176,7 +176,7 @@ OptionsBase(q)
     m_doOldBoost          = q.m_doOldBoost;
     m_doSplitMtb          = q.m_doSplitMtb;
     m_doSplitMbb          = q.m_doSplitMbb;
-    m_doSplitFjet         = q.m_doSplitFjet;
+    m_doSplitFwdJet       = q.m_doSplitFwdJet;
     m_doSumRegions        = q.m_doSumRegions;
     m_scaleTtbarHtSlices  = q.m_scaleTtbarHtSlices;
     m_applyTtbarNNLOCorrection  = q.m_applyTtbarNNLOCorrection;
@@ -355,8 +355,8 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_doSplitMtb = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOSPLITMBB") != std::string::npos ){
             m_doSplitMbb = AnalysisUtils::BoolValue(temp_val, temp_arg);
-	} else if( temp_arg.find("--DOSPLITFJET") != std::string::npos ){
-	    m_doSplitFjet = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if( temp_arg.find("--DOSPLITFWDJET") != std::string::npos ){
+	    m_doSplitFwdJet = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--DOSUMREGIONS") != std::string::npos ){
             m_doSumRegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--SCALETTBARHTSLICES") != std::string::npos ){
@@ -619,7 +619,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_doOldBoost              = " << m_doOldBoost        << std::endl;
     std::cout << " m_doSplitMtb              = " << m_doSplitMtb        << std::endl;
     std::cout << " m_doSplitMbb              = " << m_doSplitMbb        << std::endl;
-    std::cout << " m_doSplitFjet             = " << m_doSplitFjet       << std::endl;
+    std::cout << " m_doSplitFwdJet           = " << m_doSplitFwdJet     << std::endl;
     std::cout << " m_doSumRegions            = " << m_doSumRegions      << std::endl;
     std::cout << " m_scaleTtbarHtSlices      = " << m_scaleTtbarHtSlices << std::endl;
     std::cout << " m_applyTtbarNNLOCorrection= " << m_applyTtbarNNLOCorrection   << std::endl;

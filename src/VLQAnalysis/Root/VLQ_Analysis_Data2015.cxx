@@ -659,7 +659,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrTree->AddStandardBranch("dRmin_bb_lowb_3b", "#DeltaR_{min}(b-jet, b-jet) (lowb, 3b)", &(m_outData->o_dRmin_bjetbjet_lowb_3b));
       m_outMngrTree->AddStandardBranch("dRmin_bb_lowb_4b", "#DeltaR_{min}(b-jet, b-jet) (lowb, 4b)", &(m_outData->o_dRmin_bjetbjet_lowb_4b));
     }
-    if( m_opt->DoTruthAnalysis() ){ //&& (m_opt -> SampleName() == SampleName::VLQ) ){
+    if( m_opt->DoTruthAnalysis() && (m_opt -> SampleName() == SampleName::VLQ) ){
       for ( const std::string truthType : {"VLQ", "VLQ_Ht", "VLQ_Zt", "VLQ_Wb",
             "VLQ_Hbdect", "VLQ_Wlepb", "VLQ_Whadb", "VLQ_Zhadt",
             "H", "Hbb", "hadtop", "leptop","tautop",
@@ -735,7 +735,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 
       m_outMngrHist -> AddStandardTH1( "mu",          1, 0, 80,       ";<#mu>",         false, &(m_outData -> o_pileup_mu) );
       m_outMngrHist -> AddStandardTH1( "meff",        50, 0, 7000,    ";m_{eff} [GeV]", true, &(m_outData -> o_meff) );
-      m_outMngrHist -> AddStandardTH1( "meffred",     50, 0, 7000,    ";m_{eff} reduced [GeV]", otherVariables, &(m_outData -> o_meffred) );
+      m_outMngrHist -> AddStandardTH1( "meffred",     50, 0, 7000,    ";m_{eff} reduced [GeV]", (otherVariables||RWderiv), &(m_outData -> o_meffred) );
       m_outMngrHist -> AddStandardTH1( "mJsum",       25, 0, 2000,    ";m_{J}^{#Sigma} [GeV]", otherVariables, &(m_outData -> o_mJsum) );
       m_outMngrHist -> AddStandardTH1( "met",         20, 0, 1600,    ";E_{T}^{miss} [GeV]", otherVariables, &(m_outData -> o_met) );
       m_outMngrHist -> AddStandardTH1( "met_phi",     0.2, -3.5, 3.5, ";#phi_{MET}", otherVariables, &(m_outData->o_AO_met), -1, "Phi");
@@ -752,7 +752,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "mtbmin",      25, 0, 500,    ";m_{T}^{min}(b,MET)", otherVariables, &(m_outData->o_mTbmin) );
       m_outMngrHist -> AddStandardTH1( "metsig_ev",     0.5, 0, 50,    ";E_{T}^{miss}/#sqrt{H_{T}^{had}} [#sqrt{GeV}]", otherVariables, &(m_outData -> o_metsig_ev) );
       m_outMngrHist -> AddStandardTH1( "metsig_obj",    0.5, 0, 50,    "; #sigma(E_{T}^{miss}) [#sqrt{GeV}]", otherVariables, &(m_outData -> o_metsig_obj) );
-      m_outMngrHist -> AddStandardTH1( "MVAScore", /*0.050*/0.005, -0.1, 1.05, "; MVA Score", true, &(m_outData -> o_MVAScore) );
+      m_outMngrHist -> AddStandardTH1( "MVAScore", 0.050, -0.1, 1.05, "; MVA Score", true, &(m_outData -> o_MVAScore) );
 
       m_outMngrHist -> AddStandardTH2( "meff", "jets_n", 50, 0, 7000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} [GeV]", (RWderiv||otherVariables), &(m_outData -> o_meff), &(m_outData -> o_jets_n));
       m_outMngrHist -> AddStandardTH2( "meffred", "jets_n", 50, 0, 7000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} reduced [GeV]", (RWderiv||otherVariables), &(m_outData -> o_meffred), &(m_outData -> o_jets_n));
@@ -1183,25 +1183,25 @@ bool VLQ_Analysis_Data2015::Begin(){
 
       //Large-R jets
       if( m_opt -> UseLargeRJets() ){
-	m_outMngrHist -> AddStandardTH1( "FatJets_n", 1, -0.5, 5.5,     ";Number of large-R jets",  true, &(m_outData -> o_fjets_n) );
+	m_outMngrHist -> AddStandardTH1( "FatJets_n", 1, -0.5, 5.5,     ";Number of large-R jets",  false, &(m_outData -> o_fjets_n) );
 	for ( int iLRJet=-1; iLRJet<=0; ++iLRJet ) {
 	  std::string str_id = "";
 	  str_id += std::to_string(iLRJet);
 	  if(iLRJet==-1) str_id = "s";
-	  m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_pt",  50, 0, 1000, ";Fat jet"+str_id+"  p_{T} [GeV]"      ,  true, &(m_outData -> o_fjets), iLRJet, "Pt");
+	  m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_pt",  50, 0, 1000, ";Fat jet"+str_id+"  p_{T} [GeV]"      ,  false, &(m_outData -> o_fjets), iLRJet, "Pt");
 	  m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_eta", 0.2, -3, 3,  ";Fat jet"+str_id+"  #eta"             ,  false, &(m_outData -> o_fjets), iLRJet, "Eta");
-	  m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_m",   10, 0, 400,  ";Fat jet"+str_id+"  mass [GeV]"       ,  true, &(m_outData -> o_fjets), iLRJet, "M");
+	  m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_m",   10, 0, 400,  ";Fat jet"+str_id+"  mass [GeV]"       ,  false, &(m_outData -> o_fjets), iLRJet, "M");
 
 	  if(m_opt -> DoLargeRJetsBOT()){
 	    m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_XbbH_score", 0.050, -0.1, 1.05, ";Fat jet"+str_id+"Xbb Higgs score",
-					     true, &(m_outData -> o_fjets), iLRJet, "XbbH_score");
+					     false, &(m_outData -> o_fjets), iLRJet, "XbbH_score");
 	    m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_XbbQ_score", 0.050, -0.1, 1.05, ";Fat jet"+str_id+"Xbb QCD score",
-					     true, &(m_outData -> o_fjets), iLRJet, "XbbQ_score");
+					     false, &(m_outData -> o_fjets), iLRJet, "XbbQ_score");
 	    m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_XbbT_score", 0.050, -0.1, 1.05, ";Fat jet"+str_id+"Xbb Top score",
-					     true, &(m_outData -> o_fjets), iLRJet, "XbbT_score");
+					     false, &(m_outData -> o_fjets), iLRJet, "XbbT_score");
 
 	    m_outMngrHist -> AddStandardTH1( "FatJet"+str_id+"_XbbH_discriminant", 0.050, -5, 5, ";Fat jet"+str_id+"XbbH discriminant",
-					     true, &(m_outData -> o_fjets), iLRJet, "XbbH_discriminant");
+					     false, &(m_outData -> o_fjets), iLRJet, "XbbH_discriminant");
 	  }
 	  
 	}
@@ -1217,22 +1217,22 @@ bool VLQ_Analysis_Data2015::Begin(){
 	  };
 
 	  for(std::map<std::string, std::string>::iterator LRJTagger = LargeRJetTaggers.begin(); LRJTagger != LargeRJetTaggers.end(); ++LRJTagger){
-	    m_outMngrHist -> AddStandardTH1( LRJTagger->first + "_jets_n", 1, -0.5, 5.5, ";Number of " + LRJTagger->second + " jets", true,
+	    m_outMngrHist -> AddStandardTH1( LRJTagger->first + "_jets_n", 1, -0.5, 5.5, ";Number of " + LRJTagger->second + " jets", false,
 					     &(m_outData -> o_taggedjets_n.at(LRJTagger->first)));
 
 	    if((LRJTagger->first).find("DNN") != std::string::npos){
 	      m_outMngrHist->AddStandardTH2(LRJTagger->first + "_jets_n", "RCMTop_jets_n", 1, -0.5, 5.5, 1, -0.5, 5.5,
-					    ";Number of " + LRJTagger->second + " jets", ";Number of Top-tagged jets", true,
+					    ";Number of " + LRJTagger->second + " jets", ";Number of Top-tagged jets", false,
 					    &(m_outData -> o_taggedjets_n.at(LRJTagger->first)),  &(m_outData->o_taggedjets_n.at("RCMTop")));
 	    }
 	    else if((LRJTagger->first).find("JSV") != std::string::npos){
 	      m_outMngrHist->AddStandardTH2(LRJTagger->first + "_jets_n", "RCMV_jets_n", 1, -0.5, 5.5, 1, -0.5, 5.5,
-					    ";Number of " + LRJTagger->second + " jets", ";Number of W/Z-tagged jets", true,
+					    ";Number of " + LRJTagger->second + " jets", ";Number of W/Z-tagged jets", false,
 					    &(m_outData -> o_taggedjets_n.at(LRJTagger->first)),  &(m_outData->o_taggedjets_n.at("RCMV")));
 	    }
 	    else if((LRJTagger->first).find("XbbH") != std::string::npos){
 	      m_outMngrHist->AddStandardTH2(LRJTagger->first + "_jets_n", "RCMHiggs_jets_n", 1, -0.5, 5.5, 1, -0.5, 5.5,
-					    ";Number of " + LRJTagger->second + " jets", ";Number of Higgs-tagged jets", true,
+					    ";Number of " + LRJTagger->second + " jets", ";Number of Higgs-tagged jets", false,
 					    &(m_outData -> o_taggedjets_n.at(LRJTagger->first)),  &(m_outData->o_taggedjets_n.at("RCMHiggs")));
 	    }
 

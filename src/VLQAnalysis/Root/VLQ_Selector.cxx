@@ -286,7 +286,7 @@ bool VLQ_Selector::GetPreselectionCuts(){
   else m_ch_mtb_presel = {""};
 
   // forward jet multiplicity cut channels
-  if(m_opt->DoSplitFjet()) m_ch_fjet = {"", "-0fjex", "-1fjin"};
+  if(m_opt->DoSplitFwdJet()) m_ch_fjet = {"", "-0fjex", "-1fjin"};
   else m_ch_fjet = {""};
 
   // b-tagged jet multiplicity cut channels
