@@ -59,10 +59,10 @@ VLQ_WeightManager::VLQ_WeightManager( VLQ_Options *opt, const VLQ_NtupleData* nt
     m_kinRw = new VLQ_KinReweighter(m_vlq_opt, m_vlq_outData /*, m_vlq_ntupData*/);
 
     if((m_vlq_opt -> SampleName() == SampleName::ZJETS) || (m_vlq_opt -> SampleName() == SampleName::WJETS)){
-      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyZjets.root"));
+      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinRW/kinReweightings_OnlyZjets.root"));
     }
     else{
-      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinReweightings_OnlyWtTtbar.root"));
+      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinRW/kinReweightings_OnlyWtTtbar.root"));
     }
 
   }
@@ -262,6 +262,19 @@ bool VLQ_WeightManager::AddFJvtSFWeights(  ){
   AddAndInitWeight("weight_fJvt_UP", "", false, false, "", "weight_fJvt");
   AddAndInitWeight("weight_fJvt_DOWN", "", false, false, "", "weight_fJvt");
   
+  return true;
+}
+
+//______________________________________________________________________________
+//
+bool VLQ_WeightManager::AddLargeRJetTaggerSFs(){
+
+  if(!(m_vlq_opt -> UseLargeRJets() && m_vlq_opt -> DoLargeRJetsBOT())) return true;
+
+  std::vector< std::string > LRJTaggers= {"LRJDNNC50", "LRJDNNC80", "LRJDNNI50", "LRJDNNI80", "LRJSW50", "LRJSW80", "LRJSZ50", "LRJSZ80"};
+
+  for(std::string LRJTagger : LRJTaggers) AddAndInitWeight("weight_SF_"+LRJTagger, "", true /*isNominal*/, false /*isInput*/);
+
   return true;
 }
 
@@ -705,8 +718,8 @@ bool VLQ_WeightManager::SetPMGSystNorm(){
     double nev_sys = m_sampleInfo->NWeightedEvents("sumOfWeights_"+branchName, true /*ignore branch if missing*/ );
 
     double sys_factor = (nev_sys > 0.) ? nev_nom/nev_sys : 1.;
-
-    if((sysweight.second)->GetComponentValue() > m_sampleInfo->WeightThreshold(branchName, false)){
+    
+    if(m_vlq_opt->PrunePMGWeights() && ((sysweight.second)->GetComponentValue() > m_sampleInfo->WeightThreshold(branchName, false))){
       if(m_vlq_opt -> MsgLevel() == Debug::DEBUG){
 	std::cout << "Systematic component " << sysweight.first << " = " << (sysweight.second)->GetComponentValue() 
 		  << " > " << m_sampleInfo->WeightThreshold(branchName, false) << ". Setting to 0." << std::endl;
@@ -808,6 +821,27 @@ bool VLQ_WeightManager::SetNNLOWeight( const double topPt ){
 
     SetNominalComponent("weight_ttbar_NNLO_1L", result) ;
   }
+  return true;
+}
+
+//______________________________________________________________________________
+//
+bool VLQ_WeightManager::SetLargeRJetTaggerSFs(){
+
+  if(!(m_vlq_opt -> UseLargeRJets() && m_vlq_opt -> DoLargeRJetsBOT())) return true;
+
+  std::vector< std::string > LRJTaggers= {"LRJDNNC50", "LRJDNNC80", "LRJDNNI50", "LRJDNNI80", "LRJSW50", "LRJSW80", "LRJSZ50", "LRJSZ80"};
+
+  for(std::string LRJTagger : LRJTaggers){
+    double weight_SF = 1.;
+
+    for(const AnalysisObject* jet : *(m_vlq_outData -> o_taggedjets.at(LRJTagger))){
+      weight_SF *= jet->GetMoment(LRJTagger+"_SF");
+    }
+
+    SetNominalComponent("weight_SF_"+LRJTagger, weight_SF);
+  }
+
   return true;
 }
 

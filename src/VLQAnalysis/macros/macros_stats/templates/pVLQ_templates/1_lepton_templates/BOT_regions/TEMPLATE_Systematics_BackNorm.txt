@@ -1,0 +1,143 @@
+% ------------------------ %
+% --------  LUMI  -------- %
+% ------------------------ %
+
+Systematic: "luminosity"
+  Title: "luminosity"
+  Type: OVERALL
+  Category: Others
+  OverallUp: 0.017
+  OverallDown: -0.017
+  Exclude: QCD
+
+% ------------------------- %
+% --------  TTBAR  -------- %
+% ------------------------- %
+
+Systematic: "HTX_BKGNP_TTBAR_XS"
+  Title: "t#bar{t} inclusive cross section"
+  Type: OVERALL
+  Category: "t#bar{t} uncertainties"
+  OverallUp: 0.055
+  OverallDown: -0.061
+  Samples: ttbarlight,ttbarbb,ttbarcc
+
+Systematic: "HTX_BKGNP_TTBARCC_XS"
+  Title: "t#bar{t}+#geq1c norm."
+  Type: OVERALL
+  Category: "t#bar{t} uncertainties"
+  OverallUp: 0.5
+  OverallDown: -0.5
+  Samples: ttbarcc
+
+Systematic: "HTX_BKGNP_TTBARBB_XS"
+  Title: "t#bar{t}+#geq1b norm."
+  Type: OVERALL
+  Category: "t#bar{t} uncertainties"
+  OverallUp: 0.5
+  OverallDown: -0.5
+  Samples: ttbarbb
+
+% ---------------------------------- %
+% --------  V+jets (1-lep)  -------- %
+% ---------------------------------- %
+
+Systematic: "HTX_BKGNP_VJETS_XS_3B" ; "HTX_BKGNP_VJETS_XS_4B"
+  Title: "V+jets norm. (3b)" ; "V+jets norm. (#geq 4b)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.30
+  OverallDown: -0.30
+  Samples: Wjets,Zjets
+  Regions: HTX_c1lep6jin3bex*;HTX_c1lep6jin4bin*
+
+
+% -------------------------------------- %
+% --------  Dibosons (1-lep)  ---------- %
+% -------------------------------------- %
+
+Systematic: "HTX_BKGNP_OTHERS_Dibosons_XS_3B" ; "HTX_BKGNP_OTHERS_Dibosons_XS_4B"
+  Title: "Dibosons norm. (#geq6j,3b)" ; "Dibosons norm. (#geq6j,#geq4b)" 
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.38
+  OverallDown: -0.38
+  Samples: Dibosons
+  Regions: HTX_c1lep6jin3bex*;HTX_c1lep6jin4bin*
+
+% ---------------------------- %
+% --------  Top EW  ---------- %
+% ---------------------------- %
+
+Systematic: "HTX_BKGNP_OTHERS_TopEW_XS"
+  Title: "topEW norm. (1l)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.15
+  OverallDown: -0.15
+  Samples: topEW
+  Regions: HTX_c1lep*
+
+% ---------------------------- %
+% --------    ttH   ---------- %
+% ---------------------------- %
+
+Systematic: "HTX_BKGNP_OTHERS_ttH_XS"
+  Title: "ttH norm. (1l)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.09
+  OverallDown: -0.12
+  Samples: ttH
+  Regions: HTX_c1lep*
+
+% ----------------------------- %
+% --------  SM4tops  ---------- %
+% ----------------------------- %
+
+Systematic: "HTX_BKGNP_OTHERS_SM4tops_XS"
+  Title: "SM 4tops norm. (1l)"
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.3
+  OverallDown: -0.3
+  Samples: SM4tops
+  Regions: HTX_c1lep*
+
+% ----------------------------- %
+% -------  Single-top  -------- %
+% ----------------------------- %
+
+Systematic: HTX_BKGNP_OTHERS_Singletop_XS
+  Title: "Single-top norm."
+  Type: OVERALL
+  Category: "Background uncertainties"
+  OverallUp: 0.05
+  OverallDown: -0.05
+  Samples: "Singletop"
+  Regions: HTX_c1lep*
+
+% ------------------------- %
+% -----  MET trigger  ----- %
+% ------------------------- %
+
+Systematic: HTX_MET_TRIGGER_1L
+  Title: "MET trigger uncertainty"
+  Type: OVERALL
+  Category: Others
+  OverallUp: 0.02
+  OverallDown: -0.02
+  Exclude: QCD
+  Regions: HTX_c1lep*
+
+% ------------------------- %
+% --------   QCD   -------- %
+% ------------------------- %
+
+%Systematic: "HTX_BKGNP_QCD_NORM"
+%  Title: "QCD norm."
+%  Type: OVERALL
+%  Category: "QCD uncertainties"
+%  OverallUp: 0.5
+%  OverallDown: -0.5
+%  Samples: QCD

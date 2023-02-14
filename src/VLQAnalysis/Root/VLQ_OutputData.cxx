@@ -12,6 +12,10 @@
 VLQ_OutputData::VLQ_OutputData( VLQ_Options* opt ):
 OutputData(),
 m_opt(opt),
+//Metadata
+o_sampleID(0),
+o_sampleName(0),
+o_mc_campaign(0),
 //Event variables
 o_channel_type(0),o_period(0),o_run_number(0),o_pileup_mu(0),o_npv(0), o_meff(0), o_meffred(0), o_met(0), o_mtwl(0), o_ptwl(0), o_mll(0), 
 o_hthad(0), o_hthadRC(0), o_hthadRCtag(0), o_hthadRCM(0), o_mJsum(0), o_metsig_ev(0), o_metsig_obj(0),o_residualMET(0),
@@ -178,6 +182,22 @@ o_is_ttbar(false)
   jetTaggedType.push_back("RCMV0b");
   jetTaggedType.push_back("RCMV1bin");
   jetTaggedType.push_back("LooseRCTTMass");
+  if(m_opt->UseLargeRJets() && m_opt->DoLargeRJetsBOT()){
+    jetTaggedType.push_back("LRJDNNC50");
+    jetTaggedType.push_back("LRJDNNC80");
+    jetTaggedType.push_back("LRJDNNI50");
+    jetTaggedType.push_back("LRJDNNI80");
+    jetTaggedType.push_back("LRJSW50");
+    jetTaggedType.push_back("LRJSW80");
+    jetTaggedType.push_back("LRJSZ50");
+    jetTaggedType.push_back("LRJSZ80");
+    jetTaggedType.push_back("LRJSV50");
+    jetTaggedType.push_back("LRJSV80");
+    jetTaggedType.push_back("LRJXbbH50");
+    jetTaggedType.push_back("LRJXbbH60");
+    jetTaggedType.push_back("LRJXbbH70");
+  }
+
   for ( const std::string type : jetTaggedType ){
     o_taggedjets.insert( std::pair<std::string, AOVector*>( type, new AOVector() ) );
     o_taggedjets_n.insert( std::pair<std::string, int>( type, 0 ) );
@@ -271,6 +291,7 @@ o_is_ttbar(false)
     "H", "Hbb", "Hnonbb", "H_b1", "H_b2",
     "hadtop", "hadtop_b", "hadtop_W", "hadtop_q1", "hadtop_q2",
     "leptop", "leptop_b", "leptop_W", "leptop_lep", "leptop_nu",
+    "tautop", "tautop_b", "tautop_W", "tautop_lep","tautop_nu",
     "hadZ", "hadZ_q1", "hadZ_q2",
     "lepZ", "lepZ_lep1", "lepZ_lep2",
     "invZ",

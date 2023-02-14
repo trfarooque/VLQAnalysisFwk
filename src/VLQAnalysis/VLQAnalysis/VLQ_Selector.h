@@ -48,6 +48,7 @@ public:
 		   c_0Mex, c_1Mex, c_1Min, c_2Min, 
 		   c_1Mex3Jin, c_1Mex3Jin0Hex, c_1Mex3Jin1Hin,
 		   c_2Min3Jin, c_2Min3Jin0Hex, c_2Min3Jin1Hin,
+		   c_2Min0Hex, c_2Min1Hin,
 		   c_1Mex0Hex1Tex,
 		   /*Hadtop-tagged jet multiplicities*/
 		   c_0Tex, c_0Tin, c_1Tex, c_0_1Twin, c_1Tin, c_2Tin,
@@ -70,7 +71,7 @@ public:
 		   /*V+L+T+H multiplicities*/
 		   c_0VLTHex, c_1VLTHin,
 		   /*Kinematic cuts*/
-		   c_LowMtbmin, c_HighMtbmin, c_LowMbb, c_HighMbb, c_HighMetSig, c_LowMetSig, c_HighMLL, c_ZwinMLL, 
+		   c_LowMtbmin, c_HighMtbmin, c_LowMbb, c_HighMbb, c_HighMetSig, c_LowMetSig, c_HighMetCut, c_LowMetCut, c_HighMLL, c_ZwinMLL, 
 		   /*MVAScore cuts*/
 		   c_LowMVAScore, c_MidMVAScore, c_HighMVAScore, TOPSEL_MAX
   };
@@ -104,6 +105,16 @@ public:
     int AddSelectionIndex( const std::string& sel_name, int index=-1, bool newentry=false);
     SelProp MakeSelProp(const std::string& _name, int _type, const std::string& _primanc_name="");
 
+    bool GetPreselectionCuts();
+    bool AddPreselectionRegions(bool do_syst = true, bool do_runop = true);
+    bool AddMVATrainingRegions(bool do_syst = true, bool do_runop = true);
+    bool AddSingleVLQFitRegions(bool do_syst = true, bool do_runop = true);
+    bool AddSingleVLQValidationRegions(bool do_syst = true, bool do_runop = true);
+    bool AddPairVLQ0LepFitRegions(bool do_syst = true, bool do_runop = true);
+    bool AddPairVLQ0LepValidationRegions(bool do_syst = true, bool do_runop = true);
+    bool AddPairVLQ1LepFitRegions(bool do_syst = true, bool do_runop = true);
+    bool AddPairVLQ1LepValidationRegions(bool do_syst = true, bool do_runop = true);
+
  private:
     VLQ_Options *m_opt;
     const VLQ_NtupleData *m_ntupData;
@@ -135,9 +146,23 @@ public:
     std::vector<SelProp>* m_sel_Mbb_prop;
     std::vector<SelProp>* m_sel_Mtb_prop;
     std::vector<SelProp>* m_sel_MetSig_prop;
+    std::vector<SelProp>* m_sel_MetCut_prop;
     std::vector<SelProp>* m_sel_MLL_prop;
     std::vector<SelProp>* m_sel_MVAScore_prop;
     std::ifstream m_blinding_config;
+
+    std::vector<std::string> m_ch_metsig;
+    std::vector<std::string> m_ch_metcut;
+    std::vector<std::string> m_ch_mtb_presel;
+    std::vector<std::string> m_ch_fjet;
+    std::vector<std::string> m_v_bjet_presel;
+    std::vector<std::string> m_v_jet_presel;
+    std::vector<std::string> m_mva_cut_presel;
+    std::vector<std::string> m_mva_jet_presel;
+    std::vector<std::string> m_mva_bjet_presel;
+    std::vector<std::string> m_mva_boost_presel;
+    std::map<std::string, std::vector< std::string> > m_ch_lep;
+    std::map<std::string, std::vector< std::string> > m_ch_mll;
 
     //int m_nsel;
 

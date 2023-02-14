@@ -37,6 +37,8 @@ if(len(sys.argv)<5):
     print "    useBlindingCuts=TRUE/FALSE use the meff blinding cuts"
     print "    discriminant=<name of variable to be used as discriminant> (default is meff)"
     print "    discriminant_title=<title of variable to be used as discriminant> (default is m_{eff} [GeV])"
+    print "    discriminant_VR=<name of variable to be used as discriminant in validation regions> (default is the same as discriminant)"
+    print "    discriminant_VR_title=<title of variable to be used as discriminant in validation regions> (default is the same as discriminant_title)"
     print ""
     print "Other options can also be provided. Possible options are in the following list:"
     print "  -> lumiValue, addition, histoPath, statOnly, fitType, fitRegion, fitPOIAsimov, limitBlind, limitPOIAsimov"
@@ -93,6 +95,8 @@ useBlindingCuts = False
 useData = False
 discriminant = "meff"
 discriminant_title = "m_{eff} [GeV]"
+discriminant_VR = discriminant
+discriminant_VR_title = discriminant_title
 #regDict = "regions_dictionary_sVLQ_ORIG"
 regDict = "regions_dictionary"
 
@@ -155,6 +159,10 @@ for iArg in range(1,len(sys.argv)):
         discriminant = splitted[1]
     elif(argument=="DISCRIMINANT_TITLE"):
         discriminant_title = splitted[1]
+    elif(argument=="DISCRIMINANT_VR"):
+        discriminant_VR = splitted[1]
+    elif(argument=="DISCRIMINANT_VR_TITLE"):
+        discriminant_VR_title = splitted[1]
     elif(argument=="REGIONS"):
         regDict = splitted[1]
     elif(argument=="SIGNALTYPE"):
@@ -192,7 +200,7 @@ Signals = []
 
 if(signalType=="PAIR"):
     VLQ_masses = ["600","800","1000","1100","1200","1300","1400","1500","1600","1700","1800","2000"]
-    #VLQ_masses = ["2000"]
+    #VLQ_masses = ["1300","1400","1500","1600","1700"]
     VLQB_masses = ["600","700","750","800","850","900","950","1000","1050","1100","1150","1200","1300","1400","1500","1600"]
     
     #Signals += GetVLQTSamples( )
@@ -276,7 +284,7 @@ if doZeroLep:
 #open json xsec database if needed
 ##________________________________________________________                                                                                                                                                
 ## Looking into the XSe DB file                                                                                                                                                                           
-with open(os.getenv("VLQAnalysisFramework_DIR") + '/data/VLQAnalysis/xsec_list.json','r') as f:
+with open(os.getenv("VLQAnalysisFramework_DIR") + '/data/VLQAnalysis/samples_info/xsec_list.json','r') as f:
     xsecdata = json.load(f)
 
 for counter,sample in enumerate(Signals):
@@ -333,6 +341,9 @@ for counter,sample in enumerate(Signals):
                             corrected_line += "Type: " + reg['type'] + "\n"
 
                             reg_discriminant = discriminant
+                            if(reg['type']=="VALIDATION"):
+                                reg_discriminant = discriminant_VR
+
                             if (discriminant=="recoVLQ0_m"):
                                 if('0Hex' in reg['name']):
                                     reg_discriminant = "Zt_" + discriminant
@@ -340,8 +351,12 @@ for counter,sample in enumerate(Signals):
                                     reg_discriminant = "Ht_" + discriminant
 
                             corrected_line += "HistoName: " + reg['name'].replace("HTX_","") + channel + "_" + reg_discriminant + "\n"
-                            corrected_line += "VariableTitle: " + discriminant_title +"\n"
+                            if(reg['type']=="VALIDATION"):
+                                corrected_line += "VariableTitle: " + discriminant_VR_title +"\n"
+                            else: 
+                                corrected_line += "VariableTitle: " + discriminant_title +"\n"
                             corrected_line += "Binning: " + reg[binning_key] + "\n"
+                            #corrected_line += "Binning: \"AutoBin\",\"TransfoD\",3,3\n"
                             corrected_line += "Label: " + "\"" + reg['legend'] + "\"\n"
                             corrected_line += "ShortLabel: " + "\"" + reg['legend'] + "\"\n"
                             #if(reg['name'].find("c1lep")>-1 and inputDir.find("/1lep")==-1):

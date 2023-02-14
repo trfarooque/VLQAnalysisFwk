@@ -39,6 +39,15 @@ public:
     std::vector<TriggerInfo*> o_trigger_list;
 
     //
+    // Metadata
+    //
+    int o_sampleID;
+    int o_sampleName;
+    int o_mc_campaign;
+
+
+
+    //
     // Event variables
     //
     int o_channel_type;
@@ -237,7 +246,9 @@ public:
     double o_dPhimin_lepbjet;
     double o_dPhimin_jetjet;
     double o_dPhimin_RCjets;
+    double o_dPhimin_RCjetsMET;
     double o_dPhimin_RCTTMassRCTTMass;
+    double o_dPhimin_RCTTMassMET;
     double o_dRmin_RCMHiggsRCMHiggs;
     double o_dRmin_RCMHiggsRCMV;
     double o_dRmin_RCMHiggsRCMTop;
@@ -251,11 +262,13 @@ public:
     double o_dEtamin_RCMVRCMTop;
     double o_dEtamin_RCMTopRCMTop;
     double o_dPhimin_RCMHiggsRCMHiggs;
+    double o_dPhimin_RCMHiggsMET;
     double o_dPhimin_RCMHiggsRCMV;
     double o_dPhimin_RCMHiggsRCMTop;
     double o_dPhimin_RCMVRCMV;
     double o_dPhimin_RCMVRCMTop;
     double o_dPhimin_RCMTopRCMTop;
+    double o_dPhimin_RCMTopMET;
     double o_leadingdR_lepjet;
     double o_leadingdR_lepbjet;
     double o_leadingdR_jetjet;
@@ -265,6 +278,7 @@ public:
     double o_leadingdEta_lepbjet;
     double o_leadingdEta_jetjet;
     double o_leadingdPhi_RCjets;
+    double o_leadingdPhi_RCjetsMET;
     double o_leadingdPhi_lepjet;
     double o_leadingdPhi_lepbjet;
     double o_leadingdPhi_jetjet;
@@ -278,7 +292,7 @@ public:
     double o_leadingdR_RCTTMassRCTTMass;
     double o_leadingdEta_RCTTMassRCTTMass;
     double o_leadingdPhi_RCTTMassRCTTMass;
-
+    double o_leadingdPhi_RCTTMassMET;
     double o_leadingdEta_RCMHiggsRCMHiggs;
     double o_leadingdEta_RCMHiggsRCMV;
     double o_leadingdEta_RCMHiggsRCMTop;
@@ -286,11 +300,13 @@ public:
     double o_leadingdEta_RCMVRCMTop;
     double o_leadingdEta_RCMTopRCMTop;
     double o_leadingdPhi_RCMHiggsRCMHiggs;
+    double o_leadingdPhi_RCMHiggsMET;
     double o_leadingdPhi_RCMHiggsRCMV;
     double o_leadingdPhi_RCMHiggsRCMTop;
     double o_leadingdPhi_RCMVRCMV;
     double o_leadingdPhi_RCMVRCMTop;
     double o_leadingdPhi_RCMTopRCMTop;
+    double o_leadingdPhi_RCMTopMET;
     double o_minRecoVLQMAsymm_HtHt;
     double o_minRecoVLQMAsymm_HtZt;
     double o_minRecoVLQMAsymm_HtWb;
@@ -349,11 +365,14 @@ public:
     double o_dEtaaverage_RCTTMassRCTTMass;
 
     double o_dPhiaverage_RCjets;
+    double o_dPhiaverage_RCjetsMET;
     double o_dPhiaverage_jetjet;
     double o_dPhiaverage_lepjet;
     double o_dPhiaverage_lepbjet;
     double o_dPhiaverage_RCTTMassRCTTMass;
-
+    double o_dPhiaverage_RCTTMassMET;
+    double o_dPhiaverage_RCMTopMET;
+    double o_dPhiaverage_RCMHiggsMET;
     //
     //low mass Hplus variables
     double o_mbb_maxdR;

@@ -65,6 +65,7 @@ public:
 
     double GetLeadingdR( std::vector< AnalysisObject* > &v_obj1, std::vector< AnalysisObject* > &v_obj2) const;
     double GetLeadingdEta( std::vector< AnalysisObject* > &v_obj1, std::vector< AnalysisObject* > &v_obj2) const;
+    double GetLeadingdPhi( AnalysisObject *v_obj1, std::vector< AnalysisObject* > &v_obj2, const int maxVec = -1, const std::string &mom = "" ) const ;
     double GetLeadingdPhi( std::vector< AnalysisObject* > &v_obj1, std::vector< AnalysisObject* > &v_obj2) const;
 
     double GetAveragedR( std::vector< AnalysisObject* > &v_obj1,
@@ -73,6 +74,7 @@ public:
     double GetAveragedEta( std::vector< AnalysisObject* > &v_obj1,
                          std::vector< AnalysisObject* > &v_obj2,
                          const std::string &mom1 = "", const std::string &mom2 = "" ) const;
+    double GetAveragedPhi( AnalysisObject *v_obj1, std::vector< AnalysisObject* > &v_obj2, const int maxVec = -1, const std::string &mom = "" ) const ;
     double GetAveragedPhi( std::vector< AnalysisObject* > &v_obj1,
                          std::vector< AnalysisObject* > &v_obj2,
                          const std::string &mom1 = "", const std::string &mom2 = "" ) const;
@@ -134,7 +136,7 @@ public:
     int GetJetClass(AnalysisObject* jet) const;
 
     void InitMVA(const std::string &weightFileName);
-    float GetMVAScore(std::map< std::string, float> &inputVarsMVA);
+    float GetMVAScore(const std::map< std::string, float> &inputVarsMVA, const std::map< std::string, float> &spectatorVarsMVA = {});
     
 private:
     OptionsBase* m_opt;

@@ -54,6 +54,7 @@ public:
     bool AddKinReweightings();
     bool AddKinRwSyst();
     bool AddFJvtSFWeights();
+    bool AddLargeRJetTaggerSFs();
 
     bool SetLeptonSFWeights( const bool apply_trigger_weights );
     bool SetCrossSectionWeight();
@@ -66,7 +67,7 @@ public:
     bool SetTtbarHtSliceScale();
     bool SetTtbarFractionWeight();
     bool SetNNLOWeight( const double topPt );
-
+    bool SetLargeRJetTaggerSFs();
     bool SetKinReweightings();
     bool SetKinRwSyst();
     bool UpdateSysReweighting();

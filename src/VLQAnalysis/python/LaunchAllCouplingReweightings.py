@@ -15,14 +15,6 @@ sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "python/VLQAnalysis/" )
 from VLQ_BR import *
 from VLQ_Samples_mc import *
 
-
-#from regions_dictionary_pVLQ_newAna_merged_regions import *
-from regions_dictionary_pVLQ_newAna_MVA_regions import *
-
-#from regions_dictionary_sVLQ import *
-
-#from regions_dictionary import *
-
 from BatchTools import *
 from Job import *
 
@@ -53,6 +45,10 @@ parser.add_option("-n","--nMerge",type=int,dest="nMerge",help="Merging the opera
 parser.add_option("-d","--debug",dest="debug",help="Debug mode (no job submission)",action="store_true",default=False)
 parser.add_option("-r","--allRegions",dest="allRegions",help="Use all regions",action="store_true",default=False)
 parser.add_option("-m","--mcCampaign",dest="mcCampaign",help="MC campaign",action="store",default="mc16a")
+parser.add_option("-S","--doSR", dest="doSR", help="Use fit regions", action="store_true", default=False)
+parser.add_option("-V","--doVR", dest="doVR", help="Use validation regions", action="store_true", default=False)
+parser.add_option("-P","--doPR", dest="doPR", help="Use preselection regions", action="store_true", default=False)
+parser.add_option("-M","--moduleKeys", dest="moduleKeys", help="Comma separated list of keys of region dictionary modules", action="store", default="MVA")
 (options, args) = parser.parse_args()
 
 outputDir=options.outputDir
@@ -68,20 +64,37 @@ nMerge=options.nMerge
 debug=options.debug
 allRegions=options.allRegions
 mcCampaign=options.mcCampaign
+doSR=options.doSR
+doVR=options.doVR
+doPR=options.doPR
+moduleKeys = options.moduleKeys.split(",")
+
 os.system("mkdir -p " + outputDir)
 os.system("mkdir -p " + outputDir + "/Scripts")
 ##........................................................
 
 ##________________________________________________________
+## Getting list of region modules
+module_list = []
+
+if "MVA" in moduleKeys:
+    import regions_dictionary_pVLQ_newAna_MVA_regions as pVLQ_newAna_MVA_regions
+    module_list += [pVLQ_newAna_MVA_regions]
+if "BOT" in moduleKeys:
+    import regions_dictionary_pVLQ_newAna_boosted_object_cut_regions as pVLQ_newAna_BOT_regions
+    module_list += [pVLQ_newAna_BOT_regions]
+if "OLD" in moduleKeys:
+    import regions_dictionary_pVLQ as pVLQ_oldAna_BOT_regions
+    module_list += [pVLQ_oldAna_BOT_regions]
+##.........................................................
+
+##________________________________________________________
 ## Getting all signal samples and their associated weight/object systematics
 
 VLQMass=[600,800,1000,1100,1200,1300,1400,1500,1600,1700,1800,2000]
-#VLQMass=[1400]
-#VLQMass = [600,700,750,800,850,900,950,1000,1050,1100,1150,1200,1300,1400]
 
 if doAllBR:#just some mass points (not sensitive otherwise)
     VLQMass=[600,800,1000,1100,1200,1300,1400,1500,1600,1700,1800,2000]
-    #VLQMass = [700,800,900,1000,1100,1200,1300]
 ##........................................................
 
 ##________________________________________________________
@@ -100,26 +113,31 @@ if not tthfitter:
         
 else: #the TRExFitter inputs
     Variables += ["meff", "MVAScore"]
-    if(doZeroLepton):
-        Variables += ["MVAScore"]
 ##........................................................
 
 ##________________________________________________________
 ## Defining the list of regions to look at
 Regions = []
+
 if allRegions:
     Regions = [{'name':"all"}]
 else:
     if( doLepton ):
-        #
-        # Control/signal regions
-        #
-        Regions += all_regions_1l
+        for module in module_list:
+            if(doSR):
+                Regions += module.fit_regions_1l
+            if(doVR):
+                Regions += module.validation_regions_1l
+            if(doPR):
+                Regions += module.preselection_regions_1l
     if( doZeroLepton ):
-        #
-        # Validation regions
-        #
-        Regions += all_regions_0l
+        for module in module_list:
+            if(doSR):
+                Regions += module.fit_regions_0l
+            if(doVR):
+                Regions += module.validation_regions_0l
+            if(doPR):
+                Regions += module.preselection_regions_0l
 ##........................................................
 
 ##________________________________________________________

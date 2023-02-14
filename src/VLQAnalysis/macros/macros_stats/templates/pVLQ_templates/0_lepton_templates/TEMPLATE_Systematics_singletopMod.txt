@@ -1,0 +1,33 @@
+% ------------------------------------------ %
+% ---  SINGLE-TOP MODELLING SYSTEMATICS  --- %
+% ------------------------------------------ %
+
+Systematic: "HTX_BKGNP_SINGLETOP_GEN"
+  Title: "Single-top generator"
+  Type: HISTO
+  Category: "Single-top uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  HistoFilesUp: TtStAlt/SingletopaMCPy.mc16a,TtStAlt/SingletopaMCPy.mc16d,TtStAlt/SingletopaMCPy.mc16e
+  Samples: Singletop
+  ReferenceSample: Singletop_AFII
+
+Systematic: "HTX_BKGNP_SINGLETOP_PS"
+  Title: "Single-top parton shower"
+  Type: HISTO
+  Category: "Single-top uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  HistoFilesUp: TtStAlt/SingletopPowHer.mc16a,TtStAlt/SingletopPowHer.mc16d,TtStAlt/SingletopPowHer.mc16e
+  Samples: Singletop
+  ReferenceSample: Singletop_AFII
+
+Systematic: "HTX_BKGNP_SINGLETOP_DRDS_ST"
+NuisanceParameter: "HTX_BKGNP_SINGLETOP_DRDS"
+  Title: "Single-top DR/DS"
+  Type: HISTO
+  Category: "Single-top uncertainties"
+  Symmetrisation: ONESIDED
+  Smoothing: 40
+  HistoFilesUp: TtStAlt/SingletopDiagSub.mc16a,TtStAlt/SingletopDiagSub.mc16d,TtStAlt/SingletopDiagSub.mc16e
+  Samples: Singletop

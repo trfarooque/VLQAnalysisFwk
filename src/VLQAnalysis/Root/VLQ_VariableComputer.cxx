@@ -303,6 +303,28 @@ double VLQ_VariableComputer::GetLeadingdEta( AOVector &v_obj1, AOVector &v_obj2 
 
 //________________________________________________________________
 //
+double VLQ_VariableComputer::GetLeadingdPhi(  AnalysisObject *obj1,  AOVector &v_obj2, const int maxVec, const std::string &mom ) const
+{
+  if(!obj1){
+    return 0;
+  }
+
+  double dPhi = -100.;
+
+  if(v_obj2.size() >=1){
+
+    if(obj1 != v_obj2[0]){
+      dPhi = obj1 -> DeltaPhi( *v_obj2[0] );
+
+    }
+
+  }
+
+  return dPhi;
+}
+
+//________________________________________________________________
+//
 double VLQ_VariableComputer::GetLeadingdPhi( AOVector &v_obj1, AOVector &v_obj2 ) const
 {
   
@@ -359,6 +381,29 @@ double VLQ_VariableComputer::GetAveragedEta(  AOVector &v_obj1, AOVector &v_obj2
     }
     dEtaaverage = (npairs > 0) ? dEtaaverage/npairs : 10.;
     return dEtaaverage;
+}
+
+//________________________________________________________________
+//
+double VLQ_VariableComputer::GetAveragedPhi(AnalysisObject *obj1, AOVector &v_obj2, const int maxVec, const std::string &mom ) const
+{
+  if(!obj1){
+    return 0;
+  }
+  double dPhiaverage = 0.;
+  unsigned int npairs = 0;
+  int counter=0;
+  for ( const AnalysisObject* obj2 : v_obj2 ){
+    if(obj1==obj2) continue;
+    if(mom!="" && !(int)obj2->GetMoment(mom)) continue;
+    if(maxVec>=0 && counter>=maxVec) continue;
+    dPhiaverage += TMath::Abs( obj1 -> DeltaPhi( *obj2 ));
+    counter++;
+    npairs ++;
+    
+  }
+  dPhiaverage = (npairs > 0) ? dPhiaverage/npairs : 10.;
+  return dPhiaverage;
 }
 
 //________________________________________________________________
@@ -651,21 +696,21 @@ double VLQ_VariableComputer::GetMinPairVLQMassAsymm( std::map< std::string, AOVe
 //
 double VLQ_VariableComputer::GetMindPhi( AnalysisObject *obj1, AOVector &v_obj2, const int maxVec, const std::string &mom ) const
 {
-    if(!obj1){
-        return 0;
-    }
-    
-    double dPhi_min = 100;
-    int counter = 0;
-    for ( const AnalysisObject* obj2 : v_obj2 ){
-        if(obj1==obj2) continue;
-        if(mom!="" && !(int)obj2->GetMoment(mom)) continue;
-        if(maxVec>=0 && counter>=maxVec) continue;
-        double dPhi = obj1 -> DeltaPhi( *obj2 );
-        if(TMath::Abs(dPhi) < TMath::Abs(dPhi_min)) dPhi_min = dPhi;
-        counter++;
-    }
-    return dPhi_min;
+  if(!obj1){
+    return 0;
+  }
+  
+  double dPhi_min = 100;
+  int counter = 0;
+  for ( const AnalysisObject* obj2 : v_obj2 ){
+    if(obj1==obj2) continue;
+    if(mom!="" && !(int)obj2->GetMoment(mom)) continue;
+    if(maxVec>=0 && counter>=maxVec) continue;
+    double dPhi = obj1 -> DeltaPhi( *obj2 );
+    if(TMath::Abs(dPhi) < TMath::Abs(dPhi_min)) dPhi_min = dPhi;
+    counter++;
+  }
+  return dPhi_min;
 }
 
 //________________________________________________________________
@@ -1439,7 +1484,7 @@ void VLQ_VariableComputer::InitMVA(const std::string &weightFileName){
 
 //_________________________________________________________________
 //
-float VLQ_VariableComputer::GetMVAScore(std::map< std::string, float> &inputVarsMVA){
+float VLQ_VariableComputer::GetMVAScore(const std::map< std::string, float> &inputVarsMVA, const std::map< std::string, float> &spectatorVarsMVA){
 
   std::map< std::string, float >::iterator it = m_inputVarsMVA->begin();
 
@@ -1447,7 +1492,7 @@ float VLQ_VariableComputer::GetMVAScore(std::map< std::string, float> &inputVars
 
     if(inputVarsMVA.find(it->first) != inputVarsMVA.end()){
     
-      (*m_inputVarsMVA)[it->first] = inputVarsMVA[it->first];
+      (*m_inputVarsMVA)[it->first] = inputVarsMVA.at(it->first);
 
       ++it;
     }
@@ -1458,6 +1503,27 @@ float VLQ_VariableComputer::GetMVAScore(std::map< std::string, float> &inputVars
       
   }
 
-  return m_modelMVA->EvaluateMVA("MLP");
+  if(spectatorVarsMVA.size() > 0){
+    it = m_spectatorVarsMVA->begin();
+    while(it != m_spectatorVarsMVA->end()){
+
+      if(spectatorVarsMVA.find(it->first) != spectatorVarsMVA.end()){
+    
+	(*m_spectatorVarsMVA)[it->first] = spectatorVarsMVA.at(it->first);
+
+      }
+      ++it;
+
+      //else{
+      //std::cerr << " <!> Error in VLQ_VariableComputer::GetMVAScore() : Spectator variable " << it->first << " expected but not found." << std::endl;
+      //abort();
+      //}
+      
+    }
+  }
+
+  float score =  m_modelMVA->EvaluateMVA("MLP");
+
+  return score;
 
 }

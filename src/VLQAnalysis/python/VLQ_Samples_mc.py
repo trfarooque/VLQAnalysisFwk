@@ -144,12 +144,18 @@ def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campai
                                 , includeSingletopSystSamples=False 
                                 , splitSTChannels=False
                                 , includeTchan=True, includeWtprod=True, includeSchan=True
-                                , removeNull=False):
+                                , removeNull=False, useWZSherpa2211=False, useDibosonSherpa2211=False):
     Samples =  []
     if includeWjets:
-        Samples += GetWSamplesSherpa221( useWeightSyst, useObjectSyst, campaign, "Wjets", removeNull )
+        if useWZSherpa2211:
+            Samples += GetWSamplesSherpa2211(useWeightSyst, useObjectSyst, campaign, "Wjets", removeNull)
+        else:
+            Samples += GetWSamplesSherpa221( useWeightSyst, useObjectSyst, campaign, "Wjets", removeNull)
     if includeZjets:
-        Samples += GetZSamplesSherpa221( useWeightSyst, useObjectSyst, campaign, "Zjets", removeNull )
+        if useWZSherpa2211:
+            Samples += GetZSamplesSherpa2211(useWeightSyst, useObjectSyst, campaign, "Zjets", removeNull)
+        else:
+            Samples += GetZSamplesSherpa221( useWeightSyst, useObjectSyst, campaign, "Zjets", removeNull)
     if includeSingleTop:
         Samples += GetSingleTopSamples( useWeightSyst, useObjectSyst, campaign, 
                                         splitChannel=splitSTChannels,
@@ -160,7 +166,10 @@ def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campai
         Samples += GetHiggsSamples( useWeightSyst, useObjectSyst, campaign )
         Samples += Get4TopsSamples( useWeightSyst, useObjectSyst, campaign )
     if includeDibosons:
-        Samples += GetDibosonSamples( useWeightSyst, useObjectSyst, campaign )
+        if useDibosonSherpa2211:
+            Samples += GetDibosonSamplesSherpa2211( useWeightSyst, useObjectSyst, campaign)
+        else:
+            Samples += GetDibosonSamples( useWeightSyst, useObjectSyst, campaign )
     if includeDijet:
         Samples += GetDijetSamples( useWeightSyst, useObjectSyst, campaign )
 
@@ -184,7 +193,37 @@ def GetSignalSamples(useWeightSyst=False, useObjectSyst=False, campaign="",
 
     return Samples
 
+##_____________________________________________________________________
+##
+def GetWSamplesSherpa2211(useWeightSyst=False, useObjectSyst=False, campaign="", name = "Wjets", removeNull=False):
+    ObjectSystematics = []
+    WeightSystematics = []
+    if useObjectSyst:
+        ObjectSystematics += CommonObjectSystematics
+    else:
+        ObjectSystematics = [getSystematics(name="nominal",nameUp="",oneSided=True)]
 
+    Samples     =  []
+    for DSID in range(700338,700350):
+        Samples     += [getSampleUncertainties(name,str(DSID)+"."+campaign, ObjectSystematics , WeightSystematics)]
+
+    return Samples
+
+##_____________________________________________________________________
+##
+def GetZSamplesSherpa2211(useWeightSyst=False, useObjectSyst=False, campaign="", name = "Zjets", removeNull=False):
+    ObjectSystematics = []
+    WeightSystematics = []
+    if useObjectSyst:
+        ObjectSystematics += CommonObjectSystematics
+    else:
+        ObjectSystematics = [getSystematics(name="nominal",nameUp="",oneSided=True)]
+
+    Samples     =  []
+    for DSID in range(700320,700335):
+        Samples     += [getSampleUncertainties(name,str(DSID)+"."+campaign, ObjectSystematics , WeightSystematics)]
+
+    return Samples
 
 ##_____________________________________________________________________
 ##
@@ -411,6 +450,22 @@ def GetDibosonSamples( useWeightSyst=False, useObjectSyst=False, campaign="", na
 
 ##______________________________________________________________________
 ##
+def GetDibosonSamplesSherpa2211(useWeightSyst=False, useObjectSyst=False, campaign="", name = "Dibosons"):
+    ObjectSystematics = []
+    WeightSystematics = []
+    if useObjectSyst:
+        ObjectSystematics += CommonObjectSystematics
+    else:
+        ObjectSystematics = [getSystematics(name="nominal",nameUp="",oneSided=True)]
+
+    Samples     =  []
+    for DSID in range(700488,700497):
+        Samples     += [getSampleUncertainties(name,str(DSID)+"."+campaign, ObjectSystematics , WeightSystematics)]
+
+    return Samples
+
+##______________________________________________________________________
+##
 def GetTopEWSamples( useWeightSyst=False, useObjectSyst=False, campaign="", name = "topEW"):
 
     ObjectSystematics = []
@@ -448,6 +503,7 @@ def GetHiggsSamples( useWeightSyst=False, useObjectSyst=False, campaign=""):
     # Samples     += [getSampleUncertainties(name,"345874."+campaign, ObjectSystematics , WeightSystematics)] #ttH125_hdamp352p5_semilep
     # Samples     += [getSampleUncertainties(name,"345875."+campaign, ObjectSystematics , WeightSystematics)] #ttH125_hdamp352p5_dilep
     Samples     += [getSampleUncertainties("ttH","346344."+campaign, ObjectSystematics , WeightSystematics)] #ttH125_semilep
+    Samples     += [getSampleUncertainties("ttH","346345."+campaign, ObjectSystematics , WeightSystematics)] #ttH125_dilep
     Samples     += [getSampleUncertainties("VH","342284."+campaign, ObjectSystematics , WeightSystematics)] #WH
     Samples     += [getSampleUncertainties("VH","342285."+campaign, ObjectSystematics , WeightSystematics)] #ZH
     return Samples
@@ -569,7 +625,7 @@ def GetVLQTDoubletSamples( useWeightSyst=False, useObjectSyst=False, campaign=""
         ObjectSystematics = [getSystematics(name="nominal",nameUp="",oneSided=True)]
 
     Samples     =  []
-    Samples     += [getSampleUncertainties("VLQ_TT_700","302483."+campaign,  ObjectSystematics , WeightSystematics)]#TT 700
+   # Samples     += [getSampleUncertainties("VLQ_TTD_700","302483."+campaign,  ObjectSystematics , WeightSystematics)]#TT 700
     Samples     += [getSampleUncertainties("VLQ_TT_1200","302485."+campaign,  ObjectSystematics , WeightSystematics)]#TT 1200 
 
     return Samples

@@ -51,6 +51,7 @@ public:
   inline bool ApplyDeltaPhiCut() const { return m_applyDeltaPhiCut; }
   inline bool InvertDeltaPhiCut() const { return m_invertDeltaPhiCut; }
   inline bool ApplyMetSigObjCut() const { return m_applyMetSigObjCut; }
+  inline bool ApplyMetRegionsCut() const { return m_applyMetRegionsCut; }
   inline bool ApplyMetSignificanceCut() const { return m_applyMetSignificanceCut; }
   inline bool ApplyTtbbCorrection() const { return m_applyTtbbCorrection; }
   inline bool RecomputeTtBbRw() const { return m_RecTtBbRw; }
@@ -61,6 +62,7 @@ public:
   inline bool UseMETTriggerOneLep() const { return m_useMETTriggerOneLep; }
   inline bool UseLeptonTrigger() const { return m_useLeptonTrigger; }
   inline bool UseLargeRJets() const { return m_useLargeRJets; }
+  inline bool DoLargeRJetsBOT() const { return m_doLargeRJetsBOT; }
   inline bool DoCutFlow() const { return m_doCutFlow; }
   inline bool DoOneLeptonAna() const { return m_doOneLeptonAna; }
   inline bool DoTwoLeptonAna() const { return m_doTwoLeptonAna; }
@@ -80,6 +82,7 @@ public:
   inline bool DoOldBoost() const { return m_doOldBoost; }
   inline bool DoSplitMtb() const { return m_doSplitMtb; }
   inline bool DoSplitMbb() const { return m_doSplitMbb; }
+  inline bool DoSplitFwdJet() const { return m_doSplitFwdJet; }
   inline bool DoSumRegions() const { return m_doSumRegions; }
   inline bool ISAFII() const { return m_isAFII; }
   inline bool ISDIAGSUB() const { return m_isDiagSub; }
@@ -100,6 +103,9 @@ public:
   inline bool DoPDFSys() const { return m_doPDFSys; }
   inline bool DoJMRSys() const { return m_doJMRSys; }
   inline bool ApplyMVA() const { return m_applyMVA; }
+  inline bool DoBaselineFitRegions() const { return m_doBaselineFitRegions; }
+  inline bool DoUncorrelatedMVARegions() const { return m_doUncorrelatedMVARegions; }
+  inline bool PrunePMGWeights() const { return m_prunePMGWeights; }
 
   // strings
   inline std::string DoRecoVLQ() const { return m_doRecoVLQ; }
@@ -122,6 +128,7 @@ public:
   inline double TrkJetsPtCut() const { return m_trkJetsPtCut; }
   inline double LepPtCut() const { return m_lepPtCut; }
   inline double MtbminCut() const { return m_mtbminCut; }
+  inline double MetRegionsCut() const { return m_metregionsCut; }
   inline double MinDeltaPhiCut() const { return m_minDeltaPhiCut; }
   inline double MaxDeltaPhiCut() const { return m_maxDeltaPhiCut; }
   inline double MinMeffCut() const { return m_minMeffCut; }
@@ -132,6 +139,10 @@ public:
   inline double MaxMetCutZeroLep() const { return m_maxMetCutZeroLep; }
   inline double MaxMetCutTwoLep() const {return m_maxMetCutTwoLep; }
   inline double MaxLeptopDR() const { return m_maxLeptopDR; }
+  inline double HighMVACut1Lep() const { return m_highMVACut1Lep; }
+  inline double LowMVACut1Lep() const { return m_lowMVACut1Lep; }
+  inline double HighMVACut0Lep() const { return m_highMVACut0Lep; }
+  inline double LowMVACut0Lep() const { return m_lowMVACut0Lep; }
   // ints
   inline int DoJMSSys() const { return m_doJMSSys; }
   inline int MaxTRFB() const { return m_maxb; }
@@ -160,6 +171,7 @@ private:
   bool m_applyDeltaPhiCut;
   bool m_invertDeltaPhiCut;
   bool m_applyMetSigObjCut;
+  bool m_applyMetRegionsCut;
   bool m_applyMetSignificanceCut;
   bool m_applyTtbbCorrection;
   bool m_multipleVariablesWithUncertainties;
@@ -170,6 +182,7 @@ private:
   bool m_useMETTriggerOneLep;
   bool m_useLeptonTrigger;
   bool m_useLargeRJets;
+  bool m_doLargeRJetsBOT;
   bool m_doCutFlow;
   bool m_doOneLeptonAna;
   bool m_doTwoLeptonAna;
@@ -179,7 +192,7 @@ private:
 
   bool m_doPreselection, m_doExclusiveJetRegions, m_doExtendedPreselection, m_doSingleVLQRegions, m_doPairVLQRegions,
     m_doOldPairProdRegions,m_doValidnRegions, m_doFitRegions, m_doLooseSystRegions, m_doLowBRegions, m_doLowJRegions,
-    m_doSplitEMu, m_doOldBoost, m_doSplitMtb, m_doSplitMbb;
+    m_doSplitEMu, m_doOldBoost, m_doSplitMtb, m_doSplitMbb, m_doSplitFwdJet;
   bool m_doSumRegions;
 
   bool m_scaleTtbarHtSlices;
@@ -202,6 +215,9 @@ private:
   bool m_doJMRSys;
 
   bool m_applyMVA;
+  bool m_doBaselineFitRegions;
+  bool m_doUncorrelatedMVARegions;
+  bool m_prunePMGWeights;
 
   int m_doJMSSys;
   int m_maxb;
@@ -214,6 +230,7 @@ private:
   double m_trkJetsPtCut;
   double m_lepPtCut;
   double m_mtbminCut; 
+  double m_metregionsCut;
   double m_minDeltaPhiCut;
   double m_maxDeltaPhiCut;
   double m_minMeffCut;
@@ -224,6 +241,10 @@ private:
   double m_maxMetCutZeroLep;
   double m_maxMetCutTwoLep;
   double m_maxLeptopDR;
+  double m_highMVACut1Lep;
+  double m_lowMVACut1Lep;
+  double m_highMVACut0Lep;
+  double m_lowMVACut0Lep;
 
   std::string m_doRecoVLQ;
   std::string m_btagOP;

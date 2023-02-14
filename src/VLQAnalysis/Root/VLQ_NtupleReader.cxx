@@ -204,21 +204,38 @@ int VLQ_NtupleReader::SetJetBranchAddresses(const string &/*sj*/){
   // Large-R jets
   //
   if(m_opt->UseLargeRJets()){
-    stat =  SetVariableToChain("ljet_pt", &(m_VLQ_ntupData->d_ljet_pt) ); if(stat != 0){ return stat; }
-    stat =  SetVariableToChain("ljet_eta", &(m_VLQ_ntupData->d_ljet_eta) ); if(stat != 0){ return stat; }
-    stat =  SetVariableToChain("ljet_phi", &(m_VLQ_ntupData->d_ljet_phi) ); if(stat != 0){ return stat; }
-    stat =  SetVariableToChain("ljet_e", &(m_VLQ_ntupData->d_ljet_e) ); if(stat != 0){ return stat; }
-    stat =  SetVariableToChain("ljet_m", &(m_VLQ_ntupData->d_ljet_m) ); if(stat != 0){ return stat; }
-    stat =  SetVariableToChain("ljet_sd12", &(m_VLQ_ntupData->d_ljet_sd12) ); if(stat != 0){ return stat; }
-    stat =  SetVariableToChain("ljet_sd23", &(m_VLQ_ntupData->d_ljet_sd23) ); if(stat != 0){ return stat; }
-    stat =  SetVariableToChain("ljet_tau21_wta", &(m_VLQ_ntupData->d_ljet_tau21_wta) ); if(stat != 0){ return stat; }
-    stat =  SetVariableToChain("ljet_tau32_wta", &(m_VLQ_ntupData->d_ljet_tau32_wta) ); if(stat != 0){ return stat; }
-    stat =  SetVariableToChain("ljet_D2", &(m_VLQ_ntupData->d_ljet_D2) ); if(stat != 0){ return stat; }
-    stat =  SetVariableToChain("ljet_C2", &(m_VLQ_ntupData->d_ljet_C2) ); if(stat != 0){ return stat; }
-    stat =  SetVariableToChain("ljet_topTag", &(m_VLQ_ntupData->d_ljet_topTag) ); if(stat != 0){ return stat; }
-    stat =  SetVariableToChain("ljet_bosonTag", &(m_VLQ_ntupData->d_ljet_bosonTag) ); if(stat != 0){ return stat; }
-    stat =  SetVariableToChain("ljet_topTag_loose", &(m_VLQ_ntupData->d_ljet_topTag_loose) ); if(stat != 0){ return stat; }
-    stat =  SetVariableToChain("ljet_bosonTag_loose", &(m_VLQ_ntupData->d_ljet_bosonTag_loose) ); if(stat != 0){ return stat; }
+    stat =  SetVariableToChain("ak10_jets_pt", &(m_VLQ_ntupData->d_ljet_pt) ); if(stat != 0){ return stat; }
+    stat =  SetVariableToChain("ak10_jets_eta", &(m_VLQ_ntupData->d_ljet_eta) ); if(stat != 0){ return stat; }
+    stat =  SetVariableToChain("ak10_jets_phi", &(m_VLQ_ntupData->d_ljet_phi) ); if(stat != 0){ return stat; }
+    stat =  SetVariableToChain("ak10_jets_e", &(m_VLQ_ntupData->d_ljet_e) ); if(stat != 0){ return stat; }
+    stat =  SetVariableToChain("ak10_jets_m", &(m_VLQ_ntupData->d_ljet_m) ); if(stat != 0){ return stat; }
+    stat =  SetVariableToChain("ak10_jets_SPLIT12", &(m_VLQ_ntupData->d_ljet_sd12) ); if(stat != 0){ return stat; }
+    stat =  SetVariableToChain("ak10_jets_SPLIT23", &(m_VLQ_ntupData->d_ljet_sd23) ); if(stat != 0){ return stat; }
+    stat =  SetVariableToChain("ak10_jets_tau21", &(m_VLQ_ntupData->d_ljet_tau21_wta) ); if(stat != 0){ return stat; }
+    stat =  SetVariableToChain("ak10_jets_tau32", &(m_VLQ_ntupData->d_ljet_tau32_wta) ); if(stat != 0){ return stat; }
+    stat =  SetVariableToChain("ak10_jets_D2", &(m_VLQ_ntupData->d_ljet_D2) ); if(stat != 0){ return stat; }
+    stat =  SetVariableToChain("ak10_jets_C2", &(m_VLQ_ntupData->d_ljet_C2) ); if(stat != 0){ return stat; }
+    if(m_opt->DoLargeRJetsBOT()){
+      stat =  SetVariableToChain("ak10_jets_DNNTaggerTopQuarkContained50_pass", &(m_VLQ_ntupData->d_ljet_DNNC50_pass) ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_DNNTaggerTopQuarkContained80_pass", &(m_VLQ_ntupData->d_ljet_DNNC80_pass) ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_DNNTaggerTopQuarkInclusive50_pass", &(m_VLQ_ntupData->d_ljet_DNNI50_pass) ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_DNNTaggerTopQuarkInclusive80_pass", &(m_VLQ_ntupData->d_ljet_DNNI80_pass) ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_SmoothedWContained50_pass", &(m_VLQ_ntupData->d_ljet_SW50_pass) ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_SmoothedWContained80_pass", &(m_VLQ_ntupData->d_ljet_SW80_pass) ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_SmoothedZContained50_pass", &(m_VLQ_ntupData->d_ljet_SZ50_pass) ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_SmoothedZContained80_pass", &(m_VLQ_ntupData->d_ljet_SZ80_pass) ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_Xbb2020v3_Higgs", &(m_VLQ_ntupData->d_ljet_XbbHiggs_score) ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_Xbb2020v3_QCD",   &(m_VLQ_ntupData->d_ljet_XbbQCD_score)   ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_Xbb2020v3_Top",   &(m_VLQ_ntupData->d_ljet_XbbTop_score)   ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_DNNTaggerTopQuarkContained50_SF", &(m_VLQ_ntupData->d_ljet_DNNC50_SF) ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_DNNTaggerTopQuarkContained80_SF", &(m_VLQ_ntupData->d_ljet_DNNC80_SF) ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_DNNTaggerTopQuarkInclusive50_SF", &(m_VLQ_ntupData->d_ljet_DNNI50_SF) ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_DNNTaggerTopQuarkInclusive80_SF", &(m_VLQ_ntupData->d_ljet_DNNI80_SF) ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_SmoothedWContained50_SF", &(m_VLQ_ntupData->d_ljet_SW50_SF) ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_SmoothedWContained80_SF", &(m_VLQ_ntupData->d_ljet_SW80_SF) ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_SmoothedZContained50_SF", &(m_VLQ_ntupData->d_ljet_SZ50_SF) ); if(stat !=0){ return stat; }
+      stat =  SetVariableToChain("ak10_jets_SmoothedZContained80_SF", &(m_VLQ_ntupData->d_ljet_SZ80_SF) ); if(stat !=0){ return stat; }
+    }
   }
   if(m_opt->MsgLevel()==Debug::DEBUG) std::cout << "Leaving VLQ_NtupleReader::setJetBranchAddresses()" << std::endl;
 

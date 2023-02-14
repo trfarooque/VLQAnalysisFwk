@@ -1231,7 +1231,7 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
      else if(pdgIdPart==6){ //top
        top1++;
        bool leptonic=false;
-
+       bool taudecay=false;
        AnalysisObject* bchild = 0;
        AnalysisObject* Wchild = 0;
        AnalysisObject* q1 = 0;
@@ -1254,6 +1254,12 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
 	     leptonic=true;
 	     m_outData -> o_truth_partons.at("leptop_W") -> push_back(cd);
 	     m_outData -> o_truth_partons_n.at("leptop_W") ++;
+	     if(cd->GetMoment("decayType")>pow(2,15)) // CARLOS : shouldn't this be >= instead of > ?
+               {
+                 taudecay=true;
+                 m_outData -> o_truth_partons.at("tautop_W") -> push_back(cd);
+                 m_outData -> o_truth_partons_n.at("tautop_W") ++;
+               }
 	   }
 	   else{
 	     m_outData -> o_truth_partons.at("hadtop_W") -> push_back(cd);
@@ -1275,11 +1281,23 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
 	       m_outData -> o_truth_partons.at("leptop_lep") -> push_back(gc);
 	       m_outData -> o_truth_partons_n.at("leptop_lep") ++;
 	       m_outData -> o_truth_all_lep -> push_back(gc);
+	       if(gc->GetMoment("absPdgId")==15)
+                 {
+                   m_outData -> o_truth_partons.at("tautop_lep") -> push_back(gc);
+                   m_outData -> o_truth_partons_n.at("tautop_lep") ++;
+                   m_outData -> o_truth_all_lep -> push_back(gc);
+
+                 }
 	     }
 	     else if( (gc -> GetMoment("absPdgId") == 12) || (gc -> GetMoment("absPdgId") == 14) || (gc -> GetMoment("absPdgId") == 16)) {
 	       nu = gc;
 	       m_outData -> o_truth_partons.at("leptop_nu") -> push_back(gc);
 	       m_outData -> o_truth_partons_n.at("leptop_nu") ++;
+	       if(taudecay)
+                 {
+                   m_outData -> o_truth_partons.at("tautop_nu") -> push_back(gc);
+                   m_outData -> o_truth_partons_n.at("tautop_nu") ++;
+                 }
 	       list_inv.push_back(gc);
 	       *(m_outData -> o_truth_partonMET) += *gc;
 	     }
@@ -1335,6 +1353,11 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
 
 	   m_outData -> o_truth_partons.at("leptop_b") -> push_back(bchild);
 	   m_outData -> o_truth_partons_n.at("leptop_b") ++;
+	   if(taudecay)
+             {
+               m_outData -> o_truth_partons.at("tautop_b") -> push_back(bchild);
+               m_outData -> o_truth_partons_n.at("tautop_b") ++;
+             }
 
 	 }
 	 /*
@@ -1360,7 +1383,11 @@ int VLQ_TruthManager::FillParticlesPartonsVectors(){
 	 */
 	 m_outData -> o_truth_partons.at("leptop") -> push_back(part);
 	 m_outData -> o_truth_partons_n.at("leptop") ++;
-
+	 if(taudecay)
+           {
+             m_outData -> o_truth_partons.at("tautop") -> push_back(part);
+             m_outData -> o_truth_partons_n.at("tautop") ++;
+           }
        } //leptonic
 	   
        else{
