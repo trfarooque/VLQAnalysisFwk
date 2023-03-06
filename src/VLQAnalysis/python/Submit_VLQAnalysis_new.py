@@ -31,8 +31,7 @@ param_runQCD = True
 param_runData = True
 param_runTOPQ1Data = True
 param_runTOPQ4Data = True
-param_runWZSherpa2211 = False
-param_runDibosonSherpa2211 = False
+param_doSingleVLQAna = False
 
 param_runSignal = True
 param_runTtbar = True
@@ -85,6 +84,8 @@ if(len(sys.argv))>1:
             nMerge = int(value)
         elif(argument=="SLEEP"):
             sleep = int(value)
+        elif(argument=="DOSINGLEVLQANA"):
+            param_doSingleVLQAna = (value.upper()=="TRUE")
         elif(argument=="REMOVENULL"):
             param_removeNull = (value.upper()=="TRUE")
         elif(argument=="RUNDATA"):
@@ -113,14 +114,10 @@ if(len(sys.argv))>1:
             param_runWjets = (value.upper()=="TRUE")
         elif(argument=="RUNZJETS"):
             param_runZjets = (value.upper()=="TRUE")
-        elif(argument=="RUNWZSHERPA2211"):
-            param_runWZSherpa2211 = (value.upper()=="TRUE")
         elif(argument=="RUNTOPEW"):
             param_runTopEW = (value.upper()=="TRUE")
         elif(argument=="RUNDIBOSONS"):
             param_runDibosons = (value.upper()=="TRUE")
-        elif(argument=="RUNDIBOSONSSHERPA2211"):
-            param_runDibosonSherpa2211 = (value.upper()=="TRUE")
         elif(argument=="RUNDIJET"):
             param_runDijet = (value.upper()=="TRUE")
         elif(argument=="RUNTTSYST"):
@@ -182,12 +179,11 @@ print "param_campaign = ", param_campaign
 print "nFilesSplit = ", nFilesSplit
 print "nMerge = ", nMerge
 print "param_removeNull = ", param_removeNull
+print "param_doSingleVLQAna = ", param_doSingleVLQAna
 
 print "param_runData = ", param_runData
 print "param_runTOPQ1Data = ", param_runTOPQ1Data
 print "param_runTOPQ4Data = ", param_runTOPQ4Data
-print "param_runWZSherpa2211 = ", param_runWZSherpa2211
-print "param_runDibosonSherpa2211 = ", param_runDibosonSherpa2211
 
 print "param_runSignal = ", param_runSignal
 print "param_runTtbar = ", param_runTtbar
@@ -262,7 +258,7 @@ if param_runData :
 if param_runTtbar:
     Samples += GetTtbarSamples ( useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, 
                                  ttbarSystSamples = param_runTtSyst, hfSplitted = True, 
-                                 useHTSlices = param_useSlices, campaign = param_campaign )
+                                 useHTSlices = param_useSlices, campaign = param_campaign, sVLQAna=param_doSingleVLQAna)
 
 if param_runOtherBkgd:
     Samples += GetOtherBackgroundSamples (  useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, campaign=param_campaign
@@ -273,7 +269,7 @@ if param_runOtherBkgd:
                                             , includeSingletopSystSamples = param_runSTSyst
                                             , splitSTChannels = param_splitSTChannels
                                             , includeTchan=param_runTchanSingleTop, includeWtprod=param_runWtSingleTop, includeSchan=param_runSchanSingleTop
-                                            , removeNull = param_removeNull, useWZSherpa2211 = param_runWZSherpa2211, useDibosonSherpa2211 = param_runDibosonSherpa2211 )
+                                            , removeNull = param_removeNull, sVLQAna = param_doSingleVLQAna)
 
 if param_runSignal:
     Samples += GetSignalSamples( useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, campaign = param_campaign
