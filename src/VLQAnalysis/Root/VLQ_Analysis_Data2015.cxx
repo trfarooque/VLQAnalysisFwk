@@ -27,6 +27,8 @@
 #include "VLQAnalysis/VLQ_WeightManager.h"
 #include "VLQAnalysis/VLQ_TRFManager.h"
 #include "VLQAnalysis/VLQ_Selector.h"
+#include "VLQAnalysis/VLQ_MVAManager.h"
+
 #include "VLQAnalysis/string_utils.h"
 #include "VLQAnalysis/VLQ_PropagateSingleTopSystematics.h"
 #include "VLQAnalysis/VLQ_Analysis_Data2015.h"
@@ -50,22 +52,27 @@ using std::endl;
 //____________________________________________________________________________
 //
 VLQ_Analysis_Data2015::VLQ_Analysis_Data2015( VLQ_Options* opt ):
-m_opt(opt),
-m_ntupData(0),
-m_reader(0),
-m_outData(0),
-m_outMngrHist(0),
-m_outMngrTree(0),
-m_outMngrOvlerlapTree(0),
-m_anaTools(0),
-m_varComputer(0),
-m_truthMngr(0),
-m_TRFMngr(0),
-m_weightMngr(0)
+  m_opt(opt),
+  m_ntupData(NULL),
+  m_reader(NULL),
+  m_outData(NULL),
+  m_outMngrHist(NULL),
+  m_outMngrMVAHist(NULL),
+  m_outMngrTree(NULL),
+  m_outMngrMVATree(NULL),
+  m_outMngrOverlapTree(NULL),
+  m_anaTools(NULL),
+  m_varComputer(NULL),
+  m_truthMngr(NULL),
+  m_TRFMngr(NULL),
+  m_weightMngr(NULL),
+  m_selector(NULL),
+  m_mvaMngr(NULL)
 {
   m_channels.clear();
   m_topTaggers.clear();
   m_truthRCTypes.clear();
+  m_map_region_enum_index.clear();
 }
 
 //____________________________________________________________________________
@@ -101,6 +108,26 @@ bool VLQ_Analysis_Data2015::Begin(){
   //
   //############################################################################
   m_outData = new VLQ_OutputData(m_opt);
+
+
+  //############################################################################
+  //
+  // Fill metadata information
+  //
+  //############################################################################
+  std::string s_info = m_opt->StrSampleID();
+  std::string s_dsid = "";
+  int p_pos = AnalysisUtils::ParseString(s_info, s_dsid, ".");
+  if(p_pos != std::string::npos){
+    m_outData -> o_sampleID = atoi(s_dsid.c_str());
+    if(s_info == "mc16a")      m_outData -> o_mc_campaign = 1;
+    else if(s_info == "mc16d") m_outData -> o_mc_campaign = 2;
+    else if(s_info == "mc16e") m_outData -> o_mc_campaign = 3;
+  }
+  else{
+    m_outData -> o_sampleID = atoi(s_info.c_str());
+  }
+  m_outData -> o_sampleName = m_opt->SampleName();
 
   //############################################################################
   //
@@ -198,10 +225,23 @@ bool VLQ_Analysis_Data2015::Begin(){
 
   //############################################################################
   //
-  // Declaration of the OutputManager
+  // Declaration of the OutputManagers
   //
   //############################################################################
   m_outMngrHist = new OutputHistManager( m_opt, m_outData, m_weightMngr->SystMap());
+  if(m_opt->MakeMVAInputHists()){
+    m_outMngrMVAHist = new OutputHistManager( m_opt, m_outData, m_weightMngr->SystMap());
+  }
+
+  if(m_opt->DumpTree()){
+    m_outMngrTree = new OutputTreeManager( m_opt, m_outData );
+  }
+  if(m_opt->MakeMVAInputTree()){
+    m_outMngrMVATree = new OutputTreeManager( m_opt, m_outData );
+  }
+  if(m_opt->DumpOverlapTree()){
+    m_outMngrOverlapTree = new OutputTreeManager( m_opt, m_outData );
+  }
 
   //############################################################################
   //
@@ -216,10 +256,7 @@ bool VLQ_Analysis_Data2015::Begin(){
   // Declaration of the VariableComputer
   //
   //############################################################################
-  m_varComputer = new VLQ_VariableComputer(m_opt);
-  if(m_opt->ApplyMVA() && (m_opt->DoOneLeptonAna() || m_opt->DoZeroLeptonAna())) m_varComputer->InitMVA(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/")+m_opt->MVAWeightFile());
-
-  
+  m_varComputer = new VLQ_VariableComputer(m_opt);  
 
   //############################################################################
   //
@@ -228,6 +265,7 @@ bool VLQ_Analysis_Data2015::Begin(){
   //############################################################################
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "Declaring VLQ_AnalysisTools" << std::endl;
   m_anaTools = new VLQ_AnalysisTools( m_opt, m_outMngrHist, m_ntupData, m_outData, m_weightMngr, m_TRFMngr, m_varComputer );
+  if( m_opt->MakeMVAInputHists() ) m_anaTools->AddOutputHistManager(m_outMngrMVAHist);
 
   //############################################################################
   //
@@ -236,6 +274,17 @@ bool VLQ_Analysis_Data2015::Begin(){
   //############################################################################
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "Declaring VLQ_Selector" << std::endl;
   m_selector = new VLQ_Selector( m_opt, m_ntupData, m_outData, m_anaTools, false/*useDecisions*/, false/*addPrimaries*/ );
+
+
+  //############################################################################
+  //
+  // Define and initialise MVA manager
+  //
+  //############################################################################
+  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "Declaring VLQ_MVAManager" << std::endl;
+  m_mvaMngr = new VLQ_MVAManager( m_opt, m_outData, m_weightMngr, m_outMngrMVAHist, m_outMngrMVATree );
+  //All MVA histograms and branches, as required, will be added by MVAManager
+  m_mvaMngr->Init();
 
   //############################################################################
   //
@@ -272,42 +321,41 @@ bool VLQ_Analysis_Data2015::Begin(){
 
   //############################################################################
   //
-  // Declaration of the OutputTreeManager for the overlap tree
+  // Add standard branches for OutputTreeManager for the overlap tree
   //
   //############################################################################
   if(m_opt->DumpOverlapTree()){
-    m_outMngrOvlerlapTree = new OutputTreeManager( m_opt, m_outData );
-    m_outMngrOvlerlapTree->AddStandardBranch("bjets_n",       "bjets_n",      &(m_outData->o_bjets_n));
-    m_outMngrOvlerlapTree->AddStandardBranch("run_number",    "run_number",   &(m_outData->o_run_number));
-    m_outMngrOvlerlapTree->AddStandardBranch("event_number",  "event_number", &(m_outData->o_event_number));
-    m_outMngrOvlerlapTree->AddStandardBranch("jets_n",        "jets_n",       &(m_outData->o_jets_n));
-    m_outMngrOvlerlapTree->AddStandardBranch("fwdjets_n",     "fwdjets_n",    &(m_outData->o_fwdjets_n));
-    m_outMngrOvlerlapTree->AddStandardBranch("lep_n",         "lep_n",        &(m_outData->o_lep_n));
-    m_outMngrOvlerlapTree->AddStandardBranch("meff",          "meff",         &(m_outData->o_meff));
-    m_outMngrOvlerlapTree->AddStandardBranch("meffred",       "meffred",      &(m_outData->o_meffred));
-    m_outMngrOvlerlapTree->AddStandardBranch("met",           "met",          &(m_outData->o_met));
-    m_outMngrOvlerlapTree->AddStandardBranch("mtw",           "mtw",          &(m_outData->o_mtwl));
-    m_outMngrOvlerlapTree->AddStandardBranch("weight",        "weight",       &(m_outData->o_eventWeight_Nom));
-    m_outMngrOvlerlapTree->AddStandardBranch("region",        "region",       &(m_outData->o_region));
-    m_outMngrOvlerlapTree->BookStandardTree("overlap", "small tree");
+    m_outMngrOverlapTree->AddStandardBranch("bjets_n",       "bjets_n",      &(m_outData->o_bjets_n));
+    m_outMngrOverlapTree->AddStandardBranch("run_number",    "run_number",   &(m_outData->o_run_number));
+    m_outMngrOverlapTree->AddStandardBranch("event_number",  "event_number", &(m_outData->o_event_number));
+    m_outMngrOverlapTree->AddStandardBranch("jets_n",        "jets_n",       &(m_outData->o_jets_n));
+    m_outMngrOverlapTree->AddStandardBranch("fwdjets_n",     "fwdjets_n",    &(m_outData->o_fwdjets_n));
+    m_outMngrOverlapTree->AddStandardBranch("lep_n",         "lep_n",        &(m_outData->o_lep_n));
+    m_outMngrOverlapTree->AddStandardBranch("meff",          "meff",         &(m_outData->o_meff));
+    m_outMngrOverlapTree->AddStandardBranch("meffred",       "meffred",      &(m_outData->o_meffred));
+    m_outMngrOverlapTree->AddStandardBranch("met",           "met",          &(m_outData->o_met));
+    m_outMngrOverlapTree->AddStandardBranch("mtw",           "mtw",          &(m_outData->o_mtwl));
+    m_outMngrOverlapTree->AddStandardBranch("weight",        "weight",       &(m_outData->o_eventWeight_Nom));
+    m_outMngrOverlapTree->AddStandardBranch("region",        "region",       &(m_outData->o_region));
+    m_outMngrOverlapTree->BookStandardTree("overlap", "small tree");
   }
 
   //############################################################################
   //
-  // Declaration of the OutputTreeManager for the small tree
+  // Add standard branches for OutputTreeManager
   //
   //############################################################################
   if(m_opt->DumpTree()){
-    m_outMngrTree = new OutputTreeManager( m_opt, m_outData );
+
     m_outMngrTree->AddAllWeightBranches("nomWeight", m_weightMngr, true);
 
     m_outMngrTree->AddStandardBranch("run_number", "Run Number",  &(m_outData->o_run_number));
     m_outMngrTree->AddStandardBranch("event_number", "Event Number",  &(m_outData->o_event_number));
     m_outMngrTree->AddStandardBranch("VLQtype", "VLQ decay type",  &(m_outData->o_VLQtype));
 
-    //m_outMngrTree->AddStandardBranch("data_period", "Data Period",  &(m_outData->o_period));
-    //m_outMngrTree->AddStandardBranch("pileup_mu", "<#mu>", &(m_outData->o_pileup_mu));
-    //m_outMngrTree->AddStandardBranch("npv", "N_{PV}",  &(m_outData->o_npv));
+    m_outMngrTree->AddStandardBranch("data_period", "Data Period",  &(m_outData->o_period));
+    m_outMngrTree->AddStandardBranch("pileup_mu", "<#mu>", &(m_outData->o_pileup_mu));
+    m_outMngrTree->AddStandardBranch("npv", "N_{PV}",  &(m_outData->o_npv));
     m_outMngrTree->AddStandardBranch("channel", "Channel Type",  &(m_outData->o_channel_type));
 
     m_outMngrTree->AddStandardBranch("sampleID", "DSID", &(m_outData->o_sampleID));
@@ -320,7 +368,6 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_outMngrTree->AddStandardBranch("bjets_n", "Number of b-jets",  &(m_outData->o_bjets_n));
     m_outMngrTree->AddStandardBranch("trkbjets_n", "Number of track b-jets",  &(m_outData->o_trkbjets_n));
 
-    //m_outMngrTree->AddStandardBranch("fjets_n", "Number of fat jets",  &(m_outData->o_fjets_n));
     m_outMngrTree->AddStandardBranch("rcjets_n", "Number of re-clustered jets",  &(m_outData->o_rcjets_n));
     m_outMngrTree->AddStandardBranch("mtjets_n", "Number of mass-tagged jets",  &(m_outData->o_taggedjets_n.at("RCTTMass")));
     m_outMngrTree->AddStandardBranch("ttjets_n", "Number of top-tagged jets",  &(m_outData->o_taggedjets_n.at("RCMTop")));
@@ -328,9 +375,7 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_outMngrTree->AddStandardBranch("vjets_n", "Number of V-tagged jets",  &(m_outData->o_taggedjets_n.at("RCMV")));
 
 
-    /*
     m_outMngrTree->AddStandardBranch("jets_pt", "Jets  p_{T} [GeV]",  &(m_outData->o_jets), -1, "Pt");
-
     m_outMngrTree->AddStandardBranch("jets_m", "Jets Mass [GeV]",  &(m_outData->o_jets), -1, "M");
     m_outMngrTree->AddStandardBranch("jets_eta", "Jets #eta",  &(m_outData->o_jets), -1, "Eta");
     m_outMngrTree->AddStandardBranch("jets_phi", "Jets #phi",  &(m_outData->o_jets), -1, "Phi");
@@ -348,15 +393,11 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrTree->AddStandardBranch("trkjets_isb", "Trkjets is b-tagged",  &(m_outData->o_trkjets), -1, "bjet");
       m_outMngrTree->AddStandardBranch("trkjets_truthlabel", "Trkjets truth flavour",  &(m_outData->o_trkjets), -1, "truthLabel");
     }
+
     m_outMngrTree->AddStandardBranch("fwdjets_pt", "Fwd-jets  p_{T} [GeV]",  &(m_outData->o_fwdjets), -1, "Pt");
     m_outMngrTree->AddStandardBranch("fwdjets_m", "Fwd-jets Mass [GeV]",  &(m_outData->o_fwdjets), -1, "M");
     m_outMngrTree->AddStandardBranch("fwdjets_eta", "Fwd-jets #eta",  &(m_outData->o_fwdjets), -1, "Eta");
     m_outMngrTree->AddStandardBranch("fwdjets_phi", "Fwd-jets #phi",  &(m_outData->o_fwdjets), -1, "Phi");
-
-    if(m_opt->DoTruthAnalysis()){
-      m_outMngrTree->AddStandardBranch("jets_nmatch_btruth", "Jets no. of matched truth b-quarks from VLQ/ttbar decay",  &(m_outData->o_jets), -1, "nmatch_btruth");
-      m_outMngrTree->AddStandardBranch("jets_nmatch_bpartons", "Jets no. of matched truth b-quarks",  &(m_outData->o_jets), -1, "nmatch_bpartons");
-    }
 
     if( m_opt -> UseLargeRJets() ){
 
@@ -371,33 +412,15 @@ bool VLQ_Analysis_Data2015::Begin(){
     //-----------------------------------------------------------------------------------------------------------------
     m_outMngrTree->AddStandardBranch("rcjets_pt", "RC jets p_{T} [GeV]",  &(m_outData->o_rcjets), -1, "Pt");
     m_outMngrTree->AddStandardBranch("rcjets_m", "RC jets Mass [GeV]",  &(m_outData->o_rcjets), -1, "M");
-    //m_outMngrTree->AddStandardBranch("rcjets_eta", "RC jets #eta",  &(m_outData->o_rcjets), -1, "Eta");
-    //m_outMngrTree->AddStandardBranch("rcjets_phi", "RC jets #phi",  &(m_outData->o_rcjets), -1, "Phi");
-    //m_outMngrTree->AddStandardBranch("rcjets_nconsts", "RC jets N_{sj}",  &(m_outData->o_rcjets), -1, "nconsts"); */
+    m_outMngrTree->AddStandardBranch("rcjets_eta", "RC jets #eta",  &(m_outData->o_rcjets), -1, "Eta");
+    m_outMngrTree->AddStandardBranch("rcjets_phi", "RC jets #phi",  &(m_outData->o_rcjets), -1, "Phi");
+    m_outMngrTree->AddStandardBranch("rcjets_nconsts", "RC jets N_{sj}",  &(m_outData->o_rcjets), -1, "nconsts"); 
+
     //-----------------------------------------------------------------------------------------------------------------
     m_outMngrTree->AddStandardBranch("el_n", "Number of electrons",  &(m_outData->o_el_n));
     m_outMngrTree->AddStandardBranch("mu_n", "Number of muons",  &(m_outData->o_mu_n));
     m_outMngrTree->AddStandardBranch("lep_n", "Number of leptons",  &(m_outData->o_lep_n));
 
-    //-----------------------------------------------------------------------------------------------------------------
-    //m_outMngrTree->AddStandardBranch("el_loose_n", "Number of loose electrons",  &(m_outData->o_el_loose_n));
-    //m_outMngrTree->AddStandardBranch("mu_loose_n", "Number of loose muons",  &(m_outData->o_mu_loose_n));
-    //m_outMngrTree->AddStandardBranch("lep_loose_n", "Number of loose leptons",  &(m_outData->o_lep_loose_n));
-
-    //------------------------------------------------------------------------------------------------------------------
-    m_outMngrTree->AddStandardBranch("el1_pt", "Electron 1 p_{T} [GeV]",  &(m_outData->o_el), 0, "Pt");
-    //m_outMngrTree->AddStandardBranch("el1_eta", "Electron 1 #eta",  &(m_outData->o_el), 0, "Eta");
-    //m_outMngrTree->AddStandardBranch("el1_phi", "Electron 1 #phi",  &(m_outData->o_el), 0, "Phi");
-    //m_outMngrTree->AddStandardBranch("el1_isSignal", "Electron 1 isSignal",  &(m_outData->o_el), 0, "isSignal");
-
-    //------------------------------------------------------------------------------------------------------------------
-    m_outMngrTree->AddStandardBranch( "mu1_pt", "Muon 1 p_{T} [GeV]",  &(m_outData->o_mu), 0, "Pt");
-    //m_outMngrTree->AddStandardBranch("mu1_eta", "Muon 1 #eta",  &(m_outData->o_mu), 0, "Eta");
-    //m_outMngrTree->AddStandardBranch("mu1_phi", "Muon 1 #phi",  &(m_outData->o_mu), 0, "Phi");
-    //m_outMngrTree->AddStandardBranch("mu1_isSignal", "Muon 1 isSignal",  &(m_outData->o_mu), 0, "isSignal");
-
-    //------------------------------------------------------------------------------------------------------------------
-    m_outMngrTree->AddStandardBranch( "jet1_pt", "Jet 1 p_{T} [GeV]",  &(m_outData->o_jets), 0, "Pt");
 
     //-------------------------------------------------------------------------------------------------------------------
     m_outMngrTree->AddStandardBranch( "meff", "Effective mass", &(m_outData->o_meff));
@@ -405,32 +428,11 @@ bool VLQ_Analysis_Data2015::Begin(){
     if(m_opt->ApplyMVA()) m_outMngrTree->AddStandardBranch("MVAScore", "MVA Score", &(m_outData -> o_MVAScore));
 
     m_outMngrTree->AddStandardBranch( "met", "Missing E_{T}",  &(m_outData->o_AO_met), -1, "Pt");
-    //m_outMngrTree->AddStandardBranch("met_phi", "#phi_{MET}",  &(m_outData->o_AO_met), -1, "Phi");
     m_outMngrTree->AddStandardBranch( "mtw", "Transverse W mass", &(m_outData->o_mtwl));
     m_outMngrTree->AddStandardBranch( "ptw", "Transverse W p_{T}", &(m_outData->o_ptwl));
     m_outMngrTree->AddStandardBranch( "hthad", "H_{T}^{had}", &(m_outData->o_hthad));
     m_outMngrTree->AddStandardBranch( "dEtamin_RCjets",   ";#Delta#eta_{min}(rcjet,rcjet)" , &(m_outData -> o_dEtamin_RCjets)  );
     m_outMngrTree->AddStandardBranch( "dRmin_RCjets",  ";#DeltaR_{min}(rcjet,rcjet)"  ,  &(m_outData -> o_dRmin_RCjets)     );
-    /*    m_outMngrTree->AddStandardBranch( "dRmin_RCMHiggsRCMHiggs", ";#DeltaR_{min}(Higgs-tagged jet, Higgs-tagged jet)", &(m_outData -> o_dRmin_RCMHiggsRCMHiggs) );
-    m_outMngrTree->AddStandardBranch( "dRmin_RCMHiggsRCMV", ";#DeltaR_{min}(Higgs-tagged jet, W/Z-tagged jet)", &(m_outData -> o_dRmin_RCMHiggsRCMV) );
-    m_outMngrTree->AddStandardBranch( "dRmin_RCMHiggsRCMTop", ";#DeltaR_{min}(Higgs-tagged jet, Top-tagged jet)", &(m_outData -> o_dRmin_RCMHiggsRCMTop) );
-    m_outMngrTree->AddStandardBranch( "dRmin_RCMVRCMV", ";#DeltaR_{min}(W/Z-tagged jet, W/Z-tagged jet)", &(m_outData -> o_dRmin_RCMVRCMV) );
-    m_outMngrTree->AddStandardBranch( "dRmin_RCMVRCMTop", ";#DeltaR_{min}(W/Z-tagged jet, Top-tagged jet)", &(m_outData -> o_dRmin_RCMVRCMTop) );
-    m_outMngrTree->AddStandardBranch( "dRmin_RCMTopRCMTop", ";#DeltaR_{min}(Top-tagged jet, Top-tagged jet)", &(m_outData -> o_dRmin_RCMTopRCMTop) );*/
-    m_outMngrTree->AddStandardBranch( "dPhimin_RCjets",   ";#Delta#phi_{min}(lep,bjet)"  , &(m_outData -> o_dPhimin_RCjets) );
-/*  m_outMngrTree->AddStandardBranch( "dPhimin_RCMHiggsRCMHiggs", ";#Delta#phi_{min}(Higgs-tagged jet, Higgs-tagged jet)", &(m_outData -> o_dPhimin_RCMHiggsRCMHiggs));
-    m_outMngrTree->AddStandardBranch( "dPhimin_RCMHiggsRCMV", ";#Delta#phi_{min}(Higgs-tagged jet, W/Z-tagged jet)", &(m_outData -> o_dPhimin_RCMHiggsRCMV) );
-    m_outMngrTree->AddStandardBranch( "dPhimin_RCMHiggsRCMTop", ";#Delta#phi_{min}(Higgs-tagged jet, Top-tagged jet)", &(m_outData -> o_dPhimin_RCMHiggsRCMTop) );
-    m_outMngrTree->AddStandardBranch( "dPhimin_RCMVRCMV", ";#Delta#phi_{min}(W/Z-tagged jet, W/Z-tagged jet)", &(m_outData -> o_dPhimin_RCMVRCMV) );
-    m_outMngrTree->AddStandardBranch( "dPhimin_RCMVRCMTop", ";#Delta#phi_{min}(W/Z-tagged jet, Top-tagged jet)", &(m_outData -> o_dPhimin_RCMVRCMTop) );
-    m_outMngrTree->AddStandardBranch( "dPhimin_RCMTopRCMTop", ";#Delta#phi_{min}(Top-tagged jet, Top-tagged jet)", &(m_outData -> o_dPhimin_RCMTopRCMTop) );
-    m_outMngrTree->AddStandardBranch( "dEtamin_RCMHiggsRCMHiggs", ";#Delta#eta_{min}(Higgs-tagged jet, Higgs-tagged jet)", &(m_outData -> o_dEtamin_RCMHiggsRCMHiggs));
-    m_outMngrTree->AddStandardBranch( "dEtamin_RCMHiggsRCMV", ";#Delta#eta_{min}(Higgs-tagged jet, W/Z-tagged jet)", &(m_outData -> o_dEtamin_RCMHiggsRCMV) );
-    m_outMngrTree->AddStandardBranch( "dEtamin_RCMHiggsRCMTop", ";#Delta#eta_{min}(Higgs-tagged jet, Top-tagged jet)", &(m_outData -> o_dEtamin_RCMHiggsRCMTop) );
-    m_outMngrTree->AddStandardBranch( "dEtamin_RCMVRCMV", ";#Delta#eta_{min}(W/Z-tagged jet, W/Z-tagged jet)", &(m_outData -> o_dEtamin_RCMVRCMV) );
-    m_outMngrTree->AddStandardBranch( "dEtamin_RCMVRCMTop", ";#Delta#eta_{min}(W/Z-tagged jet, Top-tagged jet)", &(m_outData -> o_dEtamin_RCMVRCMTop) );
-    m_outMngrTree->AddStandardBranch( "dEtamin_RCMTopRCMTop", ";#Delta#eta_{min}(Top-tagged jet, Top-tagged jet)", &(m_outData -> o_dEtamin_RCMTopRCMTop) );*/
-   
     m_outMngrTree->AddStandardBranch( "dEtamin_RCTTMassRCTTMass", ";#Delta#eta_{min}(RCTTMass, RCTTMass)", &(m_outData -> o_dEtamin_RCTTMassRCTTMass) );
     m_outMngrTree->AddStandardBranch( "dRmin_RCTTMassRCTTMass", ";#DeltaR_{min}(RCTTMass, RCTTMass)", &(m_outData -> o_dRmin_RCTTMassRCTTMass) );
     m_outMngrTree->AddStandardBranch( "dPhimin_RCTTMassRCTTMass", ";#Delta#phi_{min}(RCTTMass, RCTTMass)", &(m_outData -> o_dPhimin_RCTTMassRCTTMass) );
@@ -446,24 +448,6 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_outMngrTree->AddStandardBranch( "leadingdPhi_RCjetsMET", ";#Delta#phi (leading RC jet, MET)", &(m_outData -> o_leadingdPhi_RCjetsMET));
     m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMTopMET", ";#Delta#phi (leading Top jet, MET)", &(m_outData -> o_leadingdPhi_RCMTopMET));
     m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMHiggsMET", ";#Delta#phi (leading Higgs jet, MET)", &(m_outData -> o_leadingdPhi_RCMHiggsMET));
-     /*    m_outMngrTree->AddStandardBranch( "leadingdR_RCMHiggsRCMHiggs", ";#DeltaR (leading Higgs-tagged J, subleading Higgs-tagged J)", &(m_outData -> o_leadingdR_RCMHiggsRCMHiggs) );
-    m_outMngrTree->AddStandardBranch( "leadingdR_RCMHiggsRCMV", ";#DeltaR (leading Higgs-tagged J, leading W/Z-tagged J)", &(m_outData -> o_leadingdR_RCMHiggsRCMV) );
-    m_outMngrTree->AddStandardBranch( "leadingdR_RCMHiggsRCMTop", ";#DeltaR (leading Higgs-tagged J, leading Top-tagged J)", &(m_outData -> o_leadingdR_RCMHiggsRCMTop) );
-    m_outMngrTree->AddStandardBranch( "leadingdR_RCMVRCMV", ";#DeltaR (leading W/Z-tagged J, subleading W/Z-tagged J)", &(m_outData -> o_leadingdR_RCMVRCMV) );
-    m_outMngrTree->AddStandardBranch( "leadingdR_RCMVRCMTop", ";#DeltaR (leading W/Z-tagged J, leading Top-tagged J)", &(m_outData -> o_leadingdR_RCMVRCMTop) );
-    m_outMngrTree->AddStandardBranch( "leadingdR_RCMTopRCMTop", ";#DeltaR (leading Top-tagged J, subleading Top-tagged J)", &(m_outData -> o_leadingdR_RCMTopRCMTop) );
-    m_outMngrTree->AddStandardBranch( "leadingdEta_RCMHiggsRCMHiggs", ";leading#Delta#eta (leadingd Higgs-tagged J, subleadingd Higgs-tagged J)", &(m_outData -> o_leadingdEta_RCMHiggsRCMHiggs) );
-    m_outMngrTree->AddStandardBranch( "leadingdEta_RCMHiggsRCMV", ";leading#Delta#eta (leadingd Higgs-tagged J, leadingd W/Z-tagged J)", &(m_outData -> o_leadingdEta_RCMHiggsRCMV) );
-    m_outMngrTree->AddStandardBranch( "leadingdEta_RCMHiggsRCMTop", ";leading#Delta#eta (leadingd Higgs-tagged J, leadingd Top-tagged J)", &(m_outData -> o_leadingdEta_RCMHiggsRCMTop) );
-    m_outMngrTree->AddStandardBranch( "leadingdEta_RCMVRCMV", ";leading#Delta#eta (leadingd W/Z-tagged J, subleadingd W/Z-tagged J)", &(m_outData -> o_leadingdEta_RCMVRCMV) );
-    m_outMngrTree->AddStandardBranch( "leadingdEta_RCMVRCMTop", ";leading#Delta#eta (leadingd W/Z-tagged J, leadingd Top-tagged J)", &(m_outData -> o_leadingdEta_RCMVRCMTop) );
-    m_outMngrTree->AddStandardBranch( "leadingdEta_RCMTopRCMTop", ";leading#Delta#eta (leadingd Top-tagged J, subleadingd Top-tagged J)", &(m_outData -> o_leadingdEta_RCMTopRCMTop) );
-    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMHiggsRCMHiggs", ";leading#Delta#phi (leadingd Higgs-tagged J, subleadingd Higgs-tagged J)", &(m_outData -> o_leadingdPhi_RCMHiggsRCMHiggs) );
-    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMHiggsRCMV", ";leading#Delta#phi (leadingd Higgs-tagged J, leadingd W/Z-tagged J)",  &(m_outData -> o_leadingdPhi_RCMHiggsRCMV) );
-    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMHiggsRCMTop", ";leading#Delta#phi (leadingd Higgs-tagged J, leadingd Top-tagged J)",  &(m_outData -> o_leadingdPhi_RCMHiggsRCMTop) );
-    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMVRCMV", ";leading#Delta#phi (leadingd W/Z-tagged J, subleadingd W/Z-tagged J)" , &(m_outData -> o_leadingdPhi_RCMVRCMV) );
-    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMVRCMTop", ";leading#Delta#phi (leadingd W/Z-tagged J, leadingd Top-tagged J)",  &(m_outData -> o_leadingdPhi_RCMVRCMTop) );
-    m_outMngrTree->AddStandardBranch( "leadingdPhi_RCMTopRCMTop", ";leading#Delta#phi (leadingd Top-tagged J, subleadingd Top-tagged J)",  &(m_outData -> o_leadingdPhi_RCMTopRCMTop) );*/
     m_outMngrTree->AddStandardBranch( "leadingdPhi_lepjet", ";leading#Delta#phi (lep,jet)",  &(m_outData -> o_leadingdPhi_lepjet) );
     m_outMngrTree->AddStandardBranch( "leadingdPhi_lepbjet", ";leading#Delta#phi (lep,bjet)",  &(m_outData  -> o_leadingdPhi_lepbjet) );
     m_outMngrTree->AddStandardBranch( "leadingdPhi_jetjet", ";leading#Delta#phi (jet,jet)",  &(m_outData -> o_leadingdPhi_jetjet) );
@@ -480,13 +464,13 @@ bool VLQ_Analysis_Data2015::Begin(){
 
     m_outMngrTree->AddStandardBranch("dRaverage_lepjet", ";#DeltaR_{ave.}(lep,jet)", &(m_outData -> o_dRaverage_lepjet)  );
     m_outMngrTree->AddStandardBranch("dRaverage_lepbjet", ";#DeltaR_{ave.}(lep,b-jet)", &(m_outData -> o_dRaverage_lepbjet)  );
-    // m_outMngrTree->AddStandardBranch("dRaverage_jetjet",  ";#DeltaR_{ave.}(jet,jet)", &(m_outData -> o_dRaverage_jetjet)  );
+    m_outMngrTree->AddStandardBranch("dRaverage_jetjet",  ";#DeltaR_{ave.}(jet,jet)", &(m_outData -> o_dRaverage_jetjet)  );
     m_outMngrTree->AddStandardBranch("dEtaaverage_lepjet", ";#Delta#eta_{ave.}(lep,jet)", &(m_outData -> o_dEtaaverage_lepjet)  );
     m_outMngrTree->AddStandardBranch("dEtaaverage_lepbjet",  ";#Delta#eta_{ave.}(lep,b-jet)", &(m_outData -> o_dEtaaverage_lepbjet)  );
-    // m_outMngrTree->AddStandardBranch("dEtaaverage_jetjet", ";#Delta#eta_{ave.}(jet,jet)", &(m_outData -> o_dEtaaverage_jetjet)  );
+    m_outMngrTree->AddStandardBranch("dEtaaverage_jetjet", ";#Delta#eta_{ave.}(jet,jet)", &(m_outData -> o_dEtaaverage_jetjet)  );
     m_outMngrTree->AddStandardBranch("dPhiaverage_lepjet",  ";#Delta#phi_{ave.}(lep,jet)", &(m_outData -> o_dPhiaverage_lepjet)  );
     m_outMngrTree->AddStandardBranch("dPhiaverage_lepbjet",  ";#Delta#phi_{ave.}(lep,b-jet)", &(m_outData -> o_dPhiaverage_lepbjet)  );
-    // m_outMngrTree->AddStandardBranch("dPhiaverage_jetjet",   ";#Delta#phi_{ave.}(jet,jet)", &(m_outData -> o_dPhiaverage_jetjet)  );
+    m_outMngrTree->AddStandardBranch("dPhiaverage_jetjet",   ";#Delta#phi_{ave.}(jet,jet)", &(m_outData -> o_dPhiaverage_jetjet)  );
     m_outMngrTree->AddStandardBranch("dRaverage_RCjets",  ";#DeltaR_{ave.}(rcjet,rcjet)", &(m_outData -> o_dRaverage_RCjets)  );
     m_outMngrTree->AddStandardBranch("dEtaaverage_RCjets", ";#Delta#eta_{ave.}(rcjet,rcjet)", &(m_outData -> o_dEtaaverage_RCjets)  );
     m_outMngrTree->AddStandardBranch("dPhiaverage_RCjets",  ";#Delta#phi_{ave.}(rcjet,rcjet)", &(m_outData -> o_dPhiaverage_RCjets)  );
@@ -542,26 +526,6 @@ bool VLQ_Analysis_Data2015::Begin(){
 					  &(m_outData -> o_taggedjets.at(type)), -1, "nbconsts" );
       m_outMngrTree -> AddStandardBranch( type + "_jet" +"s"+ "_consts_n", ";"+type+" jets"+" N_{subjets}", &(m_outData -> o_taggedjets.at(type)), -1, "nconsts" );
 
-	  /*
-	for ( int iTT =-1; iTT <=0; ++iTT ) {
-	  std::string str_id = "";
-	  str_id += std::to_string(iTT);
-	  if(iTT==-1) str_id = "s";
-       
-	  m_outMngrTree->AddStandardBranch( type + "_jet" + str_id + "_reff", ";"+type+" jet"+str_id+" R_{eff} [GeV]" , &(m_outData -> o_taggedjets.at(type)), iTT, "reff" );
-	  m_outMngrTree -> AddStandardBranch( type + "_jet" + str_id + "_pt", ";"+type+" jet"+str_id+" p_{T} [GeV]" ,
-					      &(m_outData -> o_taggedjets.at(type)), iTT, "Pt" );
-	  m_outMngrTree -> AddStandardBranch( type + "_jet" + str_id + "_eta", ";"+type+" jet"+str_id+" #eta"        ,
-					      &(m_outData -> o_taggedjets.at(type)), iTT, "Eta" );
-	  m_outMngrTree -> AddStandardBranch( type + "_jet" + str_id + "_m", ";"+type+" jet"+str_id+" mass [GeV]"    ,
-					      &(m_outData -> o_taggedjets.at(type)), iTT, "M" );
-	  m_outMngrTree -> AddStandardBranch( type + "_jet" +str_id+ "_bconsts_n", ";"+type+" jet"+str_id+" N_{subjets}^{b-tagged}",
-					      &(m_outData -> o_taggedjets.at(type)), iTT, "nbconsts" );
-
-	  if(type=="RCTTMass" || type=="LooseRCTTMass"){
-	  m_outMngrTree -> AddStandardBranch( type + "_jet" +str_id+ "_consts_n", ";"+type+" jet"+str_id+" N_{subjets}", &(m_outData -> o_taggedjets.at(type)), iTT, "nconsts" );
-	  }
-	  }*/
     }
 
     for ( int iRCJet=-1; iRCJet<=2; ++iRCJet  ) {
@@ -571,7 +535,7 @@ bool VLQ_Analysis_Data2015::Begin(){
      
 	m_outMngrTree -> AddStandardBranch( "RCjet"+str_id+"_reff",  ";RC jet"+str_id+"  R_{eff} [GeV]"      ,   &(m_outData -> o_rcjets), iRCJet, "reff");
 	m_outMngrTree -> AddStandardBranch( "RCjet"+str_id+"_pt",  ";RC jet"+str_id+"  p_{T} [GeV]"      ,   &(m_outData -> o_rcjets), iRCJet, "Pt");
-	m_outMngrTree -> AddStandardBranch( "RCjet"+str_id+"_eta",    ";RC jet"+str_id+"  #eta"             ,   &(m_outData -> o_rcjets), iRCJet, "Eta");
+ 	m_outMngrTree -> AddStandardBranch( "RCjet"+str_id+"_eta",    ";RC jet"+str_id+"  #eta"             ,   &(m_outData -> o_rcjets), iRCJet, "Eta");
 	m_outMngrTree -> AddStandardBranch( "RCjet"+str_id+"_m",  ";RC jet"+str_id+"  mass [GeV]"       ,   &(m_outData -> o_rcjets), iRCJet, "M");
 	m_outMngrTree -> AddStandardBranch( "RCjet"+str_id+"_nconsts",  ";Number of RC jet"+str_id+"  consts" ,      &(m_outData -> o_rcjets), iRCJet, "nconsts");
 	m_outMngrTree -> AddStandardBranch( "RCjet"+str_id+"_nbconsts",  ";Number of RC jet"+str_id+" b-tagged consts" ,      &(m_outData -> o_rcjets), iRCJet, "nbconsts");
@@ -581,8 +545,6 @@ bool VLQ_Analysis_Data2015::Begin(){
 	m_outMngrTree -> AddStandardBranch( "RCjet"+str_id+"_isRCMV",  ";V Mass Tag"          ,      &(m_outData -> o_rcjets), iRCJet, "isRCMV");
 
       }
-
-
     
     m_outMngrTree -> AddStandardBranch( "leptop_pt", ";Leptonic top p_{T} [GeV]" , &(m_outData -> o_leptop), -1, "Pt");
     m_outMngrTree -> AddStandardBranch( "leptop_n", ";Leptonic top p_{T} n " , &(m_outData -> o_leptop_n), -1, "");
@@ -594,10 +556,6 @@ bool VLQ_Analysis_Data2015::Begin(){
 
     m_outMngrTree -> AddStandardBranch( "lepW_n",   ";Number of (reconstructed) leptopnic W" ,&(m_outData -> o_lepW_n) );
     m_outMngrTree -> AddStandardBranch( "lepW_pt",   ";Leptonic W p_{T} [GeV]"    ,   &(m_outData -> o_lepW), -1, "Pt" );
-    //    m_outMngrTree -> AddStandardBranch( "lepW_eta",   ";Leptonic W #eta"       ,   &(m_outData -> o_lepW), -1, "Eta" );
-    // m_outMngrTree -> AddStandardBranch( "lepW_m",   ";Leptonic W mass [GeV]"   ,   &(m_outData -> o_lepW), -1, "M" );
-
-
 
     //Reconstructed neutrino
     m_outMngrTree -> AddStandardBranch( "nu_pt",  ";Neutrino p_{T} [GeV]"      ,   &(m_outData -> o_nu), -1, "Pt" );
@@ -611,54 +569,12 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_outMngrTree -> AddStandardBranch( "residualMET_Phi",   "Residual MET dphi(met-#nu_met)  [GeV]",  &(m_outData -> o_residualMET),-1,"Phi" );
     m_outMngrTree -> AddStandardBranch( "residualMET_Pt",   "Residual MET (met-#nu_met) transversal P : Pt  [GeV]",  &(m_outData -> o_residualMET),-1,"Pt" );
 
-    /*
-    m_outMngrTree->AddStandardBranch("dRmin_ejets", "#DeltaR_{min}(e, jets)", &(m_outData->o_dRmin_ejets));
-    m_outMngrTree->AddStandardBranch("dRmin_mujets", "#DeltaR_{min}(#mu, jets)", &(m_outData->o_dRmin_mujets));
-    m_outMngrTree->AddStandardBranch("dRmin_jetjet", "#DeltaR_{min}(jet, jet)", &(m_outData->o_dRmin_jetjet));
-    m_outMngrTree->AddStandardBranch("dRmin_bb", "#DeltaR_{min}(b-jet, b-jet)", &(m_outData->o_dRmin_bjetbjet));
-
-    m_outMngrTree->AddStandardBranch("mbb_mindr", "m_{inv}^{min#DeltaR}", &(m_outData->o_mbb_mindR));
-    m_outMngrTree->AddStandardBranch("dPhi_lepmet", "#Delta#phi(lep, MET)", &(m_outData->o_dPhi_lepmet));*/
-    m_outMngrTree->AddStandardBranch("dPhi_jetmet", "#Delta#phi_{min}(jet, MET)", &(m_outData->o_dPhi_jetmet));
-    /*m_outMngrTree->AddStandardBranch("dPhi_lepjet", "#Delta#phi_{min}(lep, jet)", &(m_outData->o_dPhi_lepjet));
-    m_outMngrTree->AddStandardBranch("dPhi_lepbjet", "#Delta#phi_{min}(lep, b-jet)", &(m_outData->o_dPhi_lepbjet));
-    */
-
     m_outMngrTree->AddStandardBranch("dRmin_lepbjet", "#DeltaR_{min}(lep, b-jet)", &(m_outData->o_dRmin_lepbjet));
     m_outMngrTree->AddStandardBranch("dRmin_lepjet", "#DeltaR_{min}(lep, b-jet)", &(m_outData->o_dRmin_lepjet));
 
-    //m_outMngrTree->AddStandardBranch("dRmin_ebjets", "#DeltaR_{min}(e, b-jets)", &(m_outData->o_dRmin_ebjets));
-    //m_outMngrTree->AddStandardBranch("dRmin_mubjets", "#DeltaR_{min}(#mu, b-jets)", &(m_outData->o_dRmin_mubjets));*/
     m_outMngrTree->AddStandardBranch("mT_bmin", "m_{T}^{min}(b-jets, MET)", &(m_outData->o_mTbmin));
     m_outMngrTree->AddStandardBranch("metsig_ev", "E_{T}^{miss}/#sqrt{H_{T}^{had}} [#sqrt{GeV}", &(m_outData -> o_metsig_ev));
-    /*m_outMngrTree->AddStandardBranch("jets40_n", "Number of jets with p_{T}>40 GeV", &(m_outData->o_jets40_n ));
-    m_outMngrTree->AddStandardBranch("centrality", "Centrality", &(m_outData->o_centrality ));
-    m_outMngrTree->AddStandardBranch("dRaverage_jetjet", "#DeltaR_{ave.}(jet, jet)", &(m_outData->o_dRaverage_jetjet));
-    m_outMngrTree->AddStandardBranch("dRaverage_bb", "#DeltaR_{ave.}(b-jet, b-jet)", &(m_outData->o_dRaverage_bjetbjet));
-    
-    m_outMngrTree->AddStandardBranch("dRaverage_lepjet", "#DeltaR_{ave.}(lep, jet)", &(m_outData->o_dRaverage_lepjet));
-    m_outMngrTree->AddStandardBranch("dRaverage_lepbjet", "#DeltaR_{ave.}(lep, bjet)", &(m_outData->o_dRaverage_lepbjet));
-    m_outMngrTree->AddStandardBranch("dRaverage_jetjet", "#DeltaR_{ave.}(jet, jet)", &(m_outData->o_dRaverage_jetjet));
-   
-    m_outMngrTree->AddStandardBranch("dEtaaverage_lepjet", "#DeltaR_{ave.}(lep, jet)", &(m_outData->o_dEtaaverage_lepjet));
-    m_outMngrTree->AddStandardBranch("dEtaaverage_lepbjet", "#DeltaR_{ave.}(lep, bjet)", &(m_outData->o_dEtaaverage_lepbjet));
-    m_outMngrTree->AddStandardBranch("dEtaaverage_jetjet", "#DeltaR_{ave.}(jet, jet)", &(m_outData->o_dEtaaverage_jetjet));
-   
-    m_outMngrTree->AddStandardBranch("dPhiaverage_lepjet", "#DeltaR_{ave.}(lep, jet)", &(m_outData->o_dPhiaverage_lepjet));
-    m_outMngrTree->AddStandardBranch("dPhiaverage_lepbjet", "#DeltaR_{ave.}(lep, bjet)", &(m_outData->o_dPhiaverage_lepbjet));
-    m_outMngrTree->AddStandardBranch("dPhiaverage_jetjet", "#DeltaR_{ave.}(jet, jet)", &(m_outData->o_dPhiaverage_jetjet));
-    */
 
-    if(m_opt->DoLowBRegions()){
-      m_outMngrTree->AddStandardBranch("mbb_mindr_lowb_3b", "m_{inv}^{min#DeltaR} (lowb, 3b)", &(m_outData->o_mbb_mindR_lowb_3b));
-      m_outMngrTree->AddStandardBranch("mbb_mindr_lowb_4b", "m_{inv}^{min#DeltaR} (lowb, 4b)", &(m_outData->o_mbb_mindR_lowb_4b));
-
-      m_outMngrTree->AddStandardBranch("mT_bmin_lowb_3b", "m_{T}^{min}(b-jets, MET) (lowb, 3b)", &(m_outData->o_mTbmin_lowb_3b));
-      m_outMngrTree->AddStandardBranch("mT_bmin_lowb_4b", "m_{T}^{min}(b-jets, MET) (lowb, 4b)", &(m_outData->o_mTbmin_lowb_4b));
-
-      m_outMngrTree->AddStandardBranch("dRmin_bb_lowb_3b", "#DeltaR_{min}(b-jet, b-jet) (lowb, 3b)", &(m_outData->o_dRmin_bjetbjet_lowb_3b));
-      m_outMngrTree->AddStandardBranch("dRmin_bb_lowb_4b", "#DeltaR_{min}(b-jet, b-jet) (lowb, 4b)", &(m_outData->o_dRmin_bjetbjet_lowb_4b));
-    }
     if( m_opt->DoTruthAnalysis() && (m_opt -> SampleName() == SampleName::VLQ) ){
       for ( const std::string truthType : {"VLQ", "VLQ_Ht", "VLQ_Zt", "VLQ_Wb",
             "VLQ_Hbdect", "VLQ_Wlepb", "VLQ_Whadb", "VLQ_Zhadt",
@@ -667,9 +583,7 @@ bool VLQ_Analysis_Data2015::Begin(){
         m_outMngrTree->AddStandardBranch("truth_"+truthType+"_n", "Number of truth " + truthType,  &(m_outData->o_truth_partons_n.at(truthType)));
       }
     }
-    
-    
-    
+
     m_outMngrTree->BookStandardTree("tree", "small tree");
 
   }//DumpTree
@@ -1570,7 +1484,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       }//index loop
     }
     
-    if((m_opt->VerboseOutput() && DrawReco) || m_opt->ApplyMVA()){
+    if(m_opt->VerboseOutput() && DrawReco){
 
       m_outMngrHist -> AddStandardTH1( "dRmin_RCMHiggsRCMHiggs", 0.25,0,5, ";#DeltaR_{min}(Higgs-tagged jet, Higgs-tagged jet)", otherVariables, &(m_outData -> o_dRmin_RCMHiggsRCMHiggs) );
       m_outMngrHist -> AddStandardTH1( "dRmin_RCMHiggsRCMV", 0.25,0,5, ";#DeltaR_{min}(Higgs-tagged jet, W/Z-tagged jet)", otherVariables, &(m_outData -> o_dRmin_RCMHiggsRCMV) );
@@ -1772,7 +1686,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 	//m_outMngrHist -> AddStandardTH1( "lep"+str_id+"_z0",  0.025, -0.5, 0.5,      ";Lepton z_{0} [mm]"      ,  false,           &(m_outData -> o_lep), iLep, "z0" );
       }
 
-      if(m_opt->VerboseOutput() || m_opt->ApplyMVA()){
+      if(m_opt->VerboseOutput()){
 
 	//Kinematic variables
 	m_outMngrHist -> AddStandardTH1( "dRmin_lepjet",         0.25,0,5,  ";#DeltaR_{min}(lep,jet)"              , false, &(m_outData -> o_dRmin_lepjet)     );
@@ -1797,9 +1711,6 @@ bool VLQ_Analysis_Data2015::Begin(){
 	m_outMngrHist -> AddStandardTH1( "dR_bjetbjet",     0.25,0,5,  ";#DeltaR_{min}(b-jet,b-jet)"            , false, &(m_outData -> o_dRmin_bjetbjet)  );
 	m_outMngrHist -> AddStandardTH1( "dR_ebjet",        0.25,0,5,  ";#DeltaR_{min}(e,b-jet)"                , false, &(m_outData -> o_dRmin_ebjets)     );
 	m_outMngrHist -> AddStandardTH1( "dR_mubjet",       0.25,0,5,  ";#DeltaR_{min}(#mu,b-jet)"              , false, &(m_outData -> o_dRmin_mubjets)    );
-	m_outMngrHist -> AddStandardTH1( "dRmin_TTL_bjets", 0.25,0,5,  ";#DeltaR^{min}(top tagged,b-jets)"      , false, &(m_outData -> o_dR_TTL_bjets)    );
-	m_outMngrHist -> AddStandardTH1( "dRmin_TTT_bjets", 0.25,0,5,  ";#DeltaR^{min}(top tagged,b-jets)"      , false, &(m_outData -> o_dR_TTT_bjets)    );
-	m_outMngrHist -> AddStandardTH1( "dRmin_TTLooser_bjets", 0.25,0,5,  ";#DeltaR^{min}(top tagged,b-jets)" , false, &(m_outData -> o_dR_TTLooser_bjets));
 
 	m_outMngrHist -> AddStandardTH1( "dPhi_lepmet",     0.1,0.,4,  ";#Delta#Phi(MET,lep)" ,      false, &(m_outData -> o_dPhi_lepmet));
 	m_outMngrHist -> AddStandardTH1( "dPhi_jetmet",     0.1,0.,4,  ";#Delta#Phi^{min}(MET,jet)" ,      otherVariables, &(m_outData -> o_dPhi_jetmet));
@@ -1812,21 +1723,11 @@ bool VLQ_Analysis_Data2015::Begin(){
 
       m_outMngrHist -> AddStandardTH1( "mbb_mindR",       10,0,1000,  ";m_{bb}^{#DeltaR min} [GeV]"     , false, &(m_outData -> o_mbb_mindR)        );
 
-      m_outMngrHist->AddStandardTH1("jets40_n",                 1, -2.5, 15.5,";Number of jets with p_{T}>40 GeV", false, &(m_outData->o_jets40_n ));
-      m_outMngrHist->AddStandardTH1("fwdjets30_n",              1, -0.5, 8.5,";Number of fwd-jets with p_{T}>30 GeV", false, &(m_outData->o_fwdjets30_n ));
-      m_outMngrHist->AddStandardTH1("fwdjets40_n",              1, -0.5, 8.5,";Number of fwd-jets with p_{T}>40 GeV", false, &(m_outData->o_fwdjets40_n ));
       m_outMngrHist->AddStandardTH1("centrality",               0.01, 0, 1 ,";Centrality", false, &(m_outData->o_centrality ));
       m_outMngrHist->AddStandardTH1("mbb_leading_bjets",        2, 0, 2000 ,";m(b,b) leading b-jets [GeV]", false, &(m_outData->o_mbb_leading_bjets ));
       m_outMngrHist->AddStandardTH1("mbb_softest_bjets",        2, 0, 2000 ,";m(b,b) softests b-jets [GeV]", false, &(m_outData->o_mbb_softest_bjets ));
-      m_outMngrHist->AddStandardTH1("J_lepton_invariant_mass",  2, 0, 2000 ,";m(leading-J,lepton) [GeV]", false, &(m_outData->o_J_lepton_invariant_mass));
-      m_outMngrHist->AddStandardTH1("J_leadingb_invariant_mass",2, 0, 2000 ,";m(leading-J,leading-b) [GeV]", false, &(m_outData->o_J_leadingb_invariant_mass));
-      m_outMngrHist->AddStandardTH1("J_J_invariant_mass",       2, 0, 2000 ,";m(leading-J,subleading-J) [GeV]", false, &(m_outData->o_J_J_invariant_mass));
       m_outMngrHist->AddStandardTH1("dRaverage_bjetbjet",       0.25,0,5   ,";#DeltaR_{ave.}(b-jet,b-jet)", false, &(m_outData -> o_dRaverage_bjetbjet)  );
      
-      m_outMngrHist->AddStandardTH1("invariant_mass_RCTTMassRCTTMass", 10, 0, 3500 ,";m(leading-J,subleading-J) [GeV]", false, &(m_outData->o_invariant_mass_RCTTMassRCTTMass));
-      m_outMngrHist->AddStandardTH1("invariant_mass_RCjets", 10, 0, 3500 ,";m(leading-J,subleading-J) [GeV]", false, &(m_outData->o_invariant_mass_RCjets));
-
-
       m_outMngrHist->AddStandardTH1("dRmaxM_RCTTMassRCTTMass", 10, 0, 3500 ,";m(leading-J,subleading-J) [GeV]", false, &(m_outData->o_dRmaxM_RCTTMassRCTTMass));
       m_outMngrHist->AddStandardTH1("dRmaxM_RCjets", 10, 0, 3500 ,";m(leading-J,subleading-J) [GeV]", false, &(m_outData->o_dRmaxM_RCjets));
     
@@ -1867,17 +1768,6 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist->AddStandardTH1("dPhiaverage_RCMTopMET",  0.25,0,5, ";#Delta#phi_{ave.}(RCMTop,MET)", false, &(m_outData -> o_dPhiaverage_RCMTopMET), hopt_nouoflow  );
       m_outMngrHist->AddStandardTH1("dPhiaverage_RCMHiggsMET",  0.25,0,5, ";#Delta#phi_{ave.}(RCMHiggs,MET)", false, &(m_outData -> o_dPhiaverage_RCMHiggsMET), hopt_nouoflow  );
 
-      if(m_opt->DoLowBRegions()){
-	m_outMngrHist -> AddStandardTH1( "mtbmin_lowb_3b",      50, 0, 500,    ";m_{T}^{min}(b,MET) (LowB_3b)", false, &(m_outData->o_mTbmin_lowb_3b) );
-	m_outMngrHist -> AddStandardTH1( "mtbmin_lowb_3b_zoom", 25, 0, 250,    ";m_{T}^{min}(b,MET) (LowB_3b)", otherVariables, &(m_outData->o_mTbmin_lowb_3b) );
-	m_outMngrHist -> AddStandardTH1( "mbb_mindR_lowb_3b",  10,0,300,  ";m_{bb}^{#DeltaR min} (LowB_3b) [GeV]", otherVariables, &(m_outData -> o_mbb_mindR_lowb_3b) );
-	m_outMngrHist -> AddStandardTH1( "dR_bjetbjet_lowb_3b", 0.25,0,5,  ";#DeltaR_{min}(b-jet,b-jet) (LowB_3b)", false, &(m_outData -> o_dRmin_bjetbjet_lowb_3b) );
-	//---
-	m_outMngrHist -> AddStandardTH1( "mtbmin_lowb_4b",      50, 0, 500,    ";m_{T}^{min}(b,MET) (LowB_4b)", false, &(m_outData->o_mTbmin_lowb_4b) );
-	m_outMngrHist -> AddStandardTH1( "mtbmin_lowb_4b_zoom", 25, 0, 250,    ";m_{T}^{min}(b,MET) (LowB_4b)", otherVariables, &(m_outData->o_mTbmin_lowb_4b) );
-	m_outMngrHist -> AddStandardTH1( "mbb_mindR_lowb_4b",  10,0,300,  ";m_{bb}^{#DeltaR min} (LowB_4b) [GeV]", otherVariables, &(m_outData -> o_mbb_mindR_lowb_4b) );
-	m_outMngrHist -> AddStandardTH1( "dR_bjetbjet_lowb_4b", 0.25,0,5,  ";#DeltaR_{min}(b-jet,b-jet) (LowB_4b)", false, &(m_outData -> o_dRmin_bjetbjet_lowb_4b) );
-      }
 
     }//DrawReco
 
@@ -3117,8 +3007,34 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 
     //============================================ RUN SELECTION CHAIN HERE ======================================
     m_selector->RunSelectionChain();
-    if(m_opt->DumpTree() && ( (m_outData -> o_jets_n >= 4) ) ){ // && (m_outData -> o_bjets_n >= 2) ) ){
-      m_outMngrTree->FillStandardTree("tree");
+    if(m_opt->DumpTree()){
+
+      bool passTree = false;
+
+      if(m_opt->DoOneLeptonAna()){
+	passTree = (m_outData -> o_jets_n >= 5) && (nbj >= 2);
+      }
+      else if(m_opt->DoZeroLeptonAna()){
+	passTree = (m_outData -> o_jets_n >= 6) && (nbj >= 2) ;
+      }
+
+      if(passTree) m_outMngrTree->FillStandardTree("tree");
+    }
+
+    if(m_opt->MakeMVAInputTree()){
+
+      bool passTree = false;
+
+      if(m_opt->DoOneLeptonAna()){
+	passTree = (m_outData -> o_jets_n >= 5) && (nbj >= 3) && (m_outData -> o_rcjets_n >=3) 
+	  && (m_outData -> o_taggedjets_n.at("RCTTMass") >= 2);
+      }
+      else if(m_opt->DoZeroLeptonAna()){
+	passTree = (m_outData -> o_jets_n >= 6) && (nbj >= 2) && (m_outData -> o_rcjets_n >=2) 
+	  && (m_outData -> o_taggedjets_n.at("RCTTMass") >= 2);
+      }
+
+      if(passTree) m_outMngrMVATree->FillStandardTree("mvaTree");
     }
 
     if(m_opt->DumpOverlapTree()){
@@ -3129,7 +3045,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
         }
       }
       if(m_outData -> o_region -> size()){
-        m_outMngrOvlerlapTree->FillStandardTree("overlap");
+        m_outMngrOverlapTree->FillStandardTree("overlap");
       }
     }
   }//selected events
@@ -3168,6 +3084,112 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 
 //____________________________________________________________________________
 //
+bool VLQ_Analysis_Data2015::ScaleTtbarHiSliceHistograms(OutputHistManager* outHistMngr){
+
+  for(auto histname : outHistMngr->HistMngr()->GetTH1KeyList()){
+    TH1D* histo = outHistMngr->HistMngr()->GetTH1D(histname);
+
+    // Scaling ttbar HT slices (nominal and PMG weights)
+
+    double Scale = 1.0;
+
+    if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
+      Scale = 1./0.99860961239196;
+      if ( m_opt -> ComputeWeightSys() ){
+	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.00989117643996;
+	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98630942849818;
+	else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.01244857328796;
+	else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.98661128202278;
+	else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.96762126478968;
+	else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.97391612230213;
+	else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.02221909345704;
+	else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.02018541245750;
+      }
+    }
+    if ( m_opt -> StrSampleID().find("407343.") != std::string::npos ){
+      Scale = 1./1.00220071443736;
+      if ( m_opt -> ComputeWeightSys() ){
+	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.02075306498765;
+	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98196927321205;
+	else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.03193538833724;
+	else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.99087003186616;
+	else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.91951515882506;
+	else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.93819392248974;
+	else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.06487669659290;
+	else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.06891808020899;
+      }
+    }
+    if ( m_opt -> StrSampleID().find("407342.") != std::string::npos ){
+      Scale = 1./1.01614066637173;
+      if ( m_opt -> ComputeWeightSys() ){
+	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.04057257636042;
+	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.99097386133341;
+	else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.06280582379557;
+	else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./1.00957616786319;
+	else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.89300718054136;
+	else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.90726044083483;
+	else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.12725897511274;
+	else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.12572488013792;
+      }
+    }
+    histo->Scale(Scale);
+
+  }//TH1
+
+  for(auto histname : outHistMngr->HistMngr()->GetTH2KeyList()){
+    TH2D* histo = outHistMngr->HistMngr()->GetTH2D(histname);
+
+    double Scale = 1.0;
+
+    if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
+      Scale = 1./0.99860961239196;
+      if ( m_opt -> ComputeWeightSys() ){
+	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.00989117643996;
+	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98630942849818;
+	else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.01244857328796;
+	else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.98661128202278;
+	else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.96762126478968;
+	else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.97391612230213;
+	else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.02221909345704;
+	else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.02018541245750;
+      }
+    }
+    if ( m_opt -> StrSampleID().find("407343.") != std::string::npos ){
+      Scale = 1./1.00220071443736;
+      if ( m_opt -> ComputeWeightSys() ){
+	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.02075306498765;
+	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98196927321205;
+	else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.03193538833724;
+	else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.99087003186616;
+	else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.91951515882506;
+	else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.93819392248974;
+	else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.06487669659290;
+	else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.06891808020899;
+      }
+    }
+    if ( m_opt -> StrSampleID().find("407342.") != std::string::npos ){
+      Scale = 1./1.01614066637173;
+      if ( m_opt -> ComputeWeightSys() ){
+	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.04057257636042;
+	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.99097386133341;
+	else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.06280582379557;
+	else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./1.00957616786319;
+	else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.89300718054136;
+	else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.90726044083483;
+	else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.12725897511274;
+	else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.12572488013792;
+      }
+    }
+    histo->Scale(Scale);
+  }//TH2
+
+
+  return true;
+
+}
+
+//____________________________________________________________________________
+//
 bool VLQ_Analysis_Data2015::Terminate()
 {
 
@@ -3181,102 +3203,8 @@ bool VLQ_Analysis_Data2015::Terminate()
   //
   if( m_outData -> o_is_ttbar && m_opt->ScaleTtbarHtSlices() ){
 
-    for(auto histname : m_outMngrHist->HistMngr()->GetTH1KeyList()){
-      TH1D* histo = m_outMngrHist->HistMngr()->GetTH1D(histname);
-
-      // Scaling ttbar HT slices (nominal and PMG weights)
-
-      double Scale = 1.0;
-
-      if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
-	Scale = 1./0.99860961239196;
-	if ( m_opt -> ComputeWeightSys() ){
-	  if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.00989117643996;
-	  else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98630942849818;
-	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.01244857328796;
-	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.98661128202278;
-	  else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.96762126478968;
-	  else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.97391612230213;
-	  else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.02221909345704;
-	  else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.02018541245750;
-	}
-      }
-      if ( m_opt -> StrSampleID().find("407343.") != std::string::npos ){
-	Scale = 1./1.00220071443736;
-	if ( m_opt -> ComputeWeightSys() ){
-	  if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.02075306498765;
-	  else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98196927321205;
-	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.03193538833724;
-	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.99087003186616;
-	  else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.91951515882506;
-	  else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.93819392248974;
-	  else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.06487669659290;
-	  else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.06891808020899;
-	}
-      }
-      if ( m_opt -> StrSampleID().find("407342.") != std::string::npos ){
-	Scale = 1./1.01614066637173;
-	if ( m_opt -> ComputeWeightSys() ){
-	  if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.04057257636042;
-	  else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.99097386133341;
-	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.06280582379557;
-	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./1.00957616786319;
-	  else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.89300718054136;
-	  else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.90726044083483;
-	  else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.12725897511274;
-	  else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.12572488013792;
-	}
-      }
-      histo->Scale(Scale);
-
-    }//TH1
-
-    for(auto histname : m_outMngrHist->HistMngr()->GetTH2KeyList()){
-      TH2D* histo = m_outMngrHist->HistMngr()->GetTH2D(histname);
-
-      double Scale = 1.0;
-
-      if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
-	Scale = 1./0.99860961239196;
-	if ( m_opt -> ComputeWeightSys() ){
-	  if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.00989117643996;
-	  else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98630942849818;
-	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.01244857328796;
-	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.98661128202278;
-	  else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.96762126478968;
-	  else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.97391612230213;
-	  else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.02221909345704;
-	  else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.02018541245750;
-	}
-      }
-      if ( m_opt -> StrSampleID().find("407343.") != std::string::npos ){
-	Scale = 1./1.00220071443736;
-	if ( m_opt -> ComputeWeightSys() ){
-	  if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.02075306498765;
-	  else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98196927321205;
-	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.03193538833724;
-	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./0.99087003186616;
-	  else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.91951515882506;
-	  else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.93819392248974;
-	  else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.06487669659290;
-	  else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.06891808020899;
-	}
-      }
-      if ( m_opt -> StrSampleID().find("407342.") != std::string::npos ){
-	Scale = 1./1.01614066637173;
-	if ( m_opt -> ComputeWeightSys() ){
-	  if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.04057257636042;
-	  else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.99097386133341;
-	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 1./1.06280582379557;
-	  else if (histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1./1.00957616786319;
-	  else if (histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1./0.89300718054136;
-	  else if (histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1./0.90726044083483;
-	  else if (histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 1./1.12725897511274;
-	  else if (histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 1./1.12572488013792;
-	}
-      }
-      histo->Scale(Scale);
-    }//TH2
+    ScaleTtbarHiSliceHistograms(m_outMngrHist);
+    if(m_outMngrMVAHist) ScaleTtbarHiSliceHistograms(m_outMngrMVAHist);    
 
   }//scaling ttbar files
 
@@ -3302,17 +3230,45 @@ bool VLQ_Analysis_Data2015::Terminate()
     }
 
   }
-  if(m_outMngrOvlerlapTree){
-    m_outMngrOvlerlapTree -> SaveStandardTree(AnalysisUtils::ReplaceString(nameHist, ".root", "_OVTREE.root"));
+  if(m_outMngrMVAHist){
+
+
+    if(m_opt->DoSumRegions()){
+
+      SumAnalysisRegions(true);
+      for( const std::pair<int, Selection*> &sel : *(m_selector->GetSelectionTree()) ){
+	if(sel.second->PassFlagAtBit(VLQ_Selector::PRESEL)){
+	  m_outMngrMVAHist -> SaveStandardTH1(AnalysisUtils::ReplaceString(nameHist, ".root", "_MVAHISTS.root")
+					      , false, AnalysisUtils::ReplaceString(sel.second->Name(),"-",""));
+	}
+      }
+
+    }
+    else{
+      m_outMngrMVAHist -> SaveStandardTH1(AnalysisUtils::ReplaceString(nameHist, ".root", "_MVAHISTS.root"));
+      m_outMngrMVAHist -> SaveStandardTH2(AnalysisUtils::ReplaceString(nameHist, ".root", "_MVAHISTS.root"),false);
+    }
+
+  }
+
+
+  if(m_outMngrOverlapTree){
+    m_outMngrOverlapTree -> SaveStandardTree(AnalysisUtils::ReplaceString(nameHist, ".root", "_OVTREE.root"));
   }
   if(m_outMngrTree){
     m_outMngrTree -> SaveStandardTree(AnalysisUtils::ReplaceString(nameHist, ".root", "_TREE.root"));
+  }
+  if(m_outMngrMVATree){
+    m_outMngrMVATree -> SaveStandardTree(AnalysisUtils::ReplaceString(nameHist, ".root", "_MVATREE.root"));
   }
   m_outData -> EmptyOutputData();
   delete m_outData;
 
   delete m_outMngrHist;
+  if(m_outMngrMVAHist) delete m_outMngrMVAHist;
   delete m_outMngrTree;
+  if(m_outMngrMVATree) delete m_outMngrMVATree;
+  if(m_outMngrOverlapTree) delete m_outMngrOverlapTree;
 
 
   delete m_weightMngr;

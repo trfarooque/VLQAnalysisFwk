@@ -21,6 +21,7 @@ class VLQ_WeightManager;
 class VLQ_NtupleData;
 class VLQ_NtupleReader;
 class VLQ_Selector;
+class VLQ_MVAManager;
 
 class VLQ_Analysis_Data2015 {
 
@@ -37,6 +38,7 @@ private:
     /// a text summary of the yields from the main histograms
     std::string summaryYields();
     bool SumAnalysisRegions(const bool newFile);
+    bool ScaleTtbarHiSliceHistograms(OutputHistManager* outHistMngr);
 
 private:
     VLQ_Options *m_opt;
@@ -44,14 +46,17 @@ private:
     VLQ_NtupleReader *m_reader;
     VLQ_OutputData* m_outData;
     OutputHistManager *m_outMngrHist;
+    OutputHistManager *m_outMngrMVAHist;
     OutputTreeManager *m_outMngrTree;
-    OutputTreeManager *m_outMngrOvlerlapTree;
+    OutputTreeManager *m_outMngrMVATree;
+    OutputTreeManager *m_outMngrOverlapTree;
     VLQ_AnalysisTools *m_anaTools;
     VLQ_VariableComputer *m_varComputer;
     VLQ_TruthManager *m_truthMngr;
     VLQ_TRFManager *m_TRFMngr;
     VLQ_WeightManager *m_weightMngr;
     VLQ_Selector *m_selector;
+    VLQ_MVAManager *m_mvaMngr;
     std::map < std::string, std::vector < std::string > > m_channels;
     std::vector < std::string > m_topTaggers;
     std::vector < std::string > m_truthRCTypes;

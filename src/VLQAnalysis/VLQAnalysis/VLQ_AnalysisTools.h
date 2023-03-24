@@ -37,7 +37,8 @@ public:
     //
     // Histograms handling
     //
-    void BookAllHistograms( const std::string &key/*, const bool split = false*/, const bool useSysts = true );
+    void AddOutputHistManager( OutputHistManager* outMngrHist);
+    void BookAllHistograms( const std::string &key/*, const bool split = false*/, const bool useSysts = true);
     void FillAllHistograms( const std::string &key, const int type = -1/*, const bool split = false*/ );
     void BookAllTH1DHistogramsHistManager(/*const bool split,*/ const std::string &name, const std::string &title, double binsize, double xlow, double xup, const std::string &key="", const std::string &xtitle="", const std::string &ytitle="", int lw=2, int lc=1);
     void BookAllTH1DHistogramsHistManager(/*const bool split,*/ const std::string &name, const std::string &title, int nbins, double* xedges, const std::string &key="", const std::string &xtitle="", const std::string &ytitle="", int lw=2, int lc=1);
@@ -66,12 +67,13 @@ public:
     // Variable computation
     //
     bool ComputeAllVariables();
-    bool ComputeZeroLepMVAVariables();
-    bool ComputeOneLepMVAVariables();
     bool ComputeBTagVariables();
     bool UpdateBTagMoments();
 
 protected:
+
+
+
     //
     // Blinding
     //
@@ -81,7 +83,7 @@ protected:
 
 private:
     VLQ_Options *m_opt;
-    OutputHistManager* m_outputMngr;
+    std::vector<OutputHistManager*> m_outputMngrList;
 
     const VLQ_NtupleData* m_ntupData;
     VLQ_OutputData* m_outData;

@@ -30,8 +30,8 @@ m_invertMetMtwCuts(false),
 m_applyDeltaPhiCut(true),
 m_invertDeltaPhiCut(false),
 m_applyMetSigObjCut(false),
-m_applyMetRegionsCut(false),
-m_applyMetSignificanceCut(false),
+m_doSplitMET(false),
+m_doSplitSigMET(false),
 m_applyTtbbCorrection(false),
 m_multipleVariablesWithUncertainties(false),
 m_verboseOutput(false),
@@ -81,6 +81,9 @@ m_doTheorySys(true),
 m_doPDFSys(true),
 m_doJMRSys(false),
 m_applyMVA(false),
+m_makeMVAInputHists(false),
+m_makeMVAInputTree(false),
+m_addMVAInputsFromXml(false),
 m_doBaselineFitRegions(true),
 m_doUncorrelatedMVARegions(false),
 m_prunePMGWeights(false),
@@ -145,8 +148,8 @@ OptionsBase(q)
     m_applyDeltaPhiCut   = q.m_applyDeltaPhiCut;
     m_invertDeltaPhiCut  = q.m_invertDeltaPhiCut;
     m_applyMetSigObjCut  = q.m_applyMetSigObjCut;
-    m_applyMetRegionsCut = q.m_applyMetRegionsCut;
-    m_applyMetSignificanceCut            = q.m_applyMetSignificanceCut;
+    m_doSplitMET         = q.m_doSplitMET;
+    m_doSplitSigMET      = q.m_doSplitSigMET;
     m_applyTtbbCorrection                = q.m_applyTtbbCorrection;
     m_multipleVariablesWithUncertainties = q.m_multipleVariablesWithUncertainties;
     m_verboseOutput       = q.m_verboseOutput;
@@ -196,6 +199,9 @@ OptionsBase(q)
     m_doJMRSys          = q.m_doJMRSys;
     m_doJMSSys          = q.m_doJMSSys;
     m_applyMVA          = q.m_applyMVA;
+    m_makeMVAInputHists     = q.m_makeMVAInputHists;
+    m_makeMVAInputTree     = q.m_makeMVAInputTree;
+    m_addMVAInputsFromXml  = q.m_addMVAInputsFromXml;
     m_doBaselineFitRegions = q.m_doBaselineFitRegions;
     m_doUncorrelatedMVARegions = q.m_doUncorrelatedMVARegions;
     m_prunePMGWeights   = q.m_prunePMGWeights;
@@ -289,10 +295,10 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_invertDeltaPhiCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
 	} else if( temp_arg.find("--APPLYMETSIGOBJCUT") != std::string::npos ){
 	    m_applyMetSigObjCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
-	} else if( temp_arg.find("--APPLYMETREGIONSCUT") != std::string::npos ){
-	    m_applyMetRegionsCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
-        } else if( temp_arg.find("--APPLYMETSIGCUT") != std::string::npos ){
-            m_applyMetSignificanceCut = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if( temp_arg.find("--DOSPLITMET") != std::string::npos ){
+	    m_doSplitMET = AnalysisUtils::BoolValue(temp_val, temp_arg);
+        } else if( temp_arg.find("--DOSPLITSIGMET") != std::string::npos ){
+            m_doSplitSigMET = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--APPLYTTBBCORRECTION") != std::string::npos ){
             m_applyTtbbCorrection = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--RECOMPUTETTBBRW") != std::string::npos ){
@@ -393,6 +399,12 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
             m_doJMRSys = AnalysisUtils::BoolValue(temp_val, temp_arg);
         } else if( temp_arg.find("--APPLYMVA") != std::string::npos){
 	    m_applyMVA = AnalysisUtils::BoolValue(temp_val, temp_arg);
+        } else if( temp_arg.find("--MAKEMVAINPUTHISTS") != std::string::npos){
+	    m_makeMVAInputHists = AnalysisUtils::BoolValue(temp_val, temp_arg);
+        } else if( temp_arg.find("--MAKEMVAINPUTTREE") != std::string::npos){
+	    m_makeMVAInputTree = AnalysisUtils::BoolValue(temp_val, temp_arg);
+        } else if( temp_arg.find("--ADDMVAINPUTSFROMXML") != std::string::npos){
+	    m_addMVAInputsFromXml = AnalysisUtils::BoolValue(temp_val, temp_arg);
 	} else if( temp_arg.find("--DOBASELINEFITREGIONS") != std::string::npos){
 	    m_doBaselineFitRegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
 	} else if( temp_arg.find("--DOUNCORRELATEDMVAREGIONS") != std::string::npos){
@@ -581,12 +593,12 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_RCNsubjetsCut           = " << m_RCNsubjetsCut     << std::endl;
     std::cout << " m_RCJetsPtCut             = " << m_RCJetsPtCut       << std::endl;
     std::cout << " m_applyMetMtwCuts         = " << m_applyMetMtwCuts   << std::endl;
-    std::cout << " m_invertMetMtwCuts        = " << m_invertMetMtwCuts   << std::endl;
+    std::cout << " m_invertMetMtwCuts        = " << m_invertMetMtwCuts  << std::endl;
     std::cout << " m_applyDeltaPhiCut        = " << m_applyDeltaPhiCut  << std::endl;
-    std::cout << " m_invertDeltaPhiCut       = " << m_invertDeltaPhiCut  << std::endl;
+    std::cout << " m_invertDeltaPhiCut       = " << m_invertDeltaPhiCut << std::endl;
     std::cout << " m_applyMetSigObjCut       = " << m_applyMetSigObjCut << std::endl;
-    std::cout << " m_applyMetRegionsCut       = " << m_applyMetRegionsCut << std::endl;
-    std::cout << " m_applyMetSignificanceCut = " << m_applyMetSignificanceCut  << std::endl;
+    std::cout << " m_doSplitMET              = " << m_doSplitMET        << std::endl;
+    std::cout << " m_doSplitSigMET           = " << m_doSplitSigMET        << std::endl;
     std::cout << " m_dumpHistos              = " << m_dumpHistos        << std::endl;
     std::cout << " m_dumpTree                = " << m_dumpTree          << std::endl;
     std::cout << " m_dumpOverlapTree         = " << m_dumpOverlapTree   << std::endl;
@@ -638,7 +650,10 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_doJMRSys                = " << m_doJMRSys          << std::endl;
     std::cout << " m_doJMSSys                = " << m_doJMSSys          << std::endl;
     std::cout << " m_applyMVA                = " << m_applyMVA          << std::endl;
-    std::cout << " m_doBaselineFitRegions   = " << m_doBaselineFitRegions << std::endl; 
+    std::cout << " m_makeMVAInputHists       = " << m_makeMVAInputHists     << std::endl;
+    std::cout << " m_makeMVAInputTree        = " << m_makeMVAInputTree     << std::endl;
+    std::cout << " m_addMVAInputsFromXml     = " << m_addMVAInputsFromXml << std::endl;
+    std::cout << " m_doBaselineFitRegions    = " << m_doBaselineFitRegions << std::endl; 
     std::cout << " m_doUncorrelatedMVARegions= " << m_doUncorrelatedMVARegions << std::endl;
     std::cout << " m_prunePMGWeights         = " << m_prunePMGWeights   << std::endl;
     std::cout << " m_MVAWeightFile           = " << m_MVAWeightFile     << std::endl;

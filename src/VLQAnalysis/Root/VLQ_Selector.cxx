@@ -274,11 +274,11 @@ bool VLQ_Selector::GetPreselectionCuts(){
 
   //v------------------General cuts------------------v//
   // met significance cut channels
-  if(m_opt->ApplyMetSignificanceCut()) m_ch_metsig = {"", "-LowMetSig", "-HighMetSig"};
+  if(m_opt->DoSplitSigMET()) m_ch_metsig = {"", "-LowMetSig", "-HighMetSig"};
   else m_ch_metsig = {""};
 
   // met cut channels
-  if(m_opt->ApplyMetRegionsCut()) m_ch_metcut = {"", "-LowMetCut", "-HighMetCut"};
+  if(m_opt->DoSplitMET()) m_ch_metcut = {"", "-LowMetCut", "-HighMetCut"};
   else m_ch_metcut = {""};
 
   // mtbmin cut channels
@@ -852,7 +852,7 @@ Selection* VLQ_Selector::AddVLQSelection(const std::string& name, bool do_runop,
 
   std::string hist_name = AnalysisUtils::ReplaceString(name, "-", "");
   //=================================== Book histogram in region ===============================
-  if(m_opt->DumpHistos() && do_runop){
+  if( (m_opt->DumpHistos() || m_opt->MakeMVAInputHists()) && do_runop){
     m_anaTools -> BookAllHistograms(hist_name/*, true*/, do_syst);
   }
 
@@ -1346,10 +1346,10 @@ bool VLQ_Selector::PassSelection(const int index){
   }
   
   //=== Metcut ====
-  else if(index == c_LowMetCut && m_opt->ApplyMetRegionsCut()){
+  else if(index == c_LowMetCut && m_opt->DoSplitMET()){
     pass = m_outData->o_AO_met->Pt() < m_opt->MetRegionsCut();
   }
-  else if(index == c_HighMetCut && m_opt->ApplyMetRegionsCut()){
+  else if(index == c_HighMetCut && m_opt->DoSplitMET()){
     pass = m_outData->o_AO_met->Pt() > m_opt->MetRegionsCut();
   }
 

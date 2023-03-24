@@ -38,32 +38,36 @@ public:
   inline bool UseLeptonsSF() const { return m_useLeptonsSF; }
   inline bool UseBtagSF() const { return m_useBtagSF; }
   inline bool RecomputeBtagSF() const { return m_recomputeBtagSF; }
+  inline bool DoTRF() const { return m_doTRF; }
+  inline bool RecomputeTRF() const { return m_recomputeTRF; }
   inline bool UsePileUpWeight() const { return m_usePileUpWeight; }
+
   inline bool DumpHistos() const { return m_dumpHistos; }
   inline bool DumpTree() const { return m_dumpTree; }
   inline bool DumpOverlapTree() const { return m_dumpOverlapTree; }
   inline bool SplitVLQDecays() const { return m_splitVLQDecays; }
   inline bool DoTruthAnalysis() const { return m_doTruthAnalysis; }
-  inline bool DoTRF() const { return m_doTRF; }
-  inline bool RecomputeTRF() const { return m_recomputeTRF; }
+
   inline bool ApplyMetMtwCuts() const { return m_applyMetMtwCuts; }
   inline bool InvertMetMtwCuts() const { return m_invertMetMtwCuts; }
   inline bool ApplyDeltaPhiCut() const { return m_applyDeltaPhiCut; }
   inline bool InvertDeltaPhiCut() const { return m_invertDeltaPhiCut; }
   inline bool ApplyMetSigObjCut() const { return m_applyMetSigObjCut; }
-  inline bool ApplyMetRegionsCut() const { return m_applyMetRegionsCut; }
-  inline bool ApplyMetSignificanceCut() const { return m_applyMetSignificanceCut; }
+  inline bool DoSplitMET() const { return m_doSplitMET; }
+  inline bool DoSplitSigMET() const { return m_doSplitSigMET; }
   inline bool ApplyTtbbCorrection() const { return m_applyTtbbCorrection; }
   inline bool RecomputeTtBbRw() const { return m_RecTtBbRw; }
   inline bool ReweightTtbarFractions() const { return m_RwTtFractions; }
+
   inline bool MultipleVariables() const { return m_multipleVariablesWithUncertainties; }
   inline bool VerboseOutput() const { return m_verboseOutput; }
+  inline bool DoCutFlow() const { return m_doCutFlow; }
+
   inline bool UseMETTrigger() const { return m_useMETTrigger; }
   inline bool UseMETTriggerOneLep() const { return m_useMETTriggerOneLep; }
   inline bool UseLeptonTrigger() const { return m_useLeptonTrigger; }
   inline bool UseLargeRJets() const { return m_useLargeRJets; }
   inline bool DoLargeRJetsBOT() const { return m_doLargeRJetsBOT; }
-  inline bool DoCutFlow() const { return m_doCutFlow; }
   inline bool DoOneLeptonAna() const { return m_doOneLeptonAna; }
   inline bool DoTwoLeptonAna() const { return m_doTwoLeptonAna; }
   inline bool DoZeroLeptonAna() const { return m_doZeroLeptonAna; }
@@ -103,6 +107,9 @@ public:
   inline bool DoPDFSys() const { return m_doPDFSys; }
   inline bool DoJMRSys() const { return m_doJMRSys; }
   inline bool ApplyMVA() const { return m_applyMVA; }
+  inline bool MakeMVAInputHists() const { return m_makeMVAInputHists; }
+  inline bool MakeMVAInputTree() const { return m_makeMVAInputTree; }
+  inline bool AddMVAInputsFromXml() const { return m_addMVAInputsFromXml; }
   inline bool DoBaselineFitRegions() const { return m_doBaselineFitRegions; }
   inline bool DoUncorrelatedMVARegions() const { return m_doUncorrelatedMVARegions; }
   inline bool PrunePMGWeights() const { return m_prunePMGWeights; }
@@ -171,8 +178,8 @@ private:
   bool m_applyDeltaPhiCut;
   bool m_invertDeltaPhiCut;
   bool m_applyMetSigObjCut;
-  bool m_applyMetRegionsCut;
-  bool m_applyMetSignificanceCut;
+  bool m_doSplitMET;
+  bool m_doSplitSigMET;
   bool m_applyTtbbCorrection;
   bool m_multipleVariablesWithUncertainties;
   bool m_verboseOutput;
@@ -215,6 +222,9 @@ private:
   bool m_doJMRSys;
 
   bool m_applyMVA;
+  bool m_makeMVAInputHists;
+  bool m_makeMVAInputTree;
+  bool m_addMVAInputsFromXml;
   bool m_doBaselineFitRegions;
   bool m_doUncorrelatedMVARegions;
   bool m_prunePMGWeights;

@@ -5,8 +5,6 @@
 #include <map>
 #include <vector>
 
-#include "TMVA/Reader.h"
-
 class AnalysisObject;
 class OptionsBase;
 
@@ -133,19 +131,10 @@ public:
     double GetJJInvariantMass( std::vector< AnalysisObject* > &v_RCTTMjets ) const;
 
     double GetMTbmin( std::vector< AnalysisObject* > &v_jets, AnalysisObject *met, const std::string &mom = "" ) const;
-    int GetJetClass(AnalysisObject* jet) const;
 
-    void InitMVA(const std::string &weightFileName);
-    float GetMVAScore(const std::map< std::string, float> &inputVarsMVA, const std::map< std::string, float> &spectatorVarsMVA = {});
     
 private:
     OptionsBase* m_opt;
-
-    TMVA::Reader* m_modelMVA;
-  
-    std::map< std::string, float>* m_inputVarsMVA;
-
-    std::map< std::string, float >* m_spectatorVarsMVA;
   
 };
 
