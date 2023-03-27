@@ -194,7 +194,7 @@ def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campai
                                        runTchan=includeTchan, runWtprod=includeWtprod, runSchan=includeSchan,
                                        runSingletopSystSamples=includeSingletopSystSamples)
     if includeTopEW:
-        Samples += GetTopEWSamples(useWeightSyst, useObjectSyst, campaign, sVLQAna)
+        Samples += GetTopEWSamples(useWeightSyst, useObjectSyst, campaign, "topEW", sVLQAna)
         Samples += GetHiggsSamples(useWeightSyst, useObjectSyst, campaign, sVLQAna)
         Samples += Get4TopsSamples(useWeightSyst, useObjectSyst, campaign)
 

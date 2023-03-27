@@ -85,10 +85,15 @@ with open(DSlist, 'w') as DSfile:
         
         dspath=procDir+'/'+campaign+'/'+campaign+"."+proc+'.list'
         with open(dspath) as procdsfile:
-            for line in procdsfile:
+            lines = procdsfile.readlines()
+            last = lines[-1]
+            for line in lines:
                 if not line.startswith("mc16_13TeV"):
                     continue
-                DSfile.write(line)
+                if line == last:
+                    DSfile.write(line+"\n")
+                else:
+                    DSfile.write(line)
 
 
 com="getMetadata.py --inDsTxt="
