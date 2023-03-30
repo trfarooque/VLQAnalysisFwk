@@ -174,7 +174,7 @@ int VLQ_MVAManager::MakeVariableStore(){
   m_varStore["dPhimin_RCMET"] = new VariableDef("dPhimin_RCMET", ";#Delta#phi_{min}(RC,MET)", 
 						     &(m_outputData -> o_dPhimin_RCjetsMET ));
   m_varStore["dPhimin_RCMTTMET"] = new VariableDef("dPhimin_RCMTTMET", ";#Delta#phi_{min}(RCMTT,MET)", 
-						       &(m_outputData -> o_dPhimin_RCjetsMET ));
+						       &(m_outputData -> o_dPhimin_RCTTMassMET ));
 
   m_varStore["dPhiavg_RCMET"] = new VariableDef("dPhiavg_RCMET", ";#Delta#phi_{avg}(RC,MET)", 
 						     &(m_outputData -> o_dPhiaverage_RCjetsMET));
