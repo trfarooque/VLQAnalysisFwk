@@ -77,12 +77,14 @@ for process_name in ${process_list}; do
     runDibosons="false"
     splitSTChannels="false"
     splitVLQDecays="false"
+    kinRWList="JETSN,MEFFRED"
     
     if in_list "$valid_processes" " " ${process_name}; then
 	if [ ${process_name} == "ttbar" ]; then
 	    runTtbar="true"
 	    scaleTtbarHtSlices="true"
 	    useSlices="true"
+	    kinRWList="JETSN,MEFFRED"
 	elif [ ${process_name} == "data" ]; then
 	    runData="true"
 	    if [ ${channel} == "1lep" ]; then
@@ -98,12 +100,15 @@ for process_name in ${process_list}; do
 	    if [ ${process_name} == "singletop" ]; then
 		runSingletop="true"
 		splitSTChannels="true"
+		kinRWList="JETSN,MEFFRED"
 	    fi
 	    if [ ${process_name} == "Wjets" ]; then
 		runWjets="true"
+		kinRWList="JETSN"
 	    fi
 	    if [ ${process_name} == "Zjets" ]; then
 		runZjets="true"
+		kinRWList="JETSN"
 	    fi
 	    if [ ${process_name} == "diboson" ]; then
 		runDibosons="true"
@@ -127,23 +132,23 @@ for process_name in ${process_list}; do
 	    --inputDir=/data/at3/scratch2/cbuxovaz/VLQAnalysisPairProdRun2-21.2.213-htztx-sys_0/${process_name}/ \
 	    --sampleDat=samples_info/samples_info.tag-21.2.213-htztx-syst-1L.${campaign}.dat  \
 	    --outputDirSuffix=dataMC_TRACK_DL1r_FixedCutBEff_77_${process_name}_${channel}_${campaign}_NOW \
-	    --queue=at3 --NFILESPLIT=200 --NMERGE=1 --removeNull=TRUE \
-	    --reweightKinematics=true --kinRWList=JETSN --doKinRWSmoothing=false --DOKINRWSYST=FALSE \
+	    --queue=at3 --NFILESPLIT=100 --NMERGE=1 --removeNull=TRUE \
+	    --reweightKinematics=true --kinRWList=${kinRWList} --doKinRWSmoothing=true --DOKINRWSYST=FALSE --deriveReweighting=false \
 	    --runData=${runData} --runTOPQ1Data=${runTOPQ1Data} --runTOPQ4Data=${runTOPQ4Data} --runOtherBkgd=${runOtherBkgd} \
 	    --runTtbar=${runTtbar} --useSlices=${useSlices} --scaleTtbarHtSlices=${scaleTtbarHtSlices} --runTtSyst=false \
 	    --runSingleTop=${runSingletop} --splitSTChannels=${splitSTChannels} --runStSyst=false \
 	    --runWjets=${runWjets} --runZjets=${runZjets} --runTopEW=${runTopEW} --runDibosons=${runDibosons} \
 	    --runDijet=${runDijet} --runQCD=false \
 	    --runSignals=${runSignals} --splitVLQDecays=${splitVLQDecays} --RUNPAIRVLQ=true --RUNSINGLEVLQ=false \
-	    --doOneLeptonAna=${doOneLeptonAna} --doTwoLeptonAna=${doTwoLeptonAna} --doZeroLeptonAna=${doZeroLeptonAna} \
-	    --dumpHistos=true --dumpOverlapTree=false --dumpTree=false --doTruthAnalysis=false --verboseOutput=false \
+	    --doOneLeptonAna=${doOneLeptonAna} --doTwoLeptonAna=false --doZeroLeptonAna=${doZeroLeptonAna} \
+	    --dumpHistos=true --dumpOverlapTree=false --dumpTree=false --doTruthAnalysis=false --verboseOutput=false --makeMVAInputTree=false \
 	    --otherVariables=true --doBlind=false \
 	    --useObjectSyst=false --useWeightSyst=false --onlyDumpSystHistograms=true \
 	    --useLargeRJets=false --doLargeRJetsBOT=false \
 	    --doExpSys=false --doTheorySys=false --DOPDFSYS=false \
 	    --doExclusiveJetRegions=false --doLowBRegions=true --doLowJRegions=false --doSplitEMu=false --doSplitMtb=false \
 	    --doFitRegions=false --doValidnRegions=false --doPreselection=true --doPreselSys=true --doExtendedPreselection=false --doLooseSystRegions=false \
-	    --doSingleVLQRegions=true --doPairVLQRegions=false --doRecoVLQ=pair --DoOldPairProdRegions=false \
+	    --doSingleVLQRegions=false --doPairVLQRegions=true --doRecoVLQ=pair --DoOldPairProdRegions=false \
 	    --doOldBoost=false \
 	    --useLeptonsSF=true --useLeptonTrigger=true --useMETTriggerOneLep=true --useMETTrigger=true \
 	    --applyMetMtwCuts=true --invertMetMtwCuts=false \
@@ -155,10 +160,10 @@ for process_name in ${process_list}; do
 	    --filterType=APPLYFILTER \
 	    --jetPtCut=25 --fwdJetPtCut=20 --RCJetPtCut=200 --RCNsubjetsCut=0 \
 	    --leptopOpt=VETO_RCMATCH --maxLeptopDR=1.0 --minMeffCut=600 --RCCollection=VR_rho550 \
-	    --APPLYMVA=false --MVAWEIGHTFILE=TMVA/weightsCV_1L/TMVAClassificationCV_MLP.weights.xml --lowMVACutOneLep=0.27 --highMVACutOneLep=0.7 \
-	    --DoMuonHighPtID=true
+	    --APPLYMVA=false --MVAWEIGHTFILE=TMVA/weightsCV_1L/TMVAClassificationCV_MLP.weights.xml --lowMVACutOneLep=0.27 --highMVACutOneLep=0.7
     done
 
 done
 
-#--maxMetCutTwoLep=100
+#--maxMetCutTwoLep=100 --onlyDumpSystHistograms=true --dumpHistos=true --minMeffCut=600
+#--verboseOutput=true --otherVariables=true

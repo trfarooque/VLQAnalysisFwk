@@ -2177,22 +2177,26 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 
       if( ( m_opt -> StrSampleID().find("410470.") != std::string::npos )
 	  || ( m_opt -> StrSampleID().find("410464.") != std::string::npos ) || ( m_opt -> StrSampleID().find("410465.") != std::string::npos )
-	  || ( m_opt -> StrSampleID().find("410557.") != std::string::npos ) || ( m_opt -> StrSampleID().find("410558.") != std::string::npos ) ){
+	  || ( m_opt -> StrSampleID().find("410557.") != std::string::npos ) || ( m_opt -> StrSampleID().find("410558.") != std::string::npos ) 
+	  || ( m_opt -> StrSampleID().find("411233.") != std::string::npos ) || ( m_opt -> StrSampleID().find("411234.") != std::string::npos ) ){
 	if( ht_truth > 600 ) return false;
       }
       else if( ( m_opt -> StrSampleID().find("407344.") != std::string::npos )
 	       || ( m_opt -> StrSampleID().find("407350.") != std::string::npos )
-	       || ( m_opt -> StrSampleID().find("407356.") != std::string::npos ) ){
+	       || ( m_opt -> StrSampleID().find("407356.") != std::string::npos ) 
+	       || ( m_opt -> StrSampleID().find("411337.") != std::string::npos ) ){
 	if( ht_truth < 600 || ht_truth > 1000 ) return false;
       }
       else if( ( m_opt -> StrSampleID().find("407343.") != std::string::npos )
 	       || ( m_opt -> StrSampleID().find("407349.") != std::string::npos )
-	       || ( m_opt -> StrSampleID().find("407355.") != std::string::npos ) ){
+	       || ( m_opt -> StrSampleID().find("407355.") != std::string::npos ) 
+	       || ( m_opt -> StrSampleID().find("411336.") != std::string::npos ) ){
 	if( ht_truth < 1000 || ht_truth > 1500 ) return false;
       }
       else if( ( m_opt -> StrSampleID().find("407342.") != std::string::npos )
 	       || ( m_opt -> StrSampleID().find("407348.") != std::string::npos )
-	       || ( m_opt -> StrSampleID().find("407354.") != std::string::npos ) ){
+	       || ( m_opt -> StrSampleID().find("407354.") != std::string::npos ) 
+	       || ( m_opt -> StrSampleID().find("411335.") != std::string::npos ) ){
 	if( ht_truth < 1500 ) return false;
       }
 
@@ -3094,7 +3098,7 @@ bool VLQ_Analysis_Data2015::ScaleTtbarHiSliceHistograms(OutputHistManager* outHi
     double Scale = 1.0;
 
     if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
-      Scale = 1./0.99860961239196;
+      Scale = (m_opt -> UseSVLQConfig()) ? 1./0.99860961239196 : 0.998735;
       if ( m_opt -> ComputeWeightSys() ){
 	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.00989117643996;
 	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98630942849818;
@@ -3107,7 +3111,7 @@ bool VLQ_Analysis_Data2015::ScaleTtbarHiSliceHistograms(OutputHistManager* outHi
       }
     }
     if ( m_opt -> StrSampleID().find("407343.") != std::string::npos ){
-      Scale = 1./1.00220071443736;
+      Scale = (m_opt -> UseSVLQConfig()) ? 1./1.00220071443736 : 0.997816;
       if ( m_opt -> ComputeWeightSys() ){
 	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.02075306498765;
 	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98196927321205;
@@ -3120,7 +3124,7 @@ bool VLQ_Analysis_Data2015::ScaleTtbarHiSliceHistograms(OutputHistManager* outHi
       }
     }
     if ( m_opt -> StrSampleID().find("407342.") != std::string::npos ){
-      Scale = 1./1.01614066637173;
+      Scale = (m_opt -> UseSVLQConfig()) ? 1./1.01614066637173 : 0.984447;
       if ( m_opt -> ComputeWeightSys() ){
 	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.04057257636042;
 	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.99097386133341;
@@ -3142,7 +3146,7 @@ bool VLQ_Analysis_Data2015::ScaleTtbarHiSliceHistograms(OutputHistManager* outHi
     double Scale = 1.0;
 
     if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
-      Scale = 1./0.99860961239196;
+      Scale = (m_opt -> UseSVLQConfig()) ? 1./0.99860961239196 : 0.998735;
       if ( m_opt -> ComputeWeightSys() ){
 	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.00989117643996;
 	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98630942849818;
@@ -3155,7 +3159,7 @@ bool VLQ_Analysis_Data2015::ScaleTtbarHiSliceHistograms(OutputHistManager* outHi
       }
     }
     if ( m_opt -> StrSampleID().find("407343.") != std::string::npos ){
-      Scale = 1./1.00220071443736;
+      Scale = (m_opt -> UseSVLQConfig()) ? 1./1.00220071443736 : 0.997816;
       if ( m_opt -> ComputeWeightSys() ){
 	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.02075306498765;
 	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98196927321205;
@@ -3168,7 +3172,7 @@ bool VLQ_Analysis_Data2015::ScaleTtbarHiSliceHistograms(OutputHistManager* outHi
       }
     }
     if ( m_opt -> StrSampleID().find("407342.") != std::string::npos ){
-      Scale = 1./1.01614066637173;
+      Scale = (m_opt -> UseSVLQConfig()) ? 1./1.01614066637173 : 0.984447;
       if ( m_opt -> ComputeWeightSys() ){
 	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.04057257636042;
 	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.99097386133341;
