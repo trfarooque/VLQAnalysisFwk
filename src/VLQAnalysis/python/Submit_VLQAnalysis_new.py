@@ -251,9 +251,9 @@ if param_runQCD :
    Samples += GetQCDSamples(  )
 if param_runData :
     if param_runTOPQ1Data:
-        Samples += GetDataSamples( data_type = "TOPQ1" )
+        Samples += GetDataSamples( data_type = "TOPQ1", sVLQAna=param_doSingleVLQAna )
     if param_runTOPQ4Data:
-        Samples += GetDataSamples( data_type = "TOPQ4" )
+        Samples += GetDataSamples( data_type = "TOPQ4", sVLQAna=param_doSingleVLQAna )
 
 if param_runTtbar:
     Samples += GetTtbarSamples ( useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, 

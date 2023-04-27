@@ -145,6 +145,7 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
 
     if( m_ntupData  -> d_mu_pt -> at(iMu) < pTCut  ) continue;
     if( TMath::Abs(m_ntupData  -> d_mu_eta -> at(iMu)) > 2.5 ) continue;
+    if( (m_ntupData -> d_mu_pt -> at(iMu) > 800.) && (m_ntupData -> d_mu_passHighPtID -> at(iMu) < 1) ) continue;
     m_outData->o_mu_loose_n++;
     m_outData->o_lep_loose_n++;
 

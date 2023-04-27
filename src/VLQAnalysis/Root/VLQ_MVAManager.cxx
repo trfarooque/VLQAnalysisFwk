@@ -209,7 +209,7 @@ int VLQ_MVAManager::MakeVariableStore(){
   if(m_outputData){ m_varStore.at("dPhimin_RCMET")->SetAddress(&(m_outputData -> o_dPhimin_RCjetsMET )); }
 
   m_varStore["dPhimin_RCMTTMET"] = new VariableDef("dPhimin_RCMTTMET", ";#Delta#phi_{min}(RCMTT,MET)", &(dummy));
-  if(m_outputData){ m_varStore.at("dPhimin_RCMTTMET")->SetAddress(&(m_outputData -> o_dPhimin_RCjetsMET )); }
+  if(m_outputData){ m_varStore.at("dPhimin_RCMTTMET")->SetAddress(&(m_outputData -> o_dPhimin_RCTTMassMET )); }
   
   m_varStore["dPhiavg_RCMET"] = new VariableDef("dPhiavg_RCMET", ";#Delta#phi_{avg}(RC,MET)", &(dummy));			
   if(m_outputData){ m_varStore.at("dPhiavg_RCMET")->SetAddress(&(m_outputData -> o_dPhiaverage_RCjetsMET));}

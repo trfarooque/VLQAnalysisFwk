@@ -48,6 +48,7 @@ public:
     std::vector<float> *d_mu_e;
     std::vector<float> *d_mu_ptvarcone30;
     std::vector<float> *d_mu_topoetcone20;
+    std::vector<float> *d_mu_passHighPtID;
     std::vector<double> *d_mu_d0sig;
     std::vector<double> *d_mu_z0;
     std::vector<int> *d_mu_isSignal;
