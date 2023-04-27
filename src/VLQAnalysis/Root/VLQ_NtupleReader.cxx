@@ -274,7 +274,9 @@ int VLQ_NtupleReader::SetLeptonBranchAddresses(){
   stat =  SetVariableToChain("muons_phi",     &(m_VLQ_ntupData->d_mu_phi) ); if(stat != 0){ return stat; }
   stat =  SetVariableToChain("muons_eta",     &(m_VLQ_ntupData->d_mu_eta) ); if(stat != 0){ return stat; }
   stat =  SetVariableToChain("muons_e",       &(m_VLQ_ntupData->d_mu_e) ); if(stat != 0){ return stat; }
-  stat =  SetVariableToChain("muons_passHighPtID", &(m_VLQ_ntupData->d_mu_passHighPtID) ); if(stat != 0){ return stat; }
+  if(!(m_opt->UseSVLQConfig())){
+    stat =  SetVariableToChain("muons_passHighPtID", &(m_VLQ_ntupData->d_mu_passHighPtID) ); if(stat != 0){ return stat; }
+  }
   //if(!m_opt->IsR21()){
   /*
     stat =  SetVariableToChain("muons_ptvarcone30",   &(m_VLQ_ntupData->d_mu_ptvarcone30) ); if(stat != 0){ return stat; }

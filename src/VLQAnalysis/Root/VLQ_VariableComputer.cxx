@@ -44,11 +44,12 @@ double VLQ_VariableComputer::GetMeff(  AOVector &v_jets, AOVector &v_el, AOVecto
 
 //________________________________________________________________ 
 //
-double VLQ_VariableComputer::GetMeffRed( AOVector&v_jets, AOVector &v_el, AOVector &v_mu, AnalysisObject *met ) const
+double VLQ_VariableComputer::GetMeffRed( AOVector&v_jets, AOVector &v_el, AOVector &v_mu, AnalysisObject *met, int Njets_shift, double Pt_Scale ) const
 {
+  
   double meff = GetMeff(v_jets, v_el, v_mu, met);
 
-  double meff_reduced = meff - ( ( ( static_cast<int>( v_jets.size() ) ) - 3 ) * 50.0 );
+  double meff_reduced = meff - ( ( ( static_cast<int>( v_jets.size() ) ) - Njets_shift ) * Pt_Scale );
 
   return meff_reduced;
 
@@ -64,6 +65,15 @@ double VLQ_VariableComputer::GetHtHad(  AOVector &v_jets, const std::string& mom
       ht += jet -> Pt(); 
     }
     return ht;
+}
+
+//________________________________________________________________
+//
+double VLQ_VariableComputer::GetHtHad6j(  AOVector &v_jets, const std::string& mom ) const
+{
+  double ht = 0;
+  for(unsigned int i = 5; i < v_jets.size(); i++) ht += v_jets[i]->Pt();
+  return ht;
 }
 
 //________________________________________________________________

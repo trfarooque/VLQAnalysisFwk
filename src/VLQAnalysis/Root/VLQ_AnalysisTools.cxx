@@ -145,7 +145,7 @@ bool VLQ_AnalysisTools::GetObjectVectors(){
 
     if( m_ntupData  -> d_mu_pt -> at(iMu) < pTCut  ) continue;
     if( TMath::Abs(m_ntupData  -> d_mu_eta -> at(iMu)) > 2.5 ) continue;
-    if( (m_ntupData -> d_mu_pt -> at(iMu) > 800.) && (m_ntupData -> d_mu_passHighPtID -> at(iMu) < 1) ) continue;
+    if( (!(m_opt->UseSVLQConfig())) && (m_ntupData -> d_mu_pt -> at(iMu) > 800.) && (m_ntupData -> d_mu_passHighPtID -> at(iMu) < 1) ) continue;
     m_outData->o_mu_loose_n++;
     m_outData->o_lep_loose_n++;
 
@@ -1017,7 +1017,8 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_pileup_mu (" << m_outData -> o_pileup_mu << ")"  << std::endl;
   m_outData -> o_meff         = m_varComputer -> GetMeff( *(m_outData->o_jets), *(m_outData->o_el), *(m_outData->o_mu), m_outData->o_AO_met );
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_meff (" << m_outData -> o_meff << ")"  << std::endl;
-  m_outData -> o_meffred      = m_varComputer -> GetMeffRed( *(m_outData->o_jets), *(m_outData->o_el), *(m_outData->o_mu), m_outData->o_AO_met );
+  m_outData -> o_meffred      = m_varComputer -> GetMeffRed( *(m_outData->o_jets), *(m_outData->o_el), *(m_outData->o_mu), m_outData->o_AO_met , 
+							     (m_opt->UseSVLQConfig()) ? 3 : 5, (m_opt->UseSVLQConfig()) ? 50.0 : 40.0);
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_meffred (" << m_outData -> o_meffred << ")"  << std::endl;
   m_outData -> o_met          = m_outData     -> o_AO_met -> Pt();
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_met (" << m_outData -> o_met << ")"  << std::endl;
@@ -1034,6 +1035,8 @@ bool VLQ_AnalysisTools::ComputeAllVariables(){
 
   m_outData -> o_hthad        = m_varComputer -> GetHtHad( *(m_outData->o_jets) );
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_hthad (" << m_outData -> o_hthad << ")"  << std::endl;
+  m_outData -> o_hthad6j      = m_varComputer -> GetHtHad6j( *(m_outData->o_jets) );
+  if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_hthad6j (" << m_outData -> o_hthad6j << ")"  << std::endl;
   m_outData -> o_hthadRC      = m_varComputer -> GetHtHad( *(m_outData->o_rcjets) );
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "    -> After m_outData -> o_hthadRC (" << m_outData -> o_hthad << ")"  << std::endl;
   m_outData -> o_hthadRCtag   = m_varComputer -> GetHtHad( *(m_outData->o_rcjets), "isRCMTopHiggs" );

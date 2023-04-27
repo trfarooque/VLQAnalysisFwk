@@ -7,6 +7,7 @@
 class VLQ_Options;
 class OutputHistManager;
 class TFile;
+class TH1F;
 class Selection;
 
 class VLQ_PropagateSingleTopSystematics {

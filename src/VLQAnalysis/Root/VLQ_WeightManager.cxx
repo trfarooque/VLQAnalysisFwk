@@ -58,11 +58,15 @@ VLQ_WeightManager::VLQ_WeightManager( VLQ_Options *opt, const VLQ_NtupleData* nt
 
     m_kinRw = new VLQ_KinReweighter(m_vlq_opt, m_vlq_outData /*, m_vlq_ntupData*/);
 
+    std::string path_name = "/data/VLQAnalysis/kinRW/";
+
+    path_name += ((m_vlq_opt -> UseSVLQConfig()) ? "sVLQ/" : "pVLQ/");
+
     if((m_vlq_opt -> SampleName() == SampleName::ZJETS) || (m_vlq_opt -> SampleName() == SampleName::WJETS)){
-      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinRW/pVLQ/kinReweightings_OnlyZjets.root"));
+      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string(path_name+"kinReweightings_OnlyZjets.root"));
     }
     else{
-      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/kinRW/kinReweightings_OnlyWtTtbar.root"));
+      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string(path_name+"kinReweightings_OnlyWtTtbar.root"));
     }
 
   }
@@ -709,22 +713,39 @@ bool VLQ_WeightManager::SetPMGSystNorm(){
   if(!m_vlq_opt->ComputeWeightSys()){
     return true;
   }
+
   double nev_nom = m_sampleInfo->NWeightedEvents("nominal");
+
   for( auto& sysweight :  *m_systMap ){
 
     if(sysweight.first.find("pmg") == std::string::npos) continue;
 
     const string& branchName = (sysweight.second)->BranchName();
-    double nev_sys = m_sampleInfo->NWeightedEvents("sumOfWeights_"+branchName, true /*ignore branch if missing*/ );
+
+    double nev_sys = m_sampleInfo->NWeightedEvents(branchName, true /*ignore branch if missing*/ );
 
     double sys_factor = (nev_sys > 0.) ? nev_nom/nev_sys : 1.;
-    
-    if(m_vlq_opt->PrunePMGWeights() && ((sysweight.second)->GetComponentValue() > m_sampleInfo->WeightThreshold(branchName, false))){
-      if(m_vlq_opt -> MsgLevel() == Debug::DEBUG){
-	std::cout << "Systematic component " << sysweight.first << " = " << (sysweight.second)->GetComponentValue() 
-		  << " > " << m_sampleInfo->WeightThreshold(branchName, false) << ". Setting to 0." << std::endl;
+
+    if(m_vlq_opt->PrunePMGWeights()){
+
+      if( std::abs((sysweight.second)->GetComponentValue()) > m_sampleInfo->WeightThreshold(branchName, false) ){
+	
+	if(m_vlq_opt -> MsgLevel() == Debug::DEBUG){
+	  std::cout << "Systematic component " << sysweight.first << " = " << (sysweight.second)->GetComponentValue() 
+		    << " > " << m_sampleInfo->WeightThreshold(branchName, false) << ". Setting to 0." << std::endl;
+	}
+
+	UpdateSystematicComponent(sysweight.first, 0);
+
       }
-      UpdateSystematicComponent(sysweight.first, 0);
+      else{
+
+	double correction_factor = m_sampleInfo->NWeightedEvents("sumOfWeights_"+branchName, true /*ignore branch if missing*/ );
+	
+	UpdateSystematicComponent(sysweight.first, (sysweight.second)->GetComponentValue()*sys_factor/correction_factor);
+	
+      }
+      
     }
     else{
       UpdateSystematicComponent(sysweight.first, (sysweight.second)->GetComponentValue()*sys_factor);
