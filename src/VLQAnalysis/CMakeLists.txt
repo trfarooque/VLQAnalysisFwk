@@ -55,6 +55,18 @@ atlas_add_executable( MakeSByBPlot
 		      LINK_LIBRARIES IFAETopFramework
 		      		     ${ROOT_LIBRARIES})
 
+atlas_add_executable( SortMVAInputVariables
+		      macros/macros_tmva/SortMVAInputVariables.cxx
+		      LINK_LIBRARIES IFAETopFramework
+		      		     ${ROOT_LIBRARIES})
+
+atlas_add_executable( MVATrainer
+		      macros/macros_tmva/MVATrainer.cxx
+		      LINK_LIBRARIES IFAETopFramework
+		      		     ${ROOT_LIBRARIES}
+				     VLQAnalysis)
+
+
 atlas_add_executable(MetricTabulatorAndPlotter
 		     macros/macros_carlos/Metric_Tabulator_And_Plotter/MetricTabulatorAndPlotter.cxx
 		     LINK_LIBRARIES ${ROOT_LIBRARIES} VLQAnalysis)

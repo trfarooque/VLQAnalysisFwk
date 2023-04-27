@@ -3,6 +3,7 @@
 
 #include <map>
 #include "TMVA/Reader.h"
+#include "TMVA/Reader.h"
 
 class VLQ_Options;
 class VLQ_OutputData;
@@ -26,8 +27,8 @@ class VLQ_MVAManager{
 
  public:
 
-  VLQ_MVAManager(VLQ_Options* opt, VLQ_OutputData* outData, VLQ_WeightManager* weightMngr, 
-		 OutputHistManager* outHistMngr, OutputTreeManager* outTreeMngr);
+  VLQ_MVAManager(VLQ_Options* opt=NULL, VLQ_OutputData* outData=NULL, VLQ_WeightManager* weightMngr=NULL, 
+		 OutputHistManager* outHistMngr=NULL, OutputTreeManager* outTreeMngr=NULL);
   VLQ_MVAManager();
   ~VLQ_MVAManager();
   VLQ_MVAManager(VLQ_MVAManager& q);
@@ -36,18 +37,18 @@ class VLQ_MVAManager{
   int Init(const std::vector<std::string>& inputList={});
   int EvaluateMVA();
 
- protected:
+  const std::map<std::string, VariableDef*>& GetVariableStore(){ return m_varStore; }
+  const std::map<std::string, VariableDef*>& GetMetadataStore(){ return m_metadataStore; } 
 
   int MakeVariableStore();
   int MakeInputVarList(const std::vector<std::string>& inputList={});
-
   int AddMVAVarTreeBranches();
   int AddMVAVarHistograms();
 
   int ReadXmlWeightFile();
   int InitMVAReader();
 
-
+ protected:
 
   VLQ_Options* m_opt;
   VLQ_OutputData* m_outputData;
