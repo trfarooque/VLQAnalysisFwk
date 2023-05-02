@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<MethodSetup Method="CrossValidation::MLP">
+  <GeneralInfo>
+    <Info name="TMVA Release" value="4.2.1 [262657]"/>
+    <Info name="ROOT Release" value="6.20/06 [398342]"/>
+    <Info name="Creator" value="tfarooque"/>
+    <Info name="Date" value="Tue May  2 16:16:54 2023"/>
+    <Info name="Host" value="Linux aibuild16-017.cern.ch 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux"/>
+    <Info name="Dir" value="/data/at3/scratch2/farooque/DevPVLQ/VLQAnalysisFramework/run"/>
+    <Info name="Training events" value="126185"/>
+    <Info name="TrainingTime" value="4.05311584e-06"/>
+    <Info name="AnalysisType" value="Classification"/>
+  </GeneralInfo>
+  <Options>
+    <Option name="V" modified="No">False</Option>
+    <Option name="VerbosityLevel" modified="No">Default</Option>
+    <Option name="VarTransform" modified="No">None</Option>
+    <Option name="H" modified="No">False</Option>
+    <Option name="CreateMVAPdfs" modified="No">False</Option>
+    <Option name="IgnoreNegWeightsInTraining" modified="No">False</Option>
+    <Option name="EncapsulatedMethodName" modified="Yes">MLP</Option>
+    <Option name="EncapsulatedMethodTypeName" modified="Yes">MLP</Option>
+    <Option name="NumFolds" modified="Yes">5</Option>
+    <Option name="OutputEnsembling" modified="Yes">None</Option>
+    <Option name="SplitExpr" modified="Yes">int([event_number])%int([numFolds])</Option>
+  </Options>
+  <Variables NVar="30">
+    <Variable VarIndex="0" Expression="meff" Label="meff" Title="meff" Unit="" Internal="meff" Type="D" Min="1.00073407e+03" Max="7.89738330e+03"/>
+    <Variable VarIndex="1" Expression="RCjet2_pt" Label="RCjet2_pt" Title="RCjet2_pt" Unit="" Internal="RCjet2_pt" Type="D" Min="2.00002106e+02" Max="1.44516101e+03"/>
+    <Variable VarIndex="2" Expression="leptop_pt" Label="leptop_pt" Title="leptop_pt" Unit="" Internal="leptop_pt" Type="D" Min="-1.00000000e+02" Max="3.42010815e+03"/>
+    <Variable VarIndex="3" Expression="RCjets_n" Label="RCjets_n" Title="RCjets_n" Unit="" Internal="RCjets_n" Type="D" Min="3.00000000e+00" Max="7.00000000e+00"/>
+    <Variable VarIndex="4" Expression="dPhiavg_RCjets" Label="dPhiavg_RCjets" Title="dPhiavg_RCjets" Unit="" Internal="dPhiavg_RCjets" Type="D" Min="5.01642287e-01" Max="2.09439516e+00"/>
+    <Variable VarIndex="5" Expression="RCMHiggs0_pt" Label="RCMHiggs0_pt" Title="RCMHiggs0_pt" Unit="" Internal="RCMHiggs0_pt" Type="D" Min="0.00000000e+00" Max="2.58200684e+03"/>
+    <Variable VarIndex="6" Expression="dRmin_RCMTT" Label="dRmin_RCMTT" Title="dRmin_RCMTT" Unit="" Internal="dRmin_RCMTT" Type="D" Min="8.08379501e-02" Max="4.92609024e+00"/>
+    <Variable VarIndex="7" Expression="mvlq1_RCTTM_drmax" Label="mvlq1_RCTTM_drmax" Title="mvlq1_RCTTM_drmax" Unit="" Internal="mvlq1_RCTTM_drmax" Type="D" Min="-1.52543213e+03" Max="4.45213525e+03"/>
+    <Variable VarIndex="8" Expression="RCMHiggs0_nbconsts" Label="RCMHiggs0_nbconsts" Title="RCMHiggs0_nbconsts" Unit="" Internal="RCMHiggs0_nbconsts" Type="D" Min="0.00000000e+00" Max="4.00000000e+00"/>
+    <Variable VarIndex="9" Expression="RCMHiggs0_nconsts" Label="RCMHiggs0_nconsts" Title="RCMHiggs0_nconsts" Unit="" Internal="RCMHiggs0_nconsts" Type="D" Min="0.00000000e+00" Max="2.00000000e+00"/>
+    <Variable VarIndex="10" Expression="dRmin_RCjets" Label="dRmin_RCjets" Title="dRmin_RCjets" Unit="" Internal="dRmin_RCjets" Type="D" Min="6.07473776e-02" Max="3.49933314e+00"/>
+    <Variable VarIndex="11" Expression="mvlq1_rcj_drmax" Label="mvlq1_rcj_drmax" Title="mvlq1_rcj_drmax" Unit="" Internal="mvlq1_rcj_drmax" Type="D" Min="-1.86745874e+03" Max="4.45213525e+03"/>
+    <Variable VarIndex="12" Expression="mtbmin" Label="mtbmin" Title="mtbmin" Unit="" Internal="mtbmin" Type="D" Min="3.86307569e-04" Max="1.42423145e+03"/>
+    <Variable VarIndex="13" Expression="met" Label="met" Title="met" Unit="" Internal="met" Type="D" Min="1.02333152e+00" Max="1.94994263e+03"/>
+    <Variable VarIndex="14" Expression="bjets_n" Label="bjets_n" Title="bjets_n" Unit="" Internal="bjets_n" Type="D" Min="3.00000000e+00" Max="9.00000000e+00"/>
+    <Variable VarIndex="15" Expression="dPhimin_RCMTT" Label="dPhimin_RCMTT" Title="dPhimin_RCMTT" Unit="" Internal="dPhimin_RCMTT" Type="D" Min="1.90258026e-04" Max="3.14156938e+00"/>
+    <Variable VarIndex="16" Expression="dRavg_RCjets" Label="dRavg_RCjets" Title="dRavg_RCjets" Unit="" Internal="dRavg_RCjets" Type="D" Min="1.16793573e+00" Max="3.80160737e+00"/>
+    <Variable VarIndex="17" Expression="RCMV0_nconsts" Label="RCMV0_nconsts" Title="RCMV0_nconsts" Unit="" Internal="RCMV0_nconsts" Type="D" Min="0.00000000e+00" Max="2.00000000e+00"/>
+    <Variable VarIndex="18" Expression="dPhimin_RCjets" Label="dPhimin_RCjets" Title="dPhimin_RCjets" Unit="" Internal="dPhimin_RCjets" Type="D" Min="5.45978546e-05" Max="2.09194827e+00"/>
+    <Variable VarIndex="19" Expression="dEtamin_RCMTT" Label="dEtamin_RCMTT" Title="dEtamin_RCMTT" Unit="" Internal="dEtamin_RCMTT" Type="D" Min="2.04443932e-05" Max="3.96576619e+00"/>
+    <Variable VarIndex="20" Expression="residualMET" Label="residualMET" Title="residualMET" Unit="" Internal="residualMET" Type="D" Min="0.00000000e+00" Max="1.91234351e+03"/>
+    <Variable VarIndex="21" Expression="RCMTop0_pt" Label="RCMTop0_pt" Title="RCMTop0_pt" Unit="" Internal="RCMTop0_pt" Type="D" Min="0.00000000e+00" Max="3.29057056e+03"/>
+    <Variable VarIndex="22" Expression="dEtamin_RCjets" Label="dEtamin_RCjets" Title="dEtamin_RCjets" Unit="" Internal="dEtamin_RCjets" Type="D" Min="4.91738319e-07" Max="1.94553506e+00"/>
+    <Variable VarIndex="23" Expression="mvlq0_RCTTM_drmax" Label="mvlq0_RCTTM_drmax" Title="mvlq0_RCTTM_drmax" Unit="" Internal="mvlq0_RCTTM_drmax" Type="D" Min="-1.00148853e+03" Max="6.17393848e+03"/>
+    <Variable VarIndex="24" Expression="leadingdEta_RCjets" Label="leadingdEta_RCjets" Title="leadingdEta_RCjets" Unit="" Internal="leadingdEta_RCjets" Type="D" Min="2.04443932e-05" Max="3.99614382e+00"/>
+    <Variable VarIndex="25" Expression="mtw" Label="mtw" Title="mtw" Unit="" Internal="mtw" Type="D" Min="1.75227018e-04" Max="2.40596387e+03"/>
+    <Variable VarIndex="26" Expression="leadingdR_RCjets" Label="leadingdR_RCjets" Title="leadingdR_RCjets" Unit="" Internal="leadingdR_RCjets" Type="D" Min="4.35825258e-01" Max="4.92609024e+00"/>
+    <Variable VarIndex="27" Expression="RCMHiggs1_pt" Label="RCMHiggs1_pt" Title="RCMHiggs1_pt" Unit="" Internal="RCMHiggs1_pt" Type="D" Min="0.00000000e+00" Max="1.75491919e+03"/>
+    <Variable VarIndex="28" Expression="leadingdR_RCMTT" Label="leadingdR_RCMTT" Title="leadingdR_RCMTT" Unit="" Internal="leadingdR_RCMTT" Type="D" Min="2.00649053e-01" Max="4.92609024e+00"/>
+    <Variable VarIndex="29" Expression="RCMV0_nbconsts" Label="RCMV0_nbconsts" Title="RCMV0_nbconsts" Unit="" Internal="RCMV0_nbconsts" Type="D" Min="0.00000000e+00" Max="4.00000000e+00"/>
+  </Variables>
+  <Spectators NSpec="7">
+    <Spectator SpecIndex="0" Expression="VLQtype" Label="VLQtype" Title="VLQtype" Unit="" Internal="VLQtype" Type="F" Min="-1.00000000e+00" Max="3.00000000e+00"/>
+    <Spectator SpecIndex="1" Expression="channel" Label="channel" Title="channel" Unit="" Internal="channel" Type="F" Min="1.00000000e+00" Max="5.00000000e+00"/>
+    <Spectator SpecIndex="2" Expression="event_number" Label="event_number" Title="event_number" Unit="" Internal="event_number" Type="F" Min="1.00000000e+00" Max="4.28408560e+07"/>
+    <Spectator SpecIndex="3" Expression="mc_campaign" Label="mc_campaign" Title="mc_campaign" Unit="" Internal="mc_campaign" Type="F" Min="1.00000000e+00" Max="3.00000000e+00"/>
+    <Spectator SpecIndex="4" Expression="run_number" Label="run_number" Title="run_number" Unit="" Internal="run_number" Type="F" Min="2.76262000e+05" Max="3.64292000e+05"/>
+    <Spectator SpecIndex="5" Expression="sampleID" Label="sampleID" Title="sampleID" Unit="" Internal="sampleID" Type="F" Min="3.02480000e+05" Max="4.07344000e+05"/>
+    <Spectator SpecIndex="6" Expression="sampleName" Label="sampleName" Title="sampleName" Unit="" Internal="sampleName" Type="F" Min="3.00000000e+00" Max="1.70000000e+01"/>
+  </Spectators>
+  <Classes NClass="2">
+    <Class Name="Signal" Index="0"/>
+    <Class Name="Background" Index="1"/>
+  </Classes>
+  <Transformations NTransformations="0"/>
+  <MVAPdfs/>
+  <Weights JobName="TMVAClassificationCV" SplitExpr="int([event_number])%int([numFolds])" NumFolds="5" EncapsulatedMethodName="MLP" EncapsulatedMethodTypeName="MLP" OutputEnsembling="None"/>
+</MethodSetup>

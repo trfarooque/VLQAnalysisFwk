@@ -46,7 +46,6 @@ class VLQ_MVAManager{
   int AddMVAVarHistograms();
 
   int ReadXmlWeightFile();
-  int InitMVAReader();
 
  protected:
 

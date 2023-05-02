@@ -63,11 +63,23 @@ int VLQ_MVAManager::Init(const std::vector<std::string>& inputList){
 
   if(!m_opt) return status;
 
+  
+  if(m_opt->ApplyMVA()) {
+    m_mvaReader = new TMVA::Reader("!Color");
+  }
+
   if(m_opt->AddMVAInputsFromXml() || m_opt->ApplyMVA()){
     status += ReadXmlWeightFile();
   }
-  
-  if(m_opt->ApplyMVA()) { status += InitMVAReader(); }
+
+  if(m_opt->ApplyMVA()) { 
+    std::cout << "Booking MVA" << std::endl;
+    //find architecture name from weight file in future
+    std::string xmlPath = std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/")+m_opt->MVAWeightFile();
+
+    m_mvaReader->BookMVA("MLP", xmlPath.c_str());
+    std::cout << "==================================================================================" << std::endl;
+  }
 
   if(m_opt->MakeMVAInputHists() || m_opt->MakeMVAInputTree()){
 
@@ -521,8 +533,9 @@ int VLQ_MVAManager::AddMVAVarHistograms(){
 
 int VLQ_MVAManager::ReadXmlWeightFile(){
 
-  
-  std::ifstream file(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/")+m_opt->MVAWeightFile());
+  std::string xmlPath = std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/")+m_opt->MVAWeightFile();
+
+  std::ifstream file(xmlPath.c_str());
   if(!file.is_open()){
     std::cerr << " [Error] VLQ_VariableComputer::ReadXmlWeightFile() --> File " << m_opt->MVAWeightFile() 
 	      << " not found." << std::endl;
@@ -530,6 +543,7 @@ int VLQ_MVAManager::ReadXmlWeightFile(){
   }
 
   std::string line;
+  int ind = 0; 
   while(getline(file, line)){
 
     bool foundVar = (line.find("Variable VarIndex") != std::string::npos);
@@ -540,17 +554,35 @@ int VLQ_MVAManager::ReadXmlWeightFile(){
       size_t varNamePos = line.find("Expression");
       std::string lineTrimmed = line.substr(line.find("=", varNamePos)+1);
       std::string varName = lineTrimmed.substr(1, lineTrimmed.find(" ")-2);
-
       //Now look for it in the mva variable store
-      if(m_varStore.find(varName) != m_varStore.end()){
-	if(foundVar) m_readerVarList[varName] = m_varStore.at(varName);
-	else if(foundSpec) m_readerSpecList[varName] =  m_varStore.at(varName);
-	
+      if(foundVar){
+	if(m_varStore.find(varName) != m_varStore.end()){
+	  std::cout << "Adding " << varName << " index : " << ind << std::endl;
+	  m_readerVarList[varName] = m_varStore.at(varName);
+	  m_mvaReader->AddVariable(varName, m_varStore.at(varName)->FloatValStore());
+	  ind++;
+	}
+	else{
+	  std::cerr << " [Error] VLQ_VariableComputer::ReadXmlWeightFile() --> Variable " << varName 
+		    << " required in MVA weight file is not found in m_varStore." << std::endl;
+	  abort();
+	}
       }
-      else{
-	std::cerr << " [Error] VLQ_VariableComputer::ReadXmlWeightFile() --> Variable " << varName 
-		  << " required in MVA weight file is not found in m_varStore." << std::endl;
-	abort();
+      else if(foundSpec){
+	if(m_metadataStore.find(varName) != m_metadataStore.end()){
+	  m_readerSpecList[varName] =  m_metadataStore.at(varName);
+	  m_mvaReader->AddSpectator(varName, m_metadataStore.at(varName)->FloatValStore());
+	}
+	else if(m_varStore.find(varName) != m_varStore.end()){
+	  m_readerSpecList[varName] =  m_varStore.at(varName);
+	  m_mvaReader->AddSpectator(varName, m_varStore.at(varName)->FloatValStore());
+	}
+	else{
+	  std::cerr << " [Error] VLQ_VariableComputer::ReadXmlWeightFile() --> Spectator " << varName 
+		    << " required in MVA weight file is not found in m_metadataStore of in m_varStore." << std::endl;
+	  abort();
+	}
+
       }
 
     }//adding a variable or spectator
@@ -563,42 +595,3 @@ int VLQ_MVAManager::ReadXmlWeightFile(){
   return 0;
 
 }
-
-int VLQ_MVAManager::InitMVAReader(){
-
-  m_mvaReader = new TMVA::Reader("!Color:Silent");
-
-  for(const std::pair<std::string, VariableDef*> varPair : m_readerVarList){
-    if( (varPair.second->VarType() == VariableDef::INT) 
-	|| (varPair.second->VarType() == VariableDef::LONGINT) 
-	|| (varPair.second->VarType() == VariableDef::UINT) 
-	|| (varPair.second->VarType() == VariableDef::ULONGINT) ){
-      m_mvaReader->AddVariable(varPair.first, (int*)(varPair.second->Address()));
-    }
-    else{
-      m_mvaReader->AddVariable(varPair.first, varPair.second->FloatValStore());
-    }
-  }
-
-  for(const std::pair<std::string, VariableDef*> specPair : m_readerSpecList){
-
-    if( (specPair.second->VarType() == VariableDef::INT) 
-	|| (specPair.second->VarType() == VariableDef::LONGINT) 
-	|| (specPair.second->VarType() == VariableDef::UINT) 
-	|| (specPair.second->VarType() == VariableDef::ULONGINT) ){
-      m_mvaReader->AddSpectator(specPair.first, (int*)(specPair.second->Address()));
-    }
-    else{
-      m_mvaReader->AddSpectator(specPair.first, specPair.second->FloatValStore());
-    }
-  }
-
-  std::cout << "Booking MVA" << std::endl;
-  m_mvaReader->BookMVA("MLP", m_opt->MVAWeightFile()); //find architecture name from weight file in future
-  std::cout << "==================================================================================" << std::endl;
-
-
-  return 0;
-
-}
-

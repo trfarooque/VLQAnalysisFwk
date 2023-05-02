@@ -185,10 +185,12 @@ int AddDataLoaderVariable(VariableDef* var, const bool isSpectator){
   }
 
   if(isSpectator){
-    m_dataLoader->AddSpectator( var->Name().c_str(),var->Title().c_str(), "", dataType);
+    //m_dataLoader->AddSpectator( var->Name().c_str(),var->Title().c_str(), "", dataType);
+    m_dataLoader->AddSpectator( var->Name().c_str(),var->Name().c_str(), "", dataType);
   }
   else{
-    m_dataLoader->AddVariable( var->Name().c_str(),var->Title().c_str(), "", dataType);
+    //m_dataLoader->AddVariable( var->Name().c_str(),var->Title().c_str(), "", dataType);
+    m_dataLoader->AddVariable( var->Name().c_str(),var->Name().c_str(), "", dataType);
   }
   
   return 0;
@@ -212,6 +214,7 @@ int InitDataLoader(){
   //====================== Add variables ==============================
   if(m_useAllVars){
     for( std::pair<std::string, VariableDef*> varPair : m_mvaManager->GetVariableStore()){
+      if(varPair.first == "leptop_n") continue;
       AddDataLoaderVariable(varPair.second, false);
     }
   }

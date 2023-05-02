@@ -116,16 +116,6 @@ int main(int argc, char** argv){
     status += PlotCharacteristics();
   }
 
-  std::ofstream outFStr; 
-  outFStr.open(m_outFileName.c_str()); 
-
-  outFStr << "Variable : Separation" << std::endl;
-  for ( std::pair<std::string, variable> var : m_rankedVariables){
-    outFStr << var.second.name << " : " << var.second.separation << std::endl;
-  }
-
-  outFStr.close();
-
   return status;
 
 }
@@ -312,6 +302,13 @@ int RankSeparations(){
   int nvar = 0;
   double separn_0 = -1.;
 
+  std::ofstream outFStr; 
+  outFStr.open(m_outFileName.c_str()); 
+
+  outFStr << "Variable : Separation" << std::endl;
+  //for ( std::pair<std::string, variable> var : m_rankedVariables){
+    //}
+
   for(int kk : sorted_separn_index){
 
     if(nvar == 0) separn_0 = var_separn.at(kk);
@@ -320,9 +317,11 @@ int RankSeparations(){
     if(nvar >= m_maxN) break;
 
     //std::cout << "Var : " << var_name.at(kk) << " : separation : " << var_separn.at(kk) << std::endl;
+    outFStr << var_name.at(kk) << " : " << var_separn.at(kk) << std::endl;
     m_rankedVariables[var_name.at(kk)] = m_prunedVariables.at(var_name.at(kk));
     nvar++;
   }
+  outFStr.close();
 
   return 0;
 
