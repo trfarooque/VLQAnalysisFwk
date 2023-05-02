@@ -125,8 +125,8 @@ def GetTtbarSamples( useWeightSyst=False, useObjectSyst=False, hfSplitted=True, 
                 Samples     += [getSampleUncertainties(ttbarType+"PowHer",    "410557."+campaign, ObjectSystematics, WeightSystematics)]
                 Samples     += [getSampleUncertainties(ttbarType+"PowHer",    "410558."+campaign, ObjectSystematics, WeightSystematics)]
             else:
-                Samples     += [getSampleUncertainties(ttbarType+"PowHer",    "411233."+campaign, ObjectSystematics, WeightSystetmatics)]
-                Samples     += [getSampleUncertainties(ttbarType+"PowHer",    "411234."+campaign, ObjectSystematics, WeightSystetmatics)]
+                Samples     += [getSampleUncertainties(ttbarType+"PowHer",    "411233."+campaign, ObjectSystematics, WeightSystematics)]
+                Samples     += [getSampleUncertainties(ttbarType+"PowHer",    "411234."+campaign, ObjectSystematics, WeightSystematics)]
 
             # aMC@NLO+Pythia8
             Samples     += [getSampleUncertainties(ttbarType+"aMCPy",    "410464."+campaign, ObjectSystematics, WeightSystematics)]

@@ -156,7 +156,7 @@ public:
     std::vector<std::string> m_ch_mtb_presel;
     std::vector<std::string> m_ch_fjet;
     std::vector<std::string> m_v_bjet_presel;
-    std::vector<std::string> m_v_jet_presel;
+    std::map<std::string, std::vector< std::string> > m_v_jet_presel;
     std::vector<std::string> m_mva_cut_presel;
     std::vector<std::string> m_mva_jet_presel;
     std::vector<std::string> m_mva_bjet_presel;

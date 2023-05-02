@@ -34,9 +34,10 @@ public:
     double GetMeffRed( std::vector < AnalysisObject* > &v_jets, 
 		       std::vector< AnalysisObject* > &v_el, 
 		       std::vector< AnalysisObject* > &v_mu, 
-		       AnalysisObject *met ) const;
+		       AnalysisObject *met, int Njets_shift = 3, double Pt_Scale = 50.0 ) const;
 
     double GetHtHad( std::vector< AnalysisObject* > &v_jets, const std::string& mom="" ) const;
+    double GetHtHad6j( std::vector< AnalysisObject* > &v_jets, const std::string& mom="" ) const;
     double GetMJSum( std::vector< AnalysisObject* > &v_jets, const std::string& mom="" ) const;
     double GetMetSignificance( const double met, const double hthad) const;    
     double GetMTw( const AnalysisObject* lep,

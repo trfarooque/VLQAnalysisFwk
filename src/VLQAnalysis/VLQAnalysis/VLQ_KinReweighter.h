@@ -7,8 +7,8 @@
 class VLQ_Options;
 class VLQ_OutputData;
 //class VLQ_NtupleData;
-class TH1F;
-class TH2F;
+class TH1D;
+class TH2D;
 class TF1;
 //class Selection;
 
@@ -31,7 +31,7 @@ public:
     //
     // Standard C++ functions
     //
-    VLQ_KinReweighter( VLQ_Options *opt, VLQ_OutputData *outData /*, const VLQ_NtupleData *ntupData*/ );
+    VLQ_KinReweighter( VLQ_Options *opt, VLQ_OutputData *outData);
     VLQ_KinReweighter( const VLQ_KinReweighter & );
     ~VLQ_KinReweighter();
 
@@ -43,22 +43,21 @@ public:
     //
     // Init
     //
-    bool Init( /*std::map < int, Selection* >* selection_tree,*/ const std::string &fileName );
+    bool Init( const std::string &fileName );
 
     //
     // Real function
     //
-    double GetKinReweight( /*const std::string &region_name,*/ const int kinematic, const std::string systematic ="") const;
+    double GetKinReweight( const int kinematic, const std::string systematic ="") const;
     double GetKinRwSyst(std::string systematic) const;
 
 private:
-    //const VLQ_NtupleData *m_ntupData;
     VLQ_OutputData *m_outData;
     VLQ_Options *m_opt;
     std::map<std::string, int> *m_reweightings; 
-    std::map < std::string, TH1F* > *m_histograms;
-    std::map < std::string, TH2F* > *m_histograms_2D;
-    std::map < std::string, TF1* > *m_smoothFunction; 
+    std::map < std::string, TH1D* > *m_histograms_1D;
+    std::map < std::string, TH2D* > *m_histograms_2D;
+    std::map < std::string, TF1* >  *m_histograms_fits;
 };
 
 #endif //VLQ_TTBARSYSTEMATICSMANAGER_H

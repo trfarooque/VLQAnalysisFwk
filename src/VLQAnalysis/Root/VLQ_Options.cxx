@@ -87,6 +87,7 @@ m_addMVAInputsFromXml(false),
 m_doBaselineFitRegions(true),
 m_doUncorrelatedMVARegions(false),
 m_prunePMGWeights(false),
+m_useSVLQConfig(false),
 m_doJMSSys(0),
 m_maxb(4),
 m_RCNsubjetsCut(2),
@@ -205,6 +206,7 @@ OptionsBase(q)
     m_doBaselineFitRegions = q.m_doBaselineFitRegions;
     m_doUncorrelatedMVARegions = q.m_doUncorrelatedMVARegions;
     m_prunePMGWeights   = q.m_prunePMGWeights;
+    m_useSVLQConfig     = q.m_useSVLQConfig;
     m_RecTtBbRw         = q.m_RecTtBbRw;
     m_RwTtFractions     = q.m_RwTtFractions;
     m_RCNsubjetsCut     = q.m_RCNsubjetsCut;
@@ -411,7 +413,10 @@ bool VLQ_Options::IdentifyOption ( const std::string &argument, const std::strin
 	    m_doUncorrelatedMVARegions = AnalysisUtils::BoolValue(temp_val, temp_arg);
 	} else if( temp_arg.find("--PRUNEPMGWEIGHTS") != std::string::npos){
 	    m_prunePMGWeights = AnalysisUtils::BoolValue(temp_val, temp_arg);
+	} else if( temp_arg.find("--USESVLQCONFIG") != std::string::npos){
+	    m_useSVLQConfig = AnalysisUtils::BoolValue(temp_val, temp_arg);
 	}
+	
 
         //
         // Float arguments
@@ -656,6 +661,7 @@ void VLQ_Options::PrintOptions(){
     std::cout << " m_doBaselineFitRegions    = " << m_doBaselineFitRegions << std::endl; 
     std::cout << " m_doUncorrelatedMVARegions= " << m_doUncorrelatedMVARegions << std::endl;
     std::cout << " m_prunePMGWeights         = " << m_prunePMGWeights   << std::endl;
+    std::cout << " m_useSVLQConfig           = " << m_useSVLQConfig     << std::endl;
     std::cout << " m_MVAWeightFile           = " << m_MVAWeightFile     << std::endl;
     std::cout << " m_applyVjetsSherpa22RW    = " << m_applyVjetsSherpa22RW   << std::endl;
     std::cout << " m_filterType              = " << m_filterType        << std::endl;

@@ -13,3 +13,6 @@
 [submodule "src/IFAEPlotter"]
 	path = src/IFAEPlotter
 	url = ssh://git@gitlab.cern.ch:7999/htx/IFAEPlotter.git
+[submodule "src/KinematicReweighter"]
+	path = src/KinematicReweighter
+	url = ssh://git@gitlab.cern.ch:7999/cbuxovaz/kinematic-reweighting.git

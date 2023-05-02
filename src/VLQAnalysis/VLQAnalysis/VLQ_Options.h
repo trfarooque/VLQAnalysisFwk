@@ -113,6 +113,7 @@ public:
   inline bool DoBaselineFitRegions() const { return m_doBaselineFitRegions; }
   inline bool DoUncorrelatedMVARegions() const { return m_doUncorrelatedMVARegions; }
   inline bool PrunePMGWeights() const { return m_prunePMGWeights; }
+  inline bool UseSVLQConfig() const { return m_useSVLQConfig; }
 
   // strings
   inline std::string DoRecoVLQ() const { return m_doRecoVLQ; }
@@ -228,6 +229,7 @@ private:
   bool m_doBaselineFitRegions;
   bool m_doUncorrelatedMVARegions;
   bool m_prunePMGWeights;
+  bool m_useSVLQConfig;
 
   int m_doJMSSys;
   int m_maxb;

@@ -329,17 +329,20 @@ bool VLQ_Selector::GetPreselectionCuts(){
   //v---------Single VLQ jet multiplicity cuts-------v//
   if(m_opt->DoSingleVLQRegions()){
     
-    m_v_jet_presel = {"3_5jwin","3jin","4jin","5jin","6jin"};
-    
+    m_v_jet_presel["c-1lep-"] = {"3jex","3_5jwin","3jin","4jin","5jin","6jin"};
+    m_v_jet_presel["c-2lep-"] = {};
+    if(m_opt->DoTwoLeptonAna()) m_v_jet_presel["c-2lep-"].push_back("3jin");
+ 
     if(m_opt->DeriveReweighting() ||  m_opt->DoExclusiveJetRegions()){
-      std::vector<std::string> v_jet_presel_ex = {"3jex","4jex","5jex","6jex","7jex","8jex","9jex","10jex","11jex"};
+      std::vector<std::string> v_jet_presel_ex = {"4jex","5jex","6jex","7jex","8jex","9jex","10jex","11jex"};
       
-      m_v_jet_presel.insert(m_v_jet_presel.end(),v_jet_presel_ex.begin(),v_jet_presel_ex.end());
+      m_v_jet_presel["c-1lep-"].insert(m_v_jet_presel["c-1lep-"].end(),v_jet_presel_ex.begin(),v_jet_presel_ex.end());
 
       if(m_opt->DeriveReweighting()){
 	std::vector<std::string> v_jet_presel_in = {"7jin","8jin","9jin"};
 
-	m_v_jet_presel.insert(m_v_jet_presel.end(),v_jet_presel_in.begin(),v_jet_presel_in.end());
+	m_v_jet_presel["c-1lep-"].insert(m_v_jet_presel["c-1lep-"].end(),v_jet_presel_in.begin(),v_jet_presel_in.end());
+	m_v_jet_presel["c-2lep-"].push_back("3jex");
       }
       
     }
@@ -352,35 +355,46 @@ bool VLQ_Selector::GetPreselectionCuts(){
 
     // 0-lepton
     if(m_opt->DoZeroLeptonAna()){
-      m_v_jet_presel = {"6jin", "7jin"};
+      m_v_jet_presel["c-0lep-"] = {"6jin", "7jin"};
 
       if(m_opt->DoLowJRegions()){
 	std::vector<std::string> v_jet_presel_low = {"5jex","5jin"};
-        m_v_jet_presel.insert(m_v_jet_presel.end(), v_jet_presel_low.begin(), v_jet_presel_low.end());
+        m_v_jet_presel["c-0lep-"].insert(m_v_jet_presel["c-0lep-"].end(), v_jet_presel_low.begin(), v_jet_presel_low.end());
       }
 
     }
     
     // 1-lepton or 2-lepton
     else{
-      m_v_jet_presel = {"5jin", "6jin"};
+      m_v_jet_presel["c-1lep-"] = {"5jin", "6jin"};
+      m_v_jet_presel["c-2lep-"] = {};
+      if(m_opt->DoTwoLeptonAna()) m_v_jet_presel["c-2lep-"].push_back("5jin");
 
       if(m_opt->DoLowJRegions()){
 	std::vector<std::string> v_jet_presel_low = {"4jex","4jin"};
-        m_v_jet_presel.insert(m_v_jet_presel.end(), v_jet_presel_low.begin(), v_jet_presel_low.end());
+        m_v_jet_presel["c-1lep-"].insert(m_v_jet_presel["c-1lep-"].end(), v_jet_presel_low.begin(), v_jet_presel_low.end());
       }
 
       if(m_opt->DoExclusiveJetRegions()){
-	std::vector<std::string> v_jet_presel_ex = {"5jex","6jex","7jex","8jex","9jin"};
-        m_v_jet_presel.insert(m_v_jet_presel.end(), v_jet_presel_ex.begin(), v_jet_presel_ex.end());
+	std::vector<std::string> v_jet_presel_ex = {"5jex","6jex","7jex","8jin"};
+        m_v_jet_presel["c-1lep-"].insert(m_v_jet_presel["c-1lep-"].end(), v_jet_presel_ex.begin(), v_jet_presel_ex.end());
+      }
+
+      if(m_opt->DeriveReweighting()){
+	std::vector<std::string> v_jet_presel_rw = {"5jex","6jex","7jex","8jex","9jex","10jex","11jex","7jin","8jin","10jin","12jin"};
+	m_v_jet_presel["c-1lep-"].insert(m_v_jet_presel["c-1lep-"].end(), v_jet_presel_rw.begin(), v_jet_presel_rw.end());
+	m_v_jet_presel["c-2lep-"].push_back("5jex");
       }
 
     }
 
   }
   //^----------Pair VLQ jet multiplicity cuts--------^//
-  else m_v_jet_presel = {"6jin"};
-
+  else{
+    m_v_jet_presel["c-0lep-"] = {"6jin"};
+    m_v_jet_presel["c-1lep-"] = {"6jin"};
+    m_v_jet_presel["c-2lep-"] = {"6jin"};
+  }
   //v------------MVA Training region cuts------------v//
   if(m_opt->ApplyMVA() && (!(m_opt->DoZeroLeptonAna()) != !(m_opt->DoOneLeptonAna()))){
 
@@ -411,7 +425,7 @@ bool VLQ_Selector::AddPreselectionRegions(bool do_syst, bool do_runop){
     
     const std::string& lep_prefix = lep_ch_pair.first;
     
-    for(const std::string& jet : m_v_jet_presel){
+    for(const std::string& jet : m_v_jet_presel[lep_prefix]){
       for(const std::string& bjet : m_v_bjet_presel){
 	for(const std::string& mtbsuf : m_ch_mtb_presel){
 	  for(const std::string& lepsuf : lep_ch_pair.second){
