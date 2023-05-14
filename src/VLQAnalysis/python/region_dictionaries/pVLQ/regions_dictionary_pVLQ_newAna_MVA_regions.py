@@ -2,6 +2,18 @@
 
 #
 #
+# Preselection regions 1-lepton
+#
+#
+reg_1lep6jin3bin2Min3Jin = {
+    'name':"HTX_c1lep6jin3bin2Min3Jin"
+}
+reg_1lep5jin3bin2Min3Jin = {
+    'name':"HTX_c1lep5jin3bin2Min3Jin"
+}
+
+#
+#
 # Fit regions 1-lepton
 #
 #
@@ -502,7 +514,10 @@ reg_1lep5jin4bin2Min3Jin1HinMidMVAScore_VR,
 reg_1lep5jin4bin2Min3Jin1HinLowMVAScore_VR
 ]
 
-preselection_regions_1l = []
+preselection_regions_1l = [
+    reg_1lep6jin3bin2Min3Jin,
+    reg_1lep5jin3bin2Min3Jin
+]
 
 all_regions_1l =  []
 all_regions_1l += fit_regions_1l

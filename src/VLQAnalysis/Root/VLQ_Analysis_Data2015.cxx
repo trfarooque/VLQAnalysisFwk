@@ -2548,7 +2548,8 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
   //                                                          #
   //###########################################################
   m_anaTools -> ComputeAllVariables();
-
+  
+  if(m_opt->ApplyMVA()) m_mvaMngr->EvaluateMVA();
   //###########################################################
   //                                                          #
   // Truth information recovery                               #
@@ -3088,6 +3089,102 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 
 //____________________________________________________________________________
 //
+bool VLQ_Analysis_Data2015::ScaleTtbarHtSliceHistogramsPVLQ(OutputHistManager* outHistMngr){
+
+  for(auto histname : outHistMngr->HistMngr()->GetTH1KeyList()){
+    TH1D* histo = outHistMngr->HistMngr()->GetTH1D(histname);
+
+    double Scale = 1.0;
+
+    if(m_opt->StrSampleID().find("407344.") != std::string::npos){
+      if(m_opt->ComputeWeightSys()){
+        if(histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 0.98894846;
+        else if(histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1.0124192;
+        else if(histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 0.98388135;
+        else if(histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1.0120896;
+        else if(histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1.0317384;
+        else if(histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1.0252434;
+	else if(histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 0.97702098;
+        else if(histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 0.97905928;
+      }
+    }
+    if ( m_opt -> StrSampleID().find("407343.") != std::string::npos ){
+      if(m_opt->ComputeWeightSys()){
+        if(histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 0.98185199;
+        else if(histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1.0204943;
+        else if(histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 0.98459357;
+        else if(histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1.0092582;
+        else if(histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1.0896437;
+        else if(histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1.0674632;
+        else if(histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 0.94176286;
+        else if(histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 0.93781292;
+      }
+    }
+    if ( m_opt -> StrSampleID().find("407342.") != std::string::npos ){
+      if(m_opt->ComputeWeightSys()){
+        if(histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 0.97521287;
+        else if(histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1.0272115;
+        else if(histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 0.96983117;
+        else if(histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1.0157815;
+        else if(histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1.1371188;
+        else if(histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1.1195048;
+        else if(histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 0.90183973;
+        else if(histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 0.90323299;
+      }
+    }
+    histo->Scale(Scale);
+  }
+  
+  for(auto histname : outHistMngr->HistMngr()->GetTH2KeyList()){
+    TH2D* histo = outHistMngr->HistMngr()->GetTH2D(histname);
+
+    double Scale = 1.0;
+
+    if(m_opt->StrSampleID().find("407344.") != std::string::npos){
+      if(m_opt->ComputeWeightSys()){
+        if(histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 0.98894846;
+        else if(histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1.0124192;
+        else if(histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 0.98388135;
+        else if(histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1.0120896;
+        else if(histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1.0317384;
+        else if(histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1.0252434;
+        else if(histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 0.97702098;
+        else if(histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 0.97905928;
+      }
+    }
+    if ( m_opt -> StrSampleID().find("407343.") != std::string::npos ){
+      if(m_opt->ComputeWeightSys()){
+        if(histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 0.98185199;
+        else if(histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1.0204943;
+        else if(histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 0.98459357;
+	else if(histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1.0092582;
+        else if(histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1.0896437;
+        else if(histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1.0674632;
+        else if(histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 0.94176286;
+        else if(histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 0.93781292;
+      }
+    }
+    if ( m_opt -> StrSampleID().find("407342.") != std::string::npos ){
+      if(m_opt->ComputeWeightSys()){
+        if(histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 0.97521287;
+        else if(histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1.0272115;
+        else if(histname.find("weight_pmg_isr_muRfac10__fsr_muRfac05") != std::string::npos) Scale = 0.96983117;
+        else if(histname.find("weight_pmg_isr_muRfac10__fsr_muRfac20") != std::string::npos) Scale = 1.0157815;
+        else if(histname.find("weight_pmg_muR05__muF10") != std::string::npos) Scale = 1.1371188;
+        else if(histname.find("weight_pmg_muR10__muF05") != std::string::npos) Scale = 1.1195048;
+        else if(histname.find("weight_pmg_muR10__muF20") != std::string::npos) Scale = 0.90183973;
+        else if(histname.find("weight_pmg_muR20__muF10") != std::string::npos) Scale = 0.90323299;
+      }
+    }
+    histo->Scale(Scale);
+  }
+
+  return true;
+
+}
+
+//____________________________________________________________________________
+//
 bool VLQ_Analysis_Data2015::ScaleTtbarHiSliceHistograms(OutputHistManager* outHistMngr){
 
   for(auto histname : outHistMngr->HistMngr()->GetTH1KeyList()){
@@ -3098,7 +3195,7 @@ bool VLQ_Analysis_Data2015::ScaleTtbarHiSliceHistograms(OutputHistManager* outHi
     double Scale = 1.0;
 
     if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
-      Scale = (m_opt -> UseSVLQConfig()) ? 1./0.99860961239196 : 0.998735;
+      Scale = 1./0.99860961239196;
       if ( m_opt -> ComputeWeightSys() ){
 	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.00989117643996;
 	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98630942849818;
@@ -3111,7 +3208,7 @@ bool VLQ_Analysis_Data2015::ScaleTtbarHiSliceHistograms(OutputHistManager* outHi
       }
     }
     if ( m_opt -> StrSampleID().find("407343.") != std::string::npos ){
-      Scale = (m_opt -> UseSVLQConfig()) ? 1./1.00220071443736 : 0.997816;
+      Scale = 1./1.00220071443736;
       if ( m_opt -> ComputeWeightSys() ){
 	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.02075306498765;
 	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98196927321205;
@@ -3124,7 +3221,7 @@ bool VLQ_Analysis_Data2015::ScaleTtbarHiSliceHistograms(OutputHistManager* outHi
       }
     }
     if ( m_opt -> StrSampleID().find("407342.") != std::string::npos ){
-      Scale = (m_opt -> UseSVLQConfig()) ? 1./1.01614066637173 : 0.984447;
+      Scale = 1./1.01614066637173;
       if ( m_opt -> ComputeWeightSys() ){
 	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.04057257636042;
 	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.99097386133341;
@@ -3146,7 +3243,7 @@ bool VLQ_Analysis_Data2015::ScaleTtbarHiSliceHistograms(OutputHistManager* outHi
     double Scale = 1.0;
 
     if ( m_opt -> StrSampleID().find("407344.") != std::string::npos ){
-      Scale = (m_opt -> UseSVLQConfig()) ? 1./0.99860961239196 : 0.998735;
+      Scale = 1./0.99860961239196;
       if ( m_opt -> ComputeWeightSys() ){
 	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.00989117643996;
 	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98630942849818;
@@ -3159,7 +3256,7 @@ bool VLQ_Analysis_Data2015::ScaleTtbarHiSliceHistograms(OutputHistManager* outHi
       }
     }
     if ( m_opt -> StrSampleID().find("407343.") != std::string::npos ){
-      Scale = (m_opt -> UseSVLQConfig()) ? 1./1.00220071443736 : 0.997816;
+      Scale = 1./1.00220071443736;
       if ( m_opt -> ComputeWeightSys() ){
 	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.02075306498765;
 	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.98196927321205;
@@ -3172,7 +3269,7 @@ bool VLQ_Analysis_Data2015::ScaleTtbarHiSliceHistograms(OutputHistManager* outHi
       }
     }
     if ( m_opt -> StrSampleID().find("407342.") != std::string::npos ){
-      Scale = (m_opt -> UseSVLQConfig()) ? 1./1.01614066637173 : 0.984447;
+      Scale = 1./1.01614066637173;
       if ( m_opt -> ComputeWeightSys() ){
 	if (histname.find("weight_pmg_Var3cDown") != std::string::npos) Scale = 1./1.04057257636042;
 	else if (histname.find("weight_pmg_Var3cUp") != std::string::npos) Scale = 1./0.99097386133341;
@@ -3207,8 +3304,14 @@ bool VLQ_Analysis_Data2015::Terminate()
   //
   if( m_outData -> o_is_ttbar && m_opt->ScaleTtbarHtSlices() ){
 
-    ScaleTtbarHiSliceHistograms(m_outMngrHist);
-    if(m_outMngrMVAHist) ScaleTtbarHiSliceHistograms(m_outMngrMVAHist);    
+    if(m_opt->UseSVLQConfig()){
+      ScaleTtbarHiSliceHistograms(m_outMngrHist);
+      if(m_outMngrMVAHist) ScaleTtbarHiSliceHistograms(m_outMngrMVAHist);
+    }
+    else{
+      ScaleTtbarHtSliceHistogramsPVLQ(m_outMngrHist);
+      if(m_outMngrMVAHist) ScaleTtbarHtSliceHistogramsPVLQ(m_outMngrMVAHist);
+    }
 
   }//scaling ttbar files
 
