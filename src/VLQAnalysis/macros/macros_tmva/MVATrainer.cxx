@@ -44,7 +44,7 @@ std::string m_channel;
 bool m_doCrossEval;
 bool m_useAllVars;
 bool m_usePrunedVars;
-
+bool m_doKinRW;
 
 //INTERNAL VARIABLES
 VLQ_MVAManager* m_mvaManager;
@@ -268,6 +268,11 @@ int InitDataLoader(){
 
   std::vector<std::string> weightList = {
     "weight_jvt", "weight_pu", "weight_norm", "weight_mc", "weight_trkbtag"};
+  if(m_doKinRW){
+    weightList.push_back("weight_RW_JETSN");
+    weightList.push_back("weight_RW_MEFFRED");
+  }
+
   if(m_channel == "ONELEP"){
     std::vector<std::string> weightList_1L = {"weight_elec","weight_elec_trigger","weight_muon","weight_muon_trigger" };
     weightList.insert(weightList.end(), weightList_1L.begin(), weightList_1L.end());
@@ -367,6 +372,10 @@ int ParseArguments(int argc, char** argv){
       //do all variables
       m_usePrunedVars = AnalysisUtils::BoolValue(value);
     }
+    else if(argument=="--DOKINRW"){
+      //do all variables
+      m_doKinRW = AnalysisUtils::BoolValue(value);
+    }
 
   }//loop over all command-line arguments 
 
@@ -394,7 +403,7 @@ int main( int argc, char** argv )
   m_doCrossEval = true;
   m_useAllVars = false;
   m_usePrunedVars = true;
-
+  m_doKinRW = false;
 
   //INTERNAL VARIABLES
   m_mvaManager = NULL;
@@ -418,24 +427,6 @@ int main( int argc, char** argv )
  //}
 
  return status;
-
-/*
-
-
-  bool lepton = false;
-  // Select methods (don't look at this code - not of interest)
-  TString methodList;
-  for (int i=1; i<argc; i++) {
-    TString regMethod(argv[i]);
-    if( regMethod == "--lepton" ) lepton = true;
-    else{
-      if(regMethod=="-b" || regMethod=="--batch") continue;
-      if (!methodList.IsNull()) methodList += TString(",");
-      methodList += regMethod;
-    }
-  }
-  return TMVAClassification(methodList,lepton);
-*/
 
 
 }
