@@ -38,6 +38,7 @@ private:
     /// a text summary of the yields from the main histograms
     std::string summaryYields();
     bool SumAnalysisRegions(const bool newFile);
+    bool ScaleTtbarHtSliceHistogramsPVLQ(OutputHistManager* outHistMngr);
     bool ScaleTtbarHiSliceHistograms(OutputHistManager* outHistMngr);
 
 private:
