@@ -110,7 +110,7 @@ int InitFactoryAndEvaluate(){
   TString mlp_opt = TString::Format("!V:NeuronType=%s:VarTransform=N:NCycles=%s:EpochMonitoring=false:HiddenLayers=%s:LearningRate=0.01:DecayRate=0.0:TestRate=5",m_mlp_neuronType.c_str(), m_mlp_ncycles.c_str(), m_mlp_nodes.c_str() );
 
   if(m_doCrossEval){
-    TString splitExpr="int([event_number])\%int([numFolds])";
+    TString splitExpr="Long64_t([event_number])\%int([numFolds])";
     TString opt_cv = 
       TString::Format("!V:!Silent:!Correlations:AnalysisType=Classification:NumFolds=%s:SplitType=Deterministic:SplitExpr=%s"
 		      ,m_nfolds.c_str(),splitExpr.Data());
