@@ -209,7 +209,12 @@ bool VLQ_Analysis_Data2015::Begin(){
     m_weightMngr -> AddKinReweightings();
 
     if(m_opt->DoKinRwSyst() && m_opt->DoKinRwSmoothing()){
-      m_weightMngr -> AddKinRwSyst();
+      if(m_opt->UseSVLQConfig()){
+	m_weightMngr -> AddKinRwSyst();
+      }
+      else{
+	m_weightMngr -> AddKinRwSystPVLQ();
+      }
     }
 
   }
@@ -2884,7 +2889,12 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
       m_weightMngr -> SetKinReweightings();
 
       if(m_opt->DoKinRwSyst() && m_opt->DoKinRwSmoothing()){
-	m_weightMngr -> SetKinRwSyst();
+	if(m_opt->UseSVLQConfig()){
+	  m_weightMngr -> SetKinRwSyst();
+	}
+	else{
+	  m_weightMngr -> SetKinRwSystPVLQ();
+	}
       }      
     }
     if( m_opt -> UseLargeRJets() && m_opt -> DoLargeRJetsBOT() ){

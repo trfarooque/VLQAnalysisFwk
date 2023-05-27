@@ -53,6 +53,7 @@ public:
     bool AddVLQSystematicWeights( const bool dump_config = false );
     bool AddKinReweightings();
     bool AddKinRwSyst();
+    bool AddKinRwSystPVLQ();
     bool AddFJvtSFWeights();
     bool AddLargeRJetTaggerSFs();
 
@@ -70,6 +71,7 @@ public:
     bool SetLargeRJetTaggerSFs();
     bool SetKinReweightings();
     bool SetKinRwSyst();
+    bool SetKinRwSystPVLQ();
     bool UpdateSysReweighting();
 
 private:

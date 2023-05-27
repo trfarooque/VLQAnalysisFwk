@@ -144,10 +144,10 @@ int VLQ_MVAManager::MakeVariableStore(){
   m_varStore = {};
   //======================================
   //Global meff
-  m_varStore["meff"] = new VariableDef("meff","m_{eff} [GeV]", &(dummy));
+  m_varStore["meff"] = new VariableDef("meff",";m_{eff} [GeV]", &(dummy));
   if(m_outputData){ m_varStore.at("meff")->SetAddress(&(m_outputData -> o_meff));}
 
-  m_varStore["hthad"] = new VariableDef("hthad","H_{T}^{had} [GeV]", &(dummy));
+  m_varStore["hthad"] = new VariableDef("hthad",";H_{T}^{had} [GeV]", &(dummy));
   if(m_outputData){ m_varStore.at("hthad")->SetAddress(&(m_outputData -> o_hthad));}
   //======================================
 
@@ -156,7 +156,7 @@ int VLQ_MVAManager::MakeVariableStore(){
   m_varStore["leadingdR_RCjets"] = new VariableDef("leadingdR_RCjets", ";Leading #DeltaR(RC,RC)", &(dummy)); 
   if(m_outputData){ m_varStore.at("leadingdR_RCjets")->SetAddress(&(m_outputData -> o_leadingdR_RCjets)); }
 
-  m_varStore["leadingdEta_RCjets"] = new VariableDef("leadingdEta_RCjets","Leading #Delta#eta(RC,RC)", &(dummy));
+  m_varStore["leadingdEta_RCjets"] = new VariableDef("leadingdEta_RCjets",";Leading #Delta#eta(RC,RC)", &(dummy));
   if(m_outputData){ m_varStore.at("leadingdEta_RCjets")->SetAddress(&(m_outputData -> o_leadingdEta_RCjets)); }
   m_varStore.at("leadingdEta_RCjets")->SetDefault(-10.);
 
@@ -332,10 +332,10 @@ int VLQ_MVAManager::MakeVariableStore(){
   //======================================
   //Lepton and MET-related
 
-  m_varStore["leptop_n"] = new VariableDef("leptop_n","N_{leptop}", &(dummy));
+  m_varStore["leptop_n"] = new VariableDef("leptop_n",";N_{leptonic top}", &(dummy));
   if(m_outputData){ m_varStore.at("leptop_n")->SetAddress(&(m_outputData -> o_leptop_n)); }
 
-  m_varStore["leptop_pt"] = new VariableDef("leptop_pt","Leptop p_{T} [GeV]", &(dummy), -1, "Pt");
+  m_varStore["leptop_pt"] = new VariableDef("leptop_pt",";p_{T}(leptonic top) [GeV]", &(dummy), -1, "Pt");
   if(m_outputData){ m_varStore.at("leptop_pt")->SetAddress(&(m_outputData -> o_leptop)); }
   m_varStore.at("leptop_pt")->SetDefault(-100.);
 
@@ -464,7 +464,7 @@ int VLQ_MVAManager::AddMVAVarHistograms(){
     if( (name == "meff") || (name == "hthad") 
 	|| (name.find("mvlq") != std::string::npos) ){
       xmin=0.;
-      xmax=5000.;
+      xmax=7000.;
       xwidth=25.;
     }
     else if( (name=="mtw") || (name=="ptw") || (name=="residualMET") || (name=="mtbmin") ){

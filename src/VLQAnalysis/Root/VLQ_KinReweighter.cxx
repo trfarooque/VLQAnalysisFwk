@@ -350,7 +350,9 @@ double VLQ_KinReweighter::GetKinRwSyst(std::string systematic) const{
   }
   else if(source_reg == "c1lep3jin2bex"){
 
-    std::string jet_prefix = (param2 < 7) ? std::to_string(param2) : "7";
+    int last_njet_bin = (m_opt->UseSVLQConfig()) ? 7 : 8;
+
+    std::string jet_prefix = (param2 < last_njet_bin) ? std::to_string(param2) : std::to_string(last_njet_bin);
     
     std::string histName = source_reg + "_" + kin + "_jet_" + jet_prefix + "_fit" +  systematic;
 
