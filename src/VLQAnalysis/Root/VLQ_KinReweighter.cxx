@@ -375,3 +375,27 @@ double VLQ_KinReweighter::GetKinRwSyst(std::string systematic) const{
   return 1;
 
 }
+
+//______________________________________________________________________________ 
+//
+double VLQ_KinReweighter::GetNJetsKinRwSyst(std::string systematic) const{
+
+  if((m_opt -> SampleName() != SampleName::ZJETS) && (m_opt -> SampleName() != SampleName::WJETS)) return 1;
+
+  std::string rw_name =  "c2lep3jin1bexZwinMLL_sf_jets_n"; 
+  
+  int param = m_outData->o_jets_n;
+  
+  std::map< std::string, TH1D* >::iterator it = m_histograms_1D->find(rw_name);
+
+  if( it == m_histograms_1D->end() ) return 1.;
+
+  int bin = it->second->FindBin(param);
+
+  if( bin > it->second->GetNbinsX() ) bin = it->second->GetNbinsX();
+
+  if( systematic == "UP" ) return (it->second->GetBinContent(bin) + it->second->GetBinError(bin));
+  else if( systematic == "DOWN" ) return (it->second->GetBinContent(bin) - it->second->GetBinError(bin));
+  else return 1;
+
+}

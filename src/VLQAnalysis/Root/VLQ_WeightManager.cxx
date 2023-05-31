@@ -321,6 +321,10 @@ bool VLQ_WeightManager::AddKinRwSystPVLQ(){
       AddAndInitWeight("weight_RW_MEFFRED_8JIN_DOWN", "", false, false, "", replace);
 
     }
+    else if((m_opt -> SampleName() == SampleName::ZJETS) || (m_opt -> SampleName() == SampleName::WJETS)){
+      AddAndInitWeight("weight_RW_JETSN_UP", "", false, false, "", "weight_RW_JETSN");
+      AddAndInitWeight("weight_RW_JETSN_DOWN", "", false, false, "", "weight_RW_JETSN");
+    }
 
   }
 
@@ -970,14 +974,22 @@ bool VLQ_WeightManager::SetKinRwSystPVLQ(){
   double weight_up = 1.;
   double weight_dn = 1.;
   double weight_nom = 1.;
-  
-  if(m_kinRw){
-    weight_nom = GetWeightObject("weight_RW_MEFFRED")->GetComponentValue();
+  std::string wname = "weight_RW";
+
+  if((m_vlq_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP)) wname += "_MEFFRED";
+  else if((m_opt -> SampleName() == SampleName::ZJETS) || (m_opt -> SampleName() == SampleName::WJETS)) wname += "_JETSN";
+
+  if(m_kinRw && ( (m_vlq_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP) )){
+    weight_nom = GetWeightObject(wname)->GetComponentValue();
     weight_up = m_kinRw->GetKinRwSyst("_upBand2S");
     weight_dn = m_kinRw->GetKinRwSyst("_dnBand2S");
   }
+  else if(m_kinRw && ( (m_opt -> SampleName() == SampleName::ZJETS) || (m_opt -> SampleName() == SampleName::WJETS) )){
+    weight_nom = GetWeightObject(wname)->GetComponentValue(); 
+    weight_up  = m_kinRw->GetNJetsKinRwSyst("UP");
+    weight_dn  = m_kinRw->GetNJetsKinRwSyst("DOWN");
+  }
 
-  std::string wname = "weight_RW_MEFFRED";
   if( (m_vlq_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP) ){
     
     if( m_vlq_outData -> o_jets_n < 5 ) return true;
@@ -1001,6 +1013,10 @@ bool VLQ_WeightManager::SetKinRwSystPVLQ(){
     UpdateSystematicComponent(wname+"_UP", weight_up);
     UpdateSystematicComponent(wname+"_DOWN", weight_dn);
 
+  }
+  else if( (m_opt -> SampleName() == SampleName::ZJETS) || (m_opt -> SampleName() == SampleName::WJETS) ){
+    SetSystematicComponent(wname+"_UP", weight_up);
+    SetSystematicComponent(wname+"_DOWN", weight_dn);
   }
 
   return true;
