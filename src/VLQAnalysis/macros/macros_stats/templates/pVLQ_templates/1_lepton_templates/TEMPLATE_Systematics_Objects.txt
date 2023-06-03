@@ -15,7 +15,7 @@ Systematic: "EG_RESOLUTION_ALL"
   Regions: HTX_c1lep*
 
 Systematic: "EG_SCALE_ALL"
-  Title: "Electron E_{T} scale"
+  Title: "Electron E_{T} scale ALL"
   Type: HISTO
   Category: "Lepton uncertainties"
   HistoFileSufUp: _EG_SCALE_ALL__1up
@@ -63,7 +63,7 @@ Systematic: "MUON_SCALE"
   Regions: HTX_c1lep*
 
 Systematic: "MUON_SAGITTA_RESBIAS"
-  Title: "Muon p_{T} scale"
+  Title: "Muon sagitta resbias"
   Type: HISTO
   Category: "Lepton uncertainties"
   HistoFileSufUp: _MUON_SAGITTA_RESBIAS__1up
@@ -73,12 +73,12 @@ Systematic: "MUON_SAGITTA_RESBIAS"
   Exclude: QCD
   Regions: HTX_c1lep*
 
-Systematic: "MUON_SAGITTA_RHO"
-  Title: "Muon p_{T} scale"
+Systematic: "MUON_SAGITTA_DATASTAT"
+  Title: "Muon sagitta datastat"
   Type: HISTO
   Category: "Lepton uncertainties"
-  HistoFileSufUp: _MUON_SAGITTA_RHO__1up
-  HistoFileSufDown: _MUON_SAGITTA_RHO__1down
+  HistoFileSufUp: _MUON_SAGITTA_DATASTAT__1up
+  HistoFileSufDown: _MUON_SAGITTA_DATASTAT__1down
   Symmetrisation: TwoSided
   Smoothing: 40
   Exclude: QCD
@@ -328,106 +328,6 @@ Systematic: "JET_Flavor_Response"
   Smoothing: 40
   Exclude: QCD
 
-Systematic: "JET_Pileup_OffsetMu"
-  Title: "Pile-up offset mu term"
-  Type: HISTO
-  Category: "Jet uncertainties"
-  HistoFileSufUp: _JET_Pileup_OffsetMu__1up
-  HistoFileSufDown: _JET_Pileup_OffsetMu__1down
-  Symmetrisation: TwoSided
-  Smoothing: 40
-  Exclude: QCD
-
-Systematic: "JET_Pileup_OffsetNPV"
-  Title: "Pile-up offset NPV term"
-  Type: HISTO
-  Category: "Jet uncertainties"
-  HistoFileSufUp: _JET_Pileup_OffsetNPV__1up
-  HistoFileSufDown: _JET_Pileup_OffsetNPV__1down
-  Symmetrisation: TwoSided
-  Smoothing: 40
-  Exclude: QCD
-
-Systematic: "JET_Pileup_PtTerm"
-  Title: "Pile-up offset p_{T} term"
-  Type: HISTO
-  Category: "Jet uncertainties"
-  HistoFileSufUp: _JET_Pileup_PtTerm__1up
-  HistoFileSufDown: _JET_Pileup_PtTerm__1down
-  Symmetrisation: TwoSided
-  Smoothing: 40
-  Exclude: QCD
-
-Systematic: "JET_Pileup_RhoTopology"
-  Title: "#rho topology"
-  Type: HISTO
-  Category: "Jet uncertainties"
-  HistoFileSufUp: _JET_Pileup_RhoTopology__1up
-  HistoFileSufDown: _JET_Pileup_RhoTopology__1down
-  Symmetrisation: TwoSided
-  Smoothing: 40
-  Exclude: QCD
-
-Systematic: "JET_PunchThrough_MC16"
-  Title: "Punch-through correction"
-  Type: HISTO
-  Category: "Jet uncertainties"
-  HistoFileSufUp: _JET_PunchThrough_MC16__1up
-  HistoFileSufDown: _JET_PunchThrough_MC16__1down
-  Symmetrisation: TwoSided
-  Smoothing: 40
-  Exclude: QCD
-
-Systematic: "JET_SingleParticle_HighPt"
-  Title: "High-p_{T} term"
-  Type: HISTO
-  Category: "Jet uncertainties"
-  HistoFileSufUp: _JET_SingleParticle_HighPt__1up
-  HistoFileSufDown: _JET_SingleParticle_HighPt__1down
-  Symmetrisation: TwoSided
-  Smoothing: 40
-  Exclude: QCD
-
-%Systematic: "JET_Rtrk_Baseline_mass"
-%  Title: "JMS baseline"
-%  Type: HISTO
-%  Category: "Jet uncertainties"
-%  HistoFileSufUp: _JET_Rtrk_Baseline_mass__1up
-%  HistoFileSufDown: _JET_Rtrk_Baseline_mass__1down
-%  Symmetrisation: TwoSided
-%  Smoothing: 40
-%  Exclude: QCD
-
-%Systematic: "JET_Rtrk_Modelling_mass"
-%  Title: "JMS modelling"
-%  Type: HISTO
-%  Category: "Jet uncertainties"
-%  HistoFileSufUp: _JET_Rtrk_Modelling_mass__1up
-%  HistoFileSufDown: _JET_Rtrk_Modelling_mass__1down
-%  Symmetrisation: TwoSided
-%  Smoothing: 40
-%  Exclude: QCD
-
-%Systematic: "JET_Rtrk_TotalStat_mass"
-%  Title: "JMS stat."
-%  Type: HISTO
-%  Category: "Jet uncertainties"
-%  HistoFileSufUp: _JET_Rtrk_TotalStat_mass__1up
-%  HistoFileSufDown: _JET_Rtrk_TotalStat_mass__1down
-%  Symmetrisation: TwoSided
-%  Smoothing: 40
-%  Exclude: QCD
-
-%Systematic: "JET_Rrk_Tracking_mass"
-%  Title: "JMS tracking"
-%  Type: HISTO
-%  Category: "Jet uncertainties"
-%  HistoFileSufUp: _JET_Rrk_Tracking_mass__1up
-%  HistoFileSufDown: _JET_Rrk_Tracking_mass__1down
-%  Symmetrisation: TwoSided
-%  Smoothing: 40
-%  Exclude: QCD
-
 Systematic: "JET_JER_DataVsMC_MC16"
   Title: "JER Data/MC"
   Type: HISTO
@@ -501,28 +401,148 @@ Systematic: "JET_JER_EffectiveNP_7restTerm"
   Smoothing: 40
   Exclude: QCD
 
-% -------------------------------- %
-% ---  JMS/R OBJECT SYSTEMATICS  --- %
-% -------------------------------- %
-
-Systematic: "JET_JMS"
-  Title: "JMS"
+Systematic: "JET_Pileup_OffsetMu"
+  Title: "Pile-up offset mu term"
   Type: HISTO
   Category: "Jet uncertainties"
-  HistoPathUp: "__HISTOPATH__/JMSRSYST/JMSUP/"
-  HistoPathDown: "__HISTOPATH__/JMSRSYST/JMSDOWN/"
-  HistoPathUpRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
-  HistoPathDownRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
+  HistoFileSufUp: _JET_Pileup_OffsetMu__1up
+  HistoFileSufDown: _JET_Pileup_OffsetMu__1down
   Symmetrisation: TwoSided
+  Smoothing: 40
   Exclude: QCD
 
-Systematic: "JET_JMR"
-  Title: "JMR"
+Systematic: "JET_Pileup_OffsetNPV"
+  Title: "Pile-up offset NPV term"
   Type: HISTO
   Category: "Jet uncertainties"
-  HistoPathUp: "__HISTOPATH__/JMSRSYST/JMR/"
-  HistoPathUpRefSample: "__HISTOPATH__/JMSRSYST/JMSRECALC/"
-  Symmetrisation: OneSided
+  HistoFileSufUp: _JET_Pileup_OffsetNPV__1up
+  HistoFileSufDown: _JET_Pileup_OffsetNPV__1down
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
+
+Systematic: "JET_Pileup_PtTerm"
+  Title: "Pile-up offset p_{T} term"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Pileup_PtTerm__1up
+  HistoFileSufDown: _JET_Pileup_PtTerm__1down
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
+
+Systematic: "JET_Pileup_RhoTopology"
+  Title: "#rho topology"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Pileup_RhoTopology__1up
+  HistoFileSufDown: _JET_Pileup_RhoTopology__1down
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
+
+Systematic: "JET_PunchThrough_MC16"
+  Title: "Punch-through correction"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_PunchThrough_MC16__1up
+  HistoFileSufDown: _JET_PunchThrough_MC16__1down
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
+
+% -------------------------------- %
+% --- JMS/R OBJECT SYSTEMATICS --- %
+% -------------------------------- %
+
+Systematic: "JET_Rtrk_Baseline_scaled_mass"
+  Title: "JMS baseline"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Rtrk_Baseline_scaled_mass__1up
+  HistoFileSufDown: _JET_Rtrk_Baseline_scaled_mass__1down
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
+
+Systematic: "JET_Rtrk_ExtraComp_Baseline_scaled_mass"
+  Title: "JMS extra comp. baseline"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Rtrk_ExtraComp_Baseline_scaled_mass__1up
+  HistoFileSufDown: _JET_Rtrk_ExtraComp_Baseline_scaled_mass__1down
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
+
+Systematic: "JET_Rtrk_ExtraComp_Modelling_scaled_mass"
+  Title: "JMS extra comp. modelling"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Rtrk_ExtraComp_Modelling_scaled_mass__1up
+  HistoFileSufDown: _JET_Rtrk_ExtraComp_Modelling_scaled_mass__1down
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
+
+Systematic: "JET_Rtrk_Modelling_scaled_mass"
+  Title: "JMS modelling"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Rtrk_Modelling_scaled_mass__1up
+  HistoFileSufDown: _JET_Rtrk_Modelling_scaled_mass__1down
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
+
+Systematic: "JET_Rtrk_TotalStat_scaled_mass"
+  Title: "JMS total stat."
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Rtrk_TotalStat_scaled_mass__1up
+  HistoFileSufDown: _JET_Rtrk_TotalStat_scaled_mass__1down
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
+
+Systematic: "JET_Rtrk_Tracking1_scaled_mass"
+  Title: "JMS tracking1"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Rtrk_Tracking1_scaled_mass__1up
+  HistoFileSufDown: _JET_Rtrk_Tracking1_scaled_mass__1down
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
+
+Systematic: "JET_Rtrk_Tracking2_scaled_mass"
+  Title: "JMS tracking2"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Rtrk_Tracking2_scaled_mass__1up
+  HistoFileSufDown: _JET_Rtrk_Tracking2_scaled_mass__1down
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
+
+Systematic: "JET_Rtrk_Tracking3_scaled_mass"
+  Title: "JMS tracking3"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_Rtrk_Tracking3_scaled_mass__1up
+  HistoFileSufDown: _JET_Rtrk_Tracking3_scaled_mass__1down
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
+
+Systematic: "JET_SingleParticle_HighPt"
+  Title: "High-p_{T} term"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_SingleParticle_HighPt__1up
+  HistoFileSufDown: _JET_SingleParticle_HighPt__1down
+  Symmetrisation: TwoSided
+  Smoothing: 40
   Exclude: QCD
 
 % ------------------------------ %
@@ -551,8 +571,8 @@ Systematic: "MET_SoftTrk_Scale"
   Title: "MET TST scale"
   Type: HISTO
   Category: "E_{T}^{miss} uncertainties"
-  HistoFileSufUp: _MET_SoftTrk_ScaleUp
-  HistoFileSufDown: _MET_SoftTrk_ScaleDown
+  HistoFileSufUp: _MET_SoftTrk_Scale__1up
+  HistoFileSufDown: _MET_SoftTrk_Scale__1down
   Symmetrisation: TwoSided
   Smoothing: 40
   Exclude: QCD

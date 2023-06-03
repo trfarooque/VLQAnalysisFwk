@@ -22,7 +22,7 @@
     <Option name="EncapsulatedMethodTypeName" modified="Yes">MLP</Option>
     <Option name="NumFolds" modified="Yes">5</Option>
     <Option name="OutputEnsembling" modified="Yes">None</Option>
-    <Option name="SplitExpr" modified="Yes">int([event_number])%int([numFolds])</Option>
+    <Option name="SplitExpr" modified="Yes">Long64_t([event_number])%int([numFolds])</Option>
   </Options>
   <Variables NVar="30">
     <Variable VarIndex="0" Expression="meff" Label="meff" Title="meff" Unit="" Internal="meff" Type="D" Min="1.00073407e+03" Max="7.93033350e+03"/>
@@ -71,5 +71,5 @@
   </Classes>
   <Transformations NTransformations="0"/>
   <MVAPdfs/>
-  <Weights JobName="TMVAClassificationCV" SplitExpr="int([event_number])%int([numFolds])" NumFolds="5" EncapsulatedMethodName="MLP" EncapsulatedMethodTypeName="MLP" OutputEnsembling="None"/>
+  <Weights JobName="TMVAClassificationCV" SplitExpr="Long64_t([event_number])%int([numFolds])" NumFolds="5" EncapsulatedMethodName="MLP" EncapsulatedMethodTypeName="MLP" OutputEnsembling="None"/>
 </MethodSetup>

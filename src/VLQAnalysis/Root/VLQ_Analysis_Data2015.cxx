@@ -2342,7 +2342,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
   if( !(m_outData-> o_channel_type == VLQ_Enums::UNDEFINED || m_outData-> o_channel_type == VLQ_Enums::FULLHAD) ){
     bool checkTriggerMatching = true;
     if( !m_opt -> UseLeptonTrigger()) checkTriggerMatching = false;
-    if( m_opt -> UseMETTriggerOneLep() && trigMETPass && m_outData -> o_AO_met -> Pt() > 200 ) checkTriggerMatching = false;
+    if( m_opt -> UseMETTriggerOneLep() && trigMETPass && m_outData -> o_AO_met -> Pt() > 250 ) checkTriggerMatching = false;
     if( checkTriggerMatching ){
 
       bool ele_ch = (m_outData-> o_channel_type == VLQ_Enums::ELECTRON) || (m_outData-> o_channel_type == VLQ_Enums::ELEL);
@@ -2394,14 +2394,14 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     isElMuChannel     = ( m_outData-> o_channel_type == VLQ_Enums::ELMU )     && (trigElecPass || trigMuonPass) && isTriggerMatched;
   }
   if(m_opt->UseMETTriggerOneLep()){
-    isElectronChannelHMET = ( m_outData-> o_channel_type == VLQ_Enums::ELECTRON ) && ( trigMETPass && m_outData -> o_AO_met -> Pt() > 200 );
-    isMuonChannelHMET     = ( m_outData-> o_channel_type == VLQ_Enums::MUON )     && ( trigMETPass && m_outData -> o_AO_met -> Pt() > 200 );
-    isElElChannelHMET = ( m_outData-> o_channel_type == VLQ_Enums::ELEL ) && ( trigMETPass && m_outData -> o_AO_met -> Pt() > 200 );
-    isMuMuChannelHMET     = ( m_outData-> o_channel_type == VLQ_Enums::MUMU )     && ( trigMETPass && m_outData -> o_AO_met -> Pt() > 200 );
-    isElMuChannelHMET     = ( m_outData-> o_channel_type == VLQ_Enums::ELMU )     && ( trigMETPass && m_outData -> o_AO_met -> Pt() > 200 );
+    isElectronChannelHMET = ( m_outData-> o_channel_type == VLQ_Enums::ELECTRON ) && ( trigMETPass && m_outData -> o_AO_met -> Pt() > 250 );
+    isMuonChannelHMET     = ( m_outData-> o_channel_type == VLQ_Enums::MUON )     && ( trigMETPass && m_outData -> o_AO_met -> Pt() > 250 );
+    isElElChannelHMET = ( m_outData-> o_channel_type == VLQ_Enums::ELEL ) && ( trigMETPass && m_outData -> o_AO_met -> Pt() > 250 );
+    isMuMuChannelHMET     = ( m_outData-> o_channel_type == VLQ_Enums::MUMU )     && ( trigMETPass && m_outData -> o_AO_met -> Pt() > 250 );
+    isElMuChannelHMET     = ( m_outData-> o_channel_type == VLQ_Enums::ELMU )     && ( trigMETPass && m_outData -> o_AO_met -> Pt() > 250 );
   }
 
-  bool is0LeptonChannel   = ( m_outData-> o_channel_type == VLQ_Enums::FULLHAD )  && ( trigMETPass && m_outData -> o_AO_met -> Pt() > 200 );
+  bool is0LeptonChannel   = ( m_outData-> o_channel_type == VLQ_Enums::FULLHAD )  && ( trigMETPass && m_outData -> o_AO_met -> Pt() > 250 );
 
   if( isElectronChannel || isElectronChannelHMET ){
     m_outData-> o_channel_type = VLQ_Enums::ELECTRON;

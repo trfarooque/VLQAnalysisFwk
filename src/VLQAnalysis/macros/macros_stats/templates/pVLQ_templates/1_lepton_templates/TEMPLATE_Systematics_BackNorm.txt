@@ -6,8 +6,8 @@ Systematic: "luminosity"
   Title: "luminosity"
   Type: OVERALL
   Category: Others
-  OverallUp: 0.017
-  OverallDown: -0.017
+  OverallUp: 0.0083
+  OverallDown: -0.0083
 %  Exclude: QCD,QCD0L
 
 % ------------------------- %
