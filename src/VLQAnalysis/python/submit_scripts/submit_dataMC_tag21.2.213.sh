@@ -37,7 +37,7 @@ fi
 
 campaigns=`echo $campaigns | tr "," " "`
 
-valid_processes="data pvlq ttbar singletop Wjets Zjets diboson topEW dijet"
+valid_processes="data pvlq ttbar singletop Wjets Zjets diboson topEW dijet ttbar_alt singletop_alt"
 
 # Lepton channel specific options
 doOneLeptonAna="false" 
@@ -62,6 +62,7 @@ process_list=`echo $processes | tr "," " "`
 for process_name in ${process_list}; do
     # Process specific options
     runTtbar="false"
+    runTtSyst="false"
     scaleTtbarHtSlices="false"
     useSlices="false"
     runData="false"
@@ -71,6 +72,7 @@ for process_name in ${process_list}; do
     runOtherBkgd="false"
     runDijet="false"
     runSingletop="false"
+    runStSyst="false"
     runWjets="false"
     runZjets="false"
     runTopEW="false"
@@ -78,6 +80,8 @@ for process_name in ${process_list}; do
     splitSTChannels="false"
     splitVLQDecays="false"
     kinRWList="JETSN,MEFFRED"
+
+    sample_dat_pattern="samples_info.tag-21.2.213-htztx-syst-1L"
     
     if in_list "$valid_processes" " " ${process_name}; then
 	if [ ${process_name} == "ttbar" ]; then
@@ -85,6 +89,12 @@ for process_name in ${process_list}; do
 	    scaleTtbarHtSlices="true"
 	    useSlices="true"
 	    kinRWList="JETSN,MEFFRED"
+	elif [ ${process_name} == "ttbar_alt" ]; then
+            runTtbar="true"
+	    useSlices="true"
+	    kinRWList="JETSN,MEFFRED"
+            runTtSyst="true"
+            sample_dat_pattern="samples_info.tag-21.2.213-htztx-syst-TTBARALT-1L"
 	elif [ ${process_name} == "data" ]; then
 	    runData="true"
 	    if [ ${channel} == "1lep" ]; then
@@ -101,6 +111,13 @@ for process_name in ${process_list}; do
 		runSingletop="true"
 		splitSTChannels="true"
 		kinRWList="JETSN,MEFFRED"
+	    fi
+	    if [ ${process_name} == "singletop_alt" ]; then
+		runSingletop="true"
+		splitSTChannels="true"
+		kinRWList="JETSN,MEFFRED"
+		runStSyst="true"
+		sample_dat_pattern="samples_info.tag-21.2.213-htztx-syst-STOPALT-1L" 
 	    fi
 	    if [ ${process_name} == "Wjets" ]; then
 		runWjets="true"
@@ -130,23 +147,23 @@ for process_name in ${process_list}; do
     do
 	python ../Submit_VLQAnalysis_new.py dryrun=false campaign=${campaign} --sleep=2 --producetarball=true \
 	    --inputDir=/data/at3/scratch2/cbuxovaz/VLQAnalysisPairProdRun2-21.2.213-htztx-sys_0/${process_name}/ \
-	    --sampleDat=samples_info/samples_info.tag-21.2.213-htztx-syst-1L.${campaign}.dat  \
+	    --sampleDat=samples_info/${sample_dat_pattern}.${campaign}.dat \
 	    --outputDirSuffix=dataMC_TRACK_DL1r_FixedCutBEff_77_${process_name}_${channel}_${campaign}_NOW \
-	    --queue=at3 --NFILESPLIT=100 --NMERGE=1 --removeNull=TRUE \
-	    --reweightKinematics=true --kinRWList=${kinRWList} --doKinRWSmoothing=true --DOKINRWSYST=FALSE --deriveReweighting=false \
+	    --queue=at3 --NFILESPLIT=250 --NMERGE=1 --removeNull=TRUE \
+	    --reweightKinematics=true --kinRWList=${kinRWList} --doKinRWSmoothing=true --DOKINRWSYST=false --deriveReweighting=true \
 	    --runData=${runData} --runTOPQ1Data=${runTOPQ1Data} --runTOPQ4Data=${runTOPQ4Data} --runOtherBkgd=${runOtherBkgd} \
-	    --runTtbar=${runTtbar} --useSlices=${useSlices} --scaleTtbarHtSlices=${scaleTtbarHtSlices} --runTtSyst=false \
-	    --runSingleTop=${runSingletop} --splitSTChannels=${splitSTChannels} --runStSyst=false \
+	    --runTtbar=${runTtbar} --useSlices=${useSlices} --scaleTtbarHtSlices=${scaleTtbarHtSlices} --filterType=APPLYFILTER \
+	    --runSingleTop=${runSingletop} --splitSTChannels=${splitSTChannels} --runStSyst=${runStSyst} --runTtSyst=${runTtSyst} \
 	    --runWjets=${runWjets} --runZjets=${runZjets} --runTopEW=${runTopEW} --runDibosons=${runDibosons} \
 	    --runDijet=${runDijet} --runQCD=false \
 	    --runSignals=${runSignals} --splitVLQDecays=${splitVLQDecays} --RUNPAIRVLQ=true --RUNSINGLEVLQ=false \
 	    --doOneLeptonAna=${doOneLeptonAna} --doTwoLeptonAna=false --doZeroLeptonAna=${doZeroLeptonAna} \
-	    --dumpHistos=true --dumpOverlapTree=false --dumpTree=false --doTruthAnalysis=false --verboseOutput=false --makeMVAInputTree=false \
+	    --dumpHistos=true --dumpOverlapTree=false --dumpTree=false --doTruthAnalysis=false --verboseOutput=false --makeMVAInputTree=false --makeMVAInputHists=false \
 	    --otherVariables=true --doBlind=false \
 	    --useObjectSyst=false --useWeightSyst=false --onlyDumpSystHistograms=true \
 	    --useLargeRJets=false --doLargeRJetsBOT=false \
 	    --doExpSys=false --doTheorySys=false --DOPDFSYS=false \
-	    --doExclusiveJetRegions=false --doLowBRegions=true --doLowJRegions=false --doSplitEMu=false --doSplitMtb=false \
+	    --doExclusiveJetRegions=false --doLowBRegions=false --doLowJRegions=false --doSplitEMu=false --doSplitMtb=false \
 	    --doFitRegions=false --doValidnRegions=false --doPreselection=true --doPreselSys=true --doExtendedPreselection=false --doLooseSystRegions=false \
 	    --doSingleVLQRegions=false --doPairVLQRegions=true --doRecoVLQ=pair --DoOldPairProdRegions=false \
 	    --doOldBoost=false \
@@ -157,10 +174,10 @@ for process_name in ${process_list}; do
 	    --TRFCDI=xAODBTaggingEfficiency/13TeV/2017-21-13TeV-MC16-CDI-2019-07-30_v1.root \
 	    --btagCollection=TRACK --trkJetPtCut=20. \
 	    --applyTtbarNNLOCorrection=false --applyVJetsSherpa22RW=false --applyTtbbCorrection=false \
-	    --filterType=APPLYFILTER \
 	    --jetPtCut=25 --fwdJetPtCut=20 --RCJetPtCut=200 --RCNsubjetsCut=0 \
 	    --leptopOpt=VETO_RCMATCH --maxLeptopDR=1.0 --minMeffCut=600 --RCCollection=VR_rho550 \
-	    --APPLYMVA=false --MVAWEIGHTFILE=TMVA/weightsCV_1L/TMVAClassificationCV_MLP.weights.xml --lowMVACutOneLep=0.27 --highMVACutOneLep=0.7
+	    --APPLYMVA=true --MVAWEIGHTFILE=TMVA/weightsCV_1L_30vars_allbkgd/TMVAClassificationCV_MLP.weights.xml \
+	    --lowMVACutOneLep=0.17 --highMVACutOneLep=0.59
     done
 
 done

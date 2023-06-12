@@ -302,8 +302,7 @@
 	"sumOfWeights_weight_pmg_isr_muRfac10__fsr_muRfac20": 0.987569,
 	"threshold_weight_pmg_isr_muRfac10__fsr_muRfac05": 28531.991980,
 	"sumOfWeights_weight_pmg_isr_muRfac10__fsr_muRfac05": 0.923549
-    }
-}{
+    },
     "700338.mc16e": {
         "crossSection": 203.861058282, 
         "nWeightedEvents": 863166624743369.9, 
@@ -663,8 +662,7 @@
         "nWeightedEvents_muR10__muF20": 0.0, 
         "nWeightedEvents_muR200__muF100": 0.0, 
         "nWeightedEvents_muR20__muF10": 0.0
-    }
-}{
+    },
     "700320.mc16e": {
         "crossSection": 55.38770992800001, 
         "nWeightedEvents": 163075659417543.12, 
@@ -1204,8 +1202,7 @@
         "nWeightedEvents_muR10__muF20": 0.0, 
         "nWeightedEvents_muR200__muF100": 0.0, 
         "nWeightedEvents_muR20__muF10": 0.0
-    }
-}{
+    },
     "410644.mc16e": {
         "crossSection": 2.061459, 
         "nWeightedEvents": 6699455.012125969, 
@@ -1385,8 +1382,7 @@
         "nWeightedEvents_muR10__muF20": 0.0, 
         "nWeightedEvents_muR200__muF100": 872453475.2385831, 
         "nWeightedEvents_muR20__muF10": 0.0
-    }
-}{
+    },
     "364702.mc16e": {
         "crossSection": 23997964.5713, 
         "nWeightedEvents": 27925.9465983137
