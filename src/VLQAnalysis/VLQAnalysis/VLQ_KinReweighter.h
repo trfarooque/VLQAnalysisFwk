@@ -50,6 +50,7 @@ public:
     //
     double GetKinReweight( const int kinematic, const std::string systematic ="") const;
     double GetKinRwSyst(std::string systematic) const;
+    double GetNJetsKinRwSyst(std::string systematic) const;
 
 private:
     VLQ_OutputData *m_outData;

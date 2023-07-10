@@ -298,6 +298,42 @@ bool VLQ_WeightManager::AddKinReweightings(  ){
 
 //______________________________________________________________________________
 //
+bool VLQ_WeightManager::AddKinRwSystPVLQ(){
+
+  if( m_vlq_opt -> ReweightKinematics() && m_vlq_opt->DoKinRwSyst() ){
+
+    if( (m_vlq_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP) ){
+
+      std::string replace = ( (m_vlq_opt->StrSampleName().find("SINGLETOPSCHAN") != std::string::npos)
+                              || (m_vlq_opt->StrSampleName().find("SINGLETOPTCHAN") != std::string::npos) )
+        ? "" : "weight_RW_MEFFRED";
+
+      AddAndInitWeight("weight_RW_MEFFRED_5JEX_UP", "", false, false, "", replace);
+      AddAndInitWeight("weight_RW_MEFFRED_5JEX_DOWN", "", false, false, "", replace);
+
+      AddAndInitWeight("weight_RW_MEFFRED_6JEX_UP", "", false, false, "", replace);
+      AddAndInitWeight("weight_RW_MEFFRED_6JEX_DOWN", "", false, false, "", replace);
+
+      AddAndInitWeight("weight_RW_MEFFRED_7JEX_UP", "", false, false, "", replace);
+      AddAndInitWeight("weight_RW_MEFFRED_7JEX_DOWN", "", false, false, "", replace);
+
+      AddAndInitWeight("weight_RW_MEFFRED_8JIN_UP", "", false, false, "", replace);
+      AddAndInitWeight("weight_RW_MEFFRED_8JIN_DOWN", "", false, false, "", replace);
+
+    }
+    else if((m_opt -> SampleName() == SampleName::ZJETS) || (m_opt -> SampleName() == SampleName::WJETS)){
+      AddAndInitWeight("weight_RW_JETSN_UP", "", false, false, "", "weight_RW_JETSN");
+      AddAndInitWeight("weight_RW_JETSN_DOWN", "", false, false, "", "weight_RW_JETSN");
+    }
+
+  }
+
+  return true;
+
+}
+
+//______________________________________________________________________________
+//
 bool VLQ_WeightManager::AddKinRwSyst(){
   
   if( m_vlq_opt -> ReweightKinematics() && m_vlq_opt->DoKinRwSyst() ){
@@ -308,18 +344,19 @@ bool VLQ_WeightManager::AddKinRwSyst(){
 			      || (m_vlq_opt->StrSampleName().find("SINGLETOPTCHAN") != std::string::npos) ) 
 	? "" : "weight_RW_MEFFRED";
  
+      
       AddAndInitWeight("weight_RW_MEFFRED_3JEX_UP", "", false, false, "", replace);
       AddAndInitWeight("weight_RW_MEFFRED_3JEX_DOWN", "", false, false, "", replace);
 
       AddAndInitWeight("weight_RW_MEFFRED_4JEX_UP", "", false, false, "", replace);
       AddAndInitWeight("weight_RW_MEFFRED_4JEX_DOWN", "", false, false, "", replace);
-
+     
       AddAndInitWeight("weight_RW_MEFFRED_5JEX_UP", "", false, false, "", replace);
       AddAndInitWeight("weight_RW_MEFFRED_5JEX_DOWN", "", false, false, "", replace);
 
       AddAndInitWeight("weight_RW_MEFFRED_6JEX_UP", "", false, false, "", replace);
       AddAndInitWeight("weight_RW_MEFFRED_6JEX_DOWN", "", false, false, "", replace);
-
+      
       AddAndInitWeight("weight_RW_MEFFRED_7JIN_UP", "", false, false, "", replace);
       AddAndInitWeight("weight_RW_MEFFRED_7JIN_DOWN", "", false, false, "", replace);
 
@@ -352,10 +389,10 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
     AddAndInitWeight("weight_jvt_DOWN", "", false, true, "weight_jvt_JET_JvtEfficiency__1down", "weight_jvt");
 
     //PU systematics
-    //if(m_vlq_opt->UsePileUpWeight()){
-    //AddAndInitWeight("weight_pu_UP", "", false, true, "weight_pu_PRW_DATASF__1up", "weight_pu");
-    //AddAndInitWeight("weight_pu_DOWN", "", false, true, "weight_pu_PRW_DATASF__1down", "weight_pu");
-    //}
+    if(m_vlq_opt->UsePileUpWeight()){
+      AddAndInitWeight("weight_pu_UP", "", false, true, "weight_prw_PRW_DATASF__1up", "weight_pu");
+      AddAndInitWeight("weight_pu_DOWN", "", false, true, "weight_prw_PRW_DATASF__1down", "weight_pu");
+    }
 
     //Lepton SF systematics
     if(m_vlq_opt->UseLeptonsSF()){
@@ -406,12 +443,14 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
       AddAndInitWeight(Form("%s_B_EV_Down_%i",btag_name.c_str(),i), "", false, btag_isinput, Form("%s_FT_EFF_Eigen_B_%i__1down",btag_name.c_str(),i), btag_name);
     }
 
-    for(int i = 0; i <=4; i++ ){
+    int n_charm_evs = (m_vlq_opt->UseSVLQConfig()) ? 4 : 3;
+    for(int i = 0; i <=n_charm_evs; i++ ){
       AddAndInitWeight(Form("%s_C_EV_Up_%i",btag_name.c_str(),i), "", false, btag_isinput, Form("%s_FT_EFF_Eigen_C_%i__1up",btag_name.c_str(),i), btag_name);
       AddAndInitWeight(Form("%s_C_EV_Down_%i",btag_name.c_str(),i), "", false, btag_isinput, Form("%s_FT_EFF_Eigen_C_%i__1down",btag_name.c_str(),i), btag_name);
     }
 
-    for(int i = 0; i <=5; i++ ){
+    int n_light_evs = (m_vlq_opt->UseSVLQConfig()) ? 5 : 6;
+    for(int i = 0; i <=n_light_evs; i++ ){
       AddAndInitWeight(Form("%s_Light_EV_Up_%i",btag_name.c_str(),i), "", false, btag_isinput, Form("%s_FT_EFF_Eigen_Light_%i__1up",btag_name.c_str(),i), btag_name);
       AddAndInitWeight(Form("%s_Light_EV_Down_%i",btag_name.c_str(),i), "", false, btag_isinput, Form("%s_FT_EFF_Eigen_Light_%i__1down",btag_name.c_str(),i), btag_name);
     }
@@ -493,20 +532,42 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
 
     //V+jets systematics
     if( (m_opt -> SampleName() == SampleName::WJETS) || (m_opt -> SampleName() == SampleName::ZJETS) ){
-      //V+jets PMG weights
-      AddAndInitWeight("weight_pmg_muR05__muF05","",false, true, "weight_pmg_MUR05__MUF05__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
-      AddAndInitWeight("weight_pmg_muR05__muF10","",false, true, "weight_pmg_MUR05__MUF1__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
-      AddAndInitWeight("weight_pmg_muR10__muF05","",false, true, "weight_pmg_MUR1__MUF05__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
-      AddAndInitWeight("weight_pmg_muR10__muF10","",false, true, "weight_pmg_MUR1__MUF1__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
-      AddAndInitWeight("weight_pmg_muR10__muF20","",false, true, "weight_pmg_MUR1__MUF2__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
-      AddAndInitWeight("weight_pmg_muR20__muF10","",false, true, "weight_pmg_MUR2__MUF1__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
-      AddAndInitWeight("weight_pmg_muR20__muF20","",false, true, "weight_pmg_MUR2__MUF2__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
-
-      //parametrised weights
-      AddAndInitWeight("weight_pmg_ckkw15","",false, true, "ckkw15_Weight", "weight_mc","F")->AddFlagAtBit(REWEIGHT, true);
-      AddAndInitWeight("weight_pmg_ckkw30","",false, true, "ckkw30_Weight", "weight_mc","F")->AddFlagAtBit(REWEIGHT, true);
-      AddAndInitWeight("weight_pmg_qsf025","",false, true, "qsf025_Weight", "weight_mc","F")->AddFlagAtBit(REWEIGHT, true);
-      AddAndInitWeight("weight_pmg_qsf4","",false, true, "qsf4_Weight", "weight_mc","F")->AddFlagAtBit(REWEIGHT, true);
+      if(m_vlq_opt->UseSVLQConfig()){
+	//V+jets PMG weights
+	AddAndInitWeight("weight_pmg_muR05__muF05","",false, true, "weight_pmg_MUR05__MUF05__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_muR05__muF10","",false, true, "weight_pmg_MUR05__MUF1__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_muR10__muF05","",false, true, "weight_pmg_MUR1__MUF05__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_muR10__muF10","",false, true, "weight_pmg_MUR1__MUF1__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_muR10__muF20","",false, true, "weight_pmg_MUR1__MUF2__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_muR20__muF10","",false, true, "weight_pmg_MUR2__MUF1__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_muR20__muF20","",false, true, "weight_pmg_MUR2__MUF2__PDF261000", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	
+	//parametrised weights
+	AddAndInitWeight("weight_pmg_ckkw15","",false, true, "ckkw15_Weight", "weight_mc","F")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_ckkw30","",false, true, "ckkw30_Weight", "weight_mc","F")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_qsf025","",false, true, "qsf025_Weight", "weight_mc","F")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_qsf4","",false, true, "qsf4_Weight", "weight_mc","F")->AddFlagAtBit(REWEIGHT, true);
+      }
+      else{
+	AddAndInitWeight("weight_pmg_muR05__muF05","",false, true, 
+			 "weight_pmg_ME__ONLY__MUR05__MUF05__PDF303200__PSMUR05__PSMUF05", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_muR05__muF10","",false, true,
+                         "weight_pmg_ME__ONLY__MUR05__MUF1__PDF303200__PSMUR05__PSMUF1", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_muR10__muF05","",false, true,
+                         "weight_pmg_ME__ONLY__MUR1__MUF05__PDF303200__PSMUR1__PSMUF05", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_muR10__muF20","",false, true,
+                         "weight_pmg_ME__ONLY__MUR1__MUF2__PDF303200__PSMUR1__PSMUF2", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_muR20__muF10","",false, true,
+                         "weight_pmg_ME__ONLY__MUR2__MUF1__PDF303200__PSMUR2__PSMUF1", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_muR20__muF20","",false, true,
+                         "weight_pmg_ME__ONLY__MUR2__MUF2__PDF303200__PSMUR2__PSMUF2", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_muR10__muF10_assew","",false, true,
+                         "weight_pmg_ME__ONLY__MUR1__MUF1__PDF303200__ASSEW", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_muR10__muF10_multiassew","",false, true,
+                         "weight_pmg_ME__ONLY__MUR1__MUF1__PDF303200__MULTIASSEW", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+	AddAndInitWeight("weight_pmg_muR10__muF10_expassew","",false, true,
+                         "weight_pmg_ME__ONLY__MUR1__MUF1__PDF303200__EXPASSEW", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+      }
 
     }
 
@@ -908,6 +969,62 @@ bool VLQ_WeightManager::SetKinReweightings(  ){
 
 //______________________________________________________________________________
 //
+bool VLQ_WeightManager::SetKinRwSystPVLQ(){
+
+  double weight_up = 1.;
+  double weight_dn = 1.;
+  double weight_nom = 1.;
+  std::string wname = "weight_RW";
+
+  if((m_vlq_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP)) wname += "_MEFFRED";
+  else if((m_opt -> SampleName() == SampleName::ZJETS) || (m_opt -> SampleName() == SampleName::WJETS)) wname += "_JETSN";
+
+  if(m_kinRw && ( (m_vlq_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP) )){
+    weight_nom = GetWeightObject(wname)->GetComponentValue();
+    weight_up = m_kinRw->GetKinRwSyst("_upBand2S");
+    weight_dn = m_kinRw->GetKinRwSyst("_dnBand2S");
+  }
+  else if(m_kinRw && ( (m_opt -> SampleName() == SampleName::ZJETS) || (m_opt -> SampleName() == SampleName::WJETS) )){
+    weight_nom = GetWeightObject(wname)->GetComponentValue(); 
+    weight_up  = m_kinRw->GetNJetsKinRwSyst("UP");
+    weight_dn  = m_kinRw->GetNJetsKinRwSyst("DOWN");
+  }
+
+  if( (m_vlq_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP) ){
+    
+    if( m_vlq_outData -> o_jets_n < 5 ) return true;
+    else if( m_vlq_outData -> o_jets_n == 5 ) wname += "_5JEX";
+    else if( m_vlq_outData -> o_jets_n == 6 ) wname += "_6JEX";
+    else if( m_vlq_outData -> o_jets_n == 7 ) wname += "_7JEX";
+    else if( m_vlq_outData -> o_jets_n >= 8 ) wname += "_8JIN";
+
+    SetSystematicComponent("weight_RW_MEFFRED_5JEX_UP", weight_nom);
+    SetSystematicComponent("weight_RW_MEFFRED_5JEX_DOWN", weight_nom);
+
+    SetSystematicComponent("weight_RW_MEFFRED_6JEX_UP", weight_nom);
+    SetSystematicComponent("weight_RW_MEFFRED_6JEX_DOWN", weight_nom);
+
+    SetSystematicComponent("weight_RW_MEFFRED_7JEX_UP", weight_nom);
+    SetSystematicComponent("weight_RW_MEFFRED_7JEX_DOWN", weight_nom);
+
+    SetSystematicComponent("weight_RW_MEFFRED_8JIN_UP", weight_nom);
+    SetSystematicComponent("weight_RW_MEFFRED_8JIN_DOWN", weight_nom);
+
+    UpdateSystematicComponent(wname+"_UP", weight_up);
+    UpdateSystematicComponent(wname+"_DOWN", weight_dn);
+
+  }
+  else if( (m_opt -> SampleName() == SampleName::ZJETS) || (m_opt -> SampleName() == SampleName::WJETS) ){
+    SetSystematicComponent(wname+"_UP", weight_up);
+    SetSystematicComponent(wname+"_DOWN", weight_dn);
+  }
+
+  return true;
+
+}
+
+//______________________________________________________________________________
+//
 bool VLQ_WeightManager::SetKinRwSyst(){
 
   double weight_up = 1.;
@@ -928,7 +1045,7 @@ bool VLQ_WeightManager::SetKinRwSyst(){
 
     SetSystematicComponent("weight_RW_MEFFRED_4JEX_UP", weight_nom);
     SetSystematicComponent("weight_RW_MEFFRED_4JEX_DOWN", weight_nom);
-
+      
     SetSystematicComponent("weight_RW_MEFFRED_5JEX_UP", weight_nom);
     SetSystematicComponent("weight_RW_MEFFRED_5JEX_DOWN", weight_nom);
 
@@ -938,12 +1055,12 @@ bool VLQ_WeightManager::SetKinRwSyst(){
     SetSystematicComponent("weight_RW_MEFFRED_7JIN_UP", weight_nom);
     SetSystematicComponent("weight_RW_MEFFRED_7JIN_DOWN", weight_nom);
 
-
     if( m_vlq_outData -> o_jets_n == 3 ) wname += "_3JEX";
     else if( m_vlq_outData -> o_jets_n == 4 ) wname += "_4JEX";
     else if( m_vlq_outData -> o_jets_n == 5 ) wname += "_5JEX";
     else if( m_vlq_outData -> o_jets_n == 6 ) wname += "_6JEX";
-    else if( m_vlq_outData -> o_jets_n >= 7 ) wname += "_7JIN";
+    else if( m_vlq_outData -> o_jets_n >= 7) wname += "_7JIN";
+
 
     UpdateSystematicComponent(wname+"_UP", weight_up);
     UpdateSystematicComponent(wname+"_DOWN", weight_dn);

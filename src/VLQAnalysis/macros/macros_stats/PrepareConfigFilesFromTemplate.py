@@ -335,14 +335,17 @@ for counter,sample in enumerate(Signals):
                         for channel in LepChannels:    
                             corrected_line += "\n"
                             if reg['type']=="VALIDATION":
-                                corrected_line += "Region: " + reg['name'] + "_VR" + channel + "\n"
+                                region_name_discriminant=""
+                                if(reg['discriminant']):
+                                    region_name_discriminant = "_"+reg['discriminant']
+                                corrected_line += "Region: " + reg['name'] + region_name_discriminant + "_VR" + channel + "\n"
                             else:
                                 corrected_line += "Region: " + reg['name'] + channel + "\n"
                             corrected_line += "Type: " + reg['type'] + "\n"
 
                             reg_discriminant = discriminant
-                            if(reg['type']=="VALIDATION"):
-                                reg_discriminant = discriminant_VR
+                            if(reg['type']=="VALIDATION" and reg['discriminant']):
+                                    reg_discriminant = reg['discriminant']
 
                             if (discriminant=="recoVLQ0_m"):
                                 if('0Hex' in reg['name']):
@@ -351,8 +354,8 @@ for counter,sample in enumerate(Signals):
                                     reg_discriminant = "Ht_" + discriminant
 
                             corrected_line += "HistoName: " + reg['name'].replace("HTX_","") + channel + "_" + reg_discriminant + "\n"
-                            if(reg['type']=="VALIDATION"):
-                                corrected_line += "VariableTitle: " + discriminant_VR_title +"\n"
+                            if(reg['type']=="VALIDATION" and reg['xtitle']):
+                                corrected_line += "VariableTitle: " + reg['xtitle'] +"\n"
                             else: 
                                 corrected_line += "VariableTitle: " + discriminant_title +"\n"
                             corrected_line += "Binning: " + reg[binning_key] + "\n"

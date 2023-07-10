@@ -16,7 +16,6 @@ CommonObjectSystematics += [getSystematics(name="nominal",nameUp="nominal",oneSi
 ## Electron
 CommonObjectSystematics += [getSystematics(name="EG_RESOLUTION_ALL",nameUp="EG_RESOLUTION_ALL__1up",nameDown="EG_RESOLUTION_ALL__1down",oneSided=False)]
 CommonObjectSystematics += [getSystematics(name="EG_SCALE_ALL",nameUp="EG_SCALE_ALL__1up",nameDown="EG_SCALE_ALL__1down",oneSided=False)]
-CommonObjectSystematics += [getSystematics(name="EG_SCALE_AF2",nameUp="EG_SCALE_AF2__1up",nameDown="EG_SCALE_AF2__1down",oneSided=False)] #
 ## Jets
 CommonObjectSystematics += [getSystematics(name="JET_BJES_Response",nameUp="JET_BJES_Response__1up",nameDown="JET_BJES_Response__1down",oneSided=False)]
 CommonObjectSystematics += [getSystematics(name="JET_EffectiveNP_Detector1",nameUp="JET_EffectiveNP_Detector1__1up",nameDown="JET_EffectiveNP_Detector1__1down",oneSided=False)]
@@ -28,8 +27,6 @@ CommonObjectSystematics += [getSystematics(name="JET_EffectiveNP_Modelling1",nam
 CommonObjectSystematics += [getSystematics(name="JET_EffectiveNP_Modelling2",nameUp="JET_EffectiveNP_Modelling2__1up",nameDown="JET_EffectiveNP_Modelling2__1down",oneSided=False)]
 CommonObjectSystematics += [getSystematics(name="JET_EffectiveNP_Modelling3",nameUp="JET_EffectiveNP_Modelling3__1up",nameDown="JET_EffectiveNP_Modelling3__1down",oneSided=False)]
 CommonObjectSystematics += [getSystematics(name="JET_EffectiveNP_Modelling4",nameUp="JET_EffectiveNP_Modelling4__1up",nameDown="JET_EffectiveNP_Modelling4__1down",oneSided=False)]
-CommonObjectSystematics += [getSystematics(name="JET_EffectiveNP_R10_Mixed1",nameUp="JET_EffectiveNP_R10_Mixed1__1up",nameDown="JET_EffectiveNP_R10_Mixed1__1down",oneSided=False)]
-CommonObjectSystematics += [getSystematics(name="JET_EffectiveNP_R10_Modelling1",nameUp="JET_EffectiveNP_R10_Modelling1__1up",nameDown="JET_EffectiveNP_R10_Modelling1__1down",oneSided=False)]
 CommonObjectSystematics += [getSystematics(name="JET_EffectiveNP_Statistical1",nameUp="JET_EffectiveNP_Statistical1__1up",nameDown="JET_EffectiveNP_Statistical1__1down",oneSided=False)]
 CommonObjectSystematics += [getSystematics(name="JET_EffectiveNP_Statistical2",nameUp="JET_EffectiveNP_Statistical2__1up",nameDown="JET_EffectiveNP_Statistical2__1down",oneSided=False)]
 CommonObjectSystematics += [getSystematics(name="JET_EffectiveNP_Statistical3",nameUp="JET_EffectiveNP_Statistical3__1up",nameDown="JET_EffectiveNP_Statistical3__1down",oneSided=False)]
@@ -76,11 +73,6 @@ CommonObjectSystematics += [getSystematics(name="JET_JER_EffectiveNP_6__1up",nam
 CommonObjectSystematics += [getSystematics(name="JET_JER_EffectiveNP_7restTerm__1up",nameUp="JET_JER_EffectiveNP_7restTerm__1up",nameDown="JET_JER_EffectiveNP_7restTerm__1down",oneSided=False)]
 CommonObjectSystematics += [getSystematics(name="JET_JER_DataVsMC_MC16",nameUp="JET_JER_DataVsMC_MC16__1up",nameDown="JET_JER_DataVsMC_MC16__1down",oneSided=False)]
 #CommonObjectSystematics += [getSystematics(name="JET_JMR__1up",nameUp="JET_JMR__1up",nameDown="",oneSided=True)]
-CommonObjectSystematics += [getSystematics(name="JET_JetTagSF_Dijet_Modelling",nameUp="JET_JetTagSF_Dijet_Modelling__1up",nameDown="JET_JetTagSF_Dijet_Modelling__1down",oneSided=False)]
-CommonObjectSystematics += [getSystematics(name="JET_JetTagSF_Gammajet_Modelling",nameUp="JET_JetTagSF_Gammajet_Modelling__1up",nameDown="JET_JetTagSF_Gammajet_Modelling__1down",oneSided=False)]
-CommonObjectSystematics += [getSystematics(name="JET_JetTagSF_Hadronisation",nameUp="JET_JetTagSF_Hadronisation__1up",nameDown="JET_JetTagSF_Hadronisation__1down",oneSided=False)]
-CommonObjectSystematics += [getSystematics(name="JET_JetTagSF_MatrixElement",nameUp="JET_JetTagSF_MatrixElement__1up",nameDown="JET_JetTagSF_MatrixElement__1down",oneSided=False)]
-CommonObjectSystematics += [getSystematics(name="JET_JetTagSF_Radiation",nameUp="JET_JetTagSF_Radiation__1up",nameDown="JET_JetTagSF_Radiation__1down",oneSided=False)]
 #MET
 CommonObjectSystematics += [getSystematics(name="MET_SoftTrk_ResoPara",nameUp="MET_SoftTrk_ResoPara",nameDown="",oneSided=True)]
 CommonObjectSystematics += [getSystematics(name="MET_SoftTrk_ResoPerp",nameUp="MET_SoftTrk_ResoPerp",nameDown="",oneSided=True)]
@@ -92,10 +84,6 @@ CommonObjectSystematics += [getSystematics(name="MUON_SCALE",nameUp="MUON_SCALE_
 CommonObjectSystematics += [getSystematics(name="MUON_SAGITTA_RESBIAS",nameUp="MUON_SAGITTA_RESBIAS__1up",nameDown="MUON_SAGITTA_RESBIAS__1down",oneSided=False)]
 #CommonObjectSystematics += [getSystematics(name="MUON_SAGITTA_RHO",nameUp="MUON_SAGITTA_RHO__1up",nameDown="MUON_SAGITTA_RHO__1down",oneSided=False)]
 CommonObjectSystematics += [getSystematics(name="MUON_SAGITTA_DATASTAT",nameUp="MUON_SAGITTA_DATASTAT__1up",nameDown="MUON_SAGITTA_DATASTAT__1down",oneSided=False)]
-# b-tagging
-CommonObjectSystematics += [getSystematics(name="bTag_B_0",nameUp="bTag_B_0__1up",nameDown="bTag_B_0__1down",oneSided=False)]
-CommonObjectSystematics += [getSystematics(name="bTag_Light_0",nameUp="bTag_Light_0__1up",nameDown="bTag_Light_0__1down",oneSided=False)]
-CommonObjectSystematics += [getSystematics(name="bTag_Light_1",nameUp="bTag_Light_1__1up",nameDown="bTag_Light_1__1down",oneSided=False)]
 
 ##______________________________________________________________________
 ##

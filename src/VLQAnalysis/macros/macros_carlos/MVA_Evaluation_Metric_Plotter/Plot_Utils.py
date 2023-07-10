@@ -2,7 +2,7 @@ from ROOT import *
 
 ##_______________________________________________________________________________________
 ##
-def ExtraLabel(xmin,ymin,xmax,ymax,extra_text="1l, #geq6j, #geq3b, #geq2M, #geq3J"):
+def ExtraLabel(xmin,ymin,xmax,ymax,text_size = 0.035,extra_text = "1l, #geq6j, #geq3b, #geq2M, #geq3J"):
     ttlbox = TPaveText(xmin,ymin,xmax,ymax, "NBNDC");
     ttlbox.SetTextAlign(12)
     ttlbox.SetFillColor(0)
@@ -11,7 +11,7 @@ def ExtraLabel(xmin,ymin,xmax,ymax,extra_text="1l, #geq6j, #geq3b, #geq2M, #geq3
     ttlbox.SetLineStyle(0)
     ttlbox.SetLineWidth(0)
     ttlbox.SetBorderSize(0)
-    ttlbox.SetTextSize(0.035)
+    ttlbox.SetTextSize(text_size)
     ttlbox.SetTextFont(42)
     ttlbox.SetShadowColor(0)
     extra_label = "#splitline{#scale[1.2]{#bf{#it{ATLAS}} Internal}}{#sqrt{s}=13 TeV, 140.1 fb^{-1}}"
@@ -22,11 +22,11 @@ def ExtraLabel(xmin,ymin,xmax,ymax,extra_text="1l, #geq6j, #geq3b, #geq2M, #geq3
 
 ##_______________________________________________________________________________________
 ##
-def SetupLegend(xmin,ymin,xmax,ymax):
+def SetupLegend(xmin,ymin,xmax,ymax, text_size = 0.035):
     legend = TLegend(xmin,ymin,xmax,ymax)
     legend.SetFillColor(0)
     legend.SetFillStyle(0)
-    legend.SetTextSize(0.035)
+    legend.SetTextSize(text_size)
     legend.SetLineColor(0)
     return legend
 

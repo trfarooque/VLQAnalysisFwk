@@ -84,12 +84,164 @@ def CalculateEfficiencies(sample_dictionary_list, histogram_name, mass, decay, g
 
 ##_______________________________________________________________________________________
 ##
-def ROCCurvePlots(sample_dictionary_list, histogram_name, mass, decay, global_signal_scale, signal_pattern, doLogY, outDir, extraLabel, mode="1MinusEffB"):
-    canvas = SetupCanvas(("canv_ROC_curve_"+mass+"_"+decay).replace(" ","_"))[0]
-    canvas.cd()
-    ttlbox = ExtraLabel(0.18, 0.76, 0.38, 0.87, extraLabel)    
-    legend = SetupLegend(0.54,0.7,0.9,0.9)
+def ROCCurvePlotsHist(sample_dictionary_list, histogram_name, mass, decay, global_signal_scale, signal_pattern, doLogY, outDir, extraLabel, mode="1MinusEffB"):
 
+    temp_name = ("ROC_"+mode+"_"+mass+"_"+decay).replace(" ","_")
+    x_label = "#epsilon_{signal}"
+    y_label = "1-#epsilon_{background}" if mode == "1MinusEffB" else "1/#epsilon_{background}"
+    
+    Canvas_Objects = SetupCanvas("canv_"+temp_name, True)
+    canvas, pad1, pad2 = [Canvas_Objects[i] for i in (0,1,2)]
+
+    extra_text = "#splitline{"+extraLabel+"}"+"{"+decay+" "+mass+" GeV}"
+    ttlbox = ExtraLabel(0.18, 0.76, 0.38, 0.87, text_size = 0.045, extra_text=extra_text)
+    if mode == "1MinusEffB":
+        legend = SetupLegend(0.18,0.20,0.7,0.70, text_size = 0.045)
+    else:
+        legend = SetupLegend(0.43,0.4,0.9,0.9, text_size = 0.035)
+
+    ROC_histograms = {}
+    ROC_histograms_ratio = {}
+
+    ROC_WP_multigraph = {}
+
+    interpolation_points = np.arange(0.0125, 1, 0.025)
+    bins = np.arange(0, 1.05, 0.025)
+    #interpolation_points = np.arange(0.025, 1, 0.05)
+    #bins = np.arange(0, 1.05, 0.05)
+    nbins = len(bins)-1
+
+    CalculateEfficiencies(sample_dictionary_list, histogram_name, mass, decay, global_signal_scale, signal_pattern, do_normed = True)
+
+    max_val = 0
+
+    for sample_dictionary in sample_dictionary_list:
+
+        key = sample_dictionary["label"]
+
+        ROC_WP_multigraph[key] = TMultiGraph()
+        LMVA_WP = SetupTGraph(1, 23, 2, sample_dictionary['color'])
+        HMVA_WP = SetupTGraph(1, 22, 2, sample_dictionary['color'])
+
+        LMVA_cut = sample_dictionary['MVA_cuts'][0]
+        LMVA_eff = sample_dictionary['acceptance_sgnl'][0] 
+        LMVA_rej = sample_dictionary['rejection_bkgd'][0] if mode == "1MinusEffB" else 1.0/(1.0-sample_dictionary['rejection_bkgd'][0])
+
+        HMVA_cut = sample_dictionary['MVA_cuts'][1]
+        HMVA_eff = sample_dictionary['acceptance_sgnl'][1]
+        HMVA_rej = sample_dictionary['rejection_bkgd'][1] if mode == "1MinusEffB" else 1.0/(1.0-sample_dictionary['rejection_bkgd'][1])
+
+        LMVA_WP.SetPoint(0, LMVA_eff, LMVA_rej)
+        HMVA_WP.SetPoint(0, HMVA_eff, HMVA_rej)
+        
+        LMVA_legend_text = ("(MVA Score = {0:.2f}, XLABEL =  {1:.2f}, YLABEL = {2:.2f})").format(LMVA_cut, LMVA_eff, LMVA_rej)
+        LMVA_legend_text = LMVA_legend_text.replace("XLABEL", x_label).replace("YLABEL", y_label)
+
+        HMVA_legend_text = ("(MVA Score = {0:.2f}, XLABEL =  {1:.2f}, YLABEL = {2:.2f})").format(HMVA_cut, HMVA_eff, HMVA_rej)
+        HMVA_legend_text = HMVA_legend_text.replace("XLABEL", x_label).replace("YLABEL", y_label)
+
+        legend.AddEntry(LMVA_WP, LMVA_legend_text)
+        legend.AddEntry(HMVA_WP, HMVA_legend_text)
+
+        ROC_WP_multigraph[key].Add(LMVA_WP)
+        ROC_WP_multigraph[key].Add(HMVA_WP)
+
+        histogram_ROC_name = ("h_"+temp_name+"_"+sample_dictionary["label"]).replace(".","").replace(",","").replace(" ","")
+
+        ROC_histograms[key] = TH1D(histogram_ROC_name, ";#epsilon_{signal};"+y_label, nbins, bins)  
+
+        bkgd_rejection_tmp  = []
+
+        # linear interpolation of signal efficiency (x) and background rejection (y)
+        # y_new = y_a + (y_b-y_a)*(x_new-x_a)/(x_b-x_a) where b > a
+        for interpolation_index, x_new in enumerate(interpolation_points):
+            b = next(i for i,v in enumerate(sample_dictionary['efficiency_sgnl']) if v > x_new)
+            
+            x_b = sample_dictionary['efficiency_sgnl'][b]
+            y_b = 1.0 - sample_dictionary['efficiency_bkgd'][b] if mode == "1MinusEffB" else 1.0/(sample_dictionary['efficiency_bkgd'][b]+1.0e-3)
+
+            x_a = sample_dictionary['efficiency_sgnl'][b-1]
+            y_a = 1.0 - sample_dictionary['efficiency_bkgd'][b-1] if mode == "1MinusEffB" else 1.0/(sample_dictionary['efficiency_bkgd'][b-1]+1.0e-3)
+            
+            if interpolation_index:
+                x_a = max(x_a, interpolation_points[interpolation_index-1])
+                
+                if interpolation_points[interpolation_index-1] >= x_a:
+                    y_a = bkgd_rejection_tmp[interpolation_index-1]
+
+            y_new = y_a + (y_b-y_a)*((x_new-x_a)/(x_b-x_a))
+            bkgd_rejection_tmp.append(y_new)
+        
+        for ROC_i, (eff_sgnl,rej_bkgd) in enumerate(zip(interpolation_points, bkgd_rejection_tmp)):
+            #ROC_histograms[key].SetBinContent(ROC_i, rej_bkgd)
+            ROC_histograms[key].Fill(eff_sgnl, rej_bkgd)
+
+        max_val = ROC_histograms[key].GetMaximum() if ROC_histograms[key].GetMaximum() > max_val else max_val
+
+        histogram_options = {"color":sample_dictionary['color'],
+                             "stats":False,
+                             "line_style":5,
+                             "line_width":3,
+                             "fill_style":0,
+                             "x_label_size":0,
+                             "x_title_size":0,
+                             "y_title_size":0.05}
+        SetHistogramConfiguration(ROC_histograms[key], histogram_options)
+
+        legend.AddEntry(ROC_histograms[key], sample_dictionary['label'])
+
+        ROC_histograms_ratio[key] = ROC_histograms[key].Clone(ROC_histograms[key].GetName()+"_ratio")
+
+        histogram_options["x_label_size"] = 0.07
+        histogram_options["x_title_size"] = 0.07
+        histogram_options["y_label_size"] = 0.07
+        histogram_options["y_title_size"] = 0.07
+        histogram_options["y_title"] = "Ratio"
+        histogram_options["y_title_offset"] = 0.5
+        histogram_options["y_range"] = [0.7,1.15]
+
+        SetHistogramConfiguration(ROC_histograms_ratio[key], histogram_options)
+
+        if(sample_dictionary['ratioopt'] == "REF"):
+            MVA_model_ratio_reference = key
+
+    max_val *= 1.05
+
+
+    canvas.cd()
+    canvas.Draw()
+    pad1.Draw()
+    pad2.Draw()
+    pad1.cd()
+    for nsample, hist_key in enumerate(ROC_histograms):
+        drawopt = "hist" if not nsample else "histsame"
+        ROC_histograms_ratio[hist_key].Divide(ROC_histograms[MVA_model_ratio_reference])
+        ROC_histograms[hist_key].SetMaximum(max_val)
+        ROC_histograms[hist_key].Draw(drawopt)
+        ROC_WP_multigraph[hist_key].Draw("P")
+
+
+    ttlbox.Draw("same")
+    legend.Draw("same")
+
+    pad2.cd()
+    for nsample, hist_key in enumerate(ROC_histograms_ratio):
+        drawopt = "hist" if not nsample else "histsame"
+        ROC_histograms_ratio[hist_key].Draw(drawopt)
+
+    outName = outDir+canvas.GetName()
+    canvas.Draw()
+    canvas.SaveAs(outName+".png")
+    canvas.SaveAs(outName+".pdf")
+ 
+##_______________________________________________________________________________________
+##
+def ROCCurvePlots(sample_dictionary_list, histogram_name, mass, decay, global_signal_scale, signal_pattern, doLogY, outDir, extraLabel, mode="1MinusEffB"):
+    canvas = SetupCanvas(("canv_ROC_curve_"+mass+"_"+decay+"_"+mode).replace(" ","_"))[0]
+    canvas.cd()
+    extra_text = "#splitline{"+extraLabel+"}"+"{"+decay+" "+mass+" GeV}"
+    ttlbox = ExtraLabel(0.18, 0.76, 0.38, 0.87, extra_text=extra_text)    
+    legend = SetupLegend(0.54,0.7,0.9,0.9)
 
     multigraph = TMultiGraph()
 
@@ -119,6 +271,7 @@ def ROCCurvePlots(sample_dictionary_list, histogram_name, mass, decay, global_si
     outputName = outputName.replace("MVAScore","").replace("*","")
 
     canvas.SaveAs(outputName+".png")
+    canvas.SaveAs(outputName+".pdf")
 
     if doLogY:
         multigraph.GetYaxis().SetLimits(0.0001, 100)
@@ -128,6 +281,7 @@ def ROCCurvePlots(sample_dictionary_list, histogram_name, mass, decay, global_si
         canvas.SetLogy()
         canvas.Draw()
         canvas.SaveAs(outputName+"_logy.png")
+        canvas.SaveAs(outputName+"_logy.pdf")
 
 ##_______________________________________________________________________________________ 
 ##
@@ -150,8 +304,9 @@ def SoverBPlots(sample_dictionary_list, histogram_name, mass, decay, global_sign
         MVA_SoverB_ratio     = {}
         MVA_SoverSqrtB_ratio = {}
 
-    ttlbox = ExtraLabel(0.18, 0.76, 0.38, 0.87, extraLabel)
-    legend = SetupLegend(0.45,0.7,0.83,0.9)
+    extra_text = "#splitline{"+extraLabel+"}"+"{"+decay+" "+mass+" GeV}"
+    ttlbox = ExtraLabel(0.18, 0.76, 0.38, 0.87, extra_text = extra_text, text_size=0.045)
+    legend = SetupLegend(0.45,0.7,0.83,0.9,0.045)
 
     MVA_rebin = np.arange(-0.1, 1.1, 0.050)
 
@@ -228,7 +383,7 @@ def SoverBPlots(sample_dictionary_list, histogram_name, mass, decay, global_sign
             histogram_options["y_label_size"] = 0.07
             histogram_options["y_title_size"] = 0.07
             histogram_options["y_title"] = "Ratio"
-            histogram_options["y_title_offset"] = 0.3
+            histogram_options["y_title_offset"] = 0.5
             histogram_options["y_range"] = [0,1.6]
 
             SetHistogramConfiguration(MVA_SoverB_ratio[MVA_model], histogram_options)
@@ -265,6 +420,7 @@ def SoverBPlots(sample_dictionary_list, histogram_name, mass, decay, global_sign
 
     canvas_SoverB.Draw()
     canvas_SoverB.SaveAs(outputName+"_SoverB.png")
+    canvas_SoverB.SaveAs(outputName+"_SoverB.pdf")
 
     if doLogY:
         if doRatio:
@@ -275,6 +431,7 @@ def SoverBPlots(sample_dictionary_list, histogram_name, mass, decay, global_sign
             canvas_SoverB.SetLogy()
         canvas_SoverB.Draw()
         canvas_SoverB.SaveAs(outputName+"_SoverB_LogY.png")
+        canvas_SoverB.SaveAs(outputName+"_SoverB_LogY.pdf")
 
     canvas_SoverSqrtB.cd()
     canvas_SoverSqrtB.Draw()
@@ -299,6 +456,7 @@ def SoverBPlots(sample_dictionary_list, histogram_name, mass, decay, global_sign
     legend.Draw("same")
     canvas_SoverSqrtB.Draw()
     canvas_SoverSqrtB.SaveAs(outputName+"_SoverSqrtB.png")
+    canvas_SoverSqrtB.SaveAs(outputName+"_SoverSqrtB.pdf")
     if doLogY:
         if doRatio:
             pad1_SoverSqrtB.cd()
@@ -308,6 +466,7 @@ def SoverBPlots(sample_dictionary_list, histogram_name, mass, decay, global_sign
             canvas_SoverSqrtB.SetLogy()
         canvas_SoverSqrtB.Draw()
         canvas_SoverSqrtB.SaveAs(outputName+"_SoverSqrtB_LogY.png")
+        canvas_SoverSqrtB.SaveAs(outputName+"_SoverSqrtB_LogY.pdf")
 
 ##_______________________________________________________________________________________
 ##
@@ -328,10 +487,12 @@ def AcceptanceRejectionPlots(sample_dictionary_list, histogram_name, mass, decay
     canvas_sgnl, pad1_sgnl, pad2_sgnl = [Canvas_Sgnl_Objects[i] for i in (0,1,2)]
     canvas_bkgd, pad1_bkgd, pad2_bkgd = [Canvas_Bkgd_Objects[i] for i in (0,1,2)]
 
-    ttlbox = ExtraLabel(0.18, 0.76, 0.38, 0.87, extraLabel)
+    extra_text = "#splitline{"+extraLabel+"}"+"{"+decay+" "+mass+" GeV}"
+    ttlbox_sgnl = ExtraLabel(0.18, 0.76, 0.38, 0.87, text_size = 0.045, extra_text = extra_text)
+    ttlbox_bkgd = ExtraLabel(0.18, 0.76, 0.38, 0.87, text_size = 0.045, extra_text = extraLabel)
 
-    legend_sgnl = SetupLegend(0.45,0.7,0.83,0.9)
-    legend_bkgd = SetupLegend(0.45,0.7,0.83,0.9)
+    legend_sgnl = SetupLegend(0.7,0.6,0.95,0.9, 0.045)
+    legend_bkgd = SetupLegend(0.7,0.6,0.95,0.9, 0.045)
 
     bins = np.arange(-0.1, 1.1, 0.050)
     nbins = len(bins) - 1
@@ -415,7 +576,7 @@ def AcceptanceRejectionPlots(sample_dictionary_list, histogram_name, mass, decay
         histogram_options["y_label_size"] = 0.07
         histogram_options["y_title_size"] = 0.07
         histogram_options["y_title"] = "Ratio"
-        histogram_options["y_title_offset"] = 0.3
+        histogram_options["y_title_offset"] = 0.5
         histogram_options["y_range"] = [0.9,1.1]
         
         SetHistogramConfiguration(histogram_sgnl_ref[key], histogram_options)
@@ -423,8 +584,8 @@ def AcceptanceRejectionPlots(sample_dictionary_list, histogram_name, mass, decay
         SetHistogramConfiguration(histogram_bkgd_ref[key], histogram_options)
 
 
-    sgnl_max *= 1.3
-    bkgd_max *= 1.3
+    sgnl_max *= 1.6
+    bkgd_max *= 1.6
 
     canvas_sgnl.cd()
     canvas_sgnl.Draw()
@@ -439,7 +600,7 @@ def AcceptanceRejectionPlots(sample_dictionary_list, histogram_name, mass, decay
         histogram_sgnl[hist_key].Draw(drawopt)
         multigraph_sgnl[hist_key].Draw("P")
 
-    ttlbox.Draw("same")
+    ttlbox_sgnl.Draw("same")
     legend_sgnl.Draw("same")
 
     pad2_sgnl.cd()
@@ -447,9 +608,10 @@ def AcceptanceRejectionPlots(sample_dictionary_list, histogram_name, mass, decay
         drawopt = "hist" if not nsample else "histsame"
         histogram_sgnl_ref[hist_key].Draw(drawopt)
 
-    outNameSgnl = outDir+temp_sgnl_name+".png"
+    outNameSgnl = outDir+temp_sgnl_name
     canvas_sgnl.Draw()
-    canvas_sgnl.SaveAs(outNameSgnl)
+    canvas_sgnl.SaveAs(outNameSgnl+".png")
+    canvas_sgnl.SaveAs(outNameSgnl+".pdf")
 
     canvas_bkgd.cd()
     pad1_bkgd.Draw()
@@ -463,7 +625,7 @@ def AcceptanceRejectionPlots(sample_dictionary_list, histogram_name, mass, decay
         histogram_bkgd[hist_key].Draw(drawopt)
         multigraph_bkgd[hist_key].Draw("P")
 
-    ttlbox.Draw("same")
+    ttlbox_bkgd.Draw("same")
     legend_bkgd.Draw("same")
 
     pad2_bkgd.cd()
@@ -471,9 +633,10 @@ def AcceptanceRejectionPlots(sample_dictionary_list, histogram_name, mass, decay
         drawopt = "hist" if not nsample else "histsame"
         histogram_bkgd_ref[hist_key].Draw(drawopt)
 
-    outNameBkgd = outDir+temp_bkgd_name+".png"
+    outNameBkgd = outDir+temp_bkgd_name
     canvas_bkgd.Draw()
-    canvas_bkgd.SaveAs(outNameBkgd)
+    canvas_bkgd.SaveAs(outNameBkgd+".png")
+    canvas_bkgd.SaveAs(outNameBkgd+".pdf")
 
 
 ##_______________________________________________________________________________________
@@ -506,11 +669,12 @@ sample_dictionary_list = samples_dictionary_template.dictionary_list
 
 os.system("mkdir -p "+outDir)
 
-extraLabel = "#splitline{1l, #geq6j, #geq3b, #geq2M, #geq3J}{"+decay+" "+mass+" GeV}"
+extraLabel = "1l, #geq6j, #geq3b, #geq2M, #geq3J"
 
 if doROCPlots:
     os.system("mkdir -p "+outDir+"/ROC")
-    ROCCurvePlots(sample_dictionary_list, histo, mass, decay, sgnlScale, sgnlPattern, doLogY, outDir+"/ROC/", extraLabel, mode="1OverEffB")
+    ROCCurvePlotsHist(sample_dictionary_list, histo, mass, decay, sgnlScale, sgnlPattern, doLogY, outDir+"/ROC/", extraLabel, mode="1MinusEffB")
+    ROCCurvePlotsHist(sample_dictionary_list, histo, mass, decay, sgnlScale, sgnlPattern, doLogY, outDir+"/ROC/", extraLabel, mode="1OverEffB")
 
 if doSoverBPlots:
     os.system("mkdir -p "+outDir+"/SoverB")
@@ -520,3 +684,4 @@ if doSoverBPlots:
 if doAcceptanceRejectionPlots:
     os.system("mkdir -p "+outDir+"/AcceptanceRejection")
     AcceptanceRejectionPlots(sample_dictionary_list, histo, mass, decay, sgnlScale, sgnlPattern, outDir+"/AcceptanceRejection/", extraLabel, do_normed = False)
+    AcceptanceRejectionPlots(sample_dictionary_list, histo, mass, decay, sgnlScale, sgnlPattern, outDir+"/AcceptanceRejection/", extraLabel, do_normed = True)

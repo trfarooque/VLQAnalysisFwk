@@ -152,7 +152,7 @@ HistoFiles: topEW.mc16a,topEW.mc16d,topEW.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 %HistoFile: topEW
 %Group: Non-t#bar{t}
-Group: Others
+Group: topEW
 
 Sample: "ttH"
 Title: "ttH"
@@ -163,7 +163,7 @@ HistoFiles: ttH.mc16a,ttH.mc16d,ttH.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 %HistoFile: ttH
 %Group: Non-t#bar{t}
-Group: Others
+Group: topEW
 
 Sample: "Wjets"
 Title: "W+jets"
@@ -188,13 +188,12 @@ LumiScales: 36207.66,44307.4,58450.1
 Sample: "Dibosons"
 Title: "Dibosons"
 Type: background
-FillColor: 806
+FillColor: 600
 LineColor: 1
 HistoFiles: Dibosons.mc16a,Dibosons.mc16d,Dibosons.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 %HistoFile: Dibosons
 %Group: Non-t#bar{t}
-Group: Others
 
 Sample: QCD
 Title: QCD
@@ -212,13 +211,4 @@ LineColor: 1
 HistoFiles: SM4tops.mc16a,SM4tops.mc16d,SM4tops.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 %%Group: Non-t#bar{t}
-Group: Others
-
-Sample: "VH"
-Title: "VH"
-Type: background
-FillColor: 806
-LineColor: 1
-HistoFiles: VH.mc16a,VH.mc16d,VH.mc16e
-LumiScales: 36207.66,44307.4,58450.1
-Group: Others
+Group: topEW

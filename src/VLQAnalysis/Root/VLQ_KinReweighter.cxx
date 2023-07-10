@@ -350,7 +350,9 @@ double VLQ_KinReweighter::GetKinRwSyst(std::string systematic) const{
   }
   else if(source_reg == "c1lep3jin2bex"){
 
-    std::string jet_prefix = (param2 < 7) ? std::to_string(param2) : "7";
+    int last_njet_bin = (m_opt->UseSVLQConfig()) ? 7 : 8;
+
+    std::string jet_prefix = (param2 < last_njet_bin) ? std::to_string(param2) : std::to_string(last_njet_bin);
     
     std::string histName = source_reg + "_" + kin + "_jet_" + jet_prefix + "_fit" +  systematic;
 
@@ -371,5 +373,29 @@ double VLQ_KinReweighter::GetKinRwSyst(std::string systematic) const{
   }
 
   return 1;
+
+}
+
+//______________________________________________________________________________ 
+//
+double VLQ_KinReweighter::GetNJetsKinRwSyst(std::string systematic) const{
+
+  if((m_opt -> SampleName() != SampleName::ZJETS) && (m_opt -> SampleName() != SampleName::WJETS)) return 1;
+
+  std::string rw_name =  "c2lep3jin1bexZwinMLL_sf_jets_n"; 
+  
+  int param = m_outData->o_jets_n;
+  
+  std::map< std::string, TH1D* >::iterator it = m_histograms_1D->find(rw_name);
+
+  if( it == m_histograms_1D->end() ) return 1.;
+
+  int bin = it->second->FindBin(param);
+
+  if( bin > it->second->GetNbinsX() ) bin = it->second->GetNbinsX();
+
+  if( systematic == "UP" ) return (it->second->GetBinContent(bin) + it->second->GetBinError(bin));
+  else if( systematic == "DOWN" ) return (it->second->GetBinContent(bin) - it->second->GetBinError(bin));
+  else return 1;
 
 }

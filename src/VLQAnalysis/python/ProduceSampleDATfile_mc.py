@@ -116,7 +116,7 @@ Samples += GetOtherBackgroundSamples (campaign=mccampaign,includeSingleTop=True,
                                       includeDibosons=True, includeDijet=True,
                                       includeSingletopSystSamples=False, splitSTChannels=False,
                                       includeTchan=True, includeWtprod=True, includeSchan=True,
-                                      removeNull=False, useWZSherpa2211=True, useDibosonSherpa2211=True)
+                                      removeNull=False, sVLQAna=False)
 #Samples += GetSingleVLQSamples( campaign=mccampaign )
 #Samples += GetSingleVLQSamples( campaign=mccampaign, mode='WTHt' )
 #Samples += GetNewSingleVLQSamples( campaign=mccampaign, mode='WTZt' )
