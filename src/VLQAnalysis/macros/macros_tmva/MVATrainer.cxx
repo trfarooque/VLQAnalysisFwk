@@ -215,6 +215,11 @@ int InitDataLoader(){
   if(m_useAllVars){
     for( std::pair<std::string, VariableDef*> varPair : m_mvaManager->GetVariableStore()){
       if(varPair.first == "leptop_n") continue;
+      if( (m_channel == "ALLHAD") && 
+	  ((varPair.first == "leptop_pt") || (varPair.first == "residualMET") 
+	   || (varPair.first == "ptw") || (varPair.first == "mtw") || (varPair.first == "hthad")) ){
+	continue;
+      }
       AddDataLoaderVariable(varPair.second, false);
     }
   }
