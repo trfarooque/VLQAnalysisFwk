@@ -154,10 +154,14 @@ double VLQ_KinReweighter::GetKinReweight(const int kinematic, const std::string 
 
   double reweighting = 1.0;
 
+  if(m_outData -> o_channel_type == VLQ_Enums::UNDEFINED){
+    return reweighting;
+  }
+  /*
   if(m_outData -> o_channel_type == VLQ_Enums::UNDEFINED || m_outData -> o_channel_type == VLQ_Enums::ELMU || m_outData -> o_channel_type == VLQ_Enums::FULLHAD){
     return reweighting;
   }
-
+  */
   std::string source_reg = "";
 
   if((m_opt->SampleName() == SampleName::ZJETS) || (m_opt->SampleName() == SampleName::WJETS)) source_reg = "c2lep3jin1bexZwinMLL_sf";

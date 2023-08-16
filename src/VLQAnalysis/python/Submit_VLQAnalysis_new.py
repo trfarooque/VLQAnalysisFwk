@@ -4,6 +4,7 @@ import time, getpass
 import socket
 import sys
 import datetime
+import argparse
 from VLQ_Samples_mc import *
 
 #sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "python/IFAETopFramework/" )
@@ -17,298 +18,315 @@ platform = socket.gethostname()
 now = datetime.datetime.now().strftime("%Y_%m_%d_%H%M")
 ##..............................................................................
 
+#### Some common lists of attributes ######
+allowed_campaigns = ['mc16a', 'mc16d', 'mc16e']
+
+bkg_procs = ['ttbar','singletop','Wjets','Zjets','diboson','topEW','dijet']
+bkg_sys_procs = ['ttbar_alt','singletop_alt']
+all_procs = ['data','pvlq','svlq'] + bkg_procs + bkg_sys_procs
+allowed_procs = all_procs + ['bkg','bkg_sys']
+
 ##______________________________________________________________________________
 ## OPTIONS
-nFilesSplit = 20 #number of files to merge in a single run of the code (chaining them)
-nMerge = 10 #number of merged running of the code in a single job
-channels = ["./.",]
-sleep = 1
-param_campaign = ""
-param_removeNull = False
 
-#Options to control individual submission of different types of samples
-param_runQCD = True
-param_runData = True
-param_runTOPQ1Data = True
-param_runTOPQ4Data = True
-param_doSingleVLQAna = False
+parser = argparse.ArgumentParser()
 
-param_runSignal = True
-param_runTtbar = True
-param_runOtherBkgd = True
-param_runSingleTop = True
-param_runWjets = True
-param_runZjets = True
-param_runTopEW = True
-param_runDibosons = True
-param_runDijet = True
-param_runTtSyst = False
-param_runSTSyst = False
-param_splitSTChannels = False
-param_runTchanSingleTop = True
-param_runWtSingleTop = True
-param_runSchanSingleTop = True
+parser.add_argument('--nFilesSplit', help='Number of files by which jobs are split', default=250)
+parser.add_argument('--nMerge', help='Number of jobs merged in each job set', default=1)
+parser.add_argument('--sleep', help='Sleep time between each job submission', default=2)
+parser.add_argument('--removeNull', help='If set, remove samples that are known to have zero input events ', 
+                    action='store', default=0)
+parser.add_argument('--inputDir', help='Input directory containing ntuples', required=True)
+parser.add_argument('--outputDir', help='Output directory where histogram/mini-tree files will be stored', 
+                    default="/data/at3/scratch2/"+os.getenv("USER")+"/VLQAnalysisRun2/VLQAnalysisOutputs_")
+parser.add_argument('--outputDirSuffix', help='Suffix to add to name of output directory', default='NOW')
+parser.add_argument('--useProcSubdirs', help='Input files will be found in sub-directories of the \
+input directory when this is set', action='store', type=int, default=1)
+parser.add_argument('--useSyst', help='Run systematics when set', action='store', type=int, default=0)
+##Arguments that will also be passed to VLQAna
+parser.add_argument('--useTtbarHtSlices', help='Use HT slices for ttbar sample when set', action='store', type=int, default=1)
+parser.add_argument('--mode', help='Specify what type of job to run and set corresponding set of options', 
+                    choices=['FITINPUTS','MVAINPUTTREES','DATAMC','MVAVALIDATION','FULLFITVALIDATION',
+                             'DERIVEREWEIGHTING', 'DERIVEMULTIJET'], default='DATAMC')
+parser.add_argument('--vlqOptString', help='extra options to send to VLQAna', default='')
 
-param_runSingleVLQ = True
-param_runPairVLQ = False
-param_run4tops = False
-param_runUEDRPP = False
-param_runDoubletPairVLQ = False
 
-param_useSlices = True
-param_useObjectSyst = False
-param_useWeightSyst = False
-param_onlyDumpSystHistos = False
-param_produceTarBall = True
-param_tarballPath = ""
-param_dryRun = False
-param_batch = "condor"
-param_queue = "at3_short"
-param_inputDir="/data/at3/scratch2/farooque/MBJOutputs/tag-21.2.67-htztx-0-MV2/" #place where to find the input files
-param_outputDir = "/data/at3/scratch2/"+os.getenv("USER")+"/VLQAnalysisRun2/VLQAnalysisOutputs_" #output repository
-param_outputDirSuffix = "NOW"
-userParams = []
-if(len(sys.argv))>1:
-    for x in sys.argv[1:]:
-        splitted=x.split("=")
-        if(len(splitted)!=2):
-            printError("<!> The argument \"" + x + "\" has no equal signs ... Please check")
-            sys.exit(-1)
-        argument = splitted[0].upper().replace("--","")
-        value = splitted[1]
-        if(argument=="CAMPAIGN"):
-            param_campaign = value
-        elif(argument=="NFILESPLIT"):
-            nFilesSplit = int(value)
-        elif(argument=="NMERGE"):
-            nMerge = int(value)
-        elif(argument=="SLEEP"):
-            sleep = int(value)
-        elif(argument=="DOSINGLEVLQANA"):
-            param_doSingleVLQAna = (value.upper()=="TRUE")
-        elif(argument=="REMOVENULL"):
-            param_removeNull = (value.upper()=="TRUE")
-        elif(argument=="RUNDATA"):
-            param_runData = (value.upper()=="TRUE")
-        elif(argument=="RUNQCD"):
-            param_runQCD = (value.upper()=="TRUE")
-        elif(argument=="RUNTOPQ1DATA"):
-            param_runTOPQ1Data = (value.upper()=="TRUE")
-        elif(argument=="RUNTOPQ4DATA"):
-            param_runTOPQ4Data = (value.upper()=="TRUE")
-        elif(argument=="RUNSIGNALS"):
-            param_runSignal = (value.upper()=="TRUE")
-        elif(argument=="RUNTTBAR"):
-            param_runTtbar = (value.upper()=="TRUE")
-        elif(argument=="RUNOTHERBKGD"):
-            param_runOtherBkgd = (value.upper()=="TRUE")
-        elif(argument=="RUNSINGLETOP"):
-            param_runSingleTop = (value.upper()=="TRUE")
-        elif(argument=="RUNTCHAN"):
-            param_runTchanSingleTop = (value.upper()=="TRUE")
-        elif(argument=="RUNWTPROD"):
-            param_runWtSingleTop = (value.upper()=="TRUE")
-        elif(argument=="RUNSCHAN"):
-            param_runSchanSingleTop = (value.upper()=="TRUE")
-        elif(argument=="RUNWJETS"):
-            param_runWjets = (value.upper()=="TRUE")
-        elif(argument=="RUNZJETS"):
-            param_runZjets = (value.upper()=="TRUE")
-        elif(argument=="RUNTOPEW"):
-            param_runTopEW = (value.upper()=="TRUE")
-        elif(argument=="RUNDIBOSONS"):
-            param_runDibosons = (value.upper()=="TRUE")
-        elif(argument=="RUNDIJET"):
-            param_runDijet = (value.upper()=="TRUE")
-        elif(argument=="RUNTTSYST"):
-            param_runTtSyst = (value.upper()=="TRUE")
-        elif(argument=="RUNSTSYST"):
-            param_runSTSyst = (value.upper()=="TRUE")
-        elif(argument=="SPLITSTCHANNELS"):
-            param_splitSTChannels = (value.upper()=="TRUE")
+###Common arguments used by all/many parts of processing chain
+parser.add_argument('--campaigns', help='MC campaigns to launch', nargs='*', 
+                    choices=allowed_campaigns, default=allowed_campaigns)
+parser.add_argument('--channel', help='Lepton channel', choices=['0lep','1lep'], required=True)
+parser.add_argument('--processes', help='Space-separated list of sample processes', nargs='*', 
+                    choices=allowed_procs, default=all_procs)
+parser.add_argument('--rewriteTarball', help='Code tarball will be rewritten when set', action='store', type=int, default=1)
+parser.add_argument('--tarballPath', help='Path to code tarball', default='')
+parser.add_argument('--dryRun', help='Do not launch jobs when set ', action='store', type=int, default=0)
+parser.add_argument('--batch', help='Type of batch system', default='condor')
+parser.add_argument('--queue', help='Batch queue to which jobs are submittied', default='at3_short')
 
-        elif(argument=="RUNSINGLEVLQ"):
-            param_runSingleVLQ = (value.upper()=="TRUE")
-        elif(argument=="RUNPAIRVLQ"):
-            param_runPairVLQ = (value.upper()=="TRUE")
-        elif(argument=="RUN4TOPS"):
-            param_run4tops = (value.upper()=="TRUE")
-        elif(argument=="RUNUEDRPP"):
-            param_runUEDRPP = (value.upper()=="TRUE")
-        elif(argument=="RUNDOUBLETPAIRVLQ"):
-            param_runDoubletPairVLQ = (value.upper()=="TRUE")
+args = parser.parse_args()
 
-        elif(argument=="USESLICES"):
-            param_useSlices = (value.upper()=="TRUE")
-        elif(argument=="USEOBJECTSYST"):
-            param_useObjectSyst = (value.upper()=="TRUE")
-        elif(argument=="USEWEIGHTSYST"):
-            param_useWeightSyst = (value.upper()=="TRUE")
-        elif(argument=="ONLYDUMPSYSTHISTOS"):
-            param_onlyDumpSystHistos = (value.upper()=="TRUE")
-        elif(argument=="PRODUCETARBALL"):
-            param_produceTarBall = (value.upper()=="TRUE")
-        elif(argument=="TARBALLPATH"):
-            param_tarballPath = value
-        elif(argument=="DRYRUN"):
-            param_dryRun = (value.upper()=="TRUE")
-        elif(argument=="BATCH"):
-            param_batch = value
-        elif(argument=="QUEUE"):
-            param_queue = value
-        elif(argument=="INPUTDIR"):
-            param_inputDir = value
-        elif(argument=="OUTPUTDIR"):
-            param_outputDir = value
-        elif(argument=="OUTPUTDIRSUFFIX"):
-            param_outputDirSuffix = value
-        else:
-            userParams += [{'arg':argument,'value':value}]
+##_________________________________________
+##List of processes to run
+procs_to_run = []
+for proc in args.processes:
+    print 'Adding process : ',proc
+    if proc=='bkg':
+        procs_to_run += [bkg_procs]
+    elif proc=='bkg_sys':
+        procs_to_run += [bkg_sys_procs]
+    else:
+        procs_to_run += [proc]
+
+##_________________________________________
+##Sample data to be passed to vlqOptions - process dependent
+sampleDatPattern="samples_info/pvlq/"
+
+##______________________________________________________________________________
+##Make list of options to be passed to VLQAna
+vlqOptions = {}
+
+##Default options
+vlqOptions['applydeltaphicut'] = 'TRUE'
+vlqOptions['applyMetMtwCuts'] = 'TRUE'
+vlqOptions['useMETTrigger'] = 'TRUE'
+vlqOptions['minMeffCut'] = '1000'
+vlqOptions['doKinRWSmoothing'] = 'TRUE'
+vlqOptions['lowMVACutOneLep'] = '0.17'
+vlqOptions['highMVACutOneLep'] = '0.80'
+vlqOptions['lowMVACutZeroLep'] = '0.90'
+vlqOptions['highMVACutZeroLep'] = '0.95'
+
+vlqOptions['doLooseSystRegions'] = 'FALSE'
+vlqOptions['doExtendedPreselection'] = 'FALSE'
+
+vlqOptions['doExpSys'] = 'TRUE'
+vlqOptions['doTheorySys'] = 'TRUE'
+vlqOptions['doKinRWSyst'] = 'TRUE'
+
+vlqOptions['doExpSys'] = 'TRUE'
+
+##Channel-dependent options
+if args.channel=='1lep':
+    sampleDatPattern += "1L/samples_info.tag-21.2.213-htztx-syst-1L"
+    vlqOptions['doOneLeptonAna'] = 'TRUE'
+    vlqOptions['doZeroLeptonAna'] = 'FALSE'
+    if args.mode=='DERIVEREWEIGHTING':
+        vlqOptions['doTwoLeptonAna'] = 'TRUE'
+    vlqOptions['useLeptonSF'] = 'TRUE'
+    vlqOptions['useLeptonTrigger'] = 'TRUE'
+    vlqOptions['useMETTriggerOneLep'] = 'TRUE'
+    vlqOptions['mvaWeightFile'] = 'TMVA/weightsCV_1L_30vars_allbkgd/TMVAClassificationCV_MLP.weights.xml'
+
+elif args.channel=='0lep':
+    sampleDatPattern += "0L/samples_info.tag-21.2.213-htztx-syst-0L"
+    vlqOptions['doOneLeptonAna'] = 'FALSE'
+    vlqOptions['doZeroLeptonAna'] = 'TRUE'
+    vlqOptions['useLeptonSF'] = 'FALSE'
+    vlqOptions['useLeptonTrigger'] = 'FALSE'
+    vlqOptions['useMETTriggerOneLep'] = 'FALSE'
+    vlqOptions['mvaWeightFile'] = 'TMVA/weightsCV_0L_22vars_allbkgd/TMVAClassificationCV_MLP.weights.xml'
+
+if args.mode=='DERIVEREWEIGHTING':
+    vlqOptions['deriveReweighting'] = 'TRUE'
 else:
-    printError("<!> No arguments seen ... Aborting !")
-    sys.exit(-1)
+    vlqOptions['deriveReweighting'] = 'FALSE'
 
-param_outputDirSuffix = param_outputDirSuffix.replace("NOW",now)
-param_outputDir += param_outputDirSuffix
-##..............................................................................
+if args.mode=='DERIVEMULTIJET':
+    vlqOptions['invertMetMtwCuts'] = 'TRUE'
+    vlqOptions['minDeltaPhiCut'] = '0.'
+    vlqOptions['maxDeltaPhiCut'] = '0.1'
+else:
+    vlqOptions['invertMetMtwCuts'] = 'FALSE'
+    vlqOptions['minDeltaPhiCut'] = '0.4'
+    vlqOptions['maxDeltaPhiCut'] = '-1'
 
+if args.mode=='MVAINPUTTREES':
+    vlqOptions['makeMVAInputTree'] = 'TRUE'
+else:
+    vlqOptions['dumpHistos'] = 'TRUE'
+    vlqOptions['applyMVA'] = 'TRUE' ## Also means training regions will be added
+
+if args.mode=='DATAMC' or args.mode=='MVAVALIDATION':
+    vlqOptions['makeMVAInputHists'] = 'TRUE'
+else:
+    vlqOptions['makeMVAInputHists'] = 'FALSE'
+
+
+if args.mode=='FITINPUTS' or args.mode=='FULLFITVALIDATION':
+    vlqOptions['doFitRegions'] = 'TRUE'
+else:
+    vlqOptions['doFitRegions'] = 'FALSE'
+
+if args.mode=='FITINPUTS' or args.mode=='FULLFITVALIDATION' or args.mode=='MVAVALIDATION':
+    vlqOptions['onlyDumpSystHistograms'] = 'TRUE'
+else:
+    vlqOptions['onlyDumpSystHistograms'] = 'FALSE'
+
+    if args.mode=='FITINPUTS':
+        vlqOptions['otherVariables'] = 'FALSE'
+        vlqOptions['doPreselectionRegions'] = 'FALSE'
+        vlqOptions['doPreselSys'] = 'FALSE'
+    else:
+        vlqOptions['otherVariables'] = 'TRUE'
+        vlqOptions['doPreselectionRegions'] = 'TRUE'
+        vlqOptions['doPreselSys'] = 'TRUE'
+
+if args.useTtbarHtSlices:
+    vlqOptions['scaleTtbarHtSlices'] = 'TRUE'
+    vlqOptions['filterType'] = 'APPLYFILTER'
+    
+
+for opt in args.vlqOptString.split():
+    splitted = opt.split('=')
+    if(len(splitted)!=2):
+        printError("<!> The argument \"" + opt + "\" has no equal signs ... Please check")
+        sys.exit(-1)
+    argument = splitted[0].upper().replace('--','')
+    value = splitted[1]
+
+    vlqOptions[argument] = value ### Also overwrites pre-set options with new value if provided in vlqOptString
 
 ##______________________________________________________________________________
-## Printing the options
-print "param_campaign = ", param_campaign
-print "nFilesSplit = ", nFilesSplit
-print "nMerge = ", nMerge
-print "param_removeNull = ", param_removeNull
-print "param_doSingleVLQAna = ", param_doSingleVLQAna
+## Print all options
+print "############################################################"
+print " Command-line options : "
+for argument in vars(args):
+    if( argument != 'vlqOptString' ):
+        print argument," : ",getattr(args,argument)
+for arg,value in vlqOptions.items():
+    print arg + " = " + value
 
-print "param_runData = ", param_runData
-print "param_runTOPQ1Data = ", param_runTOPQ1Data
-print "param_runTOPQ4Data = ", param_runTOPQ4Data
+print "############################################################"
 
-print "param_runSignal = ", param_runSignal
-print "param_runTtbar = ", param_runTtbar
-print "param_runOtherBkgd = ", param_runOtherBkgd
-print "param_runSingleTop = ", param_runSingleTop
-print "param_runWjets = ", param_runWjets
-print "param_runZjets = ", param_runZjets
-print "param_runTopEW = ", param_runTopEW
-print "param_runDibosons = ", param_runDibosons
-print "param_runDijet = ", param_runDijet
-print "param_runTtSyst = ", param_runTtSyst
-print "param_runSTSyst = ", param_runSTSyst
-print "param_splitSTChannels = ", param_splitSTChannels
-
-print "param_runSingleVLQ = ", param_runSingleVLQ
-print "param_runPairVLQ = ", param_runPairVLQ
-print "param_run4tops = ", param_run4tops
-print "param_runUEDRPP = ", param_runUEDRPP
-print "param_runDoubletPairVLQ = ", param_runDoubletPairVLQ
-
-print "param_useSlices = ", param_useSlices
-print "param_useObjectSyst = ", param_useObjectSyst
-print "param_useWeightSyst = ", param_useWeightSyst
-print "param_onlyDumpSystHistos = ", param_onlyDumpSystHistos
-print "param_produceTarBall = ", param_produceTarBall
-print "param_tarballPath = ", param_tarballPath
-print "param_dryRun = ", param_dryRun
-print "param_inputDir = ", param_inputDir
-print "param_outputDir = ", param_outputDir
-for param in userParams:
-    print param['arg'] + " = " + param['value']
 ##..............................................................................
 
 ##______________________________________________________________________________
-## Defining the paths and the tarball
-listFolder = param_outputDir + "/Lists_Analysis_" + param_outputDir.split("/")[len(param_outputDir.split("/"))-1] #name of the folder containing the file lists
-scriptFolder = param_outputDir + "/Scripts_Analysis_" + param_outputDir.split("/")[len(param_outputDir.split("/"))-1] #name of the folder containing the scripts
-##..............................................................................
+## Set all paths
 
-##______________________________________________________________________________
-## Creating usefull repositories
-os.system("mkdir -p " + param_outputDir) #output files folder
-os.system("mkdir -p " + listFolder) #list files folder
-os.system("mkdir -p " + scriptFolder) #script files folder
+outputDir  = args.outputDir
+
+if(args.outputDirSuffix != ""): outputDir += args.outputDirSuffix
+outputDir = outputDir.replace("NOW", now)
+os.system("mkdir -p " + outputDir) #output files folder
+
+tarballPath = args.tarballPath
+if(tarballPath == ''):
+    tarballPath = outputDir + "/AnaCode_forBatch.tgz"
+
+##..............................................................................
 ##..............................................................................
 
 ##______________________________________________________________________________
 ## Creating tarball
-tarballPath=""
-if param_produceTarBall:
-    tarballPath = param_outputDir + "/AnaCode_forBatch.tgz"
-    if not (os.path.exists(tarballPath) or param_dryRun):
-        prepareTarBall(os.getenv("VLQAnalysisFramework_DIR")+"/../../",tarballPath)
-else:
-    tarballPath = param_tarballPath
+##The code directory should be tarred if and only if this is not a dry run, and either 
+##the provided path does not exist or we explicitly want it to be overwritten
+#if (not(os.path.exists(tarballPath) or args.dryRun) and args.rewriteTarball):
 
+#pathExists = os.path.exists(tarballPath)
+#if not pathExists:
+#    print 'tarballPath at ',tarballPath,' does not exist'
+#produceTarball = not(args.dryRun) #and (args.rewriteTarball or not(os.path.exists(tarballPath)))
+#if produceTarball:
+#    print 'tarball should be produced'
+#else:
+#    print 'tarball should not be produced'
 
+if(not(args.dryRun) and (args.rewriteTarball or not(os.path.exists(tarballPath)))):
+    print 'producing tarball'
+    prepareTarBall(os.getenv("VLQAnalysisFramework_DIR")+"/../../",tarballPath)
+    print 'produced tarball'
+
+##..............................................................................
+###### FUNCTION DEFINITIONS BEGIN
 ##..............................................................................
 
 ##______________________________________________________________________________
-## Getting all samples and their associated weight/object systematics
+## Get sample and associated weight systematics by name
 ##
-Samples = []
-if param_runQCD :
-   Samples += GetQCDSamples(  )
-if param_runData :
-    if param_runTOPQ1Data:
-        Samples += GetDataSamples( data_type = "TOPQ1", sVLQAna=param_doSingleVLQAna )
-    if param_runTOPQ4Data:
-        Samples += GetDataSamples( data_type = "TOPQ4", sVLQAna=param_doSingleVLQAna )
+def retrieveSamples(sampleName, mc_campaign):
 
-if param_runTtbar:
-    Samples += GetTtbarSamples ( useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, 
-                                 ttbarSystSamples = param_runTtSyst, hfSplitted = True, 
-                                 useHTSlices = param_useSlices, campaign = param_campaign, sVLQAna=param_doSingleVLQAna)
+    Samples = []
 
-if param_runOtherBkgd:
-    Samples += GetOtherBackgroundSamples (  useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, campaign=param_campaign
-                                            , includeSingleTop = param_runSingleTop
-                                            , includeWjets = param_runWjets, includeZjets = param_runZjets
-                                            , includeTopEW = param_runTopEW, includeDibosons = param_runDibosons
-                                            , includeDijet = param_runDijet
-                                            , includeSingletopSystSamples = param_runSTSyst
-                                            , splitSTChannels = param_splitSTChannels
-                                            , includeTchan=param_runTchanSingleTop, includeWtprod=param_runWtSingleTop, includeSchan=param_runSchanSingleTop
-                                            , removeNull = param_removeNull, sVLQAna = param_doSingleVLQAna)
+    ##### Data #######
+    if sampleName == 'data' :
+        Samples = GetDataSamples( data_type = 'TOPQ1' if args.channel=='1lep' else 'TOPQ4') 
 
-if param_runSignal:
-    Samples += GetSignalSamples( useWeightSyst = param_useWeightSyst, useObjectSyst = param_useObjectSyst, campaign = param_campaign
-                                 , includeSingleVLQ = param_runSingleVLQ, includePairVLQ = param_runPairVLQ
-                                 , include4tops = param_run4tops, includeDoubletPairVLQ = param_runDoubletPairVLQ)
+    ##### Nominal backgrounds #######
+    if sampleName == 'ttbar' :
+        Samples = GetTtbarSamples(useObjectSyst=args.useSyst, campaign = mc_campaign, 
+                                  hfSplitted=True, ttbarSystSamples=False, useHTSlices = args.useTtbarHtSlices)
+    if sampleName == 'singletop' :
+        Samples = GetSingleTopSamples( useObjectSyst=args.useSyst, campaign=mc_campaign, 
+                                       splitChannel=True, runSingletopSystSamples=False)
+    if sampleName == 'Wjets' :
+        Samples =  GetWSamplesSherpa2211(useObjectSyst=args.useSyst, campaign = mc_campaign)
+    if sampleName == 'Zjets' :
+        Samples =  GetZSamplesSherpa2211(useObjectSyst=args.useSyst, campaign = mc_campaign)
+    if sampleName == 'diboson' :
+        Samples = GetDibosonSamplesSherpa2211(useObjectSyst=args.useSyst, campaign = mc_campaign)
+    if sampleName == 'topEW' : ## This names needs to be changed, since 4tops is not EW
+        Samples = GetTopEWSamples(useObjectSyst=args.useSyst, campaign = mc_campaign)
+        Samples = GetHiggsSamples(useObjectSyst=args.useSyst, campaign = mc_campaign) #ttH
+        Samples = Get4TopsSamples(useObjectSyst=args.useSyst, campaign = mc_campaign)
+    if sampleName == 'dijet' :
+        Samples = GetDijetSamples(useObjectSyst=args.useSyst, campaign = mc_campaign)
 
-printGoodNews("--> All samples recovered")
-##..............................................................................
+    ##### Alternative backgrounds #######
+    if sampleName == 'ttbar_alt' :
+        Samples = GetTtbarSamples(useObjectSyst=False, campaign = mc_campaign, 
+                                   hfSplitted=True, ttbarSystSamples=True, useHTSlices = args.useTtbarHtSlices)
+    if sampleName == 'singletop_alt' :
+        Samples = GetSingleTopSamples( useObjectSyst=False, campaign=mc_campaign, 
+                                        splitChannel=True, runSingletopSystSamples=True)
+        
+    ##### Signal #######
+    if sampleName == 'pvlq' :
+        Samples = GetVLQTSamples(useObjectSyst=args.useSyst, campaign = mc_campaign)
+        
+    return Samples
 
 ##______________________________________________________________________________
-## Loop over channels
-printGoodNews("--> Performing the loop over samples and jobs")
-nJobs = 0
-for channel in channels:
+## Submit jobs for specific sample and campaign
+##
+def SubmitSampleJob(sampleName, mc_campaign):
 
-    ##__________________________________________________________________________
-    ## Loop over samples
+    Samples = retrieveSamples(sampleName, mc_campaign)
+
+    sample_inputDir = args.inputDir
+    sample_outputDir = outputDir
+
+    if(args.useProcSubdirs):
+        sample_inputDir += "/"+sampleName+"/"
+        sample_outputDir += "/"+sampleName+"/"
+
+    sample_listDir = sample_outputDir + "/Lists_Analysis/"
+    sample_scriptsDir = sample_outputDir + "/Scripts_Analysis/"
+
+    os.system("mkdir -p " + sample_listDir) #list files directory
+    os.system("mkdir -p " + sample_scriptsDir) #script files directory
+
     for sample in Samples:
-
         SName = sample['name'] # sample name
         SType = sample['sampleType'] # sample type (first argument of the getSamplesUncertainties())
 
         excluded = []
-        joblist = getSampleJobs(sample,InputDir=param_inputDir+"/"+channel+"/",NFiles=nFilesSplit,UseList=False,ListFolder=listFolder,exclusions=excluded,useDiffFilesForObjSyst=False)
+        print "GetSampleJobs; SName : ",SName,"; SType : ",SType
+        joblist = getSampleJobs(sample,
+                                InputDir=sample_inputDir, NFiles=args.nFilesSplit,UseList=False,
+                                ListFolder=sample_listDir,exclusions=[],
+                                useDiffFilesForObjSyst=False)
         if(not joblist):
             continue
 
         #Setting caracteristics for the JobSet object
         JOSet = JobSet(platform)
-        JOSet.setBatch(param_batch)
-        JOSet.setScriptDir(scriptFolder)
-        JOSet.setLogDir(param_outputDir)
+        JOSet.setBatch(args.batch)
+        JOSet.setScriptDir(sample_scriptsDir)
+        JOSet.setLogDir(sample_outputDir)
         JOSet.setTarBall(tarballPath)#tarball sent to batch (contains all executables)
-        JOSet.setJobRecoveryFile(scriptFolder+"/JobCheck.chk")
-        JOSet.setQueue(param_queue)
+        JOSet.setJobRecoveryFile(sample_scriptsDir+"/JobCheck.chk")
+        JOSet.setQueue(args.queue)
 
-        setCom=""
-        setCom+="rcSetup Base,2.4.43 \n "
-        JOSet.setSetUpCommand(setCom)
         ##______________________________________________________________________
         ## Loop over jobs for this sample (multiple files or systematics)
         for iJob in range(len(joblist)):
@@ -319,11 +337,10 @@ for channel in channels:
             ## Name of the executable you want to run
             jO.setExecutable("VLQAna")
             jO.setDebug(False)
-
+            
             name  = SType
             name += "_" + SName
             name += "_"+joblist[iJob]['objSyst']+"_"+`iJob` #name of the job
-
             jO.setName(name)
 
             # Settings of the jobs (inputs, outputs, ...)
@@ -334,12 +351,12 @@ for channel in channels:
             jO.addOption("sampleName",sample['sampleType'])
 
             # Weight systematics
-            if param_useWeightSyst and joblist[iJob]['objSyst'].upper()=="NOMINAL" and SType.upper().find("DATA")==-1:
+            if args.useSyst and joblist[iJob]['objSyst'].upper()=="NOMINAL" and SType.upper().find("DATA")==-1:
                 jO.addOption("computeWeightSys","true")
             else:
                 jO.addOption("computeWeightSys","false")
 
-            jO.setOutDir(param_outputDir)
+            jO.setOutDir(sample_outputDir)
             jO.addOption("sampleID",SName)
 
             # Input tree name (might change for systematics)
@@ -351,27 +368,66 @@ for channel in channels:
             else:
                 jO.addOption("isData","false")
 
-            #Adding further options set by the user
-            for param in userParams:
-                jO.addOption(param['arg'],param['value'])
+            # sample info
+            if(args.channel == '1lep'):
+                jO.addOption("sampleDat", sampleDatPattern+"."+mc_campaign+".dat")
+            else:
+                jO.addOption("sampleDat", sampleDatPattern+"."+sampleName+"."+mc_campaign+".dat")
 
+            for arg,value in vlqOptions.items():
+                jO.addOption(arg, value)
+                if(arg.upper() == 'REWEIGHTKINEMATICS'):
+                    if(sampleName == 'ttbar' or sampleName == 'singletop' or 
+                       sampleName == 'ttbar_alt' or sampleName == 'singletop_alt'):
+                        jO.addOption('KINRWLIST','JETSN,MEFFRED')
+                    elif(sampleName == 'Wjets' or sampleName == 'Zjets'):
+                        jO.addOption('KINRWLIST','JETSN')
+                    
             ## SKIPPING ALREADY PROCESSED FILES
-            if(os.path.exists(param_outputDir+"/"+OFileName)):
+            if(os.path.exists(sample_outputDir+"/"+OFileName)):
                 printWarning("=> Already processed: skipping")
                 continue
 
             JOSet.addJob(jO)
 
-            if ( JOSet.size()==nMerge or joblist[iJob]['objSyst'].upper()=="NOMINAL" ):
+            if ( JOSet.size()==args.nMerge or joblist[iJob]['objSyst'].upper()=="NOMINAL" ):
                 JOSet.writeScript()
-                if not param_dryRun:
+                if not args.dryRun:
                     JOSet.submitSet()
                 JOSet.clear()
 
         if(JOSet.size()>0):
             JOSet.writeScript()
-            if not param_dryRun:
+            if not args.dryRun:
                 JOSet.submitSet()
             JOSet.clear()
-        os.system("sleep "+`sleep`)
+
+        os.system("sleep "+`args.sleep`)
+
+    return 
+
 ##..............................................................................
+###### FUNCTION DEFINITIONS END
+##..............................................................................
+
+
+##__________________________________________________________________________
+## Loop over samples
+
+printGoodNews("--> Performing the loop over samples and campaigns")
+nJobs = 0
+
+#### Loop over campaigns for MC samples
+for proc_name in procs_to_run: 
+    print 'Process : ',proc_name
+    if proc_name == 'data':
+        SubmitSampleJob(sampleName, '')
+    else:
+        for mc_campaign in args.campaigns:
+            SubmitSampleJob(proc_name, mc_campaign)
+
+##..............................................................................
+
+##..............................................................................
+
+

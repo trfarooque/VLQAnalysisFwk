@@ -225,6 +225,24 @@ bool VLQ_WeightManager::AddVLQNominalWeights(){
     bool btag_isinput = !((m_vlq_opt -> DoTRF() && m_vlq_opt -> RecomputeTRF()) || m_vlq_opt -> RecomputeBtagSF());
     AddAndInitWeight(btag_name, "", true/*is nominal*/, btag_isinput);
 
+    if(m_vlq_opt ->  UseLargeRJets() && m_vlq_opt -> DoLargeRJetsBOT()){
+
+      std::vector< std::string > LRJTaggers= {"LRJDNNC50", "LRJDNNC80", "LRJDNNI50", 
+					      "LRJDNNI80", "LRJSW50", "LRJSW80", "LRJSZ50", "LRJSZ80"};
+      for(std::string LRJTagger : LRJTaggers){ 
+	AddAndInitWeight("weight_SF_"+LRJTagger, "", true /*isNominal*/, false /*isInput*/);
+      }
+
+    }
+
+    if(m_vlq_opt->DoFJvtSFWeights()){
+
+      AddAndInitWeight("weight_fJvt", "", true, false);
+      AddAndInitWeight("weight_fJvt_UP", "", false, false, "", "weight_fJvt");
+      AddAndInitWeight("weight_fJvt_DOWN", "", false, false, "", "weight_fJvt");
+
+    }
+
     if( m_vlq_outData -> o_is_ttbar ){
       //ttbb correction weight
       if(m_vlq_opt->ApplyTtbbCorrection() && m_vlq_opt->SampleName()==SampleName::TTBARBB){
@@ -259,31 +277,6 @@ bool VLQ_WeightManager::AddVLQNominalWeights(){
 
 //______________________________________________________________________________
 //
-bool VLQ_WeightManager::AddFJvtSFWeights(  ){
-
-  //if(!m_fJvt_calibTool) return true;
-  AddAndInitWeight("weight_fJvt", "", true, false);
-  AddAndInitWeight("weight_fJvt_UP", "", false, false, "", "weight_fJvt");
-  AddAndInitWeight("weight_fJvt_DOWN", "", false, false, "", "weight_fJvt");
-  
-  return true;
-}
-
-//______________________________________________________________________________
-//
-bool VLQ_WeightManager::AddLargeRJetTaggerSFs(){
-
-  if(!(m_vlq_opt -> UseLargeRJets() && m_vlq_opt -> DoLargeRJetsBOT())) return true;
-
-  std::vector< std::string > LRJTaggers= {"LRJDNNC50", "LRJDNNC80", "LRJDNNI50", "LRJDNNI80", "LRJSW50", "LRJSW80", "LRJSZ50", "LRJSZ80"};
-
-  for(std::string LRJTagger : LRJTaggers) AddAndInitWeight("weight_SF_"+LRJTagger, "", true /*isNominal*/, false /*isInput*/);
-
-  return true;
-}
-
-//______________________________________________________________________________
-//
 bool VLQ_WeightManager::AddKinReweightings(  ){
 
   if(!m_kinRw) return true;
@@ -300,37 +293,36 @@ bool VLQ_WeightManager::AddKinReweightings(  ){
 //
 bool VLQ_WeightManager::AddKinRwSystPVLQ(){
 
-  if( m_vlq_opt -> ReweightKinematics() && m_vlq_opt->DoKinRwSyst() ){
+  //if( m_vlq_opt -> ReweightKinematics() && m_vlq_opt->DoKinRwSyst() && m_opt->DoKinRwSmoothing() ){
 
-    if( (m_vlq_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP) ){
-
-      std::string replace = ( (m_vlq_opt->StrSampleName().find("SINGLETOPSCHAN") != std::string::npos)
-                              || (m_vlq_opt->StrSampleName().find("SINGLETOPTCHAN") != std::string::npos) )
-        ? "" : "weight_RW_MEFFRED";
-
-      AddAndInitWeight("weight_RW_MEFFRED_5JEX_UP", "", false, false, "", replace);
-      AddAndInitWeight("weight_RW_MEFFRED_5JEX_DOWN", "", false, false, "", replace);
-
-      AddAndInitWeight("weight_RW_MEFFRED_6JEX_UP", "", false, false, "", replace);
-      AddAndInitWeight("weight_RW_MEFFRED_6JEX_DOWN", "", false, false, "", replace);
-
-      AddAndInitWeight("weight_RW_MEFFRED_7JEX_UP", "", false, false, "", replace);
-      AddAndInitWeight("weight_RW_MEFFRED_7JEX_DOWN", "", false, false, "", replace);
-
-      AddAndInitWeight("weight_RW_MEFFRED_8JIN_UP", "", false, false, "", replace);
-      AddAndInitWeight("weight_RW_MEFFRED_8JIN_DOWN", "", false, false, "", replace);
-
-    }
-    else if((m_opt -> SampleName() == SampleName::ZJETS) || (m_opt -> SampleName() == SampleName::WJETS)){
-      AddAndInitWeight("weight_RW_JETSN_UP", "", false, false, "", "weight_RW_JETSN");
-      AddAndInitWeight("weight_RW_JETSN_DOWN", "", false, false, "", "weight_RW_JETSN");
-    }
-
+  if( (m_vlq_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP) ){
+    
+    std::string replace = ( (m_vlq_opt->StrSampleName().find("SINGLETOPSCHAN") != std::string::npos)
+			    || (m_vlq_opt->StrSampleName().find("SINGLETOPTCHAN") != std::string::npos) )
+      ? "" : "weight_RW_MEFFRED";
+    
+    AddAndInitWeight("weight_RW_MEFFRED_5JEX_UP", "", false, false, "", replace);
+    AddAndInitWeight("weight_RW_MEFFRED_5JEX_DOWN", "", false, false, "", replace);
+    
+    AddAndInitWeight("weight_RW_MEFFRED_6JEX_UP", "", false, false, "", replace);
+    AddAndInitWeight("weight_RW_MEFFRED_6JEX_DOWN", "", false, false, "", replace);
+    
+    AddAndInitWeight("weight_RW_MEFFRED_7JEX_UP", "", false, false, "", replace);
+    AddAndInitWeight("weight_RW_MEFFRED_7JEX_DOWN", "", false, false, "", replace);
+    
+    AddAndInitWeight("weight_RW_MEFFRED_8JIN_UP", "", false, false, "", replace);
+    AddAndInitWeight("weight_RW_MEFFRED_8JIN_DOWN", "", false, false, "", replace);
+    
+  }
+  else if((m_opt -> SampleName() == SampleName::ZJETS) || (m_opt -> SampleName() == SampleName::WJETS)){
+    AddAndInitWeight("weight_RW_JETSN_UP", "", false, false, "", "weight_RW_JETSN");
+    AddAndInitWeight("weight_RW_JETSN_DOWN", "", false, false, "", "weight_RW_JETSN");
   }
 
-  return true;
-
+  return true;  
 }
+
+//}
 
 //______________________________________________________________________________
 //
@@ -463,7 +455,7 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
 
   }//INSTRUMENTAL UNCERTAINTIES
 
-  if(m_vlq_opt->DoPDFSys()){
+  if(m_vlq_opt->DoPDFSys() &&  m_vlq_outData -> o_is_ttbar ){ //PDF systematics are only implemented for ttbar samples right now
 
     //Using LHAPDF sets
     int baseIdx = 90900; 
@@ -498,6 +490,7 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
       AddAndInitWeight("weight_pmg_Var3cDown","",false, true, "weight_pmg_Var3cDown", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
       AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac20","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac20", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
       AddAndInitWeight("weight_pmg_isr_muRfac10__fsr_muRfac05","",false, true, "weight_pmg_isr_muRfac10__fsr_muRfac05", "weight_mc")->AddFlagAtBit(REWEIGHT, true);
+
 
 	/*
       //ttbar systematics
@@ -573,7 +566,13 @@ bool VLQ_WeightManager::AddVLQSystematicWeights( bool dump_config ){
 
   }//theory sys
 
+  if( m_vlq_opt -> ReweightKinematics() && m_vlq_opt->DoKinRwSyst() && m_vlq_opt->DoKinRwSmoothing() ){
+    if(m_vlq_opt->UseSVLQConfig()){ AddKinRwSyst(); }
+    else{ AddKinRwSystPVLQ(); }
+  }//reweighting sys
+
   return true;
+
 }
 
 //______________________________________________________________________________

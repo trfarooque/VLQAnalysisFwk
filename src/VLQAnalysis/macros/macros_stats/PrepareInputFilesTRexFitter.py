@@ -240,7 +240,8 @@ printGoodNews("--> All samples recovered")
 ##------------------------------------------------------
 Combination = []
 Commands = []
-listfiles = glob.glob(inputDir+"/outVLQAna_*.root")
+listfiles = glob.glob(inputDir+"/outVLQAna_*"+".root")
+#listfiles = glob.glob(inputDir+"/"+file_pattern)
 for sample in Samples:
 
     SName = sample['name'] # sample name

@@ -1,0 +1,70 @@
+{
+    "410644.mc16e": {
+        "crossSection": 2.061459, 
+        "nWeightedEvents": 6727860.1330013275
+    }, 
+    "410645.mc16e": {
+        "crossSection": 1.28866725, 
+        "nWeightedEvents": 4211387.969696403
+    }, 
+    "410646.mc16e": {
+        "crossSection": 35.848575, 
+        "nWeightedEvents": 314970521.60614777
+    }, 
+    "410647.mc16e": {
+        "crossSection": 35.8467585, 
+        "nWeightedEvents": 314791414.02781296
+    }, 
+    "410654.mc16e": {
+        "crossSection": 35.72191349999999, 
+        "nWeightedEvents": 304224200.1504605
+    }, 
+    "410655.mc16e": {
+        "crossSection": 35.7455328, 
+        "nWeightedEvents": 311229386.1347876
+    }, 
+    "410658.mc16e": {
+        "crossSection": 44.1595, 
+        "nWeightedEvents": 307148493.18131363
+    }, 
+    "410659.mc16e": {
+        "crossSection": 26.2727877, 
+        "nWeightedEvents": 184050590.68201935
+    }, 
+    "411032.mc16e": {
+        "crossSection": 26.277696, 
+        "nWeightedEvents": 179306978.97804642
+    }, 
+    "411033.mc16e": {
+        "crossSection": 44.153754, 
+        "nWeightedEvents": 307324034.62602997
+    }, 
+    "411034.mc16e": {
+        "crossSection": 2.06115756, 
+        "nWeightedEvents": 6729927.738863945
+    }, 
+    "411035.mc16e": {
+        "crossSection": 1.28861859, 
+        "nWeightedEvents": 4210098.8581671715
+    }, 
+    "411036.mc16e": {
+        "crossSection": 35.8503865, 
+        "nWeightedEvents": 314232052.2639313
+    }, 
+    "411037.mc16e": {
+        "crossSection": 35.8486004, 
+        "nWeightedEvents": 314762510.99235535
+    }, 
+    "412002.mc16e": {
+        "crossSection": 71.7001974, 
+        "nWeightedEvents": 912861551.1862183
+    }, 
+    "412004.mc16e": {
+        "crossSection": 64.326, 
+        "nWeightedEvents": 1062034689.4276733
+    }, 
+    "412005.mc16e": {
+        "crossSection": 3.3333, 
+        "nWeightedEvents": 30624944.67356682
+    }
+}

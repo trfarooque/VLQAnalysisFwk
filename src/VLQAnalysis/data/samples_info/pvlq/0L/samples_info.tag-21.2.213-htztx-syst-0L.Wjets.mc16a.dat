@@ -1,0 +1,50 @@
+{
+    "700338.mc16a": {
+        "crossSection": 203.861058282, 
+        "nWeightedEvents": 1013478653785432.9
+    }, 
+    "700339.mc16a": {
+        "crossSection": 3239.0492372, 
+        "nWeightedEvents": 1.1464800462008532e+16
+    }, 
+    "700340.mc16a": {
+        "crossSection": 18341.5512, 
+        "nWeightedEvents": 2.571035832699612e+16
+    }, 
+    "700341.mc16a": {
+        "crossSection": 213.62902079999998, 
+        "nWeightedEvents": 1000505307063407.2
+    }, 
+    "700342.mc16a": {
+        "crossSection": 3183.9202272, 
+        "nWeightedEvents": 1.1707914933666296e+16
+    }, 
+    "700343.mc16a": {
+        "crossSection": 18394.4513, 
+        "nWeightedEvents": 2.574350099702998e+16
+    }, 
+    "700344.mc16a": {
+        "crossSection": 69.20683776, 
+        "nWeightedEvents": 244751600853403.2
+    }, 
+    "700345.mc16a": {
+        "crossSection": 1121.53344, 
+        "nWeightedEvents": 1436283250789130.8
+    }, 
+    "700346.mc16a": {
+        "crossSection": 6508.5696, 
+        "nWeightedEvents": 5838188983712008.0
+    }, 
+    "700347.mc16a": {
+        "crossSection": 122.5818965, 
+        "nWeightedEvents": 122785006349022.61
+    }, 
+    "700348.mc16a": {
+        "crossSection": 2025.24462, 
+        "nWeightedEvents": 574905906029845.6
+    }, 
+    "700349.mc16a": {
+        "crossSection": 11971.21996, 
+        "nWeightedEvents": 5837974635082070.0
+    }
+}

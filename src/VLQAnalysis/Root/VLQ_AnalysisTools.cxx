@@ -60,9 +60,10 @@ m_leptopRecoOpt(0)
   if(m_opt->LeptopOpt().find("PREF_BTAG") != std::string::npos)
     m_leptopRecoOpt |= VLQ_ResonanceMaker::PREF_BTAG;
 
-
-  m_smearing_tool = new VLQ_SmearingTool();
-  m_smearing_tool -> Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/JMR.root"), "IQR_PFlow", 0.2);
+  if( m_opt->DoJMRSys() ){
+    m_smearing_tool = new VLQ_SmearingTool();
+    m_smearing_tool -> Init(std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/JMR.root"), "IQR_PFlow", 0.2);
+  }
 }
 
 //_________________________________________________________________________

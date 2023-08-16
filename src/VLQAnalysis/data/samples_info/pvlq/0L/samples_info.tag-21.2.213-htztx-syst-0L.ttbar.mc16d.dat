@@ -1,0 +1,18 @@
+{
+    "407342.mc16d": {
+        "crossSection": 0.5095361759984895, 
+        "nWeightedEvents": 3323094776.127014
+    }, 
+    "407343.mc16d": {
+        "crossSection": 2.9584871439912295, 
+        "nWeightedEvents": 64010492153.27771
+    }, 
+    "407344.mc16d": {
+        "crossSection": 21.36096760770789, 
+        "nWeightedEvents": 17816068177.79242
+    }, 
+    "410470.mc16d": {
+        "crossSection": 452.329802598659, 
+        "nWeightedEvents": 108135989062.6521
+    }
+}

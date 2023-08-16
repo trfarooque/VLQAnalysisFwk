@@ -54,8 +54,6 @@ public:
     bool AddKinReweightings();
     bool AddKinRwSyst();
     bool AddKinRwSystPVLQ();
-    bool AddFJvtSFWeights();
-    bool AddLargeRJetTaggerSFs();
 
     bool SetLeptonSFWeights( const bool apply_trigger_weights );
     bool SetCrossSectionWeight();

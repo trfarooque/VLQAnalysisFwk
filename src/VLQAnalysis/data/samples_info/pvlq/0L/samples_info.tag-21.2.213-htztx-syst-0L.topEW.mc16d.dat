@@ -1,0 +1,38 @@
+{
+    "346344.mc16d": {
+        "crossSection": 0.22998379315799997, 
+        "nWeightedEvents": 3111578.151433468
+    }, 
+    "346345.mc16d": {
+        "crossSection": 0.05466699999999999, 
+        "nWeightedEvents": 355020.01412670314
+    }, 
+    "410080.mc16d": {
+        "crossSection": 0.009200497931878854, 
+        "nWeightedEvents": 200000.0
+    }, 
+    "410155.mc16d": {
+        "crossSection": 0.60084912, 
+        "nWeightedEvents": 4111925.0083904862
+    }, 
+    "410156.mc16d": {
+        "crossSection": 0.17209440000000004, 
+        "nWeightedEvents": 232220.94164696336
+    }, 
+    "410157.mc16d": {
+        "crossSection": 0.5863131, 
+        "nWeightedEvents": 1585437.047315836
+    }, 
+    "410218.mc16d": {
+        "crossSection": 0.04128768000000001, 
+        "nWeightedEvents": 49255.10075934976
+    }, 
+    "410219.mc16d": {
+        "crossSection": 0.04128880000000001, 
+        "nWeightedEvents": 49331.13402491063
+    }, 
+    "410220.mc16d": {
+        "crossSection": 0.0409416, 
+        "nWeightedEvents": 32785.08994945139
+    }
+}

@@ -1,0 +1,50 @@
+{
+    "302469.mc16e": {
+        "crossSection": 1.16, 
+        "nWeightedEvents": 110000.0
+    }, 
+    "302472.mc16e": {
+        "crossSection": 0.195, 
+        "nWeightedEvents": 220000.0
+    }, 
+    "302476.mc16e": {
+        "crossSection": 0.0438, 
+        "nWeightedEvents": 220000.0
+    }, 
+    "302478.mc16e": {
+        "crossSection": 0.0223, 
+        "nWeightedEvents": 218000.0
+    }, 
+    "302480.mc16e": {
+        "crossSection": 0.0117, 
+        "nWeightedEvents": 220000.0
+    }, 
+    "302481.mc16e": {
+        "crossSection": 0.00634, 
+        "nWeightedEvents": 110000.0
+    }, 
+    "302482.mc16e": {
+        "crossSection": 0.0035, 
+        "nWeightedEvents": 110000.0
+    }, 
+    "308294.mc16e": {
+        "crossSection": 0.00197, 
+        "nWeightedEvents": 220000.0
+    }, 
+    "308295.mc16e": {
+        "crossSection": 0.00112, 
+        "nWeightedEvents": 220000.0
+    }, 
+    "308296.mc16e": {
+        "crossSection": 0.00065, 
+        "nWeightedEvents": 110000.0
+    }, 
+    "308297.mc16e": {
+        "crossSection": 0.00038, 
+        "nWeightedEvents": 110000.0
+    }, 
+    "308299.mc16e": {
+        "crossSection": 0.000132, 
+        "nWeightedEvents": 110000.0
+    }
+}

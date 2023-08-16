@@ -1,0 +1,30 @@
+{
+    "364702.mc16a": {
+        "crossSection": 23997964.5713, 
+        "nWeightedEvents": 85582.83767669013
+    }, 
+    "364703.mc16a": {
+        "crossSection": 308364.151, 
+        "nWeightedEvents": 1869.1647142626325
+    }, 
+    "364704.mc16a": {
+        "crossSection": 3403.015416, 
+        "nWeightedEvents": 27.55762866968831
+    }, 
+    "364705.mc16a": {
+        "crossSection": 66.14196873600001, 
+        "nWeightedEvents": 0.8511924032987301
+    }, 
+    "364706.mc16a": {
+        "crossSection": 2.4393874601199994, 
+        "nWeightedEvents": 0.022240662655470526
+    }, 
+    "364707.mc16a": {
+        "crossSection": 0.17994174659999998, 
+        "nWeightedEvents": 0.0030593283993499247
+    }, 
+    "364708.mc16a": {
+        "crossSection": 0.006347084261599999, 
+        "nWeightedEvents": 0.0008843122677849816
+    }
+}

@@ -237,6 +237,12 @@ int VLQ_MVAManager::MakeVariableStore(){
   //======================================
 
   //======================================
+  //QCD cleaning variable - technically not part of the MVA set but useful
+
+  m_varStore["dPhi_jetmet"] = new VariableDef("dPhi_jetmet", ";#Delta#Phi^{min}(MET,jet)", &(dummy));
+  if(m_outputData){ m_varStore.at("dPhi_jetmet")->SetAddress(&(m_outputData -> o_dPhi_jetmet)); }
+
+  //======================================
   //RC jet kinematics
   m_varStore["RCjet0_pt"] = new VariableDef("RCjet0_pt", ";p_{T}(RCjet0) [GeV]", &(dummy), 0, "Pt");
   if(m_outputData){ m_varStore.at("RCjet0_pt")->SetAddress(&(m_outputData->o_rcjets)); }

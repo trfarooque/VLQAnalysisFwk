@@ -21,7 +21,7 @@ m_usePileUpWeight(true),
 m_dumpHistos(true),
 m_dumpTree(false),
 m_dumpOverlapTree(false),
-m_splitVLQDecays(false),
+m_splitVLQDecays(true),
 m_doTruthAnalysis(false),
 m_doTRF(false),
 m_recomputeTRF(false),
@@ -37,9 +37,9 @@ m_multipleVariablesWithUncertainties(false),
 m_verboseOutput(false),
 m_RecTtBbRw(false),
 m_RwTtFractions(false),
-m_useMETTrigger(false),
-m_useMETTriggerOneLep(false),
-m_useLeptonTrigger(false),
+m_useMETTrigger(true),
+m_useMETTriggerOneLep(true),
+m_useLeptonTrigger(true),
 m_useLargeRJets(false),
 m_doLargeRJetsBOT(false),
 m_doCutFlow(true),
@@ -51,8 +51,8 @@ m_isDiagSub(false),
 m_doPreselection(true),
 m_doExclusiveJetRegions(false),
 m_doExtendedPreselection(false),
-m_doSingleVLQRegions(true),
-m_doPairVLQRegions(false),
+m_doSingleVLQRegions(false),
+m_doPairVLQRegions(true),
 m_doOldPairProdRegions(false),
 m_doValidnRegions(false),
 m_doFitRegions(true),
@@ -67,12 +67,12 @@ m_doSumRegions(false),
 m_scaleTtbarHtSlices(false),
 m_applyTtbarNNLOCorrection(false),
 m_recomputeTtbarNNLOCorrection(false),
-m_applyVjetsSherpa22RW(true),
+m_applyVjetsSherpa22RW(false),
 m_computeTtccNLO(false),
 m_deriveReweighting(false),
 m_reweightKinematics(false),
 m_doKinRwSmoothing(false),
-m_doKinRwSyst(false),
+m_doKinRwSyst(true),
 m_doFJvtSFWeights(false),
 m_makeQCD0LSystematics(false),
 m_doPreselSys(false),
@@ -84,19 +84,19 @@ m_applyMVA(false),
 m_makeMVAInputHists(false),
 m_makeMVAInputTree(false),
 m_addMVAInputsFromXml(false),
-m_doBaselineFitRegions(true),
+m_doBaselineFitRegions(false),
 m_doUncorrelatedMVARegions(false),
 m_prunePMGWeights(false),
 m_useSVLQConfig(false),
 m_doJMSSys(0),
 m_maxb(4),
-m_RCNsubjetsCut(2),
-m_RCJetsPtCut(300.),
+m_RCNsubjetsCut(0),
+m_RCJetsPtCut(200.),
 m_jetsPtCut(25.),
 m_jetsEtaCut(2.5),
 m_fwdJetsPtCut(40.),
 m_fwdJetsEtaCut(4.5),
-m_trkJetsPtCut(10.),
+m_trkJetsPtCut(20.),
 m_lepPtCut(28.),
 m_mtbminCut(160.),
 m_metregionsCut(400.),
@@ -108,8 +108,8 @@ m_minMetCutOneLep(0.),
 m_maxMetCutOneLep(-1.),
 m_minMetCutZeroLep(200.),
 m_maxMetCutZeroLep(-1.),
-m_maxMetCutTwoLep(-1.),
-m_maxLeptopDR(100.),
+m_maxMetCutTwoLep(100.),
+m_maxLeptopDR(1.),
 m_highMVACut1Lep(0.90),
 m_lowMVACut1Lep(0.50),
 m_highMVACut0Lep(0.95),
@@ -118,14 +118,14 @@ m_doRecoVLQ("pair"),
 // m_btagOP("77"),
 m_btagOP(""), // temp
 m_btagAlg("MV2c10"),
-m_TRFCDIPath("xAODBTaggingEfficiency/13TeV/2016-20_7-13TeV-MC15-CDI-2017-01-31_v1.root"),
-m_sampleDat("samples_info_MBJ-2.4.24-1-0.dat"),
+m_TRFCDIPath("xAODBTaggingEfficiency/13TeV/2017-21-13TeV-MC16-CDI-2019-07-30_v1.root"),
+m_sampleDat(""),
 m_lepWOpt("VANILLA"),
 m_leptopOpt("VETO_RCMATCH"),
 m_RCCollection("VR_rho550"),
 m_MVAWeightFile(""),
 m_filterType(NOFILTER),
-m_btagCollection(CALOPFLOW)
+m_btagCollection(TRACK)
 {}
 
 //_____________________________________________________________
@@ -699,11 +699,11 @@ void VLQ_Options::checkConcistency() const
                       +" doOneLeptonAna "+bool2string(m_doOneLeptonAna)+","
                       +" doZeroLeptonAna "+bool2string(m_doZeroLeptonAna)
                       +" doTwoLeptonAna "+bool2string(m_doTwoLeptonAna));
-  /*if( (m_doOneLeptonAna==true or m_doZeroLeptonAna==true) and m_doTwoLeptonAna==true)
+  if( (m_doOneLeptonAna==true or m_doTwoLeptonAna==true) and m_doZeroLeptonAna==true)
     throw logic_error(string(__FILE__)+"\n"
-                      +" Cannot run dilepton channel together with 0-lep or 1-lep channels:"
+                      +" Cannot run 0-lep channel together with 1-lep or 2-lep channels:"
                       +" doOneLeptonAna "+bool2string(m_doOneLeptonAna)+","
                       +" doZeroLeptonAna "+bool2string(m_doZeroLeptonAna)
-                      +" doTwoLeptonAna "+bool2string(m_doTwoLeptonAna));*/
-  // TODO implement other checks
-}
+                      +" doTwoLeptonAna "+bool2string(m_doTwoLeptonAna));
+    // TODO implement other checks
+    }

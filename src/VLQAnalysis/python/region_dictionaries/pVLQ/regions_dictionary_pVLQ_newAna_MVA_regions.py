@@ -5,11 +5,12 @@
 # Preselection regions 1-lepton
 #
 #
-reg_1lep6jin3bin2Min3Jin = {
-    'name':"HTX_c1lep6jin3bin2Min3Jin"
-}
-reg_1lep5jin3bin2Min3Jin = {
-    'name':"HTX_c1lep5jin3bin2Min3Jin"
+reg_1lep5jin2bin = {
+    'name':"HTX_c1lep5jin2bin",
+    'legend': "#scale[0.75]{#geq5j, #geq2b}",
+    'binning':"0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,5000,7000",
+    'binning_blind':"0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000",
+    'type':"SIGNAL"
 }
 
 #
@@ -41,15 +42,13 @@ reg_1lep5jin4bin0Hex1VTex0_1Lwin = {
 reg_1lep5jin3bex2Min3Jin0HexHighMVAScore = {
     'name':"HTX_c1lep5jin3bex2Min3Jin0HexHighMVAScore",
     'legend':"#scale[0.75]{#geq5j, 3b, #geq2M, #geq3J, 0H, HMVA}",
-    #"binning":"1000,2100,2450,2700,3000,3400,7000",
-    'binning':"1000,2100,2450,2700,3000,3400,7000", #1600 Doublet
+    'binning':"1000,2450,3000,7000",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
 reg_1lep5jin3bex2Min3Jin0HexMidMVAScore = {
     'name':"HTX_c1lep5jin3bex2Min3Jin0HexMidMVAScore",
     'legend':"#scale[0.75]{#geq5j, 3b, #geq2M, #geq3J, 0H, MMVA}",
-    #'binning':"1000,2100,2350,2650,3050,7000",
     'binning':"1000,2100,2350,2650,3050,7000", #1600 Singlet
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
@@ -57,80 +56,70 @@ reg_1lep5jin3bex2Min3Jin0HexMidMVAScore = {
 reg_1lep5jin3bex2Min3Jin0HexLowMVAScore = {
     'name':"HTX_c1lep5jin3bex2Min3Jin0HexLowMVAScore",
     'legend':"#scale[0.75]{#geq5j, 3b, #geq2M, #geq3J, 0H, LMVA}",
-    #'binning':"1000,1400,1600,1800,2000,2300,7000",
-    'binning':"1000,1400,1650,2000,2300,2800,7000", #1600 HtHt
+    'binning':"1000,1400,1650,2000,2300,7000",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
 reg_1lep5jin4bin2Min3Jin0HexHighMVAScore = {
     'name':"HTX_c1lep5jin4bin2Min3Jin0HexHighMVAScore",
     'legend':"#scale[0.75]{#geq5j, #geq4b, #geq2M, #geq3J, 0H, HMVA}",
-    #'binning':"1000,2150,2450,2700,3000,3400,7000",
-    'binning':"1000,2150,2450,2700,3000,3400,7000", #1600 Singlet
-    #'binning':"\"AutoBin\",\"TransfoD\",3,3",
+    'binning':"1000,2550,7000",
+    #'binning':"\"AutoBin\",\"TransfoD\",2,2",
     'type':"SIGNAL"
 }
 reg_1lep5jin4bin2Min3Jin0HexMidMVAScore = {
     'name':"HTX_c1lep5jin4bin2Min3Jin0HexMidMVAScore",
     'legend':"#scale[0.75]{#geq5j, #geq4b, #geq2M, #geq3J, 0H, MMVA}",
-    #'binning':"1000,1800,2000,2250,2950,7000",
-    'binning':"1000,1800,2000,2250,2500,2900,7000", # 1600 HtHt
+    'binning':"1000,1800,2000,2250,2500,7000",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
 reg_1lep5jin4bin2Min3Jin0HexLowMVAScore = {
     'name':"HTX_c1lep5jin4bin2Min3Jin0HexLowMVAScore",
     'legend':"#scale[0.75]{#geq5j, #geq4b, #geq2M, #geq3J, 0H, LMVA}",
-    #'binning':"1000,1400,1600,1800,2050,2400,7000",
-    'binning':"1000,1400,1600,1850,2250,2700,7000", # 1600 HtHt
+    'binning':"1000,1400,1600,1800,2000,2500,7000",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
 reg_1lep5jin3bex2Min3Jin1HinHighMVAScore = {
     'name':"HTX_c1lep5jin3bex2Min3Jin1HinHighMVAScore",
     'legend':"#scale[0.75]{#geq5j, 3b, #geq2M, #geq3J, #geq1H, HMVA}",
-    #'binning':"1000,2200,2400,2650,2900,3300,7000",
-    'binning':"1000,2200,2500,2800,3450,7000", #1600 Doublet
+    'binning':"1000,2000,2400,3000,7000",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
 reg_1lep5jin3bex2Min3Jin1HinMidMVAScore = {
     'name':"HTX_c1lep5jin3bex2Min3Jin1HinMidMVAScore",
     'legend':"#scale[0.75]{#geq5j, 3b, #geq2M, #geq3J, #geq1H, MMVA}",
-    #'binning':"1000,1850,2050,2250,2500,2800,7000",
-    'binning':"1000,1850,2050,2300,2650,3050,7000", #1600 Singlet
+    'binning':"1000,1850,2050,2300,2650,7000",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
 reg_1lep5jin3bex2Min3Jin1HinLowMVAScore = {
     'name':"HTX_c1lep5jin3bex2Min3Jin1HinLowMVAScore",
     'legend':"#scale[0.75]{#geq5j, 3b, #geq2M, #geq3J, #geq1H, LMVA}",
-    #'binning':"1000,1450,1650,1850,2100,2400,7000",
-    'binning':"1000,1450,1700,2050,2400,2850,7000", #1600 HtHt
+    'binning':"1000,1450,1700,2050,2400,7000",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
 reg_1lep5jin4bin2Min3Jin1HinHighMVAScore = {
     'name':"HTX_c1lep5jin4bin2Min3Jin1HinHighMVAScore",
     'legend':"#scale[0.75]{#geq5j, #geq4b, #geq2M, #geq3J, #geq1H, HMVA}",
-    #'binning':"1000,2150,2450,2750,3050,3450,7000",
-    'binning':"1000,2100,2400,2700,3000,3400,7000", #1600 HtHt
+    'binning':"1000,2400,7000",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
 reg_1lep5jin4bin2Min3Jin1HinMidMVAScore = {
     'name':"HTX_c1lep5jin4bin2Min3Jin1HinMidMVAScore",
     'legend':"#scale[0.75]{#geq5j, #geq4b, #geq2M, #geq3J, #geq1H, MMVA}",
-    #'binning':"1000,1850,2050,2350,2700,3100,7000",
-    'binning':"1000,1850,2050,2350,2700,3100,7000", #1600 Doublet
+    'binning':"1000,2050,7000",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
 reg_1lep5jin4bin2Min3Jin1HinLowMVAScore = {
     'name':"HTX_c1lep5jin4bin2Min3Jin1HinLowMVAScore",
     'legend':"#scale[0.75]{#geq5j, #geq4b, #geq2M, #geq3J, #geq1H, LMVA}",
-    #'binning':"1000,1450,1650,1900,2150,2450,7000",
-    'binning':"1000,1500,1750,2100,2450,2900,7000", #1600 HtHt
+    'binning':"1000,1500,1750,7000", #1600 HtHt
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
@@ -253,6 +242,53 @@ reg_1lep5jin4bin2Min3Jin1HinLowMVAScore_VR = {
     'binning':"0,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95,1.0,1.05",
     'type':"VALIDATION"
 }
+
+
+#
+#                                                                                                                              
+# Preselection regions 0-lepton
+#
+#  
+reg_0lep6jin2bin = {
+    'name':"HTX_c0lep6jin2bin",
+    'legend': "#scale[0.75]{#geq6j, #geq2b}",
+    'binning':"0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,5000,7000",
+    'binning_blind':"0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000",
+    'type':"SIGNAL"
+}
+
+reg_0lep6jin2bex = {
+    'name':"HTX_c0lep6jin2bex",
+    'legend': "#scale[0.75]{#geq6j, 2b}",
+    'binning':"0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,5000,7000",
+    'binning_blind':"0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000",
+    'type':"SIGNAL"
+}
+
+reg_0lep6jin3bin = {
+    'name':"HTX_c0lep6jin3bin",
+    'legend': "#scale[0.75]{#geq6j, #geq3b}",
+    'binning':"0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,5000,7000",
+    'binning_blind':"0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000",
+    'type':"SIGNAL"
+}
+
+reg_0lep6jin4bin = {
+    'name':"HTX_c0lep6jin4bin",
+    'legend': "#scale[0.75]{#geq6j, #geq4b}",
+    'binning':"0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,5000,7000",
+    'binning_blind':"0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000",
+    'type':"SIGNAL"
+}
+
+reg_0lep6jin2bin2Min = {
+    'name':"HTX_c0lep6jin2bin2Min",
+    'legend': "#scale[0.75]{#geq6j, #geq2b, #geq2M}",
+    'binning':"0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000,5000,7000",
+    'binning_blind':"0,100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,2000,2500,3000",
+    'type':"SIGNAL"
+}
+
 #
 #                                                                                                                              
 # Fit regions 0-lepton                                                                                                         
@@ -515,8 +551,7 @@ reg_1lep5jin4bin2Min3Jin1HinLowMVAScore_VR
 ]
 
 preselection_regions_1l = [
-    reg_1lep6jin3bin2Min3Jin,
-    reg_1lep5jin3bin2Min3Jin
+    reg_1lep5jin2bin
 ]
 
 all_regions_1l =  []
@@ -528,7 +563,13 @@ fit_regions_0l = []
 
 validation_regions_0l = []
 
-preselection_regions_0l = []
+preselection_regions_0l = [
+reg_0lep6jin2bin,
+reg_0lep6jin2bex,
+reg_0lep6jin3bin,
+reg_0lep6jin4bin,
+reg_0lep6jin2bin2Min
+]
 
 all_regions_0l = []
 all_regions_0l += fit_regions_0l

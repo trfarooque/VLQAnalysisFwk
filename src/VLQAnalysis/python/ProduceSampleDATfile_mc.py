@@ -24,7 +24,7 @@ wgtSysSplit=False
 jsonOutput = True
 isolateBadFiles = True
 cut_thr=0.5
-pmg_cut_thr = 0.001 # Currently applying a 0.1% quantile threshold to all pmg weights
+pmg_cut_thr = 0.005 # Currently applying a 0.1% quantile threshold to all pmg weights
 ##........................................................
 
 ##________________________________________________________
@@ -49,6 +49,19 @@ newVLQSamples = False
 pruneVLQWeights = False
 useDefaultVLQCrossSection = False
 badFileList = []
+
+param_runTtbar = False
+param_runOtherBkgd = False
+param_runSingleTop = False
+param_runWjets = False
+param_runZjets = False
+param_runTopEW = False
+param_runDibosons = False
+param_runDijet = False
+param_runTtSyst = False
+param_runSTSyst = False
+param_runSingleVLQ = False
+param_runPairVLQ = False
 
 if(len(sys.argv))>1:
     for x in sys.argv[1:]:
@@ -95,6 +108,48 @@ if(len(sys.argv))>1:
             if splitted[1].upper()=="TRUE":
                 useDefaultVLQCrossSection = True
                 # useDefaultVLQCrossSection is False by default
+        elif(argument=="RUNTTBAR"):
+            param_runTtbar = (value.upper()=="TRUE")
+        elif(argument=="RUNSINGLETOP"):
+            param_runSingleTop = (value.upper()=="TRUE")
+            param_runOtherBkgd = (value.upper()=="TRUE")
+        elif(argument=="RUNWJETS"):
+            param_runWjets = (value.upper()=="TRUE")
+            param_runOtherBkgd = (value.upper()=="TRUE")
+        elif(argument=="RUNZJETS"):
+            param_runZjets = (value.upper()=="TRUE")
+            param_runOtherBkgd = (value.upper()=="TRUE")
+        elif(argument=="RUNTOPEW"):
+            param_runTopEW = (value.upper()=="TRUE")
+            param_runOtherBkgd = (value.upper()=="TRUE")
+        elif(argument=="RUNDIBOSONS"):
+            param_runDibosons = (value.upper()=="TRUE")
+            param_runOtherBkgd = (value.upper()=="TRUE")
+        elif(argument=="RUNDIJET"):
+            param_runDijet = (value.upper()=="TRUE")
+            param_runOtherBkgd = (value.upper()=="TRUE")
+        elif(argument=="RUNTTSYST"):
+            param_runTtbar = (value.upper()=="TRUE")
+            param_runTtSyst = (value.upper()=="TRUE")
+        elif(argument=="RUNSTSYST"):
+            param_runSingleTop = (value.upper()=="TRUE")
+            param_runSTSyst = (value.upper()=="TRUE")
+            param_runOtherBkgd = (value.upper()=="TRUE")
+        elif(argument=="RUNSINGLEVLQ"):
+            param_runSingleVLQ = (value.upper()=="TRUE")
+        elif(argument=="RUNPAIRVLQ"):
+            param_runPairVLQ = (value.upper()=="TRUE")
+        elif(argument=="RUNALLBKGD"):
+            param_runTtbar = True
+            param_runOtherBkgd = True
+            param_runSingleTop = True
+            param_runWjets = True
+            param_runZjets = True
+            param_runTopEW = True
+            param_runDibosons = True
+            param_runDijet = True
+
+
 
 if not configName:
     configName = "sample_info_"+mccampaign+".dat"
@@ -104,26 +159,35 @@ if not configName:
 #print "doVLQSignalSumWeights : ", doVLQSignalSumWeights
 
 ##________________________________________________________
-## Creating usefull repositories
+## Creating useful repositories
 os.system("mkdir -p " + listFolder) #list files folder
 ##........................................................
 
 ##________________________________________________________
 ## Getting all samples and their associated weight/object systematics
 Samples = []
-Samples += GetTtbarSamples(hfSplitted=False,ttbarSystSamples=False,useHTSlices=True,campaign=mccampaign)
-Samples += GetOtherBackgroundSamples (campaign=mccampaign,includeSingleTop=True, includeWjets=True, includeZjets=True, includeTopEW=True,
-                                      includeDibosons=True, includeDijet=True,
-                                      includeSingletopSystSamples=False, splitSTChannels=False,
-                                      includeTchan=True, includeWtprod=True, includeSchan=True,
-                                      removeNull=False, sVLQAna=False)
-#Samples += GetSingleVLQSamples( campaign=mccampaign )
-#Samples += GetSingleVLQSamples( campaign=mccampaign, mode='WTHt' )
-#Samples += GetNewSingleVLQSamples( campaign=mccampaign, mode='WTZt' )
-#Samples += GetNewSingleVLQSamples( campaign=mccampaign, mode='ZTZt' )
-#Samples += GetNewSingleVLQSamples( campaign=mccampaign, mode='ZTHt',massList=["17"] )
-Samples += GetVLQTSamples(useWeightSyst=False, useObjectSyst=False, campaign=mccampaign)
-#Samples += GetDijetSamples( campaign=mccampaign )
+if param_runTtbar:
+    Samples += GetTtbarSamples(hfSplitted=False,ttbarSystSamples=param_runTtSyst,useHTSlices=True,campaign=mccampaign)
+if param_runOtherBkgd:
+    Samples += GetOtherBackgroundSamples (campaign=mccampaign,
+                                          includeSingleTop=param_runSingleTop, 
+                                          includeWjets=param_runWjets, 
+                                          includeZjets=param_runZjets, 
+                                          includeTopEW=param_runTopEW,
+                                          includeDibosons=param_runDibosons, 
+                                          includeDijet=param_runDijet,
+                                          includeSingletopSystSamples=param_runSTSyst, 
+                                          splitSTChannels=False,
+                                          includeTchan=True, 
+                                          includeWtprod=True, 
+                                          includeSchan=True,
+                                          removeNull=False, sVLQAna=False)
+
+if param_runSingleVLQ or param_runPairVLQ:
+    Samples += GetSignalSamples( campaign = mccampaign,
+                                 includeSingleVLQ = param_runSingleVLQ, 
+                                 includePairVLQ = param_runPairVLQ)
+
 printGoodNews("--> All samples recovered")
 ##........................................................
 
@@ -217,7 +281,8 @@ for sample in Samples:
     files = [f for f in files if f.find("migrated") == -1]
 
     for f in files:
-        print("Processed %d files out of %d for sample %s."%(file_counter, len(files), SName))
+        if(file_counter%50==0):
+            print("Processed %d files out of %d for sample %s."%(file_counter, len(files), SName))
         file_counter += 1
 
         root_f = TFile(f,"read")

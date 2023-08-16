@@ -35,6 +35,7 @@ parser.add_option("-r","--regions",dest="regions",help="Regions to consider (com
 parser.add_option("-f","--outputFile",dest="outputFile",help="Dummy option", action="store",default="test.root")
 parser.add_option("-v","--variables",dest="variables",help="Variables to consider (coma separated list)",action="store",default="meff")
 parser.add_option("-p","--mcCampaign",dest="mcCampaign",help="MC campaign",action="store",default="mc16a")
+parser.add_option("--fileSuffix",dest="fileSuffix",help="Any suffix to add to name of input and output files",action="store",default="")
 (options, args) = parser.parse_args()
 
 outputDir=options.outputDir
@@ -50,7 +51,7 @@ regions=options.regions
 variables=options.variables
 outputFile=options.outputFile
 mcCampaign=options.mcCampaign
-
+fileSuffix=options.fileSuffix
 os.system("mkdir -p " + outputDir)
 ##........................................................
 
@@ -77,7 +78,8 @@ for reg in regions.split(","):
 
 ##________________________________________________________
 ## Naming convention
-template_fileName = "outVLQAna_SAMPLE_*_OBJSYSTEMATIC__*.root"
+#template_fileName = "outVLQAna_SAMPLE_*_OBJSYSTEMATIC__*.root"
+template_fileName = "outVLQAna_SAMPLE_*_OBJSYSTEMATIC__*"+fileSuffix+".root"
 template_histName = "REGION_VLQTYPE_VARIABLE_WGTSYSTEMATIC"
 ##........................................................
 
@@ -191,6 +193,7 @@ def CreateAllHistograms(inputFileName, outputFileName, br):
                 histos = []
                 for iVLQ in range(1,7):
                     iVLQ_histoName = histoName.replace("VLQTYPE","vlq"+`iVLQ`)
+                    #print(iVLQ_histoName)
                     h = inF.Get(iVLQ_histoName).Clone()
                     histos += [h]
 
@@ -283,13 +286,19 @@ for BR in BRs:
 
             #Creating the input files list
             inputFileName = inputDir + "/" + template_fileName.replace("SAMPLE",SName).replace("_OBJSYSTEMATIC_",space+syst)
+            print("inputFile : " + inputFileName)
             filelist=glob.glob(inputFileName)
 
             for iFile in filelist:
                 #Computing the name of the output file
                 outputFileName = outputDir + "/"
-                outputFileName += template_fileName.replace("SAMPLE",SName+"_"+BR['name']+"."+mcCampaign).replace("_OBJSYSTEMATIC",space+syst).replace("*.root",find_between_r( iFile, space+syst, ".root" )).replace("*","")+".root"
-                print(outputFileName)
+                print(template_fileName)
+                print(iFile)
+                outputFileName += template_fileName.replace("SAMPLE",SName+"_"+BR['name']+"."+mcCampaign)\
+                .replace("_OBJSYSTEMATIC",space+syst)\
+                .replace("*"+fileSuffix+".root",find_between_r( iFile, space+syst, ".root" ))\
+                .replace("*","")+".root"
+                print("outputFile : " + outputFileName)
                 if(os.path.exists(outputFileName)):
                     continue
                 CreateAllHistograms(filelist[0],outputFileName,myBR)

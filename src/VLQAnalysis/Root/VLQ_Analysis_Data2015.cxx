@@ -205,26 +205,6 @@ bool VLQ_Analysis_Data2015::Begin(){
   if(m_opt -> ComputeWeightSys()){
     m_weightMngr -> AddVLQSystematicWeights();
   }
-  if(m_opt -> ReweightKinematics()){
-    m_weightMngr -> AddKinReweightings();
-
-    if(m_opt->DoKinRwSyst() && m_opt->DoKinRwSmoothing()){
-      if(m_opt->UseSVLQConfig()){
-	m_weightMngr -> AddKinRwSyst();
-      }
-      else{
-	m_weightMngr -> AddKinRwSystPVLQ();
-      }
-    }
-
-  }
-  if(m_opt ->  UseLargeRJets() && m_opt -> DoLargeRJetsBOT()){
-    m_weightMngr -> AddLargeRJetTaggerSFs();
-  }
-  if(m_opt->DoFJvtSFWeights()){
-    m_weightMngr -> AddFJvtSFWeights();
-  }
- 
 
   m_weightMngr -> Print( false );
 
@@ -648,23 +628,23 @@ bool VLQ_Analysis_Data2015::Begin(){
     if( DrawReco ){
       //Event variables
 
-      m_outMngrHist -> AddStandardTH1( "residualMET_M",  20, 0, 1600,   "Residual MET (met-#nu_met) M [GeV]", false, &(m_outData -> o_residualMET),-1,"M" );
       m_outMngrHist -> AddStandardTH1( "residualMET_Phi",  20, 0, 1600,   "Residual MET dphi(met-#nu_met)  [GeV]", false, &(m_outData -> o_residualMET),-1,"Phi" );
       m_outMngrHist -> AddStandardTH1( "residualMET_Pt",  20, 0, 1600,   "Residual MET (met-#nu_met) transversal P : Pt  [GeV]", otherVariables, &(m_outData -> o_residualMET),-1,"Pt" );
 
       m_outMngrHist -> AddStandardTH1( "mu",          1, 0, 80,       ";<#mu>",         false, &(m_outData -> o_pileup_mu) );
       m_outMngrHist -> AddStandardTH1( "meff",        50, 0, 7000,    ";m_{eff} [GeV]", true, &(m_outData -> o_meff) );
       m_outMngrHist -> AddStandardTH1( "meffred",     50, 0, 7000,    ";m_{eff} reduced [GeV]", (otherVariables||RWderiv), &(m_outData -> o_meffred) );
-      m_outMngrHist -> AddStandardTH1( "mJsum",       25, 0, 2000,    ";m_{J}^{#Sigma} [GeV]", otherVariables, &(m_outData -> o_mJsum) );
+      m_outMngrHist -> AddStandardTH1( "dPhi_jetmet",     0.1,0.,4,  ";#Delta#Phi^{min}(MET,jet)" ,      otherVariables, &(m_outData -> o_dPhi_jetmet));
+      //m_outMngrHist -> AddStandardTH1( "mJsum",       25, 0, 2000,    ";m_{J}^{#Sigma} [GeV]", otherVariables, &(m_outData -> o_mJsum) );
       m_outMngrHist -> AddStandardTH1( "met",         20, 0, 1600,    ";E_{T}^{miss} [GeV]", otherVariables, &(m_outData -> o_met) );
       m_outMngrHist -> AddStandardTH1( "met_phi",     0.2, -3.5, 3.5, ";#phi_{MET}", otherVariables, &(m_outData->o_AO_met), -1, "Phi");
       m_outMngrHist -> AddStandardTH1( "mtw",         25, 0, 1000,    ";m_{T}(W) [GeV]", otherVariables, &(m_outData -> o_mtwl) );
       m_outMngrHist -> AddStandardTH1( "ptw",         25, 0, 1000,    ";p_{T}(W) [GeV]", otherVariables, &(m_outData -> o_ptwl) );
       m_outMngrHist -> AddStandardTH1( "mll",         5, 0, 500,    ";m_{ll} [GeV]", false, &(m_outData -> o_mll) );
       m_outMngrHist -> AddStandardTH1( "hthad",       25, 0, 3000,    ";H_{T}^{had} [GeV]", (otherVariables||RWderiv), &(m_outData -> o_hthad) );
-      m_outMngrHist -> AddStandardTH1( "hthadRC",     50, 0, 5000,    ";H_{T}^{had} (RC jets) [GeV]", false, &(m_outData -> o_hthadRC) );
-      m_outMngrHist -> AddStandardTH1( "hthadRCtag",     50, 0, 5000,  ";H_{T}^{had} (tagged RC jets) [GeV]", false, &(m_outData -> o_hthadRCtag) );
-      m_outMngrHist -> AddStandardTH1( "hthadRCM",     50, 0, 5000,  ";H_{T}^{had} (RC jets w/ M>100 GeV) [GeV]", false, &(m_outData -> o_hthadRCM) );
+      //m_outMngrHist -> AddStandardTH1( "hthadRC",     50, 0, 5000,    ";H_{T}^{had} (RC jets) [GeV]", false, &(m_outData -> o_hthadRC) );
+      //m_outMngrHist -> AddStandardTH1( "hthadRCtag",     50, 0, 5000,  ";H_{T}^{had} (tagged RC jets) [GeV]", false, &(m_outData -> o_hthadRCtag) );
+      //m_outMngrHist -> AddStandardTH1( "hthadRCM",     50, 0, 5000,  ";H_{T}^{had} (RC jets w/ M>100 GeV) [GeV]", false, &(m_outData -> o_hthadRCM) );
 
       m_outMngrHist -> AddStandardTH1( "truth_ht_filter",    25, 0, 3000,    ";Truth H_{T} [GeV]", false, &(m_outData -> o_truth_ht_filter ) );
       m_outMngrHist -> AddStandardTH1( "truth_met_filter",   25, 0, 1000,    ";Truth MET [GeV]", false, &(m_outData -> o_truth_met_filter ) );
@@ -672,7 +652,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "metsig_ev",     0.5, 0, 50,    ";E_{T}^{miss}/#sqrt{H_{T}^{had}} [#sqrt{GeV}]", otherVariables, &(m_outData -> o_metsig_ev) );
       m_outMngrHist -> AddStandardTH1( "metsig_obj",    0.5, 0, 50,    "; #sigma(E_{T}^{miss}) [#sqrt{GeV}]", otherVariables, &(m_outData -> o_metsig_obj) );
       m_outMngrHist -> AddStandardTH1( "MVAScore", 0.050, -0.1, 1.05, "; MVA Score", true, &(m_outData -> o_MVAScore) );
-
+      /*
       m_outMngrHist -> AddStandardTH2( "meff", "jets_n", 50, 0, 7000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} [GeV]", (RWderiv||otherVariables), &(m_outData -> o_meff), &(m_outData -> o_jets_n));
       m_outMngrHist -> AddStandardTH2( "meffred", "jets_n", 50, 0, 7000, 1, -0.5, 15.5, ";Number of jets", ";m_{eff} reduced [GeV]", (RWderiv||otherVariables), &(m_outData -> o_meffred), &(m_outData -> o_jets_n));
       m_outMngrHist ->AddStandardTH2("mtbmin", "metsig_ev", 25, 0, 500, 0.5, 0, 50, ";m_{T}^{min}(b,MET)", ";E_{T}^{miss}/#sqrt{H_{T}^{had}} [#sqrt{GeV}]", otherVariables, &(m_outData->o_mTbmin), &(m_outData -> o_metsig_ev));
@@ -689,7 +669,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist->AddStandardTH2("RCTTMass_jets_n", "MVAScore", 1, 0, 6, 0.050,-0.1, 1.05, ";Number of RCTTMass jets", ";MVA Score", false,
                                     &(m_outData->o_taggedjets_n.at("RCTTMass")), &(m_outData -> o_MVAScore));
 
-      /*
+
       m_outMngrHist -> AddStandardTH2( "mu", "fwdjets_n", 10, 0, 80, 1, -0.5, 8.5,"<#mu>", "Number of fwd-jets", false,
                &(m_outData -> o_pileup_mu),&(m_outData -> o_fwdjets_n) );
       m_outMngrHist -> AddStandardTH2( "mu", "fwdjets30_n", 10, 0, 80, 1, -0.5, 8.5,"<#mu>", "Number of fwd-jets (p_{T}>30 GeV)", false,
@@ -708,109 +688,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       m_outMngrHist -> AddStandardTH1( "leptop_m",          10, 0, 500,  ";Leptonic top mass [GeV]"       ,  false, &(m_outData -> o_leptop), -1, "M", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_dR_blep",    0.1, 0, 6,   ";Leptonic top #DeltaR(b,lep)"       ,  false, &(m_outData -> o_leptop), -1, "dR_blep", hopt_nouflow);
       m_outMngrHist -> AddStandardTH1( "leptop_dR_bW",      0.1, 0, 6,   ";Leptonic top #DeltaR(b,W)"       ,  false, &(m_outData -> o_leptop), -1, "dR_bW", hopt_nouflow);
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match",      1, 0, 2,   ";Leptonic top RCtag"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match", hopt_nouflow);
 
-      m_outMngrHist -> AddStandardTH1( "leptop_b_truthLabel", 1, 0, 10,   ";Leptonic top truth flavour",  false, &(m_outData -> o_leptop_b),
-				       -1, "truthLabel", hopt_nouflow);
-      m_outMngrHist -> AddStandardTH1( "leptop_b_isbtagged", 1, 0, 2,   ";Leptonic top b isB-tagged",  false, &(m_outData -> o_leptop_b),-1,
-				       "bjet", hopt_nouflow);
-      m_outMngrHist -> AddStandardTH1( "leptop_b_dRmin_RCtag",      0.1, 0,6 ,   ";dRmin #DeltaR(RCtag,bjet)"       ,  false, &(m_outData -> o_leptop_b), -1, "dRmin_RCtag_match", hopt_nouflow);
-      m_outMngrHist -> AddStandardTH1( "leptop_dPhi_bnu",   0.1, 0, 4,   ";Leptonic top #Delta#phi(b,#nu)"       ,  false, &(m_outData -> o_leptop), -1, "dPhi_bnu", hopt_nouflow);
-
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_pT",   50, 0, 2000,   ";leptop_b RCtag_match p_{T} [GeV]"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_pT", hopt_nouflow);
-
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_mass",   10, 0, 600,   ";mass of RCtag_match  [GeV]"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_mass", hopt_nouflow);
-
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_nconsts",   1, -0.5, 7.5,   ";number of consts of RCtag_match"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_nconsts", hopt_nouflow);
-
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_fpT",   0.25, 0., 5.,   ";RCtag_match forward p_{T} [GeV]"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_fpT", hopt_nouflow);     
-
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_isRCMTop",   1, 0, 2,   ";RCtag_match is RCMTop"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_isRCMTop", hopt_nouflow);
-
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_isRCMHiggs",   1, 0, 2,   ";RCtag_match is RCMHiggs"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_isRCMHiggs", hopt_nouflow);
-
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_isRCMV",   1, 0, 2,   ";RCtag_match is RCMV"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_isRCMV", hopt_nouflow);
-
-      m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_dR_leptop",   0.1, 0, 6,   ";#DeltaR(RCtag_match, leptop)"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_dR_leptop", hopt_nouflow);
-
-      if(DrawTruth){
-	m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_nmatch_truth",   1, -0.5, 7.5,   ";nmatch truth RCtag_match"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_nmatch_truth", hopt_nouflow);      
-
-	m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_fpT_truth",   0.2,0.,5.,   "; leptop RCtag_match truth forward p_{T} [GeV]"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_fpT_truth", hopt_nouflow);
-
-	m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_dR_truth",   0.1,0.,6.,   "; truth #DeltaR(RCtag_match, leptop)"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_dR_truth", hopt_nouflow);
-
-	m_outMngrHist -> AddStandardTH1( "leptop_b_RCtag_match_pdgId_truth",   1,0,30,   "; leptop RCtag_match truth forward p_{T} [GeV]"       ,  false, &(m_outData -> o_leptop_b), -1, "RCtag_match_pdgId_truth", hopt_nouflow);
-
-      }
-      //=============================== Leptonic top =====================================
-
-      std::vector<std::string> leptopTypes = {"highM", "winM", "BoutRCtag", "BinRCtag",
-					      "BinRCMTop","BinRCMHiggs","BinRCMV",
-					      "BinRCtagNconst1","BinRCMTopNconst1","BinRCMHiggsNconst1","BinRCMVNconst1",
-					      "truthMatch", "nontruthMatch", "lowdRbW", "highdRbW"};
-
-
-
-      for(const std::string& lptype : leptopTypes){
-	//Add all the histograms from above
-
-	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_n",         1, 0, 2, ";Leptonic top" + lptype + "_n" ,  otherVariables, &(m_outData -> o_catLeptop_n.at(lptype)), -1, "", hopt_nouflow);
-	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_pt",         50, 0, 2000, ";Leptonic top" + lptype + " p_{T} [GeV]" ,  otherVariables, &(m_outData -> o_catLeptop.at(lptype)), -1, "Pt", hopt_nouflow);
-	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_eta",        0.2, -3, 3,  ";Leptonic top" + lptype + " #eta" ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "Eta", hopt_nouflow);
-	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_m",          10, 0, 500,  ";Leptonic top" + lptype + " mass [GeV]" ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "M", hopt_nouflow);
-	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_dR_blep",    0.1, 0, 6,   ";Leptonic top" + lptype + " #DeltaR(b,lep)",  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "dR_blep", hopt_nouflow);
-	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_dR_bW",      0.1, 0, 6,   ";Leptonic top" + lptype + " #DeltaR(b,W)" ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "dR_bW", hopt_nouflow);
-
-	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_m",      10, 0,500 ,   ";Leptop-bjet mass" ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "M", hopt_nouflow);
-        m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_pt",      50, 0,2000 ,   ";Leptop-bjet mass" ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "Pt", hopt_nouflow);
-
-
-	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match",      1, 0, 2,   ";Leptonic top b" + lptype + " RCtag" , false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match", hopt_nouflow);
-	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_truthLabel", 1, 0, 10,   ";Leptonic top" + lptype + " truth flavour",  false, &(m_outData -> o_catLeptop_b.at(lptype)),  -1, "truthLabel", hopt_nouflow);
-	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_isbtagged", 1, 0, 2,   ";Leptonic top" + lptype + " b isB-tagged",  false, &(m_outData -> o_catLeptop_b.at(lptype)),-1,   "bjet", hopt_nouflow);
-	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_dRmin_RCtag",      0.1, 0,6 ,   ";dRmin #DeltaR(RCtag,bjet)" ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "dRmin_RCtag_match", hopt_nouflow);
-	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_dPhi_bnu",   0.1, 0, 4,   ";Leptonic top " + lptype + " #Delta#phi(b,#nu)" ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "dPhi_bnu", hopt_nouflow);
-	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_pT",   50, 0, 2000,   ";" +lptype + "leptop_b RCtag_match p_{T} [GeV]"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_pT", hopt_nouflow);
-	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_mass",   10, 0, 600,   ";" +lptype + "mass of RCtag_match  [GeV]"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_mass", hopt_nouflow);
-	m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_nconsts",   1, -0.5, 7.5,   ";" +lptype + "number of consts of RCtag_match"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_nconsts", hopt_nouflow);
-
-
-	if(DrawTruth){
-	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_fpT",   0.25, 0., 5.,   ";" +lptype + "RCtag_match forward p_{T} [GeV]"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_fpT", hopt_nouflow);     
-
-	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_isRCMTop",   1, 0, 2,   ";" +lptype + "RCtag_match is RCMTop"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_isRCMTop", hopt_nouflow);
-
-	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_isRCMHiggs",   1, 0, 2,   ";" +lptype + "RCtag_match is RCMHiggs"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_isRCMHiggs", hopt_nouflow);
-
-	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_isRCMV",   1, 0, 2,   ";" +lptype + "RCtag_match is RCMV"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_isRCMV", hopt_nouflow);
-
-	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_dR_leptop",   0.1, 0, 6,   ";" +lptype + "#DeltaR(RCtag_match, leptop)"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_dR_leptop", hopt_nouflow);
-
-	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_nmatch_truth",   1, -0.5, 7.5,   ";" +lptype + "nmatch truth RCtag_match"  ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_nmatch_truth", hopt_nouflow);      
-
-	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_fpT_truth",   0.2,0.,5.,   ";" +lptype + " leptop RCtag_match truth forward p_{T} [GeV]"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_fpT_truth", hopt_nouflow);
-
-	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_dR_truth",   0.1,0.,6.,   ";" +lptype + " truth #DeltaR(RCtag_match, leptop)" ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_dR_truth", hopt_nouflow);
-
-	  m_outMngrHist -> AddStandardTH1( "leptop_" + lptype + "_b_RCtag_match_pdgId_truth",   1,0,30,   ";" +lptype + " leptop RCtag_match truth forward p_{T} [GeV]"       ,  false, &(m_outData -> o_catLeptop_b.at(lptype)), -1, "RCtag_match_pdgId_truth", hopt_nouflow);
-	}
-
-       if(m_opt->DoTruthAnalysis()){
-	 //Add all the histograms from above
-	 m_outMngrHist -> AddStandardTH1( "leptop_"+lptype+"_pT_truth",   50, 0, 2500, ";Leptonic top "+lptype+" p_{T}^{truth} [GeV]"
-					  ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "pT_truth");
-	 m_outMngrHist -> AddStandardTH1( "leptop_"+lptype+"_fpT_truth",   0.1, 0., 2., ";Leptonic top "+lptype+" p_{T}^{reco}/p_{T}^{truth}"
-					  ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "fpT_truth");
-	 m_outMngrHist -> AddStandardTH1( "leptop_"+lptype+"_dR_truth",   0.1, 0., 6., ";Leptonic top "+lptype+" #DeltaR^{truth}"
-					  ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "dR_truth");
-
-	 m_outMngrHist -> AddStandardTH1( "leptop_"+lptype+"_nmatch_truth",   1, 0, 2, ";Leptonic top "+lptype+" isTruthMatched"
-	 ,  false, &(m_outData -> o_catLeptop.at(lptype)), -1, "nmatch_truth");
-       }
-
-       
-      }//leptop categories
       //============== Leptop categories ==============================
 
       //Leptonic W
@@ -844,6 +722,7 @@ bool VLQ_Analysis_Data2015::Begin(){
       //Jet variables
       m_outMngrHist -> AddStandardTH1( "jets_n",      1, -2.5, 15.5,";Number of jets", true, &(m_outData -> o_jets_n) );
       m_outMngrHist -> AddStandardTH1( "trkjets_n",      1, -2.5, 15.5,";Number of track-jets", otherVariables, &(m_outData -> o_trkjets_n) );
+      /*
       m_outMngrHist -> AddStandardTH1( "fwdjets_n",   1, -0.5, 8.5,";Number of fwd-jets", otherVariables, &(m_outData -> o_fwdjets_n) );
       m_outMngrHist -> AddStandardTH1( "fwdjets_eta25_30_n",   1, -0.5, 8.5,";Number of fwd-jets 2.5<|#eta|<3.0", otherVariables,
 				       &(m_outData -> o_fwdjets_eta25_30_n) );
@@ -853,13 +732,14 @@ bool VLQ_Analysis_Data2015::Begin(){
 				       &(m_outData -> o_fwdjets_eta35_40_n) );
       m_outMngrHist -> AddStandardTH1( "fwdjets_eta40_45_n",   1, -0.5, 8.5,";Number of fwd-jets 4.0<|#eta|<4.5", otherVariables,
 				       &(m_outData -> o_fwdjets_eta40_45_n) );
-
+      */
       m_outMngrHist -> AddStandardTH1( "bjets_n",     1, -0.5, 8.5, ";Number of b-jets", otherVariables, &(m_outData -> o_bjets_n) );
       m_outMngrHist -> AddStandardTH1( "ljets_n",     1, -0.5, 8.5, ";Number of light-jets", otherVariables, &(m_outData -> o_ljets_n) );
       m_outMngrHist -> AddStandardTH1( "trkbjets_n",     1, -0.5, 8.5, ";Number of track b-jets", otherVariables, &(m_outData -> o_trkbjets_n) );
       m_outMngrHist -> AddStandardTH1( "trkljets_n",     1, -0.5, 8.5, ";Number of track light-jets", otherVariables, &(m_outData -> o_trkljets_n) );
       m_outMngrHist -> AddStandardTH1( "trkjets_nconcentric",      1, -2.5, 15.5,";Number of concentric track-jets",
 				       otherVariables, &(m_outData -> o_trkjets_nconcentric) );
+
       if(m_opt->VerboseOutput()){
 	m_outMngrHist -> AddStandardTH1( "jets_n_truth_b",  1, -2.5, 15.5,";Number of truth b-jets",
 					 otherVariables, &(m_outData -> o_jets_truth_b_n) );
@@ -929,6 +809,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 	}
 
       }
+      /*
       for ( int iFwdJet=-1; iFwdJet<=5; ++iFwdJet ) {
 	std::string str_id = "";
 	str_id += std::to_string(iFwdJet);
@@ -982,7 +863,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 	}
 
       }
-
+      */
       for ( int iBJet=-1; iBJet<=3; ++iBJet ) {
 	std::string str_id = "";
 	str_id += std::to_string(iBJet);
@@ -1162,7 +1043,7 @@ bool VLQ_Analysis_Data2015::Begin(){
 	}
 	
       }
-
+      
     }// DrawReco
 
     //Reclustered jet"+str_id+"  variables
@@ -1226,8 +1107,8 @@ bool VLQ_Analysis_Data2015::Begin(){
 	//          , false, &(m_outData -> o_rcjets), &(m_outData -> o_rcjets), iRCJet, iRCJet, false, "nbconsts", "pdgId_truth" );
       }
     }
-
-
+    
+    
     if(DrawTruth && m_opt->VerboseOutput()){
 
       for ( const std::string type : m_truthRCTypes ){
@@ -1718,7 +1599,6 @@ bool VLQ_Analysis_Data2015::Begin(){
 	m_outMngrHist -> AddStandardTH1( "dR_mubjet",       0.25,0,5,  ";#DeltaR_{min}(#mu,b-jet)"              , false, &(m_outData -> o_dRmin_mubjets)    );
 
 	m_outMngrHist -> AddStandardTH1( "dPhi_lepmet",     0.1,0.,4,  ";#Delta#Phi(MET,lep)" ,      false, &(m_outData -> o_dPhi_lepmet));
-	m_outMngrHist -> AddStandardTH1( "dPhi_jetmet",     0.1,0.,4,  ";#Delta#Phi^{min}(MET,jet)" ,      otherVariables, &(m_outData -> o_dPhi_jetmet));
 	m_outMngrHist -> AddStandardTH1( "dPhi_jetmet5",     0.1,0,4,  ";#Delta#Phi^{min}(MET,jet)" ,      false, &(m_outData -> o_dPhi_jetmet5));
 	m_outMngrHist -> AddStandardTH1( "dPhi_jetmet6",     0.1,0,4,  ";#Delta#Phi^{min}(MET,jet)" ,      false, &(m_outData -> o_dPhi_jetmet6));
 	m_outMngrHist -> AddStandardTH1( "dPhi_jetmet7",     0.1,0,4,  ";#Delta#Phi^{min}(MET,jet)" ,      false, &(m_outData -> o_dPhi_jetmet7));
@@ -3331,40 +3211,14 @@ bool VLQ_Analysis_Data2015::Terminate()
   std::string nameHist = m_opt->OutputFile();
   if(m_outMngrHist){
 
-    if(m_opt->DoSumRegions()){
-
-      SumAnalysisRegions(true);
-      for( const std::pair<int, Selection*> &sel : *(m_selector->GetSelectionTree()) ){
-	if(sel.second->PassFlagAtBit(VLQ_Selector::PRESEL)){
-	  m_outMngrHist -> SaveStandardTH1(nameHist, false, AnalysisUtils::ReplaceString(sel.second->Name(),"-",""));
-	}
-      }
-
-    }
-    else{
-      m_outMngrHist -> SaveStandardTH1(nameHist);
-      m_outMngrHist -> SaveStandardTH2(nameHist,false);
-    }
+    m_outMngrHist -> SaveStandardTH1(nameHist);
+    m_outMngrHist -> SaveStandardTH2(nameHist,false);
 
   }
   if(m_outMngrMVAHist){
 
-
-    if(m_opt->DoSumRegions()){
-
-      SumAnalysisRegions(true);
-      for( const std::pair<int, Selection*> &sel : *(m_selector->GetSelectionTree()) ){
-	if(sel.second->PassFlagAtBit(VLQ_Selector::PRESEL)){
-	  m_outMngrMVAHist -> SaveStandardTH1(AnalysisUtils::ReplaceString(nameHist, ".root", "_MVAHISTS.root")
-					      , false, AnalysisUtils::ReplaceString(sel.second->Name(),"-",""));
-	}
-      }
-
-    }
-    else{
-      m_outMngrMVAHist -> SaveStandardTH1(AnalysisUtils::ReplaceString(nameHist, ".root", "_MVAHISTS.root"));
-      m_outMngrMVAHist -> SaveStandardTH2(AnalysisUtils::ReplaceString(nameHist, ".root", "_MVAHISTS.root"),false);
-    }
+    m_outMngrMVAHist -> SaveStandardTH1(AnalysisUtils::ReplaceString(nameHist, ".root", "_MVAHISTS.root"));
+    m_outMngrMVAHist -> SaveStandardTH2(AnalysisUtils::ReplaceString(nameHist, ".root", "_MVAHISTS.root"),false);
 
   }
 
@@ -3396,707 +3250,6 @@ bool VLQ_Analysis_Data2015::Terminate()
   return true;
 }
 
-bool VLQ_Analysis_Data2015::SumAnalysisRegions(const bool newFile){
-
-  struct{
-    void operator()(TH1D* hist, TH1D** target, const std::string& name, double scale = 1.){
-      if(*target != NULL){ (*target)->Add(hist, scale); }
-      else{
-	*target = (TH1D*)(hist->Clone(name.c_str()));
-	(*target)->SetDirectory(0);
-	(*target)->Scale(scale);
-      }
-
-      return;
-    };
-  } AddHistogramToTarget;
-
-
-  std::vector<std::string> regList{};
-  std::map<std::string, std::vector<std::string> > targetPrintList{};
-
-  if( m_opt->DoOneLeptonAna() ){
-
-    if( m_opt->DoFitRegions() ){
-      std::vector<std::string> regList_1L_fit = {
-	"c1lep0Tex0Hex6jin2bex",
-	"c1lep0Tex0Hex6jin3bex",
-	"c1lep0Tex0Hex6jin4bin",
-	"c1lep0Tex1Hex6jin2bex",
-	"c1lep0Tex1Hex6jin3bex",
-	"c1lep0Tex1Hex6jin4bin",
-	"c1lep1Tex0Hex6jin2bex",
-	"c1lep1Tex0Hex6jin3bex",
-	"c1lep1Tex0Hex6jin4bin",
-	"c1lep1Tex1Hex6jin2bex",
-	"c1lep1Tex1Hex6jin3bex",
-	"c1lep1Tex1Hex6jin4bin",
-	"c1lep2Tin0_1Hwin6jin2bex",
-	"c1lep2Tin0_1Hwin6jin3bex",
-	"c1lep2Tin0_1Hwin6jin4bin",
-	"c1lep0Tin2Hin6jin2bex",
-	"c1lep0Tin2Hin6jin3bex",
-	"c1lep0Tin2Hin6jin4bin"
-      };
-      regList.insert(regList.end(), regList_1L_fit.begin(), regList_1L_fit.end());
-    }//fit
-
-    if( m_opt->DoValidnRegions() ){
-      std::vector<std::string> regList_1L_valid = {
-	"c1lep0Tex0Hex5jex2bex",
-	"c1lep0Tex0Hex5jex3bex",
-	"c1lep0Tex0Hex5jex4bin",
-	"c1lep0Tex1Hex5jex2bex",
-	"c1lep0Tex1Hex5jex3bex",
-	"c1lep0Tex1Hex5jex4bin",
-	"c1lep1Tex0Hex5jex2bex",
-	"c1lep1Tex0Hex5jex3bex",
-	"c1lep1Tex0Hex5jex4bin",
-	"c1lep1Tex1Hex5jex2bex",
-	"c1lep1Tex1Hex5jex3bex",
-	"c1lep2Tin0_1Hwin5jex2bex",
-	"c1lep2Tin0_1Hwin5jex3bex",
-	"c1lep0Tin2Hin5jex2bex",
-	"c1lep0Tin2Hin5jex3bex",
-	"c1lep2THin5jex4bin"
-      };
-      regList.insert(regList.end(), regList_1L_valid.begin(), regList_1L_valid.end());
-    }//valid
-
-
-    std::map<std::string, std::vector<std::string> > targetPrintList_1L = {
-      {"sum1lep5jin2bin", {}},
-      {"sum1lep5jin3bin", {}},
-      {"sum1lep6jin2bin", {}},
-      {"sum1lep6jin3bin", {}},
-      {"sum1lep1THin6jin3bin", {}}
-    };
-
-    targetPrintList.insert(targetPrintList_1L.begin(), targetPrintList_1L.end());
-
-
-  }//1-lepton
-
-  if( m_opt->DoZeroLeptonAna() ){
-
-    if( m_opt->DoFitRegions() ){
-      std::vector<std::string> regList_0L_fit = {
-	"c0lep0Tex0Hex7jin2bexLowMtbmin",
-	"c0lep0Tex0Hex7jin2bexHighMtbmin",
-	"c0lep0Tex1Hex7jin2bexLowMtbmin",
-	"c0lep0Tex1Hex7jin2bexHighMtbmin",
-	"c0lep1Tex0Hex7jin2bexLowMtbmin",
-	"c0lep1Tex0Hex7jin2bexHighMtbmin",
-	"c0lep2THin7jin2bexLowMtbmin",
-	"c0lep2THin7jin2bexHighMtbmin",
-	"c0lep0Tex0Hex7jin3bexLowMtbmin",
-	"c0lep0Tex0Hex7jin3bexHighMtbmin",
-	"c0lep0Tex1Hex7jin3bexLowMtbmin",
-	"c0lep0Tex1Hex7jin3bexHighMtbmin",
-	"c0lep1Tex0Hex7jin3bexLowMtbmin",
-	"c0lep1Tex0Hex7jin3bexHighMtbmin",
-	"c0lep1Tex1Hex7jin3bexLowMtbmin",
-	"c0lep1Tex1Hex7jin3bexHighMtbmin",
-	"c0lep2Tin0_1Hwin7jin3bexLowMtbmin",
-	"c0lep2Tin0_1Hwin7jin3bexHighMtbmin",
-	"c0lep0Tin2Hin7jin3bex",
-	"c0lep0Tex0Hex7jin4binLowMtbmin",
-	"c0lep0Tex0Hex7jin4binHighMtbmin",
-	"c0lep0Tex1Hex7jin4binLowMtbmin",
-	"c0lep0Tex1Hex7jin4binHighMtbmin",
-	"c0lep1Tex0Hex7jin4binLowMtbmin",
-	"c0lep1Tex0Hex7jin4binHighMtbmin",
-	"c0lep2THin7jin4bin"
-      };
-      regList.insert(regList.end(), regList_0L_fit.begin(), regList_0L_fit.end());
-    }//fit
-
-    if( m_opt->DoValidnRegions() ){
-      std::vector<std::string> regList_0L_valid = {
-	"c0lep0Tex0Hex6jex2bexLowMtbmin",
-	"c0lep0Tex0Hex6jex2bexHighMtbmin",
-	"c0lep0Tex1Hex6jex2bexLowMtbmin",
-	"c0lep0Tex1Hex6jex2bexHighMtbmin",
-	"c0lep1Tex0Hex6jex2bexLowMtbmin",
-	"c0lep1Tex0Hex6jex2bexHighMtbmin",
-	"c0lep2THin6jex2bexLowMtbmin",
-	"c0lep2THin6jex2bexHighMtbmin",
-	"c0lep0Tex0Hex6jex3bexLowMtbmin",
-	"c0lep0Tex0Hex6jex3bexHighMtbmin",
-	"c0lep0Tex1Hex6jex3bexLowMtbmin",
-	"c0lep0Tex1Hex6jex3bexHighMtbmin",
-	"c0lep1Tex0Hex6jex3bexLowMtbmin",
-	"c0lep1Tex0Hex6jex3bexHighMtbmin",
-	"c0lep2THin6jex3bex",
-	"c0lep0Tex0Hex6jex4binLowMtbmin",
-	"c0lep0Tex0Hex6jex4binHighMtbmin",
-	"c0lep0Tex1Hex6jex4bin",
-	"c0lep1Tex0Hex6jex4bin",
-	"c0lep2THin6jex4bin"
-      };
-      regList.insert(regList.end(), regList_0L_valid.begin(), regList_0L_valid.end());
-    }//valid
-
-    std::map<std::string, std::vector<std::string> > targetPrintList_0L = {
-      {"sum0lep6jin2bin", {}},
-      {"sum0lep7jin2bin", {}},
-      {"sum0lep6jin3bin", {}},
-      {"sum0lep7jin3bin", {}},
-
-      {"sum0lep1THin7jin2bin", {}}
-    };
-
-    targetPrintList.insert(targetPrintList_0L.begin(), targetPrintList_0L.end());
-
-  }//0-lep
-
-  /*
-     {"sum0lep6jin2bin", {}},
-    {"sum0lep7jin2bin", {}},
-    {"sum0lep6jin3bin", {}},
-    {"sum0lep7jin3bin", {}},
-  */
-    //{"sum0lep0Tex0Hex7jin2bin", {}},
-    //{"sum0lep1THin7jin2bin", {}},
-    //{"sum0lep2THin7jin2bin", {}},
-
-    /*
-    {"sum0lep0Tex0Hex6jex2bex", {}},
-    {"sum0lep1THex6jex2bex", {}},
-    {"sum0lep2THin6jex2bex", {}},
-
-    {"sum0lep0Tex0Hex6jex3bex", {}},
-    {"sum0lep1THex6jex3bex", {}},
-    {"sum0lep2THin6jex3bex", {}},
-
-    {"sum0lep0Tex0Hex6jex4bin", {}},
-    {"sum0lep1THex6jex4bin", {}},
-    {"sum0lep2THin6jex4bin", {}},
-
-    {"sum0lep0Tex0Hex7jin2bex", {}},
-    {"sum0lep1THex7jin2bex", {}},
-    {"sum0lep2THin7jin2bex", {}},
-
-    {"sum0lep0Tex0Hex7jin3bex", {}},
-    {"sum0lep1THex7jin3bex", {}},
-    {"sum0lep2THin7jin3bex", {}},
-
-    {"sum0lep0Tex0Hex7jin4bin", {}},
-    {"sum0lep1THex7jin4bin", {}},
-    {"sum0lep2THin7jin4bin", {}},
-    */
-    //=====================================
-  /*
-    {"sum1lep5jin2bin", {}},
-    {"sum1lep5jin3bin", {}},
-    {"sum1lep6jin2bin", {}},
-    {"sum1lep6jin3bin", {}},
-  */
-    //{"sum1lep0Tex0Hex6jin3bin", {}},
-    //{"sum1lep1THin6jin3bin", {}}
-    //{"sum1lep2THin6jin3bin", {}},
-    /*
-    {"sum1lep0Tex0Hex5jex3bex", {}},
-    {"sum1lep1THex5jex3bex", {}},
-    {"sum1lep2THin5jex3bex", {}},
-
-    {"sum1lep0Tex0Hex5jex4bin", {}},
-    {"sum1lep1THex5jex4bin", {}},
-    {"sum1lep2THin5jex4bin", {}},
-
-    {"sum1lep0Tex0Hex6jin3bex", {}},
-    {"sum1lep1THex6jin3bex", {}},
-    {"sum1lep2THin6jin3bex", {}},
-
-    {"sum1lep0Tex0Hex6jin4bin", {}},
-    {"sum1lep1THex6jin4bin", {}},
-    {"sum1lep2THin6jin4bin", {}}
-    */
-  //};
-
-  for(const std::string& region : regList){
-
-    std::string boostcat = "";
-    if(region.find("0Tex0Hex") != std::string::npos){ boostcat = "0Tex0Hex"; }
-    else if( (region.find("1Tex0Hex") != std::string::npos) || (region.find("0Tex1Hex") != std::string::npos) ){ boostcat = "1THex"; }
-    else if( (region.find("2THin") != std::string::npos) || (region.find("2Tin0_1Hwin") != std::string::npos)
-	     || (region.find("1Tex1Hex") != std::string::npos) || (region.find("0Tin2Hin") != std::string::npos) ){ boostcat = "2THin"; }
-
-
-    //else
-    /*
-      if( (region.find("1Tex0Hex") != std::string::npos) || (region.find("0Tex1Hex") != std::string::npos)
-      || (region.find("2THin") != std::string::npos) || (region.find("2Tin0_1Hwin") != std::string::npos)
-      || (region.find("1Tex1Hex") != std::string::npos) || (region.find("0Tin2Hin") != std::string::npos) )
-      { boostcat = "1THin"; }
-    */
-
-    std::string jetcat = "";
-    if(region.find("5jex") != std::string::npos){ jetcat = "5jex"; }
-    else if(region.find("6jex") != std::string::npos){ jetcat = "6jex"; }
-    else if(region.find("5jin") != std::string::npos){ jetcat = "5jin"; }
-    else if(region.find("6jin") != std::string::npos){ jetcat = "6jin"; }
-    else if(region.find("7jin") != std::string::npos){ jetcat = "7jin"; }
-
-    std::string bcat = "";
-    if(region.find("2bex") != std::string::npos){ bcat = "2bex"; }
-    else if(region.find("2bin") != std::string::npos){ bcat = "2bin"; }
-    else if(region.find("3bex") != std::string::npos){ bcat = "3bex"; }
-    else if(region.find("3bin") != std::string::npos){ bcat = "3bin"; }
-    else if(region.find("4bin") != std::string::npos){ bcat = "4bin"; }
-
-    if(region.find("0lep") != std::string::npos){
-      //=========================== Preselections ==============================================
-      targetPrintList.at("sum0lep6jin2bin").push_back(region);
-      if(region.find("7jin") != std::string::npos){
-	targetPrintList.at("sum0lep7jin2bin").push_back(region);
-      }
-
-      if( (region.find("3bex") != std::string::npos) || (region.find("4bin") != std::string::npos) ){
-	targetPrintList.at("sum0lep6jin3bin").push_back(region);
-
-	if(region.find("7jin") != std::string::npos){
-	  targetPrintList.at("sum0lep7jin3bin").push_back(region);
-	}//7jin3bin
-
-      }//3bin
-
-      //targetPrintList.at("sum0lep"+boostcat+"6jin2bin").push_back(region);
-      if(region.find("7jin") != std::string::npos){
-	if( !boostcat.empty() && (boostcat.find("0Tex0Hex") == std::string::npos) ){
-	  targetPrintList.at("sum0lep1THin7jin2bin").push_back(region);
-	}
-      }
-      //targetPrintList.at("sum0lep"+boostcat+jetcat+bcat).push_back(region);
-
-    }//0L regions
-
-    //===================== 1L REGIONS ========================================
-    else if(region.find("1lep") != std::string::npos){
-      targetPrintList.at("sum1lep5jin2bin").push_back(region);
-      if(region.find("6jin") != std::string::npos){
-	targetPrintList.at("sum1lep6jin2bin").push_back(region);
-      }
-
-      if( (region.find("3bex") != std::string::npos) || (region.find("4bin") != std::string::npos) ){
-	targetPrintList.at("sum1lep5jin3bin").push_back(region);
-
-	if(region.find("6jin") != std::string::npos){
-	  targetPrintList.at("sum1lep6jin3bin").push_back(region);
-	  if( !boostcat.empty() && (boostcat.find("0Tex0Hex") == std::string::npos) ){
-	    targetPrintList.at("sum1lep1THin6jin3bin").push_back(region);
-	  }
-	  //targetPrintList.at("sum1lep"+boostcat+"6jin3bin").push_back(region);
-	}//6jin3bin
-
-	//targetPrintList.at("sum1lep"+boostcat+jetcat+bcat).push_back(region);
-
-      }//3bin
-
-    }//1L regions
-
-  }
-
-  if( m_opt->MsgLevel() == Debug::DEBUG ){
-    //============== PRINT regions lists ===================
-    for(std::pair<std::string, std::vector<std::string> > targetPair : targetPrintList){
-      std::cout << " TARGET REGION : " <<  targetPair.first << " built from :: " <<std::endl;
-      for(std::string source_reg : targetPair.second){
-	std::cout<<source_reg<<std::endl;
-      }
-      std::cout<<std::endl<<std::endl;
-    }
-  }
-
-  std::vector<std::string> lepchannels{""};
-  if(m_opt->DoSplitEMu()){
-    lepchannels.push_back("_el");
-    lepchannels.push_back("_mu");
-  }
-
-  std::vector<std::string> wgtList{""};
-  for(std::pair<std::string, WeightObject*> sysPair : *(m_weightMngr->SystMap()) ){
-    //with the exception of QCD1L
-    wgtList.push_back("_"+sysPair.first);
-  }
-
-  std::map<std::string, std::string> boostcat_systs = {
-    {"0T0H","0Tex0Hex"},{"1T0H","1Tex0Hex"},{"0T1H","0Tex1Hex"},
-    {"1T1H","1Tex1Hex"},{"2T0_1H","2Tin0_1Hwin"},{"0T2H","0Tin2Hin"},{"2TH","2THin"}
-  };
-
-
-  bool is_Vjets = ( (m_opt -> StrSampleName().find("WJETS") != std::string::npos) || (m_opt -> StrSampleName().find("ZJETS") != std::string::npos) );
-  bool is_VjetsHF = is_Vjets && ( (m_opt -> StrSampleName().find("CHARM") != std::string::npos) || (m_opt -> StrSampleName().find("BEAUTY") != std::string::npos) );
-
-  bool is_Diboson = m_opt->StrSampleName().find("DIBOSONS") != std::string::npos;
-  bool is_singletop = m_opt->StrSampleName().find("SINGLETOP") != std::string::npos;
-  bool is_QCD0L = m_opt->MakeQCD0LSystematics(); //StrSampleName().find("QCD0L") != std::string::npos;
-  bool is_QCD = m_opt->StrSampleName().find("QCD") != std::string::npos;
-
-  //================ If single-top Wt then make DR/DS uncertainty ================
-  if(is_singletop){
-    VLQ_PropagateSingleTopSystematics* DRDSPropagator = new VLQ_PropagateSingleTopSystematics(m_opt, m_outMngrHist);
-    DRDSPropagator->Init(m_selector -> GetSelectionTree(), std::getenv("VLQAnalysisFramework_DIR")+std::string("/data/VLQAnalysis/single_top_syst.root"));
-    DRDSPropagator->WriteAllSystHistograms(false,false);
-    delete DRDSPropagator;
-  }
-
-  std::string fileMode = newFile ? "RECREATE" : "UPDATE";
-  TFile* outfile = TFile::Open( m_opt->OutputFile().c_str(), fileMode.c_str());
-
-  for( std::pair< std::string, OutputHistManager::h1Def* > hpair : *(m_outMngrHist->StdTH1Def()) ){
-
-    if( !hpair.second->hasSyst ){ continue; }
-
-    const std::string& variable_base = hpair.first;
-
-    for ( unsigned int i = 0 ; i <= ( ( m_opt -> SampleName() == SampleName::VLQ  && m_opt -> SplitVLQDecays() /* && split*/ ) ? 6 : 0 ) ; ++i) {
-      std::string variable = "";
-      if( i > 0 ){
-	variable += "vlq";
-	variable += std::to_string(i);
-	variable += "_";
-      }
-      variable +=  variable_base;
-
-      for(std::pair<std::string, std::vector<std::string> > targetPair : targetPrintList){
-
-	if(is_QCD && targetPair.first.find("0lep") != std::string::npos){continue;}
-	if(is_QCD0L && targetPair.first.find("1lep") != std::string::npos){continue;}
-
-	for(const std::string& channel : lepchannels){
-
-	  if(!channel.empty() && targetPair.first.find("1lep") == std::string::npos){ continue; }
-
-	  //Regular weight systematics
-	  for(std::string sys : wgtList){
-
-	    //std::cout<<"============================ TARGET : "<<targetPair.first<<" ========================="<<std::endl;
-	    TH1D* targethist = NULL;
-	    double sumint = 0.;
-	    for(std::string source_reg : targetPair.second){
-	      TH1D* sourcehist = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable + sys).c_str() );
-	      AddHistogramToTarget(sourcehist, &targethist, targetPair.first + channel + "_" + variable + sys);
-	      sumint += sourcehist->GetEntries();
-	    }//source regions
-
-	    outfile->cd();
-	    if(targethist){
-	      HistManager::FinaliseTH1Bins(targethist);
-	      targethist->Write();
-	      delete targethist;
-	    }
-	    //std::cout<<"======================================================================================"<<std::endl;
-	  }//systematics + nominal
-
-	  //Region dependent weight systematics, including proxies for normalisation uncertainties
-	  for(std::pair<std::string, std::string> boostcat : boostcat_systs){
-
-	    //============================ V+jets samples ===========================================================================
-	    if(is_Vjets){
-
-	      //only XS uncertainty
-	      TH1D* targethist_Vjets_XS_up = NULL;
-	      TH1D* targethist_Vjets_XS_down = NULL;
-	      for(std::string source_reg : targetPair.second){
-		TH1D* sourcehist = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable).c_str() );
-
-		//If source region is in the  boost category of the systematic, then scale it up and down
-		double sc_up = (source_reg.find(boostcat.second) != std::string::npos) ? 1.3 : 1.;
-		double sc_down = (source_reg.find(boostcat.second) != std::string::npos) ? 0.7 : 1.;
-
-		AddHistogramToTarget(sourcehist, &targethist_Vjets_XS_up, targetPair.first + channel + "_" + variable + "_weight_Vjets_XS_"+boostcat.first+"_up", sc_up);
-		AddHistogramToTarget(sourcehist, &targethist_Vjets_XS_down, targetPair.first + channel + "_" + variable + "_weight_Vjets_XS_"+boostcat.first+"_down", sc_down);
-	      }//source regions
-
-	      if(is_VjetsHF){
-		//only XS uncertainty
-		TH1D* targethist_VjetsHF_XS_up = NULL;
-		TH1D* targethist_VjetsHF_XS_down = NULL;
-		for(std::string source_reg : targetPair.second){
-		  TH1D* sourcehist = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable).c_str() );
-
-		  //If source region is in the  boost category of the systematic, then scale it up and down
-		  double sc_up = (source_reg.find(boostcat.second) != std::string::npos) ? 1.3 : 1.;
-		  double sc_down = (source_reg.find(boostcat.second) != std::string::npos) ? 0.7 : 1.;
-
-		  AddHistogramToTarget(sourcehist, &targethist_VjetsHF_XS_up, targetPair.first + channel + "_" + variable + "_weight_VjetsHF_XS_"+boostcat.first+"_up", sc_up);
-		  AddHistogramToTarget(sourcehist, &targethist_VjetsHF_XS_down, targetPair.first + channel + "_" + variable + "_weight_VjetsHF_XS_"+boostcat.first+"_down", sc_down);
-		}//source regions
-
-		outfile->cd();
-		if(targethist_VjetsHF_XS_up){
-		  HistManager::FinaliseTH1Bins(targethist_VjetsHF_XS_up);
-		  targethist_VjetsHF_XS_up->Write();
-		  delete targethist_VjetsHF_XS_up;
-		}
-		if(targethist_VjetsHF_XS_down){
-		  HistManager::FinaliseTH1Bins(targethist_VjetsHF_XS_down);
-		  targethist_VjetsHF_XS_down->Write();
-		  delete targethist_VjetsHF_XS_down;
-		}
-
-	      }//Vjets+HF sample
-
-	      outfile->cd();
-	      if(targethist_Vjets_XS_up){
-		HistManager::FinaliseTH1Bins(targethist_Vjets_XS_up);
-		targethist_Vjets_XS_up->Write();
-		delete targethist_Vjets_XS_up;
-	      }
-	      if(targethist_Vjets_XS_down){
-		HistManager::FinaliseTH1Bins(targethist_Vjets_XS_down);
-		targethist_Vjets_XS_down->Write();
-		delete targethist_Vjets_XS_down;
-	      }
-
-	    }//Vjets sample
-	    //================================================= V+jets samples ===========================================================
-
-	    //============================ Diboson samples ===========================================================================
-	    if(is_Diboson){
-
-	      //only XS uncertainty
-	      TH1D* targethist_Diboson_XS_up = NULL;
-	      TH1D* targethist_Diboson_XS_down = NULL;
-	      for(std::string source_reg : targetPair.second){
-		TH1D* sourcehist = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable).c_str() );
-
-		//If source region is in the  boost category of the systematic, then scale it up and down
-		double sc_up = (source_reg.find(boostcat.second) != std::string::npos) ? 1.48 : 1.;
-		double sc_down = (source_reg.find(boostcat.second) != std::string::npos) ? 0.52 : 1.;
-
-		AddHistogramToTarget(sourcehist, &targethist_Diboson_XS_up, targetPair.first + channel + "_" + variable + "_weight_Dibosons_XS_"+boostcat.first+"_up", sc_up);
-		AddHistogramToTarget(sourcehist, &targethist_Diboson_XS_down, targetPair.first + channel + "_" + variable + "_weight_Dibosons_XS_"+boostcat.first+"_down", sc_down);
-	      }//source regions
-
-	      outfile->cd();
-	      if(targethist_Diboson_XS_up){
-		HistManager::FinaliseTH1Bins(targethist_Diboson_XS_up);
-		targethist_Diboson_XS_up->Write();
-		delete targethist_Diboson_XS_up;
-	      }
-	      if(targethist_Diboson_XS_down){
-		HistManager::FinaliseTH1Bins(targethist_Diboson_XS_down);
-		targethist_Diboson_XS_down->Write();
-		delete targethist_Diboson_XS_down;
-	      }
-
-	    }//Diboson sample
-	    //================================================= Diboson samples ===========================================================
-
-	    //============================ Single top samples ===========================================================================
-	    if(is_singletop){
-
-	      std::vector<std::string> mtblist{};
-	      if(targetPair.first.find("0lep") != std::string::npos){
-		mtblist =  {"","LowMtbmin","HighMtbmin"};
-	      }
-	      else{
-		mtblist = {""};
-	      }
-
-	      for(const std::string& mtbcat : mtblist){
-
-		std::string mtbsuffix = (mtbcat.empty()) ? mtbcat : "_"+mtbcat;
-		double sc_const = (mtbcat == "HighMtbmin") ? 0.25 : 0.20;
-		//XS uncertainty
-		TH1D* targethist_Singletop_XS_up = NULL;
-		TH1D* targethist_Singletop_DRDS_up = NULL;
-		TH1D* targethist_Singletop_XS_down = NULL;
-
-		//std::cout << std::endl <<" STARTING Target region: " << targetPair.first << " BOOSTCAT : " << boostcat.second << std::endl;
-
-		for(std::string source_reg : targetPair.second){
-		  TH1D* sourcehist = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable).c_str() );
-
-		  bool is_regmatch = ( (source_reg.find(boostcat.second) != std::string::npos)
-				       && ( (mtbcat.empty() && (source_reg.find("Mtbmin") == std::string::npos))
-					    || (!mtbcat.empty() && (source_reg.find(mtbcat) != std::string::npos)) ) );
-
-		  //If source region is in the  boost category of the systematic, then scale it up and down
-		  //also add DRDS variation
-		  double sc_up = 1.;
-		  double sc_down = 1.;
-		  if(is_regmatch){
-		    sc_up = 1.+sc_const;
-		    sc_down = 1.-sc_const;
-		    TH1D* sourcehist_DRDS = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable + "_SingletopDRDS").c_str() );
-		    if(sourcehist_DRDS){
-		      //std::cout<<" DRDS Source region : "<<source_reg<<" --> "<<sourcehist_DRDS->Integral() << std::endl;
-		      AddHistogramToTarget(sourcehist_DRDS, &targethist_Singletop_DRDS_up
-					   , targetPair.first + channel + "_" + variable + "_SingletopDRDS_"+boostcat.first+mtbsuffix);
-		    }
-		  }
-		  else{
-		    //std::cout<<" Source region : "<<source_reg<<" --> "<<sourcehist->Integral() << std::endl;
-		    AddHistogramToTarget(sourcehist, &targethist_Singletop_DRDS_up
-					 , targetPair.first + channel + "_" + variable + "_SingletopDRDS_"+boostcat.first+mtbsuffix);
-		  }
-
-		  AddHistogramToTarget(sourcehist, &targethist_Singletop_XS_up,
-				       targetPair.first + channel + "_" + variable + "_weight_Singletop_XS_"+boostcat.first+mtbsuffix+"_up", sc_up);
-		  AddHistogramToTarget(sourcehist, &targethist_Singletop_XS_down,
-				       targetPair.first + channel + "_" + variable + "_weight_Singletop_XS_"+boostcat.first+mtbsuffix+"_down", sc_down);
-		}//source regions
-
-		outfile->cd();
-		if(targethist_Singletop_XS_up){
-		  HistManager::FinaliseTH1Bins(targethist_Singletop_XS_up);
-		  targethist_Singletop_XS_up->Write();
-		  delete targethist_Singletop_XS_up;
-		}
-		if(targethist_Singletop_XS_down){
-		  HistManager::FinaliseTH1Bins(targethist_Singletop_XS_down);
-		  targethist_Singletop_XS_down->Write();
-		  delete targethist_Singletop_XS_down;
-		}
-		if(targethist_Singletop_DRDS_up){
-		  //std::cout<<" Target region: " << targetPair.first << " --> " << targethist_Singletop_DRDS_up->Integral() << std::endl;
-		  HistManager::FinaliseTH1Bins(targethist_Singletop_DRDS_up);
-		  targethist_Singletop_DRDS_up->Write();
-		  delete targethist_Singletop_DRDS_up;
-		}
-
-	      }//mtbmin categories
-
-	    }//single top samples
-
-	    //================================================= Single top samples ===========================================================
-
-
-	    //============================ QCD samples ===========================================================================
-	    if(is_QCD0L){
-	      std::vector<std::string> mtblist =  {"","LowMtbmin","HighMtbmin"};
-
-	      for(const std::string& mtbcat : mtblist){
-
-		//XS uncertainty
-		TH1D* targethist_QCD0L_XS_up = NULL;
-		TH1D* targethist_QCD0L_XS_down = NULL;
-		for(std::string source_reg : targetPair.second){
-		  TH1D* sourcehist = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable).c_str() );
-
-		  bool is_regmatch = ( (source_reg.find(boostcat.second) != std::string::npos)
-				       && ( (mtbcat.empty() && (source_reg.find("Mtbmin") == std::string::npos))
-					    || (!mtbcat.empty() && (source_reg.find(mtbcat) != std::string::npos)) ) );
-
-		  //If source region is in the  boost category of the systematic, then scale it up and down
-		  double sc_up = is_regmatch ? 2. : 1.;
-		  double sc_down = is_regmatch ? 0. : 1.;
-		  /*
-		    if(is_regmatch){
-		    std::cout << " is_regmatch = " << is_regmatch << " source_reg = "<<source_reg
-		    << " mtbcat = " << mtbcat << " boostcat = " << boostcat.second
-		    << " sc_up " << sc_up << std::endl;
-		    }
-		  */
-		  std::string mtbsuffix = (mtbcat.empty()) ? mtbcat : "_"+mtbcat;
-		  AddHistogramToTarget(sourcehist, &targethist_QCD0L_XS_up, targetPair.first + channel + "_" + variable + "_weight_QCD0L_XS_"+boostcat.first+mtbsuffix+"_up", sc_up);
-		  AddHistogramToTarget(sourcehist, &targethist_QCD0L_XS_down, targetPair.first + channel + "_" + variable + "_weight_QCD0L_XS_"+boostcat.first+mtbsuffix+"_down", sc_down);
-		}//source regions
-
-		//DR/DS uncertainty (TO DO)
-
-		outfile->cd();
-		if(targethist_QCD0L_XS_up){
-		  HistManager::FinaliseTH1Bins(targethist_QCD0L_XS_up);
-		  targethist_QCD0L_XS_up->Write();
-		  delete targethist_QCD0L_XS_up;
-		}
-		if(targethist_QCD0L_XS_down){
-		  HistManager::FinaliseTH1Bins(targethist_QCD0L_XS_down);
-		  targethist_QCD0L_XS_down->Write();
-		  delete targethist_QCD0L_XS_down;
-		}
-
-	      }//mtbmin categories
-
-	    }//QCD0L samples
-
-
-	    if(is_QCD){
-
-	      //weight uncertainty
-	      TH1D* targethist_QCD_el_up = NULL;
-	      TH1D* targethist_QCD_mu_up = NULL;
-
-	      for(std::string source_reg : targetPair.second){
-
-		if(source_reg.find(boostcat.second) != std::string::npos){
-		  //If source region is in the  boost category of the systematic, add the systematically varied histograms
-		  TH1D* sourcehist_el_up = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable + "_weight_qcd_el_up").c_str() );
-		  //TH1D* sourcehist_el_down = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable + "_weight_qcd_el_down").c_str() );
-		  TH1D* sourcehist_mu_up = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable + "_weight_qcd_mu_up").c_str() );
-		  //TH1D* sourcehist_mu_down = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable + "_weight_qcd_mu_down").c_str() );
-
-		  AddHistogramToTarget(sourcehist_el_up, &targethist_QCD_el_up, targetPair.first + channel + "_" + variable + "_weight_qcd_el_"+boostcat.first+"_up");
-		  //AddHistogramToTarget(sourcehist_el_down, &targethist_QCD_el_down, targetPair.first + channel + "_" + variable + "_weight_qcd_el_"+boostcat.first+"_down");
-		  AddHistogramToTarget(sourcehist_mu_up, &targethist_QCD_mu_up, targetPair.first + channel + "_" + variable + "_weight_qcd_mu_"+boostcat.first+"_up");
-		  //AddHistogramToTarget(sourcehist_mu_down, &targethist_QCD_mu_down, targetPair.first + channel + "_" + variable + "_weight_qcd_mu_"+boostcat.first+"_down");
-		}
-		else{
-		  TH1D* sourcehist = m_outMngrHist->HistMngr()->GetTH1D( (source_reg + channel + "_" + variable).c_str() );
-		  AddHistogramToTarget(sourcehist, &targethist_QCD_el_up, targetPair.first + channel + "_" + variable + "_weight_qcd_el_"+boostcat.first+"_up");
-		  //AddHistogramToTarget(sourcehist, &targethist_QCD_el_down, targetPair.first + channel + "_" + variable + "_weight_qcd_el_"+boostcat.first+"_down");
-		  AddHistogramToTarget(sourcehist, &targethist_QCD_mu_up, targetPair.first + channel + "_" + variable + "_weight_qcd_mu_"+boostcat.first+"_up");
-		  //AddHistogramToTarget(sourcehist, &targethist_QCD_mu_down, targetPair.first + channel + "_" + variable + "_weight_qcd_mu_"+boostcat.first+"_down");
-		}
-	      }//source regions
-
-	      outfile->cd();
-	      if(targethist_QCD_el_up){
-		HistManager::FinaliseTH1Bins(targethist_QCD_el_up);
-		targethist_QCD_el_up->Write();
-		delete targethist_QCD_el_up;
-	      }
-	      /*      if(targethist_QCD_el_down){
-		      targethist_QCD_el_down->Write();
-		      delete targethist_QCD_el_down;
-		      }*/
-	      if(targethist_QCD_mu_up){
-		HistManager::FinaliseTH1Bins(targethist_QCD_mu_up);
-		targethist_QCD_mu_up->Write();
-		delete targethist_QCD_mu_up;
-	      }
-	      /*if(targethist_QCD_mu_down){
-		targethist_QCD_mu_down->Write();
-		delete targethist_QCD_mu_down;
-		}*/
-
-	    }//QCD samples
-
-	    //================================================= QCD samples ===========================================================
-
-	  }//Boosted categories
-
-	}//lepton channels
-
-      }//target regions
-
-    }//vlq decays
-
-  }//variables
-
-  //==== Normalisation ===
-  //Vjets_XS -- split by lepton channel and boosted category 30% (additional histograms for charm and beauty)
-  //Dibosons_XS -- split by lepton channel and boosted category (48%)
-  //Singletop_XS -- split by lepton channel, boosted category and mtbmin category (20% 1lep and low-mTbmin or non-split 0L, 25% high-mTbmin)
-  //QCD_0L -- split by boosted category and mtbmin category (100% everywhere)
-
-  //==== Existing weight ====
-  //QCD_1L -- split by boosted category and mtbmin category and lepton flavour category
-  //Singletop_DRDS -- split by lepton channel, boosted category and mtbmin category
-
-
-  wgtList.clear();
-  regList.clear();
-  targetPrintList.clear();
-
-  outfile->Close();
-  return true;
-}
 
 //____________________________________________________________________________
 //
