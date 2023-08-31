@@ -87,7 +87,6 @@ CommonObjectSystematics += [getSystematics(name="MUON_SAGITTA_DATASTAT",nameUp="
 
 ##______________________________________________________________________
 ##
-#def GetTtbarSamples( useWeightSyst=False, useObjectSyst=False, hfSplitted=True, ttbarSystSamples=False, useHTSlices = True, campaign = "", sVLQAna = False ):
 def GetTtbarSamples( useObjectSyst=False, hfSplitted=True, ttbarSystSamples=False, useHTSlices = True, campaign = ""):
     ObjectSystematics = []
     #WeightSystematics = []
@@ -138,68 +137,6 @@ def GetTtbarSamples( useObjectSyst=False, hfSplitted=True, ttbarSystSamples=Fals
 
     return Samples
 
-###______________________________________________________________________
-###
-#def GetOtherBackgroundSamples ( useWeightSyst=False, useObjectSyst=False, campaign = ""
-#                                , includeSingleTop=True 
-#                                , includeWjets=True, includeZjets=True
-#                                , includeTopEW=True, includeDibosons=True, includeDijet=False
-#                                , includeSingletopSystSamples=False 
-#                                , splitSTChannels=False
-#                                , includeTchan=True, includeWtprod=True, includeSchan=True
-#                                , removeNull=False, sVLQAna=False):
-#    Samples =  []
-#    if includeWjets:
-#        if sVLQAna:
-#            Samples += GetWSamplesSherpa221(useWeightSyst, useObjectSyst, campaign, "Wjets", removeNull)
-#        else:
-#            Samples += GetWSamplesSherpa2211(useWeightSyst, useObjectSyst, campaign, "Wjets")
-#
-#    if includeZjets:
-#        if sVLQAna:
-#            Samples += GetZSamplesSherpa221( useWeightSyst, useObjectSyst, campaign, "Zjets", removeNull)
-#        else:
-#            Samples += GetZSamplesSherpa2211(useWeightSyst, useObjectSyst, campaign, "Zjets")
-#
-#    if includeSingleTop:
-#        Samples += GetSingleTopSamples(useWeightSyst, useObjectSyst, campaign, 
-#                                       splitChannel=splitSTChannels,
-#                                       runTchan=includeTchan, runWtprod=includeWtprod, runSchan=includeSchan,
-#                                       runSingletopSystSamples=includeSingletopSystSamples)
-#    if includeTopEW:
-#        Samples += GetTopEWSamples(useWeightSyst, useObjectSyst, campaign, "topEW", sVLQAna)
-#        Samples += GetHiggsSamples(useWeightSyst, useObjectSyst, campaign, sVLQAna)
-#        Samples += Get4TopsSamples(useWeightSyst, useObjectSyst, campaign)
-#
-#    if includeDibosons:
-#        if sVLQAna:
-#            Samples += GetDibosonSamplesSherpa221(useWeightSyst, useObjectSyst, campaign)
-#        else:
-#            Samples += GetDibosonSamplesSherpa2211(useWeightSyst, useObjectSyst, campaign)
-#
-#    if includeDijet:
-#        Samples += GetDijetSamples(useWeightSyst, useObjectSyst, campaign)
-#
-#    return Samples
-#
-###_____________________________________________________________________
-###
-#def GetSignalSamples(useWeightSyst=False, useObjectSyst=False, campaign="",
-#                     includeSingleVLQ=True, includePairVLQ=False, include4tops=False,
-#                     includeDoubletPairVLQ = False):
-#    Samples =  []
-#    if include4tops:
-#        Samples += Get4topsCISamples( useWeightSyst, useObjectSyst )
-#        Samples += GetUEDRPPSamples( useWeightSyst, useObjectSyst )
-#    if includeSingleVLQ:
-#        Samples += GetSingleVLQSamples( useWeightSyst, useObjectSyst, campaign, RWName )
-#    if includePairVLQ:
-#        Samples += GetVLQTSamples( useWeightSyst, useObjectSyst, campaign )
-#    if includeDoubletPairVLQ:
-#        Samples += GetVLQTDoubletSamples( useWeightSyst, useObjectSyst, campaign)
-#
-#    return Samples
-#
 ###_____________________________________________________________________
 ##
 def GetWSamplesSherpa2211( useObjectSyst=False, campaign="", name = "Wjets"):
@@ -635,37 +572,63 @@ def GetBenchmarkVLQSamples(  useObjectSyst=False, campaign=""):
 
 ##______________________________________________________________________
 ##
-def GetVLQTSamples( useObjectSyst=False, campaign=""):
+def GetVLQTSamples( useObjectSyst=False, campaign="", postRW=False, allBR=False):
 
     ObjectSystematics = []
-    #WeightSystematics = []
     if useObjectSyst:
         ObjectSystematics += CommonObjectSystematics
     else:
         ObjectSystematics = [getSystematics(name="nominal",nameUp="",oneSided=True)]
 
     Samples     =  []
-    Samples     += [getSampleUncertainties("VLQ_TT_600","302469."+campaign,  ObjectSystematics )]#TT 600
-    Samples     += [getSampleUncertainties("VLQ_TT_800","302472."+campaign,  ObjectSystematics )]#TT 800
-    Samples     += [getSampleUncertainties("VLQ_TT_1000","302476."+campaign, ObjectSystematics )]#TT 1000
-    Samples     += [getSampleUncertainties("VLQ_TT_1100","302478."+campaign, ObjectSystematics )]#TT 1100
-    Samples     += [getSampleUncertainties("VLQ_TT_1200","302480."+campaign, ObjectSystematics )]#TT 1200
-    Samples     += [getSampleUncertainties("VLQ_TT_1300","302481."+campaign, ObjectSystematics )]#TT 1300
-    Samples     += [getSampleUncertainties("VLQ_TT_1400","302482."+campaign, ObjectSystematics )]#TT 1400
-    Samples     += [getSampleUncertainties("VLQ_TT_1500","308294."+campaign, ObjectSystematics )]#TT 1500
-    Samples     += [getSampleUncertainties("VLQ_TT_1600","308295."+campaign, ObjectSystematics )]#TT 1600
-    Samples     += [getSampleUncertainties("VLQ_TT_1700","308296."+campaign, ObjectSystematics )]#TT 1700
-    Samples     += [getSampleUncertainties("VLQ_TT_1800","308297."+campaign, ObjectSystematics )]#TT 1800
-    Samples     += [getSampleUncertainties("VLQ_TT_2000","308299."+campaign, ObjectSystematics )]#TT 2000  
+    ##------------------------- Post BR-reweighted samples for file merging --------------------------
+    if postRW:
+        VLQ_masses = ["600","800","1000","1100","1200","1300","1400","1500","1600","1700","1800","2000"]
+        step_width = 0.05
+        steps_n = int((1 + step_width)/step_width)
+ 
+        for mass in VLQ_masses:
+
+            if allBR:
+                for iHt in range(0,steps_n):
+                    for iWb in range(0,steps_n):
+                        for iZt in range(0,steps_n):
+                            coupling_Ht = iHt * step_width
+                            coupling_Zt = iZt * step_width
+                            coupling_Wb = iWb * step_width
+                            if abs(coupling_Ht+coupling_Wb+coupling_Zt-1.)<0.001:
+                                Samples += [getSampleUncertainties("VLQ_TT_" + mass +
+                                                        "_BR_%.2f_%.2f_%.2f"%(coupling_Wb,coupling_Zt,coupling_Ht)
+                                                        ,"", ObjectSystematics , [])]
+            else:
+                Samples += [getSampleUncertainties( "VLQ_TT_" + mass + "_TSinglet"+campaign, "", ObjectSystematics , [])]
+                Samples += [getSampleUncertainties( "VLQ_TT_" + mass + "_TDoublet"+campaign, "", ObjectSystematics , [])]
+                Samples += [getSampleUncertainties( "VLQ_TT_" + mass + "_HtHt"+campaign,     "", ObjectSystematics , [])]
+                Samples += [getSampleUncertainties( "VLQ_TT_" + mass + "_ZtZt"+campaign,     "", ObjectSystematics , [])]
+
+    ##------------------------- Actual DSIDs pre-RW  --------------------------
+    else:
+        Samples     += [getSampleUncertainties("VLQ_TT_600","302469."+campaign,  ObjectSystematics )]#TT 600
+        Samples     += [getSampleUncertainties("VLQ_TT_800","302472."+campaign,  ObjectSystematics )]#TT 800
+        Samples     += [getSampleUncertainties("VLQ_TT_1000","302476."+campaign, ObjectSystematics )]#TT 1000
+        Samples     += [getSampleUncertainties("VLQ_TT_1100","302478."+campaign, ObjectSystematics )]#TT 1100
+        Samples     += [getSampleUncertainties("VLQ_TT_1200","302480."+campaign, ObjectSystematics )]#TT 1200
+        Samples     += [getSampleUncertainties("VLQ_TT_1300","302481."+campaign, ObjectSystematics )]#TT 1300
+        Samples     += [getSampleUncertainties("VLQ_TT_1400","302482."+campaign, ObjectSystematics )]#TT 1400
+        Samples     += [getSampleUncertainties("VLQ_TT_1500","308294."+campaign, ObjectSystematics )]#TT 1500
+        Samples     += [getSampleUncertainties("VLQ_TT_1600","308295."+campaign, ObjectSystematics )]#TT 1600
+        Samples     += [getSampleUncertainties("VLQ_TT_1700","308296."+campaign, ObjectSystematics )]#TT 1700
+        Samples     += [getSampleUncertainties("VLQ_TT_1800","308297."+campaign, ObjectSystematics )]#TT 1800
+        Samples     += [getSampleUncertainties("VLQ_TT_2000","308299."+campaign, ObjectSystematics )]#TT 2000  
         
-    # Not available
-    #Samples     += [getSampleUncertainties("VLQ_TT_700","302470."+campaign,  ObjectSystematics )]#TT 700    
-    #Samples     += [getSampleUncertainties("VLQ_TT_750","302471."+campaign,  ObjectSystematics )]#TT 750
-    #Samples     += [getSampleUncertainties("VLQ_TT_850","302473."+campaign,  ObjectSystematics )]#TT 850
-    #Samples     += [getSampleUncertainties("VLQ_TT_900","302474."+campaign,  ObjectSystematics )]#TT 900
-    #Samples     += [getSampleUncertainties("VLQ_TT_950","302475."+campaign,  ObjectSystematics )]#TT 950
-    #Samples     += [getSampleUncertainties("VLQ_TT_1050","302477."+campaign, ObjectSystematics )]#TT 1050
-    #Samples     += [getSampleUncertainties("VLQ_TT_1150","302479."+campaign, ObjectSystematics )]#TT 1150 
+        # Not available
+        #Samples     += [getSampleUncertainties("VLQ_TT_700","302470."+campaign,  ObjectSystematics )]#TT 700    
+        #Samples     += [getSampleUncertainties("VLQ_TT_750","302471."+campaign,  ObjectSystematics )]#TT 750
+        #Samples     += [getSampleUncertainties("VLQ_TT_850","302473."+campaign,  ObjectSystematics )]#TT 850
+        #Samples     += [getSampleUncertainties("VLQ_TT_900","302474."+campaign,  ObjectSystematics )]#TT 900
+        #Samples     += [getSampleUncertainties("VLQ_TT_950","302475."+campaign,  ObjectSystematics )]#TT 950
+        #Samples     += [getSampleUncertainties("VLQ_TT_1050","302477."+campaign, ObjectSystematics )]#TT 1050
+        #Samples     += [getSampleUncertainties("VLQ_TT_1150","302479."+campaign, ObjectSystematics )]#TT 1150 
 
     return Samples
 
@@ -685,8 +648,6 @@ def GetVLQTDoubletSamples(  useObjectSyst=False, campaign=""):
     Samples     += [getSampleUncertainties("VLQ_TT_1200","302485."+campaign,  ObjectSystematics )]#TT 1200 
 
     return Samples
-
-
 
 ##______________________________________________________________________
 ##
@@ -846,3 +807,57 @@ def GetQCDSamples( data_type = "TOPQ1" ):
     Samples     += [getSampleUncertainties("QCDMU","QCD.DAOD_"+data_type+".",[getSystematics(name="nominal",nameUp="",oneSided=True)] ,[])]
     return Samples;
 
+
+##______________________________________________________________________
+## Retrieve sample by name
+##----------------------------------------------------------------------
+def retrieveSamples(sampleName, mcCampaign, dataChannel='', useSyst=False, 
+                    useTtbarHtSlices=True, hfSplittedTtbar=True, 
+                    splitSTChannel=True, 
+                    postRWPVLQ=False, allBRPVLQ=False,
+                    RWNameSVLQ="nom_mass_K100"):
+
+    Samples=[]
+
+    ##### Data #######
+    if sampleName == 'data' :
+        Samples=GetDataSamples( data_type='TOPQ4' if dataChannel=='0lep' else 'TOPQ1')
+
+    ##### Nominal backgrounds #######
+    if sampleName == 'ttbar' :
+        Samples=GetTtbarSamples(useObjectSyst=useSyst, campaign=mcCampaign,
+                                  hfSplitted=hfSplittedTtbar, ttbarSystSamples=False, 
+                                  useHTSlices=useTtbarHtSlices)
+    if sampleName == 'singletop' :
+        Samples=GetSingleTopSamples( useObjectSyst=useSyst, campaign=mcCampaign,
+                                       splitChannel=splitSTChannel, runSingletopSystSamples=False)
+    if sampleName == 'Wjets' :
+        Samples= GetWSamplesSherpa2211(useObjectSyst=useSyst, campaign=mcCampaign)
+    if sampleName == 'Zjets' :
+        Samples= GetZSamplesSherpa2211(useObjectSyst=useSyst, campaign=mcCampaign)
+    if sampleName == 'diboson' :
+        Samples=GetDibosonSamplesSherpa2211(useObjectSyst=useSyst, campaign=mcCampaign)
+    if sampleName == 'topEW' : ## This names needs to be changed, since 4tops is not EW
+        Samples=GetTopEWSamples(useObjectSyst=useSyst, campaign=mcCampaign)
+        Samples+=GetHiggsSamples(useObjectSyst=useSyst, campaign=mcCampaign) #ttH
+        Samples+=Get4TopsSamples(useObjectSyst=useSyst, campaign=mcCampaign)
+    if sampleName == 'dijet' :
+        Samples=GetDijetSamples(useObjectSyst=useSyst, campaign=mcCampaign)
+
+    ##### Alternative backgrounds #######
+    if sampleName == 'ttbar_alt' :
+        Samples=GetTtbarSamples(useObjectSyst=False, campaign=mcCampaign,
+                                  hfSplitted=hfSplittedTtbar, ttbarSystSamples=True, 
+                                  useHTSlices=useTtbarHtSlices)
+    if sampleName == 'singletop_alt' :
+        Samples=GetSingleTopSamples( useObjectSyst=False, campaign=mcCampaign,
+                                       splitChannel=splitSTChannel, runSingletopSystSamples=True)
+
+    ##### Signal #######
+    if sampleName == 'pvlq' :
+        Samples=GetVLQTSamples(useObjectSyst=useSyst, campaign=mcCampaign, postRW=postRWPVLQ, allBR=allBRPVLQ)
+    if sampleName == 'svlq' :
+        Samples=GetSingleVLQSamples( useObjectSyst=False, campaign=mcCampaign, RWName=RWNameSVLQ)
+
+    return Samples
+    

@@ -5,9 +5,11 @@ import socket
 import sys
 import datetime
 import argparse
+
+sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/VLQAnalysis/")
 from VLQ_Samples_mc import *
 
-#sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "python/IFAETopFramework/" )
+sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "python/IFAETopFramework/" )
 from BatchTools import *
 from Job import *
 from Samples import *
@@ -42,13 +44,14 @@ parser.add_argument('--outputDir', help='Output directory where histogram/mini-t
 parser.add_argument('--outputDirSuffix', help='Suffix to add to name of output directory', default='NOW')
 parser.add_argument('--useProcSubdirs', help='Input files will be found in sub-directories of the \
 input directory when this is set', action='store', type=int, default=1)
-parser.add_argument('--useSyst', help='Run systematics when set', action='store', type=int, default=0)
 ##Arguments that will also be passed to VLQAna
 parser.add_argument('--useTtbarHtSlices', help='Use HT slices for ttbar sample when set', action='store', type=int, default=1)
 parser.add_argument('--mode', help='Specify what type of job to run and set corresponding set of options', 
                     choices=['FITINPUTS','MVAINPUTTREES','DATAMC','MVAVALIDATION','FULLFITVALIDATION',
                              'DERIVEREWEIGHTING', 'DERIVEMULTIJET'], default='DATAMC')
 parser.add_argument('--vlqOptString', help='extra options to send to VLQAna', default='')
+parser.add_argument('--rewriteTarball', help='Code tarball will be rewritten when set', action='store', type=int, default=1)
+parser.add_argument('--tarballPath', help='Path to code tarball', default='')
 
 
 ###Common arguments used by all/many parts of processing chain
@@ -57,11 +60,13 @@ parser.add_argument('--campaigns', help='MC campaigns to launch', nargs='*',
 parser.add_argument('--channel', help='Lepton channel', choices=['0lep','1lep'], required=True)
 parser.add_argument('--processes', help='Space-separated list of sample processes', nargs='*', 
                     choices=allowed_procs, default=all_procs)
-parser.add_argument('--rewriteTarball', help='Code tarball will be rewritten when set', action='store', type=int, default=1)
-parser.add_argument('--tarballPath', help='Path to code tarball', default='')
+parser.add_argument('--useSyst', help='Run systematics when set', action='store', type=int, default=0)
+
 parser.add_argument('--dryRun', help='Do not launch jobs when set ', action='store', type=int, default=0)
 parser.add_argument('--batch', help='Type of batch system', default='condor')
 parser.add_argument('--queue', help='Batch queue to which jobs are submittied', default='at3_short')
+
+
 
 args = parser.parse_args()
 
@@ -71,9 +76,9 @@ procs_to_run = []
 for proc in args.processes:
     print 'Adding process : ',proc
     if proc=='bkg':
-        procs_to_run += [bkg_procs]
+        procs_to_run += bkg_procs
     elif proc=='bkg_sys':
-        procs_to_run += [bkg_sys_procs]
+        procs_to_run += bkg_sys_procs
     else:
         procs_to_run += [proc]
 
@@ -241,56 +246,13 @@ if(not(args.dryRun) and (args.rewriteTarball or not(os.path.exists(tarballPath))
 ##..............................................................................
 
 ##______________________________________________________________________________
-## Get sample and associated weight systematics by name
-##
-def retrieveSamples(sampleName, mc_campaign):
-
-    Samples = []
-
-    ##### Data #######
-    if sampleName == 'data' :
-        Samples = GetDataSamples( data_type = 'TOPQ1' if args.channel=='1lep' else 'TOPQ4') 
-
-    ##### Nominal backgrounds #######
-    if sampleName == 'ttbar' :
-        Samples = GetTtbarSamples(useObjectSyst=args.useSyst, campaign = mc_campaign, 
-                                  hfSplitted=True, ttbarSystSamples=False, useHTSlices = args.useTtbarHtSlices)
-    if sampleName == 'singletop' :
-        Samples = GetSingleTopSamples( useObjectSyst=args.useSyst, campaign=mc_campaign, 
-                                       splitChannel=True, runSingletopSystSamples=False)
-    if sampleName == 'Wjets' :
-        Samples =  GetWSamplesSherpa2211(useObjectSyst=args.useSyst, campaign = mc_campaign)
-    if sampleName == 'Zjets' :
-        Samples =  GetZSamplesSherpa2211(useObjectSyst=args.useSyst, campaign = mc_campaign)
-    if sampleName == 'diboson' :
-        Samples = GetDibosonSamplesSherpa2211(useObjectSyst=args.useSyst, campaign = mc_campaign)
-    if sampleName == 'topEW' : ## This names needs to be changed, since 4tops is not EW
-        Samples = GetTopEWSamples(useObjectSyst=args.useSyst, campaign = mc_campaign)
-        Samples = GetHiggsSamples(useObjectSyst=args.useSyst, campaign = mc_campaign) #ttH
-        Samples = Get4TopsSamples(useObjectSyst=args.useSyst, campaign = mc_campaign)
-    if sampleName == 'dijet' :
-        Samples = GetDijetSamples(useObjectSyst=args.useSyst, campaign = mc_campaign)
-
-    ##### Alternative backgrounds #######
-    if sampleName == 'ttbar_alt' :
-        Samples = GetTtbarSamples(useObjectSyst=False, campaign = mc_campaign, 
-                                   hfSplitted=True, ttbarSystSamples=True, useHTSlices = args.useTtbarHtSlices)
-    if sampleName == 'singletop_alt' :
-        Samples = GetSingleTopSamples( useObjectSyst=False, campaign=mc_campaign, 
-                                        splitChannel=True, runSingletopSystSamples=True)
-        
-    ##### Signal #######
-    if sampleName == 'pvlq' :
-        Samples = GetVLQTSamples(useObjectSyst=args.useSyst, campaign = mc_campaign)
-        
-    return Samples
-
-##______________________________________________________________________________
 ## Submit jobs for specific sample and campaign
 ##
 def SubmitSampleJob(sampleName, mc_campaign):
 
-    Samples = retrieveSamples(sampleName, mc_campaign)
+    Samples = retrieveSamples(sampleName, mc_campaign, dataChannel=args.chanel, 
+                              useSyst=args.useSyst,
+                              useTtbarHtSlices=args.useTtbarHtSlices)
 
     sample_inputDir = args.inputDir
     sample_outputDir = outputDir
@@ -421,7 +383,7 @@ nJobs = 0
 for proc_name in procs_to_run: 
     print 'Process : ',proc_name
     if proc_name == 'data':
-        SubmitSampleJob(sampleName, '')
+        SubmitSampleJob(proc_name, '')
     else:
         for mc_campaign in args.campaigns:
             SubmitSampleJob(proc_name, mc_campaign)
