@@ -271,23 +271,39 @@ bool VLQ_WeightManager::AddVLQNominalWeights(){
       AddAndInitWeight("weight_WZ_2_2");
     }
 
+    if(m_vlq_opt -> ReweightKinematics()){
+
+      if(!m_kinRw) return true;
+
+      for(const std::pair<std::string, int> kinpair : *(m_kinRw->GetReweightingList())){
+
+	AddAndInitWeight("weight_RW_"+kinpair.first, "", true /*isNominal*/, false /*isInput*/);
+
+      }
+
+    }
+
   }//!QCD
+
+
+
   return true;
 }
 
 //______________________________________________________________________________
 //
-bool VLQ_WeightManager::AddKinReweightings(  ){
 
-  if(!m_kinRw) return true;
-
-  for(const std::pair<std::string, int> kinpair : *(m_kinRw->GetReweightingList())){
-
-    AddAndInitWeight("weight_RW_"+kinpair.first, "", true /*isNominal*/, false /*isInput*/);
-
-  }
-  return true;
-}
+//bool VLQ_WeightManager::AddKinReweightings(  ){
+//
+//  if(!m_kinRw) return true;
+//
+//  for(const std::pair<std::string, int> kinpair : *(m_kinRw->GetReweightingList())){
+//
+//    AddAndInitWeight("weight_RW_"+kinpair.first, "", true /*isNominal*/, false /*isInput*/);
+//
+//  }
+//  return true;
+//}
 
 //______________________________________________________________________________
 //

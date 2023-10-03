@@ -2768,7 +2768,7 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
     if( m_opt ->ReweightKinematics() ){
       m_weightMngr -> SetKinReweightings();
 
-      if(m_opt->DoKinRwSyst() && m_opt->DoKinRwSmoothing()){
+      if(m_opt -> ComputeWeightSys() && m_opt->DoKinRwSyst() && m_opt->DoKinRwSmoothing()){
 	if(m_opt->UseSVLQConfig()){
 	  m_weightMngr -> SetKinRwSyst();
 	}
