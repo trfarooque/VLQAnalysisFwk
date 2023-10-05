@@ -210,8 +210,10 @@ print "############################################################"
 
 outputDir  = args.outputDir
 
-if(args.outputDirSuffix != ""): outputDir += args.outputDirSuffix
+if(args.outputDirSuffix != ""): 
+    outputDir += args.outputDirSuffix
 outputDir = outputDir.replace("NOW", now)
+print 'outputDir : ',outputDir
 os.system("mkdir -p " + outputDir) #output files folder
 
 tarballPath = args.tarballPath
@@ -250,7 +252,7 @@ if(not(args.dryRun) and (args.rewriteTarball or not(os.path.exists(tarballPath))
 ##
 def SubmitSampleJob(sampleName, mc_campaign):
 
-    Samples = retrieveSamples(sampleName, mc_campaign, dataChannel=args.chanel, 
+    Samples = retrieveSamples(sampleName, mc_campaign, dataChannel=args.channel, 
                               useSyst=args.useSyst,
                               useTtbarHtSlices=args.useTtbarHtSlices)
 

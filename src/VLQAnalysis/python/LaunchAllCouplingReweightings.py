@@ -36,7 +36,6 @@ def main(args):
 
     ##____________________________________________________
     ## Options
-    #parser = OptionParser(args)
     parser = argparse.ArgumentParser()
     parser.add_argument("-i","--inputDir",dest="inputDir",
                       help="repository for the splitted files are located",action="store",default="")
@@ -74,6 +73,7 @@ def main(args):
                       help="Comma separated list of keys of region dictionary modules", action="store", default="MVA")
     parser.add_argument("--fileSuffix",dest="fileSuffix",
                       help="Suffix to add at the end of the input and output files",action="store",default="")
+    parser.add_argument("--postMerging",dest="postMerging",help="Uses post-merging naming convention for input files when this set",action="store",default=0)
 
     print(args)
     args = parser.parse_args(args)
@@ -96,6 +96,8 @@ def main(args):
     doPR=args.doPR
     moduleKeys = args.moduleKeys.split(",")
     fileSuffix = args.fileSuffix
+    postMerging = args.postMerging
+
     os.system("mkdir -p " + outputDir)
     os.system("mkdir -p " + outputDir + "/Scripts")
     ##........................................................
@@ -118,7 +120,7 @@ def main(args):
     ##________________________________________________________
     ## Getting all signal samples and their associated weight/object systematics
 
-    VLQMass=[600,800,1000,1100,1200,1300,1400,1500,1600,1700,1800,2000]
+    VLQMass=[600]#,800,1000,1100,1200,1300,1400,1500,1600,1700,1800,2000]
 
     if doAllBR:#just some mass points (not sensitive otherwise)
         VLQMass=[600,800,1000,1100,1200,1300,1400,1500,1600,1700,1800,2000]
@@ -132,21 +134,26 @@ def main(args):
     if not tthfitter:
         if(doZeroLepton):
             Variables +=  ['MVAScore', 'meff', 'mtbmin', 'met', 
-                           'jets_n', 'bjets_n', 'RCMTT_jets_n', "RCMHiggs_jets_n", "RCMTop_jets_n", "RCMV_jets_n",
+                           'jets_n', 'bjets_n', 'RCMTT_jets_n', 
+                           'RCMHiggs_jets_n', 'RCMTop_jets_n', 'RCMV_jets_n',
                            'mvlq0_RCTTM_drmax', 'mvlq0_RCTTM_drmax', 'mvlq1_rcj_drmax', 'mvlq1_rcj_drmax', 
                            'RCjet0_pt', 'RCjet1_pt', 'RCjet2_pt', 'RCMTop0_pt', 'RCMHiggs0_pt', 'RCMV0_pt',
                            'RCMV0_nconsts', 'RCMV0_nbconsts', 'RCMHiggs0_nconsts', 'RCMHiggs0_nbconsts',
                            'dRmin_RCjets', 'dRmin_RCMTT', 'dPhiavg_RCjets', 'dEtaavg_RCjets',  
-                           'dEtamin_RCjets', 'dEtamin_RCMTT', 'leadingdR_RCjets', 'leadingdPhi_RCjets', 'dPhiavg_RCMTTMET']
+                           'dEtamin_RCjets', 'dEtamin_RCMTT', 
+                           'leadingdR_RCjets', 'leadingdPhi_RCjets', 'dPhiavg_RCMTTMET']
 
         if(doLepton):
-            Variables +=  ["MVAScore", "RCMHiggs_jets_n", "RCMTop_jets_n", "RCMV_jets_n", "RCjets_n", 
-                           "RCjet0_pt", "dPhimin_RCTTMassRCTTMass",
-                           "jets_n", "leadingdEta_RCTTMassRCTTMass", "leadingdEta_RCjets", "leadingdPhi_RCjets", "leptop_pt",
-                           "m_vlq_rcjets_drmax1", "m_vlq_rcjets_drmax2", "m_vlq_rcttmass_drmax1", "m_vlq_rcttmass_drmax2",
-                           "meff", "met", "ptw", "residualMET_Pt", "trkbjets_n", "mtbmin", 
-                           "RCMV_jet0_m", "RCMV_jet0_pt", "RCMV_jet0_eta", "RCMHiggs_jet0_m", "RCMHiggs_jet0_pt", 
-                           "RCMHiggs_jet0_eta", "RCMTop_jet0_m", "RCMTop_jet0_pt", "RCMTop_jet0_eta"]
+            Variables +=  ['MVAScore', 'meff', 'mtbmin', 
+                           'met', 'ptw', 'residualMET', 
+                           'RCMHiggs_jets_n', 'RCMTop_jets_n', 'RCMV_jets_n', 
+                           'RCjets_n', 'jets_n', 'bjets_n',
+                           'RCjet0_pt', 'leptop_pt', 'dPhimin_RCMTT',
+                           'leadingdEta_RCMTT', 'leadingdEta_RCjets', 'leadingdPhi_RCjets', 
+                           'mvlq0_RCTTM_drmax', 'mvlq0_RCTTM_drmax', 'mvlq1_rcj_drmax', 'mvlq1_rcj_drmax', 
+                           'RCMV0_m', 'RCMV0_pt', 'RCMV0_eta', 
+                           'RCMHiggs0_m', 'RCMHiggs0_pt', 'RCMHiggs0_eta', 
+                           'RCMTop0_m', 'RCMTop0_pt', 'RCMTop0_eta']
         
     else: #the TRExFitter inputs
         Variables += ["meff", "MVAScore"]
@@ -253,12 +260,12 @@ def main(args):
             jO.addOption("vlqCoupling", br)
             jO.addOption("mcCampaign", mcCampaign)
             jO.addOption("fileSuffix", fileSuffix)
+            jO.addOption("postMerging", str(postMerging))
 
             ###THIS IS DUMMY, NOT USED BY VLQCOUPLINGREWEIGHTER
-            outFile = "outVLQAna_VLQ_TT_"+str(sample)+"_"+br.split(",")[0]+"."+mcCampaign+"__nominal___0"
-            outFile += "_"+fileSuffix+".root" if fileSuffix else ".root"
-
-            jO.addOption("outputFile", outFile)
+            #outFile = "outVLQAna_VLQ_TT_"+str(sample)+"_"+br.split(",")[0]+"."+mcCampaign+"__nominal___0"
+            #outFile += "_"+fileSuffix+".root" if fileSuffix else ".root"
+            #jO.addOption("outputFile", outFile)
     
             regOpt = ""
 

@@ -36,6 +36,8 @@ parser.add_option("-f","--outputFile",dest="outputFile",help="Dummy option", act
 parser.add_option("-v","--variables",dest="variables",help="Variables to consider (coma separated list)",action="store",default="meff")
 parser.add_option("-p","--mcCampaign",dest="mcCampaign",help="MC campaign",action="store",default="mc16a")
 parser.add_option("--fileSuffix",dest="fileSuffix",help="Any suffix to add to name of input and output files",action="store",default="")
+parser.add_option("--postMerging",dest="postMerging",help="Uses post-merging naming convention for input files when this set",action="store",default=0)
+
 (options, args) = parser.parse_args()
 
 outputDir=options.outputDir
@@ -52,13 +54,15 @@ variables=options.variables
 outputFile=options.outputFile
 mcCampaign=options.mcCampaign
 fileSuffix=options.fileSuffix
+postMerging=options.postMerging
+
 os.system("mkdir -p " + outputDir)
 ##........................................................
 
 ##________________________________________________________
 ## Getting all signal samples and their associated weight/object systematics
 Samples = []
-Samples     += [getSampleUncertainties("VLQ","VLQ_TT_"+vlqMass,CommonObjectSystematics,[],isSignal=True)]
+Samples     += [getSampleUncertainties("VLQ","VLQ_TT_"+vlqMass,CommonObjectSystematics,isSignal=True)]
 printGoodNews("--> All VLQ samples recovered")
 ##........................................................
 
@@ -79,7 +83,14 @@ for reg in regions.split(","):
 ##________________________________________________________
 ## Naming convention
 #template_fileName = "outVLQAna_SAMPLE_*_OBJSYSTEMATIC__*.root"
-template_fileName = "outVLQAna_SAMPLE_*_OBJSYSTEMATIC__*"+fileSuffix+".root"
+#VLQ_TT_1600_ZtZt.mc16e.root
+#ttbarlight.mc16e_JET_BJES_Response__1down.root
+#outVLQAna_ttbarlight_410470.mc16e_JET_BJES_Response__1down_6.root
+if postMerging:
+    template_fileName = "SAMPLE.*_OBJSYSTEMATIC_*"+fileSuffix+".root"
+else:
+    template_fileName = "outVLQAna_SAMPLE_*_OBJSYSTEMATIC__*"+fileSuffix+".root"
+
 template_histName = "REGION_VLQTYPE_VARIABLE_WGTSYSTEMATIC"
 ##........................................................
 
@@ -268,6 +279,10 @@ for BR in BRs:
         myBR = BR['values'][key]
         Systs = []
         if(statOnly):
+            #if postMerging:
+            #    Systs += [""]
+            #else:
+            #    Systs += [""]
             Systs += [""]
         else:
             for syst in Samples[iSample]['objSyst']:
@@ -285,7 +300,11 @@ for BR in BRs:
                 space = "_nominal"
 
             #Creating the input files list
-            inputFileName = inputDir + "/" + template_fileName.replace("SAMPLE",SName).replace("_OBJSYSTEMATIC_",space+syst)
+            if syst == "nominal" and postMerging:
+                inputFileName = inputDir + "/" + template_fileName.replace("SAMPLE",SName).replace("_OBJSYSTEMATIC_","")
+            else:
+                inputFileName = inputDir + "/" + template_fileName.replace("SAMPLE",SName).replace("_OBJSYSTEMATIC_",space+syst)
+
             print("inputFile : " + inputFileName)
             filelist=glob.glob(inputFileName)
 
@@ -294,10 +313,26 @@ for BR in BRs:
                 outputFileName = outputDir + "/"
                 print(template_fileName)
                 print(iFile)
-                outputFileName += template_fileName.replace("SAMPLE",SName+"_"+BR['name']+"."+mcCampaign)\
-                .replace("_OBJSYSTEMATIC",space+syst)\
-                .replace("*"+fileSuffix+".root",find_between_r( iFile, space+syst, ".root" ))\
-                .replace("*","")+".root"
+
+                if postMerging:
+                    if syst=="nominal":
+                        outputFileName += template_fileName\
+                            .replace("SAMPLE.",SName+"_"+BR['name']+"."+mcCampaign)\
+                            .replace("_OBJSYSTEMATIC_","")\
+                            .replace("*"+fileSuffix+".root",find_between_r( iFile, space+syst, ".root" ))\
+                            .replace("*","")+".root"
+                    else:
+                        outputFileName += template_fileName\
+                            .replace("SAMPLE.",SName+"_"+BR['name']+"."+mcCampaign)\
+                            .replace("_OBJSYSTEMATIC_",space+syst)\
+                            .replace("*"+fileSuffix+".root",find_between_r( iFile, space+syst, ".root" ))\
+                            .replace("*","")+".root"
+                else:
+                    outputFileName += template_fileName.replace("SAMPLE",SName+"_"+BR['name']+"."+mcCampaign)\
+                    .replace("_OBJSYSTEMATIC",space+syst)\
+                    .replace("*"+fileSuffix+".root",find_between_r( iFile, space+syst, ".root" ))\
+                    .replace("*","")+".root"
+
                 print("outputFile : " + outputFileName)
                 if(os.path.exists(outputFileName)):
                     continue
