@@ -180,6 +180,9 @@ if args.useTtbarHtSlices:
     vlqOptions['scaleTtbarHtSlices'] = 'TRUE'
     vlqOptions['filterType'] = 'APPLYFILTER'
     
+# Capitalise all keys in vlqOptions for clean overrides:
+for k in vlqOptions.keys():
+    vlqOptions[k.upper()]=vlqOptions.pop(k)
 
 for opt in args.vlqOptString.split():
     splitted = opt.split('=')
@@ -250,7 +253,7 @@ if(not(args.dryRun) and (args.rewriteTarball or not(os.path.exists(tarballPath))
 ##
 def SubmitSampleJob(sampleName, mc_campaign):
 
-    Samples = retrieveSamples(sampleName, mc_campaign, dataChannel=args.chanel, 
+    Samples = retrieveSamples(sampleName, mc_campaign, dataChannel=args.channel, 
                               useSyst=args.useSyst,
                               useTtbarHtSlices=args.useTtbarHtSlices)
 
