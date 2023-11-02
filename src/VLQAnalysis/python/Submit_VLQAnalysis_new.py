@@ -117,7 +117,7 @@ if args.channel=='1lep':
     vlqOptions['doZeroLeptonAna'] = 'FALSE'
     if args.mode=='DERIVEREWEIGHTING':
         vlqOptions['doTwoLeptonAna'] = 'TRUE'
-    vlqOptions['useLeptonSF'] = 'TRUE'
+    vlqOptions['useLeptonsSF'] = 'TRUE'
     vlqOptions['useLeptonTrigger'] = 'TRUE'
     vlqOptions['useMETTriggerOneLep'] = 'TRUE'
     vlqOptions['mvaWeightFile'] = 'TMVA/weightsCV_1L_30vars_allbkgd/TMVAClassificationCV_MLP.weights.xml'
@@ -126,9 +126,10 @@ elif args.channel=='0lep':
     sampleDatPattern += "0L/samples_info.tag-21.2.213-htztx-syst-0L"
     vlqOptions['doOneLeptonAna'] = 'FALSE'
     vlqOptions['doZeroLeptonAna'] = 'TRUE'
-    vlqOptions['useLeptonSF'] = 'FALSE'
+    vlqOptions['useLeptonsSF'] = 'FALSE'
     vlqOptions['useLeptonTrigger'] = 'FALSE'
     vlqOptions['useMETTriggerOneLep'] = 'FALSE'
+    vlqOptions['doSplitMET'] = 'TRUE'
     vlqOptions['mvaWeightFile'] = 'TMVA/weightsCV_0L_22vars_allbkgd/TMVAClassificationCV_MLP.weights.xml'
 
 if args.mode=='DERIVEREWEIGHTING':
@@ -180,6 +181,9 @@ if args.useTtbarHtSlices:
     vlqOptions['scaleTtbarHtSlices'] = 'TRUE'
     vlqOptions['filterType'] = 'APPLYFILTER'
     
+# Capitalise all keys in vlqOptions for clean overrides:
+for k in vlqOptions.keys():
+    vlqOptions[k.upper()]=vlqOptions.pop(k)
 
 for opt in args.vlqOptString.split():
     splitted = opt.split('=')

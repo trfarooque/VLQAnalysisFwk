@@ -100,6 +100,7 @@ def main(args):
 
     os.system("mkdir -p " + outputDir)
     os.system("mkdir -p " + outputDir + "/Scripts")
+    os.system("mkdir -p " + outputDir + "/Logs")
     ##........................................................
 
     ##________________________________________________________
@@ -120,7 +121,7 @@ def main(args):
     ##________________________________________________________
     ## Getting all signal samples and their associated weight/object systematics
 
-    VLQMass=[600]#,800,1000,1100,1200,1300,1400,1500,1600,1700,1800,2000]
+    VLQMass=[800,1000,1100,1200,1300,1400,1500,1600,1700,1800,2000]#600,
 
     if doAllBR:#just some mass points (not sensitive otherwise)
         VLQMass=[600,800,1000,1100,1200,1300,1400,1500,1600,1700,1800,2000]
@@ -233,7 +234,7 @@ def main(args):
     JOSet = JobSet(platform)
     JOSet.setBatch("condor")
     JOSet.setScriptDir(outputDir+"/Scripts")
-    JOSet.setLogDir(outputDir)
+    JOSet.setLogDir(outputDir+"/Logs")
     JOSet.setTarBall(tarballPath)
     JOSet.setJobRecoveryFile(outputDir+"/Scripts/JobCheck.chk")
     JOSet.setQueue(queue)
@@ -246,8 +247,9 @@ def main(args):
             jO.setExecutable("python VLQCouplingReweighter.py")
             jO.setDebug(False)
             jO.setOutDir(outputDir)
+            #jO.setOutDir(outputDir+"/RWFiles/")
             
-            jOName = `sample`+"_br_"+br
+            jOName = `sample`+"_br_"+br+'.'+mcCampaign
             jO.setName(jOName)
             
             jO.addOption("inputDir",   inputDir)
@@ -263,9 +265,15 @@ def main(args):
             jO.addOption("postMerging", str(postMerging))
 
             ###THIS IS DUMMY, NOT USED BY VLQCOUPLINGREWEIGHTER
-            #outFile = "outVLQAna_VLQ_TT_"+str(sample)+"_"+br.split(",")[0]+"."+mcCampaign+"__nominal___0"
+            #VLQCOUPLINGREWEIGHTER WILL REWRITE THIS - WE ARE ONLY ADDING THE NOMINAL FILE HERE
+            #TO CHECK IF THE JOB RAN
+            #VLQ_TT_2000_TSinglet.mc16e.root
+            if(postMerging):
+                outFile = "VLQ_TT_"+str(sample)+"_"+br.split(",")[0]+"."+mcCampaign+".root"
+            else:
+                outFile = "outVLQAna_VLQ_TT_"+str(sample)+"_"+br.split(",")[0]+"."+mcCampaign+"__nominal___0"
             #outFile += "_"+fileSuffix+".root" if fileSuffix else ".root"
-            #jO.addOption("outputFile", outFile)
+            jO.addOption("outputFile", outFile)
     
             regOpt = ""
 

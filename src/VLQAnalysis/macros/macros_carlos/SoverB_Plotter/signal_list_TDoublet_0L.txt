@@ -1,0 +1,17 @@
+NEW
+NAME:1200_TDoublet
+LABEL:TDoublet (1.2 TeV)
+COLOR:Red
+END
+
+NEW
+NAME:1400_TDoublet
+LABEL:TDoublet (1.4 TeV)
+COLOR:Blue
+END
+
+NEW
+NAME:1600_TDoublet
+LABEL:TDoublet (1.6 TeV)
+COLOR:Green
+END

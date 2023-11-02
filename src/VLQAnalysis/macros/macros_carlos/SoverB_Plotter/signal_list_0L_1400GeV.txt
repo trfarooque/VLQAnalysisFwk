@@ -1,0 +1,23 @@
+NEW
+NAME:1400_HtHt
+LABEL:HtHt (1.4 TeV)
+COLOR:Red
+END
+
+NEW
+NAME:1400_ZtZt
+LABEL:ZtZt (1.4 TeV)
+COLOR:Red
+END
+
+NEW
+NAME:1400_TDoublet
+LABEL:TDoublet (1.4 TeV)
+COLOR:Red
+END
+
+NEW
+NAME:1400_TSinglet
+LABEL:TSinglet (1.4 TeV)
+COLOR:Red
+END

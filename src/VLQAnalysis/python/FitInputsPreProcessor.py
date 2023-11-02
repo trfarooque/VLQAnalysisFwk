@@ -127,7 +127,7 @@ if args.checkOutputs:
     relaunch = "TRUE" if(args.relaunchFailedJobs) else "FALSE"
     nRelaunched = 0
     for proc_name in procs_to_run: 
-        sample_inputDir = inputDir + '/'+proc_name+'/'
+        sample_inputDir = args.inputDir + '/'+proc_name+'/'
 
         scriptFile="{}/Scripts_Analysis/JobCheck.chk".format(sample_inputDir)
         nRelaunched += CheckOutputs.main(['input={}'.format(scriptFile), 'relaunch={}'.format(relaunch)])
@@ -181,7 +181,8 @@ if args.reweightVLQ:
     for campaign in args.campaigns:
         rw_opts = ['--inputDir',args.outputDir+'/MergedFiles/nominal/', 
                    '--outputDir',args.outputDir+'/MergedFiles/nominal/', 
-                   '--mcCampaign',campaign, '--doBatch', '--queue','at3', '--doSR', '--doPR' ]
+                   '--mcCampaign',campaign, '--postMerging', '1', '--doBatch', 
+                   '--queue','at3', '--doSR', '--doPR' ]
 
         if(not args.otherVariables):
             rw_opts.append('--tthfitter')
@@ -191,7 +192,8 @@ if args.reweightVLQ:
             rw_opts.append('--doLepton')
         if(args.channel=='0lep'):
             rw_opts.append('--doZeroLepton')
-
+        if(args.dryRun):
+            rw_opts.append('--debug')
         LaunchAllCouplingReweightings.main(rw_opts)
 
 print 'TF 4'

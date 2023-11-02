@@ -1,26 +1,17 @@
 NEW
-NAME:HtHt_1200GeV
+NAME:1200_HtHt
 LABEL:HtHt (1.2 TeV)
-MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16a_0L/outVLQAna_VLQ_TT_1200_HtHt.root
-MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16d_0L/outVLQAna_VLQ_TT_1200_HtHt.root
-MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16e_0L/outVLQAna_VLQ_TT_1200_HtHt.root
 COLOR:Red
 END
 
 NEW
-NAME:HtHt_1400GeV
+NAME:1400_HtHt
 LABEL:HtHt (1.4 TeV)
-MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16a_0L/outVLQAna_VLQ_TT_1400_HtHt.root
-MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16d_0L/outVLQAna_VLQ_TT_1400_HtHt.root
-MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16e_0L/outVLQAna_VLQ_TT_1400_HtHt.root
 COLOR:Blue
 END
 
 NEW
-NAME:HtHt_1600GeV
+NAME:1600_HtHt
 LABEL:HtHt (1.6 TeV)
-MC16A_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16a_0L/outVLQAna_VLQ_TT_1600_HtHt.root
-MC16D_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16d_0L/outVLQAna_VLQ_TT_1600_HtHt.root
-MC16E_FILE:/nfs/at3/scratch2/cbuxovaz/VLQAnalysisRun2/PairProd_SignalMC_21.2.121-htztx-3_0lepton_September_27_2021/mc16e_0L/outVLQAna_VLQ_TT_1600_HtHt.root
 COLOR:Green
 END

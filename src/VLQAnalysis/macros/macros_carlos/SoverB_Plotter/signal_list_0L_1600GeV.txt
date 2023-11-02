@@ -1,0 +1,23 @@
+NEW
+NAME:1600_HtHt
+LABEL:HtHt (1.6 TeV)
+COLOR:Red
+END
+
+NEW
+NAME:1600_ZtZt
+LABEL:ZtZt (1.6 TeV)
+COLOR:Red
+END
+
+NEW
+NAME:1600_TDoublet
+LABEL:TDoublet (1.6 TeV)
+COLOR:Red
+END
+
+NEW
+NAME:1600_TSinglet
+LABEL:TSinglet (1.6 TeV)
+COLOR:Red
+END

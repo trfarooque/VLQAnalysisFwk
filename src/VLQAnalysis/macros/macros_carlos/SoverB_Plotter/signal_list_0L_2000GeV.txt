@@ -1,0 +1,23 @@
+NEW
+NAME:2000_HtHt
+LABEL:HtHt (2.0 TeV)
+COLOR:Red
+END
+
+NEW
+NAME:2000_ZtZt
+LABEL:ZtZt (2.0 TeV)
+COLOR:Red
+END
+
+NEW
+NAME:2000_TDoublet
+LABEL:TDoublet (2.0 TeV)
+COLOR:Red
+END
+
+NEW
+NAME:2000_TSinglet
+LABEL:TSinglet (2.0 TeV)
+COLOR:Red
+END

@@ -36,7 +36,7 @@ parser.add_option("-f","--outputFile",dest="outputFile",help="Dummy option", act
 parser.add_option("-v","--variables",dest="variables",help="Variables to consider (coma separated list)",action="store",default="meff")
 parser.add_option("-p","--mcCampaign",dest="mcCampaign",help="MC campaign",action="store",default="mc16a")
 parser.add_option("--fileSuffix",dest="fileSuffix",help="Any suffix to add to name of input and output files",action="store",default="")
-parser.add_option("--postMerging",dest="postMerging",help="Uses post-merging naming convention for input files when this set",action="store",default=0)
+parser.add_option("--postMerging",dest="postMerging",help="Uses post-merging naming convention for input files when this set",action="store",type=int,default=0)
 
 (options, args) = parser.parse_args()
 
@@ -279,10 +279,6 @@ for BR in BRs:
         myBR = BR['values'][key]
         Systs = []
         if(statOnly):
-            #if postMerging:
-            #    Systs += [""]
-            #else:
-            #    Systs += [""]
             Systs += [""]
         else:
             for syst in Samples[iSample]['objSyst']:
@@ -300,7 +296,7 @@ for BR in BRs:
                 space = "_nominal"
 
             #Creating the input files list
-            if syst == "nominal" and postMerging:
+            if ((syst=="") or (syst == "nominal")) and postMerging:
                 inputFileName = inputDir + "/" + template_fileName.replace("SAMPLE",SName).replace("_OBJSYSTEMATIC_","")
             else:
                 inputFileName = inputDir + "/" + template_fileName.replace("SAMPLE",SName).replace("_OBJSYSTEMATIC_",space+syst)
@@ -315,7 +311,7 @@ for BR in BRs:
                 print(iFile)
 
                 if postMerging:
-                    if syst=="nominal":
+                    if syst=="nominal" or syst=="":
                         outputFileName += template_fileName\
                             .replace("SAMPLE.",SName+"_"+BR['name']+"."+mcCampaign)\
                             .replace("_OBJSYSTEMATIC_","")\
@@ -335,6 +331,7 @@ for BR in BRs:
 
                 print("outputFile : " + outputFileName)
                 if(os.path.exists(outputFileName)):
+                    print (outputFileName+' exists. Skipping...')
                     continue
                 CreateAllHistograms(filelist[0],outputFileName,myBR)
 ##........................................................
