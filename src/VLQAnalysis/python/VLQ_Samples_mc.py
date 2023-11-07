@@ -842,7 +842,7 @@ def retrieveSamples(sampleName, mcCampaign, dataChannel='', useSyst=False,
         Samples+=GetHiggsSamples(useObjectSyst=useSyst, campaign=mcCampaign) #ttH
         Samples+=Get4TopsSamples(useObjectSyst=useSyst, campaign=mcCampaign)
     if sampleName == 'dijet' :
-        Samples=GetDijetSamples(useObjectSyst=useSyst, campaign=mcCampaign)
+        Samples=GetDijetSamples(useObjectSyst=False, campaign=mcCampaign)
 
     ##### Alternative backgrounds #######
     if sampleName == 'ttbar_alt' :

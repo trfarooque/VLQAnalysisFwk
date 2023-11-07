@@ -120,13 +120,15 @@ for argument in vars(args):
     print argument," : ",getattr(args,argument)
 print "############################################################"
 
-print 'TF 0'
+print '===== **** BEGIN PRE-PROCESSING CHAIN **** ====='
 #........................................................................
+print '=====>> Check Outputs ====='
 if args.checkOutputs:
 
     relaunch = "TRUE" if(args.relaunchFailedJobs) else "FALSE"
     nRelaunched = 0
     for proc_name in procs_to_run: 
+        print "proc: ",proc_name
         sample_inputDir = args.inputDir + '/'+proc_name+'/'
 
         scriptFile="{}/Scripts_Analysis/JobCheck.chk".format(sample_inputDir)
@@ -136,14 +138,17 @@ if args.checkOutputs:
         print nRelaunched,' jobs were relaunched in total'
         print ' ****** WARNING ----> Re-run chain after relaunched jobs have succeeded ******'
         sys.exit()
+
+print '===== Check Outputs <<====='
     
-print 'TF 1'
 #........................................................................
+print '=====>> Link Files ====='
 if(args.linkFiles):
     subprocess.Popen("mkdir -p {}/nominal/".format(args.outputDir), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     subprocess.Popen("mkdir -p {}/ttstalt/".format(args.outputDir), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     for proc_name in procs_to_run: 
+        print proc_name
         sample_inputDir = args.inputDir + '/'+proc_name+'/'
         sample_outputDir = args.outputDir + '/ttstalt/' if(proc_name=='ttbar_alt' or proc_name=='singletop_alt') \
                       else args.outputDir + '/nominal/'
@@ -155,8 +160,10 @@ if(args.linkFiles):
                              format(sample_inputDir,campaign,args.inputSuffix,sample_outputDir), 
                              shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-print 'TF 2'
+print '===== Link Files <<====='
+
 #........................................................................
+print '=====>> Merge Files ====='
 if(args.mergeFiles):
 
     mergeOpts = ['--inputDir', args.outputDir, '--outputDir', args.outputDir+'/MergedFiles/', 
@@ -169,12 +176,12 @@ if(args.mergeFiles):
     for proc in args.processes:
         mergeOpts.append(proc)
 
-    print "Now merging"
     PrepareInputFilesTRexFitter.main(mergeOpts)
-    print "After merging"
 
-print 'TF 3'
+print '===== Merge Files <<====='
+
 #........................................................................
+print '=====>> Reweight VLQ ====='
 if args.reweightVLQ:
 
     #'--fileSuffix',args.input_suffix,
@@ -196,8 +203,10 @@ if args.reweightVLQ:
             rw_opts.append('--debug')
         LaunchAllCouplingReweightings.main(rw_opts)
 
-print 'TF 4'
+print '===== Reweight VLQ <<====='
+
 #........................................................................
+print '=====>> Extrapolate single-top syst ====='
 if( (args.extrapolateSingletopSyst>0) and 
     ( (args.useSyst and ('singletop' in procs_to_run)) 
       or ('singletop_alt' in procs_to_run) ) ):
@@ -233,9 +242,10 @@ if( (args.extrapolateSingletopSyst>0) and
 
             MakeSingletopSyst.main(asyst_opts)
 
+print '===== Extrapolate single-top syst <<====='
 
-print 'TF 5'
 #........................................................................
+print '=====>> Make V+jets syst envelope ====='
 if args.useSyst and args.makeEnvelopeVjetsSyst:
 
     for campaign in args.campaigns:
@@ -259,7 +269,7 @@ if args.useSyst and args.makeEnvelopeVjetsSyst:
             vjets_opts.append('Zjets.'+campaign)
             MakeVjetsSyst.main(vjets_opts)
 
-print 'TF 6'
+print '===== Make V+jets syst envelope <<====='
 #........................................................................
 if args.extrapolateQCD:
     pass

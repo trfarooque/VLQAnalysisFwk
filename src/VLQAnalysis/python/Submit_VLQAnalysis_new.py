@@ -318,8 +318,15 @@ def SubmitSampleJob(sampleName, mc_campaign):
             jO.addOption("textFileList","false")
             jO.addOption("sampleName",sample['sampleType'])
 
+            #and SType.upper().find("DATA")==-1 \
+            #and SType.upper().find("DIJET")==-1 \
+            #and SType.upper().find("AMCPY")==-1 \
+            #and SType.upper().find("POWHER")==-1 \
+            #and SType.upper().find("DIAGSUB")==-1 : 
+
             # Weight systematics
-            if args.useSyst and joblist[iJob]['objSyst'].upper()=="NOMINAL" and SType.upper().find("DATA")==-1:
+            if args.useSyst and joblist[iJob]['objSyst'].upper()=="NOMINAL" \
+               and sampleName!='data' and sampleName!='ttbar_alt' and sampleName!='singletop_alt':
                 jO.addOption("computeWeightSys","true")
             else:
                 jO.addOption("computeWeightSys","false")
