@@ -284,7 +284,7 @@ if doZeroLep:
 #open json xsec database if needed
 ##________________________________________________________                                                                                                                                                
 ## Looking into the XSe DB file                                                                                                                                                                           
-with open(os.getenv("VLQAnalysisFramework_DIR") + '/data/VLQAnalysis/samples_info/xsec_list.json','r') as f:
+with open(os.getenv("VLQAnalysisFramework_DIR") + '/data/VLQAnalysis/samples_info/xsec_files/xsec_list.json','r') as f:
     xsecdata = json.load(f)
 
 for counter,sample in enumerate(Signals):
@@ -444,7 +444,7 @@ for counter,sample in enumerate(Signals):
     f_adapted.write("  LineColor: 2\n")
     #f_adapted.write("  HistoFile: "+cleaned_sampleType+"\n")
     #f_adapted.write("  LumiScale: "+str(lumiscale)+"\n")
-    f_adapted.write("  HistoFiles: "+cleaned_sampleType+".mc16a,"+cleaned_sampleType+".mc16d,"+cleaned_sampleType+".mc16e\n")
+    f_adapted.write("  HistoFiles: nominal/"+cleaned_sampleType+".mc16a,nominal/"+cleaned_sampleType+".mc16d,nominal/"+cleaned_sampleType+".mc16e\n")
     f_adapted.write("  LumiScales: 36207.66,44307.4,58450.1\n")
     f_adapted.write(" \n")
 

@@ -18,16 +18,22 @@ def writeScripts( scriptName, configFile, tRexFitterOutDirectory, instructions ,
 
     script.write("cd $TMPDIR \n\n")
 
-    script.write("echo \"==> About to copy the TRexFitter tarball !\"\n")
-    script.write("cp -r " + m_tarballPath + " tarball.tgz \n")
-    script.write("echo \"==> After the copy ! (doing an ls just in case)\"\n")
-    script.write("ls -lrth \n")
-    script.write("\n\n")
+    #script.write("echo \"==> About to copy the TRexFitter tarball !\"\n")
+    #script.write("cp -r " + m_tarballPath + " tarball.tgz \n")
+    #script.write("echo \"==> After the copy ! (doing an ls just in case)\"\n")
+    #script.write("ls -lrth \n")
+    #script.write("\n\n")
 
-    script.write("echo \"==> Now untarring the tarball to have the code !\"\n")
-    script.write("tar xf tarball.tgz \n")
-    script.write("echo \"==> After the copy ! (doing an ls just in case)\"\n")
-    script.write("ls -lrth \n")
+    #script.write("echo \"==> Now untarring the tarball to have the code !\"\n")
+    #script.write("tar xf tarball.tgz \n")
+    #script.write("echo \"==> After the copy ! (doing an ls just in case)\"\n")
+    #script.write("ls -lrth \n")
+    #script.write("\n\n")
+
+    script.write("echo \"==> Setting up the TRexFitter code !\"\n")
+    script.write("export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase \n")
+    script.write("source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh \n")
+    script.write("asetup StatAnalysis,0.2.4")
     script.write("\n\n")
 
     script.write("echo \"==> Now getting the CONFIG file\"\n")
@@ -35,10 +41,10 @@ def writeScripts( scriptName, configFile, tRexFitterOutDirectory, instructions ,
     script.write("echo \"==> Done\"\n")
     script.write("\n\n")
 
-    script.write("source setup.sh \n")
-    script.write("rm -rf build \n")
-    script.write("mkdir -p build && cd build/ && cmake ../ && cmake --build ./ && cd ../")
-    script.write("\n\n")
+    #script.write("source setup.sh \n")
+    #script.write("rm -rf build \n")
+    #script.write("mkdir -p build && cd build/ && cmake ../ && cmake --build ./ && cd ../")
+    #script.write("\n\n")
 
     script.write("mkdir -p " + tRexFitterOutDirectory + "/Histograms/\n")
 
@@ -53,7 +59,7 @@ def writeScripts( scriptName, configFile, tRexFitterOutDirectory, instructions ,
     script.write("trex-fitter h configFile.txt >& logFileRunning_h \n")
     for inst in instructions:
         script.write("echo \"==> Now executing the instruction: " + inst + "\"\n")
-        script.write("trex-fitter " + inst.replace("_CONFIGFILE_","configFile.txt") + " >& logFileRunning_" + `counter` + " \n")
+        script.write("trex-fitter " + inst.replace("_CONFIGFILE_","configFile.txt") + " >& logFileRunning_" + str(counter) + " \n")
         counter += 1
 
     script.write("\n\n")
@@ -66,6 +72,7 @@ def writeScripts( scriptName, configFile, tRexFitterOutDirectory, instructions ,
     script.write("mkdir -p " + m_outputDir + "/" + tRexFitterOutDirectory + "/Systematics\n")
     script.write("mkdir -p " + m_outputDir + "/" + tRexFitterOutDirectory + "/Fits\n")
     script.write("mkdir -p " + m_outputDir + "/" + tRexFitterOutDirectory + "/RooStats\n")
+    script.write("mkdir -p " + m_outputDir + "/" + tRexFitterOutDirectory + "/Pulls\n")
     script.write("mkdir -p " + m_outputDir + "/" + tRexFitterOutDirectory + "/Plots\n")
     script.write("mkdir -p " + m_outputDir + "/" + tRexFitterOutDirectory + "/Significance\n")
     script.write("mkdir -p " + m_outputDir + "/" + tRexFitterOutDirectory + "/Tables\n")
@@ -76,6 +83,7 @@ def writeScripts( scriptName, configFile, tRexFitterOutDirectory, instructions ,
     script.write("mv " + tRexFitterOutDirectory + "/*.{png,eps,pdf} " + m_outputDir + "/" + tRexFitterOutDirectory + "/ \n")
     script.write("mv " + tRexFitterOutDirectory + "/Fits/* " + m_outputDir + "/" + tRexFitterOutDirectory + "/Fits/ \n")
     script.write("mv " + tRexFitterOutDirectory + "/RooStats/* " + m_outputDir + "/" + tRexFitterOutDirectory + "/RooStats/ \n")
+    script.write("mv " + tRexFitterOutDirectory + "/Pulls/* " + m_outputDir + "/" + tRexFitterOutDirectory + "/Pulls/ \n")
     script.write("mv " + tRexFitterOutDirectory + "/Plots/* " + m_outputDir + "/" + tRexFitterOutDirectory + "/Plots/ \n")
     script.write("mv " + tRexFitterOutDirectory + "/Significance/* " + m_outputDir + "/" + tRexFitterOutDirectory + "/Significance/ \n")
     script.write("mv " + tRexFitterOutDirectory + "/Tables/* " + m_outputDir + "/" + tRexFitterOutDirectory + "/Tables/ \n")
@@ -141,10 +149,10 @@ def LaunchJobs( scriptName, tRexFitterOutDirectory ):
         com="condor_submit " + scriptName + ".sub"
 
     if m_dryRun:
-        print " Command to launch: " + com
+        print(" Command to launch: " + com)
     else:
         if m_verbose:
-            print com
+            print(com)
         os.system(com)
 
 
@@ -180,29 +188,29 @@ def writeScriptsAndLaunchJobs( scriptTempName, configFile, instructions , jobPar
 ##------------------------------------------------------
 ## Checking the arguments
 ##------------------------------------------------------
-if(len(sys.argv)<5):
+if(len(sys.argv)<4):
     printWarning("Arguments checker ==> Wrong input arguments")
-    print ""
-    print "    python "+sys.argv[0]+" [arg]"
-    print ""
-    print "Arguments"
-    print "========="
-    print "    tarball=<path to the tarball containing TRExFitter>"
-    print "    outputDir=<place where to store all the results>"
-    print "    action=<action to perform with this job> chosen between RANKING/HISTOS/FIT/POSTPLOTS/PREPLOTS/LIMIT"
-    print "    inputDir=<ABSOLUTE path to the config files>"
-    print "    n_NP=<number of NP to be run for each job when performing the ranking> "
-    print "    queue=<name of the batch queue to launch the jobs. delfault in at3> "
-    print "    dryrun : No jobs submitted "
-    print "    runPBS : Launch jobs on PBS queue [default: condor] "
-    print "    verbose : print launch command for each job "
-    print ""
+    print("")
+    print("    python "+sys.argv[0]+" [arg]")
+    print("")
+    print("Arguments")
+    print("=========")
+    #print("    tarball=<path to the tarball containing TRExFitter>")
+    print("    outputDir=<place where to store all the results>")
+    print("    action=<action to perform with this job> chosen between RANKING/HISTOS/FIT/POSTPLOTS/PREPLOTS/LIMIT")
+    print("    inputDir=<ABSOLUTE path to the config files>")
+    print("    n_NP=<number of NP to be run for each job when performing the ranking> ")
+    print("    queue=<name of the batch queue to launch the jobs. delfault in at3> ")
+    print("    dryrun : No jobs submitted ")
+    print("    runPBS : Launch jobs on PBS queue [default: condor] ")
+    print("    verbose : print(launch command for each job ")
+    print("")
     sys.exit()
 
 ##------------------------------------------------------
 ## Selects the arguments
 ##------------------------------------------------------
-m_tarballPath = "tarball.tgz"
+#m_tarballPath = "tarball.tgz"
 m_outputDir = ""
 m_action = ""
 m_inputConfigFiles = ""
@@ -219,8 +227,8 @@ m_disk = 15
 for iArg in range(1,len(sys.argv)):
     splitted=sys.argv[iArg].split("=")
     argument = splitted[0].upper()
-    if(argument=="TARBALL"): m_tarballPath = splitted[1]
-    elif(argument=="OUTPUTDIR"): m_outputDir = splitted[1]
+    #if(argument=="TARBALL"): m_tarballPath = splitted[1]
+    if(argument=="OUTPUTDIR"): m_outputDir = splitted[1]
     elif(argument=="ACTION"): m_action = splitted[1].upper()
     elif(argument=="INPUTDIR"): m_inputConfigFiles = splitted[1]
     elif(argument=="N_NP"): m_rankingNPMerging = int(splitted[1])
@@ -257,7 +265,7 @@ os.system("mkdir -p " + m_outputDir)
 configFileList = glob.glob(m_inputConfigFiles+"*.txt")
 nMerge = 1
 if len(configFileList)>100 and not m_mergeJobs:
-    printWarning("=> You are about to submit A LOT of jobs ("+`len(configFileList)`+") ... Are you sure you want to do that ?")
+    printWarning("=> You are about to submit A LOT of jobs ("+str(len(configFileList))+") ... Are you sure you want to do that ?")
     go_ahead=""
     while go_ahead!="y" and go_ahead!="n":
         go_ahead = raw_input("   Type 'y' to continue or 'n' to merge jobs: ")
@@ -270,7 +278,7 @@ if len(configFileList)>100 and not m_mergeJobs:
 ##------------------------------------------------------
 
 for config in configFileList:
-    print "=> Taking care of config file: ", config
+    print( "=> Taking care of config file: ", config)
     if m_action == "RANKING":
         #Determining the number of systematics to consider
         f_config = open(config,'r')
@@ -356,14 +364,14 @@ if m_mergeJobs:
         if counter == 0:
             counter_scripts += 1
             counter += 1
-            os.system("cat " + script + " > " + m_outputDir + "/mergedScripts_"+`counter_scripts`)
+            os.system("cat " + script + " > " + m_outputDir + "/mergedScripts_"+str(counter_scripts))
         else:
             counter += 1
-            os.system("echo '\n\n\n\n' >> " + m_outputDir + "/mergedScripts_"+`counter_scripts`)
-            os.system("cat " + script + " >> " + m_outputDir + "/mergedScripts_"+`counter_scripts`)
+            os.system("echo '\n\n\n\n' >> " + m_outputDir + "/mergedScripts_"+str(counter_scripts))
+            os.system("cat " + script + " >> " + m_outputDir + "/mergedScripts_"+str(counter_scripts))
 
         if counter==nMerge:
             counter = 0
-            com = "qsub -q at3 " + m_outputDir + "/mergedScripts_"+`counter_scripts` + " -o " + m_outputDir + "/LOG_mergedScripts_"+`counter_scripts` + "/ -e " + m_outputDir + "/LOG_mergedScripts_"+`counter_scripts` + "/"
+            com = "qsub -q at3 " + m_outputDir + "/mergedScripts_"+str(counter_scripts) + " -o " + m_outputDir + "/LOG_mergedScripts_"+str(counter_scripts) + "/ -e " + m_outputDir + "/LOG_mergedScripts_"+str(counter_scripts) + "/"
             os.system(com)
-    printGoodNews("=> You effectively submitted \"only\" " + `counter_scripts` + " jobs instead of "+`len(configFileList)`+" !!")
+    printGoodNews("=> You effectively submitted \"only\" " + str(counter_scripts) + " jobs instead of "+str(len(configFileList))+" !!")

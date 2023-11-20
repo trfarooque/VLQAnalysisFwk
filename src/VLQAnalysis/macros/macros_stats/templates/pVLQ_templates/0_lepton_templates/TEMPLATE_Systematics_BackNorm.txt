@@ -39,7 +39,7 @@ Systematic: "HTX_BKGNP_TTBARBB_XS"
   Samples: ttbarbb
 
 % ---------------------------------- %
-% --------  V+jets (1-lep)  -------- %
+% --------  V+jets (0-lep)  -------- %
 % ---------------------------------- %
 
 Systematic: "HTX_BKGNP_VJETS_XS_3B" ; "HTX_BKGNP_VJETS_XS_4B"
@@ -52,7 +52,7 @@ Systematic: "HTX_BKGNP_VJETS_XS_3B" ; "HTX_BKGNP_VJETS_XS_4B"
   Regions: HTX_c0lep6jin3b*;HTX_c0lep6jin4bin*
 
 % -------------------------------------- %
-% --------  Dibosons (1-lep)  ---------- %
+% --------  Dibosons (0-lep)  ---------- %
 % -------------------------------------- %
 
 Systematic: "HTX_BKGNP_OTHERS_Dibosons_XS_3B" ; "HTX_BKGNP_OTHERS_Dibosons_XS_4B"
@@ -128,10 +128,10 @@ Systematic: HTX_MET_TRIGGER_0L
 % --------   QCD   -------- %
 % ------------------------- %
 
-%Systematic: "HTX_BKGNP_QCD_NORM"
-%  Title: "QCD norm."
-%  Type: OVERALL
-%  Category: "QCD uncertainties"
-%  OverallUp: 0.5
-%  OverallDown: -0.5
-%  Samples: QCD
+Systematic: "HTX_BKGNP_QCD_NORM"
+  Title: "QCD norm."
+  Type: OVERALL
+  Category: "QCD uncertainties"
+  OverallUp: 0.5
+  OverallDown: -0.5
+  Samples: QCD

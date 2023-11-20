@@ -9,7 +9,7 @@ Systematic: "HTX_BKGNP_TTBARLIGHT_GEN" ; "HTX_BKGNP_TTBARCC_GEN" ; "HTX_BKGNP_TT
   Symmetrisation: ONESIDED
   Smoothing: 40
   Samples: ttbarlight;ttbarcc;ttbarbb
-  HistoFilesUp: TtStAlt/ttbarlightaMCPy.mc16a,TtStAlt/ttbarlightaMCPy.mc16d,TtStAlt/ttbarlightaMCPy.mc16e ; TtStAlt/ttbarccaMCPy.mc16a,TtStAlt/ttbarccaMCPy.mc16d,TtStAlt/ttbarccaMCPy.mc16e ; TtStAlt/ttbarbbaMCPy.mc16a,TtStAlt/ttbarbbaMCPy.mc16d,TtStAlt/ttbarbbaMCPy.mc16e
+  HistoFilesUp: ttstalt/ttbarlightaMCPy.mc16a,ttstalt/ttbarlightaMCPy.mc16d,ttstalt/ttbarlightaMCPy.mc16e ; ttstalt/ttbarccaMCPy.mc16a,ttstalt/ttbarccaMCPy.mc16d,ttstalt/ttbarccaMCPy.mc16e ; ttstalt/ttbarbbaMCPy.mc16a,ttstalt/ttbarbbaMCPy.mc16d,ttstalt/ttbarbbaMCPy.mc16e
   ReferenceSample: ttbarlight_AFII;ttbarcc_AFII;ttbarbb_AFII
 
 Systematic: "HTX_BKGNP_TTBARLIGHT_PS" ; "HTX_BKGNP_TTBARCC_PS" ; "HTX_BKGNP_TTBARBB_PS"
@@ -18,6 +18,6 @@ Systematic: "HTX_BKGNP_TTBARLIGHT_PS" ; "HTX_BKGNP_TTBARCC_PS" ; "HTX_BKGNP_TTBA
   Category: "t#bar{t} uncertainties"
   Symmetrisation: ONESIDED
   Smoothing: 40
-  HistoFilesUp: TtStAlt/ttbarlightPowHer.mc16a,TtStAlt/ttbarlightPowHer.mc16d,TtStAlt/ttbarlightPowHer.mc16e ; TtStAlt/ttbarccPowHer.mc16a,TtStAlt/ttbarccPowHer.mc16d,TtStAlt/ttbarccPowHer.mc16e ; TtStAlt/ttbarbbPowHer.mc16a,TtStAlt/ttbarbbPowHer.mc16d,TtStAlt/ttbarbbPowHer.mc16e
+  HistoFilesUp: ttstalt/ttbarlightPowHer.mc16a,ttstalt/ttbarlightPowHer.mc16d,ttstalt/ttbarlightPowHer.mc16e ; ttstalt/ttbarccPowHer.mc16a,ttstalt/ttbarccPowHer.mc16d,ttstalt/ttbarccPowHer.mc16e ; ttstalt/ttbarbbPowHer.mc16a,ttstalt/ttbarbbPowHer.mc16d,ttstalt/ttbarbbPowHer.mc16e
   Samples: ttbarlight;ttbarcc;ttbarbb
   ReferenceSample: ttbarlight_AFII;ttbarcc_AFII;ttbarbb_AFII

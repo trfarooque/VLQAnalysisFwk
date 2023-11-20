@@ -303,45 +303,85 @@ Systematic: "JET_SingleParticle_HighPt"
   Smoothing: 40
   Exclude: QCD
 
-%Systematic: "JET_Rtrk_Baseline_mass"
-%  Title: "JMS baseline"
-%  Type: HISTO
-%  Category: "Jet uncertainties"
-%  HistoFileSufUp: _JET_Rtrk_Baseline_mass__1up
-%  HistoFileSufDown: _JET_Rtrk_Baseline_mass__1down
-%  Symmetrisation: TwoSided
-%  Smoothing: 40
-%  Exclude: QCD
+Systematic: "JET_Rtrk_Baseline_scaled_mass"
+  Title: "JMS Baseline"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufDown: _JET_Rtrk_Baseline_scaled_mass__1down
+  HistoFileSufUp: _JET_Rtrk_Baseline_scaled_mass__1up
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
 
-%Systematic: "JET_Rtrk_Modelling_mass"
-%  Title: "JMS modelling"
-%  Type: HISTO
-%  Category: "Jet uncertainties"
-%  HistoFileSufUp: _JET_Rtrk_Modelling_mass__1up
-%  HistoFileSufDown: _JET_Rtrk_Modelling_mass__1down
-%  Symmetrisation: TwoSided
-%  Smoothing: 40
-%  Exclude: QCD
+Systematic: "JET_Rtrk_ExtraComp_Baseline_scaled_mass"
+  Title: "JMS ExtraComp_Baseline"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufDown: _JET_Rtrk_ExtraComp_Baseline_scaled_mass__1down
+  HistoFileSufUp: _JET_Rtrk_ExtraComp_Baseline_scaled_mass__1up
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
 
-%Systematic: "JET_Rtrk_TotalStat_mass"
-%  Title: "JMS stat."
-%  Type: HISTO
-%  Category: "Jet uncertainties"
-%  HistoFileSufUp: _JET_Rtrk_TotalStat_mass__1up
-%  HistoFileSufDown: _JET_Rtrk_TotalStat_mass__1down
-%  Symmetrisation: TwoSided
-%  Smoothing: 40
-%  Exclude: QCD
+Systematic: "JET_Rtrk_ExtraComp_Modelling_scaled_mass"
+  Title: "JMS ExtraComp_Modelling"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufDown: _JET_Rtrk_ExtraComp_Modelling_scaled_mass__1down
+  HistoFileSufUp: _JET_Rtrk_ExtraComp_Modelling_scaled_mass__1up
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
 
-%Systematic: "JET_Rrk_Tracking_mass"
-%  Title: "JMS tracking"
-%  Type: HISTO
-%  Category: "Jet uncertainties"
-%  HistoFileSufUp: _JET_Rrk_Tracking_mass__1up
-%  HistoFileSufDown: _JET_Rrk_Tracking_mass__1down
-%  Symmetrisation: TwoSided
-%  Smoothing: 40
-%  Exclude: QCD
+Systematic: "JET_Rtrk_Modelling_scaled_mass"
+  Title: "JMS Modelling"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufDown: _JET_Rtrk_Modelling_scaled_mass__1down
+  HistoFileSufUp: _JET_Rtrk_Modelling_scaled_mass__1up
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
+
+Systematic: "JET_Rtrk_TotalStat_scaled_mass"
+  Title: "JMS TotalStat"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufDown: _JET_Rtrk_TotalStat_scaled_mass__1down
+  HistoFileSufUp: _JET_Rtrk_TotalStat_scaled_mass__1up
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
+
+Systematic: "JET_Rtrk_Tracking1_scaled_mass"
+  Title: "JMS Tracking1"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufDown: _JET_Rtrk_Tracking1_scaled_mass__1down
+  HistoFileSufUp: _JET_Rtrk_Tracking1_scaled_mass__1up
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
+
+Systematic: "JET_Rtrk_Tracking2_scaled_mass"
+  Title: "JMS Tracking2"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufDown: _JET_Rtrk_Tracking2_scaled_mass__1down
+  HistoFileSufUp: _JET_Rtrk_Tracking2_scaled_mass__1up
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
+
+Systematic: "JET_Rtrk_Tracking3_scaled_mass"
+  Title: "JMS Tracking3"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufDown: _JET_Rtrk_Tracking3_scaled_mass__1down
+  HistoFileSufUp: _JET_Rtrk_Tracking3_scaled_mass__1up
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
 
 Systematic: "JET_JER_DataVsMC_MC16"
   Title: "JER Data/MC"
@@ -442,8 +482,8 @@ Systematic: "MET_SoftTrk_Scale"
   Title: "MET TST scale"
   Type: HISTO
   Category: "E_{T}^{miss} uncertainties"
-  HistoFileSufUp: _MET_SoftTrk_ScaleUp
-  HistoFileSufDown: _MET_SoftTrk_ScaleDown
+  HistoFileSufUp: _MET_SoftTrk_Scale__1up
+  HistoFileSufDown: _MET_SoftTrk_Scale__1down
   Symmetrisation: TwoSided
   Smoothing: 40
   Exclude: QCD

@@ -216,7 +216,7 @@ if( (args.extrapolateSingletopSyst>0) and
         if(args.useSyst):
             #extrapolate weight uncertainties
             wsyst_opts = ['--inputDir',args.outputDir+'/MergedFiles/nominal/', 
-                          '--outputDir',args.outputDir+'/MergedFiles/nominal/Extrapolated/', 
+                          '--outputDir',args.outputDir+'/MergedFiles/Extrapolated/nominal/', 
                           '--campaign',campaign, '--doNominal','1', '--doSR','1', '--doPresel','1',
                           '--doWeightSys','1', '--doAltSys','0'] 
             if(args.otherVariables):
@@ -230,7 +230,7 @@ if( (args.extrapolateSingletopSyst>0) and
         if 'singletop_alt' in procs_to_run:
             #extrapolate alt samples
             asyst_opts = ['--inputDir',args.outputDir+'/MergedFiles/ttstalt/', 
-                          '--outputDir',args.outputDir+'/MergedFiles/ttstalt/Extrapolated/', 
+                          '--outputDir',args.outputDir+'/MergedFiles/Extrapolated/ttstalt/', 
                           '--campaign',campaign, '--doNominal','1', '--doSR','1', '--doPresel','1',
                           '--doWeightSys','0', '--doAltSys','1'] 
             if(args.otherVariables):
@@ -251,8 +251,8 @@ if args.useSyst and args.makeEnvelopeVjetsSyst:
     for campaign in args.campaigns:
         #extrapolate weight uncertainties
         vjets_opts = ['--inputDir',args.outputDir+'/MergedFiles/nominal/', 
-                      '--outputDir',args.outputDir+'/MergedFiles/nominal/Extrapolated/', 
-                      '--doSR','1', '--doPresel','1' ]
+                      '--outputDir',args.outputDir+'/MergedFiles/Extrapolated/nominal/', 
+                      '--doSR','1', '--doPresel','0' ]
         if(args.otherVariables):
             vjets_opts.append('--otherVariables')
         if(args.channel=='1lep'):

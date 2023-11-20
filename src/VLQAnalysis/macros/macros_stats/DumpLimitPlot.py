@@ -152,10 +152,10 @@ if(energy=="13"):
             
         # xsec and total uncertainty values taken from table 17 in https://cds.cern.ch/record/1662536/files/ATL-COM-PHYS-2014-112.pdf?
 
-        masses += [{'name':"VLQ_TT_600_"+type,'mass':600,'xsec':1.16,'err':0.10}]
+        #masses += [{'name':"VLQ_TT_600_"+type,'mass':600,'xsec':1.16,'err':0.10}]
         #masses += [{'name':"VLQ_TT_700_"+type,'mass':700,'xsec':0.455,'err':0.043}]
         #masses += [{'name':"VLQ_TT_750_"+type,'mass':750,'xsec':0.295,'err':0.029}]
-        masses += [{'name':"VLQ_TT_800_"+type,'mass':800,'xsec':0.195,'err':0.020}]
+        #masses += [{'name':"VLQ_TT_800_"+type,'mass':800,'xsec':0.195,'err':0.020}]
         #masses += [{'name':"VLQ_TT_850_"+type,'mass':850,'xsec':0.132,'err':0.014}]
         #masses += [{'name':"VLQ_TT_900_"+type,'mass':900,'xsec':0.0900,'err':0.0096}]
         #masses += [{'name':"VLQ_TT_950_"+type,'mass':950,'xsec':0.0624,'err':0.0068}]
@@ -211,7 +211,7 @@ if(energy=="13"):
 
 if len(masses)==1:
     mass = masses[0]
-    files = glob.glob(inDir + "/*"+mass['name']+suffix+"*/Limits/asymptotics/*.root")
+    files = glob.glob(inDir + "/*"+mass['name']+suffix+"*/Limits/Asymptotics/*.root")
     if len(files)==0 or len(files)>1:
         print "<!> ERROR !!"
     else:
@@ -263,15 +263,15 @@ if doMulti:
     for mass in masses: # Assume same masses and signals available in all folders if doMulti
         counter += 1
         for n,indir in enumerate(inDir):
-            files = glob.glob(indir + "/*"+mass['name']+suffix+"*/Limits/asymptotics/*.root")
-
+            files = glob.glob(indir + "/*"+mass['name']+suffix+"*/Limits/Asymptotics/*.root")
+            print(indir + "/*"+mass['name']+suffix+"*/Limits/Asymptotics/*.root")
             if len(files)==0 or len(files)>1:
                 print "<!> ERROR for mass " + `mass['mass']` + " !!"
             else:
                 rootfile = TFile(files[0],"read")
                 limtree = rootfile.Get('stats')
                 limtree.GetEntry(0)
-                print  " Mass: ", mass['mass'], " mu : ", limtree.obs_upperlimit, " xsec : ", mass['xsec']
+                #print  " Mass: ", mass['mass'], " mu : ", limtree.exp_upperlimit, " xsec : ", mass['xsec']
                 tg_obs[n].SetPoint(counter,mass['mass'],limtree.obs_upperlimit*mass['xsec'])
                 tg_exp[n].SetPoint(counter,mass['mass'],limtree.exp_upperlimit*mass['xsec'])
                 tg_exp1s[n].SetPoint(counter,mass['mass'],limtree.exp_upperlimit_plus1*mass['xsec'])
@@ -287,14 +287,15 @@ if doMulti:
 else:
     for mass in masses:
         counter += 1
-        files = glob.glob(inDir + "/*"+mass['name']+suffix+"*/Limits/asymptotics/*.root")
+        files = glob.glob(inDir + "/*"+mass['name']+suffix+"*/Limits/Asymptotics/*.root")
+        print(inDir + "/*"+mass['name']+suffix+"*/Limits/Asymptotics/*.root")
         if len(files)==0 or len(files)>1:
             print "<!> ERROR for mass " + `mass['mass']` + " !!"
         else:
             rootfile = TFile(files[0],"read")
             limtree = rootfile.Get('stats')
             limtree.GetEntry(0)
-            print  " Mass: ", mass['mass'], " mu : ", limtree.obs_upperlimit, " xsec : ", mass['xsec']
+            #print  " Mass: ", mass['mass'], " mu : ", limtree.exp_upperlimit, " xsec : ", mass['xsec']
             tg_obs.SetPoint(counter,mass['mass'],limtree.obs_upperlimit*mass['xsec'])
             tg_exp.SetPoint(counter,mass['mass'],limtree.exp_upperlimit*mass['xsec'])
             tg_exp1s.SetPoint(counter,mass['mass'],limtree.exp_upperlimit_plus1*mass['xsec'])
@@ -443,7 +444,8 @@ if doMulti:
             else:
                 tg_exp2s[n].Draw("fl")
         else:
-            tg_exp2s.Draw("f")
+            tg_exp2s[n].Draw("f")
+
 
         tg_exp1s[n].SetLineColorAlpha(cols[n],0.2)
         tg_exp1s[n].SetFillColorAlpha(cols[n],0.2)
@@ -456,7 +458,7 @@ if doMulti:
         tg_exp[n].SetLineWidth(3)
         tg_exp[n].SetLineStyle(2)
         tg_exp[n].Draw("l")
-
+        tg_theory.Draw("l3 same")
 ########################
 else:
     tg_exp2s.SetLineColor(kYellow)
@@ -666,10 +668,10 @@ else:
         tg_theory.GetXaxis().SetLimits(masses[0]['mass'],masses[len(masses)-1]['mass'])
         tg_theory.SetMinimum(ylim_min_log)
         tg_theory.SetMaximum(ylim_max_log)
-        tg_theory.Draw("al3")
         tg_exp2s.Draw("af")
         tg_exp1s.Draw("f")
         tg_exp.Draw("l")
+        tg_theory.Draw("l3 same")
         leg.Draw()
         tl_atlas.Draw()
         tl_int.Draw()

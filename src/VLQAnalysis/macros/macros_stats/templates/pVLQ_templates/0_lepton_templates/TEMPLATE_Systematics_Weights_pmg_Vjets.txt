@@ -9,11 +9,10 @@ NuisanceParameter: "HTX_BKGNP_VJETS_MURF"
   Category: "V+jets uncertainties"
   HistoNameSufUp: _weight_muRF_up
   HistoNameSufDown: _weight_muRF_down
-  HistoPathUp: "__HISTOPATH__/TheorySys/NewVJets/"
-  HistoPathDown: "__HISTOPATH__/TheorySys/NewVJets/"
+  HistoPathUp: "__HISTOPATH__/Extrapolated/"
+  HistoPathDown: "__HISTOPATH__/Extrapolated/"
   Symmetrisation: TwoSided
   DropNorm: all
-  ReferenceSample: Wjets_Ref
   Samples: Wjets
 
 Systematic: "HTX_BKGNP_ZJETS_MURF"
@@ -23,11 +22,10 @@ NuisanceParameter: "HTX_BKGNP_VJETS_MURF"
   Category: "V+jets uncertainties"
   HistoNameSufUp: _weight_muRF_up
   HistoNameSufDown: _weight_muRF_down
-  HistoPathUp: "__HISTOPATH__/TheorySys/NewVJets/"
-  HistoPathDown: "__HISTOPATH__/TheorySys/NewVJets/"
+  HistoPathUp: "__HISTOPATH__/Extrapolated/"
+  HistoPathDown: "__HISTOPATH__/Extrapolated/"
   Symmetrisation: TwoSided
   DropNorm: all
-  ReferenceSample: Zjets_Ref
   Samples: Zjets
 
 %Systematic: "HTX_BKGNP_VJETS_CKKW"
@@ -36,8 +34,8 @@ NuisanceParameter: "HTX_BKGNP_VJETS_MURF"
 %  Category: "V+jets uncertainties"
 %  HistoNameSufUp: _weight_pmg_ckkw30
 %  HistoNameSufDown: _weight_pmg_ckkw15
-%  HistoPathUp: "__HISTOPATH__/TheorySys/NewVJets/"
-%  HistoPathDown: "__HISTOPATH__/TheorySys/NewVJets/"
+%  HistoPathUp: "__HISTOPATH__/Extrapolated/"
+%  HistoPathDown: "__HISTOPATH__/Extrapolated/"
 %  Symmetrisation: TwoSided
 %  DropNorm: all
 %  Samples: Wjets,Zjets
@@ -48,8 +46,8 @@ NuisanceParameter: "HTX_BKGNP_VJETS_MURF"
 %  Category: "V+jets uncertainties"
 %  HistoNameSufUp: _weight_pmg_qsf4
 %  HistoNameSufDown: _weight_pmg_qsf025
-%  HistoPathUp: "__HISTOPATH__/TheorySys/NewVJets/"
-%  HistoPathDown: "__HISTOPATH__/TheorySys/NewVJets/"
+%  HistoPathUp: "__HISTOPATH__/Extrapolated/"
+%  HistoPathDown: "__HISTOPATH__/Extrapolated/"
 %  Symmetrisation: TwoSided
 %  DropNorm: all
 %  Samples: Wjets,Zjets

@@ -2,15 +2,15 @@
 % --------   PILE-UP  -------- %
 % ---------------------------- %
 
-%Systematic: "PRW_DATASF"
-%  Title: "Pile-up uncertainty"
-%  Type: HISTO
-%  Category: "Others"
-%  HistoNameSufUp: _weight_pu_UP
-%  HistoNameSufDown: _weight_pu_DOWN
-%  Symmetrisation: TwoSided
-%  Smoothing: 40
-%  Exclude: QCD
+Systematic: "PRW_DATASF"
+  Title: "Pile-up uncertainty"
+  Type: HISTO
+  Category: "Others"
+  HistoNameSufUp: _weight_pu_UP
+  HistoNameSufDown: _weight_pu_DOWN
+  Symmetrisation: TwoSided
+  Smoothing: 40
+  Exclude: QCD
 
 % ------------------------------ %
 % --------   B-TAGGING  -------- %
@@ -137,14 +137,14 @@ Systematic: "FT_EFF_Eigen_C_3"
   Symmetrisation: TwoSided
   Exclude: QCD
 
-Systematic: "FT_EFF_Eigen_C_4"
-  Title: "b-tag (C) EV4"
-  Type: HISTO
-  Category: "b-tagging uncertainties"
-  HistoNameSufUp: _weight_trkbtag_C_EV_Up_4
-  HistoNameSufDown: _weight_trkbtag_C_EV_Down_4
-  Symmetrisation: TwoSided
-  Exclude: QCD
+%Systematic: "FT_EFF_Eigen_C_4"
+%  Title: "b-tag (C) EV4"
+%  Type: HISTO
+%  Category: "b-tagging uncertainties"
+%  HistoNameSufUp: _weight_trkbtag_C_EV_Up_4
+%  HistoNameSufDown: _weight_trkbtag_C_EV_Down_4
+%  Symmetrisation: TwoSided
+%  Exclude: QCD
 
 % ---------------------------------- %
 % --------   L MIS-TAGGING  -------- %
@@ -204,6 +204,15 @@ Systematic: "FT_EFF_Eigen_Light_5"
   Symmetrisation: TwoSided
   Exclude: QCD
 
+Systematic: "FT_EFF_Eigen_Light_6"
+  Title: "b-tag (L) EV6"
+  Type: HISTO
+  Category: "b-tagging uncertainties"
+  HistoNameSufUp: _weight_trkbtag_Light_EV_Up_6
+  HistoNameSufDown: _weight_trkbtag_Light_EV_Down_6
+  Symmetrisation: TwoSided
+  Exclude: QCD
+
 Systematic: "FT_EFF_extrapolation"
   Title: "b-tag extrap."
   Type: HISTO
@@ -226,12 +235,12 @@ Systematic: "FT_EFF_extrapolation_from_charm"
 % --------   JVT  -------- %
 % ------------------------ %
 
-%Systematic: "JET_JvtEfficiency"
-%  Title: "JVT uncertainty"
-%  Type: HISTO
-%  Category: "Jet uncertainties"
-%  HistoNameSufUp: _weight_jvt_UP
-%  HistoNameSufDown: _weight_jvt_DOWN
-%  Symmetrisation: TwoSided
-%  %Exclude: QCD
+Systematic: "JET_JvtEfficiency"
+  Title: "JVT uncertainty"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoNameSufUp: _weight_jvt_UP
+  HistoNameSufDown: _weight_jvt_DOWN
+  Symmetrisation: TwoSided
+  Exclude: QCD
 
