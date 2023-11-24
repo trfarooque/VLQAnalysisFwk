@@ -212,6 +212,9 @@ if(energy=="13"):
 if len(masses)==1:
     mass = masses[0]
     files = glob.glob(inDir + "/*"+mass['name']+suffix+"*/Limits/Asymptotics/*.root")
+    if len(files)==0:
+        files = glob.glob(inDir + "/*"+mass['name']+suffix+"*/Limits/asymptotics/*.root")
+
     if len(files)==0 or len(files)>1:
         print "<!> ERROR !!"
     else:
@@ -264,7 +267,10 @@ if doMulti:
         counter += 1
         for n,indir in enumerate(inDir):
             files = glob.glob(indir + "/*"+mass['name']+suffix+"*/Limits/Asymptotics/*.root")
-            print(indir + "/*"+mass['name']+suffix+"*/Limits/Asymptotics/*.root")
+            if len(files)==0:
+                files = glob.glob(indir + "/*"+mass['name']+suffix+"*/Limits/asymptotics/*.root")
+                #files = glob.glob(inDir + "/*"+mass['name']+suffix+"*/Limits/asymptotics/*.root")
+            #print(indir + "/*"+mass['name']+suffix+"*/Limits/Asymptotics/*.root")
             if len(files)==0 or len(files)>1:
                 print "<!> ERROR for mass " + `mass['mass']` + " !!"
             else:
@@ -288,7 +294,10 @@ else:
     for mass in masses:
         counter += 1
         files = glob.glob(inDir + "/*"+mass['name']+suffix+"*/Limits/Asymptotics/*.root")
-        print(inDir + "/*"+mass['name']+suffix+"*/Limits/Asymptotics/*.root")
+        if len(files)==0:
+            files = glob.glob(inDir + "/*"+mass['name']+suffix+"*/Limits/asymptotics/*.root")
+
+        #print(inDir + "/*"+mass['name']+suffix+"*/Limits/Asymptotics/*.root")
         if len(files)==0 or len(files)>1:
             print "<!> ERROR for mass " + `mass['mass']` + " !!"
         else:

@@ -197,6 +197,7 @@ reg_0lep6jin2bex2MinHighMetCutLowMVAScore = {
     'legend': "#scale[0.75]{#geq6j, 2b, #geq2M, LMVA, HMET}",
     #'binning': "0,1000,1400,1600,2000,2500,3000,3500,7000",
     'binning': "1000,1500,1700,1900,2200,2500,7000",
+    'binning_blind':"1000,1500,1700,1900,2200,2500,7000",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
@@ -206,6 +207,7 @@ reg_0lep6jin3bex2MinLowMVAScore = {
     #'binning': "0,1000,1400,1800,2400,3200,7000",
     #'binning': "1000,1300,1600,1800,2200,2500,7000",
     'binning': "1000,1300,1600,1800,2200,7000",
+    'binning_blind': "1000,1300,1600,1800,2200,7000",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
@@ -214,6 +216,7 @@ reg_0lep6jin4bin2MinLowMVAScore = {
     'legend': "#scale[0.75]{#geq6j, #geq4b, #geq2M, LMVA}",
     #'binning': "0,1000,1600,2000,3500,7000",
     'binning': "1000,1500,2000,7000",
+    'binning_blind': "1000,1500,2000,7000",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
@@ -222,6 +225,7 @@ reg_0lep6jin2bex2MinHighMetCutMidMVAScore = {
     'legend': "#scale[0.75]{#geq6j, 2b, #geq2M, HMET, MMVA}",
     #'binning': "0,1000,1950,2200,2600,3000,7000",
     'binning': "0,1000,1950,2200,2600,3000,7000",
+    'binning_blind': "0,1000,1950,2200,2600",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
@@ -230,6 +234,7 @@ reg_0lep6jin3bin2MinMidMVAScore = {
     'legend': "#scale[0.75]{#geq6j, #geq3b, #geq2M, MMVA }",
     #'binning': "0,1000,1950,2100,2500,2800,7000",
     'binning': "1000,1600,1900,2100,2500,2800,7000",
+    'binning_blind': "1000,1600,1900,2100,2600",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
@@ -239,6 +244,7 @@ reg_0lep6jin2bex2MinHighMetCutHighMVAScore = {
     #'binning': "0,1000,2000,2500,3000,3500,7000",
     #'binning': "1000,2000,2500,3000,3500,7000",
     'binning': "1000,2000,2400,2800,3200,7000",
+    'binning_blind': "",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
@@ -247,6 +253,7 @@ reg_0lep6jin3bex2MinLowMetCutHighMVAScore = {
     'legend': "#scale[0.75]{#geq6j, 3b, #geq2M, LMET, HMVA}",
     #'binning': "0,1000,2500,3000,7000",
     'binning': "1000,2000,2800,7000",
+    'binning_blind': "",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
@@ -256,6 +263,7 @@ reg_0lep6jin3bex2MinHighMetCutHighMVAScore = {
     #'binning': "0,1000,2200,3000,7000",
     #'binning': "1000,2000,2800,7000",
     'binning': "1000,2000,2500,7000",
+    'binning_blind': "",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
@@ -264,6 +272,7 @@ reg_0lep6jin4bin2Min0HexHighMVAScore = {
     'legend': "#scale[0.75]{#geq6j, #geq4b, #geq2M, 0H, HMVA}",
     #'binning': "0,1000,2500,3000,7000",
     'binning': "1000,2000,2800,7000",
+    'binning_blind': "",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
@@ -272,6 +281,7 @@ reg_0lep6jin4bin2Min1HinHighMVAScore = {
     'legend': "#scale[0.75]{#geq6j, #geq4b, #geq2M, #geq1H, HMVA}",
     #'binning': "0,1000,2000,2500,3500,7000",
     'binning': "1000,7000",
+    'binning_blind': "",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }

@@ -379,7 +379,7 @@ for counter,sample in enumerate(Signals):
             f_adapted.write("Sample: \"Data\"\n")
             f_adapted.write("Title: \"Data\"\n")
             f_adapted.write("Type: data \n")
-            f_adapted.write("HistoFiles: Data.grp15,Data.grp16,Data.grp17,Data.grp18 \n")
+            f_adapted.write("HistoFiles: nominal/Data.grp15,nominal/Data.grp16,nominal/Data.grp17,nominal/Data.grp18 \n")
 
         #Adding the SM 4tops as a background in case this is not the investigated signal ... Check if the option is set before
         #if(useFourTopsAsBack and SName.find("SM4tops")==-1):
