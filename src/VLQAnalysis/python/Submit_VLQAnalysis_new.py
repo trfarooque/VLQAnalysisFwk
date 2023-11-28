@@ -231,16 +231,6 @@ if(tarballPath == ''):
 ## Creating tarball
 ##The code directory should be tarred if and only if this is not a dry run, and either 
 ##the provided path does not exist or we explicitly want it to be overwritten
-#if (not(os.path.exists(tarballPath) or args.dryRun) and args.rewriteTarball):
-
-#pathExists = os.path.exists(tarballPath)
-#if not pathExists:
-#    print 'tarballPath at ',tarballPath,' does not exist'
-#produceTarball = not(args.dryRun) #and (args.rewriteTarball or not(os.path.exists(tarballPath)))
-#if produceTarball:
-#    print 'tarball should be produced'
-#else:
-#    print 'tarball should not be produced'
 
 if(not(args.dryRun) and (args.rewriteTarball or not(os.path.exists(tarballPath)))):
     print 'producing tarball'
@@ -318,12 +308,6 @@ def SubmitSampleJob(sampleName, mc_campaign):
             jO.addOption("textFileList","false")
             jO.addOption("sampleName",sample['sampleType'])
 
-            #and SType.upper().find("DATA")==-1 \
-            #and SType.upper().find("DIJET")==-1 \
-            #and SType.upper().find("AMCPY")==-1 \
-            #and SType.upper().find("POWHER")==-1 \
-            #and SType.upper().find("DIAGSUB")==-1 : 
-
             # Weight systematics
             if args.useSyst and joblist[iJob]['objSyst'].upper()=="NOMINAL" \
                and sampleName!='data' and sampleName!='ttbar_alt' and sampleName!='singletop_alt':
@@ -335,7 +319,12 @@ def SubmitSampleJob(sampleName, mc_campaign):
             jO.addOption("sampleID",SName)
 
             # Input tree name (might change for systematics)
-            jO.addOption("inputTree",joblist[iJob]['objectTree'])
+            if joblist[iJob]['objSyst']=="JET_JMR__1up":
+                ### JMR uncertainty is calculated from nominal tree ####
+                jO.addOption("inputTree","nominal")
+                jO.addOption("doJMRSys","TRUE")
+            else:
+                jO.addOption("inputTree",joblist[iJob]['objectTree'])
 
             # isData flag
             if(sample['sampleType'].upper().find("DATA")>-1):
