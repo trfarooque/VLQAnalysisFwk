@@ -165,7 +165,10 @@ double VLQ_KinReweighter::GetKinReweight(const int kinematic, const std::string 
   std::string source_reg = "";
 
   if((m_opt->SampleName() == SampleName::ZJETS) || (m_opt->SampleName() == SampleName::WJETS)) source_reg = "c2lep3jin1bexZwinMLL_sf";
-  else if((m_outData->o_is_ttbar) || (m_opt->SampleName() == SampleName::SINGLETOP)) source_reg = "c1lep3jin2bex";
+  else if((m_outData->o_is_ttbar) || (m_opt->SampleName() == SampleName::SINGLETOP)){
+    if(m_outData -> o_channel_type == VLQ_Enums::FULLHAD) source_reg = "c0lep6jin2bex";
+    else source_reg = "c1lep3jin2bex";
+  }
 
   if(kinematic == JETSN){    
     std::string rw_name = source_reg + "_jets_n" + systematic;
@@ -307,7 +310,8 @@ double VLQ_KinReweighter::GetKinRwSyst(std::string systematic) const{
   std::string source_reg = "";
 
   if( m_outData -> o_channel_type == VLQ_Enums::MUON || m_outData -> o_channel_type == VLQ_Enums::ELECTRON ||
-      m_outData -> o_channel_type == VLQ_Enums::MUMU || m_outData -> o_channel_type == VLQ_Enums::ELEL){
+      m_outData -> o_channel_type == VLQ_Enums::MUMU || m_outData -> o_channel_type == VLQ_Enums::ELEL || 
+      m_outData -> o_channel_type == VLQ_Enums::FULLHAD){
 
     if((m_opt -> SampleName() == SampleName::ZJETS) || (m_opt -> SampleName() == SampleName::WJETS)){
 
@@ -315,8 +319,9 @@ double VLQ_KinReweighter::GetKinRwSyst(std::string systematic) const{
 
     }
     else if((m_outData -> o_is_ttbar) || (m_opt -> SampleName() == SampleName::SINGLETOP)){
-
-      source_reg = "c1lep3jin2bex";
+      
+      if(m_outData -> o_channel_type == VLQ_Enums::FULLHAD) source_reg = "c0lep6jin2bex";
+      else source_reg = "c1lep3jin2bex";
 
     }
 
@@ -352,7 +357,7 @@ double VLQ_KinReweighter::GetKinRwSyst(std::string systematic) const{
     return it -> second -> Eval(param);
 
   }
-  else if(source_reg == "c1lep3jin2bex"){
+  else if(source_reg == "c1lep3jin2bex" || source_reg == "c0lep6jin2bex"){
 
     int last_njet_bin = (m_opt->UseSVLQConfig()) ? 7 : 8;
 

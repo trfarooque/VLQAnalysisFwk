@@ -66,7 +66,12 @@ VLQ_WeightManager::VLQ_WeightManager( VLQ_Options *opt, const VLQ_NtupleData* nt
       m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string(path_name+"kinReweightings_OnlyZjets.root"));
     }
     else{
-      m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string(path_name+"kinReweightings_OnlyWtTtbar.root"));
+      if(m_vlq_opt -> DoZeroLeptonAna()){
+	m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string(path_name+"kinReweightings_OnlyWtTtbar_0L.root"));
+      }
+      else{
+	m_kinRw->Init(std::getenv("VLQAnalysisFramework_DIR")+std::string(path_name+"kinReweightings_OnlyWtTtbar.root"));
+      }
     }
 
   }
