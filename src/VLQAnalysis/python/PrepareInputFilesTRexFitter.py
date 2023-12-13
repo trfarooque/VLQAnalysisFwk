@@ -62,7 +62,7 @@ def FindAndMergeFiles(proc_name, _inputDir, _outputDir, _campaigns,
                 #command to run
                 comm = ''
                 if len(listfiles)==0:
-                    printWarning('No files retrieved')
+                    printWarning('No files retrieved for pattern : \n '+globPattern)
                 elif(len(listfiles)==1):
                     comm = 'cp '+listfiles[0]+' '+name_temp_outfile
                 else:

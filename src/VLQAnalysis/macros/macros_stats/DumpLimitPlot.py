@@ -269,10 +269,8 @@ if doMulti:
             files = glob.glob(indir + "/*"+mass['name']+suffix+"*/Limits/Asymptotics/*.root")
             if len(files)==0:
                 files = glob.glob(indir + "/*"+mass['name']+suffix+"*/Limits/asymptotics/*.root")
-                #files = glob.glob(inDir + "/*"+mass['name']+suffix+"*/Limits/asymptotics/*.root")
-            #print(indir + "/*"+mass['name']+suffix+"*/Limits/Asymptotics/*.root")
             if len(files)==0 or len(files)>1:
-                print "<!> ERROR for mass " + `mass['mass']` + " !!"
+                print "<!> ERROR for mass " + `mass['mass']` + " !! " + `len(files)`
             else:
                 rootfile = TFile(files[0],"read")
                 limtree = rootfile.Get('stats')
@@ -304,7 +302,7 @@ else:
             rootfile = TFile(files[0],"read")
             limtree = rootfile.Get('stats')
             limtree.GetEntry(0)
-            #print  " Mass: ", mass['mass'], " mu : ", limtree.exp_upperlimit, " xsec : ", mass['xsec']
+            print  " Mass: ", mass['mass'], " mu : ", limtree.exp_upperlimit, " xsec : ", mass['xsec']
             tg_obs.SetPoint(counter,mass['mass'],limtree.obs_upperlimit*mass['xsec'])
             tg_exp.SetPoint(counter,mass['mass'],limtree.exp_upperlimit*mass['xsec'])
             tg_exp1s.SetPoint(counter,mass['mass'],limtree.exp_upperlimit_plus1*mass['xsec'])
@@ -625,7 +623,7 @@ gPad.RedrawAxis()
 can.SetTickx()
 can.SetTicky()
 
-can.Print(outDir + "/" + signal.upper()+"_"+lumi.replace(".","")+outSuffix+".eps")
+#can.Print(outDir + "/" + signal.upper()+"_"+lumi.replace(".","")+outSuffix+".eps")
 can.Print(outDir + "/" + signal.upper()+"_"+lumi.replace(".","")+outSuffix+".png")
 
 # No log plot if comparison
@@ -711,6 +709,6 @@ gPad.RedrawAxis()
 can.SetTickx()
 can.SetTicky()
 
-can.Print(outDir + "/" + signal.upper()+"_"+lumi.replace(".","")+outSuffix+"_log.eps")
+#can.Print(outDir + "/" + signal.upper()+"_"+lumi.replace(".","")+outSuffix+"_log.eps")
 can.Print(outDir + "/" + signal.upper()+"_"+lumi.replace(".","")+outSuffix+"_log.png")
 

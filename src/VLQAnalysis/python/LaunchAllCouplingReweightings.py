@@ -30,7 +30,7 @@ def main(args):
     platform = socket.gethostname()
     now = datetime.datetime.now().strftime("%Y_%m_%d_%H%M")
     here = os.getcwd()
-    sleep=1
+    sleep=2
     ##..............................................................................
 
 

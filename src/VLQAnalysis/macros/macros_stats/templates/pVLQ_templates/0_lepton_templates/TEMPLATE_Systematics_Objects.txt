@@ -456,6 +456,16 @@ Systematic: "JET_JER_EffectiveNP_7restTerm"
   Smoothing: 40
   Exclude: QCD
 
+Systematic: "JET_JMR"
+  Title: "JMR Baseline"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  #HistoFileSufDown: _JET_Rtrk_Baseline_scaled_mass__1down
+  HistoFileSufUp: _JET_JMR__1up
+  Symmetrisation: OneSided
+  Smoothing: 40
+  Exclude: QCD
+
 % ------------------------------ %
 % -----------   MET  ----------- %
 % ------------------------------ %

@@ -189,7 +189,7 @@ if args.reweightVLQ:
         rw_opts = ['--inputDir',args.outputDir+'/MergedFiles/nominal/', 
                    '--outputDir',args.outputDir+'/MergedFiles/nominal/', 
                    '--mcCampaign',campaign, '--postMerging', '1', '--doBatch', 
-                   '--queue','at3', '--doSR', '--doPR' ]
+                   '--queue','at3', '--doSR', '--doPR', '--nMerge','10' ]
 
         if(not args.otherVariables):
             rw_opts.append('--tthfitter')

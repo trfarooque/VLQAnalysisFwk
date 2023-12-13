@@ -81,26 +81,6 @@ LineColor: 1
 HistoFiles: ttstalt/Singletop.mc16a,ttstalt/Singletop.mc16d,ttstalt/Singletop.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 
-%Sample: "Singletop_Ref"
-%Type: GHOST
-%FillColor: 0
-%LineColor: 1
-%HistoFiles: TheorySys/Singletop.mc16a,TheorySys/Singletop.mc16d,TheorySys/Singletop.mc16e
-%LumiScales: 36207.66,44307.4,58450.1
-
-%Sample: "Wjets_Ref"
-%Type: GHOST
-%FillColor: 0
-%LineColor: 1
-%HistoFiles: TheorySys/NewVJets/Wjets.mc16a,TheorySys/NewVJets/Wjets.mc16d,TheorySys/NewVJets/Wjets.mc16e
-%LumiScales: 36207.66,44307.4,58450.1
-
-%Sample: "Zjets_Ref"
-%Type: GHOST
-%FillColor: 0
-%LineColor: 1
-%HistoFiles: TheorySys/NewVJets/Zjets.mc16a,TheorySys/NewVJets/Zjets.mc16d,TheorySys/NewVJets/Zjets.mc16e
-%LumiScales: 36207.66,44307.4,58450.1
 
 % --------------------------- %
 % --------  SAMPLES  -------- %
