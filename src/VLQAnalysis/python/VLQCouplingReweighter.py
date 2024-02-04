@@ -87,7 +87,7 @@ for reg in regions.split(","):
 #ttbarlight.mc16e_JET_BJES_Response__1down.root
 #outVLQAna_ttbarlight_410470.mc16e_JET_BJES_Response__1down_6.root
 if postMerging:
-    template_fileName = "SAMPLE.*_OBJSYSTEMATIC_*"+fileSuffix+".root"
+    template_fileName = "SAMPLE."+mcCampaign+"*_OBJSYSTEMATIC_*"+fileSuffix+".root"
 else:
     template_fileName = "outVLQAna_SAMPLE_*_OBJSYSTEMATIC__*"+fileSuffix+".root"
 
@@ -313,18 +313,18 @@ for BR in BRs:
                 if postMerging:
                     if syst=="nominal" or syst=="":
                         outputFileName += template_fileName\
-                            .replace("SAMPLE.",SName+"_"+BR['name']+"."+mcCampaign)\
+                            .replace("SAMPLE",SName+"_"+BR['name'])\
                             .replace("_OBJSYSTEMATIC_","")\
                             .replace("*"+fileSuffix+".root",find_between_r( iFile, space+syst, ".root" ))\
                             .replace("*","")+".root"
                     else:
                         outputFileName += template_fileName\
-                            .replace("SAMPLE.",SName+"_"+BR['name']+"."+mcCampaign)\
+                            .replace("SAMPLE",SName+"_"+BR['name'])\
                             .replace("_OBJSYSTEMATIC_",space+syst)\
                             .replace("*"+fileSuffix+".root",find_between_r( iFile, space+syst, ".root" ))\
                             .replace("*","")+".root"
                 else:
-                    outputFileName += template_fileName.replace("SAMPLE",SName+"_"+BR['name']+"."+mcCampaign)\
+                    outputFileName += template_fileName.replace("SAMPLE",SName+"_"+BR['name'])\
                     .replace("_OBJSYSTEMATIC",space+syst)\
                     .replace("*"+fileSuffix+".root",find_between_r( iFile, space+syst, ".root" ))\
                     .replace("*","")+".root"

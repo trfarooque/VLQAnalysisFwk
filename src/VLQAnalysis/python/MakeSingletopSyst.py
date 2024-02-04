@@ -48,12 +48,16 @@ def GetExtrapolationRule(regname):
          extr_rule['src_list'] = ['c1lep5jin3bex2Min3Jin1HinLowMVAScore',
                                   'c1lep5jin4bin2Min3Jin1HinLowMVAScore']
       else: ## These are MMVA and HMVA regions - merge the two in each btag category 
-         if('3bex' in regname):
-            extr_rule['src_list'] = ['c1lep5jin3bex2Min3Jin1HinMidMVAScore',
-                                     'c1lep5jin3bex2Min3Jin1HinHighMVAScore']
-         else: #4bin
-            extr_rule['src_list'] = ['c1lep5jin4bin2Min3Jin1HinMidMVAScore',
-                                     'c1lep5jin4bin2Min3Jin1HinHighMVAScore']
+         if super_merge:
+            extr_rule['src_list'] = ['c1lep5jin3bex2Min3Jin1HinMidMVAScore', 'c1lep5jin4bin2Min3Jin1HinMidMVAScore',
+                                     'c1lep5jin3bex2Min3Jin1HinHighMVAScore','c1lep5jin4bin2Min3Jin1HinHighMVAScore']
+         else:
+            if('3bex' in regname):
+               extr_rule['src_list'] = ['c1lep5jin3bex2Min3Jin1HinMidMVAScore',
+                                        'c1lep5jin3bex2Min3Jin1HinHighMVAScore']
+            else: #4bin
+               extr_rule['src_list'] = ['c1lep5jin4bin2Min3Jin1HinMidMVAScore',
+                                        'c1lep5jin4bin2Min3Jin1HinHighMVAScore']
    if debug:
       print "<INFO>: Region: ",regname#,'\n'
       print "doExtr: ",extr_rule['doExtr']#,'\n'
@@ -92,7 +96,7 @@ def GetExtrapolatedHistCopy(regname, varname, sysname):
    h_target = hist_dict[regname+'_'+varsysname]
    extr_rule = reg_rules[regname]
    xbins = extr_rule['xbins']
- 
+   
    h_ext = h_target.Clone() #histogram to return
 
    # only extrapolate histograms in a region if asked by rule
@@ -200,6 +204,7 @@ def main(args):
    global sample
    global campaign
    global moduleKeys
+   global super_merge
    global debug
 
 
@@ -242,6 +247,8 @@ def main(args):
    parser.add_argument("--moduleKeys",dest="moduleKeys",
                      help="Comma separated list of keys of region dictionary modules",
                      action="store",default="MVA")
+   parser.add_argument("--superMerge",dest="super_merge",help="Apply b-tag and mid-high MVA super merge extrapolation",
+                     type=int,action="store",default=0)
    parser.add_argument("--debug",dest="debug",help="print debug messages",
                      action="store_true",default=False)
 
@@ -262,6 +269,7 @@ def main(args):
    sample=args.sample
    campaign=args.campaign
    moduleKeys=args.moduleKeys.split(",")
+   super_merge=args.super_merge
    debug=args.debug
 
    ##+++++++++++++++++++++
@@ -407,7 +415,6 @@ def main(args):
            reg = region['name'].replace("HTX_","")
            
            for var in varlist:
-               
                nominalhisto=inputFile.Get(reg+"_"+var)
                #print reg+"_"+var
                nominalhisto.SetDirectory(0)

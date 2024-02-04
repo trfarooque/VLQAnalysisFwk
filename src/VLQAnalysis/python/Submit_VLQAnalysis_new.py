@@ -112,7 +112,7 @@ vlqOptions['doExpSys'] = 'TRUE'
 
 ##Channel-dependent options
 if args.channel=='1lep':
-    sampleDatPattern += "1L/samples_info.tag-21.2.213-htztx-syst-1L"
+    sampleDatPattern += "1L/samples_info.tag-21.2.213-htztx-syst__SYSTSUFFIX__1L"
     vlqOptions['doOneLeptonAna'] = 'TRUE'
     vlqOptions['doZeroLeptonAna'] = 'FALSE'
     if args.mode=='DERIVEREWEIGHTING':
@@ -123,7 +123,7 @@ if args.channel=='1lep':
     vlqOptions['mvaWeightFile'] = 'TMVA/weightsCV_1L_30vars_allbkgd/TMVAClassificationCV_MLP.weights.xml'
 
 elif args.channel=='0lep':
-    sampleDatPattern += "0L/samples_info.tag-21.2.213-htztx-syst-0L"
+    sampleDatPattern += "0L/samples_info.tag-21.2.213-htztx-syst__SYSTSUFFIX__0L"
     vlqOptions['doOneLeptonAna'] = 'FALSE'
     vlqOptions['doZeroLeptonAna'] = 'TRUE'
     vlqOptions['useLeptonsSF'] = 'FALSE'
@@ -270,7 +270,7 @@ def SubmitSampleJob(sampleName, mc_campaign):
         excluded = []
         print "GetSampleJobs; SName : ",SName,"; SType : ",SType
         joblist = getSampleJobs(sample,
-                                InputDir=sample_inputDir, NFiles=args.nFilesSplit,UseList=False,
+                                InputDir=sample_inputDir, NFiles=int(args.nFilesSplit),UseList=False,
                                 ListFolder=sample_listDir,exclusions=[],
                                 useDiffFilesForObjSyst=False)
         if(not joblist):
@@ -333,10 +333,24 @@ def SubmitSampleJob(sampleName, mc_campaign):
                 jO.addOption("isData","false")
 
             # sample info
-            if(args.channel == '1lep'):
-                jO.addOption("sampleDat", sampleDatPattern+"."+mc_campaign+".dat")
+            if(sampleName == 'singletop_alt'):
+                sampleDatPatternTemp = sampleDatPattern.replace("__SYSTSUFFIX__","-STOPALT-")
+                if(("410646"in SName) or ("410647"in SName) or ("410644" in SName) or ("410645" in SName) or ("410658" in SName) or ("410659" in SName)):
+                    jO.addOption("isAFII", "true")
+                elif(("410654" in SName) or ("410655" in SName)):
+                    jO.addOption("isDiagSub", "true")
+            elif(sampleName == 'ttbar_alt'):
+                sampleDatPatternTemp = sampleDatPattern.replace("__SYSTSUFFIX__","-TTBARALT-")
+                if(("407342" in SName) or ("407343" in SName) or ("407344" in SName) or ("410470" in SName)):
+                    jO.addOption("isAFII", "true")
+
             else:
-                jO.addOption("sampleDat", sampleDatPattern+"."+sampleName+"."+mc_campaign+".dat")
+                sampleDatPatternTemp = sampleDatPattern.replace("__SYSTSUFFIX__","-")
+
+            if(args.channel == '1lep'):
+                jO.addOption("sampleDat", sampleDatPatternTemp+"."+mc_campaign+".dat")
+            else:
+                jO.addOption("sampleDat", sampleDatPatternTemp+"."+sampleName+"."+mc_campaign+".dat")
 
             for arg,value in vlqOptions.items():
                 jO.addOption(arg, value)
@@ -354,7 +368,7 @@ def SubmitSampleJob(sampleName, mc_campaign):
 
             JOSet.addJob(jO)
 
-            if ( JOSet.size()==args.nMerge or joblist[iJob]['objSyst'].upper()=="NOMINAL" ):
+            if ( JOSet.size()==int(args.nMerge) or joblist[iJob]['objSyst'].upper()=="NOMINAL" ):
                 JOSet.writeScript()
                 if not args.dryRun:
                     JOSet.submitSet()
