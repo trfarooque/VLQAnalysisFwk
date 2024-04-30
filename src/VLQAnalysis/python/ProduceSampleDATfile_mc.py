@@ -480,7 +480,7 @@ for sample in Samples:
             configDict[dsid].update(weightDict)
 
     else:
-        configFile.write(dsid+" "+`nEventsWeighted`+" "+`crossSection`+"\n")
+        configFile.write(f"{dsid} {nEventsWeighted} {crossSection}\n")
 
     if crossSection < 0:
         printError("<!> The sample "+ SName +" is not in the cross-section file. Please check ! The cross-section is set to -1.")
@@ -504,7 +504,7 @@ if isolateBadFiles and len(badFileList)>0:
     except:
         printError("<!> Unable to create isolation directory. Please manually make sure the follow bad files are not included in VLQAnalysis inputs:")
         for badfile in badFileList:
-            print badfile
+            print( badfile)
 
     else:
         printGoodNews("--> Moving %s bad file(s) to %s"%(len(badFileList),isolationDir))

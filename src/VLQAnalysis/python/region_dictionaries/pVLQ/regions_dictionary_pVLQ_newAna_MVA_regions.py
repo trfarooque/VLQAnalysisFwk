@@ -39,6 +39,7 @@ reg_1lep5jin2bex0Hex1VTex1Lex = {
     'legend': "#scale[0.75]{#geq5j, 2b, 0H, 1(V+t_{h}), 1t_{l}}",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'binning':"1000,1300,1700,2300,2850,7000", #1600 singlet 
+    'binning_blind':"1000,1300,1700,2300,2850,7000", #1600 singlet 
     'type':"SIGNAL"
 }
 reg_1lep5jin3bex0Hex1VTex0_1Lwin = {
@@ -46,6 +47,7 @@ reg_1lep5jin3bex0Hex1VTex0_1Lwin = {
     'legend': "#scale[0.75]{#geq5j, 3b, 0H, 1(V+t_{h}), 0-1t_{l}}",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'binning':"1000,1150,1350,1650,2100,2550,7000", #1600 HtHt
+    'binning_blind':"1000,1150,1350,1650,2100,2550,7000", #1600 HtHt
     'type':"SIGNAL"
 }
 reg_1lep5jin4bin0Hex1VTex0_1Lwin = {
@@ -53,6 +55,7 @@ reg_1lep5jin4bin0Hex1VTex0_1Lwin = {
     'legend': "#scale[0.75]{#geq5j, #geq4b, 0H, 1(V+t_{h}), 0-1t_{l}}",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'binning':"1000,1350,1650,2100,2600,7000", #1600 Doublet
+    'binning_blind':"1000,1350,1650,2100,2600,7000", #1600 Doublet
     'type':"SIGNAL"
 }
 reg_1lep5jin3bex2Min3Jin0HexHighMVAScore = {
@@ -66,6 +69,7 @@ reg_1lep5jin3bex2Min3Jin0HexMidMVAScore = {
     'name':"HTX_c1lep5jin3bex2Min3Jin0HexMidMVAScore",
     'legend':"#scale[0.75]{#geq5j, 3b, #geq2M, #geq3J, 0H, MMVA}",
     'binning':"1000,2100,2350,2650,3050,7000", #1600 Singlet
+    'binning_blind':"1000,2100,2350", #1600 Singlet
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
@@ -73,6 +77,7 @@ reg_1lep5jin3bex2Min3Jin0HexLowMVAScore = {
     'name':"HTX_c1lep5jin3bex2Min3Jin0HexLowMVAScore",
     'legend':"#scale[0.75]{#geq5j, 3b, #geq2M, #geq3J, 0H, LMVA}",
     'binning':"1000,1400,1650,2000,2300,7000",
+    'binning_blind':"1000,1400,1650,2000,2300,7000",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
@@ -87,6 +92,7 @@ reg_1lep5jin4bin2Min3Jin0HexMidMVAScore = {
     'name':"HTX_c1lep5jin4bin2Min3Jin0HexMidMVAScore",
     'legend':"#scale[0.75]{#geq5j, #geq4b, #geq2M, #geq3J, 0H, MMVA}",
     'binning':"1000,1800,2000,2250,2500,7000",
+    'binning_blind':"1000,1800",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
@@ -94,6 +100,7 @@ reg_1lep5jin4bin2Min3Jin0HexLowMVAScore = {
     'name':"HTX_c1lep5jin4bin2Min3Jin0HexLowMVAScore",
     'legend':"#scale[0.75]{#geq5j, #geq4b, #geq2M, #geq3J, 0H, LMVA}",
     'binning':"1000,1400,1600,1800,2000,2500,7000",
+    'binning_blind':"1000,1400,1600,1800,2000,2500",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
@@ -108,6 +115,7 @@ reg_1lep5jin3bex2Min3Jin1HinMidMVAScore = {
     'name':"HTX_c1lep5jin3bex2Min3Jin1HinMidMVAScore",
     'legend':"#scale[0.75]{#geq5j, 3b, #geq2M, #geq3J, #geq1H, MMVA}",
     'binning':"1000,1850,2050,2300,2650,7000",
+    'binning_blind':"1000,1850,2050",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
@@ -115,6 +123,7 @@ reg_1lep5jin3bex2Min3Jin1HinLowMVAScore = {
     'name':"HTX_c1lep5jin3bex2Min3Jin1HinLowMVAScore",
     'legend':"#scale[0.75]{#geq5j, 3b, #geq2M, #geq3J, #geq1H, LMVA}",
     'binning':"1000,1450,1700,2050,2400,7000",
+    'binning_blind':"1000,1450,1700,2050,2400,7000",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
@@ -136,6 +145,7 @@ reg_1lep5jin4bin2Min3Jin1HinLowMVAScore = {
     'name':"HTX_c1lep5jin4bin2Min3Jin1HinLowMVAScore",
     'legend':"#scale[0.75]{#geq5j, #geq4b, #geq2M, #geq3J, #geq1H, LMVA}",
     'binning':"1000,1500,1750,7000", #1600 HtHt
+    'binning_blind':"1000,1500,1750,7000", #1600 HtHt
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }
@@ -224,8 +234,8 @@ reg_0lep6jin2bex2MinHighMetCutMidMVAScore = {
     'name':"HTX_c0lep6jin2bex2MinHighMetCutMidMVAScore",
     'legend': "#scale[0.75]{#geq6j, 2b, #geq2M, HMET, MMVA}",
     #'binning': "0,1000,1950,2200,2600,3000,7000",
-    'binning': "0,1000,1950,2200,2600,3000,7000",
-    'binning_blind': "0,1000,1950,2200,2600",
+    'binning': "1000,1950,2200,2600,3000,7000",
+    'binning_blind': "1000,1950,2200,2600",
     #'binning':"\"AutoBin\",\"TransfoD\",3,3",
     'type':"SIGNAL"
 }

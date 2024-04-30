@@ -221,13 +221,13 @@ def GetRegionsAndVariables(file,prunevariables=False,Regions=False,Variables=Fal
     elif onlyRegionsWithKeys:
         regions = [region for region in regions if all(key in region for key in onlyRegionsWithKeys)]
 
-    print "Doing regions:"
+    print( "Doing regions:")
     for reg in regions:
-        print reg
-    print "\nDoing %s variables"%len(variables)
+        print( reg)
+    print( "\nDoing %s variables"%len(variables))
     for var in sorted(variables):
-        print var
-    print ""
+        print( var)
+    print( "")
     return regions,variables
 
 ##________________________________________________________
@@ -1041,7 +1041,7 @@ if dumpFiles:
         # filter commands for potential doubles
         if CommDict[key] in alldonecommands:
             continue
-        print "\n",CommDict[key],"\n"
+        print( "\n",CommDict[key],"\n")
         os.system(CommDict[key])
         alldonecommands.append(CommDict[key])
 
@@ -1050,7 +1050,7 @@ if makePlots:
         printError("Please provide a listKeyWord when choosing to plot")
     else:
         os.system('cd %s'%os.getcwd())
-        print '\nplot --SAMPLES="ConfigFiles_%s/sample_list.list" --VARIABLES="ConfigFiles_%s/vars_list.list" --STYLELIB="ConfigFiles_%s/style_list.list" --FILELIST="ConfigFiles_%s/files_list.list" --OUTFORMAT="PNG,PDF" --TITLEXMIN=0.17 --TITLEYMIN=0.765 --TITLEXMAX=0.42 --TITLEYMAX=0.915 --NEWCONFIG=TRUE --NEWFILELIST=FALSE --LEGENDTEXTSIZE=0.036 --LEGENDXMAX=0.95 --LEGENDYMAX=0.9 --YTITLEOFFSET=0.85 --RESDRAWOPT=%s --MAKEMOMENTSTABLE=FALSE --OUTPUTFOLDER="Plots_%s" --SHOWYIELDS=%s --PRINTVALUE=FALSE --RESMIN="0.2" --RESMAX="1.8"\n'%(listKeyword,listKeyword,listKeyword,listKeyword,drawRes,listKeyword,showYields)
+        print( '\nplot --SAMPLES="ConfigFiles_%s/sample_list.list" --VARIABLES="ConfigFiles_%s/vars_list.list" --STYLELIB="ConfigFiles_%s/style_list.list" --FILELIST="ConfigFiles_%s/files_list.list" --OUTFORMAT="PNG,PDF" --TITLEXMIN=0.17 --TITLEYMIN=0.765 --TITLEXMAX=0.42 --TITLEYMAX=0.915 --NEWCONFIG=TRUE --NEWFILELIST=FALSE --LEGENDTEXTSIZE=0.036 --LEGENDXMAX=0.95 --LEGENDYMAX=0.9 --YTITLEOFFSET=0.85 --RESDRAWOPT=%s --MAKEMOMENTSTABLE=FALSE --OUTPUTFOLDER="Plots_%s" --SHOWYIELDS=%s --PRINTVALUE=FALSE --RESMIN="0.2" --RESMAX="1.8"\n'%(listKeyword,listKeyword,listKeyword,listKeyword,drawRes,listKeyword,showYields))
         with open("tempplot.sh",'w') as f:
             f.write('#!/bin/bash\n')
             f.write('plot --SAMPLES="ConfigFiles_%s/sample_list.list" --VARIABLES="ConfigFiles_%s/vars_list.list" --STYLELIB="ConfigFiles_%s/style_list.list" --FILELIST="ConfigFiles_%s/files_list.list" --OUTFORMAT="PNG,PDF" --TITLEXMIN=0.17 --TITLEYMIN=0.765 --TITLEXMAX=0.42 --TITLEYMAX=0.915 --NEWCONFIG=TRUE --NEWFILELIST=FALSE --LEGENDTEXTSIZE=0.036 --LEGENDXMAX=0.95 --LEGENDYMAX=0.9 --YTITLEOFFSET=0.85 --RESDRAWOPT=%s --MAKEMOMENTSTABLE=FALSE --OUTPUTFOLDER="Plots_%s" --SHOWYIELDS=%s --PRINTVALUE=FALSE --RESMIN="0.2" --RESMAX="1.8"\n'%(listKeyword,listKeyword,listKeyword,listKeyword,drawRes,listKeyword,showYields))
@@ -1061,4 +1061,4 @@ if makePlots:
 
         # os.system('plot --SAMPLES="ConfigFiles_%s/sample_list.list" --VARIABLES="ConfigFiles_%s/vars_list.list" --STYLELIB="ConfigFiles_%s/style_list.list" --FILELIST="ConfigFiles_%s/files_list.list" --OUTFORMAT="PNG,PDF" --TITLEXMIN=0.17 --TITLEYMIN=0.765 --TITLEXMAX=0.42 --TITLEYMAX=0.915 --NEWCONFIG=TRUE --NEWFILELIST=FALSE --LEGENDTEXTSIZE=0.033 --LEGENDXMAX=0.85 --LEGENDYMAX=0.92 --YTITLEOFFSET=1.5 --RESDRAWOPT="FALSE" --MAKEMOMENTSTABLE=FALSE --OUTPUTFOLDER="Plots_%s" --SHOWYIELDS=FALSE --PRINTVALUE=FALSE'%(listKeyword,listKeyword,listKeyword,listKeyword,listKeyword))
 
-    print "\n"
+    print( "\n")

@@ -8,7 +8,7 @@ Systematic: "HTX_BKGNP_SINGLETOP_GEN"
   Category: "Single-top uncertainties"
   Symmetrisation: ONESIDED
   Smoothing: 40
-  HistoFilesUp: ttstalt/SingletopaMCPy.mc16a,ttstalt/SingletopaMCPy.mc16d,ttstalt/SingletopaMCPy.mc16e
+  HistoFilesUp: Extrapolated/ttstalt/SingletopaMCPy.mc16a,Extrapolated/ttstalt/SingletopaMCPy.mc16d,Extrapolated/ttstalt/SingletopaMCPy.mc16e
   Samples: Singletop
   ReferenceSample: Singletop_AFII
 
@@ -18,7 +18,7 @@ Systematic: "HTX_BKGNP_SINGLETOP_PS"
   Category: "Single-top uncertainties"
   Symmetrisation: ONESIDED
   Smoothing: 40
-  HistoFilesUp: ttstalt/SingletopPowHer.mc16a,ttstalt/SingletopPowHer.mc16d,ttstalt/SingletopPowHer.mc16e
+  HistoFilesUp: Extrapolated/ttstalt/SingletopPowHer.mc16a,Extrapolated/ttstalt/SingletopPowHer.mc16d,Extrapolated/ttstalt/SingletopPowHer.mc16e
   Samples: Singletop
   ReferenceSample: Singletop_AFII
 
@@ -29,5 +29,5 @@ NuisanceParameter: "HTX_BKGNP_SINGLETOP_DRDS"
   Category: "Single-top uncertainties"
   Symmetrisation: ONESIDED
   Smoothing: 40
-  HistoFilesUp: ttstalt/SingletopDiagSub.mc16a,ttstalt/SingletopDiagSub.mc16d,ttstalt/SingletopDiagSub.mc16e
+  HistoFilesUp: Extrapolated/ttstalt/SingletopDiagSub.mc16a,Extrapolated/ttstalt/SingletopDiagSub.mc16d,Extrapolated/ttstalt/SingletopDiagSub.mc16e
   Samples: Singletop

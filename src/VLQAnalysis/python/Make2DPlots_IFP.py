@@ -121,10 +121,10 @@ def GetRegionsAndVariables(file,prunevariables=False,noRegionsWithKeys=False,noV
     if noRegionsWithKeys:
         regions = [region for region in regions if not any(key in region for key in noRegionsWithKeys)]
 
-    print "Doing regions:"
+    print("Doing regions:")
     for reg in regions:
-        print reg
-    print "\nDoing %s variables"%len(variables)
+        print(reg)
+    print("\nDoing %s variables"%len(variables))
 
     # regionsvariables = []
     # for region in regions:
@@ -177,7 +177,7 @@ if plotTruthVarsTogether:
     gStyle.SetLegendBorderSize(0)
     gStyle.SetTitleBorderSize(0)
 
-    print "Plotting truth variables together"
+    print("Plotting truth variables together")
 
     truthTypes = ['truthOther','truthW','truthZ','truthHiggs','truthTop']
     truthcolors = [kOrange-2,kTeal+9,kOrange+7,kAzure+7,kMagenta-3]
@@ -191,8 +191,8 @@ if plotTruthVarsTogether:
         os.system("mkdir -p "+plotdir+sample)
 
         filename = "Rootfiles_Plots_"+list_key+"/"+sample+".root"
-        print "\nSample    -- %s"%sample
-        print "File name -- %s\n"%filename
+        print("\nSample    -- %s"%sample)
+        print("File name -- %s\n"%filename)
 
         f = TFile(filename,'read')
 

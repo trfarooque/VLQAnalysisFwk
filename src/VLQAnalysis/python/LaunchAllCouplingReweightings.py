@@ -241,7 +241,7 @@ def main(args):
 
     for sample in VLQMass:
         for br in BRs:
-            printGoodNews("=> VLQ_TT_"+`sample`+"_"+br.split(",")[0])
+            printGoodNews(f"=> VLQ_TT_{sample}_"+br.split(",")[0])
         
             jO = Job(platform)
             jO.setExecutable("python VLQCouplingReweighter.py")
@@ -249,7 +249,7 @@ def main(args):
             jO.setOutDir(outputDir)
             #jO.setOutDir(outputDir+"/RWFiles/")
             
-            jOName = `sample`+"_br_"+br+'.'+mcCampaign
+            jOName = f"{sample}_br_{br}.{mcCampaign}"
             jO.setName(jOName)
             
             jO.addOption("inputDir",   inputDir)
@@ -311,7 +311,7 @@ def main(args):
             JOSet.submitSet()
         JOSet.clear()
 
-    os.system("sleep "+`sleep`)
+    os.system(f"sleep {sleep}")
     ##........................................................
 
 if __name__ == '__main__':

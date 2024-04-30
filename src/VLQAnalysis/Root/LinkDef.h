@@ -10,7 +10,6 @@
 #include "VLQAnalysis/VLQ_Options.h"
 #include "VLQAnalysis/VLQ_OutputData.h"
 #include "VLQAnalysis/VLQ_Selector.h"
-#include "VLQAnalysis/VLQ_TRFManager.h"
 #include "VLQAnalysis/VLQ_TruthManager.h"
 #include "VLQAnalysis/VLQ_TtbarSystematicsManager.h"
 #include "VLQAnalysis/VLQ_VariableComputer.h"
@@ -29,7 +28,6 @@
 #pragma link C++ class VLQ_Options+;
 #pragma link C++ class VLQ_OutputData+;
 #pragma link C++ class VLQ_Selector;
-#pragma link C++ class VLQ_TRFManager;
 #pragma link C++ class VLQ_TruthManager;
 #pragma link C++ class VLQ_TtbarSystematicsManager;
 #pragma link C++ class VLQ_VariableComputer;

@@ -20,7 +20,7 @@
 
 //#include "NNLOReweighter/NNLOReweighter.h"
 
-#include "FakeLeptonEstimation/FakeLeptonEstimation.h"
+//#include "FakeLeptonEstimation/FakeLeptonEstimation.h"
 
 #include <iostream>
 #include <stdexcept> // invalid_argument
@@ -40,7 +40,7 @@ VLQ_WeightManager::VLQ_WeightManager( VLQ_Options *opt, const VLQ_NtupleData* nt
   m_vlq_outData(outputData),
   m_outHistMngr(outHistMngr),
   m_sampleInfo(0),
-  m_qcdWeight(0),
+  //m_qcdWeight(0),
   m_varComputer(0),
   m_tool_HFsyst(0),
   m_tool_ttFractionRw(0),
@@ -86,7 +86,7 @@ VLQ_WeightManager::VLQ_WeightManager( const VLQ_WeightManager &q ) : WeightManag
   m_vlq_outData       = q.m_vlq_outData;
   m_outHistMngr       = q.m_outHistMngr;
   m_sampleInfo        = q.m_sampleInfo;
-  m_qcdWeight         = q.m_qcdWeight;
+  //m_qcdWeight         = q.m_qcdWeight;
   m_varComputer       = q.m_varComputer;
   m_tool_HFsyst       = q.m_tool_HFsyst;
   m_tool_ttFractionRw = q.m_tool_ttFractionRw;
@@ -99,7 +99,7 @@ VLQ_WeightManager::VLQ_WeightManager( const VLQ_WeightManager &q ) : WeightManag
 //
 VLQ_WeightManager::~VLQ_WeightManager(){
   if(m_sampleInfo) delete m_sampleInfo;
-  if(m_qcdWeight) delete m_qcdWeight;
+  //if(m_qcdWeight) delete m_qcdWeight;
   if(m_varComputer) delete m_varComputer;
   if(m_tool_HFsyst) delete m_tool_HFsyst;
   if(m_tool_ttFractionRw) delete m_tool_ttFractionRw;
@@ -132,8 +132,8 @@ void VLQ_WeightManager::Init( std::map < int, Selection* >* selection_tree ){
   //////////////////////////////////////
   // QCD weight tool
   //////////////////////////////////////
-  m_qcdWeight = new FakeLeptonEstimation();
-  m_qcdWeight -> Init();
+  //m_qcdWeight = new FakeLeptonEstimation();
+  //m_qcdWeight -> Init();
   m_varComputer = new VLQ_VariableComputer(m_vlq_opt);
 
   //////////////////////////////////////
@@ -730,7 +730,7 @@ bool VLQ_WeightManager::SetFJvtSFWeights(){
 
 }
 
-
+/*
 //______________________________________________________________________________
 //
 bool VLQ_WeightManager::SetQCDWeight(){
@@ -786,7 +786,7 @@ bool VLQ_WeightManager::SetQCDWeight(){
 
   return true;
 }
-
+*/
 //______________________________________________________________________________
 //
 bool VLQ_WeightManager::SetPMGSystNorm(){

@@ -63,7 +63,7 @@ def getLimits(fntemplate=False,samples=False,draw1s=False,draw2s=False):
         elif n==2:
             x = 2000.
         else:
-            print "wrong"
+            print("wrong")
             return
         xs.append(x)
         ys.append(limit)
@@ -204,7 +204,7 @@ if drawAllPlots:
 #
 if findBestConfigPerSignal:
 
-    print 'Best: \t\talg: \tvar: \t\tcoll:'
+    print( 'Best: \t\talg: \tvar: \t\tcoll:')
     for sampletype in sampledict.keys():
         for signal in sampledict[sampletype][0]:
     
@@ -224,7 +224,7 @@ if findBestConfigPerSignal:
                             bestvar=var
                             bestcoll=coll
     
-            print signal,'\t',bestalg,'\t',bestvar,'\t',bestcoll
+            print( signal,'\t',bestalg,'\t',bestvar,'\t',bestcoll)
 
 #
 if findBestConfigOverall:
@@ -259,14 +259,14 @@ if findBestConfigOverall:
             lim = configdict_no11[key]
             bestconfig_no11 = key
     
-    print "Best config (all masses): ",bestconfig
-    print "Best config (no 1.1 TeV): ",bestconfig_no11
+    print( "Best config (all masses): ",bestconfig)
+    print( "Best config (no 1.1 TeV): ",bestconfig_no11)
     
     
-    print "\nSorted configs and total limits:"
+    print( "\nSorted configs and total limits:")
     for key in sorted(configdict, key=configdict.get, reverse=False):
-        print key, configdict[key]
+        print( key, configdict[key])
     
-    print "\nSorted configs and total limits (no 1.1 TeV):"
+    print( "\nSorted configs and total limits (no 1.1 TeV):")
     for key in sorted(configdict_no11, key=configdict_no11.get, reverse=False):
-        print key, configdict_no11[key]
+        print( key, configdict_no11[key])

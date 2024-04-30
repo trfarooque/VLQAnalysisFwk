@@ -90,6 +90,10 @@ parser.add_argument('--useSyst', help='Run systematics when set',
                     action='store', type=int, default=0)
 parser.add_argument("--otherVariables",help="Do variables other than meff and MVAScore",
                     action="store", type=int, default=0)
+parser.add_argument('--doSR', help='Run over signal regions', 
+                    action='store', type=int, default=1)
+parser.add_argument('--doPresel', help='Run over preselection regions', 
+                    action='store', type=int, default=0)
 parser.add_argument('--dryRun', help='Do not launch jobs when set ', 
                     action='store', type=int, default=0)
 parser.add_argument('--batch', help='Type of batch system', default='condor')
@@ -104,7 +108,7 @@ args = parser.parse_args()
 ##List of processes to run                                                                                             
 procs_to_run = []
 for proc in args.processes:
-    print 'Adding process : ',proc
+    print('Adding process : ',proc)
     if proc=='bkg':
         procs_to_run += bkg_procs
     elif proc=='bkg_sys':
@@ -114,41 +118,41 @@ for proc in args.processes:
 
 ##______________________________________________________________________________
 ## Print all options
-print "############################################################"
-print " Command-line options : "
+print( "############################################################")
+print( " Command-line options : ")
 for argument in vars(args):
-    print argument," : ",getattr(args,argument)
-print "############################################################"
+    print( argument," : ",getattr(args,argument))
+print( "############################################################")
 
-print '===== **** BEGIN PRE-PROCESSING CHAIN **** ====='
+print( '===== **** BEGIN PRE-PROCESSING CHAIN **** =====')
 #........................................................................
-print '=====>> Check Outputs ====='
+print( '=====>> Check Outputs =====')
 if args.checkOutputs:
 
     relaunch = "TRUE" if(args.relaunchFailedJobs) else "FALSE"
     nRelaunched = 0
     for proc_name in procs_to_run: 
-        print "proc: ",proc_name
+        print( "proc: ",proc_name)
         sample_inputDir = args.inputDir + '/'+proc_name+'/'
 
         scriptFile="{}/Scripts_Analysis/JobCheck.chk".format(sample_inputDir)
         nRelaunched += CheckOutputs.main(['input={}'.format(scriptFile), 'relaunch={}'.format(relaunch)])
 
     if(nRelaunched>0):
-        print nRelaunched,' jobs were relaunched in total'
-        print ' ****** WARNING ----> Re-run chain after relaunched jobs have succeeded ******'
+        print( nRelaunched,' jobs were relaunched in total')
+        print( ' ****** WARNING ----> Re-run chain after relaunched jobs have succeeded ******')
         sys.exit()
 
-print '===== Check Outputs <<====='
+print( '===== Check Outputs <<=====')
     
 #........................................................................
-print '=====>> Link Files ====='
+print( '=====>> Link Files =====')
 if(args.linkFiles):
     subprocess.Popen("mkdir -p {}/nominal/".format(args.outputDir), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     subprocess.Popen("mkdir -p {}/ttstalt/".format(args.outputDir), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     for proc_name in procs_to_run: 
-        print proc_name
+        print(proc_name)
         sample_inputDir = args.inputDir + '/'+proc_name+'/'
         sample_outputDir = args.outputDir + '/ttstalt/' if(proc_name=='ttbar_alt' or proc_name=='singletop_alt') \
                       else args.outputDir + '/nominal/'
@@ -160,10 +164,10 @@ if(args.linkFiles):
                              format(sample_inputDir,campaign,args.inputSuffix,sample_outputDir), 
                              shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-print '===== Link Files <<====='
+print( '===== Link Files <<=====')
 
 #........................................................................
-print '=====>> Merge Files ====='
+print( '=====>> Merge Files =====')
 if(args.mergeFiles):
 
     mergeOpts = ['--inputDir', args.outputDir, '--outputDir', args.outputDir+'/MergedFiles/', 
@@ -178,10 +182,10 @@ if(args.mergeFiles):
 
     PrepareInputFilesTRexFitter.main(mergeOpts)
 
-print '===== Merge Files <<====='
+print( '===== Merge Files <<=====')
 
 #........................................................................
-print '=====>> Reweight VLQ ====='
+print( '=====>> Reweight VLQ =====')
 if args.reweightVLQ:
 
     #'--fileSuffix',args.input_suffix,
@@ -191,6 +195,11 @@ if args.reweightVLQ:
                    '--mcCampaign',campaign, '--postMerging', '1', '--doBatch', 
                    '--queue','at3', '--doSR', '--doPR', '--nMerge','10' ]
 
+
+        if(args.doSR):
+            rw_opts.append('--doSR')  
+        if(args.doPresel):
+            rw_opts.append('--doPR')  
         if(not args.otherVariables):
             rw_opts.append('--tthfitter')
         if(not args.useSyst): 
@@ -203,10 +212,10 @@ if args.reweightVLQ:
             rw_opts.append('--debug')
         LaunchAllCouplingReweightings.main(rw_opts)
 
-print '===== Reweight VLQ <<====='
+print( '===== Reweight VLQ <<=====')
 
 #........................................................................
-print '=====>> Extrapolate single-top syst ====='
+print( '=====>> Extrapolate single-top syst =====')
 if( (args.extrapolateSingletopSyst>0) and 
     ( (args.useSyst and ('singletop' in procs_to_run)) 
       or ('singletop_alt' in procs_to_run) ) ):
@@ -217,8 +226,21 @@ if( (args.extrapolateSingletopSyst>0) and
             #extrapolate weight uncertainties
             wsyst_opts = ['--inputDir',args.outputDir+'/MergedFiles/nominal/', 
                           '--outputDir',args.outputDir+'/MergedFiles/Extrapolated/nominal/', 
-                          '--campaign',campaign, '--doNominal','1', '--doSR','1', '--doPresel','1',
+                          '--campaign',campaign, '--doNominal','1', 
                           '--doWeightSys','1', '--doAltSys','0'] 
+
+            wsyst_opts.append('--doSR')  
+            if(args.doSR):
+                wsyst_opts.append('1')  
+            else:
+                wsyst_opts.append('0')  
+
+            wsyst_opts.append('--doPresel')  
+            if(args.doPresel):
+                wsyst_opts.append('1')  
+            else:
+                wsyst_opts.append('0')  
+
             if(args.otherVariables):
                 wsyst_opts.append('--otherVariables')
             if(args.channel=='1lep'):
@@ -231,8 +253,22 @@ if( (args.extrapolateSingletopSyst>0) and
             #extrapolate alt samples
             asyst_opts = ['--inputDir',args.outputDir+'/MergedFiles/ttstalt/', 
                           '--outputDir',args.outputDir+'/MergedFiles/Extrapolated/ttstalt/', 
-                          '--campaign',campaign, '--doNominal','1', '--doSR','1', '--doPresel','1',
+                          '--campaign',campaign, '--doNominal','1', 
                           '--doWeightSys','0', '--doAltSys','1'] 
+
+            asyst_opts.append('--doSR')  
+            if(args.doSR):
+                asyst_opts.append('1')  
+            else:
+                asyst_opts.append('0')  
+
+            asyst_opts.append('--doPresel')  
+            if(args.doPresel):
+                asyst_opts.append('1')  
+            else:
+                asyst_opts.append('0')  
+
+
             if(args.otherVariables):
                 asyst_opts.append('--otherVariables')
             if(args.channel=='1lep'):
@@ -242,17 +278,30 @@ if( (args.extrapolateSingletopSyst>0) and
 
             MakeSingletopSyst.main(asyst_opts)
 
-print '===== Extrapolate single-top syst <<====='
+print( '===== Extrapolate single-top syst <<=====')
 
 #........................................................................
-print '=====>> Make V+jets syst envelope ====='
+print( '=====>> Make V+jets syst envelope =====')
 if args.useSyst and args.makeEnvelopeVjetsSyst:
 
     for campaign in args.campaigns:
         #extrapolate weight uncertainties
         vjets_opts = ['--inputDir',args.outputDir+'/MergedFiles/nominal/', 
-                      '--outputDir',args.outputDir+'/MergedFiles/Extrapolated/nominal/', 
-                      '--doSR','1', '--doPresel','0' ]
+                      '--outputDir',args.outputDir+'/MergedFiles/Extrapolated/nominal/']
+
+        vjets_opts.append('--doSR')  
+        if(args.doSR):
+            vjets_opts.append('1')  
+        else:
+            vjets_opts.append('0')  
+
+        vjets_opts.append('--doPresel')  
+        if(args.doPresel):
+            vjets_opts.append('1')  
+        else:
+            vjets_opts.append('0')  
+
+
         if(args.otherVariables):
             vjets_opts.append('--otherVariables')
         if(args.channel=='1lep'):
@@ -269,7 +318,7 @@ if args.useSyst and args.makeEnvelopeVjetsSyst:
             vjets_opts.append('Zjets.'+campaign)
             MakeVjetsSyst.main(vjets_opts)
 
-print '===== Make V+jets syst envelope <<====='
+print( '===== Make V+jets syst envelope <<=====')
 #........................................................................
 if args.extrapolateQCD:
     pass

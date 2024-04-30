@@ -3,10 +3,12 @@
 
 #include <string>
 #include <map>
+#include <TRandom.h>
 
 class TH1D;
 class TH2D;
 class TF1;
+//class TRandom3;
 
 class VLQ_SmearingTool {
 
@@ -35,8 +37,9 @@ public:
     double GetSmearFactor1D(const double param) const;
 
 private:
-    TH1D* m_smear_map;
-    double m_res_relative;
+  TH1D* m_smear_map;
+  double m_res_relative;
+  TRandom* m_random;
 };
 
 #endif //VLQ_SMEARINGTOOL_H

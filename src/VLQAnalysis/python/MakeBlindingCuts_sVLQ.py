@@ -137,8 +137,8 @@ for reg in Regions:
                     correctedbins.remove(newbins_list[ibin])
 
         if debugPrint:
-            print newbins_list[ibin:ibin+2]
-            print SB, bkgYield
+            print(newbins_list[ibin:ibin+2])
+            print(SB, bkgYield)
 
         if SB >= SBcut:
             goodbin = False
@@ -153,15 +153,15 @@ for reg in Regions:
 
     maxsignal = max(sigyields, key=sigyields.get)
 
-    print "\n"+reg['name']
+    print("\n"+reg['name'])
     if goodbins==[]:
-        print "Has to be fully blinded!"
+        print("Has to be fully blinded!")
     else:
-        print "Normal bins:  ",newbins_list
-        print "Blinded bins: ",goodbins
+        print("Normal bins:  ",newbins_list)
+        print("Blinded bins: ",goodbins)
     if correctThisRegion:
-        print "Normal bins corrected to: ",correctedbins
-    print "Max overall S/B: %.4f"%(sigyields[maxsignal]/totalbkg), "("+maxsignal+")"
+        print("Normal bins corrected to: ",correctedbins)
+    print("Max overall S/B: %.4f"%(sigyields[maxsignal]/totalbkg), "("+maxsignal+")")
 
     if writeToNewDictionary:
 

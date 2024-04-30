@@ -25,7 +25,6 @@
 #include "VLQAnalysis/VLQ_Enums.h"
 #include "VLQAnalysis/VLQ_TruthManager.h"
 #include "VLQAnalysis/VLQ_WeightManager.h"
-#include "VLQAnalysis/VLQ_TRFManager.h"
 #include "VLQAnalysis/VLQ_Selector.h"
 #include "VLQAnalysis/VLQ_MVAManager.h"
 
@@ -64,7 +63,6 @@ VLQ_Analysis_Data2015::VLQ_Analysis_Data2015( VLQ_Options* opt ):
   m_anaTools(NULL),
   m_varComputer(NULL),
   m_truthMngr(NULL),
-  m_TRFMngr(NULL),
   m_weightMngr(NULL),
   m_selector(NULL),
   m_mvaMngr(NULL)
@@ -230,14 +228,6 @@ bool VLQ_Analysis_Data2015::Begin(){
 
   //############################################################################
   //
-  // Declaration of the TRFManager
-  //
-  //############################################################################
-  m_TRFMngr = new VLQ_TRFManager( m_opt, m_weightMngr, m_ntupData, m_outData );
-  m_TRFMngr -> Init();
-
-  //############################################################################
-  //
   // Declaration of the VariableComputer
   //
   //############################################################################
@@ -249,7 +239,7 @@ bool VLQ_Analysis_Data2015::Begin(){
   //
   //############################################################################
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "Declaring VLQ_AnalysisTools" << std::endl;
-  m_anaTools = new VLQ_AnalysisTools( m_opt, m_outMngrHist, m_ntupData, m_outData, m_weightMngr, m_TRFMngr, m_varComputer );
+  m_anaTools = new VLQ_AnalysisTools( m_opt, m_outMngrHist, m_ntupData, m_outData, m_weightMngr, m_varComputer );
   if( m_opt->MakeMVAInputHists() ) m_anaTools->AddOutputHistManager(m_outMngrMVAHist);
 
   //############################################################################
@@ -2801,21 +2791,10 @@ bool VLQ_Analysis_Data2015::Process(Long64_t entry)
 	m_weightMngr -> UpdateSysReweighting();
       }
     }
-  } else if (m_opt -> StrSampleName().find("QCD") != std::string::npos){
-    m_weightMngr -> SetQCDWeight();
-  }
+  } //else if (m_opt -> StrSampleName().find("QCD") != std::string::npos){
+    //m_weightMngr -> SetQCDWeight();
+  //}
  
-  //###########################################################
-  //                                                          #
-  // TRF                                                      #
-  //                                                          #
-  //###########################################################
-  if( !(m_opt -> IsData() || (m_opt -> StrSampleName().find("QCD") != std::string::npos)) && ( m_opt->RecomputeBtagSF() || ( m_opt -> DoTRF() && m_opt->RecomputeTRF() ) ) ){
-    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "==> Evaluating TRF with TRF Manager" << std::endl;
-    m_TRFMngr->ComputeTRFWeights();
-    if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "==> After TRF manager" << std::endl;
-  }
-
   //###########################################################
   //                                                          #
   // Compute all weights                                      #
@@ -3243,7 +3222,6 @@ bool VLQ_Analysis_Data2015::Terminate()
 
 
   delete m_weightMngr;
-  delete m_TRFMngr;
   delete m_selector;
 
   if(m_opt -> MsgLevel() == Debug::DEBUG) std::cout << "-> End of Terminate function." << std::endl;

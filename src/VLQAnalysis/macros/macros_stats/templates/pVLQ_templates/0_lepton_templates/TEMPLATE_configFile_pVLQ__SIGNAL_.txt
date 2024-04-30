@@ -11,7 +11,7 @@ POI: "mu_signal"
 ReadFrom: HIST
 HistoPath: "__HISTOPATH__"
 DebugLevel: 0
-SystControlPlots: TRUE
+SystControlPlots: __SYSTCONTROLPLOTS__
 SystPruningShape: 0.01
 SystPruningNorm: 0.01
 CorrelationThreshold: 0.20
@@ -78,7 +78,7 @@ Sample: "Singletop_AFII"
 Type: GHOST
 FillColor: 0
 LineColor: 1
-HistoFiles: ttstalt/Singletop.mc16a,ttstalt/Singletop.mc16d,ttstalt/Singletop.mc16e
+HistoFiles: Extrapolated/ttstalt/Singletop.mc16a,Extrapolated/ttstalt/Singletop.mc16d,Extrapolated/ttstalt/Singletop.mc16e
 LumiScales: 36207.66,44307.4,58450.1
 
 

@@ -17,7 +17,7 @@ from glob import glob
 from ROOT import *
 from optparse import OptionParser
 from VLQ_BR import *
-from VLQ_Samples_mc import *
+from VLQ_Samples import *
 
 sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "python/IFAETopFramework/" )
 from BatchTools import *
@@ -28,33 +28,20 @@ from Samples import *
 parser = OptionParser()
 parser.add_option("-i","--inputDir",dest="inputDir",help="repository for the splitted files are located",action="store",default="./")
 parser.add_option("-o","--outputDir",dest="outputDir",help="repository where to put the hadded files",action="store",default="./test/")
-parser.add_option("-s","--statOnly",dest="statOnly",help="Flag to consider systematics",action="store",default="False")
+parser.add_option("-s","--statOnly",dest="statOnly",help="repository where to put the hadded files",action="store_true",default=False)
 parser.add_option("-m","--mass",dest="vlqMass",help="value of the VLQ mass",action="store",default="800")
 parser.add_option("-c","--vlqCoupling",dest="vlqCoupling",help="value of the coupling (Wb,Zt,Ht)",action="store",default="HtHt,0.,0.,1.")
 parser.add_option("-r","--regions",dest="regions",help="Regions to consider (coma separated list), can use \"all\" to use all regions",action="store",default="")
-parser.add_option("-f","--outputFile",dest="outputFile",help="Dummy option", action="store",default="test.root")
 parser.add_option("-v","--variables",dest="variables",help="Variables to consider (coma separated list)",action="store",default="meff")
-parser.add_option("-p","--mcCampaign",dest="mcCampaign",help="MC campaign",action="store",default="mc16a")
-parser.add_option("--fileSuffix",dest="fileSuffix",help="Any suffix to add to name of input and output files",action="store",default="")
-parser.add_option("--postMerging",dest="postMerging",help="Uses post-merging naming convention for input files when this set",action="store",type=int,default=0)
-
 (options, args) = parser.parse_args()
 
 outputDir=options.outputDir
 inputDir=options.inputDir
-if(options.statOnly.upper() == "TRUE"):
-    statOnly = True
-else:
-    statOnly = False
-#statOnly=options.statOnly
+statOnly=options.statOnly
 vlqMass=options.vlqMass
 vlqCoupling=options.vlqCoupling
 regions=options.regions
 variables=options.variables
-outputFile=options.outputFile
-mcCampaign=options.mcCampaign
-fileSuffix=options.fileSuffix
-postMerging=options.postMerging
 
 os.system("mkdir -p " + outputDir)
 ##........................................................
@@ -62,7 +49,7 @@ os.system("mkdir -p " + outputDir)
 ##________________________________________________________
 ## Getting all signal samples and their associated weight/object systematics
 Samples = []
-Samples     += [getSampleUncertainties("VLQ","VLQ_TT_"+vlqMass,CommonObjectSystematics,isSignal=True)]
+Samples     += [getSampleUncertainties("VLQ","VLQ_TT_"+vlqMass,CommonObjectSystematics,[],isSignal=True)]
 printGoodNews("--> All VLQ samples recovered")
 ##........................................................
 
@@ -82,15 +69,7 @@ for reg in regions.split(","):
 
 ##________________________________________________________
 ## Naming convention
-#template_fileName = "outVLQAna_SAMPLE_*_OBJSYSTEMATIC__*.root"
-#VLQ_TT_1600_ZtZt.mc16e.root
-#ttbarlight.mc16e_JET_BJES_Response__1down.root
-#outVLQAna_ttbarlight_410470.mc16e_JET_BJES_Response__1down_6.root
-if postMerging:
-    template_fileName = "SAMPLE.*_OBJSYSTEMATIC_*"+fileSuffix+".root"
-else:
-    template_fileName = "outVLQAna_SAMPLE_*_OBJSYSTEMATIC__*"+fileSuffix+".root"
-
+template_fileName = "outVLQAnalysis_SAMPLE_*_OBJSYSTEMATIC__*.root"
 template_histName = "REGION_VLQTYPE_VARIABLE_WGTSYSTEMATIC"
 ##........................................................
 
@@ -107,10 +86,10 @@ elif len(couplings)==1:
         BRs += [{'name':"TDoublet",'values':VLT_Doublet}]
     else:
         printError("<!> Cannot recognize the coupling configuration :-( Please check !")
-        print "    -> ", couplings[0]
+        print( "    -> ", couplings[0])
 else:
     printError("<!> Cannot recognize the coupling configuration :-( Please check !")
-    print "    -> ", vlqCoupling
+    print( "    -> ", vlqCoupling)
 ##........................................................
 
 ##________________________________________________________
@@ -125,7 +104,6 @@ def getRWValues(values):
     rw += [values[0]*values[0]/(1./9)] #0
     rw += [2.*values[0]*values[1]/(2./9)] #1
     rw += [values[1]*values[1]/(1./9)] #2
-
     return rw
 ##........................................................
 
@@ -203,8 +181,7 @@ def CreateAllHistograms(inputFileName, outputFileName, br):
 
                 histos = []
                 for iVLQ in range(1,7):
-                    iVLQ_histoName = histoName.replace("VLQTYPE","vlq"+`iVLQ`)
-                    #print(iVLQ_histoName)
+                    iVLQ_histoName = histoName.replace("VLQTYPE",f"vlq{iVLQ}")
                     h = inF.Get(iVLQ_histoName).Clone()
                     histos += [h]
 
@@ -216,18 +193,10 @@ def CreateAllHistograms(inputFileName, outputFileName, br):
                     continue
 
                 finalHisto = histos[0].Clone()
-                #print "Integral before scaling = " + str(finalHisto.Integral())
                 finalHisto.Scale(rw[0])
-                #print "Integral after scaling = " + str(finalHisto.Integral())
-                #print "Scaling histogram by " + str(rw[0])
                 for iRw in range(1,len(rw)):
-                    #print "Integral before scaling = " + str(histos[iRw].Integral())
-                    #histos[iRw].Scale(rw[iRw])
-                    #print "Integral after scaling = " + str(histos[iRw].Integral())
-                    #finalHisto.Add(histos[iRw])
                     finalHisto.Add(histos[iRw],rw[iRw])
-                    #print "Scaling histogram by " + str(rw[iRw])
-                    
+
                 outF.cd()
                 finalHisto.SetName(outputHistoName)
                 finalHisto.SetTitle(outputHistoName)
@@ -269,12 +238,6 @@ for BR in BRs:
             elif(SName.find("_1200")>-1): key = '1200'
             elif(SName.find("_1300")>-1): key = '1300'
             elif(SName.find("_1400")>-1): key = '1400'
-            elif(SName.find("_1500")>-1): key = '1500'
-            elif(SName.find("_1600")>-1): key = '1600'
-            elif(SName.find("_1700")>-1): key = '1700'
-            elif(SName.find("_1800")>-1): key = '1800'
-            elif(SName.find("_1900")>-1): key = '1900'
-            elif(SName.find("_2000")>-1): key = '2000'
 
         myBR = BR['values'][key]
         Systs = []
@@ -290,48 +253,20 @@ for BR in BRs:
 
         # Loops over the object systematics
         for syst in Systs:
-            print ".syst : " + syst
+            print( ".syst : " + syst)
             space = "_"
             if(statOnly):
                 space = "_nominal"
 
             #Creating the input files list
-            if ((syst=="") or (syst == "nominal")) and postMerging:
-                inputFileName = inputDir + "/" + template_fileName.replace("SAMPLE",SName).replace("_OBJSYSTEMATIC_","")
-            else:
-                inputFileName = inputDir + "/" + template_fileName.replace("SAMPLE",SName).replace("_OBJSYSTEMATIC_",space+syst)
-
-            print("inputFile : " + inputFileName)
+            inputFileName = inputDir + "/" + template_fileName.replace("SAMPLE",SName).replace("_OBJSYSTEMATIC_",space+syst)
             filelist=glob.glob(inputFileName)
 
             for iFile in filelist:
                 #Computing the name of the output file
                 outputFileName = outputDir + "/"
-                print(template_fileName)
-                print(iFile)
-
-                if postMerging:
-                    if syst=="nominal" or syst=="":
-                        outputFileName += template_fileName\
-                            .replace("SAMPLE.",SName+"_"+BR['name']+"."+mcCampaign)\
-                            .replace("_OBJSYSTEMATIC_","")\
-                            .replace("*"+fileSuffix+".root",find_between_r( iFile, space+syst, ".root" ))\
-                            .replace("*","")+".root"
-                    else:
-                        outputFileName += template_fileName\
-                            .replace("SAMPLE.",SName+"_"+BR['name']+"."+mcCampaign)\
-                            .replace("_OBJSYSTEMATIC_",space+syst)\
-                            .replace("*"+fileSuffix+".root",find_between_r( iFile, space+syst, ".root" ))\
-                            .replace("*","")+".root"
-                else:
-                    outputFileName += template_fileName.replace("SAMPLE",SName+"_"+BR['name']+"."+mcCampaign)\
-                    .replace("_OBJSYSTEMATIC",space+syst)\
-                    .replace("*"+fileSuffix+".root",find_between_r( iFile, space+syst, ".root" ))\
-                    .replace("*","")+".root"
-
-                print("outputFile : " + outputFileName)
+                outputFileName += template_fileName.replace("SAMPLE",SName+"_"+BR['name']).replace("_OBJSYSTEMATIC",space+syst).replace("*.root",find_between_r( iFile, space+syst, ".root" )).replace("*","")+".root"
                 if(os.path.exists(outputFileName)):
-                    print (outputFileName+' exists. Skipping...')
                     continue
                 CreateAllHistograms(filelist[0],outputFileName,myBR)
 ##........................................................

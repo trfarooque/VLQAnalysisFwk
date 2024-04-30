@@ -24,7 +24,7 @@ if(len(sys.argv))>1:
     for x in sys.argv[1:]:
         splitted=x.split("=")
         if(len(splitted)!=2):
-            print "The argument \"" + x + "\" has no equal signs ... Please check"
+            print( "The argument \"" + x + "\" has no equal signs ... Please check")
             sys.exit(-1)
         argument = splitted[0].upper().replace("--","")
         value = splitted[1]
@@ -110,7 +110,7 @@ for campaign in ['a','d','e']:
 
         # check if file exists
         if not os.path.isfile(fname):
-            print "This file doesn't exist! Skipping... : "+fname
+            print( "This file doesn't exist! Skipping... : "+fname)
             continue
 
         # start from backup
@@ -139,11 +139,11 @@ for campaign in ['a','d','e']:
                 try:
                     h_nom_SR = LoadBinnedHist(outf,fr+'_'+var,fr)
                     if h_nom_SR.Integral() == 0.:
-                        print "\nRegion %s is empty in sample %s. Setting uncertainties to 0.0!"%(fr,fname_short)
+                        print( "\nRegion %s is empty in sample %s. Setting uncertainties to 0.0!"%(fr,fname_short))
                         emptyhist = True
 
                 except ReferenceError:
-                    print "Could not find histogram(s) for %s. Skipping..."%(fr)
+                    print( "Could not find histogram(s) for %s. Skipping..."%(fr))
                     continue
                                 
                 for suf in histoSuffixes:
@@ -157,22 +157,22 @@ for campaign in ['a','d','e']:
 
                         else:
                             # load loose hist with same binning as region to extrapolate to
-                            print fname
-                            print fr
-                            print regMap[fr]+'_'+var
-                            print regMap[fr]+'_'+var+suf
+                            print( fname)
+                            print( fr)
+                            print( regMap[fr]+'_'+var)
+                            print( regMap[fr]+'_'+var+suf)
                             h_nom_loose = LoadBinnedHist(outf,regMap[fr]+'_'+var,fr)
                             h_sys_loose = LoadBinnedHist(outf,regMap[fr]+'_'+var+suf,fr)
 
                             h_sys_loose.Divide(h_nom_loose)
                             h_nom_SR.Multiply(h_sys_loose)
 
-                            print '\n',sample, 'mc16'+campaign, suf, fr
-                            print 'h_pmg_new:\t', h_nom_SR.Integral()
+                            print( '\n',sample, 'mc16'+campaign, suf, fr)
+                            print( 'h_pmg_new:\t', h_nom_SR.Integral())
                             h_nom_SR.Write(fr+'_'+var+suf)
 
                     except ReferenceError:
-                        print "Could not find histogram(s) for %s. Skipping..."%(fr)
+                        print( "Could not find histogram(s) for %s. Skipping..."%(fr))
                         continue
 
                 outf.Close()
@@ -200,7 +200,7 @@ for campaign in ['a','d','e']:
 
                 # check if file exists
                 if not os.path.isfile(fname_alt):
-                    print "This file doesn't exist! Skipping... : "+fname_alt
+                    print( "This file doesn't exist! Skipping... : "+fname_alt)
                     continue
 
                 # start from backup
@@ -226,11 +226,11 @@ for campaign in ['a','d','e']:
                     try:
                         h_nom_SR = LoadBinnedHist(outf,nameSR,fr)
                         if h_nom_SR.Integral() == 0.:
-                            print "\nRegion %s is empty in sample %s. Setting uncertainties to 0.0!"%(fr,fname_short_AFII)
+                            print( "\nRegion %s is empty in sample %s. Setting uncertainties to 0.0!"%(fr,fname_short_AFII))
                             emptyhist = True
 
                     except ReferenceError:
-                        print "Could not find histogram(s) for %s. Skipping..."%(fr)
+                        print( "Could not find histogram(s) for %s. Skipping..."%(fr))
                         continue
                                     
                     try:
@@ -254,16 +254,16 @@ for campaign in ['a','d','e']:
                         h_nom_SR.Multiply(h_alt_loose)
 
                         if h_nom_SR.Integral() == 0. or h_nom_SR.Integral() < 0.:
-                            print '\nNew histogram integral <= 0 - Using nominal histogram as alt. instead...'
+                            print( '\nNew histogram integral <= 0 - Using nominal histogram as alt. instead...')
                             outf.cd()
                             h_nom_SR = LoadBinnedHist(outf,nameSR,fr)
 
                             outf_alt.cd()
 
-                        print '\n',sample, 'mc16'+campaign, mod, fr
-                        print 'h_alt_SR:\t', h_alt_SR.Integral()
-                        print 'h_alt_new:\t', h_nom_SR.Integral()
-                        print 'h_nom_SR:\t', h_nom_SR_OriginalIntegral
+                        print( '\n',sample, 'mc16'+campaign, mod, fr)
+                        print( 'h_alt_SR:\t', h_alt_SR.Integral())
+                        print( 'h_alt_new:\t', h_nom_SR.Integral())
+                        print( 'h_nom_SR:\t', h_nom_SR_OriginalIntegral)
 
                         h_nom_SR.Write(nameSR)
 
@@ -271,7 +271,7 @@ for campaign in ['a','d','e']:
                         outf_alt.Close()
 
                     except ReferenceError:
-                        print "Could not find histogram(s) for %s. Skipping..."%(fr)
+                        print( "Could not find histogram(s) for %s. Skipping..."%(fr))
                         continue
 
                 outf_alt.Close()

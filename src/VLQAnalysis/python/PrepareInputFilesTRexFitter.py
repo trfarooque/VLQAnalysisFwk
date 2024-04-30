@@ -49,7 +49,7 @@ def FindAndMergeFiles(proc_name, _inputDir, _outputDir, _campaigns,
                                 sample_inputDir+"/outVLQAna_"+SType+"_*_"+syst+"_*.root"
                 #find the list of files that need to be merged
                 if _verbose:
-                    print 'Listing files : ',globPattern
+                    print( 'Listing files : ',globPattern)
                 listfiles = glob.glob(globPattern)
 
                 name_temp_outfile = sample_outputDir+"/"+SType
@@ -72,15 +72,15 @@ def FindAndMergeFiles(proc_name, _inputDir, _outputDir, _campaigns,
                 #print comm
                 #Commands += [comm]
                 if _dryRun:
-                    print comm
+                    print( comm)
                 else:
                     os.system(comm)
                 if _verbose:
-                    print "syst : ",syst," <<====="
+                    print( "syst : ",syst," <<=====")
 
             printGoodNews("campaign : "+campaign+" <<=====")
         if _verbose:
-            print "SType : ",SType," <<====="
+            print( "SType : ",SType," <<=====")
 
     printGoodNews("proc : "+proc_name+" <<=====")
 
@@ -147,7 +147,7 @@ def main(args):
     ##List of processes to run
     procs_to_run = []
     for proc in args.processes:
-        print 'Adding process : ',proc
+        print( 'Adding process : ',proc)
         if proc=='bkg':
             procs_to_run += bkg_procs
         elif proc=='bkg_sys':
@@ -155,14 +155,14 @@ def main(args):
         else:
             procs_to_run += [proc]
 
-        print "#Processes: ",len(procs_to_run)
+        print( "#Processes: ",len(procs_to_run))
 
     ##-------------------------------------------------------------
     ## Function which will find and merge files for a given process
     ##-------------------------------------------------------------
     ##........................................................
     start =time.time()
-    print "START"
+    print( "START")
 
     ##------------------------------------------------------
     ## Creating the output repositories
@@ -191,7 +191,7 @@ def main(args):
             systList += [Systematic['nameUp']]
             systList += [Systematic['nameDown']]
 
-    print "#Systematics : ",len(systList)
+    print( "#Systematics : ",len(systList))
 
     for s_proc in procs_to_run:
         FindAndMergeFiles(s_proc, inputDir, outputDir, campaigns, systList, doAllBRPVLQ, dryRun, verbose)
@@ -222,7 +222,7 @@ def main(args):
                            +" "+sampleDir+"/Singletoptchan"+file_suffix \
                            +" "+sampleDir+"/SingletopWtprod"+file_suffix
                     if dryRun:
-                        print comm
+                        print( comm)
                     else:
                         os.system(comm)
 
@@ -249,7 +249,7 @@ def main(args):
                                +" "+sampleDir+"/Singletoptchan"+file_suffix \
                                +" "+sampleDir+"/SingletopWtprod"+file_suffix
                     if dryRun:
-                        print comm
+                        print( comm)
                     else:
                         os.system(comm)
 
@@ -277,14 +277,14 @@ def main(args):
                        +" "+sampleDir+"/SM4tops"+file_suffix
 
                 if dryRun:
-                    print comm
+                    print( comm)
                 else:
                     os.system(comm)
 
     elapsed=time.time()-start
     elapsed=elapsed/60
-    print elapsed, " minuti trascorsi"
-    print "END"
+    print( elapsed, " minuti trascorsi")
+    print( "END")
 
     return
 

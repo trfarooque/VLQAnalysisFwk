@@ -30,7 +30,7 @@ class OutputHistManager;
 //class NNLOReweighter;
 
 //in FakeLeptonEstimation
-class FakeLeptonEstimation;
+//class FakeLeptonEstimation;
 
 class VLQ_WeightManager : public WeightManager {
 
@@ -79,7 +79,7 @@ private:
     OutputHistManager *m_outHistMngr;
 
     SampleInfo *m_sampleInfo;
-    FakeLeptonEstimation* m_qcdWeight;
+  //FakeLeptonEstimation* m_qcdWeight;
     VLQ_VariableComputer *m_varComputer;
     ttbbNLO_syst *m_tool_HFsyst;
     TtbarFractionReweighter *m_tool_ttFractionRw;

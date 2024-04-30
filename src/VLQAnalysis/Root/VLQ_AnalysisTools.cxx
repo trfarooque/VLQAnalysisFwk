@@ -8,7 +8,6 @@
 #include "VLQAnalysis/VLQ_NtupleData.h"
 #include "VLQAnalysis/VLQ_Options.h"
 #include "VLQAnalysis/VLQ_OutputData.h"
-#include "VLQAnalysis/VLQ_TRFManager.h"
 #include "VLQAnalysis/VLQ_VariableComputer.h"
 #include "VLQAnalysis/VLQ_ResonanceMaker.h"
 #include "VLQAnalysis/VLQ_SmearingTool.h"
@@ -27,12 +26,11 @@ using std::pair;
 //
 VLQ_AnalysisTools::VLQ_AnalysisTools( VLQ_Options* opt, OutputHistManager* outMngr,
   const VLQ_NtupleData *m_ntupData, VLQ_OutputData* outData, VLQ_WeightManager *weightManager,
-  VLQ_TRFManager* trfMngr, VLQ_VariableComputer *varCptr ):
+  VLQ_VariableComputer *varCptr ):
 m_opt(opt),
 m_ntupData(m_ntupData),
 m_outData(outData),
 m_weightMngr(weightManager),
-m_trfMngr(trfMngr),
 m_varComputer(varCptr),
 m_resonance_maker(nullptr),
 m_smearing_tool(nullptr),
@@ -74,7 +72,6 @@ VLQ_AnalysisTools::VLQ_AnalysisTools( const VLQ_AnalysisTools &q )
   m_outputMngrList    = q.m_outputMngrList;
   m_ntupData          = q.m_ntupData;
   m_outData           = q.m_outData;
-  m_trfMngr           = q.m_trfMngr;
   m_resonance_maker   = q.m_resonance_maker;
   m_smearing_tool     = q.m_smearing_tool;
 }
@@ -969,37 +966,14 @@ bool VLQ_AnalysisTools::UpdateRegionDependentWeight( const std::string &region_n
 bool VLQ_AnalysisTools::PassBTagRequirement( const int btag_req, const bool isIncl ){
 
 
-  if( !m_opt -> DoTRF() || m_opt->IsData() ||
-      (m_opt -> StrSampleName().find("QCD") != std::string::npos) ){
-    int source_bjets_n = (m_opt->BtagCollection() == VLQ_Options::TRACK) ? m_outData -> o_trkbjets_n : m_outData -> o_bjets_n ;
-    if(!isIncl){
-      if( source_bjets_n != btag_req ) return false;
-      return true;
-    } else {
-      if( source_bjets_n < btag_req ) return false;
-      return true;
-    }
-  }//Direct tagging
-  else {
-    if( ( m_outData -> o_TRF_bjets_n == btag_req ) && ( m_outData -> o_TRF_isIncl == isIncl ) ){
-      //the TRF weights are already computed in this configuration ... not need to spend time redoing it
-      return true;
-    }
-
-    // Calling the UpdateBTagging functon from TRFManager allows to update the
-    // TRFWeigths to the proper ones, clear and refill the m_outData->o_bjets
-    // vector with the current permutation.
-    m_trfMngr -> UpdateBTagging( isIncl, btag_req );
-    // The compute BTagVariables function is designed to compute all the
-    // variables needed by the user that depend on b-tagged jets, to make sure
-    // the proper permutation is indeed used when calling PassBTagRequirement.
-    this -> ComputeBTagVariables();
-
-    this -> UpdateBTagMoments();
-    // Updating the OutputData to contain the latest loaded b-tagging configuration
-    m_outData -> o_TRF_bjets_n = btag_req;
-    m_outData -> o_TRF_isIncl = isIncl;
-  }//TRF
+  int source_bjets_n = (m_opt->BtagCollection() == VLQ_Options::TRACK) ? m_outData -> o_trkbjets_n : m_outData -> o_bjets_n ;
+  if(!isIncl){
+    if( source_bjets_n != btag_req ) return false;
+    return true;
+  } else {
+    if( source_bjets_n < btag_req ) return false;
+    return true;
+  }
 
   return true;
 }

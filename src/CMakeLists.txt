@@ -5,7 +5,9 @@
 #
 
 # Set the minimum required CMake version:
-cmake_minimum_required( VERSION 3.2 FATAL_ERROR )
+cmake_minimum_required( VERSION 3.8 FATAL_ERROR )
+
+project(VLQAnalysisFramework VERSION 1.0.0)
 
 # If there's a directory called AtlasCMake in the project,
 # and the user didn't specify AtlasCMake_DIR yet, then let's
@@ -33,8 +35,8 @@ find_package( AnalysisBase )
 atlas_ctest_setup()
 
 # Set up a work directory project:
-atlas_project( VLQAnalysisFramework 21.2.87
-    USE AnalysisBase 21.2.87
+atlas_project( VLQAnalysisFramework 24.2.41
+    USE AnalysisBase 24.2.41
     )
 
 # Set up the runtime environment setup script(s):

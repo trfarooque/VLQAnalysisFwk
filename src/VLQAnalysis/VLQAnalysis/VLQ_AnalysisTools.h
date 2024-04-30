@@ -12,7 +12,6 @@ class TTH_NtupleData;
 class VLQ_NtupleData;
 class VLQ_OutputData;
 class VLQ_Options;
-class VLQ_TRFManager;
 class VLQ_VariableComputer;
 class VLQ_WeightManager;
 class VLQ_ResonanceMaker;
@@ -25,7 +24,7 @@ public:
     //
     // Standard C++ functions
     //
-    VLQ_AnalysisTools( VLQ_Options*, OutputHistManager*, const VLQ_NtupleData *, VLQ_OutputData *, VLQ_WeightManager *, VLQ_TRFManager *, VLQ_VariableComputer * );
+    VLQ_AnalysisTools( VLQ_Options*, OutputHistManager*, const VLQ_NtupleData *, VLQ_OutputData *, VLQ_WeightManager *, VLQ_VariableComputer * );
     VLQ_AnalysisTools( const VLQ_AnalysisTools & );
     ~VLQ_AnalysisTools();
 
@@ -88,7 +87,6 @@ private:
     const VLQ_NtupleData* m_ntupData;
     VLQ_OutputData* m_outData;
     VLQ_WeightManager* m_weightMngr;
-    VLQ_TRFManager* m_trfMngr;
     VLQ_VariableComputer* m_varComputer;
     VLQ_ResonanceMaker* m_resonance_maker;
     VLQ_SmearingTool* m_smearing_tool;

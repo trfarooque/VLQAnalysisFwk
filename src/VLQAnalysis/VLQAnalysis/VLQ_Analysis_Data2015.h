@@ -16,7 +16,6 @@ class VLQ_OutputData;
 class VLQ_AnalysisTools;
 class VLQ_VariableComputer;
 class VLQ_TruthManager;
-class VLQ_TRFManager;
 class VLQ_WeightManager;
 class VLQ_NtupleData;
 class VLQ_NtupleReader;
@@ -54,7 +53,6 @@ private:
     VLQ_AnalysisTools *m_anaTools;
     VLQ_VariableComputer *m_varComputer;
     VLQ_TruthManager *m_truthMngr;
-    VLQ_TRFManager *m_TRFMngr;
     VLQ_WeightManager *m_weightMngr;
     VLQ_Selector *m_selector;
     VLQ_MVAManager *m_mvaMngr;

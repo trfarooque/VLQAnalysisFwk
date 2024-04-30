@@ -5,7 +5,7 @@ from array import *
 import math
 import os
 import numpy
-
+import re
 import argparse
 
 sys.path.append( os.getenv("VLQAnalysisFramework_DIR") + "/python/VLQAnalysis/" )
@@ -24,6 +24,17 @@ def GetKeyNames( iF, dir = "" ):
 ##__________________________________________________________
 ## Hardcoded extrapolation rules for regions
 def GetExtrapolationRule(regname):
+    extr_rule = None
+    if 'c1lep' in regname:
+        extr_rule = Get1LExtrapolationRule(regname)
+    elif 'c0lep' in regname:
+        extr_rule = Get0LExtrapolationRule(regname)
+
+    return extr_rule
+
+##__________________________________________________________
+## Hardcoded extrapolation rules for 1L regions
+def Get1LExtrapolationRule(regname):
 
    extr_rule = {
       'doExtr':False, #extrapolate the uncertainty
@@ -55,13 +66,64 @@ def GetExtrapolationRule(regname):
             extr_rule['src_list'] = ['c1lep5jin4bin2Min3Jin1HinMidMVAScore',
                                      'c1lep5jin4bin2Min3Jin1HinHighMVAScore']
    if debug:
-      print "<INFO>: Region: ",regname#,'\n'
-      print "doExtr: ",extr_rule['doExtr']#,'\n'
-      print "onlyShape: ",extr_rule['onlyShape']#,'\n'
-      print "src_list : "
+      print("<INFO>: Region: ",regname)#,'\n'
+      print( "doExtr: ",extr_rule['doExtr'])#,'\n'
+      print( "onlyShape: ",extr_rule['onlyShape'])#,'\n'
+      print( "src_list : ")
       for src_reg in extr_rule['src_list']: 
-         print src_reg+' , '
-      print '\n'
+         print( src_reg+' , ')
+      print( '\n')
+
+
+   return extr_rule
+
+##__________________________________________________________
+## Hardcoded extrapolation rules for regions
+def Get0LExtrapolationRule(regname):
+
+   extr_rule = {
+      'doExtr':False, #extrapolate the uncertainty
+      'reg_src':'',  #name of source region from which to extrapolate
+      'src_list':[], #regions to sum in order to make source region
+      'onlyShape':False, #only extrapolate shape while retaining normalisation of target region
+      'xbins': None #binning of target region, to be read in from regions_dictionary
+   }
+
+   p_noextra = re.compile('^(c0lep6jin).*(2bex|3bex|3bin).*(Low|Mid)MVAScore')
+   if not(p_noextra.match(regname) is None):
+       pass
+   else:
+       extr_rule['doExtr'] = True
+       extr_rule['onlyShape'] = False
+
+       if regname=='c0lep6jin4bin2MinLowMVAScore':
+         extr_rule['src_list'] = [ 'c0lep6jin3bex2MinLowMVAScore',
+                                   'c0lep6jin4bin2MinLowMVAScore']
+         pass
+
+       p_extr = re.compile('^(c0lep6jin).*(2bex|3bex).*(HighMVAScore)')
+       if not(p_extr.match(regname) is None):
+         extr_rule['src_list'] = [ 'c0lep6jin2bex2MinHighMetCutHighMVAScore',
+                                   'c0lep6jin3bex2MinLowMetCutHighMVAScore',
+                                   'c0lep6jin3bex2MinHighMetCutHighMVAScore']
+         pass
+
+       p_extr = re.compile('^(c0lep6jin).*(4bin).*(HighMVAScore)')
+       if not(p_extr.match(regname) is None):
+         extr_rule['src_list'] = [ 'c0lep6jin3bex2MinLowMetCutHighMVAScore',
+                                   'c0lep6jin3bex2MinHighMetCutHighMVAScore',
+                                   'c0lep6jin4bin2Min0HexHighMVAScore',
+                                   'c0lep6jin4bin2Min1HinHighMVAScore']
+         pass
+
+   if debug:
+      print( "<INFO>: Region: ",regname)#,'\n'
+      print( "doExtr: ",extr_rule['doExtr'])#,'\n'
+      print( "onlyShape: ",extr_rule['onlyShape'])#,'\n'
+      print( "src_list : ")
+      for src_reg in extr_rule['src_list']: 
+         print( src_reg+' , ')
+      print( '\n')
 
 
    return extr_rule
@@ -125,7 +187,7 @@ def GetExtrapolatedHistCopy(regname, varname, sysname):
 def GetExtrapolatedHistVariation(regname, varname, sysname):
 
    if(sysname==""):
-      print "<!> ERROR: GetExtrapolatedHistVariation called on a nominal histogram"
+      print( "<!> ERROR: GetExtrapolatedHistVariation called on a nominal histogram")
       sys.exit(1)
 
    h_nom = hist_dict[regname+'_'+varname]
@@ -266,20 +328,20 @@ def main(args):
 
    ##+++++++++++++++++++++
    start =time.time()
-   print "START"
+   print( "START")
    if(os.path.isdir(outputDir)):
-       print "Directory already exists"
+       print("Directory already exists")
    else:
        os.system("mkdir -p "+outputDir)
 
 
    if(campaign == ""):
-      print "<!> ERROR:: No MC campaign specified."
+      print( "<!> ERROR:: No MC campaign specified.")
       sys.exit(-1)
    
    ## check option consistency ##
    if doWeightSys and doAltSys:
-      print "<!> ERROR:: doWeightSys=1 and doAltSys=1 are not allowed simultaneously."
+      print( "<!> ERROR:: doWeightSys=1 and doAltSys=1 are not allowed simultaneously.")
       sys.exit(-1)
 
    root.gROOT.SetBatch(1)
@@ -353,7 +415,7 @@ def main(args):
                Regions += module.preselection_regions_0l
 
    if debug:
-      print 'Number of regions : ',len(Regions)
+      print( 'Number of regions : ',len(Regions))
 
    ##________________________________________________________
 
@@ -398,7 +460,7 @@ def main(args):
    for sys_suf in alt_list:
 
        if debug:
-           print "sys: ",sys_suf,"."
+           print( "sys: ",sys_suf,".")
 
        inputFile=root.TFile.Open(inputDir+"/"+sample+sys_suf+"."+campaign+".root", "READ")
 
@@ -409,7 +471,8 @@ def main(args):
            for var in varlist:
                
                nominalhisto=inputFile.Get(reg+"_"+var)
-               #print reg+"_"+var
+               if debug:
+                   print( reg+"_"+var)
                nominalhisto.SetDirectory(0)
                hist_dict[reg+"_"+var if sys_suf=="" else reg+"_"+var+"_"+sys_suf ] = nominalhisto
 
@@ -420,7 +483,7 @@ def main(args):
                        hist_dict[reg+"_"+var+"_"+weight_var] = weightvarhisto
 
        if debug:
-           print "Read all histo from sys: ",sys_suf,"."
+           print( "Read all histo from sys: ",sys_suf,".")
            inputFile.Close()
            
    ### -------------- All histograms read -------------------
@@ -450,8 +513,8 @@ def main(args):
    ### --------------  Extrapolation completed -------------------
    elapsed=time.time()-start
    elapsed=elapsed/60
-   print elapsed, " minuti trascorsi"
-   print "END"
+   print( elapsed, " minuti trascorsi")
+   print( "END")
 
 ##........................................................
 

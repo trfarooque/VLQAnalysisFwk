@@ -7,6 +7,7 @@
 #include "VLQAnalysis/VLQ_WeightManager.h"
 #include "VLQAnalysis/VLQ_MVAManager.h"
 
+#include<fstream>
 
 //================== public ============================
 VLQ_MVAManager::VLQ_MVAManager(VLQ_Options* opt, VLQ_OutputData* outData, VLQ_WeightManager* weightMngr,

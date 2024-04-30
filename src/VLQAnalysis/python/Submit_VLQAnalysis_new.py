@@ -74,7 +74,7 @@ args = parser.parse_args()
 ##List of processes to run
 procs_to_run = []
 for proc in args.processes:
-    print 'Adding process : ',proc
+    print( 'Adding process : ',proc)
     if proc=='bkg':
         procs_to_run += bkg_procs
     elif proc=='bkg_sys':
@@ -182,7 +182,8 @@ if args.useTtbarHtSlices:
     vlqOptions['filterType'] = 'APPLYFILTER'
     
 # Capitalise all keys in vlqOptions for clean overrides:
-for k in vlqOptions.keys():
+keyList = list(vlqOptions.keys())
+for k in keyList:
     vlqOptions[k.upper()]=vlqOptions.pop(k)
 
 for opt in args.vlqOptString.split():
@@ -197,15 +198,15 @@ for opt in args.vlqOptString.split():
 
 ##______________________________________________________________________________
 ## Print all options
-print "############################################################"
-print " Command-line options : "
+print( "############################################################")
+print( " Command-line options : ")
 for argument in vars(args):
     if( argument != 'vlqOptString' ):
-        print argument," : ",getattr(args,argument)
+        print( argument," : ",getattr(args,argument))
 for arg,value in vlqOptions.items():
-    print arg + " = " + value
+    print( arg + " = " + value)
 
-print "############################################################"
+print( "############################################################")
 
 ##..............................................................................
 
@@ -217,7 +218,7 @@ outputDir  = args.outputDir
 if(args.outputDirSuffix != ""): 
     outputDir += args.outputDirSuffix
 outputDir = outputDir.replace("NOW", now)
-print 'outputDir : ',outputDir
+print( 'outputDir : ',outputDir)
 os.system("mkdir -p " + outputDir) #output files folder
 
 tarballPath = args.tarballPath
@@ -233,9 +234,9 @@ if(tarballPath == ''):
 ##the provided path does not exist or we explicitly want it to be overwritten
 
 if(not(args.dryRun) and (args.rewriteTarball or not(os.path.exists(tarballPath)))):
-    print 'producing tarball'
+    print( 'producing tarball')
     prepareTarBall(os.getenv("VLQAnalysisFramework_DIR")+"/../../",tarballPath)
-    print 'produced tarball'
+    print( 'produced tarball')
 
 ##..............................................................................
 ###### FUNCTION DEFINITIONS BEGIN
@@ -268,7 +269,7 @@ def SubmitSampleJob(sampleName, mc_campaign):
         SType = sample['sampleType'] # sample type (first argument of the getSamplesUncertainties())
 
         excluded = []
-        print "GetSampleJobs; SName : ",SName,"; SType : ",SType
+        print( "GetSampleJobs; SName : ",SName,"; SType : ",SType)
         joblist = getSampleJobs(sample,
                                 InputDir=sample_inputDir, NFiles=args.nFilesSplit,UseList=False,
                                 ListFolder=sample_listDir,exclusions=[],
@@ -298,7 +299,7 @@ def SubmitSampleJob(sampleName, mc_campaign):
             
             name  = SType
             name += "_" + SName
-            name += "_"+joblist[iJob]['objSyst']+"_"+`iJob` #name of the job
+            name += "_"+joblist[iJob]['objSyst']+"_"+f"{iJob}" #name of the job
             jO.setName(name)
 
             # Settings of the jobs (inputs, outputs, ...)
@@ -366,7 +367,7 @@ def SubmitSampleJob(sampleName, mc_campaign):
                 JOSet.submitSet()
             JOSet.clear()
 
-        os.system("sleep "+`args.sleep`)
+        os.system(f"sleep {args.sleep}")
 
     return 
 
@@ -383,7 +384,7 @@ nJobs = 0
 
 #### Loop over campaigns for MC samples
 for proc_name in procs_to_run: 
-    print 'Process : ',proc_name
+    print( 'Process : ',proc_name)
     if proc_name == 'data':
         SubmitSampleJob(proc_name, '')
     else:

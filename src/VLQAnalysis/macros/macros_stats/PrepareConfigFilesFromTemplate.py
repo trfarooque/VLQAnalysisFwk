@@ -58,6 +58,7 @@ _ARGUMENTS_ = []
 _ARGUMENTS_ += [{'arg':"__LUMIVALUE__",'value':"139020.02"}]
 _ARGUMENTS_ += [{'arg':"__ADDITION__",'value':""}]
 _ARGUMENTS_ += [{'arg':"__STATONLY__",'value':"FALSE"}]
+_ARGUMENTS_ += [{'arg':"__SYSTCONTROLPLOTS__",'value':"FALSE"}]
 #Fit
 _ARGUMENTS_ += [{'arg':"__FITTYPE__",'value':"BONLY"}]#BONLY, SPLUSB
 _ARGUMENTS_ += [{'arg':"__FITREGION__",'value':"CRSR"}]#CRSR, CRONLY
@@ -78,7 +79,7 @@ signalHandling = "ALL"
 signalType = "PAIR"
 signalScaling = "DEFAULT"
 signalBenchmark = 0.1
-SignalNormFactor = "1,0,100"
+SignalNormFactor = "1,-100,100"
 systConfig = []
 #for syst_file in ["BackNorm", "Objects", "Weights"]:
 for syst_file in ["Objects", "Weights_Exp"]:

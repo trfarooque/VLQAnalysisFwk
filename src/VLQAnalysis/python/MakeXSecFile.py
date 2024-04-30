@@ -101,10 +101,10 @@ com+=DSlist
 com+=" --outFile="
 com+=metaFilePath
 
-print "Calling " + com    
+print( "Calling " + com)
 
 result=os.system(com)
-print "After metadata query"
+print( "After metadata query")
 
 
 
@@ -155,6 +155,6 @@ with open(metaFilePath) as metaFile:
         sampleMetaList[dsid] = sampleMeta
 
 with open(xSecFilePath, 'w') as outfile:
-    print json.dump(sampleMetaList, outfile, indent=4, separators=(',', ': '))
-print " All xsec written "
+    print( json.dump(sampleMetaList, outfile, indent=4, separators=(',', ': ')))
+print( " All xsec written ")
 

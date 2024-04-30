@@ -145,9 +145,9 @@ def main(args):
 
    ##........................................................
    start =time.time()
-   print "START"
+   print( "START")
    if(os.path.isdir(outputDir)):
-      print "Directory already exists"
+      print( "Directory already exists")
    else:
       os.system("mkdir -p "+outputDir)
 
@@ -251,8 +251,8 @@ def main(args):
         
    elapsed=time.time()-start
    elapsed=elapsed/60
-   print elapsed, " minuti trascorsi"
-   print "END"
+   print( elapsed, " minuti trascorsi")
+   print( "END")
 
 ###.......................................................
 
