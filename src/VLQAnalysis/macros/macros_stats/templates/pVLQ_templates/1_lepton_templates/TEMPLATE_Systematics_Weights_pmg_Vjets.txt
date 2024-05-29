@@ -9,8 +9,22 @@ NuisanceParameter: "HTX_BKGNP_VJETS_MURF"
   Category: "V+jets uncertainties"
   HistoNameSufUp: _weight_muRF_up
   HistoNameSufDown: _weight_muRF_down
-  HistoPathUp: "__HISTOPATH__/TheorySys/NewVJets/"
-  HistoPathDown: "__HISTOPATH__/TheorySys/NewVJets/"
+  HistoPathUp: "__HISTOPATH__/Extrapolated/nominal/"
+  HistoPathDown: "__HISTOPATH__/Extrapolated/nominal/"
+  Symmetrisation: TwoSided
+  DropNorm: all
+  ReferenceSample: Wjets_Ref
+  Samples: Wjets
+
+Systematic: "HTX_BKGNP_WJETS_EW"
+NuisanceParameter: "HTX_BKGNP_VJETS_EW"
+  Title: "V+jets EW"
+  Type: HISTO
+  Category: "V+jets uncertainties"
+  HistoNameSufUp: _weight_EW_up
+  HistoNameSufDown: _weight_EW_down
+  HistoPathUp: "__HISTOPATH__/Extrapolated/nominal/"
+  HistoPathDown: "__HISTOPATH__/Extrapolated/nominal/"
   Symmetrisation: TwoSided
   DropNorm: all
   ReferenceSample: Wjets_Ref
@@ -23,33 +37,23 @@ NuisanceParameter: "HTX_BKGNP_VJETS_MURF"
   Category: "V+jets uncertainties"
   HistoNameSufUp: _weight_muRF_up
   HistoNameSufDown: _weight_muRF_down
-  HistoPathUp: "__HISTOPATH__/TheorySys/NewVJets/"
-  HistoPathDown: "__HISTOPATH__/TheorySys/NewVJets/"
+  HistoPathUp: "__HISTOPATH__/Extrapolated/nominal/"
+  HistoPathDown: "__HISTOPATH__/Extrapolated/nominal/"
   Symmetrisation: TwoSided
   DropNorm: all
   ReferenceSample: Zjets_Ref
   Samples: Zjets
 
-%Systematic: "HTX_BKGNP_VJETS_CKKW"
-%  Title: "V+jets ckkw"
-%  Type: HISTO
-%  Category: "V+jets uncertainties"
-%  HistoNameSufUp: _weight_pmg_ckkw30
-%  HistoNameSufDown: _weight_pmg_ckkw15
-%  HistoPathUp: "__HISTOPATH__/TheorySys/NewVJets/"
-%  HistoPathDown: "__HISTOPATH__/TheorySys/NewVJets/"
-%  Symmetrisation: TwoSided
-%  DropNorm: all
-%  Samples: Wjets,Zjets
-%
-%Systematic: "HTX_BKGNP_VJETS_QSF"
-%  Title: "V+jets qsf"
-%  Type: HISTO
-%  Category: "V+jets uncertainties"
-%  HistoNameSufUp: _weight_pmg_qsf4
-%  HistoNameSufDown: _weight_pmg_qsf025
-%  HistoPathUp: "__HISTOPATH__/TheorySys/NewVJets/"
-%  HistoPathDown: "__HISTOPATH__/TheorySys/NewVJets/"
-%  Symmetrisation: TwoSided
-%  DropNorm: all
-%  Samples: Wjets,Zjets
+Systematic: "HTX_BKGNP_ZJETS_EW"
+NuisanceParameter: "HTX_BKGNP_VJETS_EW"
+  Title: "V+jets EW"
+  Type: HISTO
+  Category: "V+jets uncertainties"
+  HistoNameSufUp: _weight_EW_up
+  HistoNameSufDown: _weight_EW_down
+  HistoPathUp: "__HISTOPATH__/Extrapolated/nominal/"
+  HistoPathDown: "__HISTOPATH__/Extrapolated/nominal/"
+  Symmetrisation: TwoSided
+  DropNorm: all
+  ReferenceSample: Zjets_Ref
+  Samples: Zjets

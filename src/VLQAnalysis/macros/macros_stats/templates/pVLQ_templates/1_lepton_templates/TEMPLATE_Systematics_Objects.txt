@@ -545,6 +545,14 @@ Systematic: "JET_SingleParticle_HighPt"
   Smoothing: 40
   Exclude: QCD
 
+Systematic: "JET_JMR"
+  Title: "JMR"
+  Type: HISTO
+  Category: "Jet uncertainties"
+  HistoFileSufUp: _JET_JMR__1up
+  Symmetrisation: OneSided
+  Exclude: QCD
+
 % ------------------------------ %
 % -----------   MET  ----------- %
 % ------------------------------ %

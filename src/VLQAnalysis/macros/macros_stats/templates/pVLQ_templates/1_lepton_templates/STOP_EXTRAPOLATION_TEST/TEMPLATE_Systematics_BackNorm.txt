@@ -22,21 +22,22 @@ Systematic: "HTX_BKGNP_TTBAR_XS"
   OverallDown: -0.061
   Samples: ttbarlight,ttbarbb,ttbarcc
 
-%Systematic: "HTX_BKGNP_TTBARCC_XS"
-%  Title: "t#bar{t}+#geq1c norm."
-%  Type: OVERALL
-%  Category: "t#bar{t} uncertainties"
-%  OverallUp: 0.5
-%  OverallDown: -0.5
-%  Samples: ttbarcc
+Systematic: "HTX_BKGNP_TTBARCC_XS"
+  Title: "t#bar{t}+#geq1c norm."
+  Type: OVERALL
+  Category: "t#bar{t} uncertainties"
+  OverallUp: 0.5
+  OverallDown: -0.5
+  Samples: ttbarcc
 
-%Systematic: "HTX_BKGNP_TTBARBB_XS"
-%  Title: "t#bar{t}+#geq1b norm."
-%  Type: OVERALL
-%  Category: "t#bar{t} uncertainties"
-%  OverallUp: 0.5
-%  OverallDown: -0.5
-%  Samples: ttbarbb
+Systematic: "HTX_BKGNP_TTBARBB_XS_2-3B";"HTX_BKGNP_TTBARBB_XS_g4B"
+  Title: "t#bar{t}+#geq1b norm. (2-3b)";"t#bar{t}+#geq1b norm. (#geq 4b)"
+  Type: OVERALL
+  Category: "t#bar{t} uncertainties"
+  OverallUp: 0.5
+  OverallDown: -0.5
+  Samples: ttbarbb
+  Regions: HTX_c1lep5jin2bex*,HTX_c1lep5jin3bex*;HTX_c1lep5jin4bin*
 
 % ---------------------------------- %
 % --------  V+jets (1-lep)  -------- %

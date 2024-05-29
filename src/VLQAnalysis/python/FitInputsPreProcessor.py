@@ -189,7 +189,7 @@ if args.reweightVLQ:
         rw_opts = ['--inputDir',args.outputDir+'/MergedFiles/nominal/', 
                    '--outputDir',args.outputDir+'/MergedFiles/nominal/', 
                    '--mcCampaign',campaign, '--postMerging', '1', '--doBatch', 
-                   '--queue','at3', '--doSR', '--doPR' ]
+                   '--queue','at3', '--doPR']#, '--doSR' ]
 
         if(not args.otherVariables):
             rw_opts.append('--tthfitter')
@@ -215,10 +215,10 @@ if( (args.extrapolateSingletopSyst>0) and
 
         if(args.useSyst):
             #extrapolate weight uncertainties
-            wsyst_opts = ['--inputDir',args.outputDir+'/MergedFiles/nominal/', 
-                          '--outputDir',args.outputDir+'/MergedFiles/Extrapolated/nominal/', 
-                          '--campaign',campaign, '--doNominal','1', '--doSR','1', '--doPresel','1',
-                          '--doWeightSys','1', '--doAltSys','0'] 
+            wsyst_opts = ['--inputDir',args.outputDir+'/MergedFiles/merged/', 
+                          '--outputDir',args.outputDir+'/MergedFiles/merged/Extrapolated/nominal/', 
+                          '--campaign',campaign, '--doNominal','1', '--doSR','1', '--doPresel','0',
+                          '--doWeightSys','1', '--doAltSys','0', '--superMerge','1'] 
             if(args.otherVariables):
                 wsyst_opts.append('--otherVariables')
             if(args.channel=='1lep'):
@@ -229,10 +229,10 @@ if( (args.extrapolateSingletopSyst>0) and
 
         if 'singletop_alt' in procs_to_run:
             #extrapolate alt samples
-            asyst_opts = ['--inputDir',args.outputDir+'/MergedFiles/ttstalt/', 
-                          '--outputDir',args.outputDir+'/MergedFiles/Extrapolated/ttstalt/', 
-                          '--campaign',campaign, '--doNominal','1', '--doSR','1', '--doPresel','1',
-                          '--doWeightSys','0', '--doAltSys','1'] 
+            asyst_opts = ['--inputDir',args.outputDir+'/MergedFiles/merged/ttstalt/', 
+                          '--outputDir',args.outputDir+'/MergedFiles/merged/Extrapolated/ttstalt/', 
+                          '--campaign',campaign, '--doNominal','1', '--doSR','1', '--doPresel','0',
+                          '--doWeightSys','0', '--doAltSys','1', '--superMerge','1'] 
             if(args.otherVariables):
                 asyst_opts.append('--otherVariables')
             if(args.channel=='1lep'):
